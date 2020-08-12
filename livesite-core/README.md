@@ -1,6 +1,8 @@
-# Hukoomi Portal Revamp
+### LiveSite Core
 
-This Repository will be used for Hukoomi Portal Revamp code.
+This source code will be used for Development of the LiveSite Features. This includes:
+
+- Component Engineering External Java Classes
 
 The Branches we map will be based on the below structure.
 
