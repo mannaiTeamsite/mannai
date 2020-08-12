@@ -1,6 +1,10 @@
-# Hukoomi Portal Revamp
+### TeamSite Core
 
-This Repository will be used for Hukoomi Portal Revamp code.
+This source code will be used for Development of the LiveSite Features. This includes:
+
+- Workflow Related Java Classes
+- TS iw-cc / Customer Configurations
+- Inline Perl Utilities
 
 The Branches we map will be based on the below structure.
 
