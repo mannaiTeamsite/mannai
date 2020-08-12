@@ -12,7 +12,7 @@ master | Production TS/LS server
 
 Please note that the deployment as of now is manual, developer needs to deploy the jar files manually after each mvn compile.
 
-# Important Git Commands
+# Development Workflow
 
 Below are the Git commands often used while making changes to Git Repo.
 
