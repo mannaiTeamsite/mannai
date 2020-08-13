@@ -1,4 +1,6 @@
 /livesite_customer.iml
 /.idea/
 /target/
+/target-livesite/
+/target-teamsite/
 **.DS_Store
