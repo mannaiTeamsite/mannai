@@ -18,5 +18,4 @@ jobs:
         uses: Cyb3r-Jak3/html5validator-action@v0.4.1
         with:
           root: html-files/
-          format: text
           css: true
