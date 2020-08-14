@@ -1,0 +1,408 @@
+/* 1. Reset***************************************************************/
+* {
+  border: 0 none;
+  outline: 0;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  -webkit-appearance: value;
+  -moz-appearance: value;
+  appearance: value;
+  word-break: break-word; }
+
+html,
+body,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+font,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+span,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+fieldset {
+  margin: 0px;
+  padding: 0px;
+  border: 0;
+  outline: 0;
+  font-size: 100%; }
+
+a,
+img a {
+  text-decoration: none;
+  border: 0;
+  outline: 0 !important;
+  transition: all ease-in .3s;
+  -moz-transition: all ease-in .3s;
+  -ms-transition: all ease-in .3s;
+  -o-transition: all ease-in .3s;
+  -webkit-transition: all ease-in .3s; }
+
+figure {
+  margin: 0;
+  padding: 0; }
+
+a,
+button,
+input {
+  transition: all ease-in .2s;
+  -moz-transition: all ease-in .2s;
+  -ms-transition: all ease-in .2s;
+  -o-transition: all ease-in .2s;
+  -webkit-transition: all ease-in .2s; }
+
+:focus {
+  outline: 0px; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0px; }
+
+ol,
+ul,
+li {
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px; }
+
+img, button {
+  user-select: none;
+  -webkit-user-drag: auto; }
+
+button {
+  cursor: pointer; }
+
+a, img {
+  -webkit-tap-highlight-color: transparent;
+  -moz-tap-highlight-color: transparent; }
+
+input,
+textarea,
+button,
+select,
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
+
+a:hover, a:active, a:focus {
+  text-decoration: none !important; }
+
+/* 2. Clearing Floats***************************************************************/
+.clear {
+  clear: both; }
+
+.clearfix:after {
+  clear: both; }
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table; }
+
+.full-height, body, html {
+  height: 100%; }
+
+.scroll-hide {
+  overflow: hidden; }
+
+/***********************Align************************************/
+.text-right {
+  text-align: right; }
+
+.text-center {
+  text-align: center; }
+
+.text-left {
+  text-align: left; }
+
+/***********************Align************************************/
+.hidden_scroll {
+  overflow: hidden; }
+
+img {
+  user-select: none;
+  -webkit-user-drag: none; }
+
+.m-t-30 {
+  margin-top: 30px !important; }
+
+.m-t-50 {
+  margin-top: 50px; }
+
+.p-30 {
+  padding: 30px; }
+
+/************************Loader*********************************/
+body.loader_show {
+  overflow: hidden; }
+
+.loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000000cc;
+  z-index: 99;
+  display: flex; }
+
+.loader img {
+  width: 150px; }
+
+body.loader_show .loader {
+  display: flex; }
+
+/************************Loader Close*********************************/
+:root {
+  --berry: #8a1538;
+  --deep-orange: #e35205;
+  --dark-orange: #cd4a04;
+  --purple-brown: #1c1517;
+  --purple-brown-light: #1c1517b3;
+  --greyish-brown: #494949;
+  --greyish-brown-two: #4f4f4f;
+  --greyish-brown-three: #6e6259;
+  --white: #ffffff;
+  --black: #000000;
+  --pinkish-grey: #c5c5c5;
+  --slate-grey: #6a6a6b;
+  --white-two: #f8f7f6;
+  --white-three: #f6f6f6;
+  --white-five: #f1f1f1;
+  --silver: #d4d9dc;
+  --silver-two: #dfe0e2;
+  --eggplant: #13070a;
+  --rouge: #b51647;
+  --rouge-two: #ba0c2f;
+  --rouge-three: #a8002f;
+  --white-four: #e5e5e5;
+  --border-color:#e3e3e3;
+  --hrruler:#d4d4d4;
+  --blue: #009dbd;
+  --black-two:#2a2a2a ;
+  --berry: #8a1538;
+  --deep-orange: #e35205;
+  --purple-brown: #1c1517;
+  --greyish-brown: #494949;
+  --greyish-brown-two: #4f4f4f;
+  --white: #ffffff;
+  --pinkish-grey: #c5c5c5;
+  --white-two: #f8f7f6;
+  --white-three: #f6f6f6;
+  --silver: #d4d9dc;
+  --silver-two: #dfe0e2;
+  --eggplant: #13070a;
+  --rouge: #b51647;
+  --white-four: #e5e5e5;
+  --white-five: #f1f1f1;
+  --rouge-two: #ba0c2f;
+  --white-six: #dedede;
+  --dark-orange: #cd4a04;
+  --very-light-pink: #fff0e9;
+  --very-light-pink-two: #fff8f3;
+  --light-pink: #fff2f6;
+  --white-seven: #ececec;
+  --greyish-brown-three: #6e6259;
+  --white-eight: #d2d2d2;
+  --white-nine: #e6e6e6;
+  --black: #2a2a2a;
+  --white-ten: #efefef;
+  --silver-three: #e6e6e7;
+  --white-eleven: #ededed;
+  --white-twelve: #e2e2e2;
+  --black-7: rgba(0, 0, 0, 0.07);
+  --ocean: #008099;
+  --white-thirteen: #f2f2f2; }
+
+.flex_row {
+  display: flex;
+  margin: 0 -10px;
+  flex-wrap: wrap; }
+
+.flex_col_sm_7 {
+  width: 70%;
+  padding: 0 10px; }
+
+.flex_col_sm_8 {
+  width: 76.7%;
+  padding: 0 10px; }
+
+.flex_col_sm_4 {
+  width: 33.3%;
+  padding: 0 10px; }
+
+.flex_col_sm_9 {
+  width: 75%;
+  padding: 0 10px; }
+
+.flex_col_sm_3 {
+  width: 25%;
+  padding: 0 10px; }
+
+.flex_col_sm_10 {
+  width: 83.33333333%;
+  padding: 0 10px; }
+
+.flex_col_sm_2 {
+  width: 16.66666667%;
+  padding: 0 10px;
+  position: relative; }
+
+.right_flex {
+  align-items: flex-end; }
+
+.col_xs_6 {
+  width: 50%;
+  padding: 0 10px; }
+
+.flex_col_sm_12 {
+  width: 100%;
+  padding: 0 10px; }
+
+.flex_col_sm_6 {
+  width: 50%;
+  padding: 0 10px; }
+
+.flex_col_xs_8 {
+  width: 60%;
+  padding: 0 10px; }
+
+.flex_col_sm_7 {
+  width: 58.333333%;
+  padding: 0 10px; }
+
+.flex_col_sm_5 {
+  width: 41.666667%;
+  padding: 0 10px; }
+
+@media (max-width: 650px) {
+  .flex_col_xs_4 {
+    width: 50%; } }
+/*----------------------------Font------------------------------*/
+@font-face {
+  font-family: "cairo_light";
+  src: url("../fonts/cairo-light-webfont.woff2") format("woff2"), url("../fonts/cairo-light-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: "cairo_regular";
+  src: url("../fonts/cairo-regular-webfont.woff2") format("woff2"), url("../fonts/cairo-regular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: "cairo_semibold";
+  src: url("../fonts/cairo-semibold-webfont.woff2") format("woff2"), url("../fonts/cairo-semibold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: "cairo_bold";
+  src: url("../fonts/cairo-bold-webfont.woff2") format("woff2"), url("../fonts/cairo-bold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+/*----------------------------Font Close------------------------------*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #F5F5F5; }
+
+::-webkit-scrollbar {
+  width: 5px;
+  background-color: #F5F5F5; }
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--berry);
+  border: 2px solid var(--berry); }
+
+.none {
+  display: none; }
+
+/*-------------------Base---------------*/
+body {
+  font-family: "cairo_regular"; }
+
+html,
+body {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth; }
+
+.app_wrapper {
+  position: relative;
+  padding: 115px 0 72px 0;
+  min-height: 100%;
+  max-width: 1640px;
+  width: 100%;
+  margin: 0 auto; }
+  @media (max-width: 990px) {
+    .app_wrapper {
+      padding: 55px 0 120px 0; } }
+  @media (max-width: 990px) {
+    .app_wrapper {
+      padding: 55px 0 120px 0; } }
+
+.custom_container {
+  max-width: 1170px;
+  margin: 0 auto;
+  padding: 0 15px;
+  position: relative; }
+
+.f_row {
+  display: flex;
+  flex-flow: wrap; }
+
+.flex_center {
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+input:focus {
+  border: 1px solid var(--berry); }
+
+/*-------------------Base close---------------*/
+
+/*# sourceMappingURL=style.css.map */

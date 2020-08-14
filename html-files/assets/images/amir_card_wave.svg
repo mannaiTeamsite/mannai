@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="553px" height="163px" viewBox="0 0 553 163" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_amir_card_wave</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="04-Amir" transform="translate(-733.000000, -509.000000)" fill="#A41440">
+            <g id="Group-4" transform="translate(151.000000, 262.000000)">
+                <g id="Rectangle-2" transform="translate(582.000000, 181.000000)">
+                    <path d="M0.0257382365,229 C0.0257382365,222.766286 0.0257382365,219.645772 0.0257382365,219.638458 C43.2106064,166.191225 92.352241,144.978405 147.453125,156 C238.535156,174.21875 361,150.316406 417,96 C454.658802,59.4733787 516.511774,59.4111309 552.988448,80.6230346 C552.985191,80.6253823 552.989042,130.084371 553,229 L0.0257382365,229 Z" id="ic_amir_card_wave"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

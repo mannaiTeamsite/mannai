@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="729px" viewBox="0 0 1440 729" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_amir_wave</title>
+    <defs>
+        <path d="M0.032637164,74.6876945 C211.182031,-10.8807818 426.504485,-22.9234499 646,38.5596903 C964.922553,127.893452 1209.82711,139.679044 1440.00275,82.6529864 C1440.00275,82.6905269 1440.00275,296.806198 1440.00275,725 L6.82121026e-13,728.614898 C6.82121026e-13,292.695352 0.0108790547,74.7196173 0.032637164,74.6876945 Z" id="path-1"></path>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="04-Amir" transform="translate(0.000000, -3988.000000)">
+            <g id="Group-17" transform="translate(0.000000, 3988.000000)">
+                <g id="Path-4">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <use id="ic_amir_wave" fill="#8A1538" xlink:href="#path-1"></use>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
