@@ -30,7 +30,7 @@ $(function () {
 
 
 /********************Search Select Persona and  its persona value Js******************************/
-    $("#select_persona").click(function(e){
+    $(".select_persona").click(function(e){
         e.stopPropagation();     
         $(".persona_tag_wrapper").toggleClass("active");
     });
@@ -38,6 +38,10 @@ $(function () {
         $(".persona_tag_wrapper").removeClass("active");
     });
 
+    $(".select_persona").click(function(){
+       console.log("asa")
+      $(".persona_tag_wrapper").addClass("active");
+    });
 
     
     $("input[type='radio']").click(function(){

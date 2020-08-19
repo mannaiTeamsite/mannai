@@ -58,6 +58,10 @@
 .none{
 	display: none;
 }
+
+input::-webkit-calendar-picker-indicator {
+	display: none;
+  }
 /*-------------------Base---------------*/
 body {
     font-family: "cairo_regular";
@@ -93,6 +97,9 @@ body {
   margin: 0 auto;
   padding:0 15px;
   position: relative;
+  @media(max-width:640px){
+	max-width: 100% !important;
+  }
 }
 
 .f_row{

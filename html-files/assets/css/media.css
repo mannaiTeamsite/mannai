@@ -317,9 +317,6 @@
 
 /**************** 640 ******************/
 @media(max-width:640px){
-    .flex_col_xs_6{
-        width: 100%;
-    }
     .commn-para {
         font-size: 15px;
     }

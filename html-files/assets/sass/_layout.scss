@@ -366,6 +366,22 @@ header{
             }
         }
     } 
+    .search_icon {
+        margin: 0 -13px -4px 13px;
+        cursor: pointer;
+    }
+
+    .jump_link_header{
+        .nav_menu {
+            ul {
+                margin: 0;
+                text-align: left;
+                li{
+                    margin: 0 30px 0 0;
+                }
+            }
+        }
+    }
 }
 /************Arabic Close*****************/
 
@@ -377,7 +393,7 @@ header{
         right: -30px;
     }
     header .innner_wrapper .nav_col .header_row .nav_menu ul li a {
-        font-size: 14px;
+        font-size: 13px;
     }
     .nav_menu ul li a {
         font-size: 14px;
@@ -559,7 +575,7 @@ footer{
                         text-align: left;
                         li {
                             display: inline-block;
-                            margin: 0 50px 0 0;
+                            margin: 0 20px 0 0;
                         }
                     }
                }
