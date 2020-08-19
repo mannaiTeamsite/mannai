@@ -29,10 +29,7 @@ public class LabelListGeneratorTest {
 			List<Node> categoryNodes = categoryDoc.selectNodes("/labels/sectionList");
             for (Node eleNode : categoryNodes) {
                 String nodeKey = eleNode.selectSingleNode("Value").getText();
-                String nodeEnLabel = eleNode.selectSingleNode("LabelEn").getText();
-                String nodeArLabel = eleNode.selectSingleNode("LabelAr").getText();
-
-                //good test
+                 //good test
 				assertEquals("Key should be student",nodeKey,"student");
             }
 
