@@ -388,6 +388,7 @@ header{
 @media(max-width:1366px){
     .jump_link_header {
         width: 90%;
+        display: none;
     }
     .header_drp_dwn  .option_wrapper{
         right: -30px;
@@ -446,6 +447,9 @@ header{
     width: 1170px;
      margin: 0 auto;
      padding: 20px 0;
+    @media(max-width:1200px){
+        width: 95%;
+    }
 
      ul{
          li{

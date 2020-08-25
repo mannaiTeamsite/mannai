@@ -53,7 +53,27 @@ $('#medal_owners').owlCarousel({
     loop:false,
     dots:false,
     nav:true,
-    
+    responsive:{
+        0:{
+            items:1,
+
+        },
+        650:{
+            items:1,
+            // loop:true,
+            // autoplay:true
+
+        },
+        768:{
+            items:2,
+        },
+        1024:{
+            items:3,
+        },
+        1200:{
+            items:3,
+        }
+    }
 });
 
 
@@ -228,6 +248,27 @@ $('#detail_tab_owl').owlCarousel({
     nav: true,
     stagePadding: 30,
     navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive:{
+        0:{
+            items:2,
+
+        },
+        650:{
+            items:3,
+            // loop:true,
+            // autoplay:true
+
+        },
+        768:{
+            items:3,
+        },
+        1024:{
+            items:4,
+        },
+        1200:{
+            items:4,
+        }
+    }
 });
 
 

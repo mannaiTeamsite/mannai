@@ -156,3 +156,29 @@ function resetClass() {
  });
 
 
+
+
+
+ /***********************************Accordian J******************************************/
+
+ function reset_acc() {
+   $('.ac-title').removeClass('acc-active');
+   $('.accordian-para').slideUp();
+   $('.plus-icon').removeClass('cross-icon');
+   }
+   $('.ac-title').click(function (e) {
+   e.preventDefault();
+   if ($(this).hasClass('acc-active'))
+   {
+   reset_acc();
+   }
+   else {
+   reset_acc();
+   var getID = $(this).attr('data-in');
+   $(getID).slideDown();
+   $(this).addClass('acc-active');
+   $(this).find('.plus-icon').addClass('cross-icon');
+   }
+   });
+
+    /***********************************Accordian J******************************************/
