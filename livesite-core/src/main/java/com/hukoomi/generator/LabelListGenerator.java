@@ -16,15 +16,15 @@ import org.dom4j.Element;
 public class LabelListGenerator {
 
     /** Logger object to check the flow of the code. */
-    private static final Logger LOG_4J =
+    private static final Logger LOGGER =
             Logger.getLogger(LabelListGenerator.class);
     /** This method will be called from Component
      * Generator Datum for Content Listing.
      * @param context The parameter context object passed from Component.
+     *
      * @return optionsDoc return the option doc generated from
      * the mapped DCR.
      */
-    @SuppressWarnings("unchecked")
     public Document getLabelOptions(final PropertyContext context) {
         final String xpath = context.getParameters().get("xpath") != null
                 ? (String) context.getParameters().get("xpath")
@@ -37,6 +37,7 @@ public class LabelListGenerator {
      * @param context The parameter context object passed from Component.
      * @param xpath The parameter from Component to iterate through
      * nodes of the mapped DCR.
+     *
      * @return optionsDoc return the option doc generated from
      * the mapped DCR.
      */
@@ -50,19 +51,20 @@ public class LabelListGenerator {
         String dctPath = context.getParameters().get("dctPath") != null
                 ? (String) context.getParameters().get("dctPath")
                 : "/templatedata/Static/Labels/data/";
-
+        LOGGER.info("dctPath Param : " + dctPath);
         String sitePath = context.getSite().getPath();
         sitePath = sitePath.replaceAll("/sites/.*", "");
         String recordName = context.getParameters().get(record) != null
                 ? (String) context.getParameters().get(record)
                 : "generic";
-        LOG_4J.info("Category DCR : " + sitePath + dctPath
+        LOGGER.info("record Param : " + record);
+        LOGGER.info("Category DCR : " + sitePath + dctPath
                         + recordName);
         InputStream fis = context.getFileDAL().getStream(sitePath + dctPath
                         + recordName);
         try {
             Document categoryDoc = Dom4jUtils.newDocument(fis);
-            LOG_4J.info("XPath : " + xpath);
+            LOGGER.info("XPath Param : " + xpath);
             List<Node> categoryNodes = categoryDoc.selectNodes(xpath);
             for (Node eleNode : categoryNodes) {
                 String nodeKey =
@@ -73,14 +75,16 @@ public class LabelListGenerator {
                         eleNode.selectSingleNode("LabelAr") != null
                                 ? "|" + eleNode.selectSingleNode("LabelEn")
                                 .getText() : "";
-
+                LOGGER.info("Option Tag : " + "<Option><Value>" + nodeEnLabel
+                        + nodeArLabel + "</Value><Display>" + nodeKey
+                        + "</Display></Option>");
                 Element eleOption = eleList.addElement("Option");
                 eleOption.addElement(value).addText(nodeEnLabel
                         + nodeArLabel);
                 eleOption.addElement(label).addText(nodeKey);
             }
         } catch (Exception ex) {
-            LOG_4J.error(ex.getClass().getCanonicalName()
+            LOGGER.error(ex.getClass().getCanonicalName()
                     + " : " + ex.getMessage(), ex);
             Element eleException = optionsDoc.addElement("Option");
             eleException.addElement(label).addText(ex.getMessage());
@@ -90,7 +94,7 @@ public class LabelListGenerator {
             try {
                 fis.close();
             } catch (IOException ex) {
-                LOG_4J.error("IOException while closing DCR input stream", ex);
+                LOGGER.error("IOException while closing DCR input stream", ex);
             }
         }
 
