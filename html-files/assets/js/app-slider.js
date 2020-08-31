@@ -294,3 +294,62 @@ $('#other_list_owl').owlCarousel({
         }
     }
 });
+
+
+
+
+$('#ministry_card_owl').owlCarousel({
+    items: 5,
+    loop: false,
+    dots: false,
+    //  autoplay: true,
+    nav: true,
+    navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive: {
+        0: {
+            items: 1,
+
+        },
+        700: {
+            items: 2,
+
+        },
+        765: {
+            items: 3,
+
+        },
+        1200: {
+            items: 5,
+        }
+    }
+});
+
+
+
+
+
+$('#embassies_card_owl').owlCarousel({
+    items: 5,
+    loop: false,
+    dots: false,
+    //  autoplay: true,
+    nav: true,
+    navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive: {
+        0: {
+            items: 1,
+
+        },
+        700: {
+            items: 2,
+
+        },
+        765: {
+            items: 3,
+
+        },
+        1200: {
+            items: 5,
+        }
+    }
+});

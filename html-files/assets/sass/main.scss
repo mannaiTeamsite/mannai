@@ -350,8 +350,8 @@ hr{
 			z-index: 9;
 			background-color: #0009;
 			@include rounded-corner(12px);
-			padding: 43px 48px;
-			width: 540px;
+			padding: 44.5px 48px;
+            width: 542px;
 			@media(max-width:1350px){
 				padding: 35px;
 				left: 53px;
@@ -691,7 +691,7 @@ hr{
 				}
 				input{
 					padding-right: 0;
-					// padding-left: 40px;
+                    padding-left: 47px;
 				}
 				.person_col {
 					border-right: 0;
@@ -699,7 +699,7 @@ hr{
 					
 				}
 				.looking_for_col {
-					padding-left: 80px;
+					padding-left: 0px;
 					padding-right: 0;
 				}
 				.location_col {
@@ -3130,8 +3130,8 @@ hr{
                     position: relative;
                     overflow: hidden;
                     cursor: pointer;
-                    @media(max-width:400px){
-                        width: 45%;
+                    @media(max-width:640px){
+                        width: 46%;
                     }
 
                     .title{
@@ -4803,6 +4803,11 @@ color: var(--deep-orange);
                     &:last-child{
                         margin-bottom: 0;
                     }
+
+                    span{
+                        color:var(--berry);
+                        font-family: "cairo_bold";
+                    }
                     
                 }
                 .aspects_points{
@@ -6243,29 +6248,42 @@ color: var(--deep-orange);
             }
             .like{
                 margin-left: 18px;
-                label{
-                    position: relative;
-                    width: 49px;
-                    height: 31px;
-                    text-align: center;
-                    background-color: var(--white-five);
-                    font-family: 'cairo_bold';
-                    font-size: 15px;
-                    line-height: 2;
-                    color: var(--rouge-two);
-                    display: inline-block;
-                    border-radius: 16px;
-                    &:first-child{
-                        margin-right: 18px;
+                display: flex;
+                align-items: center;
+                .like_btn{
+                    margin: 0 5px;
+                    label{
+                        position: relative;
+                        width: 49px;
+                        height: 31px;
+                        text-align: center;
+                        background-color: var(--white-five);
+                        font-family: 'cairo_bold';
+                        font-size: 15px;
+                        line-height: 1.8;
+                        color: var(--rouge-two);
+                        display: inline-block;
+                        border-radius: 16px;
+                        border: 2px solid transparent;
+                        transition: 0.3s ease-in-out all;
+                        cursor: pointer;
+                        &:first-child{
+                            margin-right: 18px;
+                        }
+                        
                     }
                     input[type='radio']{
                         position: absolute;
                         width: 0;
                         height: 0;
-                        opacity: 0;
+                        &:checked{
+                            +label{
+                                border: 2px solid var(--rouge);
+                            }
+                        }
                     }
-                   
                 }
+                
             }
         }
     }
@@ -6710,6 +6728,9 @@ color: var(--deep-orange);
                 
                   figure{
                       margin-right: 30px;
+                      width: 72px;
+                      height: 72px;
+                      overflow: hidden;
                   }
                   .title{
                     font-size: 18px;
@@ -9538,6 +9559,9 @@ color: var(--deep-orange);
     .hd{
         display: block;
     }
+    .rouge_btn {
+        padding: 12px 50px;
+    }   
 }
 
 /***************************************Malls close******************************************/
@@ -9596,10 +9620,10 @@ color: var(--deep-orange);
 }
 /***************************************Recreational Areas close******************************************/
 
-/***************************************Police******************************************/
-.category_police_card{
+/***************************************Police & Useful NUmbers******************************************/
+.category_police_card, .category_useful_num_card{
     .list_card {
-        min-height: 310px;
+        min-height: 300px;
         padding: 32px 8px 0 30px;
         position: relative;
         .card_img{
@@ -9630,15 +9654,34 @@ color: var(--deep-orange);
             background: url("../images/ic-list-fill-bookmark.svg") center no-repeat;
         }
     }
+    .brief_descr {
+        font-size: 15px;
+        font-family: 'cairo_semibold';
+        line-height: 1.56;
+        color: var(--black-two);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        width: 77%;
+    }
+    .read_more {
+        font-size: 15px;
+        font-family: 'cairo_bold';
+        line-height: 1.56;
+        color: var(--deep-orange);
+        width: 23%;
+    }
 }
 .list_view{
-    .category_police_card{
+    .category_police_card, .category_useful_num_card{
         .list_card{
             .details{
                 padding: 43px 0 44px 30px;
+                width: 80%;
                 .card_title{
                     margin: 0 0 15px 0;
-                    display: inline-block;
                 }
                 .tag_g{
                     top: 29px;
@@ -9647,7 +9690,9 @@ color: var(--deep-orange);
                 }
             }
         }
+      
     } 
+ 
 }
 .police_detail{
     .digit_wrap{
@@ -9676,8 +9721,274 @@ color: var(--deep-orange);
         border-bottom: 1px solid var(--white-nine);
     }
 }
-/***************************************Police close******************************************/
 
+.ar{
+    .category_police_card, .category_useful_num_card{
+        .list_card {
+            padding: 32px 30px 0 8px;
+            .details{
+                .tag_g {
+                    right: auto;
+                    left: 10px;
+                }
+            }
+        
+        }
+    }
+    .list_view{
+        .category_police_card, .category_useful_num_card{
+            .list_card {
+                .details{
+                    padding: 43px 30px 44px 0;
+                    .tag_g{
+                        right: 140px;
+                        left: auto;
+                    }
+                }
+            }
+        }
+    }
+}
+/***************************************Police and Useful NUmbers close******************************************/
+
+
+/***************************************Job******************************************/
+.category_job_card{
+    .list_card {
+        min-height: 360px;
+        padding: 30px 8px 0 31px;
+        position: relative;
+        .card_img{
+            width: 80px;
+            height: 80px;
+            border-radius: 12px;
+        }
+        .details{
+            padding: 14px 0 0 0;
+            .tag_g{
+                position: absolute;
+                top: 80px;
+                right: 10px;
+            }
+            .org_name{
+                font-family: 'cairo_semibold';
+                font-size: 14px;
+                display: block;
+                line-height: 1.43;
+                color: var(--black-two);
+                margin-bottom: 10px;
+            }
+        }
+    }
+    
+    .share_l{
+        background: url("../images/ic-list-share.svg") center no-repeat;
+        border: solid 1px var(--white-nine);
+    }
+    .bookmark_l{
+        border: solid 1px var(--white-nine);
+        background: url(../images/ic-list-bookmark.svg) center no-repeat;
+        &.save{
+            background: url("../images/ic-list-fill-bookmark.svg") center no-repeat;
+        }
+    }
+}
+.list_view{
+    .category_job_card{
+        .list_card{
+            .details{
+                padding: 40px 0 20px 30px;
+                .card_title{
+                    margin: 0 0 15px 0;
+                    display: inline-block;
+                }
+                .tag_g{
+                    top: 29px;
+                    right: auto;
+                    left: 135px;
+                }
+            }
+        }
+    } 
+}
+.job_detail{
+    .hd{
+        display: block;
+        font-family: 'cairo_semibold';
+        color: var(--black-two);
+        line-height: 1.56;
+        margin-bottom: 15px;
+    }
+    .row_wrap{
+        display: flex;
+        align-items: center;
+    }
+    .facilities_wrap{
+        li{
+            span{
+                display: block;
+                text-indent: 5px;
+                &::before{
+                    top: 10px;
+                    transform: initial;
+                }
+            }
+            
+        }
+    }
+    .digit_wrap{
+        padding-left: 15px;
+        li{
+            list-style-type: decimal;
+            margin: 0;
+            color: var(--black-two);
+            font-family: 'cairo_semibold';
+            flex: 1 1 100%;
+            .commn_para{
+                margin-bottom: 10px;
+            }
+            .answer{
+                display: block;
+                padding: 0;
+            }
+        }
+        span{
+            &::before{
+                display: none;
+            }
+        }
+    }
+    .details{
+        border-bottom: 1px solid var(--white-nine);
+        .content_wrap{
+            display: flex;
+            align-items: center;
+            margin: 0 0 15px 30px;
+            .show_label{
+                padding-left: 6px;
+                margin: 0;
+            }
+            .show_label_grey{
+                padding-right: 8px;
+            }
+        }
+        &.detail_card{
+            margin: 0 0 0 50px;
+        }
+    }
+}
+
+/***************************************Job close******************************************/
+
+
+/***************************************Museum******************************************/
+.category_museum_card{
+    .list_card {
+        min-height: 460px;
+    }
+}
+.museum_detail{
+    .detail_card{
+        .add{
+            margin: 0 0 0 12px;
+        }
+    }
+    .digit_wrap{
+        padding-left: 15px;
+        li{
+            list-style-type: decimal;
+            margin: 0;
+            color: var(--black-two);
+            font-family: 'cairo_semibold';
+            flex: 1 1 auto;
+            .commn_para{
+                margin-bottom: 10px;
+            }
+            .answer{
+                display: block;
+                padding: 0;
+            }
+        }
+        span{
+            &::before{
+                display: none;
+            }
+        }
+    }
+    
+}
+/***************************************Museum close******************************************/
+/***************************************Bank******************************************/
+.category_bank_card{
+    .list_card{
+        min-height: 450px;
+        .details {
+            padding: 17px 20px;
+        }
+    }
+}
+.list_view {
+    .category_bank_card{
+        .list_card {
+            .details {
+                padding: 25px 32px;
+            }
+        }
+    }
+}
+.bank_detail{
+    .digit_wrap{
+        padding-left: 15px;
+        li{
+            list-style-type: decimal;
+            margin: 0;
+            color: var(--black-two);
+            font-family: 'cairo_semibold';
+            flex: 1 1 auto;
+            .commn_para{
+                margin-bottom: 10px;
+            }
+            .answer{
+                display: block;
+                padding: 0;
+            }
+        }
+        span{
+            &::before{
+                display: none;
+            }
+        }
+    }
+    .facilities_wrap{
+        a{
+            color: #009dbd;
+            font-family: 'cairo_semibold';
+            line-height: 2.19;
+        }
+    }
+    .hd{
+        display: block;
+    }
+}
+
+/***************************************Bank close******************************************/
+
+/***************************************Insaurance******************************************/
+.category_insaurance_card{
+    .list_card{
+        min-height: 460px;
+    }
+}
+.list_view{
+    .category_insaurance_card{
+        .list_card{
+            .details {
+                padding: 24px 20px 10px 32px;
+            }
+        }
+    }
+}
+/*************************************Insaurance close*************************************/
 /**************More**********/
 .more{
 	color: var(--rouge);
@@ -9982,6 +10293,10 @@ color: var(--deep-orange);
         .detail_card {
             padding: 32px 32px 20px 0;
             text-align: right;
+
+            .rouge_btn {
+                width: 320px;
+            }
         }
 
         .show_label_grey{
@@ -10654,13 +10969,31 @@ color: var(--deep-orange);
     width: 100%;
     align-items: center;
     justify-content: center;
+    @media(max-width:640px){
+        flex-flow: column;
+        padding: 15px;
+    }
     p {
         max-width: 928px;
         margin: 0 100px 0 0;
         color: var(--slate-grey);
         font-family: "cairo_semibold";
         line-height: 1.9;
+        @media(max-width:1024px){
+            max-width: 75%;
+            margin: 0;
+            padding: 0 20px;
+        }
+        @media(max-width:640px){
+            max-width: 100%;
+            margin: 0 0 15px 0;
+            padding: 0 20px;
+        }
+
     }
+
+  
+
     .primary_btn {
         background-color: var(--rouge);
         font-family: "cairo_bold";
@@ -10675,3 +11008,598 @@ color: var(--deep-orange);
         }
     }
 }
+
+
+
+
+
+
+
+/***********************************Directory************************************/
+.directory_wrapper{
+    width: 1170px;
+    margin: 0 auto;
+    background-image: url(../images/ic_directory_bg_curve.svg);
+    background-color: var(--white-five);
+    background-position: bottom;
+    background-repeat:  no-repeat;
+    background-size: contain;
+    @media screen and(max-width: 1200px){
+        width: 100%;
+    }
+}
+
+.download_utility_directory{
+    padding: 30px 70px;
+    position: relative;
+    @media screen and(max-width: 1200px){
+       padding: 30px;
+    }
+    .category_tab_wrapper{
+        margin-bottom: 43px;
+        &.directory_tab{
+            ul{
+                display: flex;
+                border-bottom: 1px solid #d9d9d9;
+                padding-bottom: 12px;
+                li{
+                    margin: 0 100px 0 0;
+                    &:last-child{
+                        margin: 0;
+                    }
+                    @media screen and(max-width: 965px){
+                        margin: 0 50px 0 0;
+                    }
+                    a{
+                        font-family: 'cairo_semibold';
+                        font-size: 16px;
+                        line-height: 1.5;
+                        letter-spacing: 0.23px;
+                        color: var(--purple-brown);
+                        padding: 0 0 12px 0;
+                        &.active{
+                            color: var(--dark-orange) !important;
+                            font-family: 'cairo_bold';
+                            &:after {
+                                width: 100%;
+                            }
+                        }
+                        &.link{
+                            &:hover{
+                                color: var(--dark-orange) !important;
+                            }
+                            &::after{
+                                background: var(--dark-orange);
+                                height: 3px;
+                            }
+                        }
+                    }
+                }
+            }
+            @media screen and (max-width: 760px) {
+                display: none;
+            }
+        }
+       
+    }
+
+    .tag{
+        font-family: 'cairo_semibold';
+        font-size: 10px;
+        line-height: 1.3;
+        color: var(--purple-brown);
+        padding: 0 5px;
+        border-radius: 8px;
+        box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.23);
+        background-color: var(--white);
+        margin-left: 3px;
+    }
+    .title{
+        font-family: 'cairo_bold';
+        font-size: 30px;
+        line-height: 1.43;
+        color: #2a2a2a33;
+        margin-bottom: 17px;
+        @media screen and(max-width: 640px){
+            font-size: 21px;
+            margin: 15px 0;
+        }
+    }
+    .directory_title{
+        font-family: 'cairo_bold';
+        font-size: 36px;
+        line-height: 1.19;
+        color: var(--purple-brown);
+        margin-bottom: 50px;
+        @media screen and(max-width: 640px){
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+    }
+
+    .directory_card_row{
+        display: flex;
+        flex-wrap: wrap;
+        .directory_card{
+            width: 179px;
+            height: 220px;
+            border-radius: 20px;
+            border: solid 1px #d5d6d8;
+            background-color: var(--white);
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            padding: 34px 15px 28px;
+            margin: 0 20px 20px 0;
+            @media screen and(max-width: 768px){
+                width: 192px;
+            }
+            @media screen and(max-width: 640px){
+                width: 100%;
+                margin: 10px auto;
+            }
+            .card_title{
+                font-family: 'cairo_bold';
+                font-size: 17px;
+                line-height: 1.59;
+                color: var(--dark-orange);
+                margin-bottom: 7px;
+                text-align: center;
+            }
+            .card_brief{
+                font-family: 'cairo_semibold';
+                font-size: 14px;
+                line-height: 1.57;
+                color: var(--slate-grey);
+                text-align: center;
+            }
+            &:hover{
+                box-shadow: 5px 5px 25px 0px rgba(46, 61, 73, 0.2);
+            }
+        }
+       
+    }
+
+    .feedback_link{
+        display: flex;
+        align-items: center;
+        padding: 30px 0;
+        p{
+            font-size: 14px;
+            font-family: 'cairo_semibold';
+            color: var(--purple-brown);
+            margin-right: 50px;
+        }
+        .like{
+            display: flex;
+            label{
+                position: relative;
+                width: 49px;
+                height: 31px;
+                text-align: center;
+                background-color: var(--white-five);
+                font-family: 'cairo_bold';
+                font-size: 15px;
+                line-height: 2;
+                color: var(--rouge-two);
+                display: inline-block;
+                border-radius: 16px;
+                cursor: pointer;
+                margin-right: 18px;
+            }
+            input[type="radio"]{
+                position: absolute;
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+        }
+    }
+
+    .txt_link{
+        font-family: 'cairo_semibold';
+        line-height: 2.69;
+        color: var(--dark-orange);
+    }
+    .backtoprev_wrap{
+        padding-bottom: 30px;
+    }
+    .back{
+        font-family: 'cairo_bold';
+        font-size: 20px;
+        line-height: 2.15;
+        color: var(--purple-brown);
+        position: relative;
+        display: inline-block;
+        padding-left: 55px;
+        &::before {
+            width: 40px;
+            height: 40px;
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: url('../images/back.png') center no-repeat;
+            background-size: contain;
+        }
+    }
+    #ministry_card_owl, #embassies_card_owl, #media_card_owl{
+        .owl-next {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            top:  250px;
+            right: 26px;
+            background-image: url('../images/ic_navigation_arrow_forward_active.png');
+             &.disabled {
+               display: block;
+                background-image: url('../images/ic_navigation_arrow_forward_inactive.png');
+            }
+        }
+        .owl-prev {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            right: 86px;
+            left: auto;
+            top: 250px;        
+            background-image: url('../images/ic_navigation_arrow_backward_active.png');
+            &.disabled {
+                display: block;
+                 background-image: url('../images/ic_navigation_arrow_backward_inactive.png');
+             }
+        }
+      
+    }
+    .cards_wrap{
+        position: relative;
+        margin-bottom: 30px;
+        .directory_card{
+            .card_title{
+                color: var(--black-two);
+            }
+        }
+    }
+    h3{
+        font-family: 'cairo_bold';
+        font-size: 20px;
+        line-height: 2.15;
+        margin-bottom: 12px;
+        color: var(--purple-brown);
+    }
+    .heading_wrap{
+        align-items: center;
+        padding: 0 30px 0 10px;
+    }
+    .view_all{
+        font-family: 'cairo_bold';
+        color: var(--rouge-three);
+        display: inline-block;
+        margin-bottom: 12px;
+    }
+    .heading{
+		font-family: 'cairo_bold';
+		font-size: 28px;
+		color: var(--black);
+		position: relative;
+		padding-left: 30px;
+		margin-bottom: 16px;
+		&::before{
+			width: 20px;
+			height: 18px;
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 6px;
+			background: url(../images/bullet_pink.svg) center no-repeat;
+			background-size: contain;
+		}
+    }
+}
+
+
+.ar{
+    .download_utility_directory{
+        #ministry_card_owl, #embassies_card_owl, #media_card_owl{
+            .owl-prev {
+                right: auto;
+                left: 86px;
+            }
+            .owl-next{
+                left: 26px;
+                right: auto;
+            }
+        }
+        .text-right{
+            text-align: left !important;
+        }
+        .category_tab_wrapper{
+            &.directory_tab {
+                ul {
+                    li{
+                        margin: 0 0 0 100px;
+                    }
+                }
+            }
+        }
+        .category_search_input {
+            .detect-icon{
+                left: 5px;
+                right: auto;
+            }
+            input{
+                padding: 11px 14px 11px 60px;
+            }
+        }
+        .heading{
+            padding: 0 30px 0 0;
+            &::before{
+                left: auto;
+                right: 0;
+            }
+        }
+    }
+   
+}
+
+/***********************************Directory close*********************************/
+
+
+
+
+/*****************************Digital Projects***************************************/
+.category_digital_project_card{
+    .list_card {
+        min-height: 330px;
+        .details {
+            padding: 30px 20px;
+            border-top: solid 1px var(--white-nine);
+            .card_title{
+                margin: 0;
+            }
+        }
+    }
+}
+.list_view{
+    .category_digital_project_card{
+        .details {
+            border-left: solid 1px var(--white-nine);
+            border-top: none;
+        }
+    }
+}
+
+.digital_project_detail{
+    .email_link{
+        color: #067cf3;
+    }
+}
+
+.ar{
+    .category_digital_project_card{
+        .list_card {
+            .details {
+                border-right: solid 1px var(--white-nine);
+                border-left: none;
+            }
+        }
+    }
+}
+/*****************************Digital Projects close***************************************/
+
+/*****************************Useful Links***************************************/
+.category_useful_links_card{
+    .list_card {
+        min-height: 360px;
+        .details {
+            padding: 30px 20px;
+            border-top: solid 1px var(--white-nine);
+            .card_title{
+                margin: 0;
+            }
+        }
+    }
+}
+.ar{
+    .category_useful_links_card{
+        .list_card {
+            .details {
+                border-right: solid 1px var(--white-nine);
+                border-left: none;
+            }
+        }
+    }
+}
+/*****************************Useful Links close***************************************/
+
+/*****************************Downloadables***************************************/
+.category_downloadable_card{
+    .list_card{
+        min-height: 180px;
+        position: relative;
+        .details {
+            padding: 60px 30px 35px;
+            .card_title{
+                margin: 0;
+                line-height: 1.9;
+            }
+        }
+    }
+    .share_l{
+        background: url("../images/ic-list-share.svg") center no-repeat;
+        border: solid 1px var(--white-nine);
+    }
+    .bookmark_l{
+        border: solid 1px var(--white-nine);
+        background: url("../images/ic-list-bookmark.svg") center no-repeat;
+        &.save{
+            background: url("../images/ic-list-fill-bookmark.svg") center no-repeat;
+        }
+    }
+}
+
+.list_view{
+    .category_downloadable_card {
+        .list_card {
+            .details {
+                padding: 30px 30px 35px;
+            }
+        }
+    }
+}
+
+.downloadable_detail{
+    .facilities_wrap{
+        flex-flow: column;
+    }
+    .description_detail{
+        margin: 0 30px;
+        padding: 40px 0 50px;
+        border-bottom: 1px solid var(--white-six);
+    }
+    .card_title {
+        font-size: 28px;
+        margin: 0;
+    }
+    .btn_wrap{
+        border: none;
+    }
+}
+/*****************************Downloadables close***************************************/
+
+/*****************************Govt Offices***************************************/
+.category_govt_offc_card{
+    .list_card{
+        min-height: 520px;
+    }
+}
+
+.list_view{
+    .category_govt_offc_card{
+        .list_card{
+            .details {
+                padding: 20px 20px 10px 32px;
+            }
+        }
+    }
+   
+}
+/*****************************Govt Offices close***************************************/
+
+/*****************************Charitable Organisation***************************************/
+.category_charity_card{
+    .list_card{
+        min-height: 230px;
+        position: relative;
+        .details {
+            padding: 60px 30px 35px;
+            .card_title{
+                margin: 0;
+                line-height: 1.9;
+            }
+        }
+    }
+    .share_l{
+        background: url("../images/ic-list-share.svg") center no-repeat;
+        border: solid 1px var(--white-nine);
+    }
+    .bookmark_l{
+        border: solid 1px var(--white-nine);
+        background: url("../images/ic-list-bookmark.svg") center no-repeat;
+        &.save{
+            background: url("../images/ic-list-fill-bookmark.svg") center no-repeat;
+        }
+    }
+}
+
+.list_view{
+    .category_charity_card {
+        .list_card {
+            .details {
+                padding: 30px 30px 35px;
+            }
+        }
+    }
+}
+
+.charity_detail{ 
+    .digit_wrap{
+        padding-left: 15px;
+        li{
+            list-style-type: decimal;
+            margin: 0;
+            color: var(--black-two);
+            font-family: 'cairo_semibold';
+            flex: 1 1 auto;
+            .commn_para{
+                margin-bottom: 10px;
+            }
+        }
+        span{
+            &::before{
+                display: none;
+            }
+        }
+    }
+    .facilities_wrap {
+        li {
+            span {
+                display: block;
+                text-indent: 5px;
+                &::before{
+                    top: 10px;
+                    transform: initial;
+                }
+            }
+        }
+    }
+    .description_detail{
+        border-bottom: 1px solid var(--white-six);
+        margin: 0 30px;
+        padding: 40px 0 30px;
+    }
+    .card_title {
+        font-size: 28px;
+        margin: 0 0 18px;
+    }
+    .btn_wrap{
+        border: none;
+    }
+}
+/*****************************Charitable Organisation close***************************************/
+
+/***************************************Mobile Applications******************************************/
+.category_application_card{
+    .list_card {
+        min-height: 615px;
+        .card_img{
+            border-bottom: solid 1px var(--white-nine);
+        }
+        .details{
+            .show_label_grey{
+                padding-right: 8px;
+            }
+            .custom_label{
+                margin-bottom: 2px;
+                display: block;
+            }
+            .content_wrap{
+                display: flex;
+                align-items: center;
+                margin-bottom: 14px;
+                .show_label{
+                    padding-left: 0;
+                    margin: 0;
+                    font-size: 14px;
+                }
+            }
+        }
+        .btn_wrap{
+            border: none;
+        }
+    }
+}
+
+/***************************************Mobile Applications close******************************************/

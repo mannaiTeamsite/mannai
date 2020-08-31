@@ -382,9 +382,6 @@ body {
   @media (max-width: 990px) {
     .app_wrapper {
       padding: 55px 0 120px 0; } }
-  @media (max-width: 990px) {
-    .app_wrapper {
-      padding: 55px 0 120px 0; } }
 
 .custom_container {
   max-width: 1170px;

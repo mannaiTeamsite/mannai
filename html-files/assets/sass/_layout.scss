@@ -23,7 +23,7 @@ header{
         display: flex;      
         .nav_brand{
             display: flex;
-            padding: 10px 20px;
+            padding: 28px 27px;
             align-items: center;
             border-right: solid 1px var(--border-color);
             @media(max-width:1180px){
@@ -323,8 +323,9 @@ header{
 
 
 .search_icon{
-    margin: 0 13px -4px -15px;
+    margin: 0;
     cursor: pointer;
+    width: 16px;
 }
 /************Arabic*****************/
 .ar {

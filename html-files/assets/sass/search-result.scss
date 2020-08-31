@@ -3,15 +3,21 @@ p, h1, h2, h3, h4, h5{
 }
 .search_wrapper{
     max-width: 1237px;
-    margin: 10px auto 0;
+    margin: 26px auto 0;
     position: relative;
     padding: 50px 50px 0;
     display: flex;
     align-items: flex-start;
+   
     @media screen and (max-width: 1137px){
         margin: 60px 15px 20px;
         padding: 70px 0 0;
     }
+    @media screen and (max-width: 1024px){
+        margin: 20px 15px 20px;
+        padding: 50px 0 0;
+    }
+    
     .close{
         width: 50px;
         height: 50px;
@@ -19,17 +25,13 @@ p, h1, h2, h3, h4, h5{
         top: 0;
         right: 0;
         cursor: pointer;
-        img{
-            width: 50px;
-            height: 50px;
+        @media screen and (max-width: 1024px){
+            width: 30px;
+        height: 30px;
         }
     }
 }
-.ar{
-    .search_wrapper{
-        flex-direction: row-reverse;
-    }
-}
+
 .search_block{
     flex: 1;
 .search_input{
@@ -83,8 +85,12 @@ p, h1, h2, h3, h4, h5{
             padding: 32px 190px 32px 32px;
             border-radius: 12px;
             transition: 0.3s ease-in-out all;
+            @media screen and (max-width: 1366px){
+                font-size: 17px;
+            }
             @media screen and (max-width: 768px){
                 padding: 17px 165px 17px 15px;
+                font-size: 16px;
             }
             @media screen  and (max-width: 540px){
                 padding: 10px 15px;
@@ -122,7 +128,7 @@ p, h1, h2, h3, h4, h5{
                 display: flex;
                 align-items: center;
                 cursor: pointer;
-                margin: 0 64px;
+                margin: 0 64px 0 0;
               
                 .text{
                     font-family: 'cairo_semibold';
@@ -130,8 +136,8 @@ p, h1, h2, h3, h4, h5{
                     font-weight: 600;
                     line-height: 1.29;
                     letter-spacing: 0.19px;
-                    color: var(--slate-grey);
-                    border-bottom: 1px solid var(--slate-grey);
+                    color: var(--rouge);
+                    border-bottom: 1px solid var(--rouge);
                 }
                 @media screen and (max-width: 768px){
                     margin: 0 30px 0 10px;
@@ -170,6 +176,10 @@ p, h1, h2, h3, h4, h5{
                     background-image: url('../../assets/images/down-arrow.svg');
                     transform: rotateX(0deg);
                 }
+                .text{
+                    color: var(--slate-grey);
+                    border-bottom: 1px solid var(--slate-grey);
+                }
                }
             }
             @media screen  and (max-width: 540px){
@@ -182,6 +192,9 @@ p, h1, h2, h3, h4, h5{
     }
    
     .search_btn{
+        @media screen  and (min-width: 768px){
+            min-width: 127px;
+        }
         @media screen  and (max-width: 768px){
             margin-left: 20px;
         }
@@ -202,8 +215,13 @@ p, h1, h2, h3, h4, h5{
             padding: 13px 26px;
             line-height: 1.9;
             cursor: pointer;
+            
             @media screen and (max-width: 768px){
                 padding: 5px 20px;
+            }
+            @media screen and (max-width: 600px){
+                padding: 5px 10px;
+                min-width: 100px;
             }
             @media screen and (max-width: 540px){
                 padding: 0px 10px;
@@ -227,6 +245,9 @@ p, h1, h2, h3, h4, h5{
         background-color: var(--white);
         z-index: 99;
         display: none;
+        max-height: 400px;
+        overflow-x: auto;
+        max-width: 946px;
         @media screen and (max-width: 768px){
             top: 66px;
         }
@@ -274,9 +295,7 @@ p, h1, h2, h3, h4, h5{
         background-color: var(--white);
         padding: 32px 32px 23px;
         width: 100%;
-        max-width: 946px;
-        max-height: 500px;
-        overflow-y: auto;
+        // max-width: 946px;
         z-index: 99;
         @media screen and (max-width: 768px){
             top: 66px;
@@ -408,7 +427,6 @@ p, h1, h2, h3, h4, h5{
                                     margin-bottom: 0;
                                     img{
                                         border-radius: 9px;
-                                        width: 100%;
                                     }
                                 }
                             }
@@ -443,7 +461,6 @@ p, h1, h2, h3, h4, h5{
     .search_input{
         padding: 0 0 0 32px;
         margin: 0 0 0 30px;
-        flex-direction: row-reverse;
             @media screen  and (max-width: 768px){
                 padding: 0;
                 margin: 0;
@@ -467,7 +484,8 @@ p, h1, h2, h3, h4, h5{
                 padding: 32px 32px 32px 190px;
                 direction: rtl;
                 @media screen and (max-width: 768px){
-                    padding: 17px 17px 15px 165px;
+                    padding: 17px 17px 15px 175px;
+                    font-size: 16px;
                 }
                 @media screen  and (max-width: 540px){
                     padding: 10px 15px;
@@ -479,30 +497,30 @@ p, h1, h2, h3, h4, h5{
                 left: 0;
                 right: auto;
                 .adv_search{
+                    margin: 0 0 0 64px;
                     @media screen and (max-width: 768px){
                         margin: 0 30px 0 20px;
                     }
-                    @media screen and (max-width: 768px){
-                        margin: 0 30px 0 10px;
+                    @media screen and (max-width: 540px){
+                        margin: 0 15px 0 10px;
                     }
                     span{
                         margin-left: 10px;
                     }
                    &.applied{
                        position: relative;
-                       flex-direction: row-reverse;
-                       :after{
+                       &:after{
                            content: '';
-                           right: 0;
-                           left: 5px;
+                           right: auto;
+                           left: 0px;
                            top: -5px;
                        }
                    }
                 }
                 @media screen  and (max-width: 540px){
                     top: 100%;
-                    right: auto;
-                    left: 0;
+                    right: 0;
+                    left: auto;
                     transform: translate(0, 0);
                 }
             }
@@ -513,8 +531,8 @@ p, h1, h2, h3, h4, h5{
                 margin-left: 20px;
             }
             @media screen  and (max-width: 540px){
-                margin-left: 0;
-                margin-right: 10px;
+                margin-left: 10px;
+                margin-right: auto;
             }
             button{
                 flex-direction: row-reverse;
@@ -544,7 +562,7 @@ p, h1, h2, h3, h4, h5{
             right: 0;
             .adv_heading{
                 display: flex;
-                flex-direction: row-reverse;
+                flex-wrap: wrap;
                 @media screen and (max-width: 343px){
                     flex-wrap: wrap;
                 }
@@ -651,9 +669,12 @@ p, h1, h2, h3, h4, h5{
         .go_to_page{
             justify-content: flex-start;
             a{
-                flex-direction: row-reverse;
+                
                 span{
                     margin: 0 16px 0 0;
+                    img{
+                        transform: rotateY(180deg);
+                    }
                 }
             }
         }
@@ -882,6 +903,7 @@ p, h1, h2, h3, h4, h5{
         margin-bottom: 40px;
         @media screen and (max-width: 720px){
             padding: 6px 5px;
+            justify-content: space-between;
         }
         .nav-item{
             .nav-link{
@@ -895,7 +917,11 @@ p, h1, h2, h3, h4, h5{
                 color: var(--purple-brown);
                 border: 0;
                 padding: 1.266rem 1rem;
-                display: flex;
+                border-bottom: 4px solid transparent;
+                @media screen and (max-width: 1024px){
+                    font-size: 13px;
+                    padding: 12px 6px;
+                }
                 @media screen and (max-width: 720px){
                     font-size: 13px;
                 }
@@ -909,7 +935,6 @@ p, h1, h2, h3, h4, h5{
                 }
                 .icon{
                     margin-right: 11px;
-
                     @media screen and (max-width: 720px){
                         margin-right: 2px;
                         svg{
@@ -1029,11 +1054,9 @@ p, h1, h2, h3, h4, h5{
     .tabs_result{
         .nav-tabs{
             justify-content: flex-end;
+            justify-content: space-between;
             .nav-item{
                 .nav-link{
-                    display: flex;
-                    align-items: center;
-                    flex-direction: row-reverse;
                     .icon{
                         margin-right: 0;
                         margin-left: 11px;
@@ -1069,6 +1092,14 @@ p, h1, h2, h3, h4, h5{
                             right: auto;
                             left: 10px;
                             justify-content: flex-start;
+                        }
+                    }
+                    .dropdown-menu{
+                        .dropdown-item{
+                            > span{
+                                margin-right: 0;
+                                margin-left: 10px;
+                            }
                         }
                     }
                 }

@@ -338,7 +338,7 @@ header {
     display: flex; }
     header .innner_wrapper .nav_brand {
       display: flex;
-      padding: 10px 20px;
+      padding: 28px 27px;
       align-items: center;
       border-right: solid 1px var(--border-color); }
       @media (max-width: 1180px) {
@@ -560,8 +560,9 @@ header {
     left: 0; }
 
 .search_icon {
-  margin: 0 13px -4px -15px;
-  cursor: pointer; }
+  margin: 0;
+  cursor: pointer;
+  width: 16px; }
 
 /************Arabic*****************/
 .ar header .innner_wrapper .nav_brand {
@@ -1145,8 +1146,8 @@ hr {
   -moz-border-radius: 12px;
   -webkit-border-radius: 12px;
   border-radius: 12px;
-  padding: 43px 48px;
-  width: 540px; }
+  padding: 44.5px 48px;
+  width: 542px; }
   @media (max-width: 1350px) {
     .home .home_banner_section .banner_container {
       padding: 35px;
@@ -1422,12 +1423,13 @@ hr {
     padding-right: 0;
     padding-left: 40px; }
   .ar .personal_search_block .search_section .srch_wrap li input {
-    padding-right: 0; }
+    padding-right: 0;
+    padding-left: 47px; }
   .ar .personal_search_block .search_section .srch_wrap li .person_col {
     border-right: 0;
     border-left: 1px solid #dadada; }
   .ar .personal_search_block .search_section .srch_wrap li .looking_for_col {
-    padding-left: 80px;
+    padding-left: 0px;
     padding-right: 0; }
   .ar .personal_search_block .search_section .srch_wrap li .location_col {
     border-right: 0;
@@ -3232,9 +3234,9 @@ hr {
           position: relative;
           overflow: hidden;
           cursor: pointer; }
-          @media (max-width: 400px) {
+          @media (max-width: 640px) {
             .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm {
-              width: 45%; } }
+              width: 46%; } }
           .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm .title {
             width: 93px;
             font-size: 16px;
@@ -4483,6 +4485,9 @@ hr {
             font-size: 16px; } }
         .achievement .section_wrapper .right_sec .para_sec p:last-child {
           margin-bottom: 0; }
+        .achievement .section_wrapper .right_sec .para_sec p span {
+          color: var(--berry);
+          font-family: "cairo_bold"; }
       .achievement .section_wrapper .right_sec .para_sec .aspects_points ul {
         display: flex;
         align-items: flex-start;
@@ -5554,26 +5559,34 @@ hr {
         min-width: 59px;
         margin-right: 15px; }
       .bottom_links ul li .like, .bottom_links ul a .like {
-        margin-left: 18px; }
-        .bottom_links ul li .like label, .bottom_links ul a .like label {
-          position: relative;
-          width: 49px;
-          height: 31px;
-          text-align: center;
-          background-color: var(--white-five);
-          font-family: 'cairo_bold';
-          font-size: 15px;
-          line-height: 2;
-          color: var(--rouge-two);
-          display: inline-block;
-          border-radius: 16px; }
-          .bottom_links ul li .like label:first-child, .bottom_links ul a .like label:first-child {
-            margin-right: 18px; }
-          .bottom_links ul li .like label input[type='radio'], .bottom_links ul a .like label input[type='radio'] {
+        margin-left: 18px;
+        display: flex;
+        align-items: center; }
+        .bottom_links ul li .like .like_btn, .bottom_links ul a .like .like_btn {
+          margin: 0 5px; }
+          .bottom_links ul li .like .like_btn label, .bottom_links ul a .like .like_btn label {
+            position: relative;
+            width: 49px;
+            height: 31px;
+            text-align: center;
+            background-color: var(--white-five);
+            font-family: 'cairo_bold';
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--rouge-two);
+            display: inline-block;
+            border-radius: 16px;
+            border: 2px solid transparent;
+            transition: 0.3s ease-in-out all;
+            cursor: pointer; }
+            .bottom_links ul li .like .like_btn label:first-child, .bottom_links ul a .like .like_btn label:first-child {
+              margin-right: 18px; }
+          .bottom_links ul li .like .like_btn input[type='radio'], .bottom_links ul a .like .like_btn input[type='radio'] {
             position: absolute;
             width: 0;
-            height: 0;
-            opacity: 0; }
+            height: 0; }
+            .bottom_links ul li .like .like_btn input[type='radio']:checked + label, .bottom_links ul a .like .like_btn input[type='radio']:checked + label {
+              border: 2px solid var(--rouge); }
 
 .ar .bottom_links ul {
   align-items: flex-end; }
@@ -5870,7 +5883,10 @@ hr {
       .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper {
         display: flex; }
         .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
-          margin-right: 30px; }
+          margin-right: 30px;
+          width: 72px;
+          height: 72px;
+          overflow: hidden; }
         .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper .title {
           font-size: 18px;
           font-family: "cairo_bold";
@@ -7875,6 +7891,8 @@ h3 {
   line-height: 2.19; }
 .malls_detail .hd {
   display: block; }
+.malls_detail .rouge_btn {
+  padding: 12px 50px; }
 
 /***************************************Malls close******************************************/
 /***************************************Recreational Areas******************************************/
@@ -7909,38 +7927,55 @@ h3 {
   display: block; }
 
 /***************************************Recreational Areas close******************************************/
-/***************************************Police******************************************/
-.category_police_card .list_card {
-  min-height: 310px;
+/***************************************Police & Useful NUmbers******************************************/
+.category_police_card .list_card, .category_useful_num_card .list_card {
+  min-height: 300px;
   padding: 32px 8px 0 30px;
   position: relative; }
-  .category_police_card .list_card .card_img {
+  .category_police_card .list_card .card_img, .category_useful_num_card .list_card .card_img {
     width: 80px;
     height: 80px;
     border-radius: 12px;
     border: solid 1px #e9e9e9;
     background-color: #f2f0f3; }
-  .category_police_card .list_card .details {
+  .category_police_card .list_card .details, .category_useful_num_card .list_card .details {
     padding: 14px 0 0 0; }
-    .category_police_card .list_card .details .tag_g {
+    .category_police_card .list_card .details .tag_g, .category_useful_num_card .list_card .details .tag_g {
       position: absolute;
       top: 82px;
       right: 10px; }
-.category_police_card .share_l {
+.category_police_card .share_l, .category_useful_num_card .share_l {
   background: url("../images/ic-list-share.svg") center no-repeat;
   border: solid 1px var(--white-nine); }
-.category_police_card .bookmark_l {
+.category_police_card .bookmark_l, .category_useful_num_card .bookmark_l {
   border: solid 1px var(--white-nine);
   background: url(../images/ic-list-bookmark.svg) center no-repeat; }
-  .category_police_card .bookmark_l.save {
+  .category_police_card .bookmark_l.save, .category_useful_num_card .bookmark_l.save {
     background: url("../images/ic-list-fill-bookmark.svg") center no-repeat; }
+.category_police_card .brief_descr, .category_useful_num_card .brief_descr {
+  font-size: 15px;
+  font-family: 'cairo_semibold';
+  line-height: 1.56;
+  color: var(--black-two);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  width: 77%; }
+.category_police_card .read_more, .category_useful_num_card .read_more {
+  font-size: 15px;
+  font-family: 'cairo_bold';
+  line-height: 1.56;
+  color: var(--deep-orange);
+  width: 23%; }
 
-.list_view .category_police_card .list_card .details {
-  padding: 43px 0 44px 30px; }
-  .list_view .category_police_card .list_card .details .card_title {
-    margin: 0 0 15px 0;
-    display: inline-block; }
-  .list_view .category_police_card .list_card .details .tag_g {
+.list_view .category_police_card .list_card .details, .list_view .category_useful_num_card .list_card .details {
+  padding: 43px 0 44px 30px;
+  width: 80%; }
+  .list_view .category_police_card .list_card .details .card_title, .list_view .category_useful_num_card .list_card .details .card_title {
+    margin: 0 0 15px 0; }
+  .list_view .category_police_card .list_card .details .tag_g, .list_view .category_useful_num_card .list_card .details .tag_g {
     top: 29px;
     right: auto;
     left: 135px; }
@@ -7963,7 +7998,167 @@ h3 {
 .police_detail .details {
   border-bottom: 1px solid var(--white-nine); }
 
-/***************************************Police close******************************************/
+.ar .category_police_card .list_card, .ar .category_useful_num_card .list_card {
+  padding: 32px 30px 0 8px; }
+  .ar .category_police_card .list_card .details .tag_g, .ar .category_useful_num_card .list_card .details .tag_g {
+    right: auto;
+    left: 10px; }
+.ar .list_view .category_police_card .list_card .details, .ar .list_view .category_useful_num_card .list_card .details {
+  padding: 43px 30px 44px 0; }
+  .ar .list_view .category_police_card .list_card .details .tag_g, .ar .list_view .category_useful_num_card .list_card .details .tag_g {
+    right: 140px;
+    left: auto; }
+
+/***************************************Police and Useful NUmbers close******************************************/
+/***************************************Job******************************************/
+.category_job_card .list_card {
+  min-height: 360px;
+  padding: 30px 8px 0 31px;
+  position: relative; }
+  .category_job_card .list_card .card_img {
+    width: 80px;
+    height: 80px;
+    border-radius: 12px; }
+  .category_job_card .list_card .details {
+    padding: 14px 0 0 0; }
+    .category_job_card .list_card .details .tag_g {
+      position: absolute;
+      top: 80px;
+      right: 10px; }
+    .category_job_card .list_card .details .org_name {
+      font-family: 'cairo_semibold';
+      font-size: 14px;
+      display: block;
+      line-height: 1.43;
+      color: var(--black-two);
+      margin-bottom: 10px; }
+.category_job_card .share_l {
+  background: url("../images/ic-list-share.svg") center no-repeat;
+  border: solid 1px var(--white-nine); }
+.category_job_card .bookmark_l {
+  border: solid 1px var(--white-nine);
+  background: url(../images/ic-list-bookmark.svg) center no-repeat; }
+  .category_job_card .bookmark_l.save {
+    background: url("../images/ic-list-fill-bookmark.svg") center no-repeat; }
+
+.list_view .category_job_card .list_card .details {
+  padding: 40px 0 20px 30px; }
+  .list_view .category_job_card .list_card .details .card_title {
+    margin: 0 0 15px 0;
+    display: inline-block; }
+  .list_view .category_job_card .list_card .details .tag_g {
+    top: 29px;
+    right: auto;
+    left: 135px; }
+
+.job_detail .hd {
+  display: block;
+  font-family: 'cairo_semibold';
+  color: var(--black-two);
+  line-height: 1.56;
+  margin-bottom: 15px; }
+.job_detail .row_wrap {
+  display: flex;
+  align-items: center; }
+.job_detail .facilities_wrap li span {
+  display: block;
+  text-indent: 5px; }
+  .job_detail .facilities_wrap li span::before {
+    top: 10px;
+    transform: initial; }
+.job_detail .digit_wrap {
+  padding-left: 15px; }
+  .job_detail .digit_wrap li {
+    list-style-type: decimal;
+    margin: 0;
+    color: var(--black-two);
+    font-family: 'cairo_semibold';
+    flex: 1 1 100%; }
+    .job_detail .digit_wrap li .commn_para {
+      margin-bottom: 10px; }
+    .job_detail .digit_wrap li .answer {
+      display: block;
+      padding: 0; }
+  .job_detail .digit_wrap span::before {
+    display: none; }
+.job_detail .details {
+  border-bottom: 1px solid var(--white-nine); }
+  .job_detail .details .content_wrap {
+    display: flex;
+    align-items: center;
+    margin: 0 0 15px 30px; }
+    .job_detail .details .content_wrap .show_label {
+      padding-left: 6px;
+      margin: 0; }
+    .job_detail .details .content_wrap .show_label_grey {
+      padding-right: 8px; }
+  .job_detail .details.detail_card {
+    margin: 0 0 0 50px; }
+
+/***************************************Job close******************************************/
+/***************************************Museum******************************************/
+.category_museum_card .list_card {
+  min-height: 460px; }
+
+.museum_detail .detail_card .add {
+  margin: 0 0 0 12px; }
+.museum_detail .digit_wrap {
+  padding-left: 15px; }
+  .museum_detail .digit_wrap li {
+    list-style-type: decimal;
+    margin: 0;
+    color: var(--black-two);
+    font-family: 'cairo_semibold';
+    flex: 1 1 auto; }
+    .museum_detail .digit_wrap li .commn_para {
+      margin-bottom: 10px; }
+    .museum_detail .digit_wrap li .answer {
+      display: block;
+      padding: 0; }
+  .museum_detail .digit_wrap span::before {
+    display: none; }
+
+/***************************************Museum close******************************************/
+/***************************************Bank******************************************/
+.category_bank_card .list_card {
+  min-height: 450px; }
+  .category_bank_card .list_card .details {
+    padding: 17px 20px; }
+
+.list_view .category_bank_card .list_card .details {
+  padding: 25px 32px; }
+
+.bank_detail .digit_wrap {
+  padding-left: 15px; }
+  .bank_detail .digit_wrap li {
+    list-style-type: decimal;
+    margin: 0;
+    color: var(--black-two);
+    font-family: 'cairo_semibold';
+    flex: 1 1 auto; }
+    .bank_detail .digit_wrap li .commn_para {
+      margin-bottom: 10px; }
+    .bank_detail .digit_wrap li .answer {
+      display: block;
+      padding: 0; }
+  .bank_detail .digit_wrap span::before {
+    display: none; }
+.bank_detail .facilities_wrap a {
+  color: #009dbd;
+  font-family: 'cairo_semibold';
+  line-height: 2.19; }
+.bank_detail .hd {
+  display: block; }
+
+/***************************************Bank close******************************************/
+/***************************************Insaurance******************************************/
+.category_insaurance_card .list_card {
+  min-height: 460px; }
+
+.list_view .category_insaurance_card .list_card .details {
+  padding: 24px 20px 10px 32px; }
+
+/*************************************Insaurance close*************************************/
 /**************More**********/
 .more {
   color: var(--rouge);
@@ -8147,6 +8342,8 @@ h3 {
 .ar .video_img_wrapper .detail_card {
   padding: 32px 32px 20px 0;
   text-align: right; }
+  .ar .video_img_wrapper .detail_card .rouge_btn {
+    width: 320px; }
 .ar .video_img_wrapper .show_label_grey {
   display: inherit; }
 .ar .video_img_wrapper .content_list_wrap .content_wrap {
@@ -8582,12 +8779,26 @@ h3 {
   width: 100%;
   align-items: center;
   justify-content: center; }
+  @media (max-width: 640px) {
+    .cookies_banner_wrapper {
+      flex-flow: column;
+      padding: 15px; } }
   .cookies_banner_wrapper p {
     max-width: 928px;
     margin: 0 100px 0 0;
     color: var(--slate-grey);
     font-family: "cairo_semibold";
     line-height: 1.9; }
+    @media (max-width: 1024px) {
+      .cookies_banner_wrapper p {
+        max-width: 75%;
+        margin: 0;
+        padding: 0 20px; } }
+    @media (max-width: 640px) {
+      .cookies_banner_wrapper p {
+        max-width: 100%;
+        margin: 0 0 15px 0;
+        padding: 0 20px; } }
   .cookies_banner_wrapper .primary_btn {
     background-color: var(--rouge);
     font-family: "cairo_bold";
@@ -8598,5 +8809,407 @@ h3 {
     padding: 8px 0; }
     .cookies_banner_wrapper .primary_btn:hover {
       background-color: var(--berry); }
+
+/***********************************Directory************************************/
+.directory_wrapper {
+  width: 1170px;
+  margin: 0 auto;
+  background-image: url(../images/ic_directory_bg_curve.svg);
+  background-color: var(--white-five);
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: contain; }
+  @media screen and (max-width: 1200px) {
+    .directory_wrapper {
+      width: 100%; } }
+
+.download_utility_directory {
+  padding: 30px 70px;
+  position: relative; }
+  @media screen and (max-width: 1200px) {
+    .download_utility_directory {
+      padding: 30px; } }
+  .download_utility_directory .category_tab_wrapper {
+    margin-bottom: 43px; }
+    .download_utility_directory .category_tab_wrapper.directory_tab ul {
+      display: flex;
+      border-bottom: 1px solid #d9d9d9;
+      padding-bottom: 12px; }
+      .download_utility_directory .category_tab_wrapper.directory_tab ul li {
+        margin: 0 100px 0 0; }
+        .download_utility_directory .category_tab_wrapper.directory_tab ul li:last-child {
+          margin: 0; }
+        @media screen and (max-width: 965px) {
+          .download_utility_directory .category_tab_wrapper.directory_tab ul li {
+            margin: 0 50px 0 0; } }
+        .download_utility_directory .category_tab_wrapper.directory_tab ul li a {
+          font-family: 'cairo_semibold';
+          font-size: 16px;
+          line-height: 1.5;
+          letter-spacing: 0.23px;
+          color: var(--purple-brown);
+          padding: 0 0 12px 0; }
+          .download_utility_directory .category_tab_wrapper.directory_tab ul li a.active {
+            color: var(--dark-orange) !important;
+            font-family: 'cairo_bold'; }
+            .download_utility_directory .category_tab_wrapper.directory_tab ul li a.active:after {
+              width: 100%; }
+          .download_utility_directory .category_tab_wrapper.directory_tab ul li a.link:hover {
+            color: var(--dark-orange) !important; }
+          .download_utility_directory .category_tab_wrapper.directory_tab ul li a.link::after {
+            background: var(--dark-orange);
+            height: 3px; }
+    @media screen and (max-width: 760px) {
+      .download_utility_directory .category_tab_wrapper.directory_tab {
+        display: none; } }
+  .download_utility_directory .tag {
+    font-family: 'cairo_semibold';
+    font-size: 10px;
+    line-height: 1.3;
+    color: var(--purple-brown);
+    padding: 0 5px;
+    border-radius: 8px;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.23);
+    background-color: var(--white);
+    margin-left: 3px; }
+  .download_utility_directory .title {
+    font-family: 'cairo_bold';
+    font-size: 30px;
+    line-height: 1.43;
+    color: #2a2a2a33;
+    margin-bottom: 17px; }
+    @media screen and (max-width: 640px) {
+      .download_utility_directory .title {
+        font-size: 21px;
+        margin: 15px 0; } }
+  .download_utility_directory .directory_title {
+    font-family: 'cairo_bold';
+    font-size: 36px;
+    line-height: 1.19;
+    color: var(--purple-brown);
+    margin-bottom: 50px; }
+    @media screen and (max-width: 640px) {
+      .download_utility_directory .directory_title {
+        font-size: 24px;
+        margin-bottom: 20px; } }
+  .download_utility_directory .directory_card_row {
+    display: flex;
+    flex-wrap: wrap; }
+    .download_utility_directory .directory_card_row .directory_card {
+      width: 179px;
+      height: 220px;
+      border-radius: 20px;
+      border: solid 1px #d5d6d8;
+      background-color: var(--white);
+      display: flex;
+      flex-flow: column;
+      align-items: center;
+      transition: all 0.3s ease;
+      padding: 34px 15px 28px;
+      margin: 0 20px 20px 0; }
+      @media screen and (max-width: 768px) {
+        .download_utility_directory .directory_card_row .directory_card {
+          width: 192px; } }
+      @media screen and (max-width: 640px) {
+        .download_utility_directory .directory_card_row .directory_card {
+          width: 100%;
+          margin: 10px auto; } }
+      .download_utility_directory .directory_card_row .directory_card .card_title {
+        font-family: 'cairo_bold';
+        font-size: 17px;
+        line-height: 1.59;
+        color: var(--dark-orange);
+        margin-bottom: 7px;
+        text-align: center; }
+      .download_utility_directory .directory_card_row .directory_card .card_brief {
+        font-family: 'cairo_semibold';
+        font-size: 14px;
+        line-height: 1.57;
+        color: var(--slate-grey);
+        text-align: center; }
+      .download_utility_directory .directory_card_row .directory_card:hover {
+        box-shadow: 5px 5px 25px 0px rgba(46, 61, 73, 0.2); }
+  .download_utility_directory .feedback_link {
+    display: flex;
+    align-items: center;
+    padding: 30px 0; }
+    .download_utility_directory .feedback_link p {
+      font-size: 14px;
+      font-family: 'cairo_semibold';
+      color: var(--purple-brown);
+      margin-right: 50px; }
+    .download_utility_directory .feedback_link .like {
+      display: flex; }
+      .download_utility_directory .feedback_link .like label {
+        position: relative;
+        width: 49px;
+        height: 31px;
+        text-align: center;
+        background-color: var(--white-five);
+        font-family: 'cairo_bold';
+        font-size: 15px;
+        line-height: 2;
+        color: var(--rouge-two);
+        display: inline-block;
+        border-radius: 16px;
+        cursor: pointer;
+        margin-right: 18px; }
+      .download_utility_directory .feedback_link .like input[type="radio"] {
+        position: absolute;
+        width: 0;
+        height: 0;
+        opacity: 0; }
+  .download_utility_directory .txt_link {
+    font-family: 'cairo_semibold';
+    line-height: 2.69;
+    color: var(--dark-orange); }
+  .download_utility_directory .backtoprev_wrap {
+    padding-bottom: 30px; }
+  .download_utility_directory .back {
+    font-family: 'cairo_bold';
+    font-size: 20px;
+    line-height: 2.15;
+    color: var(--purple-brown);
+    position: relative;
+    display: inline-block;
+    padding-left: 55px; }
+    .download_utility_directory .back::before {
+      width: 40px;
+      height: 40px;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background: url("../images/back.png") center no-repeat;
+      background-size: contain; }
+  .download_utility_directory #ministry_card_owl .owl-next, .download_utility_directory #embassies_card_owl .owl-next, .download_utility_directory #media_card_owl .owl-next {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    top: 250px;
+    right: 26px;
+    background-image: url("../images/ic_navigation_arrow_forward_active.png"); }
+    .download_utility_directory #ministry_card_owl .owl-next.disabled, .download_utility_directory #embassies_card_owl .owl-next.disabled, .download_utility_directory #media_card_owl .owl-next.disabled {
+      display: block;
+      background-image: url("../images/ic_navigation_arrow_forward_inactive.png"); }
+  .download_utility_directory #ministry_card_owl .owl-prev, .download_utility_directory #embassies_card_owl .owl-prev, .download_utility_directory #media_card_owl .owl-prev {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    right: 86px;
+    left: auto;
+    top: 250px;
+    background-image: url("../images/ic_navigation_arrow_backward_active.png"); }
+    .download_utility_directory #ministry_card_owl .owl-prev.disabled, .download_utility_directory #embassies_card_owl .owl-prev.disabled, .download_utility_directory #media_card_owl .owl-prev.disabled {
+      display: block;
+      background-image: url("../images/ic_navigation_arrow_backward_inactive.png"); }
+  .download_utility_directory .cards_wrap {
+    position: relative;
+    margin-bottom: 30px; }
+    .download_utility_directory .cards_wrap .directory_card .card_title {
+      color: var(--black-two); }
+  .download_utility_directory h3 {
+    font-family: 'cairo_bold';
+    font-size: 20px;
+    line-height: 2.15;
+    margin-bottom: 12px;
+    color: var(--purple-brown); }
+  .download_utility_directory .heading_wrap {
+    align-items: center;
+    padding: 0 30px 0 10px; }
+  .download_utility_directory .view_all {
+    font-family: 'cairo_bold';
+    color: var(--rouge-three);
+    display: inline-block;
+    margin-bottom: 12px; }
+  .download_utility_directory .heading {
+    font-family: 'cairo_bold';
+    font-size: 28px;
+    color: var(--black);
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 16px; }
+    .download_utility_directory .heading::before {
+      width: 20px;
+      height: 18px;
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      background: url(../images/bullet_pink.svg) center no-repeat;
+      background-size: contain; }
+
+.ar .download_utility_directory #ministry_card_owl .owl-prev, .ar .download_utility_directory #embassies_card_owl .owl-prev, .ar .download_utility_directory #media_card_owl .owl-prev {
+  right: auto;
+  left: 86px; }
+.ar .download_utility_directory #ministry_card_owl .owl-next, .ar .download_utility_directory #embassies_card_owl .owl-next, .ar .download_utility_directory #media_card_owl .owl-next {
+  left: 26px;
+  right: auto; }
+.ar .download_utility_directory .text-right {
+  text-align: left !important; }
+.ar .download_utility_directory .category_tab_wrapper.directory_tab ul li {
+  margin: 0 0 0 100px; }
+.ar .download_utility_directory .category_search_input .detect-icon {
+  left: 5px;
+  right: auto; }
+.ar .download_utility_directory .category_search_input input {
+  padding: 11px 14px 11px 60px; }
+.ar .download_utility_directory .heading {
+  padding: 0 30px 0 0; }
+  .ar .download_utility_directory .heading::before {
+    left: auto;
+    right: 0; }
+
+/***********************************Directory close*********************************/
+/*****************************Digital Projects***************************************/
+.category_digital_project_card .list_card {
+  min-height: 330px; }
+  .category_digital_project_card .list_card .details {
+    padding: 30px 20px;
+    border-top: solid 1px var(--white-nine); }
+    .category_digital_project_card .list_card .details .card_title {
+      margin: 0; }
+
+.list_view .category_digital_project_card .details {
+  border-left: solid 1px var(--white-nine);
+  border-top: none; }
+
+.digital_project_detail .email_link {
+  color: #067cf3; }
+
+.ar .category_digital_project_card .list_card .details {
+  border-right: solid 1px var(--white-nine);
+  border-left: none; }
+
+/*****************************Digital Projects close***************************************/
+/*****************************Useful Links***************************************/
+.category_useful_links_card .list_card {
+  min-height: 360px; }
+  .category_useful_links_card .list_card .details {
+    padding: 30px 20px;
+    border-top: solid 1px var(--white-nine); }
+    .category_useful_links_card .list_card .details .card_title {
+      margin: 0; }
+
+.ar .category_useful_links_card .list_card .details {
+  border-right: solid 1px var(--white-nine);
+  border-left: none; }
+
+/*****************************Useful Links close***************************************/
+/*****************************Downloadables***************************************/
+.category_downloadable_card .list_card {
+  min-height: 180px;
+  position: relative; }
+  .category_downloadable_card .list_card .details {
+    padding: 60px 30px 35px; }
+    .category_downloadable_card .list_card .details .card_title {
+      margin: 0;
+      line-height: 1.9; }
+.category_downloadable_card .share_l {
+  background: url("../images/ic-list-share.svg") center no-repeat;
+  border: solid 1px var(--white-nine); }
+.category_downloadable_card .bookmark_l {
+  border: solid 1px var(--white-nine);
+  background: url("../images/ic-list-bookmark.svg") center no-repeat; }
+  .category_downloadable_card .bookmark_l.save {
+    background: url("../images/ic-list-fill-bookmark.svg") center no-repeat; }
+
+.list_view .category_downloadable_card .list_card .details {
+  padding: 30px 30px 35px; }
+
+.downloadable_detail .facilities_wrap {
+  flex-flow: column; }
+.downloadable_detail .description_detail {
+  margin: 0 30px;
+  padding: 40px 0 50px;
+  border-bottom: 1px solid var(--white-six); }
+.downloadable_detail .card_title {
+  font-size: 28px;
+  margin: 0; }
+.downloadable_detail .btn_wrap {
+  border: none; }
+
+/*****************************Downloadables close***************************************/
+/*****************************Govt Offices***************************************/
+.category_govt_offc_card .list_card {
+  min-height: 520px; }
+
+.list_view .category_govt_offc_card .list_card .details {
+  padding: 20px 20px 10px 32px; }
+
+/*****************************Govt Offices close***************************************/
+/*****************************Charitable Organisation***************************************/
+.category_charity_card .list_card {
+  min-height: 230px;
+  position: relative; }
+  .category_charity_card .list_card .details {
+    padding: 60px 30px 35px; }
+    .category_charity_card .list_card .details .card_title {
+      margin: 0;
+      line-height: 1.9; }
+.category_charity_card .share_l {
+  background: url("../images/ic-list-share.svg") center no-repeat;
+  border: solid 1px var(--white-nine); }
+.category_charity_card .bookmark_l {
+  border: solid 1px var(--white-nine);
+  background: url("../images/ic-list-bookmark.svg") center no-repeat; }
+  .category_charity_card .bookmark_l.save {
+    background: url("../images/ic-list-fill-bookmark.svg") center no-repeat; }
+
+.list_view .category_charity_card .list_card .details {
+  padding: 30px 30px 35px; }
+
+.charity_detail .digit_wrap {
+  padding-left: 15px; }
+  .charity_detail .digit_wrap li {
+    list-style-type: decimal;
+    margin: 0;
+    color: var(--black-two);
+    font-family: 'cairo_semibold';
+    flex: 1 1 auto; }
+    .charity_detail .digit_wrap li .commn_para {
+      margin-bottom: 10px; }
+  .charity_detail .digit_wrap span::before {
+    display: none; }
+.charity_detail .facilities_wrap li span {
+  display: block;
+  text-indent: 5px; }
+  .charity_detail .facilities_wrap li span::before {
+    top: 10px;
+    transform: initial; }
+.charity_detail .description_detail {
+  border-bottom: 1px solid var(--white-six);
+  margin: 0 30px;
+  padding: 40px 0 30px; }
+.charity_detail .card_title {
+  font-size: 28px;
+  margin: 0 0 18px; }
+.charity_detail .btn_wrap {
+  border: none; }
+
+/*****************************Charitable Organisation close***************************************/
+/***************************************Mobile Applications******************************************/
+.category_application_card .list_card {
+  min-height: 615px; }
+  .category_application_card .list_card .card_img {
+    border-bottom: solid 1px var(--white-nine); }
+  .category_application_card .list_card .details .show_label_grey {
+    padding-right: 8px; }
+  .category_application_card .list_card .details .custom_label {
+    margin-bottom: 2px;
+    display: block; }
+  .category_application_card .list_card .details .content_wrap {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px; }
+    .category_application_card .list_card .details .content_wrap .show_label {
+      padding-left: 0;
+      margin: 0;
+      font-size: 14px; }
+  .category_application_card .list_card .btn_wrap {
+    border: none; }
+
+/***************************************Mobile Applications close******************************************/
 
 /*# sourceMappingURL=main.css.map */

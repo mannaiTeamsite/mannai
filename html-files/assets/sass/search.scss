@@ -4,12 +4,17 @@ p, h1, h2, h3, h4, h5{
 }
 .search_wrapper{ //search wrapper starts here
     max-width: 1237px;
-    margin: 10px auto 0;
+    margin: 26px auto 0;
     position: relative;
     padding: 50px 50px 0;
+    
     @media screen and (max-width: 1137px){
         margin: 60px 15px 20px;
         padding: 70px 0 0;
+    }
+    @media screen and (max-width: 1024px){
+        margin: 20px 15px 20px;
+        padding: 50px 0 0;
     }
     .close{
         width: 50px;
@@ -18,9 +23,9 @@ p, h1, h2, h3, h4, h5{
         top: 0;
         right: 0;
         cursor: pointer;
-        img{
-            width: 50px;
-            height: 50px;
+        @media screen and (max-width: 1024px){
+            width: 30px;
+        height: 30px;
         }
     }
 }
@@ -71,8 +76,12 @@ p, h1, h2, h3, h4, h5{
             padding: 32px 190px 32px 32px;
             border-radius: 12px;
             transition: 0.3s ease-in-out all;
+            @media screen and (max-width: 1366px){
+                font-size: 17px;
+            }
             @media screen and (max-width: 768px){
                 padding: 17px 165px 17px 15px;
+                font-size: 16px;
             }
             @media screen  and (max-width: 540px){
                 padding: 10px 15px;
@@ -107,7 +116,7 @@ p, h1, h2, h3, h4, h5{
                 display: flex;
                 align-items: center;
                 cursor: pointer;
-                margin: 0 64px;
+                margin: 0 64px 0 32px;
               
                 .text{
                     font-family: 'cairo_semibold';
@@ -115,8 +124,8 @@ p, h1, h2, h3, h4, h5{
                     font-weight: 600;
                     line-height: 1.29;
                     letter-spacing: 0.19px;
-                    color: var(--slate-grey);
-                    border-bottom: 1px solid var(--slate-grey);
+                    color: var(--rouge);
+                    border-bottom: 1px solid var(--rouge);
                 }
                 @media screen and (max-width: 768px){
                     margin: 0 30px 0 10px;
@@ -155,6 +164,10 @@ p, h1, h2, h3, h4, h5{
                     background-image: url('../../assets/images/down-arrow.svg');
                     transform: rotateX(0deg);
                 }
+                .text{
+                    color: var(--slate-grey);
+                    border-bottom: 1px solid var(--slate-grey);
+                }
                }
             }
             @media screen  and (max-width: 540px){
@@ -167,6 +180,9 @@ p, h1, h2, h3, h4, h5{
     }
    
     .search_btn{  //search button
+        @media screen  and (min-width: 768px){
+            min-width: 127px;
+        }
         @media screen  and (max-width: 768px){
             margin-left: 20px;
         }
@@ -187,8 +203,13 @@ p, h1, h2, h3, h4, h5{
             padding: 13px 26px;
             line-height: 1.9;
             cursor: pointer;
+            
             @media screen and (max-width: 768px){
                 padding: 5px 20px;
+            }
+            @media screen and (max-width: 600px){
+                padding: 5px 10px;
+                min-width: 100px;
             }
             @media screen and (max-width: 540px){
                 padding: 0px 10px;
@@ -213,6 +234,9 @@ p, h1, h2, h3, h4, h5{
         background-color: var(--white);
         z-index: 99;
         display: none;
+        max-height: 400px;
+        overflow-x: auto;
+        max-width: 946px;
         @media screen and (max-width: 768px){
             top: 66px;
         }
@@ -262,8 +286,6 @@ p, h1, h2, h3, h4, h5{
         padding: 32px 32px 23px;
         width: 100%;
         max-width: 946px;
-        max-height: 500px;
-        overflow-y: auto;
         z-index: 99;
         @media screen and (max-width: 768px){
             top: 66px;
@@ -428,7 +450,7 @@ p, h1, h2, h3, h4, h5{
 .ar{
     .search_input{
         padding: 0 0 0 32px;
-        flex-direction: row-reverse;
+        // flex-direction: row-reverse;
             @media screen  and (max-width: 768px){
                 padding: 0;
             }
@@ -451,7 +473,8 @@ p, h1, h2, h3, h4, h5{
                 padding: 32px 32px 32px 190px;
                 direction: rtl;
                 @media screen and (max-width: 768px){
-                    padding: 17px 17px 15px 165px;
+                    padding: 17px 17px 15px 175px;
+                    font-size: 16px;
                 }
                 @media screen  and (max-width: 540px){
                     padding: 10px 15px;
@@ -466,18 +489,17 @@ p, h1, h2, h3, h4, h5{
                     @media screen and (max-width: 768px){
                         margin: 0 30px 0 20px;
                     }
-                    @media screen and (max-width: 768px){
-                        margin: 0 30px 0 10px;
+                    @media screen and (max-width: 540px){
+                        margin: 0 15px 0 10px;
                     }
                     span{
                         margin-left: 10px;
                     }
                    &.applied{
                        position: relative;
-                       flex-direction: row-reverse;
-                       :after{
+                       &:after{
                            content: '';
-                           right: 0;
+                           right: auto;
                            left: 5px;
                            top: -5px;
                        }
@@ -485,8 +507,8 @@ p, h1, h2, h3, h4, h5{
                 }
                 @media screen  and (max-width: 540px){
                     top: 100%;
-                    right: auto;
-                    left: 0;
+                    right: 0;
+                    left: auto;
                     transform: translate(0, 0);
                 }
             }
@@ -497,8 +519,8 @@ p, h1, h2, h3, h4, h5{
                 margin-left: 20px;
             }
             @media screen  and (max-width: 540px){
-                margin-left: 0;
-                margin-right: 10px;
+                margin-left: 10px;
+                margin-right: auto;
             }
             button{
                 flex-direction: row-reverse;
@@ -528,13 +550,12 @@ p, h1, h2, h3, h4, h5{
             right: 0;
             .adv_heading{
                 display: flex;
-                flex-direction: row-reverse;
                 flex-wrap: wrap;
                 >a{
                     margin-left: 0;
                     margin-right: 12px;
                     @media screen  and (max-width: 540px){
-                        margin-right: 0;
+                        // margin-right: 0;
                     }
                 }
             }
@@ -596,7 +617,7 @@ p, h1, h2, h3, h4, h5{
 }
 .ar{
     .search_bottom{
-        flex-direction: row-reverse;
+        // flex-direction: row-reverse;
         @media screen and (max-width: 600px){
             margin-top: 40px;
             flex-direction: column;
@@ -674,7 +695,7 @@ p, h1, h2, h3, h4, h5{
     .links_card{
         
         h3{
-            flex-direction: row-reverse;
+            
             span{
                 margin-right: 0 !important;
                 margin-left: 9px;
@@ -697,6 +718,9 @@ p, h1, h2, h3, h4, h5{
         display: flex;
         align-items: center;
         margin: 0 -12px;
+        @media screen and (max-width: 600px){
+           justify-content: center;
+        }
         li{
             margin: 0 12px;
             a{
@@ -710,13 +734,7 @@ p, h1, h2, h3, h4, h5{
         }
     }
 }
-.ar{
-    .social{
-        ul{
-            justify-content: flex-end;
-        }
-    }
-}
+
 
 .search_filter{  //right side accordian
     border-left: 1px solid var(--white-ten);
@@ -797,6 +815,7 @@ p, h1, h2, h3, h4, h5{
                         justify-content: space-between;
                         transition: 0.3s ease-in-out all;
                         cursor: default;
+                        position: relative;
                         > span{
                             width: 15px;
                             height: 15px;
@@ -804,6 +823,9 @@ p, h1, h2, h3, h4, h5{
                             align-items: center;
                             justify-content: flex-end;
                             cursor: pointer;
+                            position: absolute;
+                            top: 14px;
+                            right: 14px;
                         }
                     
                     &:hover{
@@ -859,10 +881,10 @@ p, h1, h2, h3, h4, h5{
         .search_accordion{
             .search_acr{
                 a{
-                    flex-direction: row-reverse;
+                    // flex-direction: row-reverse;
                 &:after{
                     right: auto;
-                    left: 0;
+                    left: 20px;
                 }
                 .preicon{
                     margin-right: 0;
@@ -875,14 +897,15 @@ p, h1, h2, h3, h4, h5{
                 ul{
                     li{
                         margin-bottom: 8px;
-                            flex-direction: row-reverse;
+                            // flex-direction: row-reverse;
                             text-align: right;
                             > span{
-                                justify-content: flex-start;
+                                left: 14px;
+                                right: auto
                             }
                         .dropdown-menu{
                             .dropdown-item{
-                                flex-direction: row-reverse;
+                                // flex-direction: row-reverse;
                                 > span{
                                     margin-right: 0;
                                     margin-left: 10px;
