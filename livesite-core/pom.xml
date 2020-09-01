@@ -140,11 +140,6 @@
     </plugins>
   </build>
   <dependencies>
-	<dependency>
-		<groupId>dom4j</groupId>
-		<artifactId>dom4j</artifactId>
-		<version>1.6.1</version>
-	</dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
@@ -184,6 +179,47 @@
 		<groupId>jaxen</groupId>
 		<artifactId>jaxen</artifactId>
 		<version>1.1.6</version>
+	</dependency>
+	<dependency>
+		<groupId>dom4j</groupId>
+		<artifactId>dom4j</artifactId>
+		<version>1.6.1</version>
+	</dependency>
+	<!-- <dependency> -->
+		<!-- <groupId>com.opentext.livesite.commons</groupId> -->
+		<!-- <artifactId>livesite-service</artifactId> -->
+		<!-- <version>1.0</version> -->
+	<!-- </dependency> -->
+	<dependency>
+		<groupId>com.opentext.livesite.commons</groupId>
+		<artifactId>livesite-service</artifactId>
+		<version>1.0</version>
+		<scope>system</scope>
+		<systemPath>${basedir}/../lib/livesite-service.jar</systemPath>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.15</version>
+
+		<exclusions>
+			<exclusion>
+				<groupId>javax.jms</groupId>
+				<artifactId>jms</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>com.sun.jdmk</groupId>
+				<artifactId>jmxtools</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>com.sun.jmx</groupId>
+				<artifactId>jmxri</artifactId>
+			</exclusion>
+			<exclusion>
+				<groupId>javax.jms</groupId>
+				<artifactId>jms</artifactId>
+			</exclusion>
+		</exclusions>
 	</dependency>
   </dependencies>
     <reporting>

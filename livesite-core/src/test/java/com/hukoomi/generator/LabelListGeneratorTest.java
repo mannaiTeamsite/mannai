@@ -6,7 +6,6 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import java.util.List;
-import org.dom4j.Element;
 import org.junit.Test;
 
 public class LabelListGeneratorTest {
@@ -22,7 +21,7 @@ public class LabelListGeneratorTest {
 	}
 	
 	@Test
-	public void NodeValidationTest() {
+	public void nodeValidationTest() {
 
 		try {
 			Document categoryDoc = createXML();
@@ -34,7 +33,6 @@ public class LabelListGeneratorTest {
             }
 
 		} catch (DocumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
