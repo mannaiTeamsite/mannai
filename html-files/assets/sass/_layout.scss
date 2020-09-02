@@ -9,7 +9,7 @@
 /**************Header*********************/
 
 header{
-    position: absolute;
+    position: fixed;
     top: 0;
     width: 100%;
     z-index: 999;
@@ -196,16 +196,20 @@ header{
 
 
 .jump_link_header{
-    width: 1400px;
-    margin: 0 auto;
-    padding: 18px 15px;
-    border-bottom: 1px solid #cbcbcb;
-}
-.header_row {
-    display: flex;       
     width: 100%;
-    align-items: center;
+    position: sticky;
+    top: 120px;
+    z-index: 99;
+    .header_row {
+        display: flex;   
+        padding: 18px 15px;    
+        width: 1400px;
+        align-items: center;
+        margin: 0 auto;
+        border-bottom: 1px solid #cbcbcb;
+    }
 }
+
 
 .header_drp_dwn{
     position: relative;
@@ -445,15 +449,17 @@ header{
 
 /*--------------------------------------------Breadcrumb--------------------------------------------*/
 .breadcrumbs_wrapper {
-    width: 1170px;
-     margin: 0 auto;
-     padding: 20px 0;
-    @media(max-width:1200px){
-        width: 95%;
-    }
+    width: 100%;
+
 
      ul{
-         li{
+        width: 1170px;
+        margin: 0 auto;
+        padding: 20px 0;
+       @media(max-width:1200px){
+           width: 95%;
+       }
+        li{
              position: relative;
              display: inline-block;
              padding-right: 25px;
@@ -481,7 +487,7 @@ header{
                  a{
                      color: #979797;
                      border-bottom: none;
-                     cursor: none;
+                     cursor:default;
                  }
                 
                  &::before{
@@ -510,6 +516,7 @@ footer{
         
         .foot_row {
             display: flex;
+            align-items: center;
 
             .copy_right{
                 font-size: 14px;
@@ -546,7 +553,7 @@ footer{
                     }
                     a{
                         cursor: pointer;
-                        font-size: 14px;
+                        font-size: 13px;
                         font-family: "cairo_semibold";
                         line-height: 1.67;
                         letter-spacing: 0.17px;

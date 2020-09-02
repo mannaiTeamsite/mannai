@@ -342,6 +342,11 @@ body.loader_show .loader {
   src: url("../fonts/cairo-bold-webfont.woff2") format("woff2"), url("../fonts/cairo-bold-webfont.woff") format("woff");
   font-weight: normal;
   font-style: normal; }
+@font-face {
+  font-family: "ge-ss-two-medium";
+  src: url("../fonts/fontsge-ss-two-medium.woff2") format("woff2"), url("../fonts/ge-ss-two-medium.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
 /*----------------------------Font Close------------------------------*/
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
@@ -356,9 +361,6 @@ body.loader_show .loader {
   border: 2px solid var(--berry); }
 
 .none {
-  display: none; }
-
-input::-webkit-calendar-picker-indicator {
   display: none; }
 
 /*-------------------Base---------------*/
@@ -405,5 +407,16 @@ input:focus {
   border: 1px solid var(--berry); }
 
 /*-------------------Base close---------------*/
+.lb-dataContainer {
+  margin: 0 auto;
+  padding-top: 5px;
+  zoom: 1;
+  width: 100%;
+  border-bottom-left-radius: 4px;
+  position: absolute;
+  top: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999; }
 
 /*# sourceMappingURL=style.css.map */

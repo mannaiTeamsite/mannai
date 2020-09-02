@@ -36,6 +36,15 @@
 	font-style: normal;
   }
 
+
+  @font-face {
+	font-family: "ge-ss-two-medium";
+	src: url("../fonts/fontsge-ss-two-medium.woff2") format("woff2"),
+	  url("../fonts/ge-ss-two-medium.woff") format("woff");
+	font-weight: normal;
+	font-style: normal;
+  }
+
 /*----------------------------Font Close------------------------------*/  
 ::-webkit-scrollbar-track
 {
@@ -60,11 +69,12 @@
 }
 
 input::-webkit-calendar-picker-indicator {
-	display: none;
+
   }
 /*-------------------Base---------------*/
 body {
-    font-family: "cairo_regular";
+	font-family: "cairo_regular";
+
   }
   
 
@@ -126,3 +136,16 @@ input{
 
 
 
+
+.lb-dataContainer {
+    margin: 0 auto;
+    padding-top: 5px;
+     zoom: 1;
+    width: 100%;
+    border-bottom-left-radius: 4px;
+    position: absolute;
+    top: -35px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+}

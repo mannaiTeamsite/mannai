@@ -1,0 +1,21 @@
+@import'variable';
+
+
+.white_bg_single{
+    background-color: var(--white);
+}
+
+.solid_white_five{
+    background-color: var(--white-five);
+}
+
+.wave_white_bg{
+    background-image: url(../images/about_wave_10.svg);
+}
+
+.gray_bg_leave{
+    background-color: var(--white-five);
+    background-image: url('../images/combined-shape.svg');
+    background-repeat: no-repeat;
+    background-position: 98% 99%;
+}

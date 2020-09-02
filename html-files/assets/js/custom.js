@@ -182,3 +182,27 @@ function resetClass() {
    });
 
     /***********************************Accordian J******************************************/
+
+
+
+
+
+
+    $(".share_g").click(function(e){
+       e.stopPropagation();
+       $(".share_kit_wrapper").addClass("active");
+    })
+
+
+    $("body").click(function(){
+      $(".share_kit_wrapper").removeClass("active");
+   })
+
+
+
+
+/****************Articles**********************/
+$(".article_card").click(function(){
+   $(this).toggleClass("active");
+})
+/****************Articles Close**********************/

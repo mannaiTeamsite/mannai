@@ -66,7 +66,9 @@
 	display: block;
 }
 strong {
-    font-family: 'cairo_bold'
+    font-family: 'cairo_bold';
+    font-weight: normal;
+
 }
 .m-t-30{
 	margin-top: 30px;
@@ -348,7 +350,7 @@ hr{
 			transform: translateY(-50%);
 			left: 217px;
 			z-index: 9;
-			background-color: #0009;
+			background-color: rgba(0, 0, 0, 0.6);
 			@include rounded-corner(12px);
 			padding: 44.5px 48px;
             width: 542px;
@@ -1899,7 +1901,7 @@ hr{
 		}
 		.news_wrapper{
 			background: var(--white);
-			padding: 25px;
+			padding: 18px;
 			@include rounded-corner(20px);
 			margin-bottom: 16px;
 			.owl-stage{
@@ -2171,7 +2173,7 @@ hr{
 		}
 		span{
 			font-family: 'cairo_bold';
-			font-size: 16px;
+			font-size: 14px;
 			line-height: 1.38;
 			letter-spacing: 0.23px;
 			color: var(--slate-grey);
@@ -6275,6 +6277,7 @@ color: var(--deep-orange);
                     input[type='radio']{
                         position: absolute;
                         width: 0;
+                        opacity: 0;
                         height: 0;
                         &:checked{
                             +label{
@@ -6509,7 +6512,6 @@ color: var(--deep-orange);
 
     /*-----------------About Qatar Banner-----------------------*/
 .abt_qatar_banner {
-    background: #f1f1f1;
     padding: 100px 0 100px;
     position: relative;
     .f_row{
@@ -6691,7 +6693,6 @@ color: var(--deep-orange);
 /*-----------------fact_figure_qatare-----------------------*/
 .fact_figure_qatar{
     padding: 150px 0 150px 0;
-    background-image: url('../images/about_wave_10.svg');
     background-size: cover;
     margin: -95px 1px 0px 0;
     background-position: top;
@@ -7522,7 +7523,7 @@ color: var(--deep-orange);
         padding: 0 10px;
         position: relative;
         font-size: 16px;
-        font-weight: 600;
+        font-family: "cairo_semibold";
         line-height: 1.38;
         letter-spacing: normal;
         color: var(--purple-brown);
@@ -7551,7 +7552,7 @@ color: var(--deep-orange);
         box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
         border: solid 1px #e0e0e0;
         background: #fff;
-        right: 0;
+        left: 0;
         opacity: 0;
         visibility: hidden;
         top: 30px;
@@ -7563,9 +7564,11 @@ color: var(--deep-orange);
             font-weight: 600;
             border-bottom: solid 1px var(--border-color);
             a{
+                font-family: "cairo_semibold";
                 padding: 19px;
                 display: block;
                 color: var(--purple-brown);
+                font-weight: normal;
             }
             &:last-child{
                 border-bottom: none;
@@ -7946,6 +7949,18 @@ color: var(--deep-orange);
 		overflow: hidden;
     }
     
+
+    .filter_close{
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        cursor: pointer;
+        img{
+            width: 14px;
+            height: 14px;
+            object-fit: cover;
+        }
+    }
  // ========Category Filter Modal========//   
 	.category_filter_wrapper_layer{
 		position: fixed;
@@ -8546,7 +8561,7 @@ color: var(--deep-orange);
 				&::before{
                     width: 35px;
                     height: 35px;
-					background: url('../images/ic-event-details-like-fill.svg') center no-repeat;
+					background: url('../images/ic_event_details_like_active.png') center no-repeat;
 				}
 			}
 		}
@@ -8700,6 +8715,11 @@ color: var(--deep-orange);
                 position: relative;
                 text-align: center;
                 @extend %basic_transition;
+                @media (max-width:1024px){
+                    font-size: 12px;
+                }
+
+                
                 &:before{
                     position: absolute;
                     left: 0;
@@ -11603,3 +11623,187 @@ color: var(--deep-orange);
 }
 
 /***************************************Mobile Applications close******************************************/
+
+
+
+.ssk-sticky.ssk-left{
+    left: -100px !important;
+}
+
+
+.share_kit_wrapper{
+    &.active{
+        .ssk-sticky.ssk-left{
+            left: 0 !important;
+        } 
+    }
+}
+
+
+
+
+
+
+
+
+
+/***************************************Articles******************************************/
+.category_articles_card{
+    .list_card {
+        min-height: 260px;
+        padding: 25px 30px 30px;
+        position: relative;
+        .details{
+            padding: 0;
+            .show_label_grey{
+                padding-right: 8px;
+            }
+            .custom_label{
+                margin-bottom: 2px;
+                display: block;
+            }
+            .content_wrap{
+                display: flex;
+                align-items: center;
+                margin-bottom: 14px;
+                .show_label{
+                    padding-left: 0;
+                    margin: 0;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    
+    .share_l{
+        background: url("../images/ic-list-share.svg") center no-repeat;
+        border: solid 1px var(--white-nine);
+    }
+    .bookmark_l{
+        border: solid 1px var(--white-nine);
+        background: url(../images/ic-list-bookmark.svg) center no-repeat;
+        &.save{
+            background: url("../images/ic-list-fill-bookmark.svg") center no-repeat;
+        }
+    }
+}
+.list_view{
+    .category_articles_card{
+        .list_card{
+            .details{
+                .card_title{
+                    margin: 0 0 15px 0;
+                    display: inline-block;
+                }
+            }
+        }
+        .content_list_wrap{
+            flex-flow: column;
+        } 
+        .custom_show_label{
+            padding: 0;
+        }
+    }   
+}
+.articles_detail{
+    .video_img_wrapper{
+        .detail_card {
+            .card_title {
+                margin-top: 8px;
+            }
+        }
+    }
+    .facilities_wrap{
+        flex-flow: column;
+    }
+    .content_wrap {
+        display: flex;
+        .show_label{
+            padding-left: 5px;
+        }
+    }
+}
+
+.article_topics{
+    display: flex;
+    flex-wrap: wrap;
+    .article_card{
+        width: 150px;
+        height: 150px;
+        border-radius: 8px;
+        background-color: var(--white-five);
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        transition: all 0.3s ease;
+        padding: 27px 15px 18px;
+        margin: 0 12px 12px 0;
+        position: relative;
+        &.active{
+            .topic_icon{
+                &:before {
+                    transform: scale(1);
+                }
+            }
+        }
+        @media screen and(max-width: 768px){
+            margin: 0 auto 20px;
+        }
+        @media screen and(max-width: 640px){
+            width: 46%;
+            height: 135px;
+            margin: 0 10px 10px 0;
+        }
+        .topic_icon{
+            width: 50px;
+            height: 50px;
+            @media screen and(max-width: 640px){
+                width: 40px;
+                height: 40px;
+            }
+            img{
+                width: 100%;
+                height: 100%;
+                object-fit: contain;
+            }
+            &:before {
+                width: 24px;
+                height: 24px;
+                position: absolute;
+                content: "";
+                background-image: url(../images/check-fill.png);
+                background-position: top right;
+                background-repeat: no-repeat;
+                background-size: contain;
+                right: 5px;
+                top: 5px;
+                z-index: 9;
+                transform: scale(0);
+                transform-origin: center center;
+                transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1);
+            }
+        }
+        .topic_name{
+            font-family: 'cairo_semibold';
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--eggplant);
+            text-align: center;
+            margin: 7px 0 0;
+        }
+    }
+}
+.ar{
+    .article_topics {
+        .article_card {
+            .topic_icon{
+                &:before{
+                    right: auto;
+                    left: 5px;
+                }
+            }
+        }
+    }
+}
+
+/***************************************Artcles close******************************************/

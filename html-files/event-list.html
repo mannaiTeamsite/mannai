@@ -15,9 +15,12 @@
    <link rel="stylesheet" href="assets/css/style.css">
    <link rel="stylesheet" href="assets/css/main.css">
    <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" href="assets/css/social-share-kit.css" type="text/css">
 </head>
 
 <body>
+
+   
 
    <!--App_wrapper-->
    <div class="app_wrapper">
@@ -98,6 +101,14 @@
         </ul>
      </div>
      <!--Breadcrumb-->
+
+     <div class="share_kit_wrapper">
+     <div class="ssk-sticky ssk-left ssk-center ssk-lg">
+        <a href="https://www.facebook.com/"  data-*="https://www.facebook.com/"  class="ssk ssk-facebook"  target="_blank"></a>
+        <a href="https://twitter.com/LOGIN" class="ssk ssk-twitter" target="_blank"></a>
+        <a href="https://www.google.com/intl/en-GB/gmail/about/" class="ssk ssk-google-plus" target="_blank"></a>
+    </div>
+</div>
 
         <section class="category_block_wrapper">
                 <!--category heading-->
@@ -188,6 +199,9 @@
                 <!--Category Sort Modal -->
                     <div class="category_sort_wrapper_layer">
                         <div class="sort_wrapr">
+                            <span class="filter_close">
+                                <img src="assets/images/ic-popup-cross.png" alt="close" />
+                            </span>
                         <h3>Sort</h3>
                         <ul>
                             <li>   
@@ -219,9 +233,9 @@
                         <img src="assets/images/ic-popup-cross.png" alt="close" />
                     </span>
                     <div class="form_field">
-                     
+                      
                         <div class="flex_row">
-                            <label>Date</label>
+                            
                             <div class="flex_col_sm_6">
                                 <label for="month">Month</label>
                                 <div class="txt_wrapper">
@@ -254,9 +268,9 @@
                         <div class="txt_wrapper">
                             <div class="select-picker-wrap">
                                 <select class="selectpicker" id="location"  name="location"  data-live-search="true" style="display: none;">
-                                    <option>Select</option>
-                                    <option>2019</option>
-                                    <option>2020</option>
+                                    <option  value="sasa">Select</option>
+                                    <option value="sasaasas">New Delhi</option>
+                                    <option>NW</option>
                                 </select>
                             </div>
                         </div>
@@ -294,11 +308,11 @@
                                     <figure class="card_img">
                                     <img src="assets/images/demo.png" alt="event-thumb" />
                                     <div class="tags_wrap">
-                                        <span class="tag_g tag_l">Healthcare Services</span>
-                                        <span class="tag_g tag_l">Healthcare Services</span>
+                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
                                     </div>
-                                    <span class="share_g share_l"  title="Share"></span>
-                                   <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
+                                    <span class="share_g share_l"  tabindex="0" title="Share"></span>
+                                   <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
                                     </figure>
                                     <div class="details">
                                     <div class="inner_wrap">
@@ -519,7 +533,12 @@
  <script src="assets/js/owl.carousel.min.js"></script>
  <script src="assets/js/app-slider.js"></script>
  <script src="assets/js/custom.js"></script>
+ <script type="text/javascript" src="assets/js/social-share-kit.js"></script>
  <!--Js Close-->
+
+ <!-- <script type="text/javascript">
+    SocialShareKit.init({ forceInit: true });
+</script> -->
 
 </body>
 
