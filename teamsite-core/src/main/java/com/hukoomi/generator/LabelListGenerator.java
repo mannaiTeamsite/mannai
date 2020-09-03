@@ -48,6 +48,9 @@ public class LabelListGenerator {
         String value = "Value";
         String label = "Display";
         String record = "record";
+        String labelEnNode = "LabelEn";
+        String labelArNode = "LabelAr";
+        String valueNode = "Value";
         String dctPath = context.getParameters().get("dctPath") != null
                 ? (String) context.getParameters().get("dctPath")
                 : "/templatedata/Static/Labels/data/";
@@ -68,19 +71,30 @@ public class LabelListGenerator {
             List<Node> categoryNodes = categoryDoc.selectNodes(xpath);
             for (Node eleNode : categoryNodes) {
                 String nodeKey =
-                        eleNode.selectSingleNode("Value").getText();
-                String nodeEnLabel =
-                        eleNode.selectSingleNode("LabelEn").getText();
-                String nodeArLabel =
-                        eleNode.selectSingleNode("LabelAr") != null
-                                ? "|" + eleNode.selectSingleNode("LabelEn")
-                                .getText() : "";
-                LOGGER.info("Option Tag : " + "<Option><Value>" + nodeEnLabel
-                        + nodeArLabel + "</Value><Display>" + nodeKey
+                        eleNode.selectSingleNode(valueNode).getText();
+                String nodeEnLabel = "";
+                if (eleNode.selectSingleNode(labelEnNode) != null
+                && !eleNode.selectSingleNode(labelEnNode)
+                        .getText().equals("")) {
+                        nodeEnLabel =
+                                eleNode.selectSingleNode(labelEnNode)
+                                .getText();
+                }
+                String nodeArLabel = "";
+                if (eleNode.selectSingleNode(labelArNode) != null
+                        && !eleNode.selectSingleNode(labelArNode)
+                                .getText().equals("")) {
+                        nodeArLabel =
+                                eleNode.selectSingleNode(labelArNode)
+                                .getText();
+                }
+                String finalLabel = setLabel(nodeEnLabel, nodeArLabel);
+
+                LOGGER.info("Option Tag : " + "<Option><Value>" + finalLabel
+                        + "</Value><Display>" + nodeKey
                         + "</Display></Option>");
                 Element eleOption = eleList.addElement("Option");
-                eleOption.addElement(value).addText(nodeEnLabel
-                        + nodeArLabel);
+                eleOption.addElement(value).addText(finalLabel);
                 eleOption.addElement(label).addText(nodeKey);
             }
         } catch (Exception ex) {
@@ -99,5 +113,29 @@ public class LabelListGenerator {
         }
 
         return optionsDoc;
+    }
+
+    /** This method will take 2 String params and
+     * check if they are not null and provide the concatenated
+     * String as result.
+     * @param labelEn The parameter Sting to be appended first
+     *                when not null.
+     * @param labelAr The parameter Sting to be appended second
+     *                when not null.
+     *
+     * @return combinedLabel return the combined String when
+     * both param strings are not null.
+     */
+    public static String setLabel(final String labelEn,
+                               final String labelAr) {
+        String combinedLabel = "";
+        if (!labelEn.equals("") && !labelAr.equals("")) {
+            combinedLabel = labelEn + "|" + labelAr;
+        } else if (!labelAr.equals("")) {
+            combinedLabel = labelAr;
+        } else if (!labelEn.equals("")) {
+            combinedLabel = labelEn;
+        }
+        return combinedLabel;
     }
 }
