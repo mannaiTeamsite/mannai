@@ -185,17 +185,15 @@
 		<artifactId>dom4j</artifactId>
 		<version>1.6.1</version>
 	</dependency>
-	<!-- <dependency> -->
-		<!-- <groupId>com.opentext.livesite.commons</groupId> -->
-		<!-- <artifactId>livesite-service</artifactId> -->
-		<!-- <version>1.0</version> -->
-	<!-- </dependency> -->
+	<dependency>
+		<groupId>com.opentext.livesite.commons</groupId>
+		<artifactId>livesite-runtime</artifactId>
+		<version>16.6.1.0.0</version>
+	</dependency>
 	<dependency>
 		<groupId>com.opentext.livesite.commons</groupId>
 		<artifactId>livesite-service</artifactId>
-		<version>1.0</version>
-		<scope>system</scope>
-		<systemPath>${basedir}/../lib/livesite-service.jar</systemPath>
+		<version>16.6.1.0.0</version>
 	</dependency>
 	<dependency>
 		<groupId>log4j</groupId>
