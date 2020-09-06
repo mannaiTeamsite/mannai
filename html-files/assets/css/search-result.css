@@ -16,6 +16,10 @@ p, h1, h2, h3, h4, h5 {
     .search_wrapper {
       margin: 20px 15px 20px;
       padding: 50px 0 0; } }
+  @media screen and (max-width: 600px) {
+    .search_wrapper {
+      margin: 5px 15px 20px;
+      padding: 35px 0 0; } }
   .search_wrapper .close {
     width: 50px;
     height: 50px;
@@ -198,10 +202,13 @@ p, h1, h2, h3, h4, h5 {
           min-width: 100px; } }
       @media screen and (max-width: 540px) {
         .search_block .search_input .search_btn button {
-          padding: 0px 10px;
-          border-radius: 9px;
+          padding: 1px 10px;
+          border-radius: 7px;
           font-family: 'cairo_semibold';
-          font-size: 14px; } }
+          font-size: 14px;
+          justify-content: baseline; }
+          .search_block .search_input .search_btn button span img {
+            width: 13px; } }
       .search_block .search_input .search_btn button span {
         margin-right: 9px; }
     .search_block .search_input .search_result {
@@ -372,6 +379,7 @@ p, h1, h2, h3, h4, h5 {
                 .search_block .search_input .advance_search_wrap .advance_search .search_form .form_row .flex_row .adv_search_images li figure {
                   margin-bottom: 0; }
                   .search_block .search_input .advance_search_wrap .advance_search .search_form .form_row .flex_row .adv_search_images li figure img {
+                    width: 100%;
                     border-radius: 9px; }
             .search_block .search_input .advance_search_wrap .advance_search .search_form .form_row .flex_row ul {
               display: flex;
@@ -635,13 +643,20 @@ p, h1, h2, h3, h4, h5 {
           left: 50%;
           transform: translate(-50%, -50%);
           cursor: pointer;
-          z-index: 1; }
+          z-index: 1;
+          transition: 0.3s ease-in-out all; }
+          .search_outcome .slider .carousel-item .slide_container .video .play img {
+            width: 100%; }
         .search_outcome .slider .carousel-item .slide_container .video video {
           width: 220px;
           height: 150px;
           display: table;
           vertical-align: middle;
           border-radius: 12px; }
+        .search_outcome .slider .carousel-item .slide_container .video.playing .play {
+          opacity: 0; }
+        .search_outcome .slider .carousel-item .slide_container .video:hover .play {
+          opacity: 1; }
       .search_outcome .slider .carousel-item .slide_container .video_info {
         flex: 1;
         padding-left: 30px; }

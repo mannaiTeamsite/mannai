@@ -1,10 +1,16 @@
 var myVideo = document.getElementById("video"); 
 
 function playPause() { 
-  if (myVideo.paused) 
+  if (myVideo.paused) {
     myVideo.play(); 
+    $('.play img').attr('src', 'assets/images/pause.png');
+    $(myVideo).parent().addClass('playing')
+  }
   else 
+  {
     myVideo.pause(); 
+    $('.play img').attr('src', 'assets/images/play.png')
+  }
 } 
 
 $(document).ready(function(){

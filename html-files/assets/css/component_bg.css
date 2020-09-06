@@ -66,13 +66,46 @@
 .solid_white_five {
   background-color: var(--white-five); }
 
+.solid_white_two {
+  background-color: var(--white-two); }
+
 .wave_white_bg {
   background-image: url(../images/about_wave_10.svg); }
 
 .gray_bg_leave {
   background-color: var(--white-five);
-  background-image: url("../images/combined-shape.svg");
+  background-image: url("../images/ic_about_hero_section_bg.svg");
   background-repeat: no-repeat;
-  background-position: 98% 99%; }
+  background-position: bottom;
+  background-size: cover; }
+
+.marron_solid {
+  background-color: var(--berry); }
+
+.wave_white_maroon {
+  background-color: var(--white-five);
+  background-image: url("../images/ic_about_updated_everyday_bg.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover; }
+
+.wave_maroon_white {
+  background-image: url("../images/ic_amir_highness_bg_small.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+  position: relative; }
+
+.wave_blue_white {
+  background-image: url("../images/wave_blue_white.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover; }
+
+.wave_darkwhite_maroon {
+  background-image: url("../images/wave_darkwhite_maroon.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover; }
 
 /*# sourceMappingURL=component_bg.css.map */

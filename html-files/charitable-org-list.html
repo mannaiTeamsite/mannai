@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="icon" href="assets/images/favicon.ico" />
+   <title>Hukoomi</title>
+   <link rel="stylesheet" href="assets/css/bootstrap.css">
+   <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+   <link rel="stylesheet" href="assets/css/style.css">
+   <link rel="stylesheet" href="assets/css/main.css">
+   <link rel="stylesheet" href="assets/css/media.css">
+</head>
+
+<body>
+
+   <!--App_wrapper-->
+   <div class="app_wrapper">
+
+      <!--header-->
+      <header>
+         <div class="header_inner">
+            <div class="innner_wrapper">
+               <div class="nav_brand">
+                  <img src="assets/images/logo.svg" alt="Hukoomi" />
+               </div>
+               <div class="nav_col">
+                  <div class="header_row">
+                     <div class="abt_qtr_nav desktop_view_head">
+                        <ul>
+                           <li><a href="javascript:void(0)" class="link">Life in Qatar</a></li>
+                           <li><a href="javascript:void(0)" class="link">Innovation</a></li>
+                           <li><a href="javascript:void(0)" class="link">Open Data</a></li>
+                           <li><a href="javascript:void(0)" class="link">E-Participation</a></li>
+                        </ul>
+                     </div>
+                     <div class="auth_nav">
+                        <ul>
+                           <li class="mob_hide">
+                              <a href="javascript:void(0)">
+                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" />
+                                 Accessibility</a>
+                           </li>
+                           <li>
+                              <a href="javascript:void(0)" id="lang_toggle">
+                                 عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon" />
+                              </a>
+                           </li>
+                           <li><a href="javascript:void(0)">Login / Signup</a></li>
+                           <li class="mob_menu_nav"><a href="javascript:void(0)" id="mob_menu_toggle">
+                                 <img src="assets/images/menu-line.svg">
+                              </a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="header_row b-top desktop_view_head">
+                     <div class="nav_menu">
+                        <ul>
+                           <li><a href="javascript:void(0)" class="link">Explore Services</a></li>
+                           <li><a href="javascript:void(0)" class="link">Downloads, Utilities & Directory</a></li>
+                           <li><a href="javascript:void(0)" class="link">Media</a></li>
+                           <li><a href="javascript:void(0)" class="link">About Qatar</a></li>
+                           <li>
+                              <img src="assets/images/search-line-red.svg" title="Search" class="search_icon" alt="" />
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- Mobile Menu-->
+         <div class="mob_nav">
+            <ul>
+               <li><a href="javascript:void(0)">Life in Qatar</a></li>
+               <li><a href="javascript:void(0)">Innovation</a></li>
+               <li><a href="javascript:void(0)">Open Data</a></li>
+               <li><a href="javascript:void(0)">Life in Qatar</a></li>
+               <li><a href="javascript:void(0)">Explore Services</a></li>
+               <li><a href="javascript:void(0)">Downloads, Utilities & Directory</a></li>
+               <li><a href="javascript:void(0)">Media</a></li>
+               <li><a href="javascript:void(0)">About Qatar</a></li>
+            </ul>
+         </div>
+         <!-- Mobile Menu-->
+      </header>
+      <!--header close-->
+
+      <!--Breadcrumb-->
+      <div class="breadcrumbs_wrapper">
+         <ul>
+            <li><a href="#" tabindex="0">Home</a></li>
+            <li><a href="#" tabindex="0">Charitable Organizations</a></li>
+         </ul>
+      </div>
+      <!--Breadcrumb-->
+
+      <section class="category_block_wrapper">
+
+         <!--category heading-->
+         <div class="custom_container">
+            <h1 class="category_heading" tabindex="0">Charitable Organizations</h1>
+         </div>
+         <!--category heading-->
+
+
+         <!--Category Search and Category view tab-->
+         <div class="custom_container">
+            <div class="f_row f_flow_col">
+               <div class="f_col">
+                  <label for="search_category" class="none">Search</label>
+                  <div class="category_search_input">
+
+                     <input type="text" id="search_category" name="search" tabindex="0" placeholder="Search">
+                     <button class="detect-icon" tabindex="0">
+                        <img src="assets/images/search-line-white.svg" alt="search-img">
+                     </button>
+                  </div>
+               </div>
+               <div class="f_col text-right">
+                  <ul class="category_view_menu_wrap">
+                     <li>
+                        <a href="#" tabindex="0" class="grid active">Grid</a>
+                     </li>
+                     <li>
+                        <a href="#" tabindex="0" class="list">List</a>
+                     </li>
+                     <li>
+                        <a href="#" tabindex="0" class="map">Map</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <!--Category Search and Category view tab close-->
+
+
+         <!--category sort and filter-->
+         <div class="custom_container">
+            <div class="f_row">
+               <div class="f_col">
+                  <ul class="categor_filter_wrap">
+                     <li>
+                        <a href="#" tabindex="0" class="sort">SORT</a>
+                     </li>
+                   
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <!--category sort and filter close-->
+
+         <!--Category Sort Modal -->
+         <div class="category_sort_wrapper_layer">
+            <div class="sort_wrapr">
+               <h3 tabindex="0">Sort</h3>
+               <ul>
+                  <li>
+                     <input type="radio" id="Alphabet" name="category_sort" value="By Latest">
+                     <label for="Alphabet" class="radio_wrap"> By Name(A-Z)</label>
+                  </li>
+                  <li>
+                     <input type="radio" id="oldest" name="category_sort" value="By Oldest">
+                     <label for="oldest" class="radio_wrap">By Name(Z-A)</label>
+                  </li>
+               </ul>
+            </div>
+         </div>
+         <!-- Category Sort Modal close -->
+
+       
+
+
+         <!--category card row  wrapper-->
+         <div class="custom_container">
+            <div class="list_row_wrapper">
+               <div class="grid_view">
+                  <div class="f_row">
+                     <!-- card repeat -->
+                     <div class="category_card category_charity_card">
+                        <a href="#" tabindex="0" class="list_card">
+                           <span class="share_g share_l" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
+                           <div class="details">
+                              <h2 class="card_title line-1" tabindex="0">Islamic Dawah Organization</h2>
+                              <span class="show_label icon mob" tabindex="0">+974 7973278927</span>
+                              <span class="show_label icon location line-2" tabindex="0">Villa 25, Street 605, Zone 51, Al Gharaffa, Al Jahhaniya
+                                 Interchange, Street 373, Al Rayyan, Qatar
+                              </span>
+                           </div>
+                        </a>
+                     </div>
+                     <!-- card repeat close -->
+                      <!-- card repeat -->
+                      <div class="category_card category_charity_card">
+                        <a href="#" tabindex="0" class="list_card">
+                           <span class="share_g share_l" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
+                           <div class="details">
+                              <h2 class="card_title line-1" tabindex="0">Qatar Charity</h2>
+                              <span class="show_label icon mob" tabindex="0">+974 7973278927</span>
+                              <span class="show_label icon location line-2" tabindex="0">Villa 25, Street 605, Zone 51, Al Gharaffa, Al Jahhaniya
+                                 Interchange, Street 373, Al Rayyan, Qatar
+                              </span>
+                           </div>
+                        </a>
+                     </div>
+                     <!-- card repeat close -->
+                      <!-- card repeat -->
+                      <div class="category_card category_charity_card">
+                        <a href="#" tabindex="0" class="list_card">
+                           <span class="share_g share_l" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
+                           <div class="details">
+                              <h2 class="card_title line-1" tabindex="0">Al-Faisal without Borders Foun</h2>
+                              <span class="show_label icon mob" tabindex="0">+974 7973278927</span>
+                              <span class="show_label icon location line-2" tabindex="0">Villa 25, Street 605, Zone 51, Al Gharaffa, Al Jahhaniya
+                                 Interchange, Street 373, Al Rayyan, Qatar
+                              </span>
+                           </div>
+                        </a>
+                     </div>
+                     <!-- card repeat close -->
+                     
+                  </div>
+                       <!-- Map card -->
+                       <div class="map_col">
+                        <figure class="map_img">
+                            <img src="assets/images/map.jpg" alt="map" />
+            
+                            <div class="srch_box">
+                                <label for="location_search" class="none">Search</label>
+                                <div class="txt_wrapper">
+                                <input type="text" id="location_search" placeholder="Search Location" />
+                                <span class="detect-icon">
+                                    <img src="assets/images/search-line-gray.svg" alt="search-img">
+                                </span>
+                                </div>
+                            </div>
+            
+              
+            
+                        </figure>
+                    </div>
+                    <!-- Map card close -->
+               </div>
+               <ul class="pagination_wrapper">
+                  <li>
+                      <a href="#" class="active">1</a>
+                  </li>
+                  <li>
+                      <a href="#">2</a>
+                  </li>
+                  <li>
+                      <a href="#">3</a>
+                  </li>
+                  <li>
+                      <a href="#">
+                              >
+                      </a>
+                  </li>
+                  </ul>
+            </div>
+
+         </div>
+         <!--category card row  wrapper close-->
+
+      </section>
+
+
+      <!--footer-->
+      <footer>
+         <div class="footer_inner">
+            <div class="foot_row">
+               <div class="copy_right" tabindex="0">
+                  Copyrigt © 2019 MOTC. All rights reserved.
+               </div>
+               <div class="foot_nav">
+                  <nav>
+                     <ul>
+                        <li><a href="#">Entity Services’ Statistics</a></li>
+                        <li><a href="#">Useful Links</a></li>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Polls & Surveys</a></li>
+                        <li><a href="#">Mobile Apps</a></li>
+                        <li><a href="#">Site Map</a></li>
+                        <li><a href="#">Privacy & Legal</a></li>
+                        <li><a href="#">Find Help</a></li>
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!--footer close-->
+
+   </div>
+   <!--App_wrapper close-->
+
+
+
+   <!-- JS -->
+   <script src="assets/js/jquery.js"></script>
+   <script>
+      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+   </script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+   <script src="assets/js/bootstrap.min.js"></script>
+   <script src="assets/js/bootstrap-select.js"></script>
+   <script src="assets/js/custom.js"></script>
+   <!-- JS close -->
+
+</body>
+
+</html>

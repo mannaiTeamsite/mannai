@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hukoomi | Donation Details</title>
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/donation-forms.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+
+</head>
+
+<body class="">
+    <div class="app_wrapper">
+        <!-- ======= header ======= -->
+        <header>
+            <div class="header_inner">
+                <div class="innner_wrapper">
+                    <div class="nav_brand">
+                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+                    </div>
+                    <div class="nav_col">
+                        <div class="header_row">
+                            <div class="abt_qtr_nav desktop_view_head">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
+                                </ul>
+                            </div>
+                            <div class="auth_nav">
+                                <ul>
+                                    <li class="mob_hide">
+                                        <a href="#" tabindex="0" class="link">
+                                            <img src="assets/images/accessibility.png" alt="Accessibility"
+                                                class="access_icon"> Accessibility</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
+                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
+                                                alt="language-icon">
+                                        </a>
+                                    </li>
+                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
+                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
+                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="header_row b-top desktop_view_head">
+                            <div class="nav_menu">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a>
+                                    </li>
+                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
+                                    <li>
+                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
+                                                title="Search" class="search_icon" alt="Search"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Menu-->
+            <div class="mob_nav">
+                <ul>
+                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Innovation</a></li>
+                    <li> <a href="#" tabindex="0">Open Data</a></li>
+                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Explore Services</a></li>
+                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
+                    <li> <a href="#" tabindex="0">Media</a></li>
+                    <li> <a href="#" tabindex="0">About Qatar</a></li>
+                </ul>
+            </div>
+            <!-- Mobile Menu-->
+        </header>
+        <!-- ======= header ======= -->
+<!-- ======= form ======= -->
+<div class="form_wrapper">
+    <div class="stepper">
+        <div class="route"></div>
+        <ul>
+            <li class="current_step">
+                <div class="step">1</div>
+                <p>Donation Details</p>
+            </li>
+            <li>
+                <div class="step">2</div>
+                <p>Confirm & Pay</p>
+            </li>
+            <li>
+                <div class="step">3</div>
+                <p>Payment Received</p>
+            </li>
+        </ul>
+    </div>
+    
+    
+<form class="needs-validation" novalidate>
+    <div class="form_container">
+        <fieldset>
+            <legend class="form_heading" id="donnation_details">Donation Details</legend>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="Zakah" class="form_lbl">Zakah</label>
+                        <input type="text" id="Zakah" class="form-control" placeholder="0.0" required>
+                        <span class="invalid-feedback">This field is required</span>
+                    </div>
+                    
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="zakah_type" class="form_lbl">Zakah Type*</label>
+                        <select class="selectpicker form-control" id="zakah_type" title="Select Zakah Type">
+                            <option>Zakah 1</option>
+                            <option>Zakah 2</option>
+                            <option>Zakah 3</option>
+                        </select>
+                        <span class="invalid-feedback">This field is required</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <fieldset>
+                        <legend class="hide_legend">voucher</legend>
+                        <div class="option_wrapper">
+                            <p class="para_md">Receive the Receipt Voucher by Email?</p>
+                            <div class="options">
+                                <input type="radio" name="receipt_voucher" id="receipt_voucher_yes" value="yes">
+                                <label for="receipt_voucher_yes" class="inp_radio" tabindex="0"><span></span> Yes</label>
+                            </div>
+                            <div class="options">
+                                <input type="radio" name="receipt_voucher" id="receipt_voucher_no" value="no">
+                                <label for="receipt_voucher_no" class="inp_radio" tabindex="0"><span></span> No</label>
+                            </div>
+                        </div>
+                        </fieldset>
+                    
+                    <div class="form-group" id="email_wrap">
+                        <label for="email" class="form_lbl">Email</label>
+                        <input type="text" id="email" class="form-control" placeholder="Enter Email">
+                    </div>
+                
+                </div>
+                <div class="col-sm-6">
+                    <fieldset>
+                        <legend class="hide_legend">sms</legend>
+                    <div class="option_wrapper">
+                        <p class="para_md">Receive SMS Notification?</p>
+                        <div class="options">
+                                <input type="radio" name="sms_notification" id="sms_notification_yes" value="yes">
+                            <label for="sms_notification_yes" class="inp_radio" tabindex="0"><span></span> Yes</label>
+                        </div>
+                        <div class="options">
+                                <input type="radio" name="sms_notification" id="sms_notification_no" value="no">
+                            <label for="sms_notification_no" class="inp_radio" tabindex="0"><span></span> No</label>
+                        </div>
+                   
+                    </div>
+                </fieldset>
+                    <div class="form-group" id="mobile_number_wrap">
+                        <label for="mobile_number" class="form_lbl">Mobile Number</label>
+                        <input type="text" id="mobile_number" class="form-control" placeholder="Enter Mobile Number">
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="option_wrapper">
+                    <div class="amount">
+                        <p class="para_lg">Total Amount : 0 QR (7 QR Minimum)?</p>
+                    </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="option_wrapper">
+                    <div class="amount">
+                        <p class="para_sm">Note : 1 QR = 3.65QR (Approx)</p>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+        <div class="form_serrator"></div>
+
+    <fieldset>
+        <legend class="form_heading" id="contact_details">Doner Contact Details</legend>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="name" class="form_lbl">Name</label>
+                    <input type="text" id="name" class="form-control" placeholder="Enter Name" required>
+                    <span class="invalid-feedback">This field is required</span>
+                </div>
+            </div> 
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="address" class="form_lbl">Address</label>
+                    <input type="text" id="address" class="form-control" placeholder="Enter Address" required>
+                    <span class="invalid-feedback">This field is required</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="telephone_number" class="form_lbl">Telephone Number</label>
+                    <input type="text" id="telephone_number" class="form-control" placeholder="Enter Phone Number" required>
+                    <span class="invalid-feedback">This field is required</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="p_o_box" class="form_lbl">P.O. Box</label>
+                    <input type="text" id="p_o_box" class="form-control" placeholder="Enter P.O. Box" required>
+                    <span class="invalid-feedback">This field is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label for="country" class="form_lbl">Country</label>
+                    <select class="selectpicker form-control" id="country" title="Select Country">
+                        <option>Country 1</option>
+                        <option>Country 2</option>
+                        <option>Country 3</option>
+                      </select>
+                      <span class="invalid-feedback">This field is required</span>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="g-recaptcha" id="rcaptcha"  data-sitekey="site key"></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6"></div>
+            <div class="col-sm-6">
+                <div class="button_wrap">
+                    <button type="reset" class="btn_hku btn_hku_secondary">Reset</button>
+                    <button type="submit" class="btn_hku btn_hku_primary">Submit</button>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    </div>
+    
+</form>
+</div>
+<!-- ======= form ======= -->
+       
+<!-- footer -->
+<footer>
+    <div class="footer_inner">
+    <div class="foot_row">
+        <div class="copy_right" tabindex="0">
+            Copyrigt © 2019 MOTC. All rights reserved.
+        </div>
+        <div class="foot_nav">
+            <nav>
+                <ul>
+                <li> <a href="#" tabindex="0">Entity  Services’ Statistics</a></li>
+                <li> <a href="#" tabindex="0">Useful Links</a></li>
+                <li> <a href="#" tabindex="0">Customer Service</a></li>
+                <li> <a href="#" tabindex="0">Contact Us</a></li>
+                <li> <a href="#" tabindex="0">FAQ</a></li>
+                <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                <li> <a href="#" tabindex="0">Site Map</a></li>
+                <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                <li> <a href="#" tabindex="0">Find Help</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    </div>
+</footer>
+<!-- footer -->
+    </div>
+    <!-- =============== bootstrap js=============== -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        crossorigin="anonymous"></script>
+    <script>
+        window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+    </script>
+
+    <!-- ======= script for select dropdown ======= -->
+    <script src="assets/js/bootstrap-select.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script>
+    
+    $('selectpicker').selectpicker();
+
+    $('#receipt_voucher_yes').change(function(){
+        if($(this).is(':checked')){
+            $('#email_wrap').css("display", "block");
+        }
+    });
+    $('#receipt_voucher_no').change(function(){
+        if($(this).is(':checked')){
+            $('#email_wrap').css("display", "none");
+        }
+    });
+    $('#sms_notification_yes').change(function(){
+        if($(this).is(':checked')){
+            $('#mobile_number_wrap').css("display", "block");
+        }
+    });
+    $('#sms_notification_no').change(function(){
+        if($(this).is(':checked')){
+            $('#mobile_number_wrap').css("display", "none");
+        }
+    });
+    // ======= validation =======
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+$('#lang_toggle').click(function(){
+        $('body').toggleClass('ar')
+    });
+    </script>
+</body>

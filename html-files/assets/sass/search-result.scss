@@ -17,6 +17,10 @@ p, h1, h2, h3, h4, h5{
         margin: 20px 15px 20px;
         padding: 50px 0 0;
     }
+    @media screen and (max-width: 600px){
+        margin: 5px 15px 20px;
+        padding: 35px 0 0;
+    }
     
     .close{
         width: 50px;
@@ -224,10 +228,16 @@ p, h1, h2, h3, h4, h5{
                 min-width: 100px;
             }
             @media screen and (max-width: 540px){
-                padding: 0px 10px;
-                border-radius: 9px;
+                padding: 1px 10px;
+                border-radius: 7px;
                 font-family: 'cairo_semibold';
                 font-size: 14px;
+                justify-content: baseline;
+                span{
+                    img{
+                        width: 13px;
+                    }
+                }
             }
             span{
                 margin-right: 9px;
@@ -426,6 +436,7 @@ p, h1, h2, h3, h4, h5{
                                 figure{
                                     margin-bottom: 0;
                                     img{
+                                        width: 100%;
                                         border-radius: 9px;
                                     }
                                 }
@@ -792,6 +803,11 @@ p, h1, h2, h3, h4, h5{
                     transform: translate(-50%, -50%);
                     cursor: pointer;
                     z-index: 1;
+                    transition: 0.3s ease-in-out all;
+
+                    img{
+                        width: 100%;
+                    }
                 }
                 video{
                     width: 220px;
@@ -800,6 +816,16 @@ p, h1, h2, h3, h4, h5{
                     vertical-align: middle;
                     // object-fit: fill;
                     border-radius: 12px;
+                }
+                &.playing{
+                    .play{
+                        opacity: 0;
+                    }
+                }
+                &:hover{
+                    .play{
+                        opacity: 1;
+                    }
                 }
             }
             .video_info{

@@ -201,8 +201,50 @@ function resetClass() {
 
 
 
+
+   $(".txt_link").click(function () {
+      $(".directory_card_row").slideToggle();
+      $(".view_all").toggle();
+      if ($(this).text() == "Collapse All")
+         $(this).text("Expand All")
+      else
+         $(this).text("Collapse All");
+   });
+
+
+
 /****************Articles**********************/
 $(".article_card").click(function(){
    $(this).toggleClass("active");
 })
 /****************Articles Close**********************/
+
+
+
+
+
+/****************show more and less  more  fact**********************/
+$(document).ready(function(){
+$(".show_more_fact").click(function(){
+
+       var text = $(".show_more_fact").text();
+       
+       if(text === "Less More Facts") {
+         console.log(text)
+           $(".show_more_fact").text('Show More Facts-Watch');
+       } else {
+           $(".show_more_fact").text('Less More Facts');
+       }
+   $(".fact_figure_card_wrap").toggleClass("active");   
+});
+
+});
+
+/****************show more and less  more  fact close**********************/
+
+
+
+$(".pagination_wrapper li a").click(function(){
+   $(".pagination_wrapper li a").removeClass("active")
+   $(this).addClass("active");
+});
