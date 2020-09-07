@@ -12218,3 +12218,153 @@ color: var(--deep-orange);
         text-align: right;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*******************Entity Service & Statistics*********************/
+.entity_services, .statistics{
+    .banner{
+        figure{
+            width: 100%;
+            height: 250px;
+            margin-bottom: 50px;
+            img{
+                width: 100%;
+                height: 250px;
+                object-fit: cover;
+            }
+        }
+    }
+    .txt_wrapper{
+        .title{
+            font-family: "cairo_bold";
+            color: var(--black);
+            font-size: 28px;
+            line-height: 0.71;
+            margin-bottom: 20px;
+            @media screen and (max-width: 640px) {
+                font-size: 20px;
+                margin-bottom: 12px;
+            }
+        }
+        .brief{
+            font-family: "cairo_semibold";
+            font-size: 16px;
+            line-height: 2.19;
+            color: var(--black-two);
+            margin-bottom: 40px;
+            @media screen and (max-width: 640px) {
+                font-size: 14px;
+                line-height: 2;
+                margin-bottom: 20px;
+            }
+        }
+    }
+    .category_heading{
+        margin: 0 0 50px 0;
+    }
+    .section_wrap{
+        padding: 60px 0 20px;
+    }
+    .cards_wrap{
+        display: flex;
+        flex-wrap: wrap;
+        .statistics_card{
+            width: 160px;
+            height: 210px;
+            border-radius: 20px;
+            border: solid 1px #d5d6d8;
+            text-align: center;
+            font-size: 16px;
+            font-family: 'cairo_semibold';
+            padding: 37px 10px 20px;
+            margin: 0 20px 20px 0;
+            .card_icon{
+                width: 40px;
+                height: 40px;
+                margin: auto auto 20px;
+                img{
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+            }
+            .name{
+                line-height: 1.69;
+                color: var(--eggplant);
+                margin-bottom: 7px;
+                display: block;
+                text-align: center;
+            }
+            .count{
+                font-size: 24px;
+                font-family: 'cairo_bold';
+                line-height: 1.13;
+                color: var(--dark-orange);
+                margin-bottom: 5px;
+                display: block;
+                text-align: center;
+            }
+            .since{
+                font-size: 14px;
+                line-height: 1.93;
+                color: #4a4a4a;
+            }
+        }
+    }
+    .location_img{
+        width: 100%;
+        height: 637px;
+        img{
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+    .report_table{
+        margin-top: 50px;
+        .total_count{
+            border: solid 1px #b5b5b5;
+            background-color: var(--white);
+        }
+        table {
+            tbody {
+                tr{
+                    &:nth-of-type(even) {
+                        background-color: var(--white-five);
+                    }
+                    &:nth-of-type(odd) {
+                        background-color: var(--white);
+                    }
+                }
+            }
+        }
+    }
+    .category_tab_wrapper{
+        ul{
+            li{
+                &:first-child{
+                    margin: 0 22px 0 0;
+                }
+            }
+        }
+    }
+}
+/**************Entity Service & Statistics close*********************/
+
+
+
+
+

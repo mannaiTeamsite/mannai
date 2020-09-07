@@ -9606,4 +9606,98 @@ h3 {
 .ar .apply_filter_tag_wrapper {
   text-align: right; }
 
+/*******************Entity Service & Statistics*********************/
+.entity_services .banner figure, .statistics .banner figure {
+  width: 100%;
+  height: 250px;
+  margin-bottom: 50px; }
+  .entity_services .banner figure img, .statistics .banner figure img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover; }
+.entity_services .txt_wrapper .title, .statistics .txt_wrapper .title {
+  font-family: "cairo_bold";
+  color: var(--black);
+  font-size: 28px;
+  line-height: 0.71;
+  margin-bottom: 20px; }
+  @media screen and (max-width: 640px) {
+    .entity_services .txt_wrapper .title, .statistics .txt_wrapper .title {
+      font-size: 20px;
+      margin-bottom: 12px; } }
+.entity_services .txt_wrapper .brief, .statistics .txt_wrapper .brief {
+  font-family: "cairo_semibold";
+  font-size: 16px;
+  line-height: 2.19;
+  color: var(--black-two);
+  margin-bottom: 40px; }
+  @media screen and (max-width: 640px) {
+    .entity_services .txt_wrapper .brief, .statistics .txt_wrapper .brief {
+      font-size: 14px;
+      line-height: 2;
+      margin-bottom: 20px; } }
+.entity_services .category_heading, .statistics .category_heading {
+  margin: 0 0 50px 0; }
+.entity_services .section_wrap, .statistics .section_wrap {
+  padding: 60px 0 20px; }
+.entity_services .cards_wrap, .statistics .cards_wrap {
+  display: flex;
+  flex-wrap: wrap; }
+  .entity_services .cards_wrap .statistics_card, .statistics .cards_wrap .statistics_card {
+    width: 160px;
+    height: 210px;
+    border-radius: 20px;
+    border: solid 1px #d5d6d8;
+    text-align: center;
+    font-size: 16px;
+    font-family: 'cairo_semibold';
+    padding: 37px 10px 20px;
+    margin: 0 20px 20px 0; }
+    .entity_services .cards_wrap .statistics_card .card_icon, .statistics .cards_wrap .statistics_card .card_icon {
+      width: 40px;
+      height: 40px;
+      margin: auto auto 20px; }
+      .entity_services .cards_wrap .statistics_card .card_icon img, .statistics .cards_wrap .statistics_card .card_icon img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain; }
+    .entity_services .cards_wrap .statistics_card .name, .statistics .cards_wrap .statistics_card .name {
+      line-height: 1.69;
+      color: var(--eggplant);
+      margin-bottom: 7px;
+      display: block;
+      text-align: center; }
+    .entity_services .cards_wrap .statistics_card .count, .statistics .cards_wrap .statistics_card .count {
+      font-size: 24px;
+      font-family: 'cairo_bold';
+      line-height: 1.13;
+      color: var(--dark-orange);
+      margin-bottom: 5px;
+      display: block;
+      text-align: center; }
+    .entity_services .cards_wrap .statistics_card .since, .statistics .cards_wrap .statistics_card .since {
+      font-size: 14px;
+      line-height: 1.93;
+      color: #4a4a4a; }
+.entity_services .location_img, .statistics .location_img {
+  width: 100%;
+  height: 637px; }
+  .entity_services .location_img img, .statistics .location_img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; }
+.entity_services .report_table, .statistics .report_table {
+  margin-top: 50px; }
+  .entity_services .report_table .total_count, .statistics .report_table .total_count {
+    border: solid 1px #b5b5b5;
+    background-color: var(--white); }
+  .entity_services .report_table table tbody tr:nth-of-type(even), .statistics .report_table table tbody tr:nth-of-type(even) {
+    background-color: var(--white-five); }
+  .entity_services .report_table table tbody tr:nth-of-type(odd), .statistics .report_table table tbody tr:nth-of-type(odd) {
+    background-color: var(--white); }
+.entity_services .category_tab_wrapper ul li:first-child, .statistics .category_tab_wrapper ul li:first-child {
+  margin: 0 22px 0 0; }
+
+/**************Entity Service & Statistics close*********************/
+
 /*# sourceMappingURL=main.css.map */

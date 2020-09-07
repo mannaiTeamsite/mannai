@@ -382,6 +382,7 @@
           border: 2px solid transparent;
           transition: 0.3s ease-in-out all;
           cursor: pointer;
+          padding-left: 0;
           margin-bottom: 0; }
           .bottom_understand .understand .like .like_btn label:first-child {
             margin-right: 18px; }
@@ -392,6 +393,12 @@
           opacity: 0; }
           .bottom_understand .understand .like .like_btn input[type='radio']:checked + label {
             border: 2px solid var(--rouge); }
+      .bottom_understand .understand .like [type="radio"]:not(:checked) + label:before, .bottom_understand .understand .like [type="radio"]:not(:checked) + label:after {
+        border: solid 2px var(--white-four);
+        display: none; }
+      .bottom_understand .understand .like [type="radio"]:checked + label:after, .bottom_understand .understand .like [type="radio"]:checked + label:before, .bottom_understand .understand .like [type="radio"]:checked + label:after {
+        border: 2px solid var(--rouge);
+        display: none; }
 
 .ar .bottom_understand .bg_image {
   bottom: 0;

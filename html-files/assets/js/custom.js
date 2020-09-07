@@ -217,6 +217,11 @@ function resetClass() {
 $(".article_card").click(function(){
    $(this).toggleClass("active");
 })
+
+
+$(".all").click(function(){
+   $(this).nextAll().toggleClass("active");
+})
 /****************Articles Close**********************/
 
 
@@ -248,3 +253,5 @@ $(".pagination_wrapper li a").click(function(){
    $(".pagination_wrapper li a").removeClass("active")
    $(this).addClass("active");
 });
+
+

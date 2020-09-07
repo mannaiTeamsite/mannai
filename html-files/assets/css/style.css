@@ -414,6 +414,9 @@ body {
 input:focus {
   border: 1px solid var(--berry); }
 
+.ul_indent {
+  text-indent: 10px; }
+
 /*-------------------Base close---------------*/
 .select-picker-wrap .bootstrap-select:not([class*=col-]):not([class*=form-control]):not(.input-group-btn) {
   width: 100%; }
@@ -508,5 +511,50 @@ input:focus {
   right: -9999px;
   left: auto;
   opacity: 0; }
+
+/*************Table****************/
+.table_wrap table {
+  font-family: 'cairo_semibold';
+  font-size: 14px;
+  line-height: 1.57;
+  letter-spacing: 0.2px;
+  color: var(--purple-brown); }
+  .table_wrap table thead {
+    border-radius: 4px;
+    border: solid 1px #b5b5b5;
+    background-color: var(--white); }
+    .table_wrap table thead th {
+      vertical-align: top;
+      border: none;
+      padding: 13px 0 13px 30px; }
+  .table_wrap table tbody td {
+    width: 15%;
+    font-size: 13px;
+    line-height: 1.69;
+    letter-spacing: 0.19px;
+    color: var(--greyish-brown-three);
+    border: none;
+    padding: 15px 0 15px 30px; }
+    .table_wrap table tbody td:first-child {
+      width: 25%;
+      font-size: 14px;
+      line-height: 1.57;
+      letter-spacing: 0.2px;
+      color: var(--purple-brown); }
+  .table_wrap table tbody tr:nth-of-type(odd) {
+    background-color: var(--white-five); }
+  .table_wrap table tbody .total_count {
+    font-family: 'cairo_bold';
+    font-size: 16px;
+    line-height: 1.38;
+    letter-spacing: 0.23px; }
+    .table_wrap table tbody .total_count:first-child {
+      color: var(--purple-brown);
+      font-size: 16px; }
+
+.ar .table_wrap table tbody td:first-child {
+  width: 25%; }
+
+/*************Table close****************/
 
 /*# sourceMappingURL=style.css.map */
