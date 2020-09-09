@@ -222,30 +222,14 @@ body.loader_show .loader {
   --hrruler:#d4d4d4;
   --blue: #009dbd;
   --black-two:#2a2a2a ;
-  --berry: #8a1538;
-  --deep-orange: #e35205;
-  --purple-brown: #1c1517;
-  --greyish-brown: #494949;
-  --greyish-brown-two: #4f4f4f;
-  --white: #ffffff;
-  --pinkish-grey: #c5c5c5;
   --warm-grey:#8a8a8a;
-  --white-two: #f8f7f6;
   --white-three: #f6f6f6;
-  --silver: #d4d9dc;
-  --silver-two: #dfe0e2;
-  --eggplant: #13070a;
-  --rouge: #b51647;
-  --white-four: #e5e5e5;
-  --white-five: #f1f1f1;
-  --rouge-two: #ba0c2f;
   --white-six: #dedede;
-  --dark-orange: #cd4a04;
   --very-light-pink: #fff0e9;
   --very-light-pink-two: #fff8f3;
   --light-pink: #fff2f6;
   --white-seven: #ececec;
-  --greyish-brown-three: #6e6259;
+  --ocean: #008099;
   --white-eight: #d2d2d2;
   --white-nine: #e6e6e6;
   --black: #2a2a2a;
@@ -254,7 +238,6 @@ body.loader_show .loader {
   --white-eleven: #ededed;
   --white-twelve: #e2e2e2;
   --black-7: rgba(0, 0, 0, 0.07);
-  --ocean: #008099;
   --white-thirteen: #f2f2f2; }
 
 :root {
@@ -284,30 +267,14 @@ body.loader_show .loader {
   --hrruler:#d4d4d4;
   --blue: #009dbd;
   --black-two:#2a2a2a ;
-  --berry: #8a1538;
-  --deep-orange: #e35205;
-  --purple-brown: #1c1517;
-  --greyish-brown: #494949;
-  --greyish-brown-two: #4f4f4f;
-  --white: #ffffff;
-  --pinkish-grey: #c5c5c5;
   --warm-grey:#8a8a8a;
-  --white-two: #f8f7f6;
   --white-three: #f6f6f6;
-  --silver: #d4d9dc;
-  --silver-two: #dfe0e2;
-  --eggplant: #13070a;
-  --rouge: #b51647;
-  --white-four: #e5e5e5;
-  --white-five: #f1f1f1;
-  --rouge-two: #ba0c2f;
   --white-six: #dedede;
-  --dark-orange: #cd4a04;
   --very-light-pink: #fff0e9;
   --very-light-pink-two: #fff8f3;
   --light-pink: #fff2f6;
   --white-seven: #ececec;
-  --greyish-brown-three: #6e6259;
+  --ocean: #008099;
   --white-eight: #d2d2d2;
   --white-nine: #e6e6e6;
   --black: #2a2a2a;
@@ -316,7 +283,6 @@ body.loader_show .loader {
   --white-eleven: #ededed;
   --white-twelve: #e2e2e2;
   --black-7: rgba(0, 0, 0, 0.07);
-  --ocean: #008099;
   --white-thirteen: #f2f2f2; }
 
 /*------------------Layout contain------------------
@@ -749,35 +715,6 @@ footer {
   margin: 0 -10px;
   flex-wrap: wrap; }
 
-.flex_col_sm_7 {
-  width: 70%;
-  padding: 0 10px; }
-
-.flex_col_sm_8 {
-  width: 76.7%;
-  padding: 0 10px; }
-
-.flex_col_sm_4 {
-  width: 33.3%;
-  padding: 0 10px; }
-
-.flex_col_sm_9 {
-  width: 75%;
-  padding: 0 10px; }
-
-.flex_col_sm_3 {
-  width: 25%;
-  padding: 0 10px; }
-
-.flex_col_sm_10 {
-  width: 83.33333333%;
-  padding: 0 10px; }
-
-.flex_col_sm_2 {
-  width: 16.66666667%;
-  padding: 0 10px;
-  position: relative; }
-
 .right_flex {
   align-items: flex-end; }
 
@@ -785,8 +722,21 @@ footer {
   width: 50%;
   padding: 0 10px; }
 
-.flex_col_sm_12 {
-  width: 100%;
+.flex_col_sm_2 {
+  width: 16.66666667%;
+  padding: 0 10px;
+  position: relative; }
+
+.flex_col_sm_3 {
+  width: 25%;
+  padding: 0 10px; }
+
+.flex_col_sm_4 {
+  width: 33.3%;
+  padding: 0 10px; }
+
+.flex_col_sm_5 {
+  width: 41.666667%;
   padding: 0 10px; }
 
 .flex_col_sm_6 {
@@ -801,8 +751,20 @@ footer {
   width: 58.333333%;
   padding: 0 10px; }
 
-.flex_col_sm_5 {
-  width: 41.666667%;
+.flex_col_sm_8 {
+  width: 76.7%;
+  padding: 0 10px; }
+
+.flex_col_sm_9 {
+  width: 75%;
+  padding: 0 10px; }
+
+.flex_col_sm_10 {
+  width: 83.33333333%;
+  padding: 0 10px; }
+
+.flex_col_sm_12 {
+  width: 100%;
   padding: 0 10px; }
 
 @media (max-width: 650px) {
@@ -4218,6 +4180,7 @@ hr {
       .section_wrapper .left_sec {
         width: 100%;
         margin-left: 0;
+        top: 0;
         position: relative; } }
   .section_wrapper .right_sec {
     flex: 1; }
@@ -4654,7 +4617,8 @@ hr {
     @media screen and (max-width: 768px) {
       .vision_banner .section_wrapper .left_sec {
         margin: 0 15px 0 0;
-        padding: 0; } }
+        padding: 0;
+        top: 0; } }
     .vision_banner .section_wrapper .left_sec h1 {
       font-family: 'cairo_bold';
       font-size: 56px;
@@ -6202,7 +6166,8 @@ hr {
               .explore_life_qatar .explore_life_block .explore_list_horizontal ul li a {
                 width: auto;
                 font-size: 12px;
-                margin: 7px 15px; } }
+                margin: 7px 9px;
+                padding: 7px 14px; } }
 
 .ar .explore_life_qatar .explore_life_block .wrap {
   display: flex;
@@ -6807,6 +6772,11 @@ hr {
     transform: translate(-50%, -50%);
     box-shadow: 0 -2px 12px 0 rgba(0, 0, 0, 0.05);
     z-index: 9; }
+    @media (max-width: 640px) {
+      .category_filter_wrapper_layer .category_filter_wrapr {
+        width: 100%; }
+        .category_filter_wrapper_layer .category_filter_wrapr .rouge_btn {
+          padding: 5px 58px; } }
     .category_filter_wrapper_layer .category_filter_wrapr h3 {
       font-family: 'cairo_bold';
       font-size: 20px;
@@ -6846,7 +6816,8 @@ hr {
       margin-bottom: 10px;
       display: block; }
     .category_filter_wrapper_layer .category_filter_wrapr .outline_btn {
-      width: 175px; }
+      width: auto;
+      padding: 11px 45px; }
 
 .category_sort_wrapper_layer {
   position: fixed;
@@ -7177,6 +7148,8 @@ hr {
   right: 62px;
   padding: 20px;
   border-radius: 8px; }
+  .share_g.active {
+    border: 1px solid var(--berry); }
 
 .web {
   width: 20px;
@@ -7366,8 +7339,14 @@ h3 {
   border-radius: 12px;
   border: solid 1px var(--white-nine);
   margin-bottom: 45px; }
+  .video_img_wrapper .flex_col_sm_7, .video_img_wrapper .flex_col_sm_5 {
+    padding: 0; }
   .video_img_wrapper .tags_wrap {
     left: 0; }
+    @media (max-width: 768px) {
+      .video_img_wrapper .tags_wrap {
+        left: 0;
+        position: relative; } }
   .video_img_wrapper .tab_wrapper.detail_tab {
     margin-left: 0px; }
   .video_img_wrapper .tab_wrapper a {
@@ -7930,6 +7909,10 @@ h3 {
 
 .hospital_detail .digit_wrap {
   padding-left: 15px; }
+  @media (max-width: 768px) {
+    .hospital_detail .digit_wrap.facilities_wrap li span {
+      display: block;
+      line-height: 25px; } }
   .hospital_detail .digit_wrap li {
     list-style-type: decimal;
     margin: 0;
@@ -8192,6 +8175,9 @@ h3 {
       padding-right: 8px; }
   .job_detail .details.detail_card {
     margin: 0 0 0 50px; }
+    @media (max-width: 768px) {
+      .job_detail .details.detail_card {
+        margin: 0 0 0 30px; } }
 
 /***************************************Job close******************************************/
 /***************************************Museum******************************************/
@@ -8513,8 +8499,17 @@ h3 {
   left: auto; }
 
 /************************************Arabic Category******************************************/
-.banner-wrapper img {
-  width: 100%; }
+.banner-wrapper {
+  height: 250px; }
+  .banner-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; }
+    @media (max-width: 768px) {
+      .banner-wrapper img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover; } }
 
 .accessibility {
   padding: 50px 0; }
@@ -9509,6 +9504,15 @@ h3 {
     display: block; }
   .category_polls_card .vote_wrap .rouge_btn {
     padding: 11px 39px; }
+
+.ar .category_polls_card .progress_wrap .progress_bar {
+  left: 37px;
+  right: auto; }
+.ar .category_polls_card [type="radio"] + label:before, .ar .category_polls_card [type="radio"] + label:after {
+  right: 0;
+  top: 0; }
+.ar .category_polls_card label {
+  padding-right: 20px; }
 
 /***************************Polls close****************************/
 /***************************Surveys****************************/

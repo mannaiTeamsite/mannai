@@ -104,9 +104,9 @@
 
      <div class="share_kit_wrapper">
      <div class="ssk-sticky ssk-left ssk-center ssk-lg">
-        <a href="https://www.facebook.com/"  data-*="https://www.facebook.com/"  class="ssk ssk-facebook"  target="_blank"></a>
-        <a href="https://twitter.com/LOGIN" class="ssk ssk-twitter" target="_blank"></a>
-        <a href="https://www.google.com/intl/en-GB/gmail/about/" class="ssk ssk-google-plus" target="_blank"></a>
+        <a href="https://www.facebook.com/"  title="Facebook"  class="ssk ssk-facebook"  target="_blank"></a>
+        <a href="https://twitter.com/LOGIN" title="Twitter" class="ssk ssk-twitter" target="_blank"></a>
+        <a href="https://www.google.com/intl/en-GB/gmail/about/" title="Gmail" class="ssk ssk-google-plus" target="_blank"></a>
     </div>
 </div>
 
@@ -322,8 +322,8 @@
                         </div>
                     </div>
                     <div class="btn_wrap">
-                        <input type="reset" class="outline_btn cancel"  value="Reset">
-                        <button type="button" class="rouge_btn  apply_filter m-l-20">Apply</button>
+                        <input type="reset" class="outline_btn cancel"  value="Reset" />
+                        <button type="button" class="rouge_btn apply_filter m-l-20">Apply</button>
                     </div>
                 </form>
                     </div>
@@ -371,17 +371,18 @@
                             </div>
                             <!-- card repeat close -->
 
-                              <!-- card repeat -->
-                              <div class="category_card">
+
+                               <!-- card repeat -->
+                               <div class="category_card">
                                 <a href="#" class="list_card">
                                     <figure class="card_img">
-                                    <img src="assets/images/event-image.png" alt="event-thumb" />
+                                    <img src="assets/images/demo.png" alt="event-thumb" />
                                     <div class="tags_wrap">
-                                        <span class="tag_g tag_l">Healthcare Services</span>
-                                        <span class="tag_g tag_l">Healthcare Services</span>
+                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
                                     </div>
-                                    <span class="share_g share_l"  title="Share"></span>
-                                   <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
+                                    <span class="share_g share_l"  tabindex="0" title="Share"></span>
+                                   <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
                                     </figure>
                                     <div class="details">
                                     <div class="inner_wrap">
@@ -407,17 +408,17 @@
                             <!-- card repeat close -->
 
 
-                              <!-- card repeat -->
-                              <div class="category_card">
+                               <!-- card repeat -->
+                               <div class="category_card">
                                 <a href="#" class="list_card">
                                     <figure class="card_img">
-                                    <img src="assets/images/event-image.png" alt="event-thumb" />
+                                    <img src="assets/images/demo.png" alt="event-thumb" />
                                     <div class="tags_wrap">
-                                        <span class="tag_g tag_l">Healthcare Services</span>
-                                        <span class="tag_g tag_l">Healthcare Services</span>
+                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
                                     </div>
-                                    <span class="share_g share_l"  title="Share"></span>
-                                   <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
+                                    <span class="share_g share_l"  tabindex="0" title="Share"></span>
+                                   <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
                                     </figure>
                                     <div class="details">
                                     <div class="inner_wrap">
@@ -442,6 +443,7 @@
                             </div>
                             <!-- card repeat close -->
 
+                      
 
                               
 
@@ -454,9 +456,10 @@
                                 <img src="assets/images/map.jpg" alt="map" />
                 
                                 <div class="srch_box">
-                                    <label for="location_search" class="hide">Search</label>
+                                    
                                     <div class="txt_wrapper">
-                                    <input type="text" id="location_search" placeholder="Search Location" />
+                                        <label for="search_location" class="hide">Search location</label>
+                                    <input type="text" id="search_location" placeholder="Search Location" />
                                     <span class="detect-icon">
                                         <img src="assets/images/search-line-gray.svg" alt="search-img">
                                     </span>
@@ -559,7 +562,7 @@
  <script>
     window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
  </script>
- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+ <script src="assets/js/popper.min.js"></script>
  <script src="assets/js/bootstrap.min.js"></script>
  <script src="assets/js/bootstrap-select.js"></script>
  <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
@@ -567,44 +570,9 @@
  <script src="assets/js/owl.carousel.min.js"></script>
  <script src="assets/js/app-slider.js"></script>
  <script src="assets/js/custom.js"></script>
- <!-- <script type="text/javascript" src="assets/js/social-share-kit.js"></script> -->
  <!--Js Close-->
 
- <!-- <script type="text/javascript">
-    SocialShareKit.init({ forceInit: true });
-</script> -->
 
-
-<script>
-
-    var i=1;
-   
-
-
-    $(".apply_filter").click(function(){
-      
-       var selectedItem = $('.selectpicker').val();
-       $(".apply_filter_tag_wrapper ul").append('<li>' + selectedItem + '<figure class="closetg" id=item'+ i +'><img src="assets/images/remove-tag.png"  class="remove_tag" alt="remove-filter-tag"></figure></li>');
-  
-        i++;
-    });
-
-   $("body").on('click','.closetg',function(){
-    var $this = $(this);
-    var getId = $this.attr('id');
-    console.log(getId)
-     // $(this).attr('data-in').parent().remove();
-     $('#' + getId).parent().remove();
-   });
-
-
-   $('form').on('reset', function() {
-  setTimeout(function() {
-    $('.selectpicker').selectpicker('refresh');
-  });
-});
-  
-</script> 
 
 </body>
 

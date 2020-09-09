@@ -4432,6 +4432,7 @@ color: var(--deep-orange);
         @media screen and (max-width: 768px){
             width: 100%;
             margin-left: 0;
+            top: 0;
             position: relative;
          }
     }
@@ -5057,6 +5058,7 @@ color: var(--deep-orange);
             @media screen  and (max-width: 768px){
                 margin: 0 15px 0 0;
                 padding: 0;
+                top:0;
             }
             h1{
                 font-family: 'cairo_bold';
@@ -5065,7 +5067,7 @@ color: var(--deep-orange);
                 letter-spacing: normal;
                 color: var(--deep-orange);
                 max-width: 308px;
-           
+                
                 @media screen and (max-width: 768px){
                     font-size: 40px;
                     max-width: 100%;
@@ -7163,7 +7165,8 @@ color: var(--deep-orange);
                     @media(max-width:640px){
                       width: auto;
                       font-size: 12px;
-                      margin: 7px 15px;
+                      margin: 7px 9px;
+                      padding:7px 14px;
                     }
                 }
               }
@@ -8054,6 +8057,13 @@ color: var(--deep-orange);
             transform: translate(-50%,-50%);
             box-shadow: 0 -2px 12px 0 rgba(0, 0, 0, 0.05);
             z-index: 9;
+            @media(max-width:640px){
+                width:100%;
+
+                .rouge_btn{
+                    padding: 5px 58px;
+                }
+            }
             h3{
                 font-family: 'cairo_bold';
                 font-size: 20px;
@@ -8103,7 +8113,8 @@ color: var(--deep-orange);
                 display: block;
             }
             .outline_btn{
-                width: 175px;
+                width: auto;
+                padding: 11px 45px;
             }
         }
 	}
@@ -8543,7 +8554,11 @@ color: var(--deep-orange);
 		top: 10px;
 		right: 62px;
 		padding: 20px;
-		border-radius: 8px;
+        border-radius: 8px;
+        
+        &.active{
+            border:1px solid var(--berry);
+        }
     }
     .web{
 		width: 20px;
@@ -8801,8 +8816,18 @@ color: var(--deep-orange);
         border-radius: 12px;
         border: solid 1px var(--white-nine);
         margin-bottom: 45px;
+
+        .flex_col_sm_7,.flex_col_sm_5{
+            padding:0;
+        }
+
         .tags_wrap{
             left: 0;
+
+            @media(max-width:768px){
+                left: 0;
+                position: relative;
+            }
         }
         .tab_wrapper{
             &.detail_tab {
@@ -9584,6 +9609,14 @@ color: var(--deep-orange);
 .hospital_detail{
     .digit_wrap{
         padding-left: 15px;
+        &.facilities_wrap li span{
+            @media(max-width:768px){
+                display: block;
+                line-height: 25px;
+            }
+        }
+    
+    
         li{
             list-style-type: decimal;
             margin: 0;
@@ -9604,6 +9637,8 @@ color: var(--deep-orange);
             }
         }
     }
+
+    
 }
 .ar{
     .category_hospital_card {
@@ -10024,6 +10059,9 @@ color: var(--deep-orange);
         }
         &.detail_card{
             margin: 0 0 0 50px;
+            @media(max-width:768px){
+                margin: 0 0 0 30px;
+            }
         }
     }
 }
@@ -10601,14 +10639,23 @@ color: var(--deep-orange);
 
 
 .banner-wrapper{
+    height: 250px;
     img{
         width: 100%;
+        height: 100%;
+        object-fit: cover;
+        @media (max-width:768px) {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
     }
-}
+} 
 
 .accessibility {
     padding: 50px 0;
 
+   
    
 
     @media (max-width:992px) {
@@ -12060,6 +12107,26 @@ color: var(--deep-orange);
         }
         .rouge_btn{
             padding: 11px 39px; 
+        }
+    }
+}
+
+
+.ar{
+    .category_polls_card {
+        .progress_wrap {
+            .progress_bar {
+                left: 37px;
+                right: auto;
+            }
+        }
+
+        [type="radio"] + label:before, [type="radio"] + label:after {
+            right: 0;
+            top: 0;
+        }
+        label{
+            padding-right: 20px;
         }
     }
 }

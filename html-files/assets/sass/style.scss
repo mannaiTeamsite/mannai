@@ -152,17 +152,11 @@ input{
   width: 100%;
 }
 
-
-
 @media(max-width:1000px){
   .reverse{
     flex-wrap: wrap-reverse !important;
   }
 }
-
-
-
-
 .lb-dataContainer {
     margin: 0 auto;
     padding-top: 5px;
@@ -175,10 +169,6 @@ input{
     transform: translateX(-50%);
     z-index: 999;
 }
-
-
-
-
 /***********Radio button**************/ 
 
 [type="radio"]:not(:checked),

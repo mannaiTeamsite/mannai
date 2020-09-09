@@ -181,22 +181,26 @@ function resetClass() {
    }
    });
 
-    /***********************************Accordian J******************************************/
+   /***********************************Accordian J******************************************/
 
 
 
 
 
-
+   /*********************************Share Kit Icon Js*******************************************************/
     $(".share_g").click(function(e){
        e.stopPropagation();
        $(".share_kit_wrapper").addClass("active");
+       $(".share_g").removeClass("active");
+       $(this).addClass("active");
     })
 
 
     $("body").click(function(){
       $(".share_kit_wrapper").removeClass("active");
-   })
+      $(".share_g").removeClass("active");
+   });
+   /*********************************Share Kit Icon Js Close*******************************************************/
 
 
 
@@ -248,10 +252,43 @@ $(".show_more_fact").click(function(){
 /****************show more and less  more  fact close**********************/
 
 
-
+/**************************Pagenation Js***********************************************/
 $(".pagination_wrapper li a").click(function(){
    $(".pagination_wrapper li a").removeClass("active")
    $(this).addClass("active");
 });
+/******************************Pagenation Js Close***********************************/
 
 
+
+
+/******************************Filter JS**********************************************/
+var i=1;
+   
+$('.selectpicker').change(function () {
+   var selectedItem = $(this).val();
+   $(".apply_filter_tag_wrapper ul").append('<li>' + selectedItem + '<figure class="closetg" id=item'+ i +'><img src="assets/images/remove-tag.png"  class="remove_tag" alt="remove-filter-tag"></figure></li>');
+    i++;
+});
+
+$("body").on('click','.closetg',function(){
+var $this = $(this);
+var getId = $this.attr('id');
+console.log(getId)
+ // $(this).attr('data-in').parent().remove();
+ $('#' + getId).parent().remove();
+});
+
+
+$('form').on('reset', function() {
+setTimeout(function() {
+$('.selectpicker').selectpicker('refresh');
+});
+});
+
+$(".cancel").click(function(){
+
+$(".apply_filter_tag_wrapper ul li").remove()
+});
+ 
+/******************************Filter JS Close**********************************************/
