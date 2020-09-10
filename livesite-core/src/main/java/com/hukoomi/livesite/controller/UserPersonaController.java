@@ -1,8 +1,11 @@
 package com.hukoomi.livesite.controller;
 
 import com.interwoven.livesite.common.web.ForwardAction;
+import com.interwoven.livesite.external.CookieHash;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.log4j.Logger;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -19,36 +22,55 @@ public class UserPersonaController {
      * open the requested page.
      */
     public final ForwardAction personaRedirect(final RequestContext context) {
-        String personaCookieValue = context.getCookies()
-                .getCookie("persona").getValue();
-        LOGGER.debug("[UserPersonaController].[personaRedirect] "
-                + ":: personaCookieValue : " + personaCookieValue);
-       if (personaCookieValue != null && !personaCookieValue
-               .equalsIgnoreCase("")) {
-           LOGGER.debug("[UserPersonaController].[personaRedirect] "
-                   + ":: sitePath : " + context.getSite().getPath());
-           String pagePath = context.getSite().getPath()
-                   .concat("/").concat(personaCookieValue).concat(".page");
+        try {
+            CookieHash cookies = context.getCookies();
+            Cookie personaCookie = cookies.getCookie("persona");
 
-           LOGGER.debug("[UserPersonaController].[personaRedirect] "
-                   + ":: pagePath : " + pagePath);
+            if (personaCookie != null) {
+                LOGGER.debug("[UserPersonaController].[personaRedirect] "
+                        + ":: personaCookie found ");
+                String personaCookieValue = personaCookie.getValue();
+                LOGGER.debug("[UserPersonaController].[personaRedirect] "
+                        + ":: personaCookieValue : " + personaCookieValue);
+                if (personaCookieValue != null && !personaCookieValue
+                        .equalsIgnoreCase("")) {
+                    LOGGER.debug("[UserPersonaController].[personaRedirect] "
+                            + ":: sitePath : " + context.getSite().getPath());
+                    String pagePath = context.getSite().getPath()
+                            .concat("/").concat(personaCookieValue)
+                            .concat(".page");
 
-           try {
-               if (context.getFileDAL().isFile(pagePath)) {
-                   context.getResponse()
-                       .setStatus(HttpServletResponse.SC_MOVED_PERMANENTLY);
-                   context.getResponse().sendRedirect(personaCookieValue
-                           .concat(".page"));
-               } else {
-                   LOGGER.debug("[UserPersonaController].[personaRedirect] "
-                           + ":: pagePath : " + pagePath
-                           + " doesnot exist. ");
-               }
-           } catch (IOException e) {
-              LOGGER.error("Exception occured" + e.getLocalizedMessage());
-               e.printStackTrace();
-           }
-       }
+                    LOGGER.debug("[UserPersonaController].[personaRedirect] "
+                            + ":: pagePath : " + pagePath);
+
+
+                    if (context.getFileDAL().isFile(pagePath)) {
+                        context.getResponse()
+                                .setStatus(HttpServletResponse
+                                        .SC_MOVED_PERMANENTLY);
+                        context.getResponse().sendRedirect(personaCookieValue
+                                .concat(".page"));
+                    } else {
+                        LOGGER.debug("[UserPersonaController]"
+                                + ".[personaRedirect]"
+                                + ":: pagePath : " + pagePath
+                                + " doesnot exist. ");
+                    }
+                }
+            } else {
+                LOGGER.debug("[UserPersonaController].[personaRedirect] "
+                        + ":: personaCookie not found ");
+            }
+        } catch (IOException e) {
+            LOGGER.error("Exception occured :: " + e.getLocalizedMessage());
+          //  e.printStackTrace();
+        } catch (NullPointerException e) {
+            LOGGER.error("Exception occured :: " + e.getLocalizedMessage());
+           // e.printStackTrace();
+        }  catch (Exception e) {
+            LOGGER.error("Exception occured :: " + e.getLocalizedMessage());
+            //e.printStackTrace();
+        }
         LOGGER.debug("[UserPersonaController].[personaRedirect] "
                 + " :: Exit");
         return null;
