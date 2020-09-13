@@ -522,6 +522,7 @@
                     border: 2px solid transparent;
                     transition: 0.3s ease-in-out all;
                     cursor: pointer;
+                    padding-left: 0; 
                     margin-bottom: 0;
                     &:first-child{
                         margin-right: 18px;
@@ -538,6 +539,14 @@
                             border: 2px solid var(--rouge);
                         }
                     }
+                }
+                [type="radio"]:checked + label:after, [type="radio"]:checked + label:before, [type="radio"]:checked + label:after,
+                [type="radio"]:not(:checked) + label:before, [type="radio"]:not(:checked) + label:after
+                {
+                    display: none;
+                }
+                [type="radio"]:not(:checked) + label:before, [type="radio"]:not(:checked) + label:after{
+                    display: none;
                 }
             }
             
