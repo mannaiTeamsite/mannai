@@ -193,14 +193,20 @@
                   <label>Date</label>
                   <div class="flex_row">
                      <div class="flex_col_sm_6">
-                        <div class="txt_wrapper">
-                           <input type="text" placeholder="Month" readonly>
+                        <label for="month">Month</label>
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" id="month">
+                              <option>Month</option>
+                              <option>Location 1</option>
+                              <option>Location 2</option>
+                           </select>
                         </div>
                      </div>
                      <div class="flex_col_sm_6">
                         <div class="txt_wrapper">
+                           <label for="year" class="">Year</label>
                            <div class="select-picker-wrap">
-                              <select class="selectpicker" style="display: none;">
+                              <select class="selectpicker" id="year">
                                  <option>2018</option>
                                  <option>2019</option>
                                  <option>2020</option>
@@ -214,9 +220,9 @@
                <div class="flex_row">
                   <div class="flex_col_sm_6">
                      <div class="form_field">
-                        <label>Location</label>
+                        <label for="select_location">Location</label>
                         <div class="select-picker-wrap">
-                           <select class="selectpicker" style="display: none;">
+                           <select class="selectpicker" id="select_location">
                               <option>Select</option>
                               <option>Location 1</option>
                               <option>Location 2</option>
@@ -227,9 +233,9 @@
                   <div class="flex_col_sm_6">
                      <div class="txt_wrapper">
                         <div class="form_field">
-                           <label>Experience (Yrs)</label>
+                           <label for="exp">Experience (Yrs)</label>
                            <div class="select-picker-wrap">
-                              <select class="selectpicker" style="display: none;">
+                              <select class="selectpicker" id="exp">
                                  <option>Fresher</option>
                                  <option>3-4</option>
                                  <option>5-10</option>
@@ -241,10 +247,10 @@
                </div>
 
                <div class="form_field">
-                  <label>Category</label>
+                  <label for="category">Category</label>
                   <div class="txt_wrapper">
                      <div class="select-picker-wrap">
-                        <select class="selectpicker" style="display: none;">
+                        <select class="selectpicker" id="category">
                            <option>Select</option>
                            <option>Category 1</option>
                            <option>Category 2</option>
@@ -253,7 +259,7 @@
                   </div>
                </div>
                <div class="btn_wrap">
-                  <button class="outline_btn cancel">Cancel</button>
+                  <button class="outline_btn cancel">Reset</button>
                   <button class="rouge_btn m-l-20">Apply</button>
                </div>
             </div>

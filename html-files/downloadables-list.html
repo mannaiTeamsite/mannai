@@ -212,10 +212,10 @@
                </div>
 
                <div class="form_field">
-                  <label tabindex="0">By Topic</label>
+                  <label for="by_topic" tabindex="0">By Topic</label>
                   <div class="txt_wrapper">
                      <div class="select-picker-wrap" tabindex="0">
-                        <select class="selectpicker" style="display: none;">
+                        <select class="selectpicker" id="by_topic">
                            <option tabindex="0">Select</option>
                            <option tabindex="0">Topic 1</option>
                            <option tabindex="0">Topic 2</option>
@@ -336,6 +336,9 @@
 
    <!-- JS -->
    <script src="assets/js/jquery.js"></script>
+   <script>
+      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+   </script>
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
    <script src="assets/js/bootstrap.min.js"></script>
    <script src="assets/js/bootstrap-select.js"></script>

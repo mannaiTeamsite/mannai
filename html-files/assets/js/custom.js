@@ -69,7 +69,7 @@ $(function () {
     $('input[name="daterange"]').daterangepicker({
        opens: 'left'
     }, function (start, end, label) {
-       console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+       console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
     });
  });
  /*************************Date Range Calendar*****************************************/
@@ -111,17 +111,21 @@ function resetClass() {
     $(".list_row_wrapper").addClass("list_view");
     $(".list_row_wrapper").removeClass("map_view");
     $(".map_col").removeClass("active");
+    $(".calendar_wrapper").removeClass("active");
+
  });
 
  $(".grid").click(function () {
     $(".list_row_wrapper").removeClass("list_view");
     $(".list_row_wrapper").removeClass("map_view");
     $(".map_col").removeClass("active");
+    $(".calendar_wrapper").removeClass("active");
  });
  $(".map").click(function () {
     $(".list_row_wrapper").addClass("map_view");
     $(".list_row_wrapper").removeClass("list_view");
     $(".map_col").addClass("active");
+    $(".calendar_wrapper").removeClass("active");
  });
 
 
@@ -215,19 +219,22 @@ function resetClass() {
          $(this).text("Collapse All");
    });
 
-
-
 /****************Articles**********************/
-$(".article_card").click(function(){
+$(".article_card").click(function () {
    $(this).toggleClass("active");
+   if (!$(this).hasClass('active')) {
+      $(".all").removeClass("active");
+   }
 })
-
-
-$(".all").click(function(){
+ 
+$(".all").click(function (e) {
+ 
    $(this).nextAll().toggleClass("active");
+   if ($(this).hasClass('active')) {
+      $(".article_card").addClass("active");
+   }
 })
 /****************Articles Close**********************/
-
 
 
 
@@ -292,3 +299,44 @@ $(".apply_filter_tag_wrapper ul li").remove()
 });
  
 /******************************Filter JS Close**********************************************/
+
+
+
+
+
+
+
+$(".calendar_view").click(function(){
+   $(".calendar_wrapper").addClass("active");
+   $(".list_row_wrapper").removeClass("map_view");
+   $(".map_col").removeClass("active");
+});
+
+
+
+
+
+
+$(".links ul li a").click(function(){
+   $(".links ul li a").removeClass("active")   
+   
+   $(this).addClass("active");
+})
+
+
+
+
+var myVideo = document.getElementById("video"); 
+
+function playPause() { 
+  if (myVideo.paused) {
+    myVideo.play(); 
+    $('.play img').attr('src', 'assets/images/pause.png');
+    $(myVideo).parent().addClass('playing')
+  }
+  else 
+  {
+    myVideo.pause(); 
+    $('.play img').attr('src', 'assets/images/play.png')
+  }
+} 

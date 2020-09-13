@@ -10,8 +10,7 @@
     <link rel="stylesheet" href="assets/css/explore-services.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <!-- ================== bootstrap css ========================= -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
     <!-- ================== bootstrap css ========================= -->
 
 </head>
@@ -92,17 +91,17 @@
 
         <div class="explore_services_wrapper" tabindex="-1">
             <div class="services_inner" id="services_inner" tabindex="-1">
-
                 <div class="serv_tabs">
                     <!-- Nav tabs -->
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
+                            <div class="new_bedge">New</div>
                             <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="tab"
                                 aria-controls="explore" aria-selected="true" tabindex="0">Explore</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="tab"
-                                aria-controls="favourites" aria-selected="false" tabindex="0">Your favourites (11)</a>
+                                aria-controls="favourites" aria-selected="false" tabindex="0">Bookmarked Services (11)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="tab"
@@ -134,22 +133,25 @@
                                         <h4>Citizen</h4>
                                         <ul>
                                             <li>
-                                                <label class="chech_lbl" for="parent"><input id="parent"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                <label class="chech_lbl" for="parent">
+                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0">
                                                     <span></span>
-                                                    Parent</label>
+                                                    <span class="chk_text">Parent</span>
+                                                </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="employee"><input id="employee"
                                                         class="check_input" type="checkbox" tabindex="0">
                                                     <span></span>
-                                                    Employee</label>
+                                                    <span class="chk_text">Employee</span>
+                                                    </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="businessman"><input id="businessman"
                                                         class="check_input" type="checkbox" tabindex="0">
                                                     <span></span>
-                                                    Businessman</label>
+                                                    <span class="chk_text">Businessman</span>
+                                                    </label>
                                             </li>
                                         </ul>
                                     </div>
@@ -163,7 +165,8 @@
                                                     <label class="chech_lbl" for="parent1"><input id="parent1"
                                                             class="check_input" type="checkbox" tabindex="0">
                                                         <span></span>
-                                                        Parent</label>
+                                                        <span class="chk_text">Parent</span>
+                                                        </label>
                                                 </fieldset>
                                             </li>
                                             <li>
@@ -172,7 +175,8 @@
                                                     <label class="chech_lbl" for="employee1"><input id="employee1"
                                                             class="check_input" type="checkbox" tabindex="0">
                                                         <span></span>
-                                                        Employee</label>
+                                                        <span class="chk_text">Employee</span>
+                                                        </label>
                                                 </fieldset>
                                             </li>
                                         </ul>
@@ -185,13 +189,15 @@
                                                 <label class="chech_lbl" for="tourist"><input id="tourist"
                                                         class="check_input" type="checkbox" tabindex="0">
                                                     <span></span>
-                                                    Tourist</label>
+                                                    <span class="chk_text">Tourist</span>
+                                                    </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="student"><input id="student"
                                                         class="check_input" type="checkbox" tabindex="0">
                                                     <span></span>
-                                                    Student</label>
+                                                    <span class="chk_text">Student</span>
+                                                    </label>
                                             </li>
                                             <li>
                                                 <fieldset>
@@ -199,7 +205,8 @@
                                                     <label class="chech_lbl" for="businessman1"><input id="businessman1"
                                                             class="check_input" type="checkbox" tabindex="0">
                                                         <span></span>
-                                                        Businessman</label>
+                                                        <span class="chk_text">Businessman</span>
+                                                        </label>
                                                 </fieldset>
                                             </li>
                                         </ul>
@@ -217,7 +224,7 @@
                             <div class="bottom_understand">
                                 <!-- <div class="bg_image"></div> -->
                                 <div class="understand">
-                                    <p>Is this question easy to understand?</p>
+                                    <p>Is this easy to understand?</p>
                                     <div class="like">
                                         <div class="like_btn" tabindex="0">
                                             <input type="radio" checked name="like" id="yes">
@@ -386,10 +393,23 @@
                                         <a class="nav-link active" id="resident_qatari_tab" data-toggle="tab"
                                             href="#for_resident_qatari" role="tab" aria-controls="for_resident_qatari"
                                             aria-selected="true">For Resident Qatari</a>
-                                            <!-- <div class="circle-ripple" id="t_point_one" data-toggle="dropdown"></div> -->
-                                            <!-- <div class="dropdown-menu arrow_top" aria-labelledby="dropdownMenuButton">
-                                               hello
-                                              </div> -->
+                                            <!-- <div class="circle-ripple" id="t_point_one" data-toggle="dropdown">
+                                                <div class="dropdown_ttr arrow_top" aria-labelledby="dropdownMenuButton">
+                                                   <div class="dropdown_ttr_body">
+                                                       <h3>Your choices are here!</h3>
+                                                       <p>All your selections are showcased here. You can switch between them and see all services personalised or your needs.</p>
+                                                   </div>
+                                                   <div class="dropdown_ttr_toolbar">
+                                                       <div class="step">1/3</div>
+                                                       <div class="skip">skip</div>
+                                                       <div class="tuto_pagination">
+                                                           <div class="tuto_prev">p</div>
+                                                           <div class="tuto_next">n</div>
+                                                       </div>
+                                                   </div>
+                                                   </div>
+                                            </div> -->
+                                           
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="for_students-tab" data-toggle="tab" href="#for_students"
@@ -590,14 +610,15 @@
                                                                     Communications Regulatory Authority
                                                                 </label>
                                                             </div>
-                                                            <a href="" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
                                                         </div>
                                                     </div>
 
                                                 </div>
 
                                                 <div class="filter_col">
-                                                    <h3>Life Stage</h3>
+                                                    <div class="new_bedge">New</div>
+                                                    <h3>Life Stage </h3>
                                                     <div class="dropdown show">
                                                         <div class="dropdown-toggle sel_filter" id="dropdownLifeStage"
                                                             data-toggle="dropdown" role="group" aria-haspopup="true"
@@ -659,7 +680,7 @@
                                                                     Business
                                                                 </label>
                                                             </div>
-                                                            <a href="" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
                                                         </div>
                                                     </div>
 
@@ -719,7 +740,7 @@
                                                             </div>
 
 
-                                                            <a href="" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
                                                         </div>
                                                     </div>
 
@@ -742,7 +763,7 @@
                                                             onkeyup="clear_search(this)" tabindex="0">
                                                         <a href="javascript:void(0)" class="clear_search"
                                                             onclick="clear_text(this)" tabindex="0">
-                                                            <img src="assets/images/close.png" alt="Clear Search">
+                                                            <img src="assets/images/ic_exps_close.png" alt="Clear Search">
                                                         </a>
                                                         <a href="javascript:void(0)" class="inner_srch_icon"
                                                             tabindex="0"><img
@@ -1038,7 +1059,7 @@
     </div>
     <!-- =============== bootstrap js=============== -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="assets/js/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
     <script src="assets/js/explore-services.js"></script>
@@ -1054,7 +1075,6 @@
         $(' .radio_lbl').click(function (e) {
             e.stopPropagation();
         });
-
 
     </script>
 </body>

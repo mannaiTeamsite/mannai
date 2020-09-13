@@ -110,11 +110,12 @@
          <div class="custom_container">
             <div class="f_row f_flow_col">
                <div class="f_col">
+                  <label for="search-bank">Search_bank</label>
                   <div class="category_search_input">
-                     <input type="text" placeholder="Search Bank" />
-                     <span class="detect-icon">
+                     <input type="text" placeholder="Search Bank"   id="search-bank"/>
+                     <button class="detect-icon">
                         <img src="assets/images/search-line-white.png" alt="search-img" />
-                     </span>
+                     </button>
                   </div>
                </div>
                <div class="f_col text-right">
@@ -188,10 +189,10 @@
              
 
                <div class="form_field">
-                  <label>Location</label>
+                  <label for="flocation">Location</label>
                   <div class="txt_wrapper">
                      <div class="select-picker-wrap">
-                        <select class="selectpicker" style="display: none;">
+                        <select class="selectpicker" id="flocation">
                            <option>Select</option>
                            <option>Location 1</option>
                            <option>Location 2</option>
@@ -201,10 +202,10 @@
                </div>
 
                <div class="form_field">
-                  <label>Bank Name</label>
+                  <label for="bank_name">Bank Name</label>
                   <div class="txt_wrapper">
                      <div class="select-picker-wrap">
-                        <select class="selectpicker" style="display: none;">
+                        <select class="selectpicker" id="bank_name">
                            <option>Arab Bank</option>
                            <option>Doha Bank</option>
                            <option>Arab Bank</option>
@@ -318,7 +319,7 @@
                                 <img src="assets/images/map.jpg" alt="map" />
                 
                                 <div class="srch_box">
-                                    <label for="location_search" class="hide">Search</label>
+                                    <label for="location_search" class="hide">Search bank</label>
                                     <div class="txt_wrapper">
                                     <input type="text" id="location_search" placeholder="Search Location" />
                                     <span class="detect-icon">

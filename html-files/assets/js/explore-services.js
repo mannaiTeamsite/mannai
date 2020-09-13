@@ -44,13 +44,13 @@ $(document).ready(function(){
     });
 
     // ======= to manage tutorial =======
-    localStorage.setItem("tutorial", 0);
-    viewTutorial = localStorage.getItem("tutorial");
-    console.log(viewTutorial);
-    if(viewTutorial == 0){
-        $(".tutorial_backdrop").css("display", "block");
-        $("#explore_tabs").css("z-index", "999")
-    }
+    // localStorage.setItem("tutorial", 0);
+    // viewTutorial = localStorage.getItem("tutorial");
+    // console.log(viewTutorial);
+    // if(viewTutorial == 0){
+    //     $(".tutorial_backdrop").css("display", "block");
+    //     $("#explore_tabs").css("z-index", "999")
+    // }
 })
 
 // ======= show clear search cross icon in sraech =======

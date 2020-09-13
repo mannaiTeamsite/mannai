@@ -329,7 +329,14 @@
                   <div class="natinalflag_card" >
                      <div class="inner_wrapper">
                         <figure class="img_video_wrapper">
-                           <img src="assets/images/national-anthem.png" alt="national">
+                           
+
+                           <div class="video">
+                              <div class="play" onclick="playPause()" onkeypress="playPause()" role="button"><img src="assets/images/play.png" alt="Play"></div>
+                              <video id="video" poster="assets/images/national-anthem.png">
+                                  <source src="assets/images/movie.mp4">
+                              </video>
+                          </div>
                         </figure>
                         <span class="national_title"  tabindex="0">National Flag</span>
                         <p class="description"  tabindex="0">
@@ -683,7 +690,7 @@
                      <p tabindex="0">
                         GOV.QA keeps you updated with all the crucial information you need about business in Qatar.
                      </p>
-                     <span class="explore_all link" tabindex="0">Qatar business plan</span>
+                   
                      <div class="business_vision_row">
                         <a href="#" class="bn_card">
                            <figure>
