@@ -24,6 +24,10 @@
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: cover;
+
+    @media(max-width:1024px){
+        background-image: none;
+    }
 }
 
 .marron_solid{
@@ -37,6 +41,9 @@
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: cover;
+    @media(max-width:1024px){
+        background-image: none;
+    }
 }
 
 
@@ -46,6 +53,9 @@
     background-position: bottom;
     background-size: cover;
     position: relative;
+    @media(max-width:1024px){
+        background-image: none;
+    }
 }
 
 
@@ -54,6 +64,9 @@
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: cover;
+    @media(max-width:1024px){
+        background-image: none;
+    }
 }
 
 .wave_darkwhite_maroon{
@@ -61,4 +74,7 @@
     background-repeat: no-repeat;
     background-position: bottom;
     background-size: cover;
+    @media(max-width:1024px){
+        background-image: none;
+    }
 }

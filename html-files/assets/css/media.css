@@ -9,7 +9,7 @@
 
 /**************** 1200 ******************/
 @media(max-width:1200px){
-    .custom_container, .inner_custom_container{
+    .custom_container{
        max-width: 95%;
    }
    

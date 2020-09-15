@@ -203,7 +203,7 @@ $('#heighlights_news_owl').owlCarousel({
             autoplay: true,
         },
         1200: {
-            items: 3,
+            items: 2,
             loop:true,
         },
         1220: {
@@ -342,6 +342,42 @@ $('#embassies_card_owl').owlCarousel({
         },
         700: {
             items: 2,
+
+        },
+        765: {
+            items: 3,
+
+        },
+        1200: {
+            items: 5,
+        }
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+$('#explore_tag').owlCarousel({
+    items: 5,
+    loop: false,
+    dots: false,
+    //  autoplay: true,
+    nav: true,
+    navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive: {
+        0: {
+            items: 2,
+
+        },
+        700: {
+            items: 3,
 
         },
         765: {

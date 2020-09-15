@@ -5,6 +5,8 @@
 @import'mixin.scss';
 @import'effect.scss';
 
+@import'about-us.scss';
+
 *:focus{
   border: 0.5px dotted #000;  
 }
@@ -140,7 +142,11 @@ hr{
 	&:hover{
 		background: url('../images/arrow-left-rouge.svg') center no-repeat;
 		background-size: contain;
-	}
+    }
+    @media(max-width:640px){
+        width: 25px;
+	    height: 25px; 
+    }
 }
 
 .owl-next {
@@ -158,7 +164,12 @@ hr{
 	&:hover{
 		background: url('../images/arrow-right-rouge.svg') center no-repeat;
 		background-size: contain;
-	}
+    }
+    
+    @media(max-width:640px){
+        width: 25px;
+	    height: 25px; 
+    }
 }
 //=========== Common CSS close ================//
 
@@ -334,7 +345,10 @@ hr{
 		.banner_img{
 			position: relative;
 			width: 100%;
-			height: 600px;
+            height: 600px;
+            @media(max-width:650px){
+                height: 250px;
+            }
 			img{
 				width: 100%;
 				height: 100%;
@@ -408,6 +422,14 @@ hr{
        color: var(--slate-grey);
         opacity: 0.68;  
       }
+      @media(max-width:650px){
+      .inner_custom_container{
+          top:50px !important;
+      }
+      .persona_tag_wrapper{
+          top: 120px;
+      }
+    }
 }
 /*-------------------------------------Home Page Close---------------------------------------------*/
 
@@ -421,16 +443,17 @@ hr{
 	background-color: var(--white-five);
 	
 	.search_section{
-		position: relative;
+        position: relative;
+        max-width: 1007px;
+        margin: 0 auto;
 		.inner_custom_container{
-			width: 1007px;
 			margin: 0 auto 0;
 			position: relative;
 			top: -27px;
 			z-index: 9;
 
         }
-        
+
         .radio_wrap {
             display: flex;
             align-items: center;
@@ -591,7 +614,7 @@ hr{
     background-color: var(--white);
     position: absolute;
 	top: 70px;
-    left: 71px;
+    left: 0;
 	z-index: 99;
 	display: flex;
 	transform: scale(0);
@@ -599,15 +622,16 @@ hr{
 	visibility: hidden;
 	transform-origin: left top;
 	@extend %basic_transition;
-	@media(max-width:870px){
-		width: 100%;
-		left: 0;
+    @media(max-width:1300px){
+        top:63px;
+        left:0;
+	}
+    @media(max-width:870px){
+	    width:100%;
+        top: 51px;
 	}
 	@media(max-width:650px){
-        flex-flow: wrap;
-        
-           width: 95%;
-            left: 10px;
+            flex-flow: wrap;
             top: 51px;
         
 	}
@@ -739,13 +763,9 @@ hr{
 		}
 	}
 	.persona_tag_wrapper{
-		right:63px;
-		left: 0;
-		@media(max-width:870px){
-
-			right: 0;
-			left: 0;
-		}
+		right:5px;
+		left: auto;
+	
 		.box {
             text-align: right;
             border-left: 1px solid var(--white-five);
@@ -787,7 +807,10 @@ hr{
         position: absolute;
         bottom: 90px;
         left: 148px;
-        z-index: 99;
+        z-index: 9;
+        @media(max-width:768px){
+            bottom: 140px;
+        }
     }
 	@media(max-width:768px){
 		padding: 25px 0 0;
@@ -896,10 +919,19 @@ hr{
 .ar{
 	.banner_section{
 		.banner_row{
-			flex-flow: row-reverse;
+            flex-flow: row-reverse;
+            @media (max-width:768px) {
+                flex-flow: column;
+            }
 			.col_left {
 				.banner_container {
                     margin: 37px 0 0 83px; 
+                    @media (max-width:768px) {
+                        margin: 0 auto 25px;
+                    }
+                    h1 {
+                        margin: 0 0 0 auto;
+                    }
                     .commn-para {
                         margin: 12px 0 14px auto;
                     }
@@ -954,7 +986,6 @@ hr{
 
 .services_section{
     padding: 50px 0 25px;
-	
 	h2{
 		margin-bottom: 48px;
 		max-width: 100%;
@@ -974,7 +1005,11 @@ hr{
 			top: 6px;
 			background: url(../images/bullet_orange.svg) center no-repeat;
 			background-size: contain;
-		}
+        }
+        
+        @media(max-width:768px){
+            font-size: 22px;
+        }
 	}
 	.service_card{
 		max-width: 358px;
@@ -1202,19 +1237,25 @@ hr{
 		@include rounded-corner(18px);
 		border: solid 1px #e1e0df;
         background-color: var(--white);
-        padding: 24px;
+        padding:0;
         margin: 0 auto 30px;
+        @media(max-width:640px){
+            margin: 0 auto;
+            width: 320px;
+        }
         .view_all_wrap{
             display: inline-block;
             width: 90px;
+            padding: 0 0 0 25px;
         }
 		.places_img{
-			width: 358px;
-			height: 150px;
+			max-width: 358px;
+            width: 100%;
+            height: 150px;
 			border-top-left-radius: 18px;
 			border-top-right-radius: 18px;
 			overflow: hidden;
-			margin: -24px -24px 13px;
+			// margin: -24px -24px 13px;
 			img{
 				width: 100%;
 				height: 150px;
@@ -1227,10 +1268,11 @@ hr{
 			font-family: 'cairo_bold';
 			font-size: 18px;
 			line-height: 27px;
-			color: var(--purple-brown);
+            color: var(--purple-brown);
+            margin: 15px 18px;
 		}
 		ul{
-			padding: 0 0 24px 0;
+			padding: 0 24px 24px 24px;
 			li{
 				border-bottom: 1px solid #e1e0df;
 				padding: 12px 0;
@@ -1340,7 +1382,10 @@ hr{
 .opinion_section{
 	background-color: var(--berry);
 	padding: 100px 0 100px;
-	h2{
+    @media(max-width:768px){
+        padding: 40px 0;
+    }
+    h2{
 		max-width: 371px;
 		font-family: 'cairo_bold';
 		font-size: 28px;
@@ -1387,8 +1432,9 @@ hr{
 		border: 1px solid #d6d8da;
 		background-color: var(--white);
         
-        @media(max-width:765px){
-            margin-bottom: 70px;
+        @media(max-width:768px){
+            margin: 34px 0;
+            max-width: 100%;
         }
 
 		h3{
@@ -1444,7 +1490,14 @@ hr{
 
 			&:hover{
 				background-color: var(--berry);
-			}
+            }
+            
+            @media(max-width: 640px){
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+
+
 		}
 		.view_all_wrap{
 			margin-left: 14px;
@@ -1456,7 +1509,9 @@ hr{
 		}
 		hr{
 			background-color: #d6d6d6;
-			margin: 0 -40px 25px;
+            margin: 0 -40px 25px;
+            height: 1px;
+            border: none;
 		}
 	}
 	.survey_card{
@@ -1523,12 +1578,17 @@ hr{
                 margin-right: 14px;
                 margin-left: 0;
             }
+            .rating_wrap {
+                .radio_wrap {
+                   justify-content: flex-end;
+                }
+            }
         }
        
         
         h2{
             padding-right: 30px;
-            padding-left: auto;
+            padding-left: 0;
             &:before{
                 right:0;
                 left: auto;
@@ -1537,6 +1597,10 @@ hr{
 
     }
 
+    .view_all_wrap::before {
+        right: auto;
+        left: -39px;
+    }
    
 }
 
@@ -2205,7 +2269,13 @@ hr{
 	}
 	.owl-prev{
 		left: 0;
-	}
+    }
+    
+    .owl-dots {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 
@@ -2220,6 +2290,7 @@ hr{
             }
         }
 		.cards_wrapper {
+            justify-content: flex-end;
 			.news_card {
 				width: 140px;
 				min-height: 120px;
@@ -3122,6 +3193,9 @@ hr{
                 display: flex;
 				flex-flow: wrap;
 //				margin-bottom: 20px;
+                @media(max-width:640px){
+                    justify-content: center;
+                }
                 .bussiness_card_sm{
                     width: 133px;
                     height: 150px;
@@ -3135,7 +3209,7 @@ hr{
                     overflow: hidden;
                     cursor: pointer;
                     @media(max-width:640px){
-                        width: 46%;
+                        width: 45%;
                     }
 
                     .title{
@@ -3255,6 +3329,14 @@ hr{
 			flex:1 1 auto;
         }
         
+        @media(max-width:900px){
+			flex:1 1 auto;
+        }
+
+        @media(max-width:640px){
+            margin: 0 auto 20px;
+        }
+        
         h2{
             font-size: 28px;
             font-family: "cairo_bold";
@@ -3361,6 +3443,14 @@ hr{
 
 
 .ar{
+.student_service_card{
+    @media(max-width:640px){
+        margin: 0 auto 20px;
+    }
+}
+   
+
+
 	.did_you_block {
         
 		.block-label{
@@ -3478,9 +3568,8 @@ hr{
             width: 170px;
             height: 170px;
             position: absolute;
-            top: -90px;
-          
-            border: 10px solid var(--white);
+            top: -90px;          
+            // border: 10px solid var(--white);
             background-color: #eaecef;
             border-radius: 50%;
             img{
@@ -4426,7 +4515,8 @@ color: var(--deep-orange);
     }
     @media screen and (max-width: 768px){
         flex-direction: column;
-        padding: 30px 10px
+        padding: 30px 10px;
+        max-width:95%;
     }
     .left_sec{
         width: 488px;
@@ -4992,9 +5082,7 @@ color: var(--deep-orange);
             }
         }
         .card{
-            h3{
-                float: right;
-            }
+
             .arrow_link{
                 clear: both;
             }
@@ -5142,7 +5230,7 @@ color: var(--deep-orange);
         }
       
         .left_sec{
-            margin: 0 0 0 32px;
+            // margin: 0 0 0 32px;
             padding-left: 60px;
             padding-right: 0;
         }
@@ -5562,7 +5650,7 @@ color: var(--deep-orange);
         margin: 0 auto;
         display: flex;
         align-items: center;
-        padding: 45px 0;
+        padding: 0 0 45px 0;
         @media screen and (min-width: 769px) and (max-width: 1200px){
             padding: 30px 10px
         }
@@ -5999,8 +6087,10 @@ color: var(--deep-orange);
 .ar{
     .card{
         h3{
-            float: right;
             width: 100%;
+            padding: 12px 17px 0 0;
+            display: block;
+            margin: 0;
         }
         .arrow_link{
             clear: both;
@@ -6196,11 +6286,15 @@ color: var(--deep-orange);
     margin: 0 auto;
    border-bottom: 1px solid var(--white-four);
    padding-bottom: 60px;
+   @media screen and (max-width: 1024px){
+    max-width: 95%;
+}  
+
    @media screen and (max-width: 768px){
     padding: 0 10px 60px 10px;
 }
-   @media screen  and (max-width: 600px){
-       padding: 0 10px 50px 10px;
+   @media screen  and (max-width: 640px){
+    padding: 0 20px 50px 20px;
    }
     ul{
         display: flex;
@@ -6337,7 +6431,7 @@ color: var(--deep-orange);
                     left: 50px;
                     right: auto;
                 }
-                padding-left: 104px;
+                padding-left: 33px;
                 padding-right: 0; 
                 a{
                     padding-left: 104px;
@@ -6519,732 +6613,6 @@ color: var(--deep-orange);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-   
-
-
-
-
-
-    /*-----------------About Qatar Banner-----------------------*/
-.abt_qatar_banner {
-    padding: 100px 0 100px;
-    position: relative;
-    .f_row{
-        flex-flow: wrap-reverse;
-    }
-    .banner_cobined_icon {
-        position: absolute;
-        right: 26px;
-        bottom: -10px;
-    }
-    .img_col {
-        width: 50%;
-        figure{
-            width: 300px;
-            margin: 0 auto; 
-        }
-    }
-    .content_col{
-        padding: 20px 50px 20px 0px;
-        width: 50%;
-        .inner_wrapper {
-            margin: 0 auto;
-            padding: 20px 0;
-            .banner_card_wrapper {
-                margin-top: 32px;
-                display: flex;
-                flex-flow: wrap;
-                justify-content: center;
-            }
-            .bn_card{
-                width: 140px;
-                height: 150px;
-                border-radius: 20px;
-                border:solid 1px #d5d6d8;
-                background-color: var(--white);
-                text-align: center;
-                display: flex;
-                flex-flow: column;
-                align-items: center;
-                justify-content: center;
-                margin-right: 25px;
-                margin-bottom: 10px;
-                @media(max-width:640px){
-                    width: 43%;
-                    margin:10px;
-    
-                }
-                figure{
-                    margin-bottom: 5px;
-                    font-size: 30px;
-                    height: 42px;
-                    display: flex;
-                    align-items: center;
-                    line-height: 1;
-                    text-align: center;
-                    color: var(--dark-orange);
-                }
-
-                .title{
-                    display: block;
-                    font-size: 17px;
-                    font-family: "cairo_bold";
-                    line-height: 1.59;
-                    letter-spacing: normal;
-                    text-align: center;
-                    color: var(--dark-orange);
-                }
-                .sub_title{
-                    font-size: 14px;
-                    font-family: "cairo_semibold";
-                    line-height: 1.57;
-                    text-align: center;
-                    color: var(--slate-grey);
-                }
-               
-            }
-
-            h1{
-               
-                font-size: 56px;
-                font-family: "cairo_bold";
-                line-height: 1.4;
-                color: var(--rouge);
-                
-            }
-            .heading-sm{
-                display: block;
-                font-size: 18px;
-                text-transform: uppercase;
-                font-family: "cairo_bold";
-                line-height: 1.4;
-                color: var(--rouge);
-            }
-             @media(max-width:1180px){
-                 h1 {
-                      font-size: 40px;
-                  }
-              }
-              
-              @media(max-width:640px){
-                  h1 {
-                        font-size: 30px;
-                    }
-                }
-                p{
-                    max-width: 447px;
-                    width: 100%;    
-                    font-size: 18px;
-                    line-height: 1.56;
-                    color: var(--slate-grey);
-                }
-          
-        }
-             
-
-                
-
-              
-}
-@media(max-width:768px){
-    .content_col{
-        width: 100%;
-    }
-    .img_col{
-        width: 100%;
-        display: none;
-    }
- }
- @media(max-width:640px){
-    
- }
-
- 
-}
-
-
-
-
-.ar{
-    .abt_qatar_banner {
-        p{
-            margin: 0 0 0 auto;
-        }
-        .content_col {
-            padding: 20px 0px 20px 50px;  
-            width: 50%;
-            .bn_card {
-                margin-right: auto;
-               margin-left: 25px;
-            }
-        }
-    }
-}
-
-
-
-
-
-@media(max-width:1180px){
- 
-    .abt_qatar_banner .content_col {
-        padding: 20px 0px 20px 0px;
-    }
-    .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
-        margin-right: 15px;
-    }
-}
-
-
-
-/*-----------------About Qatar Banner close-----------------------*/
-
-
-
-
-
-
-
-
-
-
-
-/*-----------------fact_figure_qatare-----------------------*/
-.fact_figure_qatar{
-    padding: 150px 0 150px 0;
-    background-size: cover;
-    margin: -95px 1px 0px 0;
-    background-position: top;
-    background-repeat: no-repeat;
-    position: relative;
-    .heading{
-        font-size: 28px;
-        font-family: "cairo_bold";
-        line-height: 1.18;
-        color: var(--purple-brown);
-        position: relative;
-        padding-left: 30px;
-        &:before{
-            position: absolute;
-            content: "";
-            left: 0;
-            top: 7px;
-            width: 20px;
-            height: 18px;
-            background-image: url('../images/bullet_pink.svg');
-        }
-    }
-
-    .fact_figure_card_wrap{
-        margin: 0;
-        display: flex;
-        flex-flow: wrap;
-        height: 425px;
-        overflow-y: hidden;
-        @extend %basic_transition;
-        &.active{
-            height: 100%;
-        }
-        @media(max-width:768px){
-            height: 442px;
-        }
-
-        @media(max-width: 640px){
-            height: 397px;
-        }
-
-        .factfigure_card{
-            width: 33.3%;
-            margin: 50px 0;
-              .inner_wrapper{
-                  display: flex;
-                
-                  figure{
-                      margin-right: 30px;
-                      width: 72px;
-                      height: 72px;
-                      overflow: hidden;
-                      img{
-                          width: 100%;
-                      }
-                  }
-                  .title{
-                    font-size: 18px;
-                    font-family: "cairo_bold";
-                    line-height: 1.67;
-                    color: var(--purple-brown);
-                  }
-                  .about{
-                    max-width: 264px;
-                    width: 100%;
-                    font-size: 16px;
-                    line-height: 1.5;
-                    color: var(--slate-grey);
-                  
-                  }
-              } 
-             
-        }
-        @media(max-width:975px){
-            .factfigure_card{
-                width: 50%;
-                margin: 20px 0;
-            }
-        }
-        @media(max-width:640px){
-            .factfigure_card{
-                width: 100%;
-                margin: 20px 0;
-            }
-        }
-    }
-
-    .show_more{
-        font-size: 16px;
-        font-family: "cairo_bold";
-        line-height: 1.38;
-        color: var(--rouge);
-        position: relative;
-        cursor: pointer;
-        &::before{
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            content: "";
-            right: -55px;
-            top: -3px;
-            background-image: url('../images/show_more_icon.svg');
-        }
-    }
-}
-
-
-
-.ar{
-    .fact_figure_qatar {
-
-        .heading{
-            padding-right: 30px;
-            &:before{
-                left: auto;
-                right: 0;
-            }
-        }
-
-        .fact_figure_card_wrap {
-            .factfigure_card {
-                .inner_wrapper {
-                    figure {
-                        margin-right: auto;
-                        margin-left: 30px;
-                    }
-                    .detail {
-                        text-align: right;
-                    }
-                }
-            }
-        }
-    }
-       
-}
-
-
-/*-----------------fact_figure_qatare close-----------------------*/
-
-
-
-
-
-
-
-/*-----------------National Flag Block-----------------------*/
-.national_flag_block{
-    padding:  100px 0  280px;
-    .flag_card_row{
-        display: flex;      
-        flex-flow: wrap; 
-        .natinalflag_card{
-            width: 25%;
-            padding: 0 15px;
-            @media(max-width:1024px){
-                width: 50%;
-                margin-bottom: 20px;
-            }
-            .inner_wrapper {
-                width: 260px;
-                margin: 0 auto;
-                @media(max-width:1180px){
-                    width: 100%;
-                }
-
-                .img_video_wrapper {
-                    width: 100%;
-                    height: 220px;
-                    overflow: hidden;
-                    border-radius: 10px;
-
-                    img{
-                        width: 100%;
-                        height: 220px;
-                        object-fit: cover;
-                    }
-
-                    .video{
-                        position: relative;
-
-                        .play{
-                            position: absolute;
-                            left: 50%;
-                            top: 50%;
-                            transform: translate(-50%,-50%);
-                            z-index:9;
-                            width: 53px !important;
-                            height: 53px !important;
-                            img{
-                                width: 53px !important;
-                                height: 53px !important;
-                            }
-                        }
-                    }
-
-                }
-               
-                .national_title{
-                    font-size: 18px;
-                    font-weight: bold;
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: 1.67;
-                    letter-spacing: normal;
-                    color: var(--white);
-                    display: block;
-                    margin: 28px 0 10px;
-                }
-                .description{
-                    font-size: 16px;
-                    line-height: 1.5;
-                    letter-spacing: normal;
-                    color: var(--white, 0.5) ;
-                    @media(max-width:1180px){
-                        font-size: 14px;
-                    }
-                }
-                .read_more{
-                    font-size: 16px;
-                    font-family: "cairo_bold";
-                    font-stretch: normal;
-                    font-style: normal;
-                    line-height: 1.5;
-                    letter-spacing: normal;
-                    color: var(--white);
-                    margin-top: 24px;
-                    width: 79px;
-                    cursor: pointer;
-                    display: inline-block;
-                }
-            }
-        }
-        @media(max-width:640px){
-            .natinalflag_card{
-                width: 50%;
-                margin: 20px 0;
-            }
-        }
-
-    }
-}
-
-.ar{
-    .national_flag_block {
-        .flag_card_row {
-            .natinalflag_card {
-                .inner_wrapper{
-                    text-align: right;
-                }
-            }
-        }
-    }
-}
-/*-----------------National Flag Block Close-----------------------*/
-
-
-
-
-
-/*-----------------Explore Life Block-----------------------*/
-.explore_life_qatar{
-    padding: 100px 0 50px;
-      margin-top: -262px;
-  .explore_life_block{
-      width: 1218px;
-      margin: 0 auto;
-      position: relative;
-      border-radius: 12px;
-      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09);
-      background-color: var(--white);
-      background-image: url('../images/explore-cut-icon.svg');
-      background-repeat: no-repeat;
-      background-position:top right;
-      padding: 60px 0px;
-      @media(max-width:1366px){
-           width: 100%;
-       }
-      .wrap{
-          display: flex;
-     
-        @media(max-width:1024px){
-                 flex-flow: wrap;
-        }
-      }
-      
-      .col_left{
-          width: 25%;
-          margin: 0 40px;
-          @media(max-width:1180px){
-                width: 35%;
-                margin: 0 20px;          
-        }
-        @media(max-width:1024px){
-                width: 100%;
-        }
-          .heading{
-              font-size: 28px;
-              font-family: "cairo_bold";
-              line-height: 1.18;
-              letter-spacing: normal;
-              color: var(--purple-brown);
-              position: relative;
-              padding-left: 30px;
-              &:before{
-                  position: absolute;
-                  content: "";
-                  left: 0;
-                  top: 7px;
-                  width: 20px;
-                  height: 18px;
-                  background-image: url('../images/bullet_blue.svg');
-              }
-          }
-          p{
-              max-width: 358px;
-              width: 100%;
-              font-size: 18px;
-              font-family: "cairo_semibold";
-              line-height: 1.5;
-              letter-spacing: normal;
-              color: #111925;
-              opacity: 0.7;
-              margin: 20px 0;
-          }
-
-          .explore_list{
-              ul{
-                  li{
-                      a{
-                        border-radius: 3px;
-                        background-color: var(--white-five);
-                        padding: 21px;
-                        font-size: 18px;
-                        font-family: "cairo_bold";
-                        line-height: 1.56;
-                        letter-spacing: normal;
-                        color: var(--deep-orange);
-                        margin: 45px 0;
-                        display: block;
-                        cursor: pointer;
-                        @media(max-width:1024px){
-                          display: inline-block;
-                          margin: 13px 6px 25px 0;
-                          font-size: 16px;
-                          padding: 14px;
-                      }
-                    }
-                  }
-              }
-              
-          }
-          
-         
-      }
-   
-      
-      .col_right{
-          width: 68%;
-          padding: 0 10px;
-          @media(max-width:1180px){   
-                width: 60%;
-                margin: 0 20px;
-            }
-        @media(max-width:1024px){
-                width: 100%;
-                margin: 0;
-           }
-    
-
-          .card_wrapper {
-              display: flex;
-              flex-flow: wrap;
-
-              .img_card{
-                  width: 360px;
-                  height: 220px;
-                  overflow: hidden;
-                  margin: 16px 13px 0;  
-                  cursor: pointer;
-                  overflow: hidden;
-                  -webkit-transition: all ease .4s;
-                  -o-transition: all ease .4s;
-                  transition: all ease .4s;
-                  @media(max-width:1366px){
-                        width: 45%;
-                        margin: 0 10px;
-                        img{
-                            width: 100%;
-                        }
-                }
-                @media(max-width:640px){
-                       width: 45%;
-                        height: auto;
-                        margin: 10px auto;    
-                  }
-                  figure{
-                      overflow: hidden;
-                      position: relative;
-                      border-radius: 10px;
-                  .title {
-                      font-size: 18px;
-                      font-family: "cairo_bold";
-                      line-height: 1.53;
-                      color: var(--white);
-                      position: absolute;
-                      bottom: 0px;
-                      left: 0;
-                      width: 100%;
-                      padding: 20px;
-                      margin-bottom: 0;
-                      background-color:var(--purple-brown-light);
-                      -webkit-transition: all ease .4s;
-                      -o-transition: all ease .4s;
-                      transition: all ease .4s;
-                      @media(max-width:640px){
-                        font-size: 14px;
-                        height: 100%;
-                        display: flex;
-                        align-items: center;
-                      }
-                  }
-                //   &:hover{
-                //     .title{
-                //         height:  100%;
-                //         align-items: center;
-                //         display: flex;
-                //     }
-                // }
-                }
-              }
-              
-          }
-      }
-   
-
-      .explore_list_horizontal{
-          padding: 0 40px;
-          @media(max-width:1366px){
-            padding: 0 20px;
-          }
-          ul{
-              padding:25px 0px;
-              border-radius: 3px;
-              background-color: var(--white-five);
-
-              li{
-                display: inline-block;
-                  a{
-                    display:block;
-                    width: 162px;
-                    border-radius: 23px;
-                    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
-                    background-color: var(--white);
-                    padding: 14px;
-                    text-align: center;
-                    margin: 0 30px;
-                    font-size: 16px;
-                    font-family: "cairo_semibold";
-                    line-height: 1.5;
-                    letter-spacing: normal;
-                    color: var(--slate-grey);
-                    cursor: pointer;
-                    &:hover{
-                        background-color: var(--rouge);
-                        color: var(--white);
-                    }
-                    @media(max-width:1366px){
-                      margin: 5px 25px;
-                   }
-                   @media(max-width:1024px){
-                      margin: 5px 20px;
-                   }
-                    @media(max-width:640px){
-                      width: auto;
-                      font-size: 12px;
-                      margin: 7px 9px;
-                      padding:7px 14px;
-                    }
-                }
-              }
-             
-          }
-      }
-
-  }
-
-}
-
-
-
-.ar{
-    .explore_life_qatar
-        {
-            .explore_life_block {
-                .wrap {
-                    display: flex;
-                    flex-flow: row-reverse;
-                    .col_left{
-                        .heading{
-                            padding-left: 0px;
-                            padding-right: 30px;
-                            &:before{
-                                right: 0;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-       
-}
-
-
-/*-----------------Explore Life Block close-----------------------*/
-
-
-
-
-
 /*-------------------Mood Block-----------------------------*/
 .what_mood_block{
     padding: 50px 0;
@@ -7310,6 +6678,7 @@ color: var(--deep-orange);
 
 .update_everyday_block{
     padding: 50px 0 100px 0;
+    background-color: var(--berry);
     .heading{
         width: 303px;
         font-size: 36px;
@@ -8459,6 +7828,20 @@ color: var(--deep-orange);
 	}
 	// list view card close
 
+
+    .ar {
+        .list_view{
+            .dot_l {
+                padding-right: 10px !important;
+                padding-left: 0;
+
+                &::before{
+                    left: auto; 
+                    right:0;
+                }
+                }
+        }
+    }
 	//map view
 	.map_view{
 		.grid_view{
@@ -9034,6 +8417,10 @@ color: var(--deep-orange);
             position: relative;
             margin: 0 5px 0 35px;
             height: 100%;
+
+            @media(max-width:640px){
+                padding: 35px 0 0px;
+            }
             .tag_l{
                 top: 25px;
                 left: 0;
@@ -9647,6 +9034,11 @@ color: var(--deep-orange);
         min-height: 300px;
         padding: 30px 33px;
         position: relative;
+
+        @media(max-width:640px){
+          padding: 30px 20px;
+        }
+
         .card_img{
             width: 80px;
             height: 76px;
@@ -10760,7 +10152,7 @@ color: var(--deep-orange);
     .category_pharmacy_card {
         .list_card {
             .distance{
-                top: 17px;
+            //    top: 17px;
                 left: 20px;
                 right: auto;
             }
@@ -10837,9 +10229,19 @@ color: var(--deep-orange);
 
 
     .detail_card {
-        padding: 0 96px 0 0;
+        padding: 0 10px 0 0;
+  
     }
 
+
+    @media(max-width:640px){
+    .ar{
+      
+        .detail_card{
+                padding: 0 10px  0 0;
+            }
+        }
+    }
 
     .owl-carousel .owl-stage {
         margin: 0 0 0 auto;
@@ -12172,7 +11574,7 @@ color: var(--deep-orange);
 
 
 .ssk-sticky.ssk-left{
-    left: -100px !important;
+    left: -100% !important;
 }
 
 
@@ -12198,6 +11600,9 @@ color: var(--deep-orange);
         min-height: 260px;
         padding: 25px 30px 30px;
         position: relative;
+        @media(max-width:640px){
+            padding: 25px 20px 30px;    
+        }
         .details{
             padding: 0;
             .show_label_grey{
@@ -12282,7 +11687,7 @@ color: var(--deep-orange);
         align-items: center;
         transition: all 0.3s ease;
         padding: 27px 15px 18px;
-        margin:  0 auto 12px;
+        margin: 0 12px 12px 0;
         position: relative;
         &.active{
             .topic_icon{
@@ -12291,9 +11696,9 @@ color: var(--deep-orange);
                 }
             }
         }
-        @media screen and(max-width: 768px){
-            margin: 0 auto 20px;
-        }
+        // @media screen and(max-width: 768px){
+        //     margin: 0 auto 20px;
+        // }
         @media screen and(max-width: 640px){
             width: 46%;
             height: 135px;
@@ -13093,6 +12498,13 @@ color: var(--deep-orange);
     }
 }
 
+
+.ar{
+    .more_info_links {
+       left: 15px;
+       right: auto;
+    }
+}
 
 
 

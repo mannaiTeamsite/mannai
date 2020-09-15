@@ -603,7 +603,8 @@ header {
 /*-----------------------------------------------Header-----------------------------------------------*/
 /*--------------------------------------------Breadcrumb--------------------------------------------*/
 .breadcrumbs_wrapper {
-  width: 100%; }
+  width: 100%;
+  background-color: var(--white-two); }
   .breadcrumbs_wrapper ul {
     width: 1170px;
     margin: 0 auto;
@@ -921,7 +922,7 @@ header .innner_wrapper .nav_col .header_row .auth_nav ul li:hover .access_submen
 @media (max-width: 650px) {
   .flex_col_xs_4 {
     width: 50%; } }
-.mob_nav, .card_effect:before, .persona_tag_wrapper, .news_section .cards_wrapper .news_card, .explore_travel_block .get_card, .explore_travel_block .travel_grid .travel_col_left .inner_wrapper .card_sm, .explore_travel_block .travel_grid .travel_col_right .inner_wrapper .card_sm, .fact_figure_qatar .fact_figure_card_wrap, .what_mood_block .mood .mood_tag, .directory_block .directory_grid .block .title, .category_filter_wrapper_layer, .category_sort_wrapper_layer, .video_img_wrapper .tab_wrapper a, .video_img_wrapper .tab_wrapper a:before {
+.mob_nav, .card_effect:before, .fact_figure_qatar .fact_figure_card_wrap, .persona_tag_wrapper, .news_section .cards_wrapper .news_card, .explore_travel_block .get_card, .explore_travel_block .travel_grid .travel_col_left .inner_wrapper .card_sm, .explore_travel_block .travel_grid .travel_col_right .inner_wrapper .card_sm, .what_mood_block .mood .mood_tag, .directory_block .directory_grid .block .title, .category_filter_wrapper_layer, .category_sort_wrapper_layer, .video_img_wrapper .tab_wrapper a, .video_img_wrapper .tab_wrapper a:before {
   -webkit-transition: all ease .2s;
   -o-transition: all ease .2s;
   transition: all ease .2s; }
@@ -999,6 +1000,531 @@ header .innner_wrapper .nav_col .header_row .auth_nav ul li:hover .access_submen
     height: 100%; }
 
 /*-----------------------Wave hover card effect--------------------*/
+/*-----------------About Qatar Banner-----------------------*/
+.abt_qatar_banner {
+  padding: 100px 0 100px;
+  position: relative; }
+  @media (max-width: 768px) {
+    .abt_qatar_banner {
+      padding: 20px 0 20px; } }
+  .abt_qatar_banner .f_row {
+    flex-flow: wrap-reverse; }
+  .abt_qatar_banner .banner_cobined_icon {
+    position: absolute;
+    right: 26px;
+    bottom: -10px; }
+  .abt_qatar_banner .img_col {
+    width: 50%; }
+    .abt_qatar_banner .img_col figure {
+      width: 300px;
+      margin: 0 auto; }
+  .abt_qatar_banner .content_col {
+    padding: 20px 50px 20px 0px;
+    width: 50%; }
+    .abt_qatar_banner .content_col .inner_wrapper {
+      margin: 0 auto;
+      padding: 20px 0; }
+      .abt_qatar_banner .content_col .inner_wrapper .banner_card_wrapper {
+        margin-top: 32px;
+        display: flex; }
+      .abt_qatar_banner .content_col .inner_wrapper .bn_card {
+        width: 140px;
+        height: 150px;
+        border-radius: 20px;
+        border: solid 1px #d5d6d8;
+        background-color: var(--white);
+        text-align: center;
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: center;
+        margin-right: 25px;
+        margin-bottom: 10px; }
+        @media (max-width: 640px) {
+          .abt_qatar_banner .content_col .inner_wrapper .bn_card {
+            width: 33%;
+            margin: 5px; } }
+        .abt_qatar_banner .content_col .inner_wrapper .bn_card figure {
+          margin-bottom: 5px;
+          font-size: 30px;
+          height: 42px;
+          display: flex;
+          align-items: center;
+          line-height: 1;
+          text-align: center;
+          color: var(--dark-orange); }
+          @media (max-width: 640px) {
+            .abt_qatar_banner .content_col .inner_wrapper .bn_card figure {
+              width: 35px;
+              height: 35px;
+              font-size: 14px; } }
+          .abt_qatar_banner .content_col .inner_wrapper .bn_card figure img {
+            width: 100%; }
+        .abt_qatar_banner .content_col .inner_wrapper .bn_card .title {
+          display: block;
+          font-size: 17px;
+          font-family: "cairo_bold";
+          line-height: 1.59;
+          letter-spacing: normal;
+          text-align: center;
+          color: var(--dark-orange); }
+        .abt_qatar_banner .content_col .inner_wrapper .bn_card .sub_title {
+          font-size: 14px;
+          font-family: "cairo_semibold";
+          line-height: 1.57;
+          text-align: center;
+          color: var(--slate-grey); }
+      .abt_qatar_banner .content_col .inner_wrapper h1 {
+        font-size: 56px;
+        font-family: "cairo_bold";
+        line-height: 1.4;
+        color: var(--rouge); }
+      .abt_qatar_banner .content_col .inner_wrapper .heading-sm {
+        display: block;
+        font-size: 18px;
+        text-transform: uppercase;
+        font-family: "cairo_bold";
+        line-height: 1.4;
+        color: var(--rouge); }
+      @media (max-width: 1180px) {
+        .abt_qatar_banner .content_col .inner_wrapper h1 {
+          font-size: 40px; } }
+      @media (max-width: 640px) {
+        .abt_qatar_banner .content_col .inner_wrapper h1 {
+          font-size: 30px; } }
+      .abt_qatar_banner .content_col .inner_wrapper p {
+        max-width: 447px;
+        width: 100%;
+        font-size: 18px;
+        line-height: 1.56;
+        color: var(--slate-grey); }
+  @media (max-width: 768px) {
+    .abt_qatar_banner .content_col {
+      width: 100%; }
+    .abt_qatar_banner .img_col {
+      width: 100%; } }
+
+.ar .abt_qatar_banner p {
+  margin: 0 0 0 auto; }
+.ar .abt_qatar_banner .content_col {
+  padding: 20px 0px 20px 0px; }
+  .ar .abt_qatar_banner .content_col .bn_card {
+    margin-right: 0;
+    margin-left: 5px; }
+
+@media (max-width: 1180px) {
+  .abt_qatar_banner .content_col {
+    padding: 20px 0px 20px 0px; }
+
+  .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
+    margin-right: 15px; } }
+/*-----------------About Qatar Banner close-----------------------*/
+/*-----------------fact_figure_qatare-----------------------*/
+.fact_figure_qatar {
+  padding: 150px 0 150px 0;
+  background-size: cover;
+  margin: 0;
+  background-position: top;
+  background-repeat: no-repeat;
+  position: relative; }
+  @media (max-width: 768px) {
+    .fact_figure_qatar {
+      padding: 20px 0; } }
+  .fact_figure_qatar .heading {
+    font-size: 28px;
+    font-family: "cairo_bold";
+    line-height: 1.18;
+    color: var(--purple-brown);
+    position: relative;
+    padding-left: 30px; }
+    @media (max-width: 768px) {
+      .fact_figure_qatar .heading {
+        font-size: 22px; } }
+    .fact_figure_qatar .heading:before {
+      position: absolute;
+      content: "";
+      left: 0;
+      top: 7px;
+      width: 20px;
+      height: 18px;
+      background-image: url("../images/bullet_pink.svg"); }
+  .fact_figure_qatar .fact_figure_card_wrap {
+    margin: 0;
+    display: flex;
+    flex-flow: wrap;
+    height: 425px;
+    overflow-y: hidden; }
+    .fact_figure_qatar .fact_figure_card_wrap.active {
+      height: 100%;
+      max-height: 100%; }
+    @media (max-width: 800px) {
+      .fact_figure_qatar .fact_figure_card_wrap {
+        max-height: 420px; } }
+    @media (max-width: 640px) {
+      .fact_figure_qatar .fact_figure_card_wrap {
+        max-height: 397px; } }
+    .fact_figure_qatar .fact_figure_card_wrap .factfigure_card {
+      width: 33.3%;
+      margin: 50px 0; }
+      .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper {
+        display: flex; }
+        .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
+          margin-right: 30px;
+          width: 72px;
+          height: 72px;
+          overflow: hidden; }
+          .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure img {
+            width: 100%; }
+        .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper .title {
+          font-size: 18px;
+          font-family: "cairo_bold";
+          line-height: 1.67;
+          color: var(--purple-brown); }
+        .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper .about {
+          max-width: 264px;
+          width: 100%;
+          font-size: 16px;
+          line-height: 1.5;
+          color: var(--slate-grey); }
+    @media (max-width: 975px) {
+      .fact_figure_qatar .fact_figure_card_wrap .factfigure_card {
+        width: 50%;
+        margin: 20px 0; } }
+    @media (max-width: 640px) {
+      .fact_figure_qatar .fact_figure_card_wrap .factfigure_card {
+        width: 100%;
+        margin: 20px 0; } }
+  .fact_figure_qatar .show_more {
+    font-size: 16px;
+    font-family: "cairo_bold";
+    line-height: 1.38;
+    color: var(--rouge);
+    position: relative;
+    cursor: pointer; }
+    .fact_figure_qatar .show_more::before {
+      position: absolute;
+      width: 40px;
+      height: 40px;
+      content: "";
+      right: -55px;
+      top: -3px;
+      background-image: url("../images/show_more_icon.svg"); }
+
+.ar .fact_figure_qatar .heading {
+  padding-right: 30px; }
+  .ar .fact_figure_qatar .heading:before {
+    left: auto;
+    right: 0; }
+.ar .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
+  margin-right: 0;
+  margin-left: 30px; }
+.ar .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper .detail {
+  text-align: right; }
+
+/*-----------------fact_figure_qatare close-----------------------*/
+/*-----------------National Flag Block-----------------------*/
+.national_flag_block {
+  padding: 100px 0  280px; }
+  .national_flag_block .flag_card_row {
+    display: flex;
+    flex-flow: wrap; }
+    .national_flag_block .flag_card_row .natinalflag_card {
+      width: 25%;
+      padding: 0 15px; }
+      @media (max-width: 1024px) {
+        .national_flag_block .flag_card_row .natinalflag_card {
+          width: 50%;
+          margin-bottom: 20px; } }
+      .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper {
+        width: 260px;
+        margin: 0 auto; }
+        @media (max-width: 1180px) {
+          .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper {
+            width: 100%; } }
+        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper {
+          width: 100%;
+          height: 220px;
+          overflow: hidden;
+          border-radius: 10px; }
+          @media (max-width: 640px) {
+            .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper {
+              width: 100%;
+              height: 135px; } }
+          .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; }
+          .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video {
+            position: relative; }
+            @media (max-width: 768px) {
+              .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video {
+                height: 100%;
+                width: 100%; } }
+            @media (max-width: 640px) {
+              .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video video {
+                width: 100%;
+                height: 135px; } }
+            .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video .play {
+              position: absolute;
+              left: 50%;
+              top: 50%;
+              transform: translate(-50%, -50%);
+              z-index: 9;
+              width: 53px !important;
+              height: 53px !important; }
+              .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video .play img {
+                width: 53px !important;
+                height: 53px !important; }
+        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .national_title {
+          font-size: 18px;
+          font-weight: bold;
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.67;
+          letter-spacing: normal;
+          color: var(--white);
+          display: block;
+          margin: 28px 0 10px; }
+        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .description {
+          font-size: 16px;
+          line-height: 1.5;
+          letter-spacing: normal;
+          color: var(--white, 0.5); }
+          @media (max-width: 1180px) {
+            .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .description {
+              font-size: 14px; } }
+        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .read_more {
+          font-size: 16px;
+          font-family: "cairo_bold";
+          font-stretch: normal;
+          font-style: normal;
+          line-height: 1.5;
+          letter-spacing: normal;
+          color: var(--white);
+          margin-top: 24px;
+          width: 79px;
+          cursor: pointer;
+          display: inline-block; }
+    @media (max-width: 640px) {
+      .national_flag_block .flag_card_row .natinalflag_card {
+        width: 50%;
+        margin: 20px 0;
+        padding: 0 10px; } }
+
+.ar .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper {
+  text-align: right; }
+
+/*-----------------National Flag Block Close-----------------------*/
+/*-----------------Explore Life Block-----------------------*/
+.explore_life_qatar {
+  padding: 100px 0 50px;
+  margin-top: -262px; }
+  .explore_life_qatar .explore_life_block {
+    width: 1218px;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09);
+    background-color: var(--white);
+    background-image: url("../images/explore-cut-icon.svg");
+    background-repeat: no-repeat;
+    background-position: top right;
+    padding: 60px 0px; }
+    @media (max-width: 1366px) {
+      .explore_life_qatar .explore_life_block {
+        width: 100%; } }
+    .explore_life_qatar .explore_life_block .wrap {
+      display: flex; }
+      @media (max-width: 1024px) {
+        .explore_life_qatar .explore_life_block .wrap {
+          flex-flow: wrap; } }
+    .explore_life_qatar .explore_life_block .col_left {
+      width: 25%;
+      margin: 0 40px; }
+      @media (max-width: 1180px) {
+        .explore_life_qatar .explore_life_block .col_left {
+          width: 35%;
+          margin: 0 20px; } }
+      @media (max-width: 1024px) {
+        .explore_life_qatar .explore_life_block .col_left {
+          width: 100%; } }
+      .explore_life_qatar .explore_life_block .col_left .heading {
+        font-size: 28px;
+        font-family: "cairo_bold";
+        line-height: 1.18;
+        letter-spacing: normal;
+        color: var(--purple-brown);
+        position: relative;
+        padding-left: 30px; }
+        @media (max-width: 768px) {
+          .explore_life_qatar .explore_life_block .col_left .heading {
+            font-size: 22px; } }
+        .explore_life_qatar .explore_life_block .col_left .heading:before {
+          position: absolute;
+          content: "";
+          left: 0;
+          top: 7px;
+          width: 20px;
+          height: 18px;
+          background-image: url("../images/bullet_blue.svg"); }
+      .explore_life_qatar .explore_life_block .col_left p {
+        max-width: 358px;
+        width: 100%;
+        font-size: 18px;
+        font-family: "cairo_semibold";
+        line-height: 1.5;
+        letter-spacing: normal;
+        color: #111925;
+        opacity: 0.7;
+        margin: 20px 0; }
+      @media (max-width: 1024px) {
+        .explore_life_qatar .explore_life_block .col_left .explore_list ul li {
+          display: inline-block; } }
+      .explore_life_qatar .explore_life_block .col_left .explore_list ul li a {
+        border-radius: 3px;
+        background-color: var(--white-five);
+        padding: 21px;
+        font-size: 18px;
+        font-family: "cairo_bold";
+        line-height: 1.56;
+        letter-spacing: normal;
+        color: var(--deep-orange);
+        margin: 59px 0;
+        display: block;
+        cursor: pointer; }
+        @media (max-width: 1024px) {
+          .explore_life_qatar .explore_life_block .col_left .explore_list ul li a {
+            display: inline-block;
+            margin: 13px 6px 25px 0;
+            font-size: 16px;
+            padding: 14px; } }
+        @media (max-width: 768px) {
+          .explore_life_qatar .explore_life_block .col_left .explore_list ul li a {
+            margin: 5px; } }
+    .explore_life_qatar .explore_life_block .col_right {
+      width: 68%;
+      padding: 0 10px; }
+      @media (max-width: 1180px) {
+        .explore_life_qatar .explore_life_block .col_right {
+          width: 60%;
+          margin: 0 20px; } }
+      @media (max-width: 1024px) {
+        .explore_life_qatar .explore_life_block .col_right {
+          width: 100%;
+          margin: 0; } }
+      .explore_life_qatar .explore_life_block .col_right .card_wrapper {
+        display: flex;
+        flex-flow: wrap;
+        margin: 20px 0 0 0; }
+        .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card {
+          width: 360px;
+          height: 220px;
+          overflow: hidden;
+          margin: 16px 13px 0;
+          cursor: pointer;
+          overflow: hidden;
+          -webkit-transition: all ease .4s;
+          -o-transition: all ease .4s;
+          transition: all ease .4s; }
+          @media (max-width: 1366px) {
+            .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card {
+              width: 45%;
+              margin: 10px 10px; }
+              .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card img {
+                width: 100%; } }
+          @media (max-width: 640px) {
+            .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card {
+              width: 45%;
+              height: auto;
+              margin: 10px auto; } }
+          .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure {
+            overflow: hidden;
+            position: relative;
+            border-radius: 10px;
+            height: 100%; }
+            .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure img {
+              height: 100%;
+              object-fit: cover; }
+            .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure .title {
+              font-size: 18px;
+              font-family: "cairo_bold";
+              line-height: 1.53;
+              color: var(--white);
+              position: absolute;
+              bottom: 0px;
+              left: 0;
+              width: 100%;
+              padding: 20px;
+              margin-bottom: 0;
+              background-color: var(--purple-brown-light);
+              -webkit-transition: all ease .4s;
+              -o-transition: all ease .4s;
+              transition: all ease .4s; }
+              @media (max-width: 640px) {
+                .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure .title {
+                  font-size: 14px;
+                  height: 100%;
+                  display: flex;
+                  align-items: center; } }
+    .explore_life_qatar .explore_life_block .explore_list_horizontal {
+      padding: 0 40px; }
+      @media (max-width: 1366px) {
+        .explore_life_qatar .explore_life_block .explore_list_horizontal {
+          padding: 0 20px; } }
+      .explore_life_qatar .explore_life_block .explore_list_horizontal .inner_wrapper {
+        padding: 25px 0px;
+        border-radius: 3px;
+        background-color: var(--white-five); }
+        .explore_life_qatar .explore_life_block .explore_list_horizontal .inner_wrapper .owl-prev {
+          width: 25px;
+          height: 25px;
+          top: 50%;
+          left: -35px; }
+        .explore_life_qatar .explore_life_block .explore_list_horizontal .inner_wrapper .owl-next {
+          width: 25px;
+          height: 25px;
+          top: 50%;
+          right: -35px; }
+      .explore_life_qatar .explore_life_block .explore_list_horizontal .tag_about {
+        display: block;
+        width: 162px;
+        border-radius: 23px;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+        background-color: var(--white);
+        padding: 14px;
+        text-align: center;
+        margin: 0 30px;
+        font-size: 16px;
+        font-family: "cairo_semibold";
+        line-height: 1.5;
+        letter-spacing: normal;
+        color: var(--slate-grey);
+        cursor: pointer; }
+        .explore_life_qatar .explore_life_block .explore_list_horizontal .tag_about:hover {
+          background-color: var(--rouge);
+          color: var(--white); }
+        @media (max-width: 1366px) {
+          .explore_life_qatar .explore_life_block .explore_list_horizontal .tag_about {
+            margin: 5px 25px; } }
+        @media (max-width: 1024px) {
+          .explore_life_qatar .explore_life_block .explore_list_horizontal .tag_about {
+            margin: 5px 20px; } }
+        @media (max-width: 640px) {
+          .explore_life_qatar .explore_life_block .explore_list_horizontal .tag_about {
+            width: auto;
+            font-size: 12px;
+            margin: 7px 9px;
+            padding: 7px 14px; } }
+
+.ar .explore_life_qatar .explore_life_block .wrap {
+  display: flex; }
+  .ar .explore_life_qatar .explore_life_block .wrap .col_left .heading {
+    padding-left: 0px;
+    padding-right: 30px; }
+    .ar .explore_life_qatar .explore_life_block .wrap .col_left .heading:before {
+      right: 0; }
+
+/*-----------------Explore Life Block close-----------------------*/
 *:focus {
   border: 0.5px dotted #000; }
 
@@ -1124,6 +1650,10 @@ hr {
   .owl-prev:hover {
     background: url("../images/arrow-left-rouge.svg") center no-repeat;
     background-size: contain; }
+  @media (max-width: 640px) {
+    .owl-prev {
+      width: 25px;
+      height: 25px; } }
 
 .owl-next {
   position: absolute;
@@ -1140,6 +1670,10 @@ hr {
   .owl-next:hover {
     background: url("../images/arrow-right-rouge.svg") center no-repeat;
     background-size: contain; }
+  @media (max-width: 640px) {
+    .owl-next {
+      width: 25px;
+      height: 25px; } }
 
 .ar .dwnld_wrap span {
   margin-right: 20px; }
@@ -1249,6 +1783,9 @@ hr {
   position: relative;
   width: 100%;
   height: 600px; }
+  @media (max-width: 650px) {
+    .home .home_banner_section .banner_img {
+      height: 250px; } }
   .home .home_banner_section .banner_img img {
     width: 100%;
     height: 100%; }
@@ -1310,15 +1847,21 @@ hr {
 .home ::placeholder {
   color: var(--slate-grey);
   opacity: 0.68; }
+@media (max-width: 650px) {
+  .home .inner_custom_container {
+    top: 50px !important; }
+  .home .persona_tag_wrapper {
+    top: 120px; } }
 
 /*-------------------------------------Home Page Close---------------------------------------------*/
 /*-------------------------------------Search Filter---------------------------------------------*/
 .personal_search_block {
   background-color: var(--white-five); }
   .personal_search_block .search_section {
-    position: relative; }
+    position: relative;
+    max-width: 1007px;
+    margin: 0 auto; }
     .personal_search_block .search_section .inner_custom_container {
-      width: 1007px;
       margin: 0 auto 0;
       position: relative;
       top: -27px;
@@ -1464,22 +2007,24 @@ hr {
   background-color: var(--white);
   position: absolute;
   top: 70px;
-  left: 71px;
+  left: 0;
   z-index: 99;
   display: flex;
   transform: scale(0);
   opacity: 0;
   visibility: hidden;
   transform-origin: left top; }
+  @media (max-width: 1300px) {
+    .persona_tag_wrapper {
+      top: 63px;
+      left: 0; } }
   @media (max-width: 870px) {
     .persona_tag_wrapper {
       width: 100%;
-      left: 0; } }
+      top: 51px; } }
   @media (max-width: 650px) {
     .persona_tag_wrapper {
       flex-flow: wrap;
-      width: 95%;
-      left: 10px;
       top: 51px; } }
   .persona_tag_wrapper .box {
     border-right: 1px solid var(--white-five);
@@ -1569,12 +2114,8 @@ hr {
 .ar .personal_search_block .search_section .tags_wrapper li {
   margin: 0 0 24px 24px; }
 .ar .persona_tag_wrapper {
-  right: 63px;
-  left: 0; }
-  @media (max-width: 870px) {
-    .ar .persona_tag_wrapper {
-      right: 0;
-      left: 0; } }
+  right: 5px;
+  left: auto; }
   .ar .persona_tag_wrapper .box {
     text-align: right;
     border-left: 1px solid var(--white-five);
@@ -1598,7 +2139,10 @@ hr {
     position: absolute;
     bottom: 90px;
     left: 148px;
-    z-index: 99; }
+    z-index: 9; }
+    @media (max-width: 768px) {
+      .banner_section .btn-st {
+        bottom: 140px; } }
   @media (max-width: 768px) {
     .banner_section {
       padding: 25px 0 0; } }
@@ -1680,8 +2224,16 @@ hr {
 
 .ar .banner_section .banner_row {
   flex-flow: row-reverse; }
+  @media (max-width: 768px) {
+    .ar .banner_section .banner_row {
+      flex-flow: column; } }
   .ar .banner_section .banner_row .col_left .banner_container {
     margin: 37px 0 0 83px; }
+    @media (max-width: 768px) {
+      .ar .banner_section .banner_row .col_left .banner_container {
+        margin: 0 auto 25px; } }
+    .ar .banner_section .banner_row .col_left .banner_container h1 {
+      margin: 0 0 0 auto; }
     .ar .banner_section .banner_row .col_left .banner_container .commn-para {
       margin: 12px 0 14px auto; }
 
@@ -1739,6 +2291,9 @@ hr {
       top: 6px;
       background: url(../images/bullet_orange.svg) center no-repeat;
       background-size: contain; }
+    @media (max-width: 768px) {
+      .services_section h2 {
+        font-size: 22px; } }
   .services_section .service_card {
     max-width: 358px;
     height: 464px;
@@ -1898,18 +2453,23 @@ hr {
     border-radius: 18px;
     border: solid 1px #e1e0df;
     background-color: var(--white);
-    padding: 24px;
+    padding: 0;
     margin: 0 auto 30px; }
+    @media (max-width: 640px) {
+      .to_do_section .card {
+        margin: 0 auto;
+        width: 320px; } }
     .to_do_section .card .view_all_wrap {
       display: inline-block;
-      width: 90px; }
+      width: 90px;
+      padding: 0 0 0 25px; }
     .to_do_section .card .places_img {
-      width: 358px;
+      max-width: 358px;
+      width: 100%;
       height: 150px;
       border-top-left-radius: 18px;
       border-top-right-radius: 18px;
-      overflow: hidden;
-      margin: -24px -24px 13px; }
+      overflow: hidden; }
       .to_do_section .card .places_img img {
         width: 100%;
         height: 150px;
@@ -1918,9 +2478,10 @@ hr {
       font-family: 'cairo_bold';
       font-size: 18px;
       line-height: 27px;
-      color: var(--purple-brown); }
+      color: var(--purple-brown);
+      margin: 15px 18px; }
     .to_do_section .card ul {
-      padding: 0 0 24px 0; }
+      padding: 0 24px 24px 24px; }
       .to_do_section .card ul li {
         border-bottom: 1px solid #e1e0df;
         padding: 12px 0;
@@ -1992,6 +2553,9 @@ hr {
 .opinion_section {
   background-color: var(--berry);
   padding: 100px 0 100px; }
+  @media (max-width: 768px) {
+    .opinion_section {
+      padding: 40px 0; } }
   .opinion_section h2 {
     max-width: 371px;
     font-family: 'cairo_bold';
@@ -2034,9 +2598,10 @@ hr {
     border-radius: 12px;
     border: 1px solid #d6d8da;
     background-color: var(--white); }
-    @media (max-width: 765px) {
+    @media (max-width: 768px) {
       .opinion_section .card_wrap {
-        margin-bottom: 70px; } }
+        margin: 34px 0;
+        max-width: 100%; } }
     .opinion_section .card_wrap h3 {
       max-width: 316px;
       font-family: 'cairo_bold';
@@ -2082,6 +2647,10 @@ hr {
       color: var(--white); }
       .opinion_section .card_wrap .vote_btn:hover {
         background-color: var(--berry); }
+      @media (max-width: 640px) {
+        .opinion_section .card_wrap .vote_btn {
+          padding: 10px 15px;
+          font-size: 14px; } }
     .opinion_section .card_wrap .view_all_wrap {
       margin-left: 14px; }
       .opinion_section .card_wrap .view_all_wrap span {
@@ -2090,7 +2659,9 @@ hr {
         letter-spacing: 0.2px; }
     .opinion_section .card_wrap hr {
       background-color: #d6d6d6;
-      margin: 0 -40px 25px; }
+      margin: 0 -40px 25px;
+      height: 1px;
+      border: none; }
   .opinion_section .survey_card h3 {
     margin-bottom: 16px; }
   .opinion_section .survey_card p {
@@ -2137,12 +2708,17 @@ hr {
 .ar .opinion_section .card_wrap .view_all_wrap {
   margin-right: 14px;
   margin-left: 0; }
+.ar .opinion_section .card_wrap .rating_wrap .radio_wrap {
+  justify-content: flex-end; }
 .ar .opinion_section h2 {
   padding-right: 30px;
-  padding-left: auto; }
+  padding-left: 0; }
   .ar .opinion_section h2:before {
     right: 0;
     left: auto; }
+.ar .view_all_wrap::before {
+  right: auto;
+  left: -39px; }
 
 /*************************Polls and Survey close*************************************/
 .owl-dots {
@@ -2680,6 +3256,10 @@ hr {
     z-index: 99; }
   .news_section .owl-prev {
     left: 0; }
+  .news_section .owl-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center; }
 
 .ar .news_section h2 {
   padding-right: 30px;
@@ -2687,10 +3267,12 @@ hr {
   .ar .news_section h2:before {
     right: 0;
     left: auto; }
-.ar .news_section .cards_wrapper .news_card {
-  width: 140px;
-  min-height: 120px;
-  margin: 0 0 16px 19px; }
+.ar .news_section .cards_wrapper {
+  justify-content: flex-end; }
+  .ar .news_section .cards_wrapper .news_card {
+    width: 140px;
+    min-height: 120px;
+    margin: 0 0 16px 19px; }
 .ar .news_section .right_col {
   text-align: right; }
   .ar .news_section .right_col .more_news .wheather_card .detect-icon {
@@ -3338,6 +3920,9 @@ hr {
       .business_qatar .block_row .col_right .bussiness_card_row {
         display: flex;
         flex-flow: wrap; }
+        @media (max-width: 640px) {
+          .business_qatar .block_row .col_right .bussiness_card_row {
+            justify-content: center; } }
         .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm {
           width: 133px;
           height: 150px;
@@ -3354,7 +3939,7 @@ hr {
           cursor: pointer; }
           @media (max-width: 640px) {
             .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm {
-              width: 46%; } }
+              width: 45%; } }
           .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm .title {
             width: 93px;
             font-size: 16px;
@@ -3439,6 +4024,12 @@ hr {
     @media (max-width: 900px) {
       .student_card_wrap .student_service_card {
         flex: 1 1 auto; } }
+    @media (max-width: 900px) {
+      .student_card_wrap .student_service_card {
+        flex: 1 1 auto; } }
+    @media (max-width: 640px) {
+      .student_card_wrap .student_service_card {
+        margin: 0 auto 20px; } }
     .student_card_wrap .student_service_card h2 {
       font-size: 28px;
       font-family: "cairo_bold";
@@ -3520,6 +4111,9 @@ hr {
     color: #111925;
     margin: 10px 0; }
 
+@media (max-width: 640px) {
+  .ar .student_service_card {
+    margin: 0 auto 20px; } }
 .ar .did_you_block .block-label {
   padding-right: 30px;
   padding-left: 0; }
@@ -3597,7 +4191,6 @@ hr {
       height: 170px;
       position: absolute;
       top: -90px;
-      border: 10px solid var(--white);
       background-color: #eaecef;
       border-radius: 50%; }
       .amir_banner_section .amir_detail .sheikh_img img {
@@ -4323,7 +4916,8 @@ hr {
   @media screen and (max-width: 768px) {
     .section_wrapper {
       flex-direction: column;
-      padding: 30px 10px; } }
+      padding: 30px 10px;
+      max-width: 95%; } }
   .section_wrapper .left_sec {
     width: 488px;
     margin-right: 32px;
@@ -4738,8 +5332,6 @@ hr {
   padding-right: 27px; }
 .ar .links ul li a:before {
   right: -23px; }
-.ar .card h3 {
-  float: right; }
 .ar .card .arrow_link {
   clear: both; }
 .ar .bottom_links ul li figure {
@@ -4831,7 +5423,6 @@ hr {
   .ar .section_wrapper .right_sec {
     padding: 0; } }
 .ar .section_wrapper .left_sec {
-  margin: 0 0 0 32px;
   padding-left: 60px;
   padding-right: 0; }
 .ar .section_wrapper .right_sec figure {
@@ -5145,7 +5736,7 @@ hr {
     margin: 0 auto;
     display: flex;
     align-items: center;
-    padding: 45px 0; }
+    padding: 0 0 45px 0; }
     @media screen and (min-width: 769px) and (max-width: 1200px) {
       .history .section_wrapper {
         padding: 30px 10px; } }
@@ -5486,8 +6077,10 @@ hr {
         margin-bottom: 24px; }
 
 .ar .card h3 {
-  float: right;
-  width: 100%; }
+  width: 100%;
+  padding: 12px 17px 0 0;
+  display: block;
+  margin: 0; }
 .ar .card .arrow_link {
   clear: both; }
 .ar .card .card_header {
@@ -5632,12 +6225,15 @@ hr {
   margin: 0 auto;
   border-bottom: 1px solid var(--white-four);
   padding-bottom: 60px; }
+  @media screen and (max-width: 1024px) {
+    .bottom_links {
+      max-width: 95%; } }
   @media screen and (max-width: 768px) {
     .bottom_links {
       padding: 0 10px 60px 10px; } }
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: 640px) {
     .bottom_links {
-      padding: 0 10px 50px 10px; } }
+      padding: 0 20px 50px 20px; } }
   .bottom_links ul {
     display: flex;
     align-items: center; }
@@ -5731,7 +6327,7 @@ hr {
 .ar .bottom_links ul {
   align-items: flex-end; }
   .ar .bottom_links ul li {
-    padding-left: 104px;
+    padding-left: 33px;
     padding-right: 0; }
     .ar .bottom_links ul li figure {
       margin-left: 15px !important; }
@@ -5878,484 +6474,6 @@ hr {
     left: 50px;
     right: auto; }
 
-/*-----------------About Qatar Banner-----------------------*/
-.abt_qatar_banner {
-  padding: 100px 0 100px;
-  position: relative; }
-  .abt_qatar_banner .f_row {
-    flex-flow: wrap-reverse; }
-  .abt_qatar_banner .banner_cobined_icon {
-    position: absolute;
-    right: 26px;
-    bottom: -10px; }
-  .abt_qatar_banner .img_col {
-    width: 50%; }
-    .abt_qatar_banner .img_col figure {
-      width: 300px;
-      margin: 0 auto; }
-  .abt_qatar_banner .content_col {
-    padding: 20px 50px 20px 0px;
-    width: 50%; }
-    .abt_qatar_banner .content_col .inner_wrapper {
-      margin: 0 auto;
-      padding: 20px 0; }
-      .abt_qatar_banner .content_col .inner_wrapper .banner_card_wrapper {
-        margin-top: 32px;
-        display: flex;
-        flex-flow: wrap;
-        justify-content: center; }
-      .abt_qatar_banner .content_col .inner_wrapper .bn_card {
-        width: 140px;
-        height: 150px;
-        border-radius: 20px;
-        border: solid 1px #d5d6d8;
-        background-color: var(--white);
-        text-align: center;
-        display: flex;
-        flex-flow: column;
-        align-items: center;
-        justify-content: center;
-        margin-right: 25px;
-        margin-bottom: 10px; }
-        @media (max-width: 640px) {
-          .abt_qatar_banner .content_col .inner_wrapper .bn_card {
-            width: 43%;
-            margin: 10px; } }
-        .abt_qatar_banner .content_col .inner_wrapper .bn_card figure {
-          margin-bottom: 5px;
-          font-size: 30px;
-          height: 42px;
-          display: flex;
-          align-items: center;
-          line-height: 1;
-          text-align: center;
-          color: var(--dark-orange); }
-        .abt_qatar_banner .content_col .inner_wrapper .bn_card .title {
-          display: block;
-          font-size: 17px;
-          font-family: "cairo_bold";
-          line-height: 1.59;
-          letter-spacing: normal;
-          text-align: center;
-          color: var(--dark-orange); }
-        .abt_qatar_banner .content_col .inner_wrapper .bn_card .sub_title {
-          font-size: 14px;
-          font-family: "cairo_semibold";
-          line-height: 1.57;
-          text-align: center;
-          color: var(--slate-grey); }
-      .abt_qatar_banner .content_col .inner_wrapper h1 {
-        font-size: 56px;
-        font-family: "cairo_bold";
-        line-height: 1.4;
-        color: var(--rouge); }
-      .abt_qatar_banner .content_col .inner_wrapper .heading-sm {
-        display: block;
-        font-size: 18px;
-        text-transform: uppercase;
-        font-family: "cairo_bold";
-        line-height: 1.4;
-        color: var(--rouge); }
-      @media (max-width: 1180px) {
-        .abt_qatar_banner .content_col .inner_wrapper h1 {
-          font-size: 40px; } }
-      @media (max-width: 640px) {
-        .abt_qatar_banner .content_col .inner_wrapper h1 {
-          font-size: 30px; } }
-      .abt_qatar_banner .content_col .inner_wrapper p {
-        max-width: 447px;
-        width: 100%;
-        font-size: 18px;
-        line-height: 1.56;
-        color: var(--slate-grey); }
-  @media (max-width: 768px) {
-    .abt_qatar_banner .content_col {
-      width: 100%; }
-    .abt_qatar_banner .img_col {
-      width: 100%;
-      display: none; } }
-
-.ar .abt_qatar_banner p {
-  margin: 0 0 0 auto; }
-.ar .abt_qatar_banner .content_col {
-  padding: 20px 0px 20px 50px;
-  width: 50%; }
-  .ar .abt_qatar_banner .content_col .bn_card {
-    margin-right: auto;
-    margin-left: 25px; }
-
-@media (max-width: 1180px) {
-  .abt_qatar_banner .content_col {
-    padding: 20px 0px 20px 0px; }
-
-  .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
-    margin-right: 15px; } }
-/*-----------------About Qatar Banner close-----------------------*/
-/*-----------------fact_figure_qatare-----------------------*/
-.fact_figure_qatar {
-  padding: 150px 0 150px 0;
-  background-size: cover;
-  margin: -95px 1px 0px 0;
-  background-position: top;
-  background-repeat: no-repeat;
-  position: relative; }
-  .fact_figure_qatar .heading {
-    font-size: 28px;
-    font-family: "cairo_bold";
-    line-height: 1.18;
-    color: var(--purple-brown);
-    position: relative;
-    padding-left: 30px; }
-    .fact_figure_qatar .heading:before {
-      position: absolute;
-      content: "";
-      left: 0;
-      top: 7px;
-      width: 20px;
-      height: 18px;
-      background-image: url("../images/bullet_pink.svg"); }
-  .fact_figure_qatar .fact_figure_card_wrap {
-    margin: 0;
-    display: flex;
-    flex-flow: wrap;
-    height: 425px;
-    overflow-y: hidden; }
-    .fact_figure_qatar .fact_figure_card_wrap.active {
-      height: 100%; }
-    @media (max-width: 768px) {
-      .fact_figure_qatar .fact_figure_card_wrap {
-        height: 442px; } }
-    @media (max-width: 640px) {
-      .fact_figure_qatar .fact_figure_card_wrap {
-        height: 397px; } }
-    .fact_figure_qatar .fact_figure_card_wrap .factfigure_card {
-      width: 33.3%;
-      margin: 50px 0; }
-      .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper {
-        display: flex; }
-        .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
-          margin-right: 30px;
-          width: 72px;
-          height: 72px;
-          overflow: hidden; }
-          .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure img {
-            width: 100%; }
-        .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper .title {
-          font-size: 18px;
-          font-family: "cairo_bold";
-          line-height: 1.67;
-          color: var(--purple-brown); }
-        .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper .about {
-          max-width: 264px;
-          width: 100%;
-          font-size: 16px;
-          line-height: 1.5;
-          color: var(--slate-grey); }
-    @media (max-width: 975px) {
-      .fact_figure_qatar .fact_figure_card_wrap .factfigure_card {
-        width: 50%;
-        margin: 20px 0; } }
-    @media (max-width: 640px) {
-      .fact_figure_qatar .fact_figure_card_wrap .factfigure_card {
-        width: 100%;
-        margin: 20px 0; } }
-  .fact_figure_qatar .show_more {
-    font-size: 16px;
-    font-family: "cairo_bold";
-    line-height: 1.38;
-    color: var(--rouge);
-    position: relative;
-    cursor: pointer; }
-    .fact_figure_qatar .show_more::before {
-      position: absolute;
-      width: 40px;
-      height: 40px;
-      content: "";
-      right: -55px;
-      top: -3px;
-      background-image: url("../images/show_more_icon.svg"); }
-
-.ar .fact_figure_qatar .heading {
-  padding-right: 30px; }
-  .ar .fact_figure_qatar .heading:before {
-    left: auto;
-    right: 0; }
-.ar .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper figure {
-  margin-right: auto;
-  margin-left: 30px; }
-.ar .fact_figure_qatar .fact_figure_card_wrap .factfigure_card .inner_wrapper .detail {
-  text-align: right; }
-
-/*-----------------fact_figure_qatare close-----------------------*/
-/*-----------------National Flag Block-----------------------*/
-.national_flag_block {
-  padding: 100px 0  280px; }
-  .national_flag_block .flag_card_row {
-    display: flex;
-    flex-flow: wrap; }
-    .national_flag_block .flag_card_row .natinalflag_card {
-      width: 25%;
-      padding: 0 15px; }
-      @media (max-width: 1024px) {
-        .national_flag_block .flag_card_row .natinalflag_card {
-          width: 50%;
-          margin-bottom: 20px; } }
-      .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper {
-        width: 260px;
-        margin: 0 auto; }
-        @media (max-width: 1180px) {
-          .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper {
-            width: 100%; } }
-        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper {
-          width: 100%;
-          height: 220px;
-          overflow: hidden;
-          border-radius: 10px; }
-          .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover; }
-          .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video {
-            position: relative; }
-            .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video .play {
-              position: absolute;
-              left: 50%;
-              top: 50%;
-              transform: translate(-50%, -50%);
-              z-index: 9;
-              width: 53px !important;
-              height: 53px !important; }
-              .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video .play img {
-                width: 53px !important;
-                height: 53px !important; }
-        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .national_title {
-          font-size: 18px;
-          font-weight: bold;
-          font-stretch: normal;
-          font-style: normal;
-          line-height: 1.67;
-          letter-spacing: normal;
-          color: var(--white);
-          display: block;
-          margin: 28px 0 10px; }
-        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .description {
-          font-size: 16px;
-          line-height: 1.5;
-          letter-spacing: normal;
-          color: var(--white, 0.5); }
-          @media (max-width: 1180px) {
-            .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .description {
-              font-size: 14px; } }
-        .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .read_more {
-          font-size: 16px;
-          font-family: "cairo_bold";
-          font-stretch: normal;
-          font-style: normal;
-          line-height: 1.5;
-          letter-spacing: normal;
-          color: var(--white);
-          margin-top: 24px;
-          width: 79px;
-          cursor: pointer;
-          display: inline-block; }
-    @media (max-width: 640px) {
-      .national_flag_block .flag_card_row .natinalflag_card {
-        width: 50%;
-        margin: 20px 0; } }
-
-.ar .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper {
-  text-align: right; }
-
-/*-----------------National Flag Block Close-----------------------*/
-/*-----------------Explore Life Block-----------------------*/
-.explore_life_qatar {
-  padding: 100px 0 50px;
-  margin-top: -262px; }
-  .explore_life_qatar .explore_life_block {
-    width: 1218px;
-    margin: 0 auto;
-    position: relative;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.09);
-    background-color: var(--white);
-    background-image: url("../images/explore-cut-icon.svg");
-    background-repeat: no-repeat;
-    background-position: top right;
-    padding: 60px 0px; }
-    @media (max-width: 1366px) {
-      .explore_life_qatar .explore_life_block {
-        width: 100%; } }
-    .explore_life_qatar .explore_life_block .wrap {
-      display: flex; }
-      @media (max-width: 1024px) {
-        .explore_life_qatar .explore_life_block .wrap {
-          flex-flow: wrap; } }
-    .explore_life_qatar .explore_life_block .col_left {
-      width: 25%;
-      margin: 0 40px; }
-      @media (max-width: 1180px) {
-        .explore_life_qatar .explore_life_block .col_left {
-          width: 35%;
-          margin: 0 20px; } }
-      @media (max-width: 1024px) {
-        .explore_life_qatar .explore_life_block .col_left {
-          width: 100%; } }
-      .explore_life_qatar .explore_life_block .col_left .heading {
-        font-size: 28px;
-        font-family: "cairo_bold";
-        line-height: 1.18;
-        letter-spacing: normal;
-        color: var(--purple-brown);
-        position: relative;
-        padding-left: 30px; }
-        .explore_life_qatar .explore_life_block .col_left .heading:before {
-          position: absolute;
-          content: "";
-          left: 0;
-          top: 7px;
-          width: 20px;
-          height: 18px;
-          background-image: url("../images/bullet_blue.svg"); }
-      .explore_life_qatar .explore_life_block .col_left p {
-        max-width: 358px;
-        width: 100%;
-        font-size: 18px;
-        font-family: "cairo_semibold";
-        line-height: 1.5;
-        letter-spacing: normal;
-        color: #111925;
-        opacity: 0.7;
-        margin: 20px 0; }
-      .explore_life_qatar .explore_life_block .col_left .explore_list ul li a {
-        border-radius: 3px;
-        background-color: var(--white-five);
-        padding: 21px;
-        font-size: 18px;
-        font-family: "cairo_bold";
-        line-height: 1.56;
-        letter-spacing: normal;
-        color: var(--deep-orange);
-        margin: 45px 0;
-        display: block;
-        cursor: pointer; }
-        @media (max-width: 1024px) {
-          .explore_life_qatar .explore_life_block .col_left .explore_list ul li a {
-            display: inline-block;
-            margin: 13px 6px 25px 0;
-            font-size: 16px;
-            padding: 14px; } }
-    .explore_life_qatar .explore_life_block .col_right {
-      width: 68%;
-      padding: 0 10px; }
-      @media (max-width: 1180px) {
-        .explore_life_qatar .explore_life_block .col_right {
-          width: 60%;
-          margin: 0 20px; } }
-      @media (max-width: 1024px) {
-        .explore_life_qatar .explore_life_block .col_right {
-          width: 100%;
-          margin: 0; } }
-      .explore_life_qatar .explore_life_block .col_right .card_wrapper {
-        display: flex;
-        flex-flow: wrap; }
-        .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card {
-          width: 360px;
-          height: 220px;
-          overflow: hidden;
-          margin: 16px 13px 0;
-          cursor: pointer;
-          overflow: hidden;
-          -webkit-transition: all ease .4s;
-          -o-transition: all ease .4s;
-          transition: all ease .4s; }
-          @media (max-width: 1366px) {
-            .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card {
-              width: 45%;
-              margin: 0 10px; }
-              .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card img {
-                width: 100%; } }
-          @media (max-width: 640px) {
-            .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card {
-              width: 45%;
-              height: auto;
-              margin: 10px auto; } }
-          .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure {
-            overflow: hidden;
-            position: relative;
-            border-radius: 10px; }
-            .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure .title {
-              font-size: 18px;
-              font-family: "cairo_bold";
-              line-height: 1.53;
-              color: var(--white);
-              position: absolute;
-              bottom: 0px;
-              left: 0;
-              width: 100%;
-              padding: 20px;
-              margin-bottom: 0;
-              background-color: var(--purple-brown-light);
-              -webkit-transition: all ease .4s;
-              -o-transition: all ease .4s;
-              transition: all ease .4s; }
-              @media (max-width: 640px) {
-                .explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure .title {
-                  font-size: 14px;
-                  height: 100%;
-                  display: flex;
-                  align-items: center; } }
-    .explore_life_qatar .explore_life_block .explore_list_horizontal {
-      padding: 0 40px; }
-      @media (max-width: 1366px) {
-        .explore_life_qatar .explore_life_block .explore_list_horizontal {
-          padding: 0 20px; } }
-      .explore_life_qatar .explore_life_block .explore_list_horizontal ul {
-        padding: 25px 0px;
-        border-radius: 3px;
-        background-color: var(--white-five); }
-        .explore_life_qatar .explore_life_block .explore_list_horizontal ul li {
-          display: inline-block; }
-          .explore_life_qatar .explore_life_block .explore_list_horizontal ul li a {
-            display: block;
-            width: 162px;
-            border-radius: 23px;
-            box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
-            background-color: var(--white);
-            padding: 14px;
-            text-align: center;
-            margin: 0 30px;
-            font-size: 16px;
-            font-family: "cairo_semibold";
-            line-height: 1.5;
-            letter-spacing: normal;
-            color: var(--slate-grey);
-            cursor: pointer; }
-            .explore_life_qatar .explore_life_block .explore_list_horizontal ul li a:hover {
-              background-color: var(--rouge);
-              color: var(--white); }
-            @media (max-width: 1366px) {
-              .explore_life_qatar .explore_life_block .explore_list_horizontal ul li a {
-                margin: 5px 25px; } }
-            @media (max-width: 1024px) {
-              .explore_life_qatar .explore_life_block .explore_list_horizontal ul li a {
-                margin: 5px 20px; } }
-            @media (max-width: 640px) {
-              .explore_life_qatar .explore_life_block .explore_list_horizontal ul li a {
-                width: auto;
-                font-size: 12px;
-                margin: 7px 9px;
-                padding: 7px 14px; } }
-
-.ar .explore_life_qatar .explore_life_block .wrap {
-  display: flex;
-  flex-flow: row-reverse; }
-  .ar .explore_life_qatar .explore_life_block .wrap .col_left .heading {
-    padding-left: 0px;
-    padding-right: 30px; }
-    .ar .explore_life_qatar .explore_life_block .wrap .col_left .heading:before {
-      right: 0; }
-
-/*-----------------Explore Life Block close-----------------------*/
 /*-------------------Mood Block-----------------------------*/
 .what_mood_block {
   padding: 50px 0; }
@@ -6401,7 +6519,8 @@ hr {
 /*-------------------Mood Block Close-----------------------------*/
 /*---------------------------Update Every Day-------------------------------*/
 .update_everyday_block {
-  padding: 50px 0 100px 0; }
+  padding: 50px 0 100px 0;
+  background-color: var(--berry); }
   .update_everyday_block .heading {
     width: 303px;
     font-size: 36px;
@@ -7219,6 +7338,13 @@ hr {
   display: inline-block;
   padding-left: 14px; }
 
+.ar .list_view .dot_l {
+  padding-right: 10px !important;
+  padding-left: 0; }
+  .ar .list_view .dot_l::before {
+    left: auto;
+    right: 0; }
+
 .map_view .grid_view {
   display: flex; }
 .map_view .f_row {
@@ -7653,6 +7779,9 @@ h3 {
     position: relative;
     margin: 0 5px 0 35px;
     height: 100%; }
+    @media (max-width: 640px) {
+      .video_img_wrapper .detail_card {
+        padding: 35px 0 0px; } }
     .video_img_wrapper .detail_card .tag_l {
       top: 25px;
       left: 0; }
@@ -8099,6 +8228,9 @@ h3 {
   min-height: 300px;
   padding: 30px 33px;
   position: relative; }
+  @media (max-width: 640px) {
+    .category_pharmacy_card .list_card {
+      padding: 30px 20px; } }
   .category_pharmacy_card .list_card .card_img {
     width: 80px;
     height: 76px;
@@ -8766,7 +8898,6 @@ h3 {
 .ar .category_block_wrapper .share_wrap li a.custom_label {
   padding: 0 45px 0 0; }
 .ar .category_pharmacy_card .list_card .distance {
-  top: 17px;
   left: 20px;
   right: auto; }
 .ar .list_view .category_pharmacy_card .list_card .details {
@@ -8804,7 +8935,10 @@ h3 {
   left: 0px;
   width: auto; }
 .ar .detail_card {
-  padding: 0 96px 0 0; }
+  padding: 0 10px 0 0; }
+@media (max-width: 640px) {
+  .ar .ar .detail_card {
+    padding: 0 10px  0 0; } }
 .ar .owl-carousel .owl-stage {
   margin: 0 0 0 auto; }
 .ar .item {
@@ -9696,7 +9830,7 @@ h3 {
 
 /***************************************Mobile Applications close******************************************/
 .ssk-sticky.ssk-left {
-  left: -100px !important; }
+  left: -100% !important; }
 
 .share_kit_wrapper.active .ssk-sticky.ssk-left {
   left: 0 !important; }
@@ -9706,6 +9840,9 @@ h3 {
   min-height: 260px;
   padding: 25px 30px 30px;
   position: relative; }
+  @media (max-width: 640px) {
+    .category_articles_card .list_card {
+      padding: 25px 20px 30px; } }
   .category_articles_card .list_card .details {
     padding: 0; }
     .category_articles_card .list_card .details .show_label_grey {
@@ -9760,13 +9897,10 @@ h3 {
     align-items: center;
     transition: all 0.3s ease;
     padding: 27px 15px 18px;
-    margin: 0 auto 12px;
+    margin: 0 12px 12px 0;
     position: relative; }
     .article_topics .article_card.active .topic_icon:before {
       transform: scale(1); }
-    @media screen and (max-width: 768px) {
-      .article_topics .article_card {
-        margin: 0 auto 20px; } }
     @media screen and (max-width: 640px) {
       .article_topics .article_card {
         width: 46%;
@@ -10275,6 +10409,10 @@ h3 {
   .more_info_links li {
     display: inline-block;
     margin: 0 3px; }
+
+.ar .more_info_links {
+  left: 15px;
+  right: auto; }
 
 .reader_ui {
   position: absolute !important;
