@@ -1,4 +1,4 @@
-package com.hukoomi.livesite.solr;
+package com.hukoomi.utils;
 
 import com.interwoven.livesite.dom4j.Dom4jUtils;
 import org.apache.commons.lang.StringUtils;

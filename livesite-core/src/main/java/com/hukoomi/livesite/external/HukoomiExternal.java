@@ -1,7 +1,7 @@
 package com.hukoomi.livesite.external;
 
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
-import com.hukoomi.livesite.solr.SolrQueryUtil;
+import com.hukoomi.utils.SolrQueryUtil;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;

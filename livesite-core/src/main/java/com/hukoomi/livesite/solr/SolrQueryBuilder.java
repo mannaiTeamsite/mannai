@@ -1,7 +1,7 @@
 package com.hukoomi.livesite.solr;
 
 import com.interwoven.livesite.runtime.RequestContext;
-import com.utils.PropertyFileReader;
+import com.hukoomi.utils.PropertiesFileReader;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -89,21 +89,26 @@ public class SolrQueryBuilder {
      * @param context The parameter context object passed from Component.
      */
     private void init(final RequestContext context) {
-        PropertyFileReader propertyFileReader = new PropertyFileReader(
+        logger.info("Initialising Solr Query Builder");
+        PropertiesFileReader propertyFileReader = new PropertiesFileReader(
                 context, "solrconfig.properties");
-        Properties properties = propertyFileReader.getPropertyFile();
+        Properties properties = propertyFileReader.getPropertiesFile();
         final String solrHost = context.getParameterString("solrHost",
                 properties.getProperty("solrHost"));
+        logger.debug("Solr Host: " + solrHost);
         final String solrCore = context.getParameterString("solrCore");
+        logger.debug("Solr Core: " + solrCore);
         this.baseUrl = solrHost + "/" + solrCore;
+        logger.debug("Solr Base URL: " + baseUrl);
         this.requestHandler = context.getParameterString("requestHandler",
                 properties.getProperty("requestHandler"));
-
+        logger.debug("Solr Request Handler: " + requestHandler);
         try {
             this.baseQuery = URLDecoder.decode(context
                     .getParameterString("baseQuery", DEFAULT_QUERY), UTF);
+            logger.debug("Solr Base Query: " + baseQuery);
         } catch (UnsupportedEncodingException e) {
-            logger.warn("Unable to decode baseQuery="
+            logger.error("Unable to decode baseQuery="
                     + context.getParameterString("baseQuery",
                     DEFAULT_QUERY), e);
         }
@@ -111,25 +116,27 @@ public class SolrQueryBuilder {
         try {
             this.fieldQuery = URLDecoder.decode(context
                     .getParameterString("fieldQuery", ""), UTF);
+            logger.debug("Solr Field Query: " + fieldQuery);
         } catch (UnsupportedEncodingException e) {
-            logger.warn("Unable to decode fieldQuery="
+            logger.error("Unable to decode fieldQuery="
                     + context.getParameterString("fieldQuery"), e);
         }
 
         try {
             this.groupingField = URLDecoder.decode(context
                     .getParameterString("groupingField", ""), UTF);
+            logger.debug("Solr Grouping Field: " + fieldQuery);
         } catch (UnsupportedEncodingException e) {
-            logger.warn("Unable to decode groupingField="
+            logger.error("Unable to decode groupingField="
                     + context.getParameterString("groupingField"), e);
         }
-        String strRows = context.getParameterString("rows");
+        String strRows = context.getParameterString("rows", "9");
         try {
             if (StringUtils.isNotBlank(strRows)) {
                 this.rows = Integer.parseInt(strRows);
             }
         } catch (NumberFormatException e) {
-            logger.warn("Invalid rows parameter " + strRows);
+            logger.error("Invalid value for parameter::rows: " + strRows, e);
         }
 
         if (this.rows <= 0) {
@@ -137,14 +144,15 @@ public class SolrQueryBuilder {
                     + "than or equal to zero, defaulting to configuration");
             this.rows = Integer.parseInt(properties.getProperty("rows"));
         }
+        logger.debug("Solr Result Rows: " + this.rows);
 
-        String strStart = context.getParameterString("start");
+        String strStart = context.getParameterString("start", "0");
         try {
             if (StringUtils.isNotBlank(strStart)) {
                 this.start = Integer.parseInt(strStart);
             }
         } catch (NumberFormatException e) {
-            logger.warn("Invalid start parameter " + strStart);
+            logger.error("Invalid value for parameter::start: " + strStart, e);
         }
 
         if (this.start < 0) {
@@ -152,19 +160,14 @@ public class SolrQueryBuilder {
                     + " less than zero, defaulting to zero");
             this.start = 0;
         }
+        logger.debug("Solr Result Rows: " + this.start);
 
         this.sort = context.getParameterString("sort",
                 properties.getProperty("sort"));
+        logger.info("Solr Result Sort: " + this.sort);
         this.mltFl = context.getParameterString("mlt_fl",
                 properties.getProperty("mlt_fl"));
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("SOLR SelectUrl:" + baseUrl);
-            logger.debug("SOLR RequestHandler:" + requestHandler);
-            logger.debug("SOLR Rows:" + rows);
-            logger.debug("SOLR Start:" + start);
-        }
-
+        logger.info("Solr Result mltFl: " + this.mltFl);
     }
 
     /**
@@ -289,7 +292,7 @@ public class SolrQueryBuilder {
         if (StringUtils.isNotBlank(this.sort)) {
             sb.append("&sort=" + this.sort);
         }
-
+        logger.debug("Generated Solr Query: " + sb.toString());
         return sb.toString();
     }
 
