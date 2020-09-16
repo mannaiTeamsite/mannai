@@ -112,6 +112,7 @@ function resetClass() {
     $(".list_row_wrapper").removeClass("map_view");
     $(".map_col").removeClass("active");
     $(".calendar_wrapper").removeClass("active");
+    $(".map_list_button").removeClass("active");
 
  });
 
@@ -120,13 +121,27 @@ function resetClass() {
     $(".list_row_wrapper").removeClass("map_view");
     $(".map_col").removeClass("active");
     $(".calendar_wrapper").removeClass("active");
+    $(".map_list_button").removeClass("active");
  });
  $(".map").click(function () {
     $(".list_row_wrapper").addClass("map_view");
     $(".list_row_wrapper").removeClass("list_view");
     $(".map_col").addClass("active");
     $(".calendar_wrapper").removeClass("active");
- });
+    $(".map_list_button").addClass("active");
+   });
+
+   
+$(".calendar_view").click(function(){
+   $(".calendar_wrapper").addClass("active");
+   $(".list_row_wrapper").removeClass("map_view");
+   $(".map_col").removeClass("active");
+   $(".map_list_button").removeClass("active");
+});
+
+
+
+
 
 
 
@@ -305,12 +320,6 @@ $(".apply_filter_tag_wrapper ul li").remove()
 
 
 
-
-$(".calendar_view").click(function(){
-   $(".calendar_wrapper").addClass("active");
-   $(".list_row_wrapper").removeClass("map_view");
-   $(".map_col").removeClass("active");
-});
 
 
 

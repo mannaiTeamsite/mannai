@@ -154,17 +154,14 @@
         padding: 0 10px;
     }
 
-    .flex_col_sm_6 {
-        width: 100%;
-        padding: 0 10px;
-    }
+ 
 
     .flex-col-sm-4 {
         width: 100%;
         padding: 0 10px;
     }
     .flex_col_xs_6{
-        width: 100%;
+        width: 50%;
     }
     /* grid media CLOSE */
     
@@ -315,6 +312,15 @@
 
 /*************** 768 close *************/
 
+@media(max-width:700px){
+    .flex_col_sm_6 {
+        width: 100%;
+        padding: 0 10px;
+    }
+}
+
+
+
 /**************** 640 ******************/
 @media(max-width:640px){
     .commn-para {
@@ -438,6 +444,10 @@
     }
     .tourist_component .subscription_section .reviews_wrapper p {
         max-width: 70%;
+    }
+
+    .flex_col_xs_6{
+        width: 100%;
     }
 }
 

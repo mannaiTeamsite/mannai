@@ -69,7 +69,6 @@
   background-color: var(--berry); }
 
 .wave_white_maroon {
-  background-color: var(--white-five);
   background-image: url("../images/ic_about_updated_everyday_bg.svg");
   background-repeat: no-repeat;
   background-position: bottom;

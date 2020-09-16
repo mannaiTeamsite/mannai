@@ -530,6 +530,18 @@ input:focus {
   right: -9999px;
   left: auto;
   opacity: 0; }
+.ar [type="radio"]:not(:checked) + label:before, .ar [type="radio"]:not(:checked) + label:after {
+  border: solid 2px var(--white-four);
+  right: 0;
+  left: auto; }
+.ar [type="radio"]:not(:checked) + label, .ar [type="radio"]:checked + label {
+  position: relative;
+  padding-right: 40px;
+  padding-left: 0; }
+.ar [type="radio"]:checked + label:after, .ar [type="radio"]:checked + label:before, .ar [type="radio"]:checked + label:after {
+  border: 2px solid var(--rouge);
+  right: 0;
+  left: auto; }
 
 /*************Table****************/
 .table_wrap table {
@@ -577,6 +589,8 @@ input:focus {
 /*************Table close****************/
 .low, .medium, .high, .critical {
   padding-left: 32px !important; }
+  .low:before, .medium:before, .high:before, .critical:before {
+    top: 0; }
 
 .ar .low, .ar .medium, .ar .high, .ar .critical {
   padding-right: 32px !important;

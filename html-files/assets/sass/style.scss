@@ -307,7 +307,24 @@ input{
 			left: auto;
 			opacity: 0;
 		}
-}
+
+		[type="radio"]:not(:checked) + label:before, [type="radio"]:not(:checked) + label:after {
+			border: solid 2px var(--white-four);
+			right: 0;
+			left: auto;
+		}
+		[type="radio"]:not(:checked) + label, [type="radio"]:checked + label {
+			position: relative;
+			padding-right: 40px;
+			padding-left: 0;
+		}
+		[type="radio"]:checked + label:after, [type="radio"]:checked + label:before, [type="radio"]:checked + label:after {
+			border: 2px solid var(--rouge);
+			right: 0;
+			left: auto;
+		}
+
+	}
 
 
 
@@ -387,6 +404,10 @@ input{
 
 .low, .medium, .high, .critical{
 	padding-left: 32px !important;
+
+	&:before{
+		top: 0 !important;
+	}
 }
 
 
@@ -418,3 +439,4 @@ input{
     padding: 11px 25px;
     background-color: var(--white);
 }
+
