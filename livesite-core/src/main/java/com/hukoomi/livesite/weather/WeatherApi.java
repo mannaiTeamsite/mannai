@@ -30,15 +30,29 @@ public class WeatherApi {
      */
     public Document getWeather(
             final RequestContext context) throws IOException {
-        String weatherApiUrl =
-                "https://api.openweathermap.org/data/2.5/onecall";
+        String weatherApiUrl = "";
         String decode = "UTF-8";
+
+        String url = context.getParameterString(
+                "url", "");
+        try {
+            String urlDecode = URLDecoder.decode(
+                    url, decode);
+            weatherApiUrl = weatherApiUrl.concat(urlDecode);
+            LOGGER.debug("weatherApiUrl url : " + weatherApiUrl);
+            LOGGER.info("weatherApiUrl url : " + weatherApiUrl);
+
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.warn("Unable to decode lat="
+                    + url, e);
+        }
+
         String lat = context.getParameterString(
                 "lat", "");
         try {
-            String latEn = URLDecoder.decode(
+            String latDecode = URLDecoder.decode(
                     lat, decode);
-            weatherApiUrl = weatherApiUrl.concat("?lat=" + latEn);
+            weatherApiUrl = weatherApiUrl.concat("?lat=" + latDecode);
             LOGGER.debug("weatherApiUrl lat : " + weatherApiUrl);
             LOGGER.info("weatherApiUrl lat : " + weatherApiUrl);
 
@@ -50,9 +64,9 @@ public class WeatherApi {
         String lon = context.getParameterString(
                 "lon", "");
         try {
-            String lonEn = URLDecoder.decode(
+            String lonDecode = URLDecoder.decode(
                     lon, decode);
-            weatherApiUrl = weatherApiUrl.concat("&lon=" + lonEn);
+            weatherApiUrl = weatherApiUrl.concat("&lon=" + lonDecode);
             LOGGER.debug("weatherApiUrl lon : " + weatherApiUrl);
             LOGGER.info("weatherApiUrl lon : " + weatherApiUrl);
 
