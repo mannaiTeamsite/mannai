@@ -1,0 +1,108 @@
+:root {
+  --berry: #8a1538;
+  --deep-orange: #e35205;
+  --dark-orange: #cd4a04;
+  --purple-brown: #1c1517;
+  --purple-brown-light: rgba(28, 21, 23, 0.7);
+  --greyish-brown: #494949;
+  --greyish-brown-two: #4f4f4f;
+  --greyish-brown-three: #6e6259;
+  --white: #ffffff;
+  --black: #000000;
+  --pinkish-grey: #c5c5c5;
+  --slate-grey: #6a6a6b;
+  --white-two: #f8f7f6;
+  --white-three: #f6f6f6;
+  --white-five: #f1f1f1;
+  --silver: #d4d9dc;
+  --silver-two: #dfe0e2;
+  --eggplant: #13070a;
+  --rouge: #b51647;
+  --rouge-two: #ba0c2f;
+  --rouge-three: #a8002f;
+  --white-four: #e5e5e5;
+  --border-color:#e3e3e3;
+  --hrruler:#d4d4d4;
+  --blue: #009dbd;
+  --black-two:#2a2a2a ;
+  --warm-grey:#8a8a8a;
+  --white-three: #f6f6f6;
+  --white-six: #dedede;
+  --very-light-pink: #fff0e9;
+  --very-light-pink-two: #fff8f3;
+  --light-pink: #fff2f6;
+  --white-seven: #ececec;
+  --ocean: #008099;
+  --white-eight: #d2d2d2;
+  --white-nine: #e6e6e6;
+  --black: #2a2a2a;
+  --white-ten: #efefef;
+  --silver-three: #e6e6e7;
+  --white-eleven: #ededed;
+  --white-twelve: #e2e2e2;
+  --black-7: rgba(0, 0, 0, 0.07);
+  --white-thirteen: #f2f2f2; }
+
+.white_bg_single {
+  background-color: var(--white); }
+
+.solid_white_five {
+  background-color: var(--white-five); }
+
+.solid_white_two {
+  background-color: var(--white-two); }
+
+.wave_white_bg {
+  background-image: url(../images/about_wave_10.svg); }
+
+.gray_bg_leave {
+  background-color: var(--white-five);
+  background-image: url("../images/ic_about_hero_section_bg.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover; }
+  @media (max-width: 1024px) {
+    .gray_bg_leave {
+      background-image: none; } }
+
+.marron_solid {
+  background-color: var(--berry); }
+
+.wave_white_maroon {
+  background-image: url("../images/ic_about_updated_everyday_bg.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover; }
+  @media (max-width: 1024px) {
+    .wave_white_maroon {
+      background-image: none; } }
+
+.wave_maroon_white {
+  background-image: url("../images/ic_amir_highness_bg_small.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+  position: relative; }
+  @media (max-width: 1024px) {
+    .wave_maroon_white {
+      background-image: none; } }
+
+.wave_blue_white {
+  background-image: url("../images/wave_blue_white.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover; }
+  @media (max-width: 1024px) {
+    .wave_blue_white {
+      background-image: none; } }
+
+.wave_darkwhite_maroon {
+  background-image: url("../images/wave_darkwhite_maroon.svg");
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover; }
+  @media (max-width: 1024px) {
+    .wave_darkwhite_maroon {
+      background-image: none; } }
+
+/*# sourceMappingURL=component_bg.css.map */
