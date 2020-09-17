@@ -91,7 +91,7 @@ public class WeatherApi {
 
         weatherApiUrl = weatherApiUrl.concat("&exclude=hourly,minutely");
 
-        return WeatherApi.toDocument(weatherApiUrl, "WeatherResponse");
+        return WeatherApi.callWeatherApi(weatherApiUrl, "WeatherResponse");
     }
 
     /** This method will be called from Component
@@ -100,14 +100,13 @@ public class WeatherApi {
      * @param xmlRootName XML Root Element of returned document.
      * @return String return the document
      */
-    public static Document toDocument(
+    public static Document callWeatherApi(
             final String url,
             final String xmlRootName) throws IOException {
         Document document = DocumentHelper.createDocument();
         try {
             JSONObject returnObject = new JSONObject();
-            returnObject.put(xmlRootName,
-                    new JSONObject(WeatherApi.getRequest(url)));
+            returnObject.put(xmlRootName, WeatherApi.getRequest(url));
             String returnXML = XML.toString(returnObject);
             document = Dom4jUtils.newDocument(returnXML);
         } catch (Exception e) {
@@ -117,7 +116,7 @@ public class WeatherApi {
     }
     /** This method will be called from Component
      * External for Weather Content fetching.
-     * @param url The parameter passed from toDocument.
+     * @param url The parameter passed from callWeatherApi.
      * @return String return the weather response
      * generated from weather Api.
      */
