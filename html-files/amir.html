@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="icon" href="assets/images/favicon.ico" />
+   <title>Hukoomi</title>
+   <link rel="stylesheet" href="assets/css/bootstrap.css">
+   <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+   <link rel="stylesheet" href="assets/css/style.css">
+   <link rel="stylesheet" href="assets/css/main.css">
+   <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+   <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="assets/css/component_bg.css">
+</head>
+
+<body>
+   <!--App_wrapper-->
+   <div class="app_wrapper">
+       <!--header-->
+   <header>
+      <div class="header_inner">
+         <div class="innner_wrapper">
+            <div class="nav_brand">
+               <a href="#"  tabindex="0" > <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+            </div>
+            <div class="nav_col">
+               <div class="header_row">
+                  <div class="abt_qtr_nav desktop_view_head">
+                     <ul>
+                        <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
+                        <li> <a href="#"  tabindex="0" class="link">Digital Products</a></li>
+                        <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
+                        <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
+                     </ul>
+                  </div>
+                  <div class="auth_nav">
+                     <ul>
+                        <li class="mob_hide">
+                            <a href="#"  tabindex="0"  class="link" >
+                           <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                        </li>
+                        <li>
+                            <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                           </a>
+                        </li>
+                        <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
+                        <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
+                           <img src="assets/images/menu-line.svg" alt="toggle_menu">
+                           </a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="header_row b-top desktop_view_head">
+                  <div class="nav_menu">
+                     <ul>
+                        <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
+                        <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
+                        <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
+                        <li> <a href="#"  tabindex="0"  class="link">About Qatar</a></li>
+                        <li>
+                            <a href="#"  tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                       </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- Mobile Menu-->
+      <div class="mob_nav">
+         <ul>
+            <li tabindex="0" > <a href="#"  tabindex="0" >Life in Qatar</a></li>
+            <li> <a href="#"  tabindex="0" >Innovation</a></li>
+            <li> <a href="#"  tabindex="0" >Open Data</a></li>
+            <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
+            <li> <a href="#"  tabindex="0" >Explore Services</a></li>
+            <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
+            <li> <a href="#"  tabindex="0" >Media</a></li>
+            <li> <a href="#"  tabindex="0" >About Qatar</a></li>
+         </ul>
+      </div>
+      <!-- Mobile Menu-->
+   </header>
+   <!--header close--> 
+
+      <!--Jump Link header-->
+      <div class="jump_link_header solid_white_five">
+         <div class="header_row b-top">
+            <div class="header_drp_dwn">
+               <div class="selected_option" tabindex="0">
+                  <img src="assets/images/flag-oval.png" class="flag_oval_icon" alt="about qatar" />
+                  About Qatar
+               </div>
+               <div class="option_wrapper">
+                  <ul>
+                     <li><a href="#" tabindex="0"> About Qatar </a></li>
+                     <li><a href="#" tabindex="0"> Qatar National Vision 2030</a></li>
+                     <li> <a href="#" tabindex="0">Government & Legislatives</a></li>
+                     <li> <a href="#" tabindex="0">The Amir</a></li>
+                     <li> <a href="#" tabindex="0">Al-Adaam </a></li>
+                  </ul>
+               </div>
+            </div>
+            <div class="nav_menu">
+               <ul>
+                  <li><a href="#fact_figure" tabindex="0" class="link">Facts & Figures</a></li>
+                  <li><a href="#life_qatar" tabindex="0" class="link">Life in Qatar</a></li>
+                  <li><a href="#travel" tabindex="0" class="link">Travel</a></li>
+                  <li><a href="#business" tabindex="0" class="link">Business</a></li>
+                  <li><a href="#future" tabindex="0" class="link">Future</a></li>
+                  <li><a href="#media" tabindex="0" class="link">Media</a></li>
+                  <li><a href="#contact"  tabindex="0" class="link">Contact</a></li>
+               </ul>
+            </div>
+         </div>
+      </div>
+      <!--Jump Link header close-->
+
+      <!--Breadcrumb-->
+      <div class="breadcrumbs_wrapper solid_white_five">
+         <ul>
+            <li><a href="#" tabindex="0">Home</a></li>
+            <li><a href="#" tabindex="0">About Qatar</a></li>
+            <li><a href="#" tabindex="0">The Amir</a></li>
+         </ul>
+      </div>
+      <!--Breadcrumb-->
+
+      <section class="amir_banner_section">
+         <div class="custom_container">
+            <div class="flex_row">
+               <div class="flex_col_sm_6">
+                  <div class="details">
+                     <h1 class="sub-title" tabindex="0">Who is The Amir?
+                       
+                     </h1>
+
+                     <span class="content_title" tabindex="0">The Amir is the Head of State.</span>
+                     <p class="commn-para" tabindex="0">
+                        His person shall be inviolable and he must be respected by all. The Amir is the
+                        Commander-in-Chief of the armed forces. He shall supervise the same with the assistance of
+                        the Defense Council, which is set under his direct authority.
+                     </p>
+
+                     <p class="commn-para" tabindex="0">The Amir shall represent the State internally and externally and in all
+                        international relations.</p>
+
+
+                  </div>
+               </div>
+               <div class="flex_col_sm_6">
+                  <div class="amir_detail">
+                     <figure class="sheikh_img">
+                        <img src="assets/images/oval-3.png" alt="sheikh" />
+                     </figure>
+                     <span class="name" tabindex="0">His Highness Sheikh Tamim Bin Hamad Al-Thani</span>
+                     <span class="by" tabindex="0">Amir of the State of Qatar</span>
+
+                  </div>
+               </div>
+            </div>
+         </div>
+      </section>
+
+      <section class="content_wrap duties_section">
+         <div class="custom_container">
+            <h2 tabindex="0">What are <span>Amir’s duties</span>
+               towards the state of Qatar?
+            </h2>
+            <div class="flex_row">
+               <div class="flex_col_sm_6 flex_col_xs_6">
+                  <ul>
+                     <li>
+                        <span tabindex="0">Drawing up the general policy of the State with the assistance of the Council of
+                           Ministers.</span>
+                     </li>
+                     <li>
+                        <span tabindex="0">Ratification and promulgation of laws; and no such law may be issued unless it is
+                           ratified by the Amir.</span>
+                     </li>
+                     <li>
+                        <span tabindex="0">Summoning the Council of Ministers to convene at any time deemed necessary for public
+                           interest; and the Amir shall preside over the meetings of the Council of Ministers that he
+                           attends.</span>
+                     </li>
+                     <li>
+                        <span tabindex="0">Appointment of civil servants and military personnel and terminating their service in
+                           accordance with the law.</span>
+                     </li>
+                     <li>
+                        <span tabindex="0">Accrediting the heads of diplomatic and consular missions.</span>
+                     </li>
+                  </ul>
+               </div>
+               <div class="flex_col_sm_6 flex_col_xs_6">
+                  <ul>
+                     <li>
+                        <span tabindex="0">Granting pardon or commuting penalties in accordance with the law.</span>
+                     </li>
+                     <li>
+                        <span tabindex="0">Conferring civilian and military orders and badges of honor in accordance with the
+                           law.</span>
+                     </li>
+                     <li>
+                        <span tabindex="0">Establishing and regulating ministries and other governmental organs and determining
+                           its functions.</span>
+                     </li>
+                     <li>
+                        <span tabindex="0">Establishing, organizing, supervising and specifying the functions of the consultative
+                           bodies that assist him in directing the high policies of the state.</span>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <hr />
+         </div>
+      </section>
+
+
+      <section class="about_section">
+         <div class="custom_container">
+            <div class="flex_row">
+               <div class="flex_col_sm_6 flex_col_xs_6">
+                  <figure class="sheikh-img">
+                     <img src="assets/images/about-sheikh.png" alt="about-sheikh" />
+                  </figure>
+               </div>
+               <div class="flex_col_sm_6 flex_col_xs_6 detail_col">
+                  <h1 tabindex="0">About
+                     <span>His Highness
+                        Sheikh Tamim Bin Hamad Al-Thani</span>
+                  </h1>
+                  <p class="commn-para" tabindex="0">He is the current Amir of the state of Qatar. He became Amir of Qatar on 25th
+                     June, 2013.</p>
+                  <p class="commn-para" tabindex="0">Place & Date of birth
+                     <span class="birth" tabindex="0">Doha on 3rd June, 1980</span></p>
+               </div>
+            </div>
+         </div>
+      </section>
+
+
+      <section class="content_wrap work_exp_section wave_maroon_white">
+         <div class="custom_container">
+            <h2 tabindex="0">His Highness’s
+               <span>Work Experience</span>
+            </h2>
+            <div class="flex_row flex-dir-col">
+               <div class="flex_col_sm_6">
+                  <ul class="exp_card">
+
+                     <li>
+                        <h3 tabindex="0">Head of the Qatari Olympic Committee.</h3>
+                        <span class="timeline" tabindex="0">Jan 1990 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                     <li>
+                        <h3 tabindex="0">Member of the International Olympic Committee.</h3>
+                        <span class="timeline" tabindex="0">Jan 1990 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                     <li>
+                        <h3 tabindex="0">Head of the Organizing Committee of the ASIAD 2006 Games.</h3>
+                        <span class="timeline" tabindex="0">Jan 1990 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                     <li>
+                        <h3 tabindex="0">Member of the Sports for All Committee, sub-committee of the International Olympic
+                           Committee.</h3>
+                        <span class="timeline" tabindex="0">Jan 1990 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                     <li>
+                        <h3 tabindex="0">Head of the Upper Council of the Environment and Natural Sanctuaries.</h3>
+                        <span class="timeline" tabindex="0">Jan 1990 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                     <li>
+                        <h3 tabindex="0">Participated in a number of regional and international conferences and accompanied HH the
+                           Amir to a number of official visits to countries.</h3>
+                        <span class="timeline" tabindex="0">Jan 1990 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                     <li>
+                        <h3 tabindex="0">Heir Apparent of State of Qatar </h3>
+                        <span class="timeline" tabindex="0">August 2003 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                     <li>
+                        <h3 tabindex="0">Amir of State of Qatar </h3>
+                        <span class="timeline" tabindex="0">June 2013 - present</span>
+                        <p class="commn-para elip_3" tabindex="0">Participated in a number of regional and international
+                           conferences and
+                           accompanied HH the Amir to a number of official visits to countries.</p>
+                        <span class="card_fill"></span>
+                     </li>
+
+                  </ul>
+               </div>
+               <div class="flex_col_sm_6">
+
+                  <!--Owl Slider-->
+                  <div id="higness_owl" class="owl-carousel owl-loaded owl-drag">
+                     <!-- card repeat -->
+                     <div class="item">
+                        <figure>
+                           <img src="assets/images/sheikh-exp.png" alt="sheikh-exp" />
+                        </figure>
+                     </div>
+                     <!-- card repeat -->
+                     <!-- card repeat -->
+                     <div class="item">
+                        <figure>
+                           <img src="assets/images/sheikh-exp.png" alt="sheikh-exp" />
+                        </figure>
+                     </div>
+                     <!-- card repeat -->
+                     <!-- card repeat -->
+                     <div class="item">
+                        <figure>
+                           <img src="assets/images/sheikh-exp.png" alt="sheikh-exp" />
+                        </figure>
+                     </div>
+                     <!-- card repeat -->
+                  </div>
+                  <!--Owl Slider-->
+
+
+               </div>
+            </div>
+         </div>
+      </section>
+
+
+      <section class="acadmic_section">
+         <div class="custom_container">
+            <h3 tabindex="0">His Highness’s
+               Academic Qualifications
+            </h3>
+            <div class="qualification_card_row">
+               <div class="qualification_card">
+                  <div class="inner_wrapper">
+                     <figure class="icon">
+                        <img src="assets/images/acadmic-logo1.png" alt="academic-logo" />
+                     </figure>
+                     <span tabindex="0">Received the High School Certificate from
+                        Shireburn High School in the UK in 1997.</span>
+                  </div>
+               </div>
+               <div class="qualification_card">
+                  <div class="inner_wrapper">
+                     <figure class="icon">
+                        <img src="assets/images/acadmic-logo2.png" alt="academic-logo" />
+                     </figure>
+                     <span tabindex="0">Graduated from The Royal Military Academy Sandhurst in the UK in 1998.</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <span class="botm-right-img"></span>
+      </section>
+
+
+      <section class="content_wrap honors_section">
+         <div class="custom_container">
+            <h2 tabindex="0">His Highness’s
+               <span>Medals and honors</span>
+            </h2>
+            <div class="honors_detail">
+
+               <!--Owl Slider-->
+               <div id="medal_owners" class="owl-carousel owl-loaded owl-drag">
+                  <!-- card -->
+                  <div class="item">
+                     <div class="item_block">
+                        <figure>
+                           <img src="assets/images/shekh-honors.png" alt="honors-img" />
+                        </figure>
+                        <span class="elip_3" tabindex="0">The Issa Bin Salman Al-Khalifa’s Order of
+                           Merit-Excellence class, Kingdom of Bahrain 2004.</span>
+                     </div>
+                  </div>
+                  <!--card-->
+
+                  <!-- card -->
+                  <div class="item">
+                     <div class="item_block">
+                        <figure>
+                           <img src="assets/images/shekh-honors.png" alt="honors-img" />
+                        </figure>
+                        <span class="elip_3" tabindex="0">The Issa Bin Salman Al-Khalifa’s Order of
+                           Merit-Excellence class, Kingdom of Bahrain 2004.</span>
+                     </div>
+                  </div>
+                  <!--card-->
+
+                  <!-- card -->
+                  <div class="item">
+                     <div class="item_block">
+                        <figure>
+                           <img src="assets/images/shekh-honors.png" alt="honors-img" />
+                        </figure>
+                        <span class="elip_3" tabindex="0">The Issa Bin Salman Al-Khalifa’s Order of
+                           Merit-Excellence class, Kingdom of Bahrain 2004.</span>
+                     </div>
+                  </div>
+                  <!--card-->
+
+                  <!-- card -->
+                  <div class="item">
+                     <div class="item_block">
+                        <figure>
+                           <img src="assets/images/shekh-honors.png" alt="honors-img" />
+                        </figure>
+                        <span class="elip_3" tabindex="0">The Issa Bin Salman Al-Khalifa’s Order of
+                           Merit-Excellence class, Kingdom of Bahrain 2004.</span>
+                     </div>
+                  </div>
+                  <!--card-->
+               </div>
+
+
+            </div>
+         </div>
+      </section>
+
+      <section class="note_block">
+
+         <div class="custom_container">
+            <h2 class="all_about" tabindex="0">…and that, is all about the Amir of Qatar</h2>
+         </div>
+      </section>
+
+
+      <div class="bottom_links">
+         <ul>
+            <li>
+               <a href="#" tabindex="0"> 
+               <figure><img src="assets/images/ic_about_share.png" alt="share_page" /></figure>
+               <p class="link" >Share this page with friends & family</p>
+               </a>
+            </li>
+            <li>
+               <a href="#" tabindex="0">
+               <figure><img src="assets/images/ic_about_bookmark.png" alt="bookmark_page" /></figure>
+               <p class="link" >Bookmark this page</p>
+               </a>
+            </li>
+            <li>
+              
+               <p tabindex="0">Like this page?</p>
+               <div class="like">
+                  <div class="like_btn">
+                      <input type="radio" checked name="like" id="yes">
+                  <label for="yes">Yes</label>
+                  </div>
+                  <div class="like_btn"><input type="radio" name="like" id="no">
+                      <label for="no">No</label>
+                  </div>
+              </div>
+              
+            </li>
+         </ul>
+      </div>
+
+
+      <div class="custom_container">
+         <div class="pagination">
+            <ul>
+               <li>
+                  <a href="#" tabindex="0" class="arrow_link prev"  title="Advisory Council">
+                     Read Previous
+                     <span><img src="assets/images/left_arrow.svg" alt="previous_page" /></span>
+                  </a>
+                  <p tabindex="0">Advisory Council</p>
+               </li>
+               <li>
+                  <a href="#" tabindex="0" class="arrow_link" title="About the Qatar Government">
+                     Read Next
+                     <span><img src="assets/images/right_arrow.svg" alt="next_page" /></span>
+                  </a>
+                  <p tabindex="0">About the Qatar Government</p>
+               </li>
+            </ul>
+
+            <button class="find_help" tabindex="0"> Find Help?</button>
+         </div>
+      </div>
+
+      <!--footer-->
+      <footer>
+         <div class="footer_inner">
+            <div class="foot_row">
+               <div class="copy_right" tabindex="0">
+                  Copyrigt © 2019 MOTC. All rights reserved.
+               </div>
+               <div class="foot_nav">
+                  <nav>
+                     <ul>
+                        <li><a href="#">Entity Services’ Statistics</a></li>
+                        <li><a href="#">Useful Links</a></li>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Polls & Surveys</a></li>
+                        <li><a href="#">Mobile Apps</a></li>
+                        <li><a href="#">Site Map</a></li>
+                        <li><a href="#">Privacy & Legal</a></li>
+                        <li><a href="#">Find Help</a></li>
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!--footer close-->
+
+   </div>
+   <!--App_wrapper close-->
+
+   <!--Js-->
+   <script src="assets/js/jquery.js"></script>
+   <script>
+      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+   </script>
+   <script src="assets/js/bootstrap.min.js"></script>
+   <script src="assets/js/bootstrap-select.js"></script>
+   <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+   <script src="assets/js/owl.carousel.min.js"></script>
+   <script src="assets/js/app-slider.js"></script>
+   <script src="assets/js/custom.js"></script>
+   <!--Js Close-->
+
+</body>
+
+</html>

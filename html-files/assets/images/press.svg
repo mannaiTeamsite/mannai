@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_advance_search_press_inactive</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+        <g id="07-search" transform="translate(-654.000000, -500.000000)" stroke="#1C1517">
+            <g id="Group-4-Copy" transform="translate(152.000000, 474.000000)">
+                <g id="Group-17" transform="translate(503.000000, 24.000000)">
+                    <g id="ic_advance_search_press_inactive" transform="translate(0.000000, 3.000000)">
+                        <path d="M19.37536,17.14816 C19.37536,18.28096 18.45776,19.19936 17.32496,19.19936 L2.61056,19.19936 C3.69056,19.19936 4.56496,18.32416 4.56496,17.24416 L4.56496,0.29936 L19.37536,0.29936 L19.37536,17.14816 Z" id="Stroke-1"></path>
+                        <path d="M4.5652,19.19976 L2.774,19.19976 C1.4076,19.19976 0.3004,18.09176 0.3004,16.72536 L0.3004,3.58056 C0.3004,3.03976 0.7388,2.60136 1.2796,2.60136 C1.8196,2.60136 2.2588,3.03976 2.2588,3.58056 L2.2588,16.78936" id="Stroke-3"></path>
+                        <line x1="1.2792" y1="2.60128" x2="3.1176" y2="2.60128" id="Stroke-5"></line>
+                        <polygon id="Stroke-7" points="7.1488 7.9872 12.3992 6.0136 17.6504 7.9872 12.3992 9.7008"></polygon>
+                        <path d="M15.3792,8.91848 L15.3792,12.60488 L14.8848,12.47528 C13.256,12.04808 11.544,12.05048 9.9168,12.48328 L9.4576,12.60488 L9.4576,9.03048" id="Stroke-9"></path>
+                        <line x1="7.1488" y1="2.60128" x2="17.0016" y2="2.60128" id="Stroke-11"></line>
+                        <line x1="9.39568" y1="16.01376" x2="15.02688" y2="16.01376" id="Stroke-13"></line>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

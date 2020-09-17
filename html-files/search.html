@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hukoomi | Search</title>
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <link rel="stylesheet" href="assets/css//main.css">
+    <link rel="stylesheet" href="assets/css/search.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous">
+    <!-- ================== bootstrap css ========================= -->
+</head>
+
+<body class="">
+   
+    <div class="app_wrapper">
+        <header>
+            <div class="header_inner">
+                <div class="innner_wrapper">
+                    <div class="nav_brand">
+                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+                    </div>
+                    <div class="nav_col">
+                        <div class="header_row">
+                            <div class="abt_qtr_nav desktop_view_head">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
+                                </ul>
+                            </div>
+                            <div class="auth_nav">
+                                <ul>
+                                    <li class="mob_hide">
+                                        <a href="#" tabindex="0" class="link">
+                                            <img src="assets/images/accessibility.png" alt="Accessibility"
+                                                class="access_icon"> Accessibility</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
+                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
+                                                alt="language-icon">
+                                        </a>
+                                    </li>
+                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
+                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
+                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="header_row b-top desktop_view_head">
+                            <div class="nav_menu">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
+                                    <li>
+                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
+                                                title="Search" class="search_icon" alt="Search"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Menu-->
+            <div class="mob_nav">
+                <ul>
+                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Innovation</a></li>
+                    <li> <a href="#" tabindex="0">Open Data</a></li>
+                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Explore Services</a></li>
+                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
+                    <li> <a href="#" tabindex="0">Media</a></li>
+                    <li> <a href="#" tabindex="0">About Qatar</a></li>
+                </ul>
+            </div>
+            <!-- Mobile Menu-->
+        </header>
+        <!-- ======= header ======= -->
+   <section class="search_wrapper">
+    <div class="close" tabindex="0"><img src="assets/images/close.svg" alt="Close" title="Close"></div>
+       <!-- ====== search input box, aslo includes autocomplete dropdown and advance search ======= -->
+       <div class="search_input">
+           <div class="input_wrap">
+               <!-- ===== please do not change hierarchy of DIV's ====== -->
+               <!-- ===== inputbox ===== -->
+            <input type="text" class="search" id="search" aria-labelledby="search" title="Search" tabindex="1" onkeyup="showSearch(this)" placeholder="Search here eg. how to get a driving license…">
+            <label for="search">Search here eg. how to get a driving license…</label>
+            <!-- ========== advance search button========= -->
+            <div class="adv_search_wrapper">
+                <!-- add class "applied" when filter is applied -->
+                <a 
+                class="adv_search collapsed"
+                data-toggle="collapse" 
+                href="#collapseExample" 
+                role="button" 
+                aria-expanded="false" 
+                aria-controls="collapseExample"
+                tabindex="2"
+                id="advance_search"
+            >
+                <span class="text">Advanced Search</span> 
+                <span class="adv_caret">
+                </span>
+            </a>
+            </div>
+            <!-- ========== advance search button========= -->
+
+            
+
+           
+           </div>
+
+           <!-- ===== serach button ===== -->
+            <div class="search_btn">
+                <button id="search_btn" tabindex="3"> <span><img src="assets/images/search.svg" alt="Search Button"></span> Search</button>
+            </div>
+            <!-- ===== serach button end ===== -->
+            <!-- ========= advance search =============== -->
+            <div class="advance_search_wrap collapse" id="collapseExample">
+                <p class="adv_heading">Hukoomi Advance Search <a href="">Share feedback</a></p>
+                <div class="advance_search">
+                    <div class="search_info">
+                        <ul>
+                            <li>
+                                <h3 class="info_title" tabindex="0">Search inside</h3>
+                            </li>
+                            <li tabindex="0">
+                                <h3>Select audience</h3>
+                                <p>Whom are you searching for?</p>
+                            </li>
+                            <li tabindex="0">
+                                <h3>Channels</h3>
+                                <p>Get results from selected government ministries</p>
+                            </li>
+                            <li tabindex="0">
+                                <h3>Service topic filters</h3>
+                                <p>Customize search results with topics of your interest</p>
+                            </li>
+                            <li tabindex="0">
+                                <h3>Has downloads</h3>
+                                <p>Should your search results includes downloads?</p>
+                            </li>
+                            <li tabindex="0">
+                                <h3>Life journeys</h3>
+                                <p>Find life journeys here</p>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="search_form">
+                        <div class="form_row">
+                            <div class="title">
+                                <h3>Search inside</h3>
+                            </div>
+                            <div class="flex_row">
+                                <ul>
+                                    <li>
+                                        <label class="chech_lbl" for="services">
+                                            <input tabindex="0" id="services" class="check_input" type="checkbox">
+                                            <span></span>
+                                            Government services</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="downloads">
+                                            <input tabindex="0" id="downloads" class="check_input" type="checkbox" checked>
+                                            <span></span>
+                                            Downloads, utilities and directory</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="media"><input tabindex="0" id="media" class="check_input" type="checkbox">
+                                            <span></span>
+                                            Media center (news, events, blogs)</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="form_row">
+                            <div class="title">
+                                <h3>Select audience</h3>
+                                <p>Whom are you searching for?</p>
+                            </div>
+                            <div class="flex_row">
+                                <ul>
+                                    <li>
+                                        <label class="chech_lbl" for="myself"><input id="myself" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Myself</label>
+                                    </li>
+                                    <li class="flex_inline">
+                                        <p>I am a</p>
+                                        <div class="dropdown">
+                                            <a tabindex="0" class="dropdown-link" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" role="link">
+                                                 <span class="text">tourist businessman</span> <span class="caret"><img src="assets/images/caret-down.svg" alt="tourist businessman"></span>
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                              <a tabindex="0" class="dropdown-item" href="#">tourist businessman</a>
+                                              <a tabindex="0" class="dropdown-item" href="#">tourist businessman</a>
+                                            </div>
+                                          </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex_row">
+                                <ul>
+                                    <li>
+                                        <label class="chech_lbl" for="option_1"><input id="option_1" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Option 1</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="option_2"><input id="option_2" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Option 2</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="option_3"><input id="option_3" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Option 3</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="form_row">
+                            <div class="title">
+                                <h3>Channels</h3>
+                                <p>Get results from selected government ministries and other departments.</p>
+                            </div>
+                            <div class="flex_row">
+                                <ul>
+                                    <li>
+                                        <label class="chech_lbl" for="healthcare"><input id="healthcare" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Healthcare</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="education"><input id="education" class="check_input" type="checkbox" checked tabindex="0">
+                                            <span></span>
+                                            Education</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="labour"><input id="labour" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Labour</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="form_row">
+                            <div class="title">
+                                <h3>Service topic filters</h3>
+                                <p>Customize search results with topics of your interest</p>
+                            </div>
+                            <div class="flex_row">
+                                <ul>
+                                    <li>
+                                        <label class="chech_lbl" for="healthcare_1">
+                                            <input id="healthcare_1" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Healthcare</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="education_1">
+                                            <input id="education_1" class="check_input" type="checkbox" checked tabindex="0">
+                                            <span></span>
+                                            Education</label>
+                                    </li>
+                                    <li>
+                                        <label class="chech_lbl" for="labour_1">
+                                            <input id="labour_1" class="check_input" type="checkbox" tabindex="0">
+                                            <span></span>
+                                            Labour</label>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="form_row">
+                            <div class="title">
+                                <h3>Services by life journeys <span class="new">New</span></h3>
+                            </div>
+                            <div class="flex_row">
+                                <ul class="adv_search_images">
+                                    <li>
+                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
+                                    </li>
+                                    <li>
+                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
+                                    </li>
+                                    <li>
+                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!-- ========= advance search end =============== -->
+         <!-- ============search result dropdown autocomplete ========== -->
+         <div class="search_result">
+            <ul>
+                <li tabindex="0">
+                    <h2>Service (2)</h2>
+                    <p>How qatar <b>government works</b></p>
+                    <p>How qatar <b>national vision 2030</b> is structured</p>
+                </li>
+                <li tabindex="0">
+                    <h2>Articles (2)</h2>
+                    <p>How qatar <b>driving license is created</b></p>
+                    <p>How qatar <b>sports academy</b> functions</p>
+                </li>
+                <li tabindex="0">
+                    <h2>Utilities (2)</h2>
+                    <p>How qatar <b>water bill</b> is paid</p>
+                    <p>How qatar <b>electricity bill</b> is paid</p>
+                </li>
+                <li tabindex="0">
+                    <h2>Service (2)</h2>
+                    <p>How qatar <b>government works</b></p>
+                    <p>How qatar <b>national vision 2030</b> is structured</p>
+                </li>
+                <li tabindex="0">
+                    <h2>Articles (2)</h2>
+                    <p>How qatar <b>driving license is created</b></p>
+                    <p>How qatar <b>sports academy</b> functions</p>
+                </li>
+                <li tabindex="0">
+                    <h2>Utilities (2)</h2>
+                    <p>How qatar <b>water bill</b> is paid</p>
+                    <p>How qatar <b>electricity bill</b> is paid</p>
+                </li>
+            </ul>
+        </div>
+     <!-- ============search result dropdown autocomplete end========== -->
+       </div>
+<!-- ====== search input box ends here ======= -->
+
+<!-- ========= bottom section and serach filter ======= -->
+       <div class="search_bottom">
+           <div class="link_cards">
+            <div class="supporting_links">
+                <div class="links_card">
+                    <h3 tabindex="0">
+                        <span><img src="assets/images/briefcase.svg" alt="My Recent Searches"></span>
+                        My recent searches</h3>
+                        <ul>
+                            <li tabindex="0"><a href="">Get a driving license</a></li>
+                            <li tabindex="0"><a href="">School for Higher education</a></li>
+                            <li tabindex="0"><a href="">Municipal council</a></li>
+                            <li tabindex="0"><a href="">Advisory council</a></li>
+                        </ul>
+                </div>
+
+                <div class="links_card">
+                    <h3 tabindex="0">
+                        <span><img src="assets/images/gear.svg" alt="Explore Hukoomi"></span>
+                        Explore Hukoomi</h3>
+                        <ul>
+                            <li tabindex="0"><a href="">About Qatar</a></li>
+                            <li tabindex="0"><a href="">Qatar National Vision</a></li>
+                            <li tabindex="0"><a href="">Qatar Ministries</a></li>
+                            <li tabindex="0"><a href="">Qatar National Flag</a></li>
+                        </ul>
+                </div>
+
+                <div class="links_card">
+                    <h3 tabindex="0">
+                        <span><img src="assets/images/account.svg" alt="My account"></span>
+                        My account</h3>
+                        <ul>
+                            <li tabindex="0"><a href="">Get a driving license</a></li>
+                            <li tabindex="0"><a href="">Higher education</a></li>
+                            <li tabindex="0"><a href="">Get a driving license</a></li>
+                            <li tabindex="0"><a href="">Higher education</a></li>
+                        </ul>
+                </div>
+            </div>
+
+            <!-- ============= social icons ============== -->
+            <div class="social">
+                <ul>
+                    <li><a href=""><img src="assets/images/facebook.svg" alt="Facebook"></a></li>
+                    <li><a href=""><img src="assets/images/twitter.svg" alt="Twitter"></a></li>
+                    <li><a href=""><img src="assets/images/linkedin.svg" alt="Linkedin"></a></li>
+                    <li><a href=""><img src="assets/images/youtube.svg" alt="Youtube"></a></li>
+                    <li><a href=""><img src="assets/images/instagram.svg" alt="Instagram"></a></li>
+                </ul>
+            </div>
+            <!-- ============= social icons end ============== -->
+           </div>
+           
+            <!-- ===== right side accordian   -->
+            <div class="search_filter">
+                <div id="accordionExample">
+                    <div class="search_accordion">
+                      <div class="search_acr" id="headingOne">
+                          <a 
+                            tabindex="0"
+                            class="collapsed"
+                            data-toggle="collapse" 
+                            data-target="#collapseOne" 
+                            aria-expanded="true" 
+                            aria-controls="collapseOne"
+                            role="link">
+                            <span class="preicon srch">
+                                <img src="assets/images/search-small.svg" alt="Top Searches">
+                            </span> Top searches 
+                          </a>
+                      </div>
+                  
+                      <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+                        <div class="search_accordion_container">
+                          one
+                        </div>
+                      </div>
+                    </div>
+                    <div class="seprator"></div>
+                    <div class="search_accordion">
+                      <div class="search_acr" id="headingTwo">
+                          <a
+                            tabindex="0"
+                            data-toggle="collapse" 
+                            data-target="#collapseTwo" 
+                            aria-expanded="false" 
+                            aria-controls="collapseTwo"
+                            role="link">
+                            <span class="preicon"
+                            role="link">
+                                <img src="assets/images/bookmark-star.svg" alt="My Bookmarked Pages">
+                            </span> My bookmarked pages 
+                          </a>
+                      </div>
+                      <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                        <div class="search_accordion_container">
+                            <ul>
+                                <li tabindex="0" class="">
+                                        Consumer Rights and Protection <span
+                                        id="filterDropdown1" 
+                                        data-toggle="dropdown" 
+                                        aria-haspopup="true" 
+                                        aria-expanded="false"
+                                        role="button"
+                                        tabindex="0"
+                                    ><img src="assets/images/ellipse.svg" alt="Consumer Rights and Protection"></span>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterDropdown1">
+                                        <a class="dropdown-item" href="#">
+                                            <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
+                                            Remove Bookmark</a>
+                                        <a class="dropdown-item" href="#">
+                                            <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                            Share Page</a>
+                                      </div>
+                                </li>
+                                <li tabindex="0">
+                                        Security and Public Safety 
+                                        <span
+                                                id="filterDropdown2" 
+                                                data-toggle="dropdown" 
+                                                aria-haspopup="true" 
+                                                aria-expanded="false"
+                                                role="button"
+                                                tabindex="0"
+                                            ><img src="assets/images/ellipse.svg" alt=" Security and Public Safety"></span>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterDropdown2">
+                                                <a class="dropdown-item" href="#">
+                                                    <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
+                                                    Remove Bookmark</a>
+                                                <a class="dropdown-item" href="#">
+                                                    <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                                    Share Page</a>
+                                              </div>
+                                </li>
+                                <li tabindex="0">
+                                        Driving License Application 
+                                            <span
+                                                id="filterDropdown3" 
+                                                data-toggle="dropdown" 
+                                                aria-haspopup="true" 
+                                                aria-expanded="false"
+                                                role="button"
+                                                tabindex="0"
+                                            ><img src="assets/images/ellipse.svg" alt="Driving License Application"></span>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterDropdown3">
+                                                <a class="dropdown-item" href="#">
+                                                    <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
+                                                    Remove Bookmark</a>
+                                                <a class="dropdown-item" href="#">
+                                                    <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                                    Share Page</a>
+                                              </div>
+                                </li>
+                                <li tabindex="0">
+                                        Persons with Disabilities 
+                                        <span
+                                                id="filterDropdown4" 
+                                                data-toggle="dropdown" 
+                                                aria-haspopup="true" 
+                                                aria-expanded="false"
+                                                role="button"
+                                                tabindex="0"
+                                            ><img src="assets/images/ellipse.svg" alt="Persons with Disabilities "></span>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterDropdown4">
+                                                <a class="dropdown-item" href="#">
+                                                    <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
+                                                    Remove Bookmark</a>
+                                                <a class="dropdown-item" href="#">
+                                                    <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                                    Share Page</a>
+                                              </div>
+                                </li>
+                                <li tabindex="0">
+                                        Register in KAHRAMAA as an Exempted Qatari Citizen <span
+                                        id="filterDropdown5" 
+                                        data-toggle="dropdown" 
+                                        aria-haspopup="true" 
+                                        aria-expanded="false"
+                                        role="button"
+                                        tabindex="0"
+                                    ><img src="assets/images/ellipse.svg" alt="Register in KAHRAMAA as an Exempted Qatari Citizen"></span>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterDropdown5">
+                                        <a class="dropdown-item" href="#">
+                                            <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
+                                            Remove Bookmark</a>
+                                        <a class="dropdown-item" href="#">
+                                            <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                            Share Page</a>
+                                      </div>
+                                </li>
+                            </ul>
+                        </div>
+                      </div>
+                    </div>
+                   
+                  </div>
+                
+            </div>
+            <!-- ===== right side accordian end   -->
+           
+       </div>
+<!-- ======= bottom section and serach filter end ======= -->
+       
+   </section>
+</div>
+   <!-- =============== bootstrap js=============== -->
+   <script src="assets/js/jquery.js"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" crossorigin="anonymous"></script>
+   <script>
+   window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+   </script>
+    
+   <script src="assets/js/custom.js"></script>
+   <script src="assets/js/search.js"></script>
+
+   <!-- ==  ============= bootstrap js=============== -->
+</body>
+
+</html>

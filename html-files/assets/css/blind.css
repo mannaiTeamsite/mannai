@@ -1,0 +1,119 @@
+html, span,div, applet, object, iframe,p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video, button, html input[type=button], input[type=reset], input[type=submit] {
+	color: #fff !important;
+	background-color:#000 !important;
+	border-color:#fff !important;
+}
+
+
+html, applet, object, iframe, h1, h2, h3, h4, h5,
+ h6,  blockquote, a, abbr, acronym, address, big, cite, code,
+ del, dfn, em, img, ins, kbd, q, s, samp, small,
+ strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul,
+ li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+ article, aside, canvas, details, embed, figure, figcaption,
+ footer, header, hgroup, menu, nav, output, ruby, section,
+ summary, time, mark, audio, video, button{
+   color:yellow !important;
+}
+
+select,option {
+    color: #53565b !important;
+}
+
+
+*::-moz-placeholder{
+   color: #000 !important;
+}
+
+a:focus,a:hover{
+    color: #fff !important;
+}
+
+strong:focus,strong:hover{
+    color: #fff !important;
+}
+body img{
+-webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+filter: grayscale(100%) !important;
+}
+
+[class^='banner'], [class*='banner']{
+    -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+filter: grayscale(100%) !important;
+}
+
+[class^='ico'], [class*='ico']{
+    color: #fff !important;
+}
+input::-webkit-input-placeholder, input { color:#000 !important;}
+.banner {
+    
+	background-image: url(../images/bw/banner.jpg);
+    filter: gray;
+}
+.banner1 {
+	background-image: url(../images/bw/banner1.jpg);
+	filter: gray;
+}
+.banner2 {
+	background-image: url(../images/bw/banner2.jpg);
+}
+.banner3 {
+	background-image: url(../images/bw/banner3.jpg);
+}
+.ico-search { background:url(../images/bw/search.jpg) no-repeat; background-color:#fff !important}
+.search-box-container .search-input, .services-input, input[type="text"] { background-color:#fff !important; color:#000 !important}
+
+.link1 {
+	background-image: url('../images/bw/link1.png')
+}
+.link2 {
+	background-image: url('../images/bw/link2.png')
+}
+.link3 {
+	background-image: url('../images/bw/link3.png')
+}
+.link4 {
+	background-image: url('../images/bw/link4.png')
+}
+.cover-img {background-image:none !important; }
+
+.banner-slide h3, .banner-slide div, .banner-slide a, .banner-slide span  { background-color:transparent !important}
+
+.banner*{
+-webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+}
+.cover-img {  
+  border: 2px solid #e2e2e2;
+}
+.navigation span {
+   color:yellow !important;
+}
+.navigation span:hover,.navigation li.selected, .navigation li.selected span{
+     color:#fff !important;
+}
+.navigation li:hover,.navigation li:hover span,.navigation li:hover a{
+   color:#fff !important;
+}
+.navigation li.selected a {
+    border-right: 1px solid #fff !important;
+}
+.left-nav li.active > a{
+  color:#fff !important;
+}
+
+
+
+
+

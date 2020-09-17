@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1440px" height="660px" viewBox="0 0 1440 660" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_tourist_polls_bg</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="03-tourist" transform="translate(0.000000, -5185.000000)">
+            <g id="Group-10" transform="translate(0.000000, 5185.000000)">
+                <g id="ic_tourist_polls_bg" transform="translate(-0.000882, 0.000000)">
+                    <polygon id="Rectangle" fill="#8A1538" points="0.000881964334 0 1440.00088 0 1440.00088 659 0.000881964334 659"></polygon>
+                    <path d="M1.36424205e-12,599.236329 C217.699696,502.717696 441.677576,477.322292 671.935982,523.050116 C1018.49443,591.874372 1291.51348,633.827063 1440,619.798757 C1440,619.798757 1440,633.199171 1440,660 L1.36424205e-12,660 C1.36424205e-12,619.493795 1.36424205e-12,599.239238 1.36424205e-12,599.236329 Z" id="Path-2" fill="#F1F1F1"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
