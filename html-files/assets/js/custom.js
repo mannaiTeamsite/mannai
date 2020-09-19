@@ -56,8 +56,21 @@ $(function () {
 
 /*********************Mobile Menu Toggle***********************************************************/
 $("#mob_menu_toggle").click(function(){
-    $(".mob_nav").toggleClass("active");
+    $("#head1_top").toggleClass("head1_top");
 });
+
+$("#mob_menu_toggle2").click(function(){
+   $("#head2_top").toggleClass("head2_top");
+});
+
+$(".about_qatar_nav").click(function(){
+   $(".about_submenu").toggleClass("active");
+});
+
+$(".reomve_about_menu").click(function(){
+   $(".about_submenu").removeClass("active");
+});
+
 /*********************Mobile Menu Toggle close***********************************************************/
 
 
@@ -140,6 +153,14 @@ $(".calendar_view").click(function(){
 });
 
 
+
+$(".map_list_button").click(function(){
+   $(".map_view .f_row").toggleClass("responsive_map_view");
+});
+
+$(".close_map_img").click(function(){
+   $(".map_view .f_row").removeClass("responsive_map_view");
+});
 
 
 
@@ -316,27 +337,16 @@ $(".apply_filter_tag_wrapper ul li").remove()
 /******************************Filter JS Close**********************************************/
 
 
-
-
-
-
-
-
-
-
-
-
+/************************************Face Page Side Link js***************************************************/
 $(".links ul li a").click(function(){
-   $(".links ul li a").removeClass("active")   
-   
+   $(".links ul li a").removeClass("active");   
    $(this).addClass("active");
-})
+});
+/************************************Face Page Side Link js close***************************************************/
 
 
-
-
+/************************************Face Page video play and pause js close***************************************************/
 var myVideo = document.getElementById("video"); 
-
 function playPause() { 
   if (myVideo.paused) {
     myVideo.play(); 
@@ -349,3 +359,248 @@ function playPause() {
     $('.play img').attr('src', 'assets/images/play.png')
   }
 } 
+/************************************Face Page video play and pause js close***************************************************/
+
+
+/**************************************readspeakar UI Js*******************************************************/
+$(".lisitin").click(function(){
+   $(".reader_ui").toggleClass("active")
+});
+/**************************************readspeakar UI Js close*******************************************************/
+
+
+/**************************************Contrast Js*******************************************************/
+$(document).ready(function(){
+$('#themechange').click(function(){
+if($('link#styles').attr('href')=="assets/css/Day.css"){
+$('link#styles').attr('href','assets/css/blind.css')
+}
+else
+{
+$('link#styles').attr('href','assets/css/Day.css')
+}
+})
+});
+/**************************************Contrast Js close*******************************************************/
+
+
+/**************************************Font plus and minus JS*******************************************/
+var fontCount = 0;
+$(document).ready(function(){
+    $('.font_plus').click(function(){
+        if(fontCount < 2){
+            console.log(fontCount)
+            font_plus();
+            fontCount ++;
+        }
+        
+    });
+    $('.font_minus').click(function(){
+        if(fontCount > 0 ){
+            console.log(fontCount)
+            font_minus()
+            fontCount --;
+        }
+        
+    });
+
+})
+
+function font_plus(){
+    var a = document.querySelectorAll(" h1, h2, h3, h4, h5, h6, p, li, a, b, th, tr, td");
+var fs;
+    for(i = 0; i<a.length; i++){
+        var fs = window.getComputedStyle(a[i]).fontSize.replace('px', '');
+        fs ++;
+        // if(a[i].style.fontSize){
+            a[i].style.fontSize = fs + 'px' 
+        // }
+        
+    }
+}
+
+function font_minus(){
+    var a = document.querySelectorAll(" h1, h2, h3, h4, h5, h6, p, li, a, b, th, tr, td");
+var fs;
+    for(i = 0; i<a.length; i++){
+        var fs = window.getComputedStyle(a[i]).fontSize.replace('px', '');
+        fs --;
+        a[i].style.fontSize = fs + 'px' 
+    }
+}
+/**************************************Font plus and minus JS close*******************************************/
+
+
+
+
+
+/*************************************Calendar js******************************************************************/
+$(document).ready(function(){
+
+  
+   $('#demo').click();
+   $(document).find('.today').parent().siblings().hide();
+   $(document).find('td').css('pointer-events', 'none');
+   $('.view_all').click(function(){
+       console.log('click');
+       if(!$(this).hasClass('min_view')){
+           $(this).addClass('min_view');
+           $(this).parent().addClass('full_view');
+           $(document).find('.today').parent().siblings().show();
+           $(document).find('td').css('pointer-events', 'auto');
+       }
+       else{
+           $(this).removeClass('min_view');
+           $(this).parent().removeClass('full_view');
+           $(document).find('.today').parent().siblings().hide();
+           $(document).find('td').css('pointer-events', 'none');
+       }
+   });
+   
+   
+   
+   });
+   // ======= show current week only =======
+   $(document).find('td').on('click', function(e){
+      console.log('hello')
+      e.preventDefault();
+      e.stopPropagation();
+   
+   })
+   // ======= show current week only =======
+   //   ======= get current date =======
+   var today = new Date();
+   var dd = String(today.getDate()).slice(-2);
+   var mm = String(today.getMonth() + 1).slice(-2); //January is 0!
+   var yyyy = today.getFullYear();
+   
+   today = mm + '/' + dd + '/' + yyyy;
+   //   ======= get current date =======
+   if (window.matchMedia("(max-width: 600px)").matches) {
+   $('#demo').daterangepicker({
+   "parentEl": ".events",
+   "singleDatePicker": true,
+   "showDropdowns": true,
+   "autoApply": true,
+   "locale": {
+       "format": "MM/DD/YYYY",
+       "separator": " - ",
+       "applyLabel": "Apply",
+       "cancelLabel": "Cancel",
+       "fromLabel": "From",
+       "toLabel": "To",
+       "customRangeLabel": "Custom",
+       "weekLabel": "W",
+       "daysOfWeek": [
+           "Su",
+           "Mo",
+           "Tu",
+           "We",
+           "Th",
+           "Fr",
+           "Sa"
+       ],
+       "monthNames": [
+           "January",
+           "February",
+           "March",
+           "April",
+           "May",
+           "June",
+           "July",
+           "August",
+           "September",
+           "October",
+           "November",
+           "December"
+       ],
+       "firstDay": 1
+   },
+   "linkedCalendars": false,
+   "showCustomRangeLabel": false,
+   "alwaysShowCalendars": true,
+   "startDate": today,
+   //  "endDate": "09/16/2020",
+   isInvalidDate: function(ele) {
+     // console.log(ele);
+   var currDate = moment(ele._d).format('YY-MM-DD');
+   
+   return ["20-09-09", "20-09-25", "20-09-20", "20-09-21"].indexOf(currDate) != -1;
+   },
+   isCustomDate: function(e){
+   // console.log(e);
+   var dataCell = moment(e._d).format("YYYY-MM-DD");
+       if ( dataCell == '2020-09-05' || dataCell == '2020-09-15' || dataCell == '2020-09-01' || dataCell == '2020-09-12' ) {
+          console.log(dataCell)
+           return 'isEvent';
+       }
+   }
+   }, function(start, end, label) {
+   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+   });
+   } else {
+   $('#demo').daterangepicker({
+   "parentEl": ".events",
+   "singleDatePicker": true,
+   "showDropdowns": true,
+   "autoApply": true,
+   "locale": {
+       "format": "MM/DD/YYYY",
+       "separator": " - ",
+       "applyLabel": "Apply",
+       "cancelLabel": "Cancel",
+       "fromLabel": "From",
+       "toLabel": "To",
+       "customRangeLabel": "Custom",
+       "weekLabel": "W",
+       "daysOfWeek": [
+           "Sunday",
+           "Monday",
+           "Tuesday",
+           "Wednesday",
+           "Thursday",
+           "Friday",
+           "Saturday"
+       ],
+       "monthNames": [
+           "January",
+           "February",
+           "March",
+           "April",
+           "May",
+           "June",
+           "July",
+           "August",
+           "September",
+           "October",
+           "November",
+           "December"
+       ],
+       "firstDay": 1
+   },
+   "linkedCalendars": false,
+   "showCustomRangeLabel": false,
+   "alwaysShowCalendars": true,
+   "startDate": today,
+   //  "endDate": "09/16/2020",
+   isInvalidDate: function(ele) {
+     // console.log(ele);
+   var currDate = moment(ele._d).format('YY-MM-DD');
+   
+   return ["20-09-09", "20-09-25", "20-09-20", "20-09-21"].indexOf(currDate) != -1;
+   },
+   isCustomDate: function(e){
+   // console.log(e);
+   var dataCell = moment(e._d).format("YYYY-MM-DD");
+       if ( dataCell == '2020-09-05' || dataCell == '2020-09-15' || dataCell == '2020-09-01' || dataCell == '2020-09-12' ) {
+          console.log(dataCell)
+           return 'isEvent';
+       }
+   }
+   }, function(start, end, label) {
+   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+   });
+   }
+
+
+   /*************************************Calendar js close******************************************************************/

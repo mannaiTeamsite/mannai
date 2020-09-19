@@ -1,852 +1,675 @@
-
 <!DOCTYPE html>
 <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta http-equiv="X-UA-Compatible" content="ie=edge">
+      <link rel="icon" href="assets/images/favicon.ico" />
+      <title>Hukoomi</title>
+      <link rel="stylesheet" href="assets/css/bootstrap.css">
+      <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+      <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+      <link rel="stylesheet" href="assets/css/lightbox.css">
+      <link rel="stylesheet" href="assets/css/style.css">
+      <link rel="stylesheet" href="assets/css/main.css">
+      <link rel="stylesheet" href="assets/css/events.css">
+      <link rel="stylesheet" href="assets/css/media.css">
+      <link rel="stylesheet" href="assets/css/event-daterangepicker.css">
+      <link rel="stylesheet" href="assets/css/social-share-kit.css" type="text/css">
+      <link rel="stylesheet" href="assets/css/simple-calendar.css" type="text/css">
+      <link rel="stylesheet" href="assets/css/Day.css" id="styles" type="text/css" />
+   </head>
+   <body>
+      <!--App_wrapper-->
+      <div class="app_wrapper">
+         <!--header-->
+         <header>
+            <div class="header_inner">
+               <div class="innner_wrapper">
+                  <div class="nav_brand">
+                     <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+                  </div>
+                  <div class="nav_col">
+                     <div class="header_row">
+                         <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                            <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                            </a>
+                         </figure>
 
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <link rel="icon" href="assets/images/favicon.ico" />
-   <title>Hukoomi</title>
-   <link rel="stylesheet" href="assets/css/bootstrap.css">
-   <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
-   <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
-   <link rel="stylesheet" href="assets/css/lightbox.css">
-   <link rel="stylesheet" href="assets/css/style.css">
-   <link rel="stylesheet" href="assets/css/main.css">
-   <link rel="stylesheet" href="assets/css/media.css">
-   <link rel="stylesheet" href="assets/css/social-share-kit.css" type="text/css">
-   <link rel="stylesheet" href="assets/css/simple-calendar.css" type="text/css">
-
-   <link href="assets/css/days.css" id="styles" rel="stylesheet" type="text/css" />
-
-</head>
-
-<body>
-
-   
-
-   <!--App_wrapper-->
-   <div class="app_wrapper">
-
-   <!--header-->
-   <header>
-    <div class="header_inner">
-       <div class="innner_wrapper">
-          <div class="nav_brand">
-            <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
-          </div>
-          <div class="nav_col">
-             <div class="header_row">
-                <div class="abt_qtr_nav desktop_view_head">
-                   <ul>
-                      <li><a href="#" class="link">Life in Qatar</a></li>
-                      <li><a href="#" class="link">Innovation</a></li>
-                      <li><a href="#" class="link">Open Data</a></li>
-                      <li><a href="#" class="link">E-Participation</a></li>
-                   </ul>
-                </div>
-                <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
-                    <a rel="nofollow" class="rsbtn_play"  title="Listen"
-                       href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
-                        <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
-                    <span>Listen</span></span></span>
-                        <span class="rsbtn_right rsimg rsplay rspart"></span>
-                    <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
-                    </a>
-                </div>
-
-                <div class="auth_nav">
-                   <ul>
-                      <li class="mob_hide">
-                         <a href="#" class="link">
-                         <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                         <div class="access_submenu">
-                            <span class="title">Accessbility Options</span>
-                            <ul>
-                               <li>
-                                  <span class="option">Text Size</span>
-                                  <div class="size_wrap">
-                                     <button class="text_size_minus">-</button>
-                                     <button class="text_size_plus">+</button>
-                                  </div>
-                               </li>
-                               <li>
-                                  <span class="option">Listen Content</span>
-                                  <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
-                                     <img src="assets/images/volume.png" alt="speaker" />
-                                     <span>Listen</span>
-                                  </button>
-                               </li>
-                               <li>
-                                  <span class="option">Contrast</span>
-                                  <button id="themechange">
-                                     <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
-                                  </button>
-                               </li>
-                            </ul>
-                         </div>
-                      </li>
-                      <li>
-                         <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                         </a>
-                      </li>
-                      <li><a href="#" class="link">Login / Signup</a></li>
-                      <li class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
-                         <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                         </a>
-                      </li>
-                   </ul>
-                </div>
-             </div>
-             <div class="header_row b-top desktop_view_head">
-                <div class="nav_menu">
-                   <ul>
-                      <li><a href="#" class="link">Explore Services</a></li>
-                      <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
-                      <li><a href="#" class="link">Media</a></li>
-                      <li class=""><a href="#">About Qatar</a>
-
-                        <div class="about_submenu">
-                           <div class="f_row">
-                              <!-- card repeat -->
-                              <div class="card_col">
-                                 <a href="#" class="card_wrapper">
-                                    <figure class="card_img">
-                                       <img src="assets/images/rectangle-2.png" alt="thumb-img" />
-                                    </figure>
-                                    <h3 class="line-1">Qatar Government</h3>
-                                    <span class="descr line-2">Small description about Qatar Government
-                                       page.</span>
+                        <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                           <ul>
+                              <li><a href="#" class="link">Life in Qatar</a></li>
+                              <li><a href="#" class="link">Innovation</a></li>
+                              <li><a href="#" class="link">Open Data</a></li>
+                              <li><a href="#" class="link">E-Participation</a></li>
+                           </ul>
+                        </div>
+                        <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                           <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                              href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                           <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                           <span>Listen</span></span></span>
+                           <span class="rsbtn_right rsimg rsplay rspart"></span>
+                           <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                           </a>
+                        </div>
+                        <div class="auth_nav">
+                           <ul>
+                              <li class="mob_hide">
+                                 <a href="#" class="link">
+                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                                 <div class="access_submenu">
+                                    <span class="title">Accessbility Options</span>
+                                    <ul>
+                                       <li>
+                                          <span class="option">Text Size</span>
+                                          <div class="size_wrap">
+                                             <button class="text_size_minus font_minus">-</button>
+                                             <button class="text_size_plus  font_plus">+</button>
+                                          </div>
+                                       </li>
+                                       <li>
+                                          <span class="option">Listen Content</span>
+                                          <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                          <img src="assets/images/volume.png" alt="speaker" />
+                                          <span>Listen</span>
+                                          </button>
+                                       </li>
+                                       <li>
+                                          <span class="option">Contrast</span>
+                                          <button id="themechange">
+                                          <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                          </button>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                              <li>
+                                 <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
                                  </a>
-                              </div>
-                              <!-- card repeat close-->
-                              <!-- card repeat -->
-                              <div class="card_col">
-                                 <a href="#" class="card_wrapper">
-                                    <figure class="card_img">
-                                       <img src="assets/images/new-flag.jpg" alt="thumb-img" />
-                                    </figure>
-                                    <h3 class="line-1">Hukoomi</h3>
-                                    <span class="descr line-2">Small description about Qatar Government
-                                       page.</span>
-                                 </a>
-                              </div>
-                              <!-- card repeat close-->
-                              <!-- card repeat -->
-                              <div class="card_col">
-                                 <a href="#" class="card_wrapper">
-                                    <figure class="card_img">
-                                       <img src="assets/images/rectangle-4.png" alt="thumb-img" />
-                                    </figure>
-                                    <h3 class="line-1">Qatar</h3>
-                                    <span class="descr line-2">Small description about Qatar Government
-                                       page.</span>
-                                 </a>
-                              </div>
-                              <!-- card repeat close-->
-                              <!-- card repeat -->
-                              <div class="card_col">
-                                 <a href="#" class="card_wrapper">
-                                    <figure class="card_img">
-                                       <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
-                                    </figure>
-                                    <h3 class="line-1">Qatar National Vision 2030</h3>
-                                    <span class="descr line-2">Small description about Qatar Government
-                                       page.</span>
-                                 </a>
-                              </div>
-                              <!-- card repeat close-->
-                               <!-- card repeat -->
-                               <div class="card_col">
-                                 <a href="#" class="card_wrapper">
-                                    <figure class="card_img">
-                                       <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
-                                    </figure>
-                                    <h3 class="line-1">Government & Legislatives</h3>
-                                    <span class="descr line-2">Small description about Qatar Government
-                                       page.</span>
-                                 </a>
-                              </div>
-                              <!-- card repeat close-->
-                               <!-- card repeat -->
-                               <div class="card_col">
-                                 <a href="#" class="card_wrapper">
-                                    <figure class="card_img">
-                                       <img src="assets/images/amir.png" alt="thumb-img" />
-                                    </figure>
-                                    <h3 class="line-1">The Amir</h3>
-                                    <span class="descr line-2">Small description about Qatar Government
-                                       page.</span>
-                                 </a>
-                              </div>
-                              <!-- card repeat close-->
+                              </li>
+                              <li><a href="#" class="link">Login / Signup</a></li>
+                              <li class="mob_menu_nav">
+                                <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="header_row b-top desktop_view_head" id="head2_top">
+                        <div class="nav_menu">
+                           <ul>
+                              <li><a href="#" class="link">Explore Services</a></li>
+                              <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                              <li><a href="#" class="link">Media</a></li>
+                              <li class="">
+                                 <a href="#" class="link about_qatar_nav">About Qatar</a>
+                                 <div class="about_submenu">
 
+                                    <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                                    <div class="f_row">
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar Government</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Hukoomi</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar National Vision 2030</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Government & Legislatives</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/amir.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">The Amir</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                    </div>
+                                 </div>
+                              </li>
+                              <li>
+                                 <a href="#"> <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </header>
+         <!--header close-->
+         <!--Breadcrumb-->
+         <div class="breadcrumbs_wrapper">
+            <ul>
+               <li><a href="#">Home</a></li>
+               <li><a href="#">Events Happening Around You</a></li>
+            </ul>
+         </div>
+         <!--Breadcrumb-->
+         <!--Share Kit Facebook,Twitter and Gmail-->
+         <div class="share_kit_wrapper">
+            <div class="ssk-sticky ssk-left ssk-center ssk-lg">
+               <a href="https://www.facebook.com/"  title="Facebook"  class="ssk ssk-facebook"  target="_blank"></a>
+               <a href="https://twitter.com/LOGIN" title="Twitter" class="ssk ssk-twitter" target="_blank"></a>
+               <a href="https://www.google.com/intl/en-GB/gmail/about/" title="Gmail" class="ssk ssk-google-plus" target="_blank"></a>
+            </div>
+         </div>
+         <!--Share Kit Facebook,Twitter and Gmail close-->
+         <section class="category_block_wrapper">
+            <!--category heading-->
+            <div class="custom_container">
+               <h1 class="category_heading" tabindex="0">Events Happening Around You</h1>
+            </div>
+            <!--category heading--> 
+            <!--Category Search and Category view tab-->
+            <div class="custom_container">
+               <div class="f_row f_flow_col">
+                  <div class="f_col">
+                     <label for="search_category" class="none">Search</label>
+                     <div class="category_search_input">
+                        <input type="text" id="search_category" name="search" placeholder="Search by Event Name or Organizer Name" />
+                        <button class="detect-icon" title="Search">
+                        <img src="assets/images/search-line-white.png" alt="search-img" />
+                        </button>
+                     </div>
+                  </div>
+                  <div class="f_col text-right">
+                     <ul class="category_view_menu_wrap">
+                        <li>
+                           <a href="#" class="grid   active">Grid</a>
+                        </li>
+                        <li>
+                           <a href="#" class="list">List</a>
+                        </li>
+                        <li>
+                           <a href="#" class="map">Map</a>
+                        </li>
+                        <li>
+                           <a href="#" class="calendar_view">Calendar</a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <!--Category Search and Category view tab close-->
+            <!--category sort and filter-->
+            <div class="custom_container">
+               <div class="f_row">
+                  <div class="f_col">
+                     <div class="category_tab_wrapper">
+                        <ul>
+                           <li><a href="#" class="link active">All</a></li>
+                           <li><a href="#" class="link">Local Events</a></li>
+                           <li><a href="#" class="link">National Events</a></li>
+                           <li><a href="#" class="link">International Events</a></li>
+                        </ul>
+                     </div>
+                     <span class="mob_tab">
+                     <img src="assets/images/filter-line.png" alt="mob-tab" />
+                     </span>
+                  </div>
+                  <div class="f_col">
+                     <ul class="categor_filter_wrap">
+                        <li>
+                           <a href="#" class="sort">SORT</a>
+                        </li>
+                        <li>
+                           <a href="#" class="filter">Filter</a>
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+            <div class="custom_container">
+               <div class="f_row">
+                  <div class="f_col">
+                     <figure class="map_list_button">
+                        <img src="assets/images/toggle_map.png" alt="toggle_view_button"  />
+                     </figure>
+                  </div>
+               </div>
+            </div>
+            <!-- Mobile Tabs -->
+            <div class="mob_tab_wrapr_layer">
+               <div class="mob_tab_wrapr">
+                  <ul>
+                     <li><a href="#" class="link active">All</a></li>
+                     <li><a href="#" class="link">Local Events</a></li>
+                     <li><a href="#" class="link">National Events</a></li>
+                     <li><a href="#" class="link">International Events</a></li>
+                  </ul>
+               </div>
+            </div>
+            <!-- Mobile Tabs close -->
+            <div class="custom_container">
+               <div class="f_row">
+                  <div class="f_col">
+                     <div class="apply_filter_tag_wrapper">
+                        <ul>
+                           <!-- <li tabindex="0">
+                              Al Wakrah   
+                              <figure>
+                                  <img src="assets/images/remove-tag.png"  alt="remove-filter-tag"/>
+                              </figure>
+                              </li>
+                              
+                              <li tabindex="0">
+                              Al Wakrah   
+                              <figure>
+                                  <img src="assets/images/remove-tag.png"  alt="remove-filter-tag"/>
+                              </figure>
+                              </li tabindex="0">
+                              
+                              <li>
+                              <button class="reset_filter">Reset Filters</button>
+                              </li> -->
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!--category sort and filter close-->
+            <!--Category Sort Modal -->
+            <div class="category_sort_wrapper_layer">
+               <div class="sort_wrapr">
+                  <span class="filter_close">
+                  <img src="assets/images/ic-popup-cross.png" alt="close" />
+                  </span>
+                  <h3>Sort</h3>
+                  <fieldset>
+                     <ul>
+                        <li>   
+                           <input type="radio" id="Distance" name="category_sort" value="distance" />
+                           <label for="Distance" class="radio_wrap">Nearest to Me</label>
+                        </li>
+                        <li>
+                           <input type="radio" id="Alphabet" name="category_sort" value="By Latest" />
+                           <label for="Alphabet" class="radio_wrap"> By Latest</label>
+                        </li>
+                        <li>
+                           <input type="radio" id="oldest" name="category_sort" value="By Oldest" />
+                           <label for="oldest" class="radio_wrap">By Oldest</label>
+                        </li>
+                        <li>
+                     </ul>
+                  </fieldset>
+               </div>
+            </div>
+            <!-- Category Sort Modal close -->
+            <!--category filter Modal -->
+            <div class="category_filter_wrapper_layer">
+               <div class="category_filter_wrapr">
+                  <h3>Filter</h3>
+                  <span class="filter_close">
+                  <img src="assets/images/ic-popup-cross.png" alt="close" />
+                  </span>
+                  <form method='post'>
+                     <div class="form_field">
+                        <div class="flex_row">
+                           <div class="flex_col_sm_6">
+                              <label for="month">Month</label>
+                              <div class="txt_wrapper">
+                                 <div class="select-picker-wrap">
+                                    <select class="selectpicker"  name="month" id="month" style="display: none;">
+                                       <option>Month</option>
+                                       <option>Jan</option>
+                                       <option>Feb</option>
+                                       <option>Mar</option>
+                                    </select>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="flex_col_sm_6">
+                              <label for="year">Year</label>
+                              <div class="txt_wrapper">
+                                 <div class="select-picker-wrap">
+                                    <select class="selectpicker" name="year"  id="year" data-live-search="true" style="display: none;">
+                                       <option>Year</option>
+                                       <option>2019</option>
+                                       <option>2020</option>
+                                    </select>
+                                 </div>
+                              </div>
                            </div>
                         </div>
-                     </li>
-                      <li>
-                         <a href="#"> <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                     </li>
-                   </ul>
-                </div>
-             </div>
-          </div>
-       </div>
-    </div>
-    <!-- Mobile Menu-->
-    <!-- <div class="mob_nav">
-       <ul>
-          <li><a href="#">Life in Qatar</a></li>
-          <li><a href="#">Innovation</a></li>
-          <li><a href="#">Open Data</a></li>
-          <li><a href="#">Life in Qatar</a></li>
-          <li><a href="#">Explore Services</a></li>
-          <li><a href="#">Downloads, Utilities & Directory</a></li>
-          <li><a href="#">Media</a></li>
-          <li><a href="#">About Qatar</a></li>
-       </ul>
-    </div> -->
-    <!-- Mobile Menu-->
- </header>
- <!--header close-->
-
-       <!--Breadcrumb-->
-       <div class="breadcrumbs_wrapper">
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Events Happening Around You</a></li>
-        </ul>
-     </div>
-     <!--Breadcrumb-->
-
-     <div class="share_kit_wrapper">
-     <div class="ssk-sticky ssk-left ssk-center ssk-lg">
-        <a href="https://www.facebook.com/"  title="Facebook"  class="ssk ssk-facebook"  target="_blank"></a>
-        <a href="https://twitter.com/LOGIN" title="Twitter" class="ssk ssk-twitter" target="_blank"></a>
-        <a href="https://www.google.com/intl/en-GB/gmail/about/" title="Gmail" class="ssk ssk-google-plus" target="_blank"></a>
-    </div>
-</div>
-
-        <section class="category_block_wrapper">
-                <!--category heading-->
-                <div class="custom_container">
-                    <h1 class="category_heading" tabindex="0">Events Happening Around You</h1>
-                </div>
-                <!--category heading--> 
-            
-            
-                <!--Category Search and Category view tab-->
-                <div class="custom_container">
-                    <div class="f_row f_flow_col">
-                        <div class="f_col">
-                            <label for="search_category" class="none">Search</label>
-                        <div class="category_search_input">
-                           
-                            <input type="text" id="search_category" name="search" placeholder="Search by Event Name or Organizer Name" />
-                            <button class="detect-icon">
-                                <img src="assets/images/search-line-white.png" alt="search-img" />
-                            </button>
-                        </div>
-                        </div>
-                        <div class="f_col text-right">
-                        <ul class="category_view_menu_wrap">
-                            <li>
-                                <a href="#" class="grid   active">Grid</a>
-                            </li>
-                            <li>
-                                <a href="#" class="list">List</a>
-                            </li>
-                            <li>
-                                <a href="#" class="map">Map</a>
-                            </li>
-                            <li>
-                                <a href="#" class="calendar_view">Calendar</a>
-                            </li>
-                        </ul>
-                        </div>
-                    </div>
-                </div>
-                <!--Category Search and Category view tab close-->
-            
-            
-                <!--category sort and filter-->
-                <div class="custom_container">
-                    <div class="f_row">
-                        <div class="f_col">
-                        <div class="category_tab_wrapper">
-                            <ul>
-                                <li><a href="#" class="link active">All</a></li>
-                                <li><a href="#" class="link">Local Events</a></li>
-                                <li><a href="#" class="link">National Events</a></li>
-                                <li><a href="#" class="link">International Events</a></li>
-                            </ul>
-                        </div>
-                        <span class="mob_tab">
-                            <img src="assets/images/filter-line.png" alt="mob-tab" />
-                        </span>
-                        </div>
-                        <div class="f_col">
-                        <ul class="categor_filter_wrap">
-                            <li>
-                                <a href="#" class="sort">SORT</a>
-                            </li>
-                            <li>
-                                <a href="#" class="filter">Filter</a>
-                            </li>
-                        </ul>
-                        </div>
-                    </div>
-
-                   
-                </div>
-            
-                <!-- Mobile Tabs -->
-                <div class="mob_tab_wrapr_layer">
-                    <div class="mob_tab_wrapr">
-                    <ul>
-                        <li><a href="#" class="link active">All</a></li>
-                        <li><a href="#" class="link">Local Events</a></li>
-                        <li><a href="#" class="link">National Events</a></li>
-                        <li><a href="#" class="link">International Events</a></li>
-                    </ul>
-                    </div>
-                </div>
-                <!-- Mobile Tabs close -->
-                
-                <div class="custom_container">
-                    <div class="f_row">
-                        <div class="f_col">
-                                <div class="apply_filter_tag_wrapper">
-                                    <ul>
-                                        <!-- <li tabindex="0">
-                                            Al Wakrah   
-                                            <figure>
-                                                <img src="assets/images/remove-tag.png"  alt="remove-filter-tag"/>
-                                            </figure>
-                                        </li>
-
-                                        <li tabindex="0">
-                                            Al Wakrah   
-                                            <figure>
-                                                <img src="assets/images/remove-tag.png"  alt="remove-filter-tag"/>
-                                            </figure>
-                                        </li tabindex="0">
-
-                                        <li>
-                                            <button class="reset_filter">Reset Filters</button>
-                                        </li> -->
-                                    </ul>
-                                </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <!--category sort and filter close-->
-            
-                <!--Category Sort Modal -->
-                    <div class="category_sort_wrapper_layer">
-                        <div class="sort_wrapr">
-                            <span class="filter_close">
-                                <img src="assets/images/ic-popup-cross.png" alt="close" />
-                            </span>
-                        <h3>Sort</h3>
-                        <ul>
-                            <li>   
-                                 <input type="radio" id="Distance" name="category_sort" value="distance">
-                                 <label for="Distance" class="radio_wrap">Nearest to Me</label>
-                            
-                            </li>
-                            <li>
-                                <input type="radio" id="Alphabet" name="category_sort" value="By Latest">
-                                 <label for="Alphabet" class="radio_wrap"> By Latest</label>
-                             </li>
-                            <li>
-                                 <input type="radio" id="oldest" name="category_sort" value="By Oldest">
-                                 <label for="oldest" class="radio_wrap">By Oldest</label>
-                               
-                            </li>
-                            <li>
-                          
-                        </ul>
-                        </div>
-                    </div>
-                <!-- Category Sort Modal close -->
-            
-                <!--category filter Modal -->
-                <div class="category_filter_wrapper_layer">
-                    <div class="category_filter_wrapr">
-                    <h3>Filter</h3>
-                    <span class="filter_close">
-                        <img src="assets/images/ic-popup-cross.png" alt="close" />
-                    </span>
-                    <form method='post'>
-                    <div class="form_field">
-                      
-                        <div class="flex_row">
-                            
-                            <div class="flex_col_sm_6">
-                                <label for="month">Month</label>
-                                <div class="txt_wrapper">
-                                    <div class="select-picker-wrap">
-                                        <select class="selectpicker"  name="month" id="month" style="display: none;">
-                                            <option>Month</option>
-                                            <option>Jan</option>
-                                            <option>Feb</option>
-                                            <option>Mar</option>
-                                        </select>
-                                    </div>
-                                    </div>
-                            </div>
-                            <div class="flex_col_sm_6">
-                                <label for="year">Year</label>
-                                <div class="txt_wrapper">
-                                <div class="select-picker-wrap">
-                                    <select class="selectpicker" name="year"  id="year" data-live-search="true" style="display: none;">
-                                        <option>Year</option>
-                                        <option>2019</option>
-                                        <option>2020</option>
-                                    </select>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <div class="form_field">
+                     </div>
+                     <div class="form_field">
                         <label for="location"> Location</label>
                         <div class="txt_wrapper">
-                            <div class="select-picker-wrap">
-                                <select class="selectpicker" id="location"  name="location"  data-live-search="true" style="display: none;">
-                                    <option  value="sasa">Select</option>
-                                    <option value="sasaasas">New Delhi</option>
-                                    <option>NW</option>
-                                </select>
-                            </div>
+                           <div class="select-picker-wrap">
+                              <select class="selectpicker" id="location"  name="location"  data-live-search="true" style="display: none;">
+                                 <option  value="sasa">Select</option>
+                                 <option value="sasaasas">New Delhi</option>
+                                 <option>NW</option>
+                              </select>
+                           </div>
                         </div>
-                    </div>
-            
-                    <div class="form_field">
+                     </div>
+                     <div class="form_field">
                         <label for="intended">Intended Audience</label>
                         <div class="txt_wrapper">
-                            <div class="select-picker-wrap">
-                                <select class="selectpicker"   name="intended" id="intended" data-live-search="true" style="display: none;">
-                                    <option>Select</option>
-                                    <option>2019</option>
-                                    <option>2020</option>
-                                </select>
-                            </div>
+                           <div class="select-picker-wrap">
+                              <select class="selectpicker"   name="intended" id="intended" data-live-search="true" style="display: none;">
+                                 <option>Select</option>
+                                 <option>2019</option>
+                                 <option>2020</option>
+                              </select>
+                           </div>
                         </div>
-                    </div>
-                    <div class="btn_wrap">
+                     </div>
+                     <div class="form_field">
+                        <label for="organizers">Organizers</label>
+                        <div class="txt_wrapper">
+                           <div class="select-picker-wrap">
+                              <select class="selectpicker"   name="organizers" id="organizers" data-live-search="true">
+                                 <option>Select</option>
+                                 <option>2019</option>
+                                 <option>2020</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="form_field">
+                        <label for="category">Category</label>
+                        <div class="txt_wrapper">
+                           <div class="select-picker-wrap">
+                              <select class="selectpicker"   name="organizers" id="category">
+                                 <option>Select</option>
+                                 <option>Category1</option>
+                                 <option>Category2</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="btn_wrap">
                         <input type="reset" class="outline_btn cancel"  value="Reset" />
                         <button type="button" class="rouge_btn apply_filter m-l-20">Apply</button>
-                    </div>
-                </form>
-                    </div>
-                </div>
-                <!--category filter modal close-->
-                
-      
- 
+                     </div>
+                  </form>
+               </div>
+            </div>
+            <!--category filter modal close-->
+            <!--category card row  wrapper-->
+            <div class="custom_container">
+               <div class="list_row_wrapper">
+                  <div class="calendar_wrapper">
 
-            
-                <!--category card row  wrapper-->
-                 <div class="custom_container"> 
-                    <div class="list_row_wrapper">
-                        <div class="calendar_wrapper">
-                            <div id="container"></div>
+                     <div class="events ">
+                        <input type="text" id="demo">
+                        <div class="view_all"><img src="assets/images/ic_dashboard_caret_down.png" alt="View"></div>
+                    </div>
+
+
+                  </div>
+                  <div class="grid_view">
+                     <div class="f_row">
+                        <!--close image-->
+                        <img src="assets/images/close-line.png"  class="close_map_img"  alt="close"/>
+                        <!-- card repeat -->
+                        <div class="category_card">
+                           <a href="#" class="list_card">
+                              <figure class="card_img">
+                                 <img src="assets/images/demo.png" alt="event-thumb" />
+                                 <div class="tags_wrap">
+                                    <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                    <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                 </div>
+                                 <span class="share_g share_l"  tabindex="0" title="Share"></span>
+                                 <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                              </figure>
+                              <div class="details">
+                                 <div class="inner_wrap">
+                                    <div class="author_wrap">
+                                       <figure>
+                                          <img src="assets/images/new-flag.jpg" alt="author-logo" />
+                                       </figure>
+                                       <span class="by">Ministry Public Health</span>
+                                    </div>
+                                    <h2 class="card_title">Smart City Award 2020</h2>
+                                 </div>
+                                 <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
+                                 <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
+                                 </span>
+                                 <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
+                                 hotel
+                                 </span>
+                                 <span class="custom_label">Intended Audience</span>
+                                 <span class="custom_show_label">Student & Visitor</span>
+                              </div>
+                           </a>
+                        </div>
+                        <!-- card repeat close -->
+                        <!-- card repeat -->
+                        <div class="category_card">
+                           <a href="#" class="list_card">
+                              <figure class="card_img">
+                                 <img src="assets/images/demo.png" alt="event-thumb" />
+                                 <div class="tags_wrap">
+                                    <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                    <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                 </div>
+                                 <span class="share_g share_l"  tabindex="0" title="Share"></span>
+                                 <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                              </figure>
+                              <div class="details">
+                                 <div class="inner_wrap">
+                                    <div class="author_wrap">
+                                       <figure>
+                                          <img src="assets/images/new-flag.jpg" alt="author-logo" />
+                                       </figure>
+                                       <span class="by">Ministry Public Health</span>
+                                    </div>
+                                    <h2 class="card_title">Smart City Award 2020</h2>
+                                 </div>
+                                 <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
+                                 <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
+                                 </span>
+                                 <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
+                                 hotel
+                                 </span>
+                                 <span class="custom_label">Intended Audience</span>
+                                 <span class="custom_show_label">Student & Visitor</span>
+                              </div>
+                           </a>
+                        </div>
+                        <!-- card repeat close -->
+                        <!-- card repeat -->
+                        <div class="category_card">
+                           <a href="#" class="list_card">
+                              <figure class="card_img">
+                                 <img src="assets/images/demo.png" alt="event-thumb" />
+                                 <div class="tags_wrap">
+                                    <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                    <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                                 </div>
+                                 <span class="share_g share_l"  tabindex="0" title="Share"></span>
+                                 <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                              </figure>
+                              <div class="details">
+                                 <div class="inner_wrap">
+                                    <div class="author_wrap">
+                                       <figure>
+                                          <img src="assets/images/new-flag.jpg" alt="author-logo" />
+                                       </figure>
+                                       <span class="by">Ministry Public Health</span>
+                                    </div>
+                                    <h2 class="card_title">Smart City Award 2020</h2>
+                                 </div>
+                                 <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
+                                 <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
+                                 </span>
+                                 <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
+                                 hotel
+                                 </span>
+                                 <span class="custom_label">Intended Audience</span>
+                                 <span class="custom_show_label">Student & Visitor</span>
+                              </div>
+                           </a>
+                        </div>
+                        <!-- card repeat close -->
+                     </div>
+                     <!-- Map card -->
+                     <div class="map_col">
+                        <figure class="map_img">
+                           <img src="assets/images/map.jpg" alt="map" />
+                           <div class="srch_box">
+                              <div class="txt_wrapper">
+                                 <label for="search_location" class="hide">Search location</label>
+                                 <input type="text" id="search_location" placeholder="Search Location" />
+                                 <span class="detect-icon">
+                                 <img src="assets/images/search-line-gray.svg" alt="search-img">
+                                 </span>
+                              </div>
                            </div>
-
-
-                        <div class="grid_view">
-                        <div class="f_row">
-                            <!-- card repeat -->
-                            <div class="category_card">
-                                <a href="#" class="list_card">
-                                    <figure class="card_img">
-                                    <img src="assets/images/demo.png" alt="event-thumb" />
-                                    <div class="tags_wrap">
-                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
-                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
+                           <div class="map_card">
+                              <figure class="card_img">
+                                 <img src="assets/images/event-image.png" alt="event-thumb" />
+                              </figure>
+                              <div class="details">
+                                 <div class="inner_wrap">
+                                    <div class="author_wrap">
+                                       <figure>
+                                          <img src="assets/images/new-flag.jpg" alt="author-logo">
+                                       </figure>
+                                       <span class="by">Ministry Public Health</span>
                                     </div>
-                                    <span class="share_g share_l"  tabindex="0" title="Share"></span>
-                                   <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
-                                    </figure>
-                                    <div class="details">
-                                    <div class="inner_wrap">
-                                        <div class="author_wrap">
-                                            <figure>
-                                                <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                            </figure>
-                                            <span class="by">Ministry Public Health</span>
-                                        </div>
-                                        <h2 class="card_title">Smart City Award 2020</h2>
-                                    </div>
-                                    <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
-                                        <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
-                                    </span>
-                                    <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
-                                        hotel
-                                    </span>
+                                    <h2 class="card_title">Smart City Award 2020</h2>
+                                 </div>
+                                 <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
+                                 <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
+                                 </span>
+                                 <span class="show_label icon location">Sheraton Grand Doha Resort &amp; Conventional
+                                 hotel
+                                 </span>
+                                 <div class="audience_wrap">
                                     <span class="custom_label">Intended Audience</span>
-                                    <span class="custom_show_label">Student & Visitor</span>
-                                    </div>
-                                </a>
-                            </div>
-                            <!-- card repeat close -->
-
-                               <!-- card repeat -->
-                               <div class="category_card">
-                                <a href="#" class="list_card">
-                                    <figure class="card_img">
-                                    <img src="assets/images/demo.png" alt="event-thumb" />
-                                    <div class="tags_wrap">
-                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
-                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
-                                    </div>
-                                    <span class="share_g share_l"  tabindex="0" title="Share"></span>
-                                   <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
-                                    </figure>
-                                    <div class="details">
-                                    <div class="inner_wrap">
-                                        <div class="author_wrap">
-                                            <figure>
-                                                <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                            </figure>
-                                            <span class="by">Ministry Public Health</span>
-                                        </div>
-                                        <h2 class="card_title">Smart City Award 2020</h2>
-                                    </div>
-                                    <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
-                                        <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
-                                    </span>
-                                    <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
-                                        hotel
-                                    </span>
-                                    <span class="custom_label">Intended Audience</span>
-                                    <span class="custom_show_label">Student & Visitor</span>
-                                    </div>
-                                </a>
-                            </div>
-                            <!-- card repeat close -->
-
-
-
-                               <!-- card repeat -->
-                               <div class="category_card">
-                                <a href="#" class="list_card">
-                                    <figure class="card_img">
-                                    <img src="assets/images/demo.png" alt="event-thumb" />
-                                    <div class="tags_wrap">
-                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
-                                        <span class="tag_g tag_l" tabindex="0">Healthcare Services</span>
-                                    </div>
-                                    <span class="share_g share_l"  tabindex="0" title="Share"></span>
-                                   <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
-                                    </figure>
-                                    <div class="details">
-                                    <div class="inner_wrap">
-                                        <div class="author_wrap">
-                                            <figure>
-                                                <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                            </figure>
-                                            <span class="by">Ministry Public Health</span>
-                                        </div>
-                                        <h2 class="card_title">Smart City Award 2020</h2>
-                                    </div>
-                                    <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
-                                        <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
-                                    </span>
-                                    <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
-                                        hotel
-                                    </span>
-                                    <span class="custom_label">Intended Audience</span>
-                                    <span class="custom_show_label">Student & Visitor</span>
-                                    </div>
-                                </a>
-                            </div>
-                            <!-- card repeat close -->
-
-
-
-
-                           
-
-
-                             
-
-                      
-
-                              
-
-                      
-                            
-                            </div>
-                        <!-- Map card -->
-                        <div class="map_col">
-                            <figure class="map_img">
-                                <img src="assets/images/map.jpg" alt="map" />
-                
-                                <div class="srch_box">
-                                    
-                                    <div class="txt_wrapper">
-                                        <label for="search_location" class="hide">Search location</label>
-                                    <input type="text" id="search_location" placeholder="Search Location" />
-                                    <span class="detect-icon">
-                                        <img src="assets/images/search-line-gray.svg" alt="search-img">
-                                    </span>
-                                    </div>
-                                </div>
-                
-                                <div class="map_card">
-                                    <figure class="card_img">
-                                    <img src="assets/images/event-image.png" alt="event-thumb" />
-                                    </figure>
-                                    <div class="details">
-                                    <div class="inner_wrap">
-                                        <div class="author_wrap">
-                                            <figure>
-                                                <img src="assets/images/new-flag.jpg" alt="author-logo">
-                                            </figure>
-                                            <span class="by">Ministry Public Health</span>
-                                        </div>
-                                        <h2 class="card_title">Smart City Award 2020</h2>
-                                    </div>
-                                    <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
-                                        <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
-                                    </span>
-                                    <span class="show_label icon location">Sheraton Grand Doha Resort &amp; Conventional
-                                        hotel
-                                    </span>
-                                    <div class="audience_wrap">
-                                        <span class="custom_label">Intended Audience</span>
-                                        <span class="custom_show_label">Student &amp; Visitor</span>
-                                    </div>
-                                    </div>
-                
-                                </div>
-                
-                            </figure>
-                        </div>
-                        <!-- Map card close -->
-                        </div>
-
-                            <ul class="pagination_wrapper">
-                            <li>
-                                <a href="#" class="active">1</a>
-                            </li>
-                            <li>
-                                <a href="#">2</a>
-                            </li>
-                            <li>
-                                <a href="#">3</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                        >
-                                </a>
-                            </li>
-                            </ul>
-                    </div>
-
-
-                    
-
-
-
-                 </div>
-                <!--category card row  wrapper close--> 
-         
-
-              
-
-            
-        </section>
-
-  
-      <!--footer-->
-      <footer>
-        <div class="footer_inner">
-           <div class="foot_row">
-              <div class="copy_right" tabindex="0">
-                 Copyrigt © 2019 MOTC. All rights reserved.
-              </div>
-              <div class="foot_nav">
-                 <nav>
-                    <ul>
-                       <li><a href="#">Entity  Services’ Statistics</a></li>
-                       <li><a href="#">Useful Links</a></li>
-                       <li><a href="#">Customer Service</a></li>
-                       <li><a href="#">Contact Us</a></li>
-                       <li><a href="#">FAQ</a></li>
-                       <li><a href="#">Polls & Surveys</a></li>
-                       <li><a href="#">Mobile Apps</a></li>
-                       <li><a href="#">Site Map</a></li>
-                       <li><a href="#">Privacy & Legal</a></li>
-                       <li><a href="#">Find Help</a></li>
-                    </ul>
-                 </nav>
-              </div>
-           </div>
-        </div>
-     </footer>
-      <!--footer close-->
-
-   </div>
-   <!--App_wrapper close-->
- 	
-
-
- <!--Js-->
- <script src="assets/js/jquery.js"></script>
- <script src="//f1-as.readspeaker.com/script/9256/webReader/webReader.js?pids=wr"></script>
- <script>
-    window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
- </script>
- <script src="assets/js/popper.min.js"></script>
- <script src="assets/js/bootstrap.min.js"></script>
- <script src="assets/js/bootstrap-select.js"></script>
- <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
- <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
- <script src="assets/js/owl.carousel.min.js"></script>
- <script src="assets/js/app-slider.js"></script>
- <script src="assets/js/custom.js"></script>
- <script src="assets/js/jquery.simple-calendar.js"></script>
- <!--Js Close-->
-
-<script>
-    $(function(){
-  $("#container").simpleCalendar({
-
-    displayEvent:true,
-
-    months: ['january','february','march','april','may','june','july','august','september','october','november','december'],
-
-     days: ['sunday','monday','tuesday','wednesday','thursday','friday','saturday'],
-
-     events: [
-        // generate new event after tomorrow for one hour
-        {
-          startDate: new Date(new Date().setHours(new Date().getHours() + 24)).toDateString(),
-          endDate: new Date(new Date().setHours(new Date().getHours() + 25)).toISOString(),
-          summary: 'Visit of the Eiffel Tower'
-        },
-        // generate new event for yesterday at noon
-        {
-          startDate: new Date(new Date().setHours(new Date().getHours() - new Date().getHours() - 12, 0)).toISOString(),
-          endDate: new Date(new Date().setHours(new Date().getHours() - new Date().getHours() - 11)).getTime(),
-          summary: 'Restaurant'
-        },
-        // generate new event for the last two days
-        {
-          startDate: new Date(new Date().setHours(new Date().getHours() - 48)).toISOString(),
-          endDate: new Date(new Date().setHours(new Date().getHours() - 24)).getTime(),
-          summary: 'Visit of the Louvre'
-        }
-      ],
-
-  });
-
-  
-
-});
-</script>
-
-<script>
-
-
-// $(function () {
-//     var count = 1;
-//     $('link').each(function (i, e) {
-        
-//         var href = $(this).attr('href');
-//         if (href == "http://wotfly.com/templates-common/106/css/newheader.css") {
-            
-//             if (count > 1) {
-//                 $(this).remove();
-//             }
-            
-//         }
-//         count++;
-//     });
-// });
-
-
-        // $("#themechange").click(function(){    
-        //     var a="<link id ='blindstyle'  rel='stylesheet' href='assets/css/blind.css' type='text/css'  />";        
-        //     if(a==="<link id ='blindstyle'  rel='stylesheet' href='assets/css/blind.css' type='text/css'  />"){
-        //         $('link[href="assets/css/blind.css"]').remove();
-        //     }
-
-        //     else{
-        //         console.log("asa")
-        //          $("head").append(("<link id ='blindstyle'  rel='stylesheet' href='assets/css/blind.css' type='text/css'  />"));
-                 
-        //     }
-        // });
-
-
-
-        $(".lisitin").click(function(){
-            $(".reader_ui").toggleClass("active")
-        });
-
-
-
-
-
-
-
-        $(document).ready(function(){
-        $('#themechange').click(function(){
-        if($('link#styles').attr('href')=="assets/css/Day.css"){
-       // $('#mode').attr('value','Switch To Day Mode')
-        $('link#styles').attr('href','assets/css/blind.css')
-        }
-        else
-        {
-      //  $('#mode').attr('value','Switch To Night Mode')
-        $('link#styles').attr('href','assets/css/Day.css')
-        }
-        })
-
-        });
-
-
-
-
-        $(document).ready(function(){        
-           var originalSize = $('div').css('font-size');         
-          // reset        
-           $(".text_size_minus").click(function(){           
-          $('div').css('font-size', originalSize);         
-           });
-         
-           // Increase Font Size          
-           $(".text_size_plus").click(function(){         
-          var currentSize = $('div').css('font-size');         
-          var currentSize = parseFloat(currentSize)*1.2;          
-          $('div').css('font-size', currentSize);         
-          return false;          
-          });        
-		  
-           // Decrease Font Size       
-        //    $(".text_size_minus").click(function(){        
-        //    var currentFontSize = $('div').css('font-size');        
-        //    var currentSize = $('div').css('font-size');        
-        //    var currentSize = parseFloat(currentSize)*0.8;        
-        //    $('div').css('font-size', currentSize);         
-        //    return false;         
-        //    });  
-           
-           
-         });
-
-
-</script>
-
-</body>
-
+                                    <span class="custom_show_label">Student &amp; Visitor</span>
+                                 </div>
+                              </div>
+                           </div>
+                        </figure>
+                     </div>
+                     <!-- Map card close -->
+                  </div>
+                  <ul class="pagination_wrapper">
+                     <li>
+                        <a href="#" class="active">1</a>
+                     </li>
+                     <li>
+                        <a href="#">2</a>
+                     </li>
+                     <li>
+                        <a href="#">3</a>
+                     </li>
+                     <li>
+                        <a href="#">
+                        >
+                        </a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <!--category card row  wrapper close--> 
+         </section>
+         <!--footer-->
+         <footer>
+            <div class="footer_inner">
+               <div class="foot_row">
+                  <div class="copy_right" tabindex="0">
+                     Copyrigt © 2019 MOTC. All rights reserved.
+                  </div>
+                  <div class="foot_nav">
+                     <nav>
+                        <ul>
+                           <li><a href="#">Entity  Services’ Statistics</a></li>
+                           <li><a href="#">Useful Links</a></li>
+                           <li><a href="#">Customer Service</a></li>
+                           <li><a href="#">Contact Us</a></li>
+                           <li><a href="#">FAQ</a></li>
+                           <li><a href="#">Polls & Surveys</a></li>
+                           <li><a href="#">Mobile Apps</a></li>
+                           <li><a href="#">Site Map</a></li>
+                           <li><a href="#">Privacy & Legal</a></li>
+                           <li><a href="#">Find Help</a></li>
+                        </ul>
+                     </nav>
+                  </div>
+               </div>
+            </div>
+         </footer>
+         <!--footer close-->
+      </div>
+      <!--App_wrapper close-->
+      <!--Js-->
+      <script src="assets/js/jquery.js"></script>
+      <script>
+         window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+      </script>
+      <script src="assets/js/popper.min.js"></script>
+      <script src="assets/js/bootstrap.min.js"></script>
+      <script src="assets/js/bootstrap-select.js"></script>
+      <script src="assets/js//moment.min.js"></script>
+      <script src="assets/js/daterangepicker.min.js"></script>
+      <script src="assets/js/owl.carousel.min.js"></script>
+      <script src="assets/js/app-slider.js"></script>
+      <script src="assets/js/custom.js"></script>
+      <script src="assets/js/daterangepicker.js"></script>
+      <!--Js Close-->
+   </body>
 </html>
