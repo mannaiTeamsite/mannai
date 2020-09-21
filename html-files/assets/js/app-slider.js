@@ -420,3 +420,39 @@ $('#contact_card_owl').owlCarousel({
         }
     }
 });
+
+
+
+
+
+
+
+
+
+
+$('#currents_polls_owl').owlCarousel({
+    items: 2,
+    loop: false,
+    dots: false,
+    //  autoplay: true,
+    nav: true,
+    navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive: {
+        0: {
+            items: 1,
+
+        },
+        700: {
+            items: 2,
+
+        },
+        765: {
+            items: 2,
+
+        },
+        1200: {
+            items: 2,
+        }
+    }
+});
+

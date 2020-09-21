@@ -50,6 +50,7 @@
 {
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
 	background-color: #F5F5F5;
+	z-index: 99;
 }
 
 ::-webkit-scrollbar
@@ -440,3 +441,13 @@ input{
     background-color: var(--white);
 }
 
+
+
+
+
+
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: transparent;
+}

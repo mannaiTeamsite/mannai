@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Data</title>
+    <!-- fonts -->
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <!-- ================== bootstrap css ========================= -->
+    <!-- settings -->
+    <link rel="stylesheet" href="assets/css/my-data.css">
+</head>
+
+<body class="">
+    <div class="app_wrapper">
+        <header>
+            <div class="header_inner">
+                <div class="innner_wrapper">
+                    <div class="nav_brand">
+                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+                    </div>
+                    <div class="nav_col">
+                        <div class="header_row">
+                            <div class="abt_qtr_nav desktop_view_head">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
+                                </ul>
+                            </div>
+                            <div class="auth_nav">
+                                <ul>
+                                    <li class="mob_hide">
+                                        <a href="#" tabindex="0" class="link">
+                                            <img src="assets/images/accessibility.png" alt="Accessibility"
+                                                class="access_icon"> Accessibility</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
+                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
+                                                alt="language-icon">
+                                        </a>
+                                    </li>
+                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
+                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
+                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="header_row b-top desktop_view_head">
+                            <div class="nav_menu">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a>
+                                    </li>
+                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
+                                    <li>
+                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
+                                                title="Search" class="search_icon" alt="Search"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Menu-->
+            <div class="mob_nav">
+                <ul>
+                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Innovation</a></li>
+                    <li> <a href="#" tabindex="0">Open Data</a></li>
+                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Explore Services</a></li>
+                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
+                    <li> <a href="#" tabindex="0">Media</a></li>
+                    <li> <a href="#" tabindex="0">About Qatar</a></li>
+                </ul>
+            </div>
+            <!-- Mobile Menu-->
+        </header>
+        <!-- ======= header ======= -->
+        <!-- wrapper -->
+        <div class="dashboard_wrapper">
+            <!-- ======= left navigation ======= -->
+            <div class="dashboard_left_nav">
+                <nav class="dashboard_main_nav">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <img src="assets/images/ic_menu_dashboard_active.png" alt="Dashboard">
+                                <span class="nav_text">Overview</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)" class="active">
+                                <img src="assets/images/ic_menu_my_data_active.png" alt="My daya">
+                                <span class="nav_text">My Data</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <img src="assets/images/ic_menu_settings_active.png" alt="Settings">
+                                <span class="nav_text">Settings & Preferences</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <nav class="dashboard_sub_nav">
+                    <ul>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <img src="assets/images/ic_menu_question_active.png" alt="Questions">
+                                <span class="nav_text">Find Help</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:void(0)">
+                                <img src="assets/images/ic_menu_logout_active.png" alt="Logout">
+                                <span class="nav_text">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <!-- ======= left navigation ======= -->
+            <div class="card-wrapper">
+                <!-- container -->
+                <div class="container">
+                    <!-- row -->
+                    <div class="row">
+                        <!-- col-md-12 -->
+                        <div class="col-md-12">
+                            <!-- sub-header -->
+                            <div class="sub-header">
+                                <h3>My Data <span class="user-name">Mohammed</span></h3>
+                                <div class="switch_profile">
+                                    <p>Switch Profile</p>
+                                    <div class="switch_group">
+                                        <div class="switch_btn">
+                                            <input type="radio" id="personal" name="switch_group" checked="">
+                                            <label for="personal" title="Personal Profile">
+                                                <span><img src="assets/images/tick_red.svg" alt="Personal"></span>
+                                                Personal
+                                            </label>
+                                        </div>
+                                        <div class="switch_btn">
+                                            <input type="radio" id="business" name="switch_group">
+                                            <label for="business" title="Business Profile">
+                                                <span><img src="assets/images/tick_red.svg" alt="Business"></span>
+                                                Business
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="dash_menu">
+                                    <img src="assets/images/open-menu.png" title="Menu" alt="Menu">
+                                </div>
+                            </div>
+                            <!-- settings-container -->
+                            <div class="card-container">
+                                <!-- navtabsbar -->
+                                <div class="navtabsbar">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="subscribed_services-tab" data-toggle="tab"
+                                                href="#subscribed_services" role="tab"
+                                                aria-controls="subscribed_services" aria-selected="true">
+                                                <span class="icon"><img src="assets/images/subs-services.png"
+                                                        alt="subs-service"><img
+                                                        src="assets/images/subs-service-active.png"
+                                                        class="show-hide" alt="subs-service"></span> Subscribed Services
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="favorites-tab" data-toggle="tab" href="#favorites"
+                                                role="tab" aria-controls="favorites" aria-selected="false"><span
+                                                    class="icon"><img src="assets/images/ic-fav-mydata.png"
+                                                        width="16" alt="favorite"><img
+                                                        src="assets/images/fav-active.png" class="show-hide"
+                                                        width="16" alt="favorite"></span> All
+                                                Favorites</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile"
+                                                role="tab" aria-controls="profile" aria-selected="false"><span
+                                                    class="icon"><img src="assets/images/user.png" width="17"
+                                                        alt="user"><img src="assets/images/user-active.png"
+                                                        class="show-hide" width="17" alt="user"></span> My Profile</a>
+                                        </li>
+                                    </ul>
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <!-- tab-pane -->
+                                        <div class="tab-pane active" id="subscribed_services" role="tabpanel"
+                                            aria-labelledby="subscribed_services-tab">
+                                            <div class="tab-card">
+                                                <!-- left-side -->
+                                                <div class="left-side">
+                                                    <!-- heading -->
+                                                    <div class="heading">
+                                                        <h4>Subscribed Services</h4>
+                                                    </div>
+                                                    <!-- navbar -->
+                                                    <ul class="navbar flex-column align-items-start">
+                                                        <li><a href="javascript:void(0)">My Bill</a></li>
+                                                        <li><a href="javascript:void(0)">Telecommunication Permit
+                                                                Details</a>
+                                                        </li>
+                                                        <li class="active"><a href="javascript:void(0)">Health Card
+                                                                Details</a></li>
+                                                        <li><a href="javascript:void(0)">Company/Branches Details</a>
+                                                        </li>
+                                                        <li><a href="javascript:void(0)">Real Estate Details</a></li>
+                                                        <li><a href="javascript:void(0)">Commercial Registration
+                                                                Licence</a></li>
+                                                    </ul>
+                                                </div>
+                                                <!-- right-side -->
+                                                <div class="right-side">
+                                                    <!-- card -->
+                                                    <div class="card">
+                                                        <!-- card-header -->
+                                                        <div class="card-header">
+                                                            <h3>Health card details</h3>
+                                                        </div>
+                                                        <!-- card-body -->
+                                                        <div class="card-body">
+                                                            <!-- form -->
+                                                            <!-- <form action=""> -->
+                                                            <!-- fieldset -->
+                                                            <fieldset>
+                                                                <legend>Health Card Forms</legend>
+                                                                <!-- row -->
+                                                                <div class="row">
+                                                                    <div class="col-lg-5 col-md-6 col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label for="araName">Cardholder name
+                                                                                (Arabic)</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="araName" name="ara-name"
+                                                                                value="Mohammed Ibrahim" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-5 col-md-6 col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label for="engName">Cardholder name
+                                                                                (English)</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="eng-name" id="engName"
+                                                                                value="Mohammed Ibrahim" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- row -->
+                                                                <div class="row">
+                                                                    <div class="col-lg-5 col-md-6 col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label for="cardNumber">HMC card
+                                                                                number</label>
+                                                                            <input type="text" class="form-control"
+                                                                                id="cardNumber" name="card-name"
+                                                                                value="&#8226;&#8226;&#8226;&#8226; &#8226;&#8226;&#8226;&#8226; 4258"
+                                                                                readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="col-lg-5 col-md-6 col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <label for="dateExpiry">Date of
+                                                                                expiry</label>
+                                                                            <input type="text" class="form-control"
+                                                                                name="date-expiry" id="dateExpiry"
+                                                                                value="September 17, 2020" readonly>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="card-expired">
+                                                                    <p>Your Health card is dated to expire on September
+                                                                        17,
+                                                                        2020 <span class="renew hover">Renew</span></p>
+                                                                </div>
+                                                            </fieldset>
+                                                            <!-- </form> -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- <div class="card-services">
+                                                        <div class="row">
+                                                            <div class="col-md-4 col-sm-6">                                                                
+                                                                <div class="card-services-navbar">
+                                                                    <div class="title">
+                                                                        <h5>Explore Health Card e-services</h5>
+                                                                    </div>
+                                                                    <ul>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">Request
+                                                                                to renew
+                                                                                health card</a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">Request
+                                                                                to Re-print
+                                                                                Lost or damaged health card </a></li>
+                                                                    </ul>
+                                                                </div>
+                                                                
+                                                                <div class="card-services-navbar">
+                                                                    <div class="title">
+                                                                        <h5>Healthcare related services</h5>
+                                                                    </div>
+                                                                    <ul>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">NAMAT
+                                                                                Platform for
+                                                                                healthy lifestyle</a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">Step into
+                                                                                health </a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">My Health
+                                                                                Patient
+                                                                                Portal </a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            <div class="col-md-4 col-sm-6">                                                                
+                                                                <div class="card-services-navbar">
+                                                                    <div class="title">
+                                                                        <h5>Learn about Healthcare in Qatar</h5>
+                                                                    </div>
+                                                                    <ul>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">Hayaak
+                                                                                service</a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">List of
+                                                                                Registered
+                                                                                insurance companies</a></li>
+                                                                        <li class="active"><a href="javascript:void(0)"
+                                                                                class="hover">Health
+                                                                                financing
+                                                                                &amp; Insurance </a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">List of
+                                                                                services
+                                                                                covered with Social Health </a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">Insurance
+                                                                                System </a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">Donate
+                                                                                Blood for
+                                                                                HMC’s patients </a></li>
+                                                                        <li><a href="javascript:void(0)"
+                                                                                class="hover">Hajj &
+                                                                                Umrah
+                                                                                Vaccinations </a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- tab-pane -->
+                                        <div class="tab-pane" id="favorites" role="tabpanel"
+                                            aria-labelledby="favorites-tab">
+                                            <div class="tab-card">
+                                                <!-- right-side -->
+                                                <div class="right-side favorite">
+                                                    <!-- card -->
+                                                    <div class="card border-0 mb-0">
+                                                        <!-- card-header -->
+                                                        <div class="card-header">
+                                                            <h3>All Favorites</h3>
+                                                        </div>
+                                                        <!-- card-body -->
+                                                        <div class="card-body">
+                                                            <div class="accordion" id="accordionFavorite">
+                                                                <!-- card-panel -->
+                                                                <div class="card-panel">
+                                                                    <div class="card-header" id="headingOne">
+                                                                        <div class="sub-header" data-toggle="collapse"
+                                                                            data-target="#collapseOne"
+                                                                            aria-expanded="true" role="button">
+                                                                            <h4 class="mb-0">Services (6)</h4>
+                                                                            <span class="toggle-icon"></span>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div id="collapseOne" class="collapse show"
+                                                                        aria-labelledby="headingOne"
+                                                                        data-parent="#accordionFavorite">
+                                                                        <!-- card-body -->
+                                                                        <div class="card-body">
+                                                                            <!-- card-box-container -->
+                                                                            <div class="card-box-container">
+                                                                                <!-- card-box -->
+                                                                                <div class="card-box">
+                                                                                    <span class="icon"><img
+                                                                                            src="assets/images/bookmark.png"
+                                                                                            alt="bookmark"></span>
+                                                                                    <h4>Apply for New Driving License
+                                                                                    </h4>
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="link">Ministry of
+                                                                                        Interior</a>
+                                                                                </div>
+                                                                                <!-- card-box -->
+                                                                                <div class="card-box">
+                                                                                    <span class="icon"><img
+                                                                                            src="assets/images/bookmark.png"
+                                                                                            alt="bookmark"></span>
+                                                                                    <h4>Apply to Design Garden</h4>
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="link">Ministry of
+                                                                                        Municipality
+                                                                                        and Environment</a>
+                                                                                </div>
+                                                                                <!-- card-box -->
+                                                                                <div class="card-box">
+                                                                                    <span class="icon"><img
+                                                                                            src="assets/images/bookmark.png"
+                                                                                            alt="bookmark"></span>
+                                                                                    <h4>Apply for Agricultural
+                                                                                        Consignment
+                                                                                        Import License</h4>
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="link">Ministry of
+                                                                                        Municipality
+                                                                                        and Environment</a>
+                                                                                </div>
+                                                                                <!-- card-box -->
+                                                                                <div class="card-box">
+                                                                                    <span class="icon"><img
+                                                                                            src="assets/images/bookmark.png"
+                                                                                            alt="bookmark"></span>
+                                                                                    <h4>QDB Home Construction Funding
+                                                                                    </h4>
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="link">Qatar Development
+                                                                                        Bank</a>
+                                                                                </div>
+                                                                                <!-- card-box -->
+                                                                                <div class="card-box">
+                                                                                    <span class="icon"><img
+                                                                                            src="assets/images/bookmark.png"
+                                                                                            alt="bookmark"></span>
+                                                                                    <h4>Register in QDB
+                                                                                        Training/Information
+                                                                                        Session</h4>
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="link">Qatar Development
+                                                                                        Bank</a>
+                                                                                </div>
+                                                                                <!-- card-box -->
+                                                                                <div class="card-box">
+                                                                                    <span class="icon"><img
+                                                                                            src="assets/images/bookmark.png"
+                                                                                            alt="bookmark"></span>
+                                                                                    <h4>Apply to Design Garden</h4>
+                                                                                    <a href="javascript:void(0)"
+                                                                                        class="link">Ministry of
+                                                                                        Municipality
+                                                                                        and Environment</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- card-panel -->
+                                                                <div class="card-panel">
+                                                                    <div class="card-header" id="headingTwo">
+                                                                        <div class="sub-header" data-toggle="collapse"
+                                                                            data-target="#collapseTwo"
+                                                                            aria-expanded="false" role="button">
+                                                                            <h4 class="mb-0">Utilities (04)</h4>
+                                                                            <span class="toggle-icon"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="collapseTwo" class="collapse"
+                                                                        aria-labelledby="headingTwo"
+                                                                        data-parent="#accordionFavorite">
+                                                                        <div class="card-body">
+                                                                            Anim pariatur cliche reprehenderit, enim
+                                                                            eiusmod
+                                                                            high life accusamus terry richardson ad
+                                                                            squid. 3
+                                                                            wolf moon officia aute, non cupidatat
+                                                                            skateboard
+                                                                            dolor brunch. Food truck quinoa nesciunt
+                                                                            laborum
+                                                                            eiusmod. Brunch 3 wolf moon tempor, sunt
+                                                                            aliqua put
+                                                                            a bird on it squid single-origin coffee
+                                                                            nulla
+                                                                            assumenda shoreditch et. Nihil anim keffiyeh
+                                                                            helvetica, craft beer labore wes anderson
+                                                                            cred
+                                                                            nesciunt sapiente ea proident. Ad vegan
+                                                                            excepteur
+                                                                            butcher vice lomo. Leggings occaecat craft
+                                                                            beer
+                                                                            farm-to-table, raw denim aesthetic synth
+                                                                            nesciunt
+                                                                            you probably haven't heard of them accusamus
+                                                                            labore
+                                                                            sustainable VHS.
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- card-panel -->
+                                                                <div class="card-panel">
+                                                                    <div class="card-header" id="headingThree">
+                                                                        <div class="sub-header" data-toggle="collapse"
+                                                                            data-target="#collapseThree"
+                                                                            aria-expanded="false" role="button">
+                                                                            <h4 class="mb-0">Pages (03)</h4>
+                                                                            <span class="toggle-icon"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="collapseThree" class="collapse"
+                                                                        aria-labelledby="headingThree"
+                                                                        data-parent="#accordionFavorite">
+                                                                        <div class="card-body">
+                                                                            Anim pariatur cliche reprehenderit, enim
+                                                                            eiusmod
+                                                                            high life accusamus terry richardson ad
+                                                                            squid. 3
+                                                                            wolf moon officia aute, non cupidatat
+                                                                            skateboard
+                                                                            dolor brunch. Food truck quinoa nesciunt
+                                                                            laborum
+                                                                            eiusmod. Brunch 3 wolf moon tempor, sunt
+                                                                            aliqua put
+                                                                            a bird on it squid single-origin coffee
+                                                                            nulla
+                                                                            assumenda shoreditch et. Nihil anim keffiyeh
+                                                                            helvetica, craft beer labore wes anderson
+                                                                            cred
+                                                                            nesciunt sapiente ea proident. Ad vegan
+                                                                            excepteur
+                                                                            butcher vice lomo. Leggings occaecat craft
+                                                                            beer
+                                                                            farm-to-table, raw denim aesthetic synth
+                                                                            nesciunt
+                                                                            you probably haven't heard of them accusamus
+                                                                            labore
+                                                                            sustainable VHS.
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- card-panel -->
+                                                                <div class="card-panel">
+                                                                    <div class="card-header" id="headingFour">
+                                                                        <div class="sub-header" data-toggle="collapse"
+                                                                            data-target="#collapseFour"
+                                                                            aria-expanded="false" role="button">
+                                                                            <h4 class="mb-0">Topics (03)</h4>
+                                                                            <span class="toggle-icon"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div id="collapseFour" class="collapse"
+                                                                        aria-labelledby="headingFour"
+                                                                        data-parent="#accordionFavorite">
+                                                                        <div class="card-body">
+                                                                            Anim pariatur cliche reprehenderit, enim
+                                                                            eiusmod
+                                                                            high life accusamus terry richardson ad
+                                                                            squid. 3
+                                                                            wolf moon officia aute, non cupidatat
+                                                                            skateboard
+                                                                            dolor brunch. Food truck quinoa nesciunt
+                                                                            laborum
+                                                                            eiusmod. Brunch 3 wolf moon tempor, sunt
+                                                                            aliqua put
+                                                                            a bird on it squid single-origin coffee
+                                                                            nulla
+                                                                            assumenda shoreditch et. Nihil anim keffiyeh
+                                                                            helvetica, craft beer labore wes anderson
+                                                                            cred
+                                                                            nesciunt sapiente ea proident. Ad vegan
+                                                                            excepteur
+                                                                            butcher vice lomo. Leggings occaecat craft
+                                                                            beer
+                                                                            farm-to-table, raw denim aesthetic synth
+                                                                            nesciunt
+                                                                            you probably haven't heard of them accusamus
+                                                                            labore
+                                                                            sustainable VHS.
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- tab-pane -->
+                                        <div class="tab-pane" id="profile" role="tabpanel"
+                                            aria-labelledby="profile-tab">
+                                            <!-- tab-card -->
+                                            <div class="tab-card my-profile-card">
+                                                <!-- right-side -->
+                                                <div class="right-side">
+                                                    <!-- card -->
+                                                    <div class="card">
+                                                        <!-- card-header -->
+                                                        <div class="card-header">
+                                                            <h3>Personal Details</h3>
+                                                        </div>
+                                                        <!-- card-body -->
+                                                        <div class="card-body">
+                                                            <!-- inner-navtabs -->
+                                                            <div class="inner-navtabs">
+                                                                <!-- profile-navtabs -->
+                                                                <ul class="profile-navtabs nav" id="myTabOne"
+                                                                    role="tablist">
+                                                                    <li>
+                                                                        <a class="nav-link active" id="personal-tab"
+                                                                            data-toggle="tab" href="#pers-identity"
+                                                                            role="tab" aria-controls="pers-identity"
+                                                                            aria-selected="true">Personal &amp;
+                                                                            Identity</a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a id="address-tab" class="nav-link"
+                                                                            data-toggle="tab" href="#add-contact"
+                                                                            role="tab" aria-controls="add-contact"
+                                                                            aria-selected="false">Address &amp;
+                                                                            Contact</a>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="tab-content">
+                                                                    <!-- tab-pane -->
+                                                                    <div class="tab-pane active" id="pers-identity"
+                                                                        role="tabpanel" aria-labelledby="personal-tab">
+                                                                        <div class="my-profile">
+
+                                                                            <!-- form -->
+                                                                            <!-- <form action=""> -->
+                                                                            <!-- row -->
+                                                                            <div class="row">
+                                                                                <!-- col-lg-9 -->
+                                                                                <!-- When you will show col-lg-3 you can replace the col-lg-12 class with (col-lg-9 col-md-8 col-sm-7) -->
+                                                                                <div class="col-lg-12">
+                                                                                    <!-- fieldset -->
+                                                                                    <fieldset>
+                                                                                        <legend>Personal Details
+                                                                                        </legend>
+                                                                                        <!-- row -->
+                                                                                        <div class="row">
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <!-- profile-img -->
+                                                                                                <div
+                                                                                                    class="profile-img">
+                                                                                                    <!-- img -->
+                                                                                                    <div
+                                                                                                        class="img-box">
+                                                                                                        <img src="assets/images/avatar.png"
+                                                                                                            class="profile-pic"
+                                                                                                            alt="avatar">
+                                                                                                    </div>
+                                                                                                    <span class="upload-button">
+                                                                                                        <label for="fileUpload" class="hover">Change Picture</label>                                                                                                        
+                                                                                                        <input type="file" class="file-upload" id="fileUpload" name="file-upload" accept="image/*">
+                                                                                                    </span>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <!-- form-group -->
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        for="qid">QID</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="qid"
+                                                                                                        name="qid"
+                                                                                                        value="91828182182"
+                                                                                                        readonly>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <!-- row -->
+                                                                                        <div class="row">
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <!-- form-group -->
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        for="firstName">First
+                                                                                                        Name</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="firstName"
+                                                                                                        name="f-name"
+                                                                                                        value="Mohamed"
+                                                                                                        readonly>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <!-- form-group -->
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        for="lastName">Last
+                                                                                                        Name</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="lastName"
+                                                                                                        name="l-name"
+                                                                                                        value="Ibrahim"
+                                                                                                        readonly>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <!-- row -->
+                                                                                        <div class="row">
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <!-- form-group -->
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        for="gender">Gender</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="gender"
+                                                                                                        name="gender"
+                                                                                                        value="Male"
+                                                                                                        readonly>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <!-- form-group -->
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        for="dob">DOB</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="dob"
+                                                                                                        name="dob"
+                                                                                                        value="June 8, 1991"
+                                                                                                        readonly>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <!-- row -->
+                                                                                        <div class="row">
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        for="passNumber">Passport
+                                                                                                        Number</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="passNumber"
+                                                                                                        name="pass-number"
+                                                                                                        value="K0192187"
+                                                                                                        readonly>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                            <!-- col-md-6 -->
+                                                                                            <div
+                                                                                                class="col-md-6 col-sm-12">
+                                                                                                <!-- form-group -->
+                                                                                                <div class="form-group">
+                                                                                                    <label
+                                                                                                        for="passExpiry">Passport
+                                                                                                        Expiry</label>
+                                                                                                    <input type="text"
+                                                                                                        class="form-control"
+                                                                                                        id="passExpiry"
+                                                                                                        name="pass-expiry"
+                                                                                                        value="K0192187"
+                                                                                                        readonly>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </fieldset>
+                                                                                </div>
+                                                                                <!-- col-lg-3 -->
+                                                                                <!-- <div class="col-lg-3 col-md-4 col-sm-5">
+                                                                                    <div class="related-services">
+                                                                                        <div class="title">
+                                                                                            <h4>Related Services</h4>
+                                                                                        </div>
+                                                                                        <div class="services">
+                                                                                            <ul>
+                                                                                                <li><a
+                                                                                                        href="javascript:void(0)">Apply
+                                                                                                        for QID</a></li>
+                                                                                                <li class="active"><a
+                                                                                                        href="javascript:void(0)">Update
+                                                                                                        QID details </a>
+                                                                                                </li>
+                                                                                                <li><a
+                                                                                                        href="javascript:void(0)">Apply
+                                                                                                        for KAHARMA with
+                                                                                                        QID</a>
+                                                                                                </li>
+                                                                                                <li><a
+                                                                                                        href="javascript:void(0)">Pay
+                                                                                                        ZAKAT with
+                                                                                                        QID</a>
+                                                                                                </li>
+                                                                                            </ul>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div> -->
+                                                                            </div>
+                                                                            <div class="footer-btn">
+                                                                                <button type="button"
+                                                                                    class="btn submit-btn">Edit
+                                                                                    Profile</button>
+                                                                                <!-- <button type="button"
+                                                                                    class="btn">Discard
+                                                                                    Changes</button> -->
+                                                                            </div>
+                                                                            <!-- </form> -->
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- tab-pane -->
+                                                                    <div class="tab-pane" id="add-contact"
+                                                                        role="tabpanel" aria-labelledby="address-tab">
+                                                                        No data
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- footer -->
+        <footer>
+            <div class="footer_inner">
+                <div class="foot_row">
+                    <div class="copy_right" tabindex="0">
+                        Copyrigt © 2019 MOTC. All rights reserved.
+                    </div>
+                    <div class="foot_nav">
+                        <nav>
+                            <ul>
+                                <li> <a href="#" tabindex="0">Entity Services’ Statistics</a></li>
+                                <li> <a href="#" tabindex="0">Useful Links</a></li>
+                                <li> <a href="#" tabindex="0">Customer Service</a></li>
+                                <li> <a href="#" tabindex="0">Contact Us</a></li>
+                                <li> <a href="#" tabindex="0">FAQ</a></li>
+                                <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                                <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                                <li> <a href="#" tabindex="0">Site Map</a></li>
+                                <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                                <li> <a href="#" tabindex="0">Find Help</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer -->
+    </div>
+
+
+    <!-- ======= remove favourite alert ======= -->
+    <div class="alert_backdrop"></div>
+    <div class="hku_alert">
+        <div class="remove_favourite animate__animated animate__zoomIn">
+            <div class="close_hku_alert ">
+                <img src="assets/images/close_alert.png" alt="Close Alert">
+            </div>
+            <div class="sucess_icon">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" width="32px"
+                    height="32px">
+                    <circle class="path circle" fill="#22c993" stroke="#22c993" stroke-width="6" stroke-miterlimit="10"
+                        cx="65.1" cy="65.1" r="62.1" />
+                    <polyline class="path check" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round"
+                        stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                </svg>
+            </div>
+            <div class="sucess_text">
+                <p>Item successfully added to favourites.</p>
+            </div>
+            <div class="undo_button">
+                <a href="javascript:void(0)" class="link">Undo</a>
+            </div>
+        </div>
+
+    </div>
+    <!-- ======= remove favourite alert ======= -->
+
+    <!-- script  -->
+    <!-- =============== bootstrap js=============== -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/my-data.js"></script>
+    <script>
+        window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+    </script>
+
+
+
+</body>
+
+</html>

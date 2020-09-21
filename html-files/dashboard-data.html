@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hukoomi | Dashboard</title>
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <!-- ================== bootstrap css ========================= -->
+</head>
+
+<body class="">
+    <div class="app_wrapper">
+    <header>
+        <div class="header_inner">
+           <div class="innner_wrapper">
+              <div class="nav_brand">
+                 <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+              </div>
+              <div class="nav_col">
+                 <div class="header_row">
+                    <div class="abt_qtr_nav desktop_view_head">
+                       <ul>
+                          <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
+                          <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
+                       </ul>
+                    </div>
+                    <div class="auth_nav">
+                       <ul>
+                          <li class="mob_hide">
+                              <a href="#" tabindex="0" class="link">
+                             <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon"> Accessibility</a>
+                          </li>
+                          <li>
+                              <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon" alt="language-icon">
+                             </a>
+                          </li>
+                          <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
+                          <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
+                             <img src="assets/images/menu-line.svg" alt="toggle_menu">
+                             </a>
+                          </li>
+                       </ul>
+                    </div>
+                 </div>
+                 <div class="header_row b-top desktop_view_head">
+                    <div class="nav_menu">
+                       <ul>
+                          <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Media</a></li>
+                          <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
+                          <li>
+                              <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png" title="Search" class="search_icon" alt="Search"></a>
+                         </li>
+                       </ul>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+        <!-- Mobile Menu-->
+        <div class="mob_nav">
+           <ul>
+              <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
+              <li> <a href="#" tabindex="0">Innovation</a></li>
+              <li> <a href="#" tabindex="0">Open Data</a></li>
+              <li> <a href="#" tabindex="0">Life in Qatar</a></li>
+              <li> <a href="#" tabindex="0">Explore Services</a></li>
+              <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
+              <li> <a href="#" tabindex="0">Media</a></li>
+              <li> <a href="#" tabindex="0">About Qatar</a></li>
+           </ul>
+        </div>
+        <!-- Mobile Menu-->
+     </header>
+    <!-- ======= header ======= -->
+    
+    <div class="dashboard_wrapper">
+        <!-- ======= left navigation ======= -->
+        <div class="dashboard_left_nav">
+            <nav class="dashboard_main_nav">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)" class="active">
+                            <img src="assets/images/ic_menu_dashboard_active.png" alt="Dashboard">
+                            <span class="nav_text">Overview</span>
+                    </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_my_data_active.png" alt="My daya">
+                            <span class="nav_text">My Data</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_settings_active.png" alt="Settings">
+                            <span class="nav_text">Settings & Preferences</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <nav class="dashboard_sub_nav">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_question_active.png" alt="Questions">
+                            <span class="nav_text">Find Help</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_logout_active.png" alt="Logout">
+                            <span class="nav_text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <!-- ======= left navigation ======= -->
+
+        <div class="dashboard_inner">
+            <!-- =========== user info header start ====== -->
+            <div class="user_info_wrapper">
+                    <div class="user_info">
+                        <figure>
+                            <img src="assets/images/user.jpg" alt="User" title="User">
+                        </figure>
+                        <div class="user_name">
+                            <p>Welcome,</p>
+                            <h3>Mohammed</h3>
+                        </div>
+                    </div>
+                <div class="switch_profile">
+                    <p>Switch Profile</p>
+                    <div class="switch_group">
+                        <div class="switch_btn">
+                            <input type="radio" id="personal" name="switch_group" checked>
+                            <label for="personal" title="Personal Profile"> 
+                                <span><img src="assets/images/tick_red.svg" alt="Personal"></span>
+                                Personal
+                                </label>
+                        </div>
+                       <div class="switch_btn">
+                        <input type="radio" id="business" name="switch_group" >
+                        <label for="business" title="Business Profile">
+                            <span><img src="assets/images/tick_red.svg" alt="Business"></span>
+                            Business
+                        </label>
+                       </div>
+                       
+                    </div>
+                </div>
+                <div class="dash_menu">
+                    <img src="assets/images/open-menu.png" title="Menu" alt="Menu">
+                </div>
+            </div>
+            <!-- =========== user info header end ====== -->
+    
+            <div class="inner_container">
+                <div class="container_left">
+                    <!-- ======= profile details ======= -->
+                    <div class="personal_details">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/ic_dashboard_personal_details.png" alt="Personal Details">
+                                <h3>Personal Details</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                <ul>
+                                    <li><h4><span>Qatar ID</span>27612405934</h4></li>
+                                    <li><h4><span>Nationality</span>India</h4></li>
+                                    <li><h4><span>Mobile No.</span>982345671</h4></li>
+                                    <li><h4><span>Email</span>mohammed@gmail.com</h4></li>
+                                    <li><h4><span>Passport No.</span>27612405934</h4></li>
+                                </ul>
+                                
+                            </div>
+                            <div class="hku_card_footer">
+                                <a href="javascript:void(0)" class="link arrow_link_red">View All
+                                    <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                                </a>
+                                <!-- <a href="javascript:void(0)" class="link dark_link">Complete Profile</a> -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= profile details ======= -->
+
+                    <!-- ======= quick links ======= -->
+                    <div class="quick_links">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/link.png" alt="Personal Details">
+                                <h3>Quick Links</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                <ul>
+                                    <li><a href="javascript:void(0)">Labor Law</a></li>
+                                    <li><a href="javascript:void(0)" class="active">Hukoomi mobile app</a></li>
+                                    <li><a href="javascript:void(0)">Civil service law</a></li>
+                                    <li><a href="javascript:void(0)">Hukoomi mobile app</a></li>
+                                    <li><a href="javascript:void(0)"> Civil service law</a></li>
+                                </ul>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= quick links ======= -->
+
+                     <!-- ======= polls ======= -->
+                     <div class="polls">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/dash-polls.png" alt="Polls">
+                                <h3>Polls</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                
+                                    <div class="slider">
+                                        <div id="polls" class="carousel slide" data-ride="carousel" data-interval="false">
+                                            
+                                            <div class="carousel-inner">
+                                              <div class="carousel-item active">
+                                                <fieldset>
+                                                    <legend class="card_heading">How would you rate COVID-19 Self-Assessment Service?</legend>
+                                                <ul>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="excellent" value="excellent">
+                                                            <label for="excellent" class="inp_radio" tabindex="0"><span></span> Excellent</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="very_good" value="very_good">
+                                                            <label for="very_good" class="inp_radio" tabindex="0"><span></span> Very Good</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="good" value="good">
+                                                            <label for="good" class="inp_radio" tabindex="0"><span></span> Good</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="acceptable" value="acceptable">
+                                                            <label for="acceptable" class="inp_radio" tabindex="0"><span></span> Acceptable</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="not_acceptable" value="not_acceptable">
+                                                            <label for="not_acceptable" class="inp_radio" tabindex="0"><span></span> Not Acceptable</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </fieldset>
+                                              </div>
+                                              <div class="carousel-item">
+                                                <fieldset>
+                                                    <legend class="card_heading">next question comes here</legend>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="excellent_1" value="excellent_1">
+                                                                <label for="excellent_1" class="inp_radio" tabindex="0"><span></span> Excellent</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="very_good_1" value="very_good_1">
+                                                                <label for="very_good_1" class="inp_radio" tabindex="0"><span></span> Very Good</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="good_1" value="good_1">
+                                                                <label for="good_1" class="inp_radio" tabindex="0"><span></span> Good</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="acceptable_1" value="acceptable_1">
+                                                                <label for="acceptable_1" class="inp_radio" tabindex="0"><span></span> Acceptable</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="not_acceptable_1" value="not_acceptable_1">
+                                                                <label for="not_acceptable_1" class="inp_radio" tabindex="0"><span></span> Not Acceptable</label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                            </fieldset>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="hku_card_footer">
+                               
+                                <button class="btn_rouge">Vote</button>
+                                <a href="javascript:void(0)" class="link arrow_link_red">View All
+                                    <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                                </a>
+                            </div>
+                            <div class="slider_nav">
+                                <div class="slide_indicator">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#polls" data-slide-to="0" class="active"></li>
+                                        <li data-target="#polls" data-slide-to="1"></li>
+                                        <li data-target="#polls" data-slide-to="2"></li>
+                                      </ol>
+                                </div>
+                                <div class="slide_buttons">
+                                    <a class="carousel-control-prev" href="#polls" role="button" data-slide="prev">
+                                        <img src="assets/images/slide_prev.png" alt="Previous">
+                                      </a>
+                                      <a class="carousel-control-next" href="#polls" role="button" data-slide="next">
+                                        <img src="assets/images/slide_next.png" alt="Next">
+                                      </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= polls ======= -->
+                </div>
+                <div class="container_middle">
+                
+
+                    <!-- ======= bills card blank ======= -->
+                    <div class="bills_card_wrapper">
+                        <div class="hku_card">
+                            <div class="hku_card_header no_border">
+                                <ul class="nav nav-tabs mt__20" id="bills_tab_nav" role="tablist">
+                                    <li class="nav-item">
+                                      <a class="nav-link active" id="bills-due" data-toggle="tab" href="#bills" role="tab" aria-controls="bills" aria-selected="true">Bills Due (04)</a>
+                                    </li>
+                                  </ul>
+                            </div>
+                            <div class="select_all">
+                                <label class="chech_lbl" for="servicesck">
+                                    <input id="servicesck" class="check_input" type="checkbox" tabindex="0" onchange="checkAll(this)">
+                                    <span></span>
+                                    Select All</label>
+                            </div>
+                            <div class="bills_card">
+                                
+                                <div class="tab-content" id="bills_tab_content">
+                                    <div class="tab-pane fade show active" id="bills" role="tabpanel" aria-labelledby="bills-due">
+                                            <div class="hku_data_card_grey">
+                                                
+                                                <div class="data_item">
+                                                    <div class="select_bill">
+                                                        <label class="chech_lbl" for="bill_1"><input id="bill_1" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <span></span>Electricity Bill one Electricity Bill one</label>
+                                                    </div>
+                                                    <!-- <h4>Electricity Bill</h4> -->
+                                                    <p>Qatar Power Company Qatar Power Company</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <h4>QR 595</h4>
+                                                    <p>Pay by 8 July</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <a 
+                                                    href="javascript:void(0)" 
+                                                    class="link"
+                                                    >Pay Now</a>
+                                                        <a 
+                                                        href="javascript:void(0)" 
+                                                        class="link link_light"
+                                                        data-toggle="modal" data-target="#detail_bill"
+                                                        >View Details</a>
+                                                </div>
+                                            </div>
+                                            <div class="hku_data_card_grey">
+                                                
+                                                <div class="data_item">
+                                                    <div class="select_bill">
+                                                        <label class="chech_lbl" for="bill_2"><input id="bill_2" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <span></span>Electricity Bill two</label>
+                                                    </div>
+                                                    <!-- <h4>Electricity Bill</h4> -->
+                                                    <p>Qatar Power Company</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <h4>QR 595</h4>
+                                                    <p>Pay by 8 July</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <a href="javascript:void(0)" class="link">Pay Now</a>
+                                                        <a 
+                                                        href="javascript:void(0)" 
+                                                        class="link link_light"
+                                                        data-toggle="modal" data-target="#detail_bill"
+                                                        >View Details</a>
+                                                </div>
+                                            </div>
+                                            <div class="hku_data_card_grey">
+                                               
+                                                <div class="data_item">
+                                                    <div class="select_bill">
+                                                        <label class="chech_lbl" for="bill_3"><input id="bill_3" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <span></span>Electricity Bill hree</label>
+                                                    </div>
+                                                    <!-- <h4>Electricity Bill</h4> -->
+                                                    <p>Qatar Power Company</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <h4>QR 595</h4>
+                                                    <p>Pay by 8 July</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <a href="javascript:void(0)" class="link">Pay Now</a>
+                                                        <a 
+                                                        href="javascript:void(0)" 
+                                                        class="link link_light"
+                                                        data-toggle="modal" data-target="#detail_bill"
+                                                        >View Details</a>
+                                                </div>
+                                            </div>
+                                            <div class="hku_data_card_grey">
+                                                
+                                                <div class="data_item">
+                                                    <div class="select_bill">
+                                                        <label class="chech_lbl" for="bill_4"><input id="bill_4" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <span></span>
+                                                            Electricity Bill four</label>
+                                                    </div>
+                                                    <p>Qatar Power Company</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <h4>QR 595</h4>
+                                                    <p>Pay by 8 July</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <a href="javascript:void(0)" class="link">Pay Now</a>
+                                                        <a 
+                                                        href="javascript:void(0)" 
+                                                        class="link link_light"
+                                                        data-toggle="modal" data-target="#detail_bill"
+                                                        >View Details</a>
+                                                </div>
+                                            </div>
+                                            <div class="hku_data_card_grey">
+                                                
+                                                <div class="data_item">
+                                                    <div class="select_bill">
+                                                        <label class="chech_lbl" for="bill_5"><input id="bill_5" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <span></span>
+                                                            Electricity Bill five</label>
+                                                    </div>
+                                                    <!-- <h4>Electricity Bill</h4> -->
+                                                    <p>Qatar Power Company</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <h4>QR 595</h4>
+                                                    <p>Pay by 8 July</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <a href="javascript:void(0)" class="link">Pay Now</a>
+                                                        <a 
+                                                        href="javascript:void(0)" 
+                                                        class="link link_light"
+                                                        data-toggle="modal" data-target="#detail_bill"
+                                                        >View Details</a>
+                                                </div>
+                                            </div>
+                                            <div class="hku_data_card_grey">
+                                                
+                                                <div class="data_item">
+                                                    <div class="select_bill">
+                                                        <label class="chech_lbl" for="bill_6">
+                                                            
+                                                            <input id="bill_6" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <span></span>
+                                                            Electricity Bill six</label>
+                                                    </div>
+                                                    <p>Qatar Power Company</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <h4>QR 595</h4>
+                                                    <p>Pay by 8 July</p>
+                                                </div>
+                                                <div class="data_item pay">
+                                                    <a href="javascript:void(0)" class="link">Pay Now</a>
+                                                        <a 
+                                                        href="javascript:void(0)" 
+                                                        class="link link_light"
+                                                        data-toggle="modal" data-target="#detail_bill"
+                                                        >View Details</a>
+                                                </div>
+                                            </div>
+                                        
+                                    </div>
+                                  </div>
+                            </div>
+                            
+                            <div class="hku_card_footer footer_border">
+                                <div class="hku_data_card_grey">
+                                    
+                                    <div class="data_item">
+                                        <h4>Total Amount</h4>
+                                        <p>(incl. of all taxes)</p>
+                                    </div>
+                                    <div class="data_item pay">
+                                        <h4>QR 1,025</h4>
+                                    </div>
+                                    <div class="data_item pay">
+                                        <button class="pat_all_btn">Pay All</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <a href="javascript:void(0)" class="link show_more" onclick="show_more_less(this)">
+                                <span>Show All</span> 
+                                <img src="assets/images/ic_dashboard_caret_down.png" alt="Show More">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- ======= bills card blank end ======= -->
+
+                    <!-- ======= Favorites ======= -->
+                    <div class="bills_card_wrapper">
+                        <div class="hku_card">
+                            <div class="card_header">
+                                <img src="assets/images/ic_dashboard_favorite.png" alt="">
+                                Favorites
+                            </div>
+                            <div class="hku_card_header no_border">
+                                
+                                <ul class="nav nav-tabs" id="favorites_tab_nab" role="tablist">
+                                    <li class="nav-item">
+                                      <a class="nav-link active" id="fav-services-tab" data-toggle="tab" href="#services" role="tab" aria-controls="services" aria-selected="true">Services (06)</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" id="fav-utilities-tab" data-toggle="tab" href="#utilities" role="tab" aria-controls="utilities" aria-selected="false">Utilities (04)</a>
+                                    </li>
+                                  </ul>
+                            </div>
+                            <div class="bills_card">
+                                <div class="tab-content" id="favorites_tab_content">
+                                    <div class="tab-pane fade show active" id="services" role="tabpanel" aria-labelledby="fav-services-tab">
+                                        <div class="hku_card_grey">
+                                            <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                            <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                            <p>Individuals, companies and government entities may submit a request to the General Directorate of Traffic to issue a new driving license.</p>
+                                        </div>
+        
+                                        <div class="hku_card_grey">
+                                            <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                            <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                            <p>Individuals, companies and government entities may submit a request to the General Directorate of Traffic to issue a new driving license.</p>
+                                        </div>
+
+                                        <div class="hku_card_grey">
+                                            <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                            <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                            <p>Individuals, companies and government entities may submit a request to the General Directorate of Traffic to issue a new driving license.</p>
+                                        </div>
+
+                                        <div class="hku_card_grey">
+                                            <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                            <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                            <p>Individuals, companies and government entities may submit a request to the General Directorate of Traffic to issue a new driving license.</p>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="utilities" role="tabpanel" aria-labelledby="fav-utilities-tab">
+                                        <div class="hku_card_grey">
+                                            <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                            <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                            <p>Individuals, companies and government entities may submit a request to the General Directorate of Traffic to issue a new driving license.</p>
+                                        </div>
+        
+                                        <div class="hku_card_grey">
+                                            <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                            <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                            <p>Individuals, companies and government entities may submit a request to the General Directorate of Traffic to issue a new driving license.</p>
+                                        </div>
+                                    </div>
+                                    
+                                  </div>
+                               
+
+                            </div>
+                            <a href="javascript:void(0)" class="link show_more" onclick="show_more_less(this)">
+                                <span>Show All</span>
+                                <img src="assets/images/ic_dashboard_caret_down.png" alt="Show More">
+                            </a>
+                        </div>
+                    </div>
+                    <!-- ======= Favoritesends  ======= -->
+
+                    <!-- ======= news letter ======= -->
+                    <div class="news_letter">
+                        <div class="hku_card">
+                            <div class="card_header">
+                                Receive Newsletters
+                            </div>
+                            <p>Subscribe to the newsletter from Hukoomi.</p>
+                            <fieldset>
+                                <legend>News Letter</legend>
+                                <form class="needs-validation" novalidate>
+                                    <div class="news_letter_inp">
+                                        <input class="subscribe_inp" type="email" placeholder="Enter e-mail id" title="Subscribe" required>
+                                        
+                                        <button type="submit" class="subscribe_btn">
+                                            <img src="assets/images/send.png" alt="Send">
+                                            Subscribe</button>
+                                    </div>
+                                    <span class="invalid-feedback">This field is required</span>
+                                </form>
+                            </fieldset>
+                           
+                        </div>
+                    </div>
+                    
+                    <!-- ======= news letter ======= -->
+
+                </div>
+                <div class="container_right">
+                     <!-- ======= pending tasks ======= -->
+                     <!-- <div class="pending_tasks">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/ic_dashboard_pending_task.png" alt="Personal Details">
+                                <h3>Pending Tasks (02)</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                <div class="hku_card_grey">
+                                    <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                    <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                </div>
+
+                                <div class="hku_card_grey">
+                                    <h3>Read what is new on Hukoomi 3.0</h3>
+                                    <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                                </div>
+                                
+                            </div>
+                            <div class="hku_card_footer">
+                                <a href="javascript:void(0)" class="link arrow_link_red">Pay Now
+                                    <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div> -->
+                    <!-- ======= pending tasks ======= -->
+
+                     <!-- ======= directory_information ======= -->
+                     <div class="directory_information">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/ic_dashboard_directory.png" alt="Personal Details">
+                                <h3>Directory information</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                <div class="hku_card_grey">
+                                    <h3>Al-Ahli Hospital</h3>
+                                </div>
+                                <div class="directory_info">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <p class="para_ocean">Phone</p>
+                                                <p class="para_light">44898888</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <p class="para_ocean">Fax</p>
+                                                <p class="para_light">44898888</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <p class="para_ocean">Email</p>
+                                        <p class="para_light">info@ahlihospital.com</p>
+                                    </div>
+                                </div>
+                               <div class="directory_social">
+                                   <ul>
+                                       <li>
+                                           <a href="avascript:void(0)">
+                                               <img src="assets/images/ic_fb_sm.png" alt="Face Book"></a></li>
+                                       <li>
+
+                                           <a href="avascript:void(0)">
+                                            <img src="assets/images/ic_twitter_sm.png" alt="Twitter">
+                                           </a>
+                                        </li>
+                                       <li>
+                                           <a href="avascript:void(0)">
+                                            <img src="assets/images/ic_linkedin_sm.png" alt="LinkedIn">
+                                           </a>
+                                        </li>
+                                       <li>
+                                           <a href="avascript:void(0)">
+                                            <img src="assets/images/ic_gmap_sm.png" alt="Map">
+                                           </a>
+                                        </li>
+                                   </ul>
+                               </div>
+                                
+                            </div>
+                            <div class="hku_card_footer">
+                                <a href="javascript:void(0)" class="link arrow_link_red">View All Directories
+                                    <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                                </a>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= directory_information ======= -->
+
+                     <!-- ======= survey ======= -->
+                     <div class="survey">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/ic_dashboard_survey.png" alt="Polls">
+                                <h3>Survey</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                
+                                    <div class="slider">
+                                        <div id="survey" class="carousel slide" data-ride="carousel" data-interval="false">
+                                            
+                                            <div class="carousel-inner">
+                                              <div class="carousel-item active">
+                                                <fieldset>
+                                                    <legend class="card_heading">Take part in Qatar foreign Investment survey.</legend>
+                                               
+                                            </fieldset>
+                                              </div>
+                                              <div class="carousel-item">
+                                                <fieldset>
+                                                    <legend class="card_heading">the next question comes here</legend>
+                                               
+                                            </fieldset>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="hku_card_footer">
+                                <button class="btn_rouge">Start Survey</button>
+                                <a href="javascript:void(0)" class="link arrow_link_red">View All
+                                    <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                                </a>
+                                
+                            </div>
+                            <div class="slider_nav">
+                                <div class="slide_indicator">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#survey" data-slide-to="0" class="active"></li>
+                                        <li data-target="#survey" data-slide-to="1"></li>
+                                        <li data-target="#survey" data-slide-to="2"></li>
+                                      </ol>
+                                </div>
+                                <div class="slide_buttons">
+                                    <a class="carousel-control-prev" href="#survey" role="button" data-slide="prev">
+                                        <img src="assets/images/slide_prev.png" alt="Previous">
+                                      </a>
+                                      <a class="carousel-control-next" href="#survey" role="button" data-slide="next">
+                                        <img src="assets/images/slide_next.png" alt="Next">
+                                      </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= survey ======= -->
+                </div>
+            </div>
+        </div>
+    </div>
+ <!-- ======= subscrube alert ======= -->
+        <div class="alert_backdrop"></div>
+            <div class="hku_alert">
+                <div class="hku_alert_container animate__animated animate__zoomIn">
+                    <div class="close_hku_alert ">
+                        <img src="assets/images/close_alert.png" alt="Close Alert">
+                    </div>
+                    <div class="sucess_icon">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" width="32px" height="32px">
+                            <circle class="path circle" fill="#22c993" stroke="#22c993" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                            <polyline class="path check" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                          </svg>
+                    </div>
+                    <div class="sucess_text">
+                        <p>You have successfully subscribed to news letters.</p>
+                    </div>
+                    <!-- <div class="undo_button">
+                        <a href="javascript:void(0)" class="link">Undo</a>
+                    </div> -->
+                </div>
+               
+            </div>
+        <!-- ======= subscrube alert ======= -->
+
+        <!-- ======= view detail bill popup ======= -->
+        <div class="modal fade" id="detail_bill" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+               
+              <div class="modal-content">
+                <div class="close_bill_detail" data-dismiss="modal">
+                    <img src="assets/images/ic-dashboard-close-red.png" alt="Close">
+                </div>
+                <div class="right-side">
+                    <!-- card -->
+                    <div class="card">
+                        <!-- card-header -->
+                        <div class="card-header">
+                            <h3>Electricity Bill for March</h3>
+                        </div>
+                        <!-- card-body -->
+                        <div class="card-body">
+                            <!-- form -->
+                            <!-- <form action=""> -->
+                            <!-- fieldset -->
+                            <fieldset>
+                                <legend class="legend">Account Details</legend>
+                                <!-- row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="araName">RR Number</label>
+                                            <input type="text" class="form-control" id="araName" name="ara-name" value="5645456" readonly="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="engName">Account ID</label>
+                                            <input type="text" class="form-control" name="eng-name" id="engName" value="AXL-UTI-81721" readonly="">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- row -->
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="cardNumber">MR Code</label>
+                                            <input type="text" class="form-control" id="cardNumber" name="card-name" value="4258" readonly="">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-12">
+                                        <div class="form-group">
+                                            <label for="dateExpiry">Date of
+                                                expiry</label>
+                                            <input type="text" class="form-control" name="date-expiry" id="dateExpiry" value="September 17, 2020" readonly="">
+                                        </div>
+                                    </div>
+                                </div>
+                             
+                            </fieldset>
+                            <!-- </form> -->
+                        </div>
+                        <div class="bill_summary">
+                            <div class="row">
+                                <div class="col-sm-12 col-md-6">
+                                    <ul class="bill_block">
+                                        <li>
+                                          <h3>QR 1,025</h3>
+                                          <p>Net Due Amount</p>
+                                        </li>
+                                        <li>
+                                            <h3>8-07-2020</h3>
+                                            <p>Due date</p>
+                                        </li>
+                                    </ul>
+                                   
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                  <ul class="bill_block payment">
+                                      <li>
+                                          <div class="add_bill">
+                                              <img src="assets/images/red-plus.png" alt="Add Bill">
+                                              <a href="javascript:void(0)" class="link">Add to bills due</a>
+                                          </div>
+                                      </li>
+                                      <li>
+                                          <button class="pay_bill_now">Pay Now</button>
+                                      </li>
+                                  </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+               
+              </div>
+            </div>
+          </div>
+<!-- footer -->
+<footer>
+    <div class="footer_inner">
+       <div class="foot_row">
+          <div class="copy_right" tabindex="0">
+             Copyrigt © 2019 MOTC. All rights reserved.
+          </div>
+          <div class="foot_nav">
+             <nav>
+                <ul>
+                   <li> <a href="#" tabindex="0">Entity  Services’ Statistics</a></li>
+                   <li> <a href="#" tabindex="0">Useful Links</a></li>
+                   <li> <a href="#" tabindex="0">Customer Service</a></li>
+                   <li> <a href="#" tabindex="0">Contact Us</a></li>
+                   <li> <a href="#" tabindex="0">FAQ</a></li>
+                   <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                   <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                   <li> <a href="#" tabindex="0">Site Map</a></li>
+                   <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                   <li> <a href="#" tabindex="0">Find Help</a></li>
+                </ul>
+             </nav>
+          </div>
+       </div>
+    </div>
+ </footer>
+<!-- footer -->
+</div>
+    <!-- =============== bootstrap js=============== -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script>
+    window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+    </script>
+      <script src="assets/js/dashboard.js"></script>
+    </body>
+
+

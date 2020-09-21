@@ -184,8 +184,8 @@
                                  </div>
                               </li>
                               <li>
-                                 <a href="#"> <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                              </li>
+                                 <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                           </li>
                            </ul>
                         </div>
                      </div>
@@ -568,6 +568,8 @@
                      <div class="map_col">
                         <figure class="map_img">
                            <img src="assets/images/map.jpg" alt="map" />
+
+                           <div id="map"></div>
                            <div class="srch_box">
                               <div class="txt_wrapper">
                                  <label for="search_location" class="hide">Search location</label>
@@ -671,5 +673,24 @@
       <script src="assets/js/custom.js"></script>
       <script src="assets/js/daterangepicker.js"></script>
       <!--Js Close-->
+
+      <script>
+        var a = $('.category_card .tags_wrap > .tag_l').length;
+        $(".category_card  .tag_l").eq(1).css("color", "yellow"); 
+        console.log(a);
+
+         if( $(a) == 4){
+            alert("Sas")
+         }
+
+         else{
+
+         }
+
+
+      </script>
+
+
+
    </body>
 </html>
