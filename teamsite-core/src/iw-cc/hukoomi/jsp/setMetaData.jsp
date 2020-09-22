@@ -16,66 +16,59 @@
 <%!Logger logger = Logger.getLogger(getClass());%>
 <%
 	try {
-		logger.error("----Inside setMetadata.jsp----");
+		logger.info("----Inside setMetadata.jsp----");
 		CSClient client = user_ctx.getCSClient();
 		
-		String dcrpath = request.getParameter("path");		
-		String master = dcrpath; String nonmaster = ""; 
-		String locale = ""; String sublocale = "";
+		String priDCRPath	= request.getParameter("priDCRName");
+		String secDCRPath		= request.getParameter("secDCRName");
+		String priDCRExistStatus	= request.getParameter("priDCRExistStatus");
+		String secDCRExistStatus	= request.getParameter("secDCRExistStatus");
+		logger.info("priDCRPath[" + priDCRPath + "] secDCRPath[" + secDCRPath + "] priDCRExistStatus[" + priDCRExistStatus + "] secDCRExistStatus[" + secDCRExistStatus + "]");
 		
-		if(dcrpath.contains("data/en")){
-            nonmaster = dcrpath.replaceAll("data/en","data/ar");
-			locale = "en";
-			sublocale = "ar";
-        }else if(dcrpath.contains("data/ar")){
-            nonmaster = dcrpath.replaceAll("data/ar","data/en");
-			locale = "ar";
-			sublocale = "en";
-        }
+		CSVPath priDCRVPath		= new CSVPath(priDCRPath);
+		CSSimpleFile priDCR	= (CSSimpleFile) client.getFile(priDCRVPath);	
 		
-		logger.error("DCR PATH [" + dcrpath + "] LOCAL [" + locale + "]");
-		CSVPath path1 = new CSVPath(master);
-		CSSimpleFile csFile1 = (CSSimpleFile) client.getFile(path1);
-		CSVPath path2 = new CSVPath(nonmaster);
-		CSSimpleFile csFile2 = (CSSimpleFile) client.getFile(path2);
+		CSVPath secDCRVPath		= new CSVPath(secDCRPath);
+		CSSimpleFile secDCR	= (CSSimpleFile) client.getFile(secDCRVPath);		
 		
-		CSExtendedAttribute[] sourceEA3 = { new CSExtendedAttribute("TeamSite/Metadata/lang", locale) };
-		csFile1.setExtendedAttributes(sourceEA3);
-		CSExtendedAttribute[] sourceEA4 = { new CSExtendedAttribute("TeamSite/Metadata/lang", sublocale) };
-		csFile2.setExtendedAttributes(sourceEA4);
-		Map<String, String[]> params = request.getParameterMap();
-		for (String key : params.keySet()) {		
-			String value[] = params.get(key);
-			String metadata_name = "TeamSite/Metadata/" + key;
-			logger.error("KEY [" + key + "], value length" + value.length);
-			if (logger.isInfoEnabled()) {
-				logger.error(metadata_name + " ==> " + Arrays.toString(value));
-			}			
-			for (int i = 0; i < value.length; i++) {
-				if (csFile1 != null && csFile2 != null) {
-					CSExtendedAttribute[] sourceEA1 = { new CSExtendedAttribute(metadata_name, value[i]) };
-					csFile1.setExtendedAttributes(sourceEA1);
-					if ("isMaster".equals(key)) {
-						if("True".equals(value[i])) {
-							value[i] = "False";
-						} else {
-							value[i] = "True";
-						}
-					}
-					if ("contentEntryStatus".equals(key)) {
-						value[i] = "Not Started";
-					}
-					CSExtendedAttribute[] sourceEA2 = { new CSExtendedAttribute(metadata_name, value[i]) };
-					csFile2.setExtendedAttributes(sourceEA2);					
-					logger.error("[NOT NULL]");
-				} else {
-					logger.error("[NULL]");
-				}
-				logger.error("KEY [" + key + "], value[" + i + "] :" + value[i]);
-			}			
+		CSExtendedAttribute[] masterDCRExt = { new CSExtendedAttribute("TeamSite/Metadata/masterDCR", request.getParameter("masterDCRName")) };
+		CSExtendedAttribute[] localDCRExt = { new CSExtendedAttribute("TeamSite/Metadata/localDCR", request.getParameter("localDCRName")) };
+		CSExtendedAttribute[] isLocalised = { new CSExtendedAttribute("TeamSite/Metadata/isLocalised", request.getParameter("isLocalised")) };
+		CSExtendedAttribute[] priDCRMasterStatus = { new CSExtendedAttribute("TeamSite/Metadata/isMaster", request.getParameter("priDCRMasterStatus")) };
+		CSExtendedAttribute[] secDCRMasterStatus = { new CSExtendedAttribute("TeamSite/Metadata/isMaster", request.getParameter("secDCRMasterStatus")) };
+		CSExtendedAttribute[] priDCRContentEntryStatus = { new CSExtendedAttribute("TeamSite/Metadata/contentEntryStatus", request.getParameter("priDCRContentEntryStatus")) };
+		CSExtendedAttribute[] secDCRContentEntryStatus = { new CSExtendedAttribute("TeamSite/Metadata/contentEntryStatus", request.getParameter("secDCRContentEntryStatus")) };
+		CSExtendedAttribute[] priCreatedOn = { new CSExtendedAttribute("TeamSite/Metadata/createdOn", request.getParameter("priCreatedOn")) };
+		CSExtendedAttribute[] priModifiedOn = { new CSExtendedAttribute("TeamSite/Metadata/modifiedOn", request.getParameter("priModifiedOn"))};
+		CSExtendedAttribute[] secCreatedOn = { new CSExtendedAttribute("TeamSite/Metadata/createdOn", request.getParameter("secCreatedOn")) };
+		CSExtendedAttribute[] secModifiedOn = { new CSExtendedAttribute("TeamSite/Metadata/modifiedOn", request.getParameter("secModifiedOn"))};
+		
+		priDCR.setExtendedAttributes(masterDCRExt);
+		priDCR.setExtendedAttributes(localDCRExt);
+		priDCR.setExtendedAttributes(isLocalised);
+		priDCR.setExtendedAttributes(priDCRMasterStatus);
+		priDCR.setExtendedAttributes(priDCRContentEntryStatus);
+		
+		if ("false".equals(priDCRExistStatus)) {
+			priDCR.setExtendedAttributes(priCreatedOn);
+		} else {			
+			priDCR.setExtendedAttributes(priModifiedOn);
 		}
-		logger.error("----End of Metadata---- ");
+		
+		secDCR.setExtendedAttributes(masterDCRExt);
+		secDCR.setExtendedAttributes(localDCRExt);
+		secDCR.setExtendedAttributes(isLocalised);
+		secDCR.setExtendedAttributes(secDCRMasterStatus);
+		secDCR.setExtendedAttributes(secDCRContentEntryStatus);
+		
+		if ("false".equals(secDCRExistStatus)) {
+			secDCR.setExtendedAttributes(secCreatedOn);
+		} else {
+			secDCR.setExtendedAttributes(secModifiedOn);
+		}
+		
+		logger.info("----End of Metadata---- ");
 	} catch (Exception e) {
-		logger.error("Exception occured while settin the Extended Attributes", e);
+		logger.info("Exception occured while settin the Extended Attributes", e);
 	}
 %>
