@@ -1,6 +1,7 @@
 /livesite_customer.iml
 /.idea/
-/target/
+/Hukoomi/target/
 /Hukoomi/target-livesite/
 /Hukoomi/target-teamsite/
+**/*.iml
 **.DS_Store
