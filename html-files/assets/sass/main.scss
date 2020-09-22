@@ -3265,9 +3265,13 @@ hr{
                     font-family: "cairo_semibold";
                     line-height: 1.93;
                     text-align: center;
-                    color: var(--purple-brown);
-                    @media(max-width:400px){
-                        width: 50%;
+                    a{
+                       text-decoration: none;
+                       display: block;
+                        color: var(--purple-brown);
+                        @media(max-width:400px){
+                            width: 50%;
+                        }
                     }
                 }
             }
@@ -12155,6 +12159,18 @@ color: var(--deep-orange);
             color: var(--slate-grey);
         }
     }
+    &.polls_start{
+        .progress_wrap{
+            display: none;
+        }
+    }
+
+    &.after_poll{
+        .progress_wrap{
+            display: block;
+        }
+    }
+
     .progress_wrap{
         width: 50%;
         display: flex;
@@ -13930,6 +13946,9 @@ color: var(--deep-orange);
         background-color: #d9d9d9;
         margin: 28px -20px 24px;
         border: none;
+        @media screen and (max-width: 640px){
+            margin: 28px -15px 24px;
+        }
     }
     .reachout_details{
         padding-left: 60px;

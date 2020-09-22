@@ -4075,11 +4075,14 @@ hr {
           font-size: 14px;
           font-family: "cairo_semibold";
           line-height: 1.93;
-          text-align: center;
-          color: var(--purple-brown); }
-          @media (max-width: 400px) {
-            .business_qatar .block_row .col_left .business_vision_row .bn_card {
-              width: 50%; } }
+          text-align: center; }
+          .business_qatar .block_row .col_left .business_vision_row .bn_card a {
+            text-decoration: none;
+            display: block;
+            color: var(--purple-brown); }
+            @media (max-width: 400px) {
+              .business_qatar .block_row .col_left .business_vision_row .bn_card a {
+                width: 50%; } }
       .business_qatar .block_row .col_left .did_you_block .block-label {
         font-size: 18px;
         font-family: "cairo_bold";
@@ -10315,6 +10318,10 @@ h3 {
     line-height: 1.38;
     letter-spacing: 0.23px;
     color: var(--slate-grey); }
+.category_polls_card.polls_start .progress_wrap {
+  display: none; }
+.category_polls_card.after_poll .progress_wrap {
+  display: block; }
 .category_polls_card .progress_wrap {
   width: 50%;
   display: flex;
@@ -11554,6 +11561,9 @@ h3 {
   background-color: #d9d9d9;
   margin: 28px -20px 24px;
   border: none; }
+  @media screen and (max-width: 640px) {
+    #reach-out-modal hr {
+      margin: 28px -15px 24px; } }
 #reach-out-modal .reachout_details {
   padding-left: 60px;
   position: relative; }

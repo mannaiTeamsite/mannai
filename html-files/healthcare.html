@@ -1,0 +1,1515 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hukoomi</title>
+    <!-- fonts -->
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <!-- ================== bootstrap select css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+    <!-- owl-carousel -->
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <!-- healthcare -->
+    <link rel="stylesheet" href="assets/css/healthcare.css">
+</head>
+
+<body class="">
+    <div class="app_wrapper">
+        <header>
+            <div class="header_inner">
+                <div class="innner_wrapper">
+                    <div class="nav_brand">
+                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+                    </div>
+                    <div class="nav_col">
+                        <div class="header_row">
+                            <div class="abt_qtr_nav desktop_view_head">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
+                                </ul>
+                            </div>
+                            <div class="auth_nav">
+                                <ul>
+                                    <li class="mob_hide">
+                                        <a href="#" tabindex="0" class="link">
+                                            <img src="assets/images/accessibility.png" alt="Accessibility"
+                                                class="access_icon"> Accessibility</a>
+                                    </li>
+                                    <li>
+                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
+                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
+                                                alt="language-icon">
+                                        </a>
+                                    </li>
+                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
+                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
+                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="header_row b-top desktop_view_head">
+                            <div class="nav_menu">
+                                <ul>
+                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a>
+                                    </li>
+                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
+                                    <li>
+                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
+                                                title="Search" class="search_icon" alt="Search"></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Mobile Menu-->
+            <div class="mob_nav">
+                <ul>
+                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Innovation</a></li>
+                    <li> <a href="#" tabindex="0">Open Data</a></li>
+                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
+                    <li> <a href="#" tabindex="0">Explore Services</a></li>
+                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
+                    <li> <a href="#" tabindex="0">Media</a></li>
+                    <li> <a href="#" tabindex="0">About Qatar</a></li>
+                </ul>
+            </div>
+            <!-- Mobile Menu-->
+        </header>
+        <!-- ======= header ======= -->
+
+        <div class="overlay"></div>
+        <div class="healthcare_wrapper">
+            <!-- healthcare -->
+            <section class="healthcare_banner">
+                <div class="container">
+                    <!-- healthcare_header -->
+                    <div class="healthcare_header">
+                        <span class="menu-toggle"><img src="assets/images//menu.svg" alt="menu"></span>
+                        <!-- breadcrumb -->
+                        <div class="breadcrumb">
+                            <ul>
+                                <li><a href="javascript:void(0)" class="hover">Home</a></li>
+                                <li><a href="javascript:void(0)" class="hover">Topics</a></li>
+                                <li>Healthcare</li>
+                            </ul>
+                        </div>
+                        <!-- Searchbar -->
+                        <div class="searchbar">
+                            <div class="heading">
+                                <h2>Healthcare <img src="assets/images//down-icon.svg" alt=""></h2>
+                            </div>
+                            <div class="search">
+                                <label class="d-none" for="healtcareSearch">Topics</label>
+                                <input type="text" class="searchbox" id="healtcareSearch" name="healtcareSearch"
+                                    placeholder="(eg: topics, services, downloadables etc)"
+                                    title="(eg: topics, services, downloadables etc)">
+                            </div>
+                        </div>
+                        <!-- Navigation -->
+                        <nav class="healthcare-navbar">
+                            <span class="close-icon"><img src="assets/images//close-white.svg" alt=""></span>
+                            <ul>
+                                <li class="active"><a href="#aboutHealthcare"><img src="assets/images//channel.svg"
+                                            alt="channel">
+                                        About Channel</a>
+                                </li>
+                                <li><a href="#healthTopics"><img src="assets/images//health_topic.svg" alt="health_topic">
+                                        A-Z
+                                        Health Topics </a></li>
+                                <li><a href="#serviceSupport"><img src="assets/images//service_support.svg"
+                                            alt="service_support">
+                                        Services & Support</a></li>
+                                <li><a href="#directory"><img src="assets/images//directory.svg" alt="directory"
+                                            height="21">
+                                        Directory</a>
+                                </li>
+                                <li><a href="#utility"><img src="assets/images//utility.svg" alt="utility"> Utility</a>
+                                </li>
+                                <li><a href="#downloadables"><img src="assets/images//downloadables.svg" alt="downloadables">
+                                        Downloadables</a></li>
+                                <li><a href="#quickLinks"><img src="assets/images//link_h.svg" alt="link"> Quick links</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </section>
+
+            <!-- about_healthcare -->
+            <section id="aboutHealthcare" class="about_healthcare">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-4">
+                            <!-- healthcare-news -->
+                            <div class="healthcare-news">
+                                <!-- day-date -->
+                                <div class="day-date">
+                                    <span class="day">Sunday</span>
+                                    <span class="date hover">19 July, 2020 <img src="assets/images//chevron-down-grey.svg"
+                                            alt=""></span>
+                                </div>
+                                <!-- news-info -->
+                                <div class="news-info">
+                                    <!-- news-details -->
+                                    <div class="news-details">
+                                        <img src="assets/images//healthcare_listing_1.jpg" alt="healthcare_listing_1">
+                                        <p>Chronic stress linked to racial discrimination may adversely impact
+                                            cognition,
+                                            Alzheimer’s disease</p>
+                                        <div class="date">19 July, 2020</div>
+                                        <a href="javascript:void(0)" class="newspaper-name">Al Sharq Newspaper</a>
+                                    </div>
+                                    <!-- news-details -->
+                                    <div class="news-details">
+                                        <img src="assets/images//healthcare_listing_2.jpg" alt="healthcare_listing_2">
+                                        <p>"Prevention is better than cure" - Government's statement on healthcare
+                                            process.
+                                        </p>
+                                        <div class="date">19 July, 2020</div>
+                                        <a href="javascript:void(0)" class="newspaper-name">Al Sharq Newspaper</a>
+                                    </div>
+                                    <a href="javascript:void(0)" class="view-all">View all Healthcare News <span
+                                            class="icon"></span></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- col-md-8 -->
+                        <div class="col-md-9 col-sm-8">
+                            <!-- healthcare-info -->
+                            <div class="healthcare-info">
+                                <div class="heading">
+                                    <h2>About Healthcare.gov</h2>
+                                </div>
+                                <div class="media">
+                                    <div class="media-body">
+                                        <p>Health care, health-care, or healthcare is the maintenance or improvement of
+                                            health via
+                                            the prevention, diagnosis, treatment, recovery, or cure of disease, illness,
+                                            injury, and
+                                            other physical and mental impairments in people. Health care is delivered by
+                                            health
+                                            professionals in allied health fields. Physicians and physician associates
+                                            are a
+                                            part of
+                                            these health professionals. Dentistry, pharmacy, midwifery, nursing,
+                                            medicine,
+                                            optometry, audiology, psychology, occupational therapy, physical therapy,
+                                            athletic
+                                            training and other health professions are all part of health care. It
+                                            includes
+                                            work done
+                                            in providing primary care, secondary care, and tertiary care, as well as in
+                                            public
+                                            health.
+                                        </p>
+                                        <p>Access to health care may vary across countries, communities, and
+                                            individuals,
+                                            influenced
+                                            by social and economic conditions as well as health policies. Providing
+                                            health
+                                            care
+                                            services means “the timely use of personal health services to achieve the
+                                            best
+                                            possible
+                                            health outcomes”.</p>
+                                    </div>
+                                    <div class="img"><img src="assets/images//healthcare_about.png" alt="healthcare_about"></div>
+                                </div>
+                            </div>
+                            <!-- healthcare-trails -->
+                            <div class="healthcare-trails">
+                                <div class="media">
+                                    <div class="img">
+                                        <img src="assets/images//healthcare_trails.png" alt="healthcare_trails">
+                                    </div>
+                                    <div class="media-body">
+                                        <h4>Healthcare trails financial industry in IT adoption</h4>
+                                        <p>…Greenline Synergy, discusses why the healthcare sector is “several years
+                                            behind”
+                                            the
+                                            financial industry in …</p>
+                                        <span class="uploaded_by">5 days ago - Uploaded by ETHealthWorld</span>
+                                    </div>
+                                </div>
+                                <div class="media-footer">
+                                    <a href="javascript:void(0)">Learn more on Healthcare.gov.qa <span class="icon"><img
+                                                src="assets/images//chevron-right-white.svg" alt=""></span></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- health-topics -->
+            <section id="healthTopics" class="health-topics">
+                <div class="container">
+                    <!-- row -->
+                    <div class="row">
+                        <!-- col-md-4 -->
+                        <div class="col-md-4 col-sm-4">
+                            <!-- filter-section -->
+                            <div class="filter-section">
+                                <div class="filter-header">
+                                    <h5>Filter by</h5>
+                                    <span class="clear-all hover">Clear All</span>
+                                </div>
+                                <!-- show-hide-item -->
+                                <div class="show-hide-item">
+                                    <span class="badge">Persona 1 <span class="remove"><svg
+                                                xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                                stroke-linecap="round" stroke-linejoin="round"
+                                                class="feather feather-x">
+                                                <line x1="18" y1="6" x2="6" y2="18" stroke="#1c1517"></line>
+                                                <line x1="6" y1="6" x2="18" y2="18" stroke="#1c1517"></line>
+                                            </svg></span></span>
+                                </div>
+                                <!-- filter-body -->
+                                <div id="accordionFilter" class="filter-body">
+                                    <fieldset>
+                                        <legend>Filter</legend>
+                                        <!-- filter-card -->
+                                        <div class="filter-card">
+                                            <div id="headingOne" class="filter-card-header">
+                                                <div class="sub-header" data-toggle="collapse"
+                                                    data-target="#collapseOne" aria-expanded="true" role="button">
+                                                    <h5 class="mb-0">By Personas</h5>
+                                                    <span class="toggle-icon"></span>
+                                                </div>
+                                            </div>
+                                            <div id="collapseOne" class="filter-card-body collapse show"
+                                                aria-labelledby="headingOne" data-parent="#accordionFilter">
+                                                <ul>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personeOne">
+                                                            <input id="personeOne" type="checkbox" class="checkbox"
+                                                                checked>
+                                                            <span class="check"></span><span class="text">Persona
+                                                                1</span>
+                                                        </label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personaTwo">
+                                                            <input id="personaTwo" type="checkbox" class="checkbox">
+                                                            <span class="check"></span><span class="text">Persona
+                                                                2</span></label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personaThree">
+                                                            <input id="personaThree" type="checkbox" class="checkbox">
+                                                            <span class="check"></span><span class="text">Persona
+                                                                3</span></label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personaFour">
+                                                            <input id="personaFour" type="checkbox" class="checkbox">
+                                                            <span class="check"></span><span class="text">Persona
+                                                                4</span></label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <!-- filter-card -->
+                                        <div class="filter-card">
+                                            <div id="headingTwo" class="filter-card-header">
+                                                <div class="sub-header" data-toggle="collapse"
+                                                    data-target="#collapseTwo" aria-expanded="false" role="button">
+                                                    <h5 class="mb-0">By Life Journeys</h5>
+                                                    <span class="toggle-icon"></span>
+                                                </div>
+                                            </div>
+                                            <div id="collapseTwo" class="filter-card-body collapse"
+                                                aria-labelledby="headingTwo" data-parent="#accordionFilter">
+                                                <ul>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personeFive">
+                                                            <input id="personeFive" type="checkbox" class="checkbox">
+                                                            <span class="check"></span><span class="text">Persona
+                                                                5</span></label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personaSix">
+                                                            <input id="personaSix" type="checkbox" class="checkbox">
+                                                            <span class="check"></span><span class="text">Persona
+                                                                6</span></label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personaSeven">
+                                                            <input id="personaSeven" type="checkbox" class="checkbox">
+                                                            <span class="check"></span><span class="text">Persona
+                                                                7</span></label>
+                                                    </li>
+                                                    <li>
+                                                        <label class="custom-checkbox" for="personaEight">
+                                                            <input id="personaEight" type="checkbox" class="checkbox">
+                                                            <span class="check"></span><span class="text">Persona
+                                                                8</span></label>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- col-md-8 -->
+                        <div class="col-md-8 col-sm-8">
+                            <!-- right-section -->
+                            <div class="right-section">
+                                <!-- heading -->
+                                <div class="heading">
+                                    <h3>A-Z Health Topics</h3>
+                                </div>
+                                <!-- details-info -->
+                                <div class="details-info">
+                                    <!-- searchbar -->
+                                    <div class="searchbar">
+                                        <label class="d-none" for="topic">Search for a topic</label>
+                                        <input type="text" class="search" name="topic" id="topic"
+                                            placeholder="Search for a topic" title="Search for a topic"></div>
+                                    <div class="sort-header">
+                                        <span class="sort">Sort By:</span>
+                                        <div class="dropdown"><a href="javascript:void(0)" id="dropdownMenuButtonOne"
+                                                class="hover dropdown-toggle" data-toggle="dropdown">Relevance</a> <span
+                                                class="icon"><img src="assets/images//chevron-down-grey.svg"
+                                                    alt="chevron-down-grey"></span>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonOne">
+                                                <a class="dropdown-item" href="#">All</a>
+                                                <a class="dropdown-item" href="#">A to B</a>
+                                                <a class="dropdown-item" href="#">Z to A</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4 col-sm-6">
+                                            <!-- topics-details -->
+                                            <div class="topics-details">
+                                                <div class="number">A</div>
+                                                <div class="topic-navbar">
+                                                    <ul>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- topics-details -->
+                                            <div class="topics-details">
+                                                <div class="number">B</div>
+                                                <div class="topic-navbar">
+                                                    <ul>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6">
+                                            <!-- topics-details -->
+                                            <div class="topics-details">
+                                                <div class="number">C</div>
+                                                <div class="topic-navbar">
+                                                    <ul>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- topics-details -->
+                                            <div class="topics-details">
+                                                <div class="number">D</div>
+                                                <div class="topic-navbar">
+                                                    <ul>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- topics-details -->
+                                            <div class="topics-details">
+                                                <div class="number">E</div>
+                                                <div class="topic-navbar">
+                                                    <ul>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 col-sm-6">
+                                            <!-- topics-details -->
+                                            <div class="topics-details">
+                                                <div class="number">F</div>
+                                                <div class="topic-navbar">
+                                                    <ul>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- topics-details -->
+                                            <div class="topics-details">
+                                                <div class="number">G</div>
+                                                <div class="topic-navbar">
+                                                    <ul>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                                Protective
+                                                                kits</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pagination">
+                                    <div class="d-flex">
+                                        <a href="javascript:void(0)" class="btn arrow-left"><img src="assets/images//back_h.png"
+                                                alt="back"></a>
+                                        <a href="javascript:void(0)" class="btn arrow-right"><img src="assets/images//next_h.png"
+                                                alt="next"></a>
+                                    </div>
+                                    <p>Showing 50 of All 200 Health topics</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- service-support -->
+                    <div id="serviceSupport" class="service-support">
+                        <!-- row -->
+                        <div class="row">
+                            <!-- col-md-4 -->
+                            <div class="col-md-4 col-sm-4">
+                                <!-- filter-section -->
+                                <div class="filter-section">
+                                    <div class="filter-header">
+                                        <h5>Filter by</h5>
+                                        <span class="clear-all hover">Clear All</span>
+                                    </div>
+                                    <div class="show-hide-item">
+                                        <span class="badge">Persona 1 <span class="remove"><svg
+                                                    xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                                    class="feather feather-x">
+                                                    <line x1="18" y1="6" x2="6" y2="18" stroke="#1c1517"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18" stroke="#1c1517"></line>
+                                                </svg></span></span>
+                                    </div>
+                                    <!-- filter-body -->
+                                    <div id="accordionFilterOne" class="filter-body">
+                                        <!-- fieldset -->
+                                        <fieldset>
+                                            <legend>Service Filter</legend>
+                                            <!-- filter-card -->
+                                            <div class="filter-card">
+                                                <div id="headingThree" class="filter-card-header">
+                                                    <div class="sub-header" data-toggle="collapse"
+                                                        data-target="#collapseThree" aria-expanded="true" role="button">
+                                                        <h5 class="mb-0">By Personas</h5>
+                                                        <span class="toggle-icon"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapseThree" class="filter-card-body collapse show"
+                                                    aria-labelledby="headingThree" data-parent="#accordionFilterOne">
+                                                    <ul>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persone_1">
+                                                                <input id="persone_1" type="checkbox" class="checkbox"
+                                                                    checked>
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    1</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_2">
+                                                                <input id="persona_2" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    2</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_3">
+                                                                <input id="persona_3" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    3</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_4">
+                                                                <input id="persona_4" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    4</span></label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- filter-card -->
+                                            <div class="filter-card">
+                                                <div id="headingFour" class="filter-card-header">
+                                                    <div class="sub-header" data-toggle="collapse"
+                                                        data-target="#collapseFour" aria-expanded="false" role="button">
+                                                        <h5 class="mb-0">By Life Journeys</h5>
+                                                        <span class="toggle-icon"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapseFour" class="filter-card-body collapse"
+                                                    aria-labelledby="headingFour" data-parent="#accordionFilterOne">
+                                                    <ul>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persone_5">
+                                                                <input id="persone_5" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    10</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_6">
+                                                                <input id="persona_6" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    11</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_7">
+                                                                <input id="persona_7" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    12</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_8">
+                                                                <input id="persona_8" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    13</span></label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- filter-card -->
+                                            <div class="filter-card">
+                                                <div id="headingFive" class="filter-card-header">
+                                                    <div class="sub-header" data-toggle="collapse"
+                                                        data-target="#collapseFive" aria-expanded="false" role="button">
+                                                        <h5 class="mb-0">By Service Types</h5>
+                                                        <span class="toggle-icon"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapseFive" class="filter-card-body collapse"
+                                                    aria-labelledby="headingFive" data-parent="#accordionFilterOne">
+                                                    <ul>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persone_9">
+                                                                <input id="persone_9" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    14</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_10">
+                                                                <input id="persona_10" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    15</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_11">
+                                                                <input id="persona_11" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    16</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_12">
+                                                                <input id="persona_12" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    17</span></label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- filter-card -->
+                                            <div class="filter-card">
+                                                <div id="headingSix" class="filter-card-header">
+                                                    <div class="sub-header" data-toggle="collapse"
+                                                        data-target="#collapseSix" aria-expanded="false" role="button">
+                                                        <h5 class="mb-0">By Speciality</h5>
+                                                        <span class="toggle-icon"></span>
+                                                    </div>
+                                                </div>
+                                                <div id="collapseSix" class="filter-card-body collapse"
+                                                    aria-labelledby="headingSix" data-parent="#accordionFilterOne">
+                                                    <ul>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persone_13">
+                                                                <input id="persone_13" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    18</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_14">
+                                                                <input id="persona_14" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    19</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_15">
+                                                                <input id="persona_15" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    20</span></label>
+                                                        </li>
+                                                        <li>
+                                                            <label class="custom-checkbox" for="persona_16">
+                                                                <input id="persona_16" type="checkbox" class="checkbox">
+                                                                <span class="check"></span><span class="text">Persona
+                                                                    21</span></label>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- col-md-8 -->
+                            <div class="col-md-8 col-sm-8">
+                                <!-- right-section -->
+                                <div class="right-section">
+                                    <!-- heading -->
+                                    <div class="heading">
+                                        <h3>Services & Support</h3>
+                                    </div>
+                                    <!-- details-info -->
+                                    <div class="details-info">
+                                        <!-- searchbar -->
+                                        <div class="searchbar">
+                                            <label for="service"></label>
+                                            <input type="search" class="search" name="service" id="service"
+                                                placeholder="Search for a Service"></div>
+                                        <div class="sort-header">
+                                            <span class="sort">Sort By:</span>
+                                            <div class="dropdown"><a href="javascript:void(0)"
+                                                    id="dropdownMenuButtonThree" class="hover dropdown-toggle"
+                                                    data-toggle="dropdown">Relevance</a> <span class="icon"><img
+                                                        src="assets/images//chevron-down-grey.svg"
+                                                        alt="chevron-down-grey"></span>
+                                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonThree">
+                                                    <a class="dropdown-item" href="#">Example</a>
+                                                    <a class="dropdown-item" href="#">Example One</a>
+                                                    <a class="dropdown-item" href="#">Examp Two</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- service-details -->
+                                        <div class="service-details">
+                                            <!-- card -->
+                                            <div class="card">
+                                                <h4>Authentication of Medical Documents Through Foreign Ministry</h4>
+                                                <h5>Ministry of Foreign Affairs</h5>
+                                                <p>People who wish to have their medical documents authenticated shall
+                                                    submit a request to the Consular Affairs Department.</p>
+                                            </div>
+                                            <!-- card -->
+                                            <div class="card">
+                                                <h4>File Workplace Health and Safety Report</h4>
+                                                <h5>Ministry of Administrative Development Labor and Social Affairs</h5>
+                                                <p>Report workplace accidents, injuries and health issues</p>
+                                            </div>
+                                            <!-- card -->
+                                            <div class="card">
+                                                <h4>Work Injuries Registration</h4>
+                                                <h5>Ministry of Administrative Development Labor and Social Affairs</h5>
+                                                <p>Companies and establishments in Qatar can register work injuries
+                                                    online.
+                                                    The registration process is periodical, and companies can also add
+                                                    new
+                                                    statistics including the data of all their workers and their
+                                                    injuries
+                                                    and submit them for final approval.</p>
+                                            </div>
+                                            <!-- card -->
+                                            <div class="card">
+                                                <h4>Briefing Service of Registered Health Service Providers, Hospitals
+                                                    and
+                                                    Clinics</h4>
+                                                <h5>Ministry of Public Health</h5>
+                                                <p>The Health Financing and Insurance Department provides this service
+                                                    to
+                                                    facilitate communication with any of the health service providers,
+                                                    hospitals and clinics registered in the State of Qatar.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="hrline"></div>
+                                    <div class="pagination">
+                                        <div class="d-flex">
+                                            <a href="javascript:void(0)" class="btn arrow-left"><img
+                                                    src="assets/images//back_h.png" alt="back"></a>
+                                            <a href="javascript:void(0)" class="btn arrow-right"><img
+                                                    src="assets/images//next_h.png" alt="next"></a>
+                                        </div>
+                                        <p>Showing 20 of All 80 Healthcare related services</p>
+                                        <a href="javascript:void(0)" class="view-all">View all Healthcare related
+                                            services
+                                            <img src="assets/images//chevron-right-rouge.svg" alt="chevron-right-rouge"></a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- find-services -->
+            <section id="findServices" class="find-services">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="heading">
+                                <h3>Find Services near you</h3>
+                            </div>
+                            <!-- fieldset -->
+                            <fieldset>
+                                <legend>Find Service</legend>
+                                <!-- horizontal-form -->
+                                <div class="horizontal-form">
+                                    <!-- form-group -->
+                                    <div class="form-group col-3">
+                                        <label for="location">Location</label>
+                                        <input type="text" class="form-control" name="location" id="location"
+                                            value="Doha" title="Location">
+                                        <span class="icon"><img src="assets/images//location.svg" alt="location"></span>
+                                    </div>
+                                    <!-- form-group -->
+                                    <div class="form-group col-3">
+                                        <label for="pin-code">Pin Code</label>
+                                        <input type="text" class="form-control" name="pin_code" id="pin-code"
+                                            placeholder="Enter pincode" title="Pin Code">
+                                    </div>
+                                    <!-- form-group -->
+
+                                    <div class="form-group col-6">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <label class="d-none" for="healthcareService">Facility/Service</label>
+                                                <select name="healthcareservice" id="healthcareService"
+                                                    title="Healthcare Facility/Service"
+                                                    class="selectpicker form-control" data-size="5">
+                                                    <option selected>Healthcare Facility/Service</option>
+                                                    <option>Example 2</option>
+                                                    <option>Example 3</option>
+                                                </select>
+                                            </div>
+                                            <label class="d-none" for="facility">Specific facility</label>
+                                            <input type="text" class="form-control" id="facility" name="facility"
+                                                placeholder="Search for a specific facility"
+                                                title="Search for a specific facility">
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <!-- location-box -->
+                            <div class="location-box">
+                                <div class="col-8">
+                                    <!-- map-box -->
+                                    <div class="map-box">
+                                        <iframe
+                                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3606.8985817064777!2d51.49744801459734!3d25.307611283844956!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e45db3b9358194f%3A0xa8bb701580a7d574!2sAl-Ahli%20Hospital!5e0!3m2!1sen!2sin!4v1599064539853!5m2!1sen!2sin"
+                                            allowfullscreen="" aria-hidden="false" title="map"></iframe>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <!-- address-box -->
+                                    <div class="address-box">
+                                        <!-- logo -->
+                                        <div class="logo">
+                                            <div class="logo-img"><img src="assets/images//healthcare-services-logo.png"
+                                                    alt="healthcare-services-logo"></div>
+                                            <h5>Al-Ahli Hospital</h5>
+                                        </div>
+                                        <!-- address-info -->
+                                        <div class="address-info">
+                                            <h6 class="title"><img src="assets/images//location-marker.svg"
+                                                    alt="location-marker">Address</h6>
+                                            <p>Ahmed Bin Ali St, Doha, Qatar</p>
+                                        </div>
+                                        <!-- address-info -->
+                                        <div class="address-info">
+                                            <h6 class="title"><img src="assets/images//location-marker.svg"
+                                                    alt="location-marker">Operating Hours</h6>
+                                            <p>Mon - Sun (Open 24 hours)</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- directory -->
+
+            <section id="directory" class="directory">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="hospital-card-box">
+                                <div class="heading">
+                                    <h3>Directory (4)</h3>
+                                </div>
+                                <div class="carousel-slider">
+                                    <div class="owl-carousel">
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Al-Ahli Hospital</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="contact-details">
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Phone</div>
+                                                        <div class="info">44898888</div>
+                                                    </div>
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Fax</div>
+                                                        <div class="info">44898888</div>
+                                                    </div>
+                                                    <div class="contact col-12">
+                                                        <div class="sub-heading">Email</div>
+                                                        <div class="info">info@ahlihospital.com</div>
+                                                    </div>
+                                                </div>
+                                                <div class="social-icons">
+                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Al Emadi Hospital</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="contact-details">
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Phone</div>
+                                                        <div class="info">44898888</div>
+                                                    </div>
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Fax</div>
+                                                        <div class="info">-</div>
+                                                    </div>
+                                                    <div class="contact col-12">
+                                                        <div class="sub-heading">Email</div>
+                                                        <div class="info">info@ahlihospital.com</div>
+                                                    </div>
+                                                </div>
+                                                <div class="social-icons">
+                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Al-Ahli Hospital</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="contact-details">
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Phone</div>
+                                                        <div class="info">44898888</div>
+                                                    </div>
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Fax</div>
+                                                        <div class="info">--</div>
+                                                    </div>
+                                                    <div class="contact col-12">
+                                                        <div class="sub-heading">Email</div>
+                                                        <div class="info">info@ahlihospital.com</div>
+                                                    </div>
+                                                </div>
+                                                <div class="social-icons">
+                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Al-Ahli Hospital</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="contact-details">
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Phone</div>
+                                                        <div class="info">44898888</div>
+                                                    </div>
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Fax</div>
+                                                        <div class="info">--</div>
+                                                    </div>
+                                                    <div class="contact col-12">
+                                                        <div class="sub-heading">Email</div>
+                                                        <div class="info">info@ahlihospital.com</div>
+                                                    </div>
+                                                </div>
+                                                <div class="social-icons">
+                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3>Al-Ahli Hospital</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="contact-details">
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Phone</div>
+                                                        <div class="info">44898888</div>
+                                                    </div>
+                                                    <div class="contact col-6">
+                                                        <div class="sub-heading">Fax</div>
+                                                        <div class="info">--</div>
+                                                    </div>
+                                                    <div class="contact col-12">
+                                                        <div class="sub-heading">Email</div>
+                                                        <div class="info">info@ahlihospital.com</div>
+                                                    </div>
+                                                </div>
+                                                <div class="social-icons">
+                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="owl-theme">
+                                        <div class="owl-controls">
+                                            <div class="custom-nav owl-nav"></div>
+                                            <p>Showing 03 of All 09 Healthcare related Directory</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="downloadables" class="mobile-apps">
+                <!-- container -->
+                <div class="container">
+                    <!-- row -->
+                    <div class="row">
+                        <!-- col-md-12 -->
+                        <div class="col-md-12">
+                            <!-- download-card-box -->
+                            <div class="download-card-box">
+                                <div class="heading">
+                                    <h3>Downloadables (6)</h3>
+                                    <h4>Mobile Apps</h4>
+                                </div>
+
+                                <div class="carousel-slider2">
+                                    <div class="owl-carousel">
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <span class="icon"><img src="assets/images//mob-app.svg" alt="mob-app"></span>
+                                                <h3>Hukoomi mobile app</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Qatar e-Government Portal “Hukoomi" This app allows users to benefit
+                                                    from
+                                                    many various services and view latest news and events organised in
+                                                    Qatar
+                                                </p>
+                                            </div>
+                                            <div class="footer-btn">
+                                                <a href="javascript:void(0)" class="store-btn"><img
+                                                        src="assets/images//play-store.png" alt="play-store"></a>
+                                                <a href="javascript:void(0)" class="store-btn"><img
+                                                        src="assets/images//apple-store.png" alt="apple-store"></a>
+                                            </div>
+                                        </div>
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <span class="icon"><img src="assets/images//enteraz-app.png"
+                                                        alt="enteraz-app"></span>
+                                                <h3>Enteraz App</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>This app enables all segments of the Qatari community from citizens
+                                                    and
+                                                    residents to follow up with the latest updates of the corona virus
+                                                    -Covid 19
+                                                    in Qatar.</p>
+                                            </div>
+                                            <div class="footer-btn">
+                                                <a href="javascript:void(0)" class="store-btn"><img
+                                                        src="assets/images//play-store.png" alt="play-store"></a>
+                                                <a href="javascript:void(0)" class="store-btn"><img
+                                                        src="assets/images//apple-store.png" alt="apple-store"></a>
+                                            </div>
+                                        </div>
+                                        <!-- card -->
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <span class="icon"><img src="assets/images//mob-app.svg" alt="mob-app"></span>
+                                                <h3>Hukoomi mobile app</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <p>Qatar e-Government Portal “Hukoomi" This app allows users to benefit
+                                                    from
+                                                    many various services and view latest news and events organised in
+                                                    Qatar
+                                                </p>
+                                            </div>
+                                            <div class="footer-btn">
+                                                <a href="javascript:void(0)" class="store-btn"><img
+                                                        src="assets/images//play-store.png" alt="play-store"></a>
+                                                <a href="javascript:void(0)" class="store-btn"><img
+                                                        src="assets/images//apple-store.png" alt="apple-store"></a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="owl-theme">
+                                        <div class="owl-controls">
+                                            <div class="custom-nav owl-nav"></div>
+                                            <p>Showing 03 of All 06 Healthcare related Mobile Apps</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="utility" class="related-documents">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="sub-heading">
+                                <h4>Related Documents</h4>
+                            </div>
+                            <fieldset>
+                                <legend>Documents</legend>
+                                <div class="document-search">
+                                    <label class="d-none" for="sub-topic">Select a sub-topic</label>
+                                    <select name="sub-topic" id="sub-topic" class="selectpicker form-control"
+                                        title="Select a sub-topic">
+                                        <option>Example 1</option>
+                                        <option>Example 2</option>
+                                        <option>Example 3</option>
+                                        <option>Example 4</option>
+                                    </select>
+                                    <label class="d-none" for="searchDocument">Search for document</label>
+                                    <input type="text" class="search form-control" id="searchDocument" name="document"
+                                        placeholder="Search for document" title="Search for document">
+                                </div>
+                            </fieldset>
+                            <!-- document-info -->
+                            <div class="sort-header">
+                                <span class="sort">Sort By:</span>
+                                <div class="dropdown"><a href="javascript:void(0)" id="dropdownMenuButton"
+                                        class="hover dropdown-toggle" data-toggle="dropdown">Relevance</a> <span
+                                        class="icon"><img src="assets/images//chevron-down-grey.svg"
+                                            alt="chevron-down-grey"></span>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Example</a>
+                                        <a class="dropdown-item" href="#">Example One</a>
+                                        <a class="dropdown-item" href="#">Examp Two</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="document-info">
+                                <div class="col-6">
+                                    <div class="panel">
+                                        <h4>Forms for NHS staff: NHS visitor and migrant health charging</h4>
+                                        <p>Forms for enquiring if NHS visitor and migrant patients need to pay for
+                                            treatment
+                                            and
+                                            for declaring whether they will be treated before leaving Qatar.</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="panel">
+                                        <h4>Forms for NHS staff: NHS visitor and migrant health charging</h4>
+                                        <p>Forms for enquiring if NHS visitor and migrant patients need to pay for
+                                            treatment
+                                            and
+                                            for declaring whether they will be treated before leaving Qatar.</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <!-- document-info -->
+                            <div class="document-info">
+                                <div class="col-6">
+                                    <div class="panel">
+                                        <h4>Health Card</h4>
+                                        <p>Forms for enquiring if NHS visitor and migrant patients need to pay for
+                                            treatment
+                                            and
+                                            for declaring whether they will be treated before leaving Qatar.</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="panel">
+                                        <h4>Health Card</h4>
+                                        <p>Forms for enquiring if NHS visitor and migrant patients need to pay for
+                                            treatment
+                                            and
+                                            for declaring whether they will be treated before leaving Qatar.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- document-info -->
+                            <div class="document-info">
+                                <div class="col-6">
+                                    <div class="panel">
+                                        <h4>Health Card</h4>
+                                        <p>Forms for enquiring if NHS visitor and migrant patients need to pay for
+                                            treatment
+                                            and
+                                            for declaring whether they will be treated before leaving Qatar.</p>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="panel">
+                                        <h4>Health Card</h4>
+                                        <p>Forms for enquiring if NHS visitor and migrant patients need to pay for
+                                            treatment
+                                            and
+                                            for declaring whether they will be treated before leaving Qatar.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- pagination -->
+                            <div class="pagination">
+                                <div class="d-flex">
+                                    <a href="javascript:void(0)" class="btn arrow-left"><img src="assets/images//back_h.png"
+                                            alt="back"></a>
+                                    <a href="javascript:void(0)" class="btn arrow-right"><img src="assets/images//next_h.png"
+                                            alt="next"></a>
+                                </div>
+                                <p>Showing 03 of All 06 Healthcare related Documents</p>
+                                <a href="javascript:void(0)" class="view-all">View all Healthcare related services <img
+                                        src="assets/images//chevron-right-rouge.svg" alt="chevron-right-rouge"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- quick-links -->
+            <section id="quickLinks" class="quick-links">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="sub-heading">
+                                <h4>Quick Links (06)</h4>
+                            </div>
+                            <div class="links-card">
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Condition & Treatments</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Nutrition Tips and guidelines</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Pre-marital Screening</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Mental Health</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Senior Care</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Health Insurance</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Emergencies</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Disability services</a>
+                                </div>
+                                <!-- links-info -->
+                                <div class="links-info">
+                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
+                                    <a href="javascript:void(0)">Medical Commission Procedures</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- emergency-contacts -->
+            <section class="emergency-contacts">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="sub-heading">
+                                <h4>Emergency Contacts</h4>
+                            </div>
+                            <div class="contact-slider">
+                                <div class="contact-carousel owl-carousel owl-theme">
+                                    <!-- card-box -->
+                                    <div class="card-box">
+                                        <!-- media -->
+                                        <div class="media">
+                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="media-body">
+                                                <div class="name">Police</div>
+                                                <div class="number">999</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- card-box -->
+                                    <div class="card-box">
+                                        <!-- media -->
+                                        <div class="media">
+                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="media-body">
+                                                <div class="name">Ambulance</div>
+                                                <div class="number">998</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- card-box -->
+                                    <div class="card-box">
+                                        <!-- media -->
+                                        <div class="media">
+                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="media-body">
+                                                <div class="name">Civil Defence</div>
+                                                <div class="number">997</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- card-box -->
+                                    <div class="card-box">
+                                        <!-- media -->
+                                        <div class="media">
+                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="media-body">
+                                                <div class="name">Electricity Authority</div>
+                                                <div class="number">996</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-box">
+                                        <!-- media -->
+                                        <div class="media">
+                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="media-body">
+                                                <div class="name">Electricity Authority</div>
+                                                <div class="number">996</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-box">
+                                        <!-- media -->
+                                        <div class="media">
+                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="media-body">
+                                                <div class="name">Electricity Authority</div>
+                                                <div class="number">996</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- like-page -->
+            <div class="like-page">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="like-page-info">
+                                <div class="left-side">
+                                    <span class="text">Like this page?</span>
+                                    <button type="button" class="btn">YES</button>
+                                    <button type="button" class="btn">No</button>
+                                </div>
+                                <div class="right-side">
+                                    <p>Stuck somewhere? <a href="javascript:void(0)" class="hover">Find help</a></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <div class="footer_inner">
+                <div class="foot_row">
+                    <div class="copy_right" tabindex="0">
+                        Copyrigt © 2019 MOTC. All rights reserved.
+                    </div>
+                    <div class="foot_nav">
+                        <nav>
+                            <ul>
+                                <li> <a href="#" tabindex="0">Entity Services’ Statistics</a></li>
+                                <li> <a href="#" tabindex="0">Useful Links</a></li>
+                                <li> <a href="#" tabindex="0">Customer Service</a></li>
+                                <li> <a href="#" tabindex="0">Contact Us</a></li>
+                                <li> <a href="#" tabindex="0">FAQ</a></li>
+                                <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                                <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                                <li> <a href="#" tabindex="0">Site Map</a></li>
+                                <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                                <li> <a href="#" tabindex="0">Find Help</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer -->
+    </div>
+
+    <!-- script  -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/healthcare.js"></script>
+
+    <script>
+        window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification</title>
+    <!-- fonts -->
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <!-- ================== bootstrap datetimepicker css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css" />   
+    <!-- healthcare -->
+    <link rel="stylesheet" href="assets/css/notifiation.css">
+</head>
+
+<body class="">
+    <div class="app_wrapper">
+    <header>
+        <div class="header_inner">
+           <div class="innner_wrapper">
+              <div class="nav_brand">
+                 <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+              </div>
+              <div class="nav_col">
+                 <div class="header_row">
+                    <div class="abt_qtr_nav desktop_view_head">
+                       <ul>
+                          <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
+                          <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
+                       </ul>
+                    </div>
+                    <div class="auth_nav">
+                       <ul>
+                          <li class="mob_hide">
+                              <a href="#" tabindex="0" class="link">
+                             <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon"> Accessibility</a>
+                          </li>
+                          <li>
+                              <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon" alt="language-icon">
+                             </a>
+                          </li>
+                          <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
+                          <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
+                             <img src="assets/images/menu-line.svg" alt="toggle_menu">
+                             </a>
+                          </li>
+                       </ul>
+                    </div>
+                 </div>
+                 <div class="header_row b-top desktop_view_head">
+                    <div class="nav_menu">
+                       <ul>
+                          <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a></li>
+                          <li> <a href="#" tabindex="0" class="link">Media</a></li>
+                          <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
+                          <li>
+                              <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png" title="Search" class="search_icon" alt="Search"></a>
+                         </li>
+                       </ul>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+        <!-- Mobile Menu-->
+        <div class="mob_nav">
+           <ul>
+              <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
+              <li> <a href="#" tabindex="0">Innovation</a></li>
+              <li> <a href="#" tabindex="0">Open Data</a></li>
+              <li> <a href="#" tabindex="0">Life in Qatar</a></li>
+              <li> <a href="#" tabindex="0">Explore Services</a></li>
+              <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
+              <li> <a href="#" tabindex="0">Media</a></li>
+              <li> <a href="#" tabindex="0">About Qatar</a></li>
+           </ul>
+        </div>
+        <!-- Mobile Menu-->
+     </header>
+    <!-- ======= header ======= -->
+
+    <div class="container">
+        <div class="notification-wrapper">
+            <a href="javascrip:void(0)" class="go-back-btn"><img src="assets/images/back-btn.svg" alt="back-btn">Go back</a>  
+            <section class="notification-container">
+               <aside>
+                <div class="total-noti-card">
+                    <div class="noti-header">
+                        <span class="icon"><img src="assets/images/notification.svg" alt="notification"></span>
+                        <h2>Notification (03)</h2>                        
+                    </div>
+                    <div class="noti-body">
+                        <p>You’re all caught up! Check back later for new notifications</p>
+                    </div>
+                    <a href="javascript:void()" class="link-text">View Settings <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6" stroke="#b51647"></polyline></svg></span></a>
+                </div>
+               </aside>
+               <!-- aside end -->
+               <article>
+                <div class="notification-details">
+                    <div class="filter-header">
+                        <div class="date-section">
+                            <label>Select date</label>
+                            <div class="date">
+                                <input type="text" class="form-control" id="datetimepicker" />                            
+                                <span class="calendar-icon"><img src="assets/images/calendar.svg" alt="calendar"></span>
+                            </div>                            
+                        </div>
+                        <!-- date-section end -->
+                        <div class="filter-notification">
+                            <a href="javascript:void(0)" class="filter-toggle">
+                            <span class="icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-filter"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" stroke="#6a6a6b"></polygon></svg></span>
+                            Filter Notifications
+                            <span class="dropdown-icon"><img src="assets/images/ellipse.svg" alt="ellipse"></span>
+                            </a>
+                            <div id="accordionFilter" class="filter-dropdown">
+                                <fieldset>
+                                    <legend class="d-none">Filter</legend>
+                                <div class="filter-card">
+                                    <div id="headingOne" class="filter-card-header">
+                                        <div class="sub-header" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true">
+                                            <h4>By Entities</h4>
+                                            <span class="toggle-icon"></span>
+                                        </div>
+                                    </div>
+                                    <div id="collapseOne" class="filter-card-body collapse show" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                                        <ul>
+                                            <li>
+                                                <label class="custom-checkbox" for="agents_services">
+                                                    <input id="agents_services" type="checkbox" class="checkbox" tabindex="0">
+                                                    <span></span>Agents Services</label>
+                                            </li>
+                                            <li>
+                                                <label class="custom-checkbox" for="beneficiaries_services">
+                                                    <input id="beneficiaries_services" type="checkbox" class="checkbox" tabindex="1">
+                                                    <span></span>Beneficiaries Services</label>
+                                            </li>
+                                            <li>
+                                                <label class="custom-checkbox" for="oil_and_gas">
+                                                    <input id="oil_and_gas" type="checkbox" class="checkbox" tabindex="2">
+                                                    <span></span>Oil and gas</label>
+                                            </li>
+                                            <li>
+                                                <label class="custom-checkbox" for="housing_loan">
+                                                    <input id="housing_loan" type="checkbox" class="checkbox" tabindex="3">
+                                                    <span></span>Housing loan</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- filter-card end -->
+                                <div class="filter-card">
+                                    <div id="headingTwo" class="filter-card-header">
+                                        <div class="sub-header" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false">
+                                            <h4>By Types</h4>
+                                            <span class="toggle-icon"></span>
+                                        </div>
+                                    </div>
+                                    <div id="collapseTwo" class="filter-card-body collapse" aria-labelledby="headingOne" data-parent="#accordionFilter">
+                                        <ul>
+                                            <li>
+                                                <label class="custom-checkbox" for="agents_servicesOne">
+                                                    <input id="agents_servicesOne" type="checkbox" class="checkbox" tabindex="0">
+                                                    <span></span>Agents Services</label>
+                                            </li>
+                                            <li>
+                                                <label class="custom-checkbox" for="beneficiaries_servicesOne">
+                                                    <input id="beneficiaries_servicesOne" type="checkbox" class="checkbox" tabindex="1">
+                                                    <span></span>Beneficiaries Services</label>
+                                            </li>
+                                            <li>
+                                                <label class="custom-checkbox" for="oil_and_gasOne">
+                                                    <input id="oil_and_gasOne" type="checkbox" class="checkbox" tabindex="2">
+                                                    <span></span>Oil and gas</label>
+                                            </li>
+                                            <li>
+                                                <label class="custom-checkbox" for="housing_loanOne">
+                                                    <input id="housing_loanOne" type="checkbox" class="checkbox" tabindex="3">
+                                                    <span></span>Housing loan</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- filter-card end -->
+                                <div class="filter-footer">
+                                    <a href="javascript:void(0)" class="hover">Apply</a>
+                                    <a href="javascript:void(0)" class="hover clearAll">Clear All</a>
+                                </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <!-- filter-notification end -->
+                    </div>
+                    <!-- filter-header end -->
+                    <div class="notification-body">
+                        <div class="notification-date">22nd Jul, 2020</div>
+                        <div class="notification-card">
+                            <span class="badge">New</span>
+                            <div class="notification-info">
+                                <p>MOI is now accepting Renewal of residence permits for Qatari citizens. <span class="time">2h ago</span></p>
+                                <a href="javascript:void(0)" class="link">Apply Now</a>
+                            </div>
+                            <div class="dropdown">
+                                <span class="dropdown-icon dropdown-toggle" data-toggle="dropdown"><img src="assets/images/ellipse.svg" alt="ellipse"></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_mark.png" alt="notification_mark"> Mark as read</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_remove.png" alt="notification_remove">Remove this notification</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_turn_off.png" alt="notification_turn_off">Turn off this notification</a>
+                                  </div>
+                            </div>
+                        </div>
+                        <!-- notification-card end -->
+                        <div class="notification-card">
+                            <span class="badge">New</span>
+                            <div class="notification-info">
+                                <p>New Guidelines for KHARMAA released. <span class="time">3h ago</span></p>
+                                <a href="javascript:void(0)" class="link">Download</a>
+                            </div>
+                            <div class="dropdown">
+                                <span class="dropdown-icon dropdown-toggle" data-toggle="dropdown"><img src="assets/images/ellipse.svg" alt="ellipse"></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_mark.png" alt="notification_mark"> Mark as read</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_remove.png" alt="notification_remove">Remove this notification</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_turn_off.png" alt="notification_turn_off">Turn off this notification</a>
+                                  </div>
+                            </div>
+                        </div>
+                        <!-- notification-card end -->
+                        <div class="notification-card">
+                            <span class="badge">New</span>
+                            <div class="notification-info">
+                                <p>MOI is now accepting Renewal of residence permits for Qatari citizens. <span class="time">2h ago</span></p>
+                                <a href="javascript:void(0)" class="link">Apply Now</a>
+                            </div>
+                            <div class="dropdown">
+                                <span class="dropdown-icon dropdown-toggle" data-toggle="dropdown"><img src="assets/images/ellipse.svg" alt="ellipse"></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_mark.png" alt="notification_mark"> Mark as read</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_remove.png" alt="notification_remove">Remove this notification</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_turn_off.png" alt="notification_turn_off">Turn off this notification</a>
+                                  </div>
+                            </div>
+                        </div>
+                        <!-- notification-card end -->
+                        <div class="notification-card">
+                            <!-- 
+                                // when someone read this notification remove [ active class ] and change title read to unread
+                             -->
+                            <span class="dot active" title="Mark as read"></span>
+                            <div class="notification-info">
+                                <p>New Guidelines for KHARMAA released. <span class="time">3h ago</span></p>
+                                <a href="javascript:void(0)" class="link">Download</a>
+                            </div>
+                            <div class="dropdown">
+                                <span class="dropdown-icon dropdown-toggle" data-toggle="dropdown"><img src="assets/images/ellipse.svg" alt="ellipse"></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_mark.png" alt="notification_mark"> Mark as read</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_remove.png" alt="notification_remove">Remove this notification</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_turn_off.png" alt="notification_turn_off">Turn off this notification</a>
+                                  </div>
+                            </div>
+                        </div>
+                        <!-- notification-card end -->
+                        <div class="hrline"></div>
+                        <div class="notification-date">22nd Jul, 2020</div>
+                        <div class="notification-card">                            
+                            <span class="dot" title="Mark as unread"></span>
+                            <div class="notification-info">
+                                <p>New Guidelines for KHARMAA released. <span class="time">3h ago</span></p>
+                                <a href="javascript:void(0)" class="link">Download</a>
+                            </div>
+                            <div class="dropdown">
+                                <span class="dropdown-icon dropdown-toggle" data-toggle="dropdown"><img src="assets/images/ellipse.svg" alt="ellipse"></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_mark.png" alt="notification_mark"> Mark as read</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_remove.png" alt="notification_remove">Remove this notification</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_turn_off.png" alt="notification_turn_off">Turn off this notification</a>
+                                  </div>
+                            </div>
+                        </div>
+                        <!-- notification-card end -->
+                        <div class="notification-card">
+                            <span class="dot" title="Mark as unread"></span>
+                            <div class="notification-info">
+                                <p>MOI is now accepting Renewal of residence permits for Qatari citizens. <span class="time">2h ago</span></p>
+                                <a href="javascript:void(0)" class="link">Apply Now</a>
+                            </div>
+                            <div class="dropdown">
+                                <span class="dropdown-icon dropdown-toggle" data-toggle="dropdown"><img src="assets/images/ellipse.svg" alt="ellipse"></span>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_mark.png" alt="notification_mark"> Mark as read</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_remove.png" alt="notification_remove">Remove this notification</a>
+                                    <a class="dropdown-item" href="#"><img src="assets/images/ic_notification_turn_off.png" alt="notification_turn_off">Turn off this notification</a>
+                                  </div>
+                            </div>
+                        </div>
+                        <!-- notification-card end -->
+
+                    </div>
+                </div>
+               </article>
+               <!-- aricle end -->
+            </section>
+        </div>
+
+    </div>
+
+    <footer>
+        <div class="footer_inner">
+           <div class="foot_row">
+              <div class="copy_right" tabindex="0">
+                 Copyrigt © 2019 MOTC. All rights reserved.
+              </div>
+              <div class="foot_nav">
+                 <nav>
+                    <ul>
+                       <li> <a href="#" tabindex="0">Entity  Services’ Statistics</a></li>
+                       <li> <a href="#" tabindex="0">Useful Links</a></li>
+                       <li> <a href="#" tabindex="0">Customer Service</a></li>
+                       <li> <a href="#" tabindex="0">Contact Us</a></li>
+                       <li> <a href="#" tabindex="0">FAQ</a></li>
+                       <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                       <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                       <li> <a href="#" tabindex="0">Site Map</a></li>
+                       <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                       <li> <a href="#" tabindex="0">Find Help</a></li>
+                    </ul>
+                 </nav>
+              </div>
+           </div>
+        </div>
+     </footer>
+    <!-- footer -->
+    </div>
+
+    <!-- script  -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/moment.min.js"></script>    
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="assets/js/notification.js"></script>
+
+</body>
+
+</html>

@@ -69,6 +69,7 @@ $('#lang_toggle').click(function () {
     $('body').toggleClass('ar')
 });
 
+//======= bill checkbox check uncheck =======
 function checkAll(ele) {
     var checkboxes = document.getElementsByTagName('input');
     if ($(checkboxes).hasClass('bill_check')) {
@@ -94,13 +95,9 @@ $('.bill_check').on('change', function () {
     if (!$(this).is(':checked')) {
         $('#servicesck').prop('checked', false)
     }
-})
-$(function () {
-    $('[data-toggle="popover"]').popover({
-        container: 'body'
-    })
 });
 
+//======= profile switch redirection =======
 $('#business').click(function () {
     window.location.href = 'business-profile.html'
 });
@@ -110,6 +107,35 @@ $('#personal').click(function () {
 
 
 
+
+//======= change polls slide on button click =======
 $('#polls').on('slide.bs.carousel', function () {
-    console.log($(carousel-item ))
-  })
+        currentIndex = $('#polls .carousel-item.active').index() + 1;
+        $('#polls_indicator ol li').eq(currentIndex).addClass('active').siblings().removeClass('active');
+       if(currentIndex == $('#polls .carousel-item').length){
+        $('#polls_indicator ol li').eq(0).addClass('active').siblings().removeClass('active');
+       } 
+  });
+
+//======= change polls slide on dot indicator click =======
+  $('#polls_indicator ol li').on('click', function () {
+    currentIndex = $(this).index();
+    $("#polls").carousel(currentIndex);
+});
+
+//======= change survey slide on button click =======
+  $('#survey').on('slide.bs.carousel', function () {
+    currentIndex = $('#survey .carousel-item.active').index() + 1;
+    console.log(currentIndex);
+    $('#survey_indicator ol li').eq(currentIndex).addClass('active').siblings().removeClass('active');
+    if(currentIndex == $('#survey .carousel-item').length){
+        $('#survey_indicator ol li').eq(0).addClass('active').siblings().removeClass('active');
+       }
+});
+
+//======= change survey slide on dot indicator click =======
+$('#survey_indicator ol li').on('click', function () {
+    currentIndex = $(this).index();
+    $("#survey").carousel(currentIndex);
+});
+  $('.carousel').carousel()

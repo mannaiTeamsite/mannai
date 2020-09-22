@@ -604,3 +604,32 @@ $(document).ready(function(){
 
 
    /*************************************Calendar js close******************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   $(".polls_btn").click(function(){
+
+
+      $(this).hide();
+      $(".category_polls_card").removeClass("polls_start");
+
+
+      $(".category_polls_card").addClass("past_polls");
+
+      // var radioValue = $("input[name='persona']:checked").val();
+      // if(radioValue){
+      //    $("#persona").val(radioValue)
+      // }
+   });
