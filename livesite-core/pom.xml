@@ -37,6 +37,8 @@
             <configuration>
                 <executable>${JAVA_HOME}/bin/javac</executable>
                 <compilerVersion>11.0.7</compilerVersion>
+                <source>6</source>
+                <target>6</target>
             </configuration>
         </plugin>
         <plugin>
@@ -140,6 +142,11 @@
     </plugins>
   </build>
   <dependencies>
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20150729</version>
+      </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>jstl</artifactId>
@@ -196,6 +203,16 @@
 		<version>16.6.1.0.0</version>
 	</dependency>
 	<dependency>
+		<groupId>org.springframework.web</groupId>
+		<artifactId>springframework-web</artifactId>
+		<version>3.1.1</version>
+	</dependency>
+	<dependency>
+		<groupId>org.springframework.core</groupId>
+		<artifactId>springframework-core</artifactId>
+		<version>3.1.1</version>
+	</dependency>
+	<dependency>
 		<groupId>log4j</groupId>
 		<artifactId>log4j</artifactId>
 		<version>1.2.15</version>
@@ -218,6 +235,17 @@
 				<artifactId>jms</artifactId>
 			</exclusion>
 		</exclusions>
+	</dependency>
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20170516</version>
+          <scope>compile</scope>
+      </dependency>
+	<dependency>
+		<groupId>commons-lang</groupId>
+		<artifactId>commons-lang</artifactId>
+		<version>2.6</version>
 	</dependency>
   </dependencies>
     <reporting>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="31px" viewBox="0 0 30 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>right_arrow</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="02-Vision" transform="translate(-873.000000, -6528.000000)">
+            <g id="Group-21" transform="translate(153.000000, 6347.000000)">
+                <g id="Group-43" transform="translate(359.000000, 174.000000)">
+                    <g id="Group-41" transform="translate(289.000000, 7.500000)">
+                        <g id="right_arrow" transform="translate(72.000000, 0.000000)">
+                            <circle id="Oval" fill="#B51647" cx="15" cy="15" r="15"></circle>
+                            <path d="M16.8560854,15.3960411 L13.8388493,18.8358073 C13.6469167,19.0547309 13.3357307,19.0547309 13.1438913,18.8358073 C12.9520362,18.6170783 12.9520362,18.2623211 13.1438913,18.0436099 L15.8136794,14.9999425 L13.1439689,11.9563813 C12.9521139,11.7375638 12.9521139,11.382842 13.1439689,11.1641131 C13.3358239,10.9452956 13.6469943,10.9452956 13.838927,11.1641131 L16.8561631,14.6039323 C16.9520906,14.7133499 17,14.8566019 17,14.9999248 C17,15.1433184 16.9519974,15.2866767 16.8560854,15.3960411 Z" id="Path" stroke="#FFFFFF" fill="#FFFFFF" fill-rule="nonzero" transform="translate(15.000000, 15.000000) rotate(-360.000000) translate(-15.000000, -15.000000) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

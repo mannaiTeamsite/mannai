@@ -1,5 +1,5 @@
 /**
- * Provides the class definition to various common
- * utility functions employed in the hukoomi site.
+ * Provides the class definitions for
+ * Utils functions working across the application.
  */
 package com.hukoomi.utils;

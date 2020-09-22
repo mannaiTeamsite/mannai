@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="44" height="40" viewBox="0 0 44 40">
+    <defs>
+        <path id="prefix__a" d="M0 39.844L43.989 39.844 43.989 0 0 0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path stroke="#CD4A04" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20.218 39.022H16.22v-3.109c0-1.184.889-2.073 2.073-2.073 1.185 0 2.073.889 2.073 2.073v3.109h-.148zM8.373 3.043L8.373 6.448"/>
+        <mask id="prefix__b" fill="#fff">
+            <use xlink:href="#prefix__a"/>
+        </mask>
+        <path stroke="#CD4A04" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.708 11.63L11.039 11.63 11.039 6.448 5.708 6.448zM5.708 16.812L13.999 16.812 13.999 11.63 5.708 11.63zM38.43 6.596h-4.441V5.263c0-1.184 1.036-2.22 2.22-2.22 1.185 0 2.221 1.036 2.221 2.22v1.333zM36.357.674L36.357 3.042M18.589 10.89L21.995 10.89M18.589 22.439V9.557c0-1.628 1.332-2.813 2.814-2.813 1.628 0 2.813 1.333 2.813 2.813v10.81M26.733 24.068L26.733 19.626 16.664 23.18 16.664 26.181M11.038 39.022L33.395 39.022 33.395 29.546 11.038 29.546z" mask="url(#prefix__b)"/>
+        <path stroke="#CD4A04" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.147 29.546L14.147 27.029 18.589 26.141 21.55 25.548 24.808 24.808 29.102 24.068 29.102 29.546M31.619 29.546L31.619 6.596 41.095 6.596 41.095 39.17 43.316 39.17M.674 39.17L3.487 39.17 3.487 16.961 12.37 16.961 12.37 24.068" mask="url(#prefix__b)"/>
+    </g>
+</svg>
