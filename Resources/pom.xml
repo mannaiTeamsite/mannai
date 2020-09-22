@@ -39,6 +39,34 @@
 							<version>16.6.1.0.0</version>
 							<packaging>jar</packaging>
 						</configuration>
+					</execution>
+					<execution>
+						<id>livesite_install_springframework-web</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/livesite/lib/org.springframework.web-3.1.1.RELEASE.jar</file>
+							<groupId>org.springframework.web</groupId>
+							<artifactId>springframework-web</artifactId>
+							<version>3.1.1</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+					<execution>
+						<id>livesite_install_springframework-core</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/livesite/lib/org.springframework.core-3.1.1.RELEASE.jar</file>
+							<groupId>org.springframework.core</groupId>
+							<artifactId>springframework-core</artifactId>
+							<version>3.1.1</version>
+							<packaging>jar</packaging>
+						</configuration>
 					</execution>								
 				</executions>
 			</plugin>
