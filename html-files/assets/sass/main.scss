@@ -796,7 +796,7 @@ hr{
 				 .txt_wrapper .detect-icon {
 					left: 20px;
 					right: auto;
-					top: 1px;
+					// top: 1px;
 				}
 			}
 			.tags_wrapper li {
@@ -15026,3 +15026,8 @@ color: var(--deep-orange);
 // arabic close
 
 /********* Contact Us close ************/
+
+
+.html5-title,#html5-watermark {
+    display: none !important;
+}

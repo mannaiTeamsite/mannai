@@ -123,6 +123,19 @@ header {
 .personal_search_block .search_section .inner_custom_container{
     border-radius: 12px;
 }
+.personal_search_block .search_section .srch_wrap li div {
+    border: none !important;
+}
+.personal_search_block .search_section .srch_wrap li {
+    border: none !important;
+}
+[type="radio"]:checked + label:after, [type="radio"]:checked + label:before, [type="radio"]:checked + label:after {
+    border: 2px solid yellow !important;
+    background: #524040;
+}
+[type="radio"]:checked + label:after, [type="radio"]:checked + label:before, [type="radio"]:checked + label:after {
+    border: 2px solid yellow;
+}
 
 
 .personal_search_block .search_section .srch_wrap ul {
@@ -144,6 +157,19 @@ section{
 }
 .student_card_wrap .student_service_card{
     border: 1px solid #fff;
+}
+.note_block {
+    padding: 50px 0 50px;
+    border-bottom: none !important;
+}
+.bussiness_card_sm {
+    border: 1px solid #fff !important;
+}
+.bussiness_card_sm .title {
+    color: yellow !important;
+}
+.update_everyday_block .every_update_row .block figure {
+    border: 1px solid yellow !important;
 }
 
 .category_polls_card .row_wrap.active .progress_bar {

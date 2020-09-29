@@ -2262,8 +2262,7 @@ hr {
   right: auto; }
 .ar .personal_search_block .search_section .srch_wrap .txt_wrapper .detect-icon {
   left: 20px;
-  right: auto;
-  top: 1px; }
+  right: auto; }
 .ar .personal_search_block .search_section .tags_wrapper li {
   margin: 0 0 24px 24px; }
 .ar .persona_tag_wrapper {
@@ -12267,5 +12266,7 @@ h3 {
     padding-right: 0;
     border: none; } }
 /********* Contact Us close ************/
+.html5-title, #html5-watermark {
+  display: none !important; }
 
 /*# sourceMappingURL=main.css.map */
