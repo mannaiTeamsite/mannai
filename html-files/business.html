@@ -14,170 +14,255 @@
       <link rel="stylesheet" href="assets/css/component_bg.css">
       <link rel="stylesheet" type="text/css" href="assets/css/daterangepicker.css" />
       <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+      <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
    </head>
    <body>
       <!--App_wrapper-->
       <div class="app_wrapper">
-   <!--header-->
-   <header>
-      <div class="header_inner">
-         <div class="innner_wrapper">
-            <div class="nav_brand">
-               <a href="#"  tabindex="0" > <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
-            </div>
-            <div class="nav_col">
-               <div class="header_row">
-                  <div class="abt_qtr_nav desktop_view_head">
-                     <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Digital Products</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
-                     </ul>
-                  </div>
-                  <div class="auth_nav">
-                     <ul>
-                        <li class="mob_hide">
-                            <a href="#"  tabindex="0"  class="link" >
-                           <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                        </li>
-                        <li>
-                            <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                           </a>
-                        </li>
-                        <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
-                        <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
-                           <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                           </a>
-                        </li>
-                     </ul>
-                  </div>
+       <!--header-->
+       <header>
+         <div class="header_inner">
+            <div class="innner_wrapper">
+               <div class="nav_brand">
+                  <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
                </div>
-               <div class="header_row b-top desktop_view_head">
-                  <div class="nav_menu">
-                     <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">About Qatar</a></li>
-                        <li>
-                            <a href="#"  tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                       </li>
-                     </ul>
+               <div class="nav_col">
+                  <div class="header_row">
+                      <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                         <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                         </a>
+                      </figure>
+
+                     <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                        <ul>
+                           <li><a href="#" class="link">Life in Qatar</a></li>
+                          <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                           <li><a href="#" class="link">Open Data</a></li>
+                           <li><a href="#" class="link">E-Participation</a></li>
+                        </ul>
+                     </div>
+                     <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                        <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                           href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                        <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                        <span>Listen</span></span></span>
+                        <span class="rsbtn_right rsimg rsplay rspart"></span>
+                        <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                        </a>
+                     </div>
+                     <div class="auth_nav">
+                        <ul>
+                           <li class="mob_hide">
+                              <a href="#" class="link">
+                              <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                              <div class="access_submenu">
+                                 <span class="title">Accessbility Options</span>
+                                 <ul>
+                                    <li>
+                                       <span class="option">Text Size</span>
+                                       <div class="size_wrap">
+                                          <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                          <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <span class="option">Listen Content</span>
+                                       <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                       <img src="assets/images/volume.png" alt="speaker" />
+                                       <span>Listen</span>
+                                       </button>
+                                    </li>
+                                    <li>
+                                       <span class="option">Contrast</span>
+                                       <button id="themechange">
+                                       <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                       </button>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                           <li>
+                              <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                              </a>
+                           </li>
+                           <li><a href="#" class="link">Login / Signup</a></li>
+                           <li class="mob_menu_nav">
+                             <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="header_row b-top desktop_view_head" id="head2_top">
+                     <div class="nav_menu">
+                        <ul>
+                           <li><a href="#" class="link">Explore Services</a></li>
+                           <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                           <li><a href="#" class="link">Media</a></li>
+                           <li class="">
+                              <a href="#" class="link about_qatar_nav">About Qatar</a>
+                              <div class="about_submenu">
+
+                                 <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                                 <div class="f_row">
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar Government</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                          </figure>
+                                          <h3 class="line-1">Hukoomi</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar National Vision 2030</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                          </figure>
+                                          <h3 class="line-1">Government & Legislatives</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/amir.png" alt="The Amir" />
+                                          </figure>
+                                          <h3 class="line-1">The Amir</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                 </div>
+                              </div>
+                           </li>
+                           <li>
+                              <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                        </li>
+                        </ul>
+                     </div>
                   </div>
                </div>
             </div>
          </div>
-      </div>
-      <!-- Mobile Menu-->
-      <div class="mob_nav">
-         <ul>
-            <li tabindex="0" > <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Innovation</a></li>
-            <li> <a href="#"  tabindex="0" >Open Data</a></li>
-            <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Explore Services</a></li>
-            <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
-            <li> <a href="#"  tabindex="0" >Media</a></li>
-            <li> <a href="#"  tabindex="0" >About Qatar</a></li>
-         </ul>
-      </div>
-      <!-- Mobile Menu-->
-   </header>
-   <!--header close-->
+      </header>
+      <!--header close-->
 
 
 
-           <!--Banner section-->
-           <section class="banner_section" id="editpersona">
-            <div class="custom_container">
-               <div id="home_banner_tsb" class="owl-carousel owl-loaded owl-drag" tabindex="0">
-                  <!--repeat -->
-                  <div class="item">
-                     <div class="banner_row">
-                        <div class="col_left">
-                           <div class="banner_container">
-                              <h1>Download this app for COVID updates in Qatar</h1>
-                              <p class="commn-para"><strong>Ehteraz mobile app -</strong> Check transmission chains and
-                                 latest
-                                 updates on COVID-19 in Qatar.
-                              </p>
-                              <a href="javascript:void)" tabindex="1" class="app-link">
-                                 <img src="assets/images/app-store.png" alt="app-store" />
-                              </a>
-                              <a href="javascript:void)" tabindex="1" class="app-link">
-                                 <img src="assets/images/play-store.png" alt="play-store" />
-                              </a>
-                             
+
+
+                    <!--Banner section-->
+                    <section class="banner_section" id="editpersona">
+                     <div class="custom_container">
+                        <div id="home_banner_tsb" class="owl-carousel owl-loaded owl-drag" tabindex="0">
+                           <!--repeat -->
+                           <div class="item">
+                              <div class="banner_row">
+                                 <div class="col_left">
+                                    <div class="banner_container">
+                                       <h1>Download this app for COVID updates in Qatar</h1>
+                                       <p class="commn-para"><strong>Ehteraz mobile app -</strong> Check transmission chains and
+                                          latest
+                                          updates on COVID-19 in Qatar.
+                                       </p>
+                                       <a href="#"  class="app-link">
+                                          <img src="assets/images/app-store.png" alt="app-store" />
+                                       </a>
+                                       <a href="#"  class="app-link">
+                                          <img src="assets/images/play-store.png" alt="play-store" />
+                                       </a>
+                                      
+                                    </div>
+                                 </div>
+                                 <div class="col_right">
+                                    <figure class="banner_img">
+                                       <img src="assets/images/ic_student_phone_mockups.png" alt="banner-img" />
+                                    </figure>
+                                 </div>
+                              </div>
                            </div>
-                        </div>
-                        <div class="col_right">
-                           <figure class="banner_img">
-                              <img src="assets/images/ic_student_phone_mockups.png" alt="banner-img" />
-                           </figure>
-                        </div>
-                     </div>
-                  </div>
-                  <!--repeat -->
-
-                    <!--repeat -->
-                    <div class="item">
-                     <div class="banner_row">
-                        <div class="col_left">
-                           <div class="banner_container">
-                              <h1>State of Qatar Wins WSIS 2020 E-Science Award</h1>
-                              <p class="commn-para">The State of Qatar, represented by "Qatar Open Data Portal" of the Ministry of Transport and Communications (MOTC),
-                              </p>
+                           <!--repeat -->
+         
+         
+                              <!--repeat -->
+                              <div class="item">
+                                 <div class="banner_row">
+                                    <div class="col_left">
+                                       <div class="banner_container">
+                                          <h1>Download this app for COVID updates in Qatar</h1>
+                                          <p class="commn-para"><strong>Ehteraz mobile app -</strong> Check transmission chains and
+                                             latest
+                                             updates on COVID-19 in Qatar.
+                                          </p>
+                                          <a href="#"  class="app-link">
+                                             <img src="assets/images/app-store.png" alt="app-store" />
+                                          </a>
+                                          <a href="#"  class="app-link">
+                                             <img src="assets/images/play-store.png" alt="play-store" />
+                                          </a>
+                                         
+                                       </div>
+                                    </div>
+                                    <div class="col_right">
+                                       <figure class="banner_img">
+                                          <img src="assets/images/ic_student_phone_mockups.png" alt="banner-img" />
+                                       </figure>
+                                    </div>
+                                 </div>
+                              </div>
+                              <!--repeat -->
+         
                              
-                             
-                           </div>
                         </div>
-                        <div class="col_right">
-                           <figure class="banner_img">
-                              <img src="assets/images/dummy1.png" alt="banner-img" />
-                           </figure>
-                        </div>
+                        <span class="btn-st play_pause_btn pause_btn"  tabindex="0" id="play_pause_button"></span>
                      </div>
-                  </div>
-                  <!--repeat -->     
-                  
-                  
-                    <!--repeat -->
-                    <div class="item">
-                     <div class="banner_row">
-                        <div class="col_left">
-                           <div class="banner_container">
-                              <h1>Coronavirus 2019</h1>
-                              <p class="commn-para">
-                                 Coronavirus disease 2019 (COVID-19) is a novel (new) strain of coronavirus that was first identified in Wuhan, Hebei Province, China
-                              </p>
-                             
-                              <a href="javascript:void)" tabindex="1" class="app-link">
-                                 <img src="assets/images/app-store.png" alt="app-store" />
-                              </a>
-                              <a href="javascript:void)" tabindex="1" class="app-link">
-                                 <img src="assets/images/play-store.png" alt="play-store" />
-                              </a>
-                           </div>
-                        </div>
-                        <div class="col_right">
-                           <figure class="banner_img">
-                              <img src="assets/images/corona.jpg" alt="banner-img" />
-                           </figure>
-                        </div>
-                     </div>
-                  </div>
-                  <!--repeat -->     
-                  
-                  
-
-
-
-               </div>
-               <span class="btn-st play_pause_btn pause_btn"  id="play_pause_button"></span>
-            </div>
-         </section>
-         <!--Banner section close-->
+                    </section>
+                  <!--Banner section close-->
    
           <!-- Search Section -->
           <div class="personal_search_block">
@@ -345,7 +430,7 @@
                      <div class="service_card">
                         <h3 class="title travel" tabindex="0">
                            <img src="assets/images/ic_planning_journey.svg" alt="Journey Travel" class="Qatar travel" />
-                           Planning your journey/travel</h3>
+                           Exploring business in Qatar</h3>
                         <ul class="links_wrap">
                            <li>
                                <a href="#"  tabindex="0" >Getting here</a>
@@ -438,6 +523,41 @@
                      </div>
                   </div>
                   <!-- card repeat close -->
+
+
+                      <!-- card repeat -->
+                      <div class="item">
+                        <div class="service_card">
+                           <h3 class="title travel" tabindex="0">
+                              <img src="assets/images/ic_leaving_qatar.svg" alt="Leaving in Qatar" class="" />
+                              Leaving Qatar </h3>
+                           <ul class="links_wrap">
+                              <li>
+                                  <a href="#"  tabindex="0" >Getting here</a>
+                              </li>
+                              <li>
+                                  <a href="#"  tabindex="0" >Visas, residence permits & customs</a>
+                              </li>
+                              <li>
+                                  <a href="#"  tabindex="0" >Weather in Qatar</a>
+                              </li>
+                              <li>
+                                  <a href="#"  tabindex="0" >Information about Qatar</a>
+                              </li>
+                              <li>
+                                  <a href="#"  tabindex="0" >Information about Qatar</a>
+                              </li>
+                           </ul>
+                           <div class="vw">
+                               <a href="#"  tabindex="0"   class="view_all_wrap  link">
+                                 View All
+                              </a>
+                           </div>
+   
+   
+                        </div>
+                     </div>
+                     <!-- card repeat close -->
 
                </div>
                <!--Owl Slider close-->
@@ -669,7 +789,7 @@
                            <label class="field_label"  for="date_range"   tabindex="0">Date</label>
                            <div class="txt_wrapper">
 
-                              <input type="text" name="daterange"  id="date_range" value="01/01/2018 - 01/15/2018" />
+                              <input type="text" name="daterange"  id="date_range" value="" />
                               <span class="detect-icon">
                                  <img src="assets/images/calendar.png" alt="calendar" />
                               </span>
@@ -713,9 +833,11 @@
                               </a>
                               </li>
                            </ul>
-                            <a href="#"  tabindex="0"  class="view_all_wrap link">
-                              View All
-                           </a>
+                           <div class="vw">
+                              <a href="#" tabindex="0" class="view_all_wrap  link">
+                                View All
+                             </a>
+                          </div>
                         </div>
                      </div>
                      <!-- card repeat close -->
@@ -751,9 +873,11 @@
                                  </a>
                                  </li>
                               </ul>
-                               <a href="#"  tabindex="0"  class="view_all_wrap link">
-                                 View All
-                              </a>
+                              <div class="vw">
+                                 <a href="#" tabindex="0" class="view_all_wrap  link">
+                                   View All
+                                </a>
+                             </div>
                            </div>
                         </div>
                         <!-- card repeat close -->
@@ -790,9 +914,11 @@
                               </a>
                               </li>
                            </ul>
-                            <a href="#"  tabindex="0"  class="view_all_wrap link">
-                              View All
-                           </a>
+                           <div class="vw">
+                              <a href="#" tabindex="0" class="view_all_wrap  link">
+                                View All
+                             </a>
+                          </div>
                         </div>
                      </div>
                      <!-- card repeat close -->
@@ -1311,80 +1437,80 @@
                </div>
             </section>
             <!--Section  Polls and Survey close -->
-           <!-- Subscription Section -->
-           <section class="subscription_section">
-            <div class="custom_container">
-               <div class="flex_row">
-                  <div class="flex_col_sm_6">
-                     <h2 tabindex="0">Never miss an update</h2>
-                     <p class="commn-para" tabindex="0">Get all the latest updates about Qatar sent straight to your inbox. We help
-                        to keep you upbeat.
-                     </p>
-                     <div class="txt_wrapper">
-                        <label for="emailid" class="none">email</label>
-                        <input type="text" id="emailid" placeholder="Enter e-mail id" />
-                        <button class="detect-icon">
-                           <img src="assets/images/send.png" alt="send" /> Subscribe
-                        </button>
+          <!-- Subscription Section -->
+      <section class="subscription_section">
+         <div class="custom_container">
+            <div class="flex_row">
+               <div class="flex_col_sm_6">
+                  <h2 tabindex="0">Never miss an update</h2>
+                  <p class="commn-para" tabindex="0">Get all the latest updates about Qatar sent straight to your inbox.
+                     We help
+                     to keep you upbeat.
+                  </p>
+                  <div class="txt_wrapper">
+                     <label for="emailid" class="none">email</label>
+                     <input type="text" id="emailid" placeholder="Enter e-mail id" />
+                  </div>
+                  <div class="select_lang_wrap">
+                     <span class="recv_option" tabindex="0">Receive Newsletter in</span>
+                     <div class="checkbox_wrap">
+                        <input class="filter-type filled-in" type="checkbox" name="english" id="english" />
+                        <label for="english"><span></span>English</label>
                      </div>
-                     <span class="note"  tabindex="0"><strong>Please note-</strong> Even if you may like it we don’t do spamming! If
-                        you wish to opt out later, you can unsubscribe later.</span>
+                     <div class="checkbox_wrap">
+                        <input class="filter-type filled-in" type="checkbox" name="qatar" id="qatar" />
+                        <label for="qatar"><span></span>عربى</label>
+                     </div>
+                  </div>
+                  <button class="subscribe_btn">Subscribe</button>
+                  <span class="thank_u_msg" tabindex="0">
+                     Thank you! You’re subscribed, look for a confirmation email shortly.
+                  </span>
+                  <span class="note" tabindex="0"><strong>Please note-</strong> Even if you may like it we don’t do
+                     spamming! If
+                     you wish to opt out later, you can unsubscribe later.</span>
+               </div>
+               <div class="flex_col_sm_6">
+                  <div class="sample_card">
                      <!--Owl Slider-->
-                     <div id="review_owl" class="owl-carousel owl-loaded owl-drag">
+                     <div id="newsletter_owl" class="owl-carousel owl-loaded owl-drag">
                         <!-- item repeat -->
                         <div class="item">
-                           <div class="reviews_wrapper" tabindex="0">
-                              <figure>
-                                 <img src="assets/images/sheikh.jpg" alt="reviewd-by" />
+                           <div class="inner_wrap" tabindex="0">
+                              <figure class="sample_img">
+                                 <img src="assets/images/blog-thumb.png" alt="newsletter-sample" />
                               </figure>
-                              <p>“Your newsletters are beautifully crafted and they do a great job of keeping me well
-                                 informed
-                                 about all the latest news & events happening in Qatar.”
-                              </p>
+                              <span class="headlines">Why Qatar is the Safest Country in the World?</span>
+                              <a href="#" tabindex="0" class="view_all_wrap link">
+                                 Checkout a sample newsletter
+                              </a>
                            </div>
                         </div>
-                        <!-- item repeat close -->
+                        <!-- item repeat close-->
                         <!-- item repeat -->
                         <div class="item">
-                           <div class="reviews_wrapper" tabindex="0">
-                              <figure>
-                                 <img src="assets/images/sheikh.jpg" alt="reviewd-by" />
+                           <div class="inner_wrap" tabindex="0">
+                              <figure class="sample_img">
+                                 <img src="assets/images/blog-thumb.png" alt="newsletter-sample" />
                               </figure>
-                              <p>“Your newsletters are beautifully crafted and they do a great job.”</p>
+                              <span class="headlines">Why Qatar is the Safest Country in the World?</span>
+                              <a href="#" tabindex="0" class="view_all_wrap link">
+                                 Checkout a sample newsletter
+                              </a>
                            </div>
                         </div>
-                        <!-- item repeat close -->
+                        <!-- item repeat close-->
                      </div>
                      <!--Owl Slider close-->
                   </div>
-                  <div class="flex_col_sm_6">
-                     <div class="sample_card">
-                        <!--Owl Slider-->
-                        <div id="newsletter_owl" class="owl-carousel owl-loaded owl-drag">
-                           <!-- item repeat -->
-                           <div class="item">
-                              <div class="inner_wrap" tabindex="0">
-                                 <figure class="sample_img">
-                                    <img src="assets/images/blog-thumb.png" alt="newsletter-sample" />
-                                 </figure>
-                                 <span class="headlines">Why Qatar is the Safest Country in the World?</span>
-                                  <a href="#"  tabindex="0"  class="view_all_wrap link">
-                                    Checkout a sample newsletter
-                                 </a>
-                              </div>
-                           </div>
-                           <!-- item repeat close-->
-                        
-                          
-                        </div>
-                        <!--Owl Slider close-->
-                     </div>
-                     <!-- slider close-->
-                  </div>
+                  <!-- slider close-->
                </div>
             </div>
-         </section>
-         <!-- Subscription Section close-->
+         </div>
+      </section>
+      <!-- Subscription Section close-->
+
+
                 <!-- Wish to learn Section -->
                 <section class="know_section">
                   <div class="custom_container">

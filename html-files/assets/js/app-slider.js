@@ -79,8 +79,8 @@ $('#medal_owners').owlCarousel({
 
 $('#services_owl').owlCarousel({
     items: 3,
-    nav:false,
-    dots:true,
+    nav:true,
+    dots:false,
     responsive:{
         0:{
             items:1,

@@ -13,89 +13,193 @@
     <!-- ================== bootstrap css ========================= -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" crossorigin="anonymous">
     <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
 </head>
 
 <body class="">
    
     <div class="app_wrapper">
-        <header>
-            <div class="header_inner">
-                <div class="innner_wrapper">
-                    <div class="nav_brand">
-                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+      <!--header-->
+      <header>
+        <div class="header_inner">
+           <div class="innner_wrapper">
+              <div class="nav_brand">
+                 <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+              </div>
+              <div class="nav_col">
+                 <div class="header_row">
+                     <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                        <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                        </a>
+                     </figure>
+
+                    <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                       <ul>
+                          <li><a href="#" class="link">Life in Qatar</a></li>
+                         <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                          <li><a href="#" class="link">Open Data</a></li>
+                          <li><a href="#" class="link">E-Participation</a></li>
+                       </ul>
                     </div>
-                    <div class="nav_col">
-                        <div class="header_row">
-                            <div class="abt_qtr_nav desktop_view_head">
-                                <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
-                                    <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
-                                </ul>
-                            </div>
-                            <div class="auth_nav">
-                                <ul>
-                                    <li class="mob_hide">
-                                        <a href="#" tabindex="0" class="link">
-                                            <img src="assets/images/accessibility.png" alt="Accessibility"
-                                                class="access_icon"> Accessibility</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
-                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
-                                                alt="language-icon">
-                                        </a>
-                                    </li>
-                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
-                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
-                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="header_row b-top desktop_view_head">
-                            <div class="nav_menu">
-                                <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
-                                    <li>
-                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
-                                                title="Search" class="search_icon" alt="Search"></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                       <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                          href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                       <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                       <span>Listen</span></span></span>
+                       <span class="rsbtn_right rsimg rsplay rspart"></span>
+                       <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                       </a>
                     </div>
-                </div>
-            </div>
-            <!-- Mobile Menu-->
-            <div class="mob_nav">
-                <ul>
-                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Innovation</a></li>
-                    <li> <a href="#" tabindex="0">Open Data</a></li>
-                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Explore Services</a></li>
-                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
-                    <li> <a href="#" tabindex="0">Media</a></li>
-                    <li> <a href="#" tabindex="0">About Qatar</a></li>
-                </ul>
-            </div>
-            <!-- Mobile Menu-->
-        </header>
+                    <div class="auth_nav">
+                       <ul>
+                          <li class="mob_hide">
+                             <a href="#" class="link">
+                             <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                             <div class="access_submenu">
+                                <span class="title">Accessbility Options</span>
+                                <ul>
+                                   <li>
+                                      <span class="option">Text Size</span>
+                                      <div class="size_wrap">
+                                         <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                         <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                      </div>
+                                   </li>
+                                   <li>
+                                      <span class="option">Listen Content</span>
+                                      <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                      <img src="assets/images/volume.png" alt="speaker" />
+                                      <span>Listen</span>
+                                      </button>
+                                   </li>
+                                   <li>
+                                      <span class="option">Contrast</span>
+                                      <button id="themechange">
+                                      <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                      </button>
+                                   </li>
+                                </ul>
+                             </div>
+                          </li>
+                          <li>
+                             <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                             </a>
+                          </li>
+                          <li><a href="#" class="link">Login / Signup</a></li>
+                          <li class="mob_menu_nav">
+                            <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                          </li>
+                       </ul>
+                    </div>
+                 </div>
+                 <div class="header_row b-top desktop_view_head" id="head2_top">
+                    <div class="nav_menu">
+                       <ul>
+                          <li><a href="#" class="link">Explore Services</a></li>
+                          <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                          <li><a href="#" class="link">Media</a></li>
+                          <li class="">
+                             <a href="#" class="link about_qatar_nav">About Qatar</a>
+                             <div class="about_submenu">
+
+                                <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                                <div class="f_row">
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Qatar Government</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Hukoomi</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Qatar</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Qatar National Vision 2030</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Government & Legislatives</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/amir.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">The Amir</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                </div>
+                             </div>
+                          </li>
+                          <li>
+                             <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                       </li>
+                       </ul>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </header>
+     <!--header close-->
         <!-- ======= header ======= -->
    <section class="search_wrapper">
-    <div class="close" tabindex="0"><img src="assets/images/close.svg" alt="Close" title="Close"></div>
+    <div class="close" tabindex="0"><img src="assets/images/close.svg" alt="Close" title="Close Search"></div>
        <!-- ====== search input box, aslo includes autocomplete dropdown and advance search ======= -->
        <div class="search_input">
            <div class="input_wrap">
                <!-- ===== please do not change hierarchy of DIV's ====== -->
                <!-- ===== inputbox ===== -->
-            <input type="text" class="search" id="search" aria-labelledby="search" title="Search" tabindex="1" onkeyup="showSearch(this)" placeholder="Search here eg. how to get a driving license…">
+            <input type="text" class="search" id="search" aria-labelledby="search" title="Search" onkeyup="showSearch(this)" placeholder="Search here eg. how to get a driving license…">
             <label for="search">Search here eg. how to get a driving license…</label>
             <!-- ========== advance search button========= -->
             <div class="adv_search_wrapper">
@@ -107,7 +211,7 @@
                 role="button" 
                 aria-expanded="false" 
                 aria-controls="collapseExample"
-                tabindex="2"
+                tabindex="-1"
                 id="advance_search"
             >
                 <span class="text">Advanced Search</span> 
@@ -124,7 +228,7 @@
 
            <!-- ===== serach button ===== -->
             <div class="search_btn">
-                <button id="search_btn" tabindex="3"> <span><img src="assets/images/search.svg" alt="Search Button"></span> Search</button>
+                <button id="search_btn" tabindex="-1"> <span><img src="assets/images/search.svg" alt="Search Button"></span> Search</button>
             </div>
             <!-- ===== serach button end ===== -->
             <!-- ========= advance search =============== -->
@@ -295,13 +399,13 @@
                             <div class="flex_row">
                                 <ul class="adv_search_images">
                                     <li>
-                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
+                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Services"></figure>
                                     </li>
                                     <li>
-                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
+                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Life"></figure>
                                     </li>
                                     <li>
-                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
+                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Journey"></figure>
                                     </li>
                                 </ul>
                             </div>
@@ -354,9 +458,9 @@
            <div class="link_cards">
             <div class="supporting_links">
                 <div class="links_card">
-                    <h3 tabindex="0">
+                    <h1 tabindex="0">
                         <span><img src="assets/images/briefcase.svg" alt="My Recent Searches"></span>
-                        My recent searches</h3>
+                        My recent searches</h1>
                         <ul>
                             <li tabindex="0"><a href="">Get a driving license</a></li>
                             <li tabindex="0"><a href="">School for Higher education</a></li>
@@ -366,9 +470,9 @@
                 </div>
 
                 <div class="links_card">
-                    <h3 tabindex="0">
+                    <h2 tabindex="0">
                         <span><img src="assets/images/gear.svg" alt="Explore Hukoomi"></span>
-                        Explore Hukoomi</h3>
+                        Explore Hukoomi</h2>
                         <ul>
                             <li tabindex="0"><a href="">About Qatar</a></li>
                             <li tabindex="0"><a href="">Qatar National Vision</a></li>
@@ -455,7 +559,7 @@
                                         aria-expanded="false"
                                         role="button"
                                         tabindex="0"
-                                    ><img src="assets/images/ellipse.svg" alt="Consumer Rights and Protection"></span>
+                                    ><img src="assets/images/ellipse.svg" alt="Consumer_Rights"></span>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterDropdown1">
                                         <a class="dropdown-item" href="#">
                                             <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
@@ -530,7 +634,7 @@
                                         aria-expanded="false"
                                         role="button"
                                         tabindex="0"
-                                    ><img src="assets/images/ellipse.svg" alt="Register in KAHRAMAA as an Exempted Qatari Citizen"></span>
+                                    ><img src="assets/images/ellipse.svg" alt="Register in KAHRAMAA"></span>
                                     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="filterDropdown5">
                                         <a class="dropdown-item" href="#">
                                             <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
@@ -562,9 +666,9 @@
    <script>
    window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
    </script>
-    
-   <script src="assets/js/custom.js"></script>
+     <script src="assets/js/daterangepicker.js"></script>
    <script src="assets/js/search.js"></script>
+   <script src="assets/js/custom.js"></script>
 
    <!-- ==  ============= bootstrap js=============== -->
 </body>

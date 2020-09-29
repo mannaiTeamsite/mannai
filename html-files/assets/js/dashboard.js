@@ -53,21 +53,16 @@ $('.undo_button, .close_hku_alert').click(function () {
     $('.hku_alert, .alert_backdrop').css("display", "none")
 });
 // ========= to show menu on small screens =======
-// $('.dash_menu').click(function(){
-//     $('body').toggleClass('dash_menu_show')
-// })
-$('.dash_menu').click(function (e) {
-    // e.stopPropagation();
-    $('body').toggleClass('dash_menu_show')
-});
+$('.dash_menu').click(function(){
+    $('body').addClass('dash_menu_show');
+    $('.dash_nav_backdrop').css('display', 'block')
+})
 
-$(document).click(function () {
+$('.dash_nav_backdrop').click(function(){
     $('body').removeClass('dash_menu_show');
-});
+    $('.dash_nav_backdrop').css('display', 'none')
+})
 
-$('#lang_toggle').click(function () {
-    $('body').toggleClass('ar')
-});
 
 //======= bill checkbox check uncheck =======
 function checkAll(ele) {
@@ -138,4 +133,41 @@ $('#survey_indicator ol li').on('click', function () {
     currentIndex = $(this).index();
     $("#survey").carousel(currentIndex);
 });
-  $('.carousel').carousel()
+  $('.carousel').carousel();
+
+// ========================================
+  $('.carousel').carousel({
+    interval: false,
+  })
+  
+  $(document).ready(function () {               // on document ready
+    // checkSurvey();
+    $('#survey').on('slide.bs.carousel', function () {
+        console.log('running...')
+      })
+  });
+  
+  $('#survey').on('slide.bs.carousel', function(){
+      console.log('running...')
+  });
+ 
+  
+  function checkSurvey()                        // check function
+  {
+    var $this = $('#survey');
+    if ($('.carousel-inner .carousel-item:first').hasClass('active')) {
+        // Hide left arrow
+        $('.carousel-control-prev').css({'opacity': '0.5', 'pointer-events': 'none'});
+        // But show right arrow
+        $('.carousel-control-next').css({'opacity': '1', 'pointer-events': 'auto'});
+    } else if ($('.carousel-inner .carousel-item:last').hasClass('active')) {
+        // Hide right arrow
+        $('.carousel-control-next').css({'opacity': '0.5', 'pointer-events': 'none'});
+        // But show left arrow
+        $('.carousel-control-prev').css({'opacity': '1', 'pointer-events': 'auto'});
+    } else {
+        $('.carousel-control').css({'opacity': '1', 'pointer-events': 'auto'});
+    }
+  }
+
+

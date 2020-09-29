@@ -40,6 +40,8 @@ $('a[href*="#"]')
     }
   });
 
+
+
 $('.carousel-slider .owl-carousel').owlCarousel({
     loop:true,
     nav: true,
@@ -80,8 +82,8 @@ $('.carousel-slider2 .owl-carousel').owlCarousel({
     margin:32,
     responsiveClass:true,   
     navText: [
-      '<img src="assets/images/back_h.png" alt="back">',
-      '<img src="assets/images/next_h.png" alt="next">'
+        '<img src="assets/images/back_h.png" alt="back">',
+        '<img src="assets/images/next_h.png" alt="next">'
     ],    
     navContainer: '.carousel-slider2 .custom-nav',
     responsive:{
@@ -109,8 +111,8 @@ $('.contact-carousel').owlCarousel({
     dots: false,
     responsiveClass:true,   
     navText: [
-      '<img src="assets/images/back_h.png" alt="back">',
-      '<img src="assets/images/next_h.png" alt="next">'
+        '<img src="assets/images/back_h.png" alt="back">',
+        '<img src="assets/images/next_h.png" alt="next">'
     ],            
     responsive:{
     0:{
@@ -138,18 +140,26 @@ $('.contact-carousel').owlCarousel({
 // mobile Navbar
 
 
-const menuToggle =  document.querySelector ('.menu-toggle');
-const closeIcon = document.querySelector  ('.close-icon');
-const healthcareNavbar = document.querySelector('.healthcare-navbar');
-const overlay = document.querySelector('.overlay');
+// const menuToggle =  document.querySelector ('.menu-toggle');
+// const closeIcon = document.querySelector  ('.close-icon');
+// const healthcareNavbar = document.querySelector('.healthcare-navbar');
+// const overlay = document.querySelector('.overlay');
 
-menuToggle.addEventListener('click', function(){
-healthcareNavbar.classList.add('show');
-overlay.classList.add('show');
+// menuToggle.addEventListener('click', function(){
+// healthcareNavbar.classList.add('show');
+// overlay.classList.add('show');
+// });
+
+
+// closeIcon.addEventListener('click', function(){
+// healthcareNavbar.classList.remove('show');
+// overlay.classList.remove('show');
+// });
+
+
+$('.healthcare-navbar li').click(function(){
+  $('.healthcare-navbar li').removeClass('active')
+  $(this).addClass('active');
 });
 
 
-closeIcon.addEventListener('click', function(){
-healthcareNavbar.classList.remove('show');
-overlay.classList.remove('show');
-});

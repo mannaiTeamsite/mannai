@@ -4,6 +4,8 @@
 @import'mixin.scss';
 
 
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
+
 /*----------------------------Font------------------------------*/
 @font-face {
 	font-family: "cairo_light";
@@ -21,6 +23,10 @@
 	font-style: normal;
   }
   
+
+  
+
+
   @font-face {
 	font-family: "cairo_semibold";
 	src: url("../fonts/cairo-semibold-webfont.woff2") format("woff2"),
@@ -28,6 +34,9 @@
 	font-weight: normal;
 	font-style: normal;
   }
+
+ 
+
   @font-face {
 	font-family: "cairo_bold";
 	src: url("../fonts/cairo-bold-webfont.woff2") format("woff2"),
@@ -75,11 +84,11 @@
 
 input::-webkit-calendar-picker-indicator {
 
-  }
+}
 /*-------------------Base---------------*/
 body {
 	font-family: "cairo_regular";
-
+	font-weight: 400;
   }
   
 
@@ -125,6 +134,10 @@ body {
 	margin: 0 auto;
 	@media(max-width:990px){
 		padding: 55px 0 120px 0;
+	}
+
+	@media(max-width:640px){
+		padding: 55px 0 135px 0;
 	}
 }
 
@@ -335,6 +348,10 @@ input{
 
 /*************Table****************/ 
 .table_wrap{
+	@media(max-width:768px){
+		white-space: nowrap;
+		overflow-y: auto;
+	}
 	table{
 		font-family: 'cairo_semibold';
 		font-size: 14px;
@@ -450,4 +467,10 @@ input{
 .nav-pills .nav-link.active, .nav-pills .show>.nav-link {
     color: #fff;
     background-color: transparent;
+}
+
+
+
+.lb-data .lb-details {
+    display: none;
 }

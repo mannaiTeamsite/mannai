@@ -27,6 +27,9 @@ p, h1, h2, h3, h4, h5{
         top: 0;
         right: 0;
         cursor: pointer;
+        img{
+            max-width: 100%;
+        }
         @media screen and (max-width: 1024px){
             width: 30px;
             height: 30px;
@@ -426,8 +429,9 @@ p, h1, h2, h3, h4, h5{
                                 figure{
                                     margin-bottom: 0;
                                     img{
-                                        width: 100%;
                                         border-radius: 9px;
+                                        width: 100%;
+                                        max-width: 100%;
                                     }
                                 }
                             }
@@ -671,7 +675,7 @@ p, h1, h2, h3, h4, h5{
                 width: 100%;
                 margin: 10px;
             }
-            h3{
+            h1, h2, h3{
                 display: flex;
                 align-items: center;
                 font-family: 'cairo_bold';
@@ -709,8 +713,7 @@ p, h1, h2, h3, h4, h5{
 }
 .ar{
     .links_card{
-        
-        h3{
+        h1, h2, h3{
             
             span{
                 margin-right: 0 !important;
@@ -753,7 +756,7 @@ p, h1, h2, h3, h4, h5{
 
 
 .search_filter{  //right side accordian
-    border-left: 1px solid var(--white-ten);
+    border-left: 1px solid #efefef;
     margin-left: 20px;
     padding-left: 24px;
     width: 100%;

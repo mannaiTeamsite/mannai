@@ -30,9 +30,7 @@ $(document).ready(function(){
     });
 
     // ======= for lang change =======
-    $('#lang_toggle').click(function(){
-        $('body').toggleClass('ar')
-    });
+   
     $('.del_fav').click(function(){
         console.log("favourite")
         $('.hku_alert, .alert_backdrop').css("display", "block")
@@ -151,8 +149,14 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
     });
     console.log(applied_filters_arr);
     applied_filters()
-  }
-
+  };
+  
+  $('.dropdown-menu .chech_lbl').click(function (e) {
+    e.stopPropagation();
+});
+$(' .radio_lbl').click(function (e) {
+    e.stopPropagation();
+});
 
 
   

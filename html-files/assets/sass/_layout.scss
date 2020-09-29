@@ -486,7 +486,7 @@ header{
                   ul{
                       text-align: left;
                       li{
-                        margin: 0 30px 0 9px;
+                        margin: 0 30px 0 0;
                       }
                   }
                 }
@@ -498,8 +498,10 @@ header{
         }
     } 
     .search_icon {
-        margin: 0 -13px -4px 13px;
         cursor: pointer;
+        @media(max-width: 990px){
+            margin: 0;
+        }
     }
 
     .jump_link_header{
@@ -659,6 +661,14 @@ header{
         border-left: none;
     }
 }
+
+
+
+.header_dropdown_menu{
+    display: block;
+    top: 0;
+    position: relative;
+}
 /*-----------------------------------------------Header-----------------------------------------------*/
 
 /*--------------------------------------------Breadcrumb--------------------------------------------*/
@@ -711,6 +721,31 @@ header{
              }
          }
      }
+ }
+
+
+ .ar{
+    .breadcrumbs_wrapper  {
+        ul {
+            width: 95%;
+            text-align: right;
+
+            li{
+                padding-left: 25px;
+                padding-right: 0;
+                &:before{
+                    top: 0px;
+                    right: auto;
+                    left: 5px;
+                    transform: rotate(180deg);
+                    &:first-child{
+                        content: "";
+                         background: transparent;
+                    }
+                }
+            }
+        }
+    }
  }
 /*--------------------------------------------Breadcrumb close--------------------------------------------*/
 

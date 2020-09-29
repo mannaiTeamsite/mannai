@@ -68,10 +68,10 @@ a:hover {
     @media (max-width: 414px) {
       .ar .notification-wrapper .notification-container article .filter-header .filter-notification {
         padding: 35px 20px 0 0px; } }
-    .ar .notification-wrapper .notification-container article .filter-header .filter-notification a .icon {
+    .ar .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle .icon {
       margin-right: 0;
       margin-left: 8px; }
-    .ar .notification-wrapper .notification-container article .filter-header .filter-notification a .dropdown-icon {
+    .ar .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle .dropdown-icon {
       margin-left: 0;
       margin-right: auto; }
     .ar .notification-wrapper .notification-container article .filter-header .filter-notification .filter-dropdown .filter-card .filter-card-header .toggle-icon {
@@ -121,11 +121,12 @@ a:hover {
         flex-wrap: wrap; } }
     .notification-wrapper .notification-container aside {
       margin-right: 30px;
-      width: 260px;
-      max-width: 100%; }
+      width: 260px; }
       @media (max-width: 640px) {
         .notification-wrapper .notification-container aside {
-          margin-bottom: 20px; } }
+          margin-bottom: 20px;
+          width: 100%;
+          margin-right: 0; } }
       .notification-wrapper .notification-container aside .total-noti-card {
         border-radius: 12px;
         box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.13);
@@ -134,7 +135,7 @@ a:hover {
         .notification-wrapper .notification-container aside .total-noti-card .noti-header {
           display: flex;
           align-self: center; }
-          .notification-wrapper .notification-container aside .total-noti-card .noti-header h2 {
+          .notification-wrapper .notification-container aside .total-noti-card .noti-header h1 {
             font-family: "cairo_bold";
             font-size: 16px;
             line-height: 25px;
@@ -175,12 +176,18 @@ a:hover {
     .notification-wrapper .notification-container article {
       width: 553px;
       max-width: 100%; }
+      @media (max-width: 640px) {
+        .notification-wrapper .notification-container article {
+          width: 100%; } }
       .notification-wrapper .notification-container article .filter-header {
         display: flex;
         align-items: center;
         margin-bottom: 15px; }
         .notification-wrapper .notification-container article .filter-header .date-section {
           width: 114px; }
+          @media (max-width: 768px) and (min-width: 375px) {
+            .notification-wrapper .notification-container article .filter-header .date-section {
+              width: 150px; } }
           .notification-wrapper .notification-container article .filter-header .date-section label {
             font-family: "cairo_semibold";
             font-size: 13px;
@@ -207,6 +214,39 @@ a:hover {
               transform: translateY(-50%); }
               .notification-wrapper .notification-container article .filter-header .date-section .date .calendar-icon img {
                 width: 15px; }
+            .notification-wrapper .notification-container article .filter-header .date-section .date .dropdown-menu {
+              z-index: 990; }
+            .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker th {
+              padding: 6px 8px; }
+              .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker th.prev, .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker th.next {
+                position: relative; }
+              .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker th .glyphicon-chevron-left {
+                border-style: solid;
+                border-width: 2px 0 0 2px;
+                border-color: #1c1517;
+                padding: 4px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%) rotate(-45deg);
+                left: calc(50% - 4px); }
+              .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker th .glyphicon-chevron-right {
+                border-style: solid;
+                border-width: 0 2px 2px 0;
+                border-color: #1c1517;
+                padding: 4px;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%) rotate(-45deg);
+                left: calc(50% - 8px); }
+            .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker .day {
+              padding: 8px;
+              font-size: 14px; }
+              .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker .day.active, .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker .day:hover {
+                background-color: #b51647;
+                color: #ffffff; }
+            .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker .month.active, .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker .month:hover, .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker .year.active, .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker .year:hover {
+              background-color: #b51647;
+              color: #ffffff; }
         .notification-wrapper .notification-container article .filter-header .filter-notification {
           position: relative;
           padding: 35px 0 0 40px;
@@ -216,7 +256,7 @@ a:hover {
             .notification-wrapper .notification-container article .filter-header .filter-notification {
               max-width: 170px;
               padding: 35px 0 0 20px; } }
-          .notification-wrapper .notification-container article .filter-header .filter-notification a {
+          .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle {
             font-family: "cairo_bold";
             font-size: 13px;
             line-height: 18px;
@@ -224,18 +264,24 @@ a:hover {
             letter-spacing: 0.19px;
             transition: all 0.3s ease-in;
             display: flex;
-            align-items: center; }
-            .notification-wrapper .notification-container article .filter-header .filter-notification a .icon {
+            align-items: center;
+            background-color: #ffffff;
+            border: none;
+            width: 100%; }
+            .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle:focus {
+              outline: none;
+              box-shadow: none; }
+            .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle .icon {
               margin-right: 8px; }
-              .notification-wrapper .notification-container article .filter-header .filter-notification a .icon svg {
+              .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle .icon svg {
                 width: 16px; }
-                .notification-wrapper .notification-container article .filter-header .filter-notification a .icon svg polygon {
+                .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle .icon svg polygon {
                   transition: all 0.3s ease-in; }
-            .notification-wrapper .notification-container article .filter-header .filter-notification a .dropdown-icon {
+            .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle .dropdown-icon {
               margin-left: auto; }
-            .notification-wrapper .notification-container article .filter-header .filter-notification a:hover {
+            .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle:hover {
               color: #b51647; }
-              .notification-wrapper .notification-container article .filter-header .filter-notification a:hover svg polygon {
+              .notification-wrapper .notification-container article .filter-header .filter-notification .filter-toggle:hover svg polygon {
                 stroke: #b51647; }
         .notification-wrapper .notification-container article .filter-header .filter-dropdown {
           min-width: 209px;
@@ -266,7 +312,7 @@ a:hover {
               align-items: center;
               margin-bottom: 14px;
               cursor: pointer; }
-              .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-card .filter-card-header .sub-header h4 {
+              .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-card .filter-card-header .sub-header h2 {
                 font-family: "cairo_semibold";
                 font-size: 14px;
                 line-height: 22px;
@@ -324,7 +370,7 @@ a:hover {
                     display: block;
                     position: absolute;
                     top: 0;
-                    background: url("../images/check_notification.svg") no-repeat 50% 50%/100%; }
+                    background: url("..//images/check.svg") no-repeat 50% 50%/100%; }
               .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-card .filter-card-body ul .custom-checkbox span {
                 position: absolute;
                 top: 2px;
@@ -339,16 +385,21 @@ a:hover {
             align-items: center;
             justify-content: space-between;
             padding: 0 15px; }
-            .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-footer a {
+            .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-footer .filter-btn {
               font-family: "cairo_bold";
               font-size: 14px;
               line-height: 22px;
               letter-spacing: 0.2px;
-              color: #b51647; }
-              .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-footer a:first-child::after {
+              color: #b51647;
+              background: #fff;
+              border: none; }
+              .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-footer .filter-btn:first-child::after {
                 background: #b51647; }
-              .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-footer a:last-of-type {
+              .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-footer .filter-btn:last-of-type {
                 color: #6a6a6b; }
+              .notification-wrapper .notification-container article .filter-header .filter-dropdown .filter-footer .filter-btn:focus {
+                outline: none;
+                box-shadow: none; }
       .notification-wrapper .notification-container article .notification-body {
         padding: 30px 20px;
         border-radius: 12px;
@@ -391,14 +442,17 @@ a:hover {
         .notification-wrapper .notification-container article .notification-body .notification-info {
           padding: 0 25px 0 15px;
           flex: 1; }
-          .notification-wrapper .notification-container article .notification-body .notification-info p {
+          @media (max-width: 768px) {
+            .notification-wrapper .notification-container article .notification-body .notification-info {
+              padding: 0 10px; } }
+          .notification-wrapper .notification-container article .notification-body .notification-info h3 {
             font-family: "cairo_semibold";
             font-size: 16px;
             line-height: 25px;
             color: #1c1517;
             letter-spacing: 0.23px;
             margin-bottom: 10px; }
-            .notification-wrapper .notification-container article .notification-body .notification-info p .time {
+            .notification-wrapper .notification-container article .notification-body .notification-info h3 .time {
               font-family: "cairo_semibold";
               font-size: 14px;
               line-height: 22px;
@@ -430,10 +484,11 @@ a:hover {
           cursor: pointer;
           width: 20px;
           height: 20px;
-          display: inline-block;
-          text-align: right; }
+          display: inline-block; }
           .notification-wrapper .notification-container article .notification-body .dropdown .dropdown-icon::after {
             display: none; }
+          .notification-wrapper .notification-container article .notification-body .dropdown .dropdown-icon img {
+            margin: 0 auto; }
         .notification-wrapper .notification-container article .notification-body .dropdown .dropdown-menu {
           min-width: 200px;
           padding: 0;

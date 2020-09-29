@@ -21,12 +21,7 @@ $(window).scroll(function () {
 /**********************Onscroll Header Fixed close********************************/
 
 
-/********Select Js***************/
-$(function () {
-    $('.selectpicker').selectpicker({});
-    });
 
-/********Select Js close***************/
 
 
 /********************Search Select Persona and  its persona value Js******************************/
@@ -63,33 +58,21 @@ $("#mob_menu_toggle2").click(function(){
    $("#head2_top").toggleClass("head2_top");
 });
 
-$(".about_qatar_nav").click(function(){
+$(".about_qatar_nav").click(function(e){
+   e.stopPropagation()
    $(".about_submenu").toggleClass("active");
 });
+
+$("body").click(function(){
+   $(".about_submenu").removeClass("active");
+});
+
 
 $(".reomve_about_menu").click(function(){
    $(".about_submenu").removeClass("active");
 });
 
 /*********************Mobile Menu Toggle close***********************************************************/
-
-
-
-
-
-/*************************Date Range Calendar*****************************************/
-$(function () {
-    $('input[name="daterange"]').daterangepicker({
-       opens: 'left'
-    }, function (start, end, label) {
-       console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
-    });
- });
- /*************************Date Range Calendar*****************************************/
-
-
-
-
 
  /**************************Category  Filter Modal Js*************************************************/
  $(".filter").click(function (e) {
@@ -373,11 +356,13 @@ $(".lisitin").click(function(){
 $(document).ready(function(){
 $('#themechange').click(function(){
 if($('link#styles').attr('href')=="assets/css/Day.css"){
-$('link#styles').attr('href','assets/css/blind.css')
+$('link#styles').attr('href','assets/css/blind.css');
+$(".head_logo").attr("src", "assets/images/h-logo.png");
 }
 else
 {
-$('link#styles').attr('href','assets/css/Day.css')
+$('link#styles').attr('href','assets/css/Day.css');
+ $(".head_logo").attr("src", "assets/images/logo.svg");
 }
 })
 });
@@ -623,13 +608,45 @@ $(document).ready(function(){
 
 
       $(this).hide();
-      $(".category_polls_card").removeClass("polls_start");
+      $(this).parent().parent().parent().parent().parent().removeClass("polls_start");
+      $(this).parent().parent().parent().parent().parent().addClass("polls_inactive");
 
+      $("input[type='radio']:checked").parent().parent().addClass("active");
 
-      $(".category_polls_card").addClass("past_polls");
-
-      // var radioValue = $("input[name='persona']:checked").val();
-      // if(radioValue){
-      //    $("#persona").val(radioValue)
-      // }
+     
    });
+
+   // function resetRadio(){
+   //    $(".row_wrap").removeClass("active");   
+   // }
+
+   // $("input[type='radio']").click(function(){
+   //   resetRadio()
+   //   var b = $(this).attr('id');
+
+   //    console.log(b);
+      
+   //    $('#'+ b ).parent().parent().addClass("active");
+
+   // });
+   /*************************Date Range Calendar*****************************************/
+$(function () {
+   $('input[name="daterange"]').daterangepicker({
+      opens: 'left'
+   }, function (start, end, label) {
+      console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+   });
+});
+/*************************Date Range Calendar*****************************************/
+/********Select Js***************/
+$(function () {
+  $('.selectpicker').selectpicker({});
+  });
+
+/********Select Js close***************/
+
+
+
+
+
+

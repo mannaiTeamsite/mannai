@@ -15,89 +15,218 @@
    <link rel="stylesheet" href="assets/css/component_bg.css">
    <link rel="stylesheet" type="text/css" href="assets/css/daterangepicker.css" />
    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
 </head>
+
 <body>
    <!--App_wrapper-->
    <div class="app_wrapper">
- 
-         <!--header-->
-         <header>
-            <div class="header_inner">
-               <div class="innner_wrapper">
-                  <div class="nav_brand">
-                     <a href="#"  tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
-                  </div>
-                  <div class="nav_col">
-                     <div class="header_row">
-                        <div class="abt_qtr_nav desktop_view_head">
-                           <ul>
-                              <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
-                              <li> <a href="#"  tabindex="0" class="link">Digital Products</a></li>
-                              <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
-                           </ul>
-                        </div>
-                        <div class="auth_nav">
-                           <ul>
-                              <li class="mob_hide">
-                                 <a href="#"  tabindex="0"  class="link" >
-                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                              </li>
-                              <li>
-                                 <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                                 </a>
-                              </li>
-                              <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
-                              <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
-                                 <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                                 </a>
-                              </li>
-                           </ul>
-                        </div>
+       <!--header-->
+       <header>
+         <div class="header_inner">
+            <div class="innner_wrapper">
+               <div class="nav_brand">
+                  <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+               </div>
+               <div class="nav_col">
+                  <div class="header_row">
+                      <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                         <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                         </a>
+                      </figure>
+
+                     <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                        <ul>
+                           <li><a href="#" class="link">Life in Qatar</a></li>
+                          <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                           <li><a href="#" class="link">Open Data</a></li>
+                           <li><a href="#" class="link">E-Participation</a></li>
+                        </ul>
                      </div>
-                     <div class="header_row b-top desktop_view_head">
-                        <div class="nav_menu">
-                           <ul>
-                              <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link active" >About Qatar</a></li>
-                              <li>
-                                 <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                     <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                        <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                           href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                        <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                        <span>Listen</span></span></span>
+                        <span class="rsbtn_right rsimg rsplay rspart"></span>
+                        <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                        </a>
+                     </div>
+                     <div class="auth_nav">
+                        <ul>
+                           <li class="mob_hide">
+                              <a href="#" class="link">
+                              <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                              <div class="access_submenu">
+                                 <span class="title">Accessbility Options</span>
+                                 <ul>
+                                    <li>
+                                       <span class="option">Text Size</span>
+                                       <div class="size_wrap">
+                                          <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                          <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <span class="option">Listen Content</span>
+                                       <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                       <img src="assets/images/volume.png" alt="speaker" />
+                                       <span>Listen</span>
+                                       </button>
+                                    </li>
+                                    <li>
+                                       <span class="option">Contrast</span>
+                                       <button id="themechange">
+                                       <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                       </button>
+                                    </li>
+                                 </ul>
+                              </div>
                            </li>
-                           </ul>
-                        </div>
+                           <li>
+                              <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                              </a>
+                           </li>
+                           <li><a href="#" class="link">Login / Signup</a></li>
+                           <li class="mob_menu_nav">
+                             <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="header_row b-top desktop_view_head" id="head2_top">
+                     <div class="nav_menu">
+                        <ul>
+                           <li><a href="#" class="link">Explore Services</a></li>
+                           <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                           <li><a href="#" class="link">Media</a></li>
+                           <li class="">
+                              <a href="#" class="link about_qatar_nav">About Qatar</a>
+                              <div class="about_submenu">
+
+                                 <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                                 <div class="f_row">
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar Government</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                          </figure>
+                                          <h3 class="line-1">Hukoomi</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar National Vision 2030</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                          </figure>
+                                          <h3 class="line-1">Government & Legislatives</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/amir.png" alt="The Amir" />
+                                          </figure>
+                                          <h3 class="line-1">The Amir</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                          page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                 </div>
+                              </div>
+                           </li>
+                           <li>
+                              <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                        </li>
+                        </ul>
                      </div>
                   </div>
                </div>
             </div>
-            <!-- Mobile Menu-->
-            <div class="mob_nav">
-               <ul>
-                  <li tabindex="0"> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-                  <li> <a href="#"  tabindex="0" >Innovation</a></li>
-                  <li> <a href="#"  tabindex="0" >Open Data</a></li>
-                  <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-                  <li> <a href="#"  tabindex="0" >Explore Services</a></li>
-                  <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
-                  <li> <a href="#"  tabindex="0" >Media</a></li>
-                  <li> <a href="#"  tabindex="0" >About Qatar</a></li>
-               </ul>
-            </div>
-            <!-- Mobile Menu-->
-         </header>
-         <!--header close--> 
+         </div>
+       </header>
+      <!--header close-->
+ 
+      <!--Banner section-->
+      <section class="banner_section" id="editpersona">
+         <div class="custom_container">
+            <div id="home_banner_tsb" class="owl-carousel owl-loaded owl-drag" tabindex="0">
+               <!--repeat -->
+               <div class="item">
+                  <div class="banner_row">
+                     <div class="col_left">
+                        <div class="banner_container">
+                           <h1>Download this app for COVID updates in Qatar</h1>
+                           <p class="commn-para"><strong>Ehteraz mobile app -</strong> Check transmission chains and
+                              latest
+                              updates on COVID-19 in Qatar.
+                           </p>
+                           <a href="#"  class="app-link">
+                              <img src="assets/images/app-store.png" alt="app-store" />
+                           </a>
+                           <a href="#"  class="app-link">
+                              <img src="assets/images/play-store.png" alt="play-store" />
+                           </a>
+                          
+                        </div>
+                     </div>
+                     <div class="col_right">
+                        <figure class="banner_img">
+                           <img src="assets/images/ic_student_phone_mockups.png" alt="banner-img" />
+                        </figure>
+                     </div>
+                  </div>
+               </div>
+               <!--repeat -->
 
-         <!--Edit Persona Button-->
-         <a href="#editpersona" class="ediit_persona select_persona">
-            <img src="assets/images/group.png" class=""   title="Edit Persona"  alt="Edit Persona"/>
-         </a>
-         <!--Edit Persona Button close-->
 
-         <!--Banner section-->
-         <section class="banner_section">
-            <div class="custom_container">
-               <div id="home_banner_tsb" class="owl-carousel owl-loaded owl-drag" tabindex="0">
                   <!--repeat -->
                   <div class="item">
                      <div class="banner_row">
@@ -108,10 +237,10 @@
                                  latest
                                  updates on COVID-19 in Qatar.
                               </p>
-                              <a href="javascript:void)" tabindex="1" class="app-link">
+                              <a href="#"  class="app-link">
                                  <img src="assets/images/app-store.png" alt="app-store" />
                               </a>
-                              <a href="javascript:void)" tabindex="1" class="app-link">
+                              <a href="#"  class="app-link">
                                  <img src="assets/images/play-store.png" alt="play-store" />
                               </a>
                              
@@ -126,1066 +255,1033 @@
                   </div>
                   <!--repeat -->
 
-                    <!--repeat -->
-                    <div class="item">
-                     <div class="banner_row">
-                        <div class="col_left">
-                           <div class="banner_container">
-                              <h1>Download this app for COVID updates in Qatar</h1>
-                              <p class="commn-para"><strong>Ehteraz mobile app -</strong> Check transmission chains and
-                                 latest
-                                 updates on COVID-19 in Qatar.
-                              </p>
-                              <a href="javascript:void)" tabindex="1" class="app-link">
-                                 <img src="assets/images/app-store.png" alt="app-store" />
-                              </a>
-                              <a href="javascript:void)" tabindex="1" class="app-link">
-                                 <img src="assets/images/play-store.png" alt="play-store" />
-                              </a>
-                             
-                           </div>
-                        </div>
-                        <div class="col_right">
-                           <figure class="banner_img">
-                              <img src="assets/images/ic_student_phone_mockups.png" alt="banner-img" />
-                           </figure>
-                        </div>
-                     </div>
-                  </div>
-                  <!--repeat -->       
-               </div>
-               <span class="btn-st play_pause_btn pause_btn"  id="play_pause_button"></span>
+                 
             </div>
-         </section>
-         <!--Banner section close-->
+            <span class="btn-st play_pause_btn pause_btn"  tabindex="0" id="play_pause_button"></span>
+         </div>
+        </section>
+      <!--Banner section close-->
+      
+     <!-- Search Section -->
+     <div class="personal_search_block">
+      <!--Edit Persona Button-->
+      <a href="#editpersona" class="ediit_persona select_persona">
+         <img src="assets/images/group.png" class=""   title="Edit Persona"  alt="Edit Persona"/>
+      </a>
+   <!--Edit Persona Button close-->
+   <div class="custom_container">
+     <div class="search_section">
+        <!-- search -->
+        <div class="inner_custom_container">
+           <div class="srch_wrap">
+              <ul>
 
-          <!-- Search Section -->
-          <div class="personal_search_block">
-             <div class="custom_container">
-               <div class="search_section">
-                  <!-- search -->
-                  <div class="inner_custom_container">
-                     <div class="srch_wrap" id="editpersona">
-                        <ul>
-
-                        <li tabindex="0" class="select_persona">
-                           <div class="person_col">
-                              <label for="persona">I'm a</label>
-                              <div class="txt_wrapper">
-                                 <input type="text" placeholder="eg. Tourist" id="persona"  value="" />
-                                 <span class="detect-icon">
-                                 <img src="assets/images/arrow-down-s-line.svg" alt="location" />
-                                 </span>
-                              </div>
-                           </div>
-                        </li>
-                        <li tabindex="0">
-                           <div class="location_col">
-                              <label for="place">And I'm from</label>
-                              <div class="txt_wrapper">
-                                
-                              <input type="text" name="city"  id="place" placeholder="eg. Qatar" list="cityname" autocomplete="off">
-                              <datalist id="cityname">
-                              <option value="Boston">
-                              <option value="Cambridge">
-                              </datalist>
-                                 <span class="detect-icon">
-                                 <img src="assets/images/location.svg" alt="location" />
-                                 </span>
-                                
-                              </div>
-                           </div>
-                        </li>
-                        <li tabindex="0">
-                           <div class="looking_for_col">
-                              <label for="looking_for">And I'm looking for</label>
-                              <input type="text" id="looking_for" placeholder="eg. qatar travel with family" />
-                           </div>
-                        </li>
-                        </ul>
-
-                        <div class="btn_wrapper">
-                           <button class="search_btn">Search</button>
-                        </div>
-                        
-                     </div>
-                  </div>
-                  <div class="persona_tag_wrapper">
-                     <div class="box">
-                        <span class="persona_title">Citizen</span>
-                        <ul>
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Parent" name="persona" value="Parent">
-                                 <label for="Parent">Parent</label>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Employee" name="persona" value="Employee">
-                                 <label for="Employee">Employee</label>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Businessman" name="persona"  value="Businessman">
-                                 <label for="Businessman">Businessman</label>
-                              </div>
-                           </li>
-                        </ul>
-                     </div>
-                     <div class="box">
-                        <span class="persona_title">Resident</span>
-                        <ul>
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Demo1" name="persona" value="Demo1">
-                                 <label for="Demo1">Demo1</label>
-                              </div>
-                           </li>
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Demo2" name="persona" value="Demo2">
-                                 <label for="Demo2">Demo2</label>
-                              </div>
-                           </li>
-                        </ul>
-                     </div>
-                     <div class="box">
-                        <span class="persona_title">Visitor</span>
-                        <ul>
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Demo3" name="persona" value="Demo3">
-                                 <label for="Demo3">Demo3</label>
-                              </div>
-                           </li>
-
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Demo4" name="persona" value="Demo4">
-                                 <label for="Demo4">Demo4</label>
-                              </div>
-                           </li>
-
-
-                           <li>
-                              <div class="radio_wrap">
-                                 <input type="radio" id="Demo5" name="persona" value="Tourist">
-                                 <label for="Demo5">Demo5</label>
-                              </div>
-                           </li>
+              <li tabindex="0" class="select_persona">
+                 <div class="person_col">
+                    <label for="persona">I'm a</label>
+                    <div class="txt_wrapper">
+                       <input type="text" placeholder="eg. Tourist" id="persona"  value="" />
+                       <span class="detect-icon">
+                       <img src="assets/images/arrow-down-s-line.svg" alt="location" />
+                       </span>
+                    </div>
+                 </div>
+              </li>
+              <li tabindex="0">
+                 <div class="location_col">
+                    <label for="place">And I'm from</label>
+                    <div class="txt_wrapper">
                       
+                    <input type="text" name="city"  id="place" placeholder="eg. Qatar" list="cityname" autocomplete="off">
+                    <datalist id="cityname">
+                    <option value="Boston">
+                    <option value="Cambridge">
+                    </datalist>
+                       <span class="detect-icon">
+                       <img src="assets/images/location.svg" alt="location" />
+                       </span>
+                      
+                    </div>
+                 </div>
+              </li>
+              <li tabindex="0">
+                 <div class="looking_for_col">
+                    <label for="looking_for">And I'm looking for</label>
+                    <input type="text" id="looking_for" placeholder="eg. qatar travel with family" />
+                 </div>
+              </li>
+              </ul>
+
+              <div class="btn_wrapper">
+                 <button class="search_btn">Search</button>
+              </div>
+              
+           </div>
+        </div>
+        <div class="persona_tag_wrapper">
+           <div class="box">
+              <span class="persona_title">Citizen</span>
+              <ul>
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Parent" name="persona" value="Parent">
+                       <label for="Parent">Parent</label>
+                    </div>
+                 </li>
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Employee" name="persona" value="Employee">
+                       <label for="Employee">Employee</label>
+                    </div>
+                 </li>
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Businessman" name="persona"  value="Businessman">
+                       <label for="Businessman">Businessman</label>
+                    </div>
+                 </li>
+              </ul>
+           </div>
+           <div class="box">
+              <span class="persona_title">Resident</span>
+              <ul>
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Demo1" name="persona" value="Demo1">
+                       <label for="Demo1">Demo1</label>
+                    </div>
+                 </li>
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Demo2" name="persona" value="Demo2">
+                       <label for="Demo2">Demo2</label>
+                    </div>
+                 </li>
+              </ul>
+           </div>
+           <div class="box">
+              <span class="persona_title">Visitor</span>
+              <ul>
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Demo3" name="persona" value="Demo3">
+                       <label for="Demo3">Demo3</label>
+                    </div>
+                 </li>
+
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Demo4" name="persona" value="Demo4">
+                       <label for="Demo4">Demo4</label>
+                    </div>
+                 </li>
+
+
+                 <li>
+                    <div class="radio_wrap">
+                       <input type="radio" id="Demo5" name="persona" value="Tourist">
+                       <label for="Demo5">Demo5</label>
+                    </div>
+                 </li>
+            
+              </ul>
+           </div>
+        </div>
+        <!-- search close -->
+     </div>
+  </div>
+</div>
+<!-- Search Section close-->
+
+      <!--Tag Section -->
+      <div class="tag_section">
+         <div class="custom_container">
+            <!--Tags-->
+            <div class="inner_custom_container">
+               <ul class="tags_wrapper">
+                  <li> <a href="#" tabindex="0" class="btn_effect">Coming to Qatar</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">Living in Qatar</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">Tourism in Qatar</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">Getting a driving license in Qatar</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">Fifa World Cup 2022</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">Qatar embassy near me</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">Emergency contacts</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">List of services</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">Ministries &amp; ministers</a></li>
+                  <li> <a href="#" tabindex="0" class="btn_effect">How Qatar government works</a></li>
+               </ul>
+            </div>
+            <!--Tags Close-->
+         </div>
+      </div>
+      <!--Tag Section close-->
+      <!-- Govt. Services -->
+      <section class="services_section">
+         <div class="custom_container">
+            <h2 tabindex="-1">Government services for tourists</h2>
+            <div class="flex_row">
+               <!--Owl Slider-->
+               <div id="services_owl" class="owl-carousel owl-loaded owl-drag">
+                  <!-- card repeat -->
+                  <div class="item">
+                     <div class="service_card">
+                        <h3 class="title travel" tabindex="0">
+                           <img src="assets/images/ic_planning_journey.svg" alt="Journey Travel" class="Qatar travel" />
+                           Planning your journey/travel</h3>
+                        <ul class="links_wrap">
+                           <li>
+                              <a href="#" tabindex="0">Getting here</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Visas, residence permits & customs</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Weather in Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
                         </ul>
+                        <div class="vw">
+                           <a href="#" tabindex="0" class="view_all_wrap  link">
+                              View All
+                           </a>
+                        </div>
                      </div>
                   </div>
-                  <!-- search close -->
+                  <!-- card repeat close -->
+                  <!-- card repeat -->
+                  <div class="item">
+                     <div class="service_card">
+                        <h3 class="title travel" tabindex="0">
+                           <img src="assets/images/ic_staying_in_qatar.svg" alt="Staying in Qatar" class="" />
+                           Staying in Qatar </h3>
+                        <ul class="links_wrap">
+                           <li>
+                              <a href="#" tabindex="0">Getting here</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Visas, residence permits & customs</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Weather in Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
+                        </ul>
+                        <div class="vw">
+                           <a href="#" tabindex="0" class="view_all_wrap  link">
+                              View All
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- card repeat close -->
+                  <!-- card repeat -->
+                  <div class="item">
+                     <div class="service_card">
+                        <h3 class="title travel" tabindex="0">
+                           <img src="assets/images/ic_leaving_qatar.svg" alt="Leaving in Qatar" class="" />
+                           Leaving Qatar </h3>
+                        <ul class="links_wrap">
+                           <li>
+                              <a href="#" tabindex="0">Getting here</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Visas, residence permits & customs</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Weather in Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
+                        </ul>
+                        <div class="vw">
+                           <a href="#" tabindex="0" class="view_all_wrap  link">
+                              View All
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- card repeat close -->
+
+                    <!-- card repeat -->
+                    <div class="item">
+                     <div class="service_card">
+                        <h3 class="title travel" tabindex="0">
+                           <img src="assets/images/ic_leaving_qatar.svg" alt="Leaving in Qatar" class="" />
+                           Leaving Qatar </h3>
+                        <ul class="links_wrap">
+                           <li>
+                              <a href="#" tabindex="0">Getting here</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Visas, residence permits & customs</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Weather in Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">Information about Qatar</a>
+                           </li>
+                        </ul>
+                        <div class="vw">
+                           <a href="#" tabindex="0" class="view_all_wrap  link">
+                              View All
+                           </a>
+                        </div>
+                     </div>
+                  </div>
+                  <!-- card repeat close -->
                </div>
+               <!--Owl Slider close-->
             </div>
          </div>
-         <!-- Search Section close-->
-
-         <!--Tag Section -->
-         <div class="tag_section">
-           
-            <div class="custom_container">
-               <!--Tags-->
-                  <div class="inner_custom_container">
-                     <ul class="tags_wrapper">
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Coming to Qatar</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Living in Qatar</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Tourism in Qatar</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Getting a driving license in Qatar</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Fifa World Cup 2022</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Qatar embassy near me</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Emergency contacts</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">List of services</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">Ministries &amp; ministers</a></li>
-                        <li> <a href="#"  tabindex="0"  class="btn_effect">How Qatar government works</a></li>
-                     </ul>
-                  </div>
-                  <!--Tags Close-->
-            </div>
-         </div>
-          <!--Tag Section close-->
-         
-          <!-- Govt. Services -->
-         <section class="services_section">
-            <div class="custom_container">
-               <h2 tabindex="-1">Government services for tourists</h2>
-               <div class="flex_row">
-                  <!--Owl Slider-->
-                  <div id="services_owl" class="owl-carousel owl-loaded owl-drag">
-                     <!-- card repeat -->
-                     <div class="item">
-                        <div class="service_card">
-                           <h3 class="title travel" tabindex="0">
-                              <img src="assets/images/ic_planning_journey.svg" alt="Journey Travel" class="Qatar travel" />
-                              Planning your journey/travel</h3>
-                           <ul class="links_wrap">
-                              <li>
-                                  <a href="#"  tabindex="0" >Getting here</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Visas, residence permits & customs</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Weather in Qatar</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Information about Qatar</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Information about Qatar</a>
-                              </li>
-                           </ul>
-                           <div class="vw">
-                               <a href="#"  tabindex="0"  class="view_all_wrap  link">
-                                 View All
-                              </a>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- card repeat close -->
-
-                     <!-- card repeat -->
-                     <div class="item">
-                        <div class="service_card">
-                           <h3 class="title travel"  tabindex="0">
-                              <img src="assets/images/ic_staying_in_qatar.svg"  alt="Staying in Qatar" class="" />
-                              Staying in Qatar </h3>
-                           <ul class="links_wrap">
-                              <li>
-                                  <a href="#"  tabindex="0" >Getting here</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Visas, residence permits & customs</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Weather in Qatar</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Information about Qatar</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Information about Qatar</a>
-                              </li>
-                           </ul>
-                           <div class="vw">
-                               <a href="#"  tabindex="0"   class="view_all_wrap  link">
-                                 View All
-                              </a>
-                           </div>
-                        </div>
-                     </div>
-                     <!-- card repeat close -->
-
-
-                     <!-- card repeat -->
-                     <div class="item">
-                        <div class="service_card">
-                           <h3 class="title travel" tabindex="0">
-                              <img src="assets/images/ic_leaving_qatar.svg" alt="Leaving in Qatar" class="" />
-                              Leaving Qatar </h3>
-                           <ul class="links_wrap">
-                              <li>
-                                  <a href="#"  tabindex="0" >Getting here</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Visas, residence permits & customs</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Weather in Qatar</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Information about Qatar</a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >Information about Qatar</a>
-                              </li>
-                           </ul>
-                           <div class="vw">
-                               <a href="#"  tabindex="0"   class="view_all_wrap  link">
-                                 View All
-                              </a>
-                           </div>
-
-
-                        </div>
-                     </div>
-                     <!-- card repeat close -->
-
-                  </div>
-                  <!--Owl Slider close-->
-               </div>
-            </div>
-         </section>
-         <!-- Govt. Services close -->
-
-         <!--Explore Travel-->
-         <section class="explore_travel_block" id="travel">
-            <div class="custom_container">
-               <h2 class="heading" tabindex="0">Explore travel in Qatar</h2>
-               <p tabindex="0"> 
-                  There is a lot for everyone to experience in Qatar! See what all you can do.
-               </p>
-               <label class="block_label" tabindex="0">What do you wish to do?</label>     
-               <div class="wish_card_row">
-
-                  <div class="wish_card_col">  
-                      <a href="#"  tabindex="0"  class="wish_card_sm" >
-                        <figure class="icon"> 
-                           <img src="assets/images/ic_tourist_desert_safari.png"  alt="ic_tourist_desert_safari" />
-                        </figure>
-                        <span class="title">
+      </section>
+      <!-- Govt. Services close -->
+      <!--Explore Travel-->
+      <section class="explore_travel_block" id="travel">
+         <div class="custom_container">
+            <h2 class="heading" tabindex="0">Explore travel in Qatar</h2>
+            <p tabindex="0">
+               There is a lot for everyone to experience in Qatar! See what all you can do.
+            </p>
+            <label class="block_label" tabindex="0">What do you wish to do?</label>
+            <div class="wish_card_row">
+               <div class="wish_card_col">
+                  <a href="#" tabindex="0" class="wish_card_sm">
+                     <figure class="icon">
+                        <img src="assets/images/ic_tourist_desert_safari.png" alt="ic_tourist_desert_safari" />
+                     </figure>
+                     <span class="title">
                         Desert Safari
-                        </span>
-                     </a>
-                   
-                      <a href="#"  tabindex="0"    class="wish_card_sm">
-                        <figure class="icon"> 
-                           <img src= "assets/images/ic_tourist_arabic_coffee.png" alt="ic_tourist_arabic_coffee" />
-                        </figure>
-                        <span class="title">
+                     </span>
+                  </a>
+                  <a href="#" tabindex="0" class="wish_card_sm">
+                     <figure class="icon">
+                        <img src="assets/images/ic_tourist_arabic_coffee.png" alt="ic_tourist_arabic_coffee" />
+                     </figure>
+                     <span class="title">
                         Arabic Coffee
-                        </span>
-                     </a>
-                      <a href="#"  tabindex="0"    class="wish_card_sm">
-                        <figure class="icon"> 
-                           <img src="assets/images/ic_tourist_visit_museum.png" alt="ic_tourist_visit_museum" />
-                        </figure>
-                        <span class="title">
+                     </span>
+                  </a>
+                  <a href="#" tabindex="0" class="wish_card_sm">
+                     <figure class="icon">
+                        <img src="assets/images/ic_tourist_visit_museum.png" alt="ic_tourist_visit_museum" />
+                     </figure>
+                     <span class="title">
                         Visit a Museum
-                        </span>
-                     </a>
-                      <a href="#"  tabindex="0"   class="wish_card_sm">
-                        <figure class="icon"> 
-                           <img src="assets/images/ic_tourist_arabic_food.png"  alt="ic_tourist_arabic_food"/>
-                        </figure>
-                        <span class="title">
+                     </span>
+                  </a>
+                  <a href="#" tabindex="0" class="wish_card_sm">
+                     <figure class="icon">
+                        <img src="assets/images/ic_tourist_arabic_food.png" alt="ic_tourist_arabic_food" />
+                     </figure>
+                     <span class="title">
                         Arabic Food Tour
-                        </span>
-                     </a>
-                      <a href="#"  tabindex="0" class="see_more link">
-                       
-                        <img src="assets/images/view-all.png" alt="view all" />
-                        View All
-                       
-                     </a>
-                  </div>
-                
-                  <div class="get_card" tabindex="0">
-                     <label class="block_label">What do you get?</label>
-                     <ul>
-                        <li> Travel guides & iteneraries to download</li>
-                        <li> Calculate estimate travel costs </li>
-                        <li>Travel checklists and instructions </li>
-                     </ul>
-                  </div>
-
-
-
+                     </span>
+                  </a>
+                  <a href="#" tabindex="0" class="see_more link">
+                     <img src="assets/images/view-all.png" alt="view all" />
+                     View All
+                  </a>
                </div>
-               <div class="travel_grid">
-                  <div class="travel_col_left">
-                     <div class="f_row">
-                        <div class="col-left">
-                           <div class="travel_card">
-                              <label class="block_label" tabindex="0">Travel by time</label>
-                              <ul>
-                                 <li> <a href="#"  tabindex="0"  class="link"> 12 hours layover</a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> 1 to 2 days  </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> 3 days visit  </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> 6 days visit  </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> 12 days visit </a></li>
-                              </ul>
-                           </div>
-                           <div class="travel_card">
-                              <label class="block_label" tabindex="0">I want to travel</label>
-                              <ul>
-                                 <li> <a href="#"  tabindex="0"  class="link"> By flight</a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> By metro  </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> By cab  </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> By city bus  </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> By boat or </a></li>
-                              </ul>
-                           </div>
+               <div class="get_card" tabindex="0">
+                  <label class="block_label">What do you get?</label>
+                  <ul>
+                     <li> Travel guides & iteneraries to download</li>
+                     <li> Calculate estimate travel costs </li>
+                     <li>Travel checklists and instructions </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="travel_grid">
+               <div class="travel_col_left">
+                  <div class="f_row">
+                     <div class="col-left">
+                        <div class="travel_card">
+                           <label class="block_label" tabindex="0">Travel by time</label>
+                           <ul>
+                              <li> <a href="#" tabindex="0" class="link"> 12 hours layover</a></li>
+                              <li> <a href="#" tabindex="0" class="link"> 1 to 2 days </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> 3 days visit </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> 6 days visit </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> 12 days visit </a></li>
+                           </ul>
                         </div>
-                        <div class="col-rigt">
-                           <div class="travel_card">
-                              <label class="block_label" tabindex="0">Travel by interests</label>
-                              <ul>
-                                 <li> <a href="#"  tabindex="0"  class="link">  Adventure travel </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link">  Art & culture </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> Backpacking </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> Beaches, coasts & islands </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link">Family holidays </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> Festivals </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> Food and drink </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> Honeymoon & romance </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link">Road trips </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link">Travel gear & tech </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link"> Travel on a budget </a></li>
-                                 <li> <a href="#"  tabindex="0"  class="link">Wildlife & nature</a></li>
-                              </ul>
-                           </div>
+                        <div class="travel_card">
+                           <label class="block_label" tabindex="0">I want to travel</label>
+                           <ul>
+                              <li> <a href="#" tabindex="0" class="link"> By flight</a></li>
+                              <li> <a href="#" tabindex="0" class="link"> By metro </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> By cab </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> By city bus </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> By boat or </a></li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="col-rigt">
+                        <div class="travel_card">
+                           <label class="block_label" tabindex="0">Travel by interests</label>
+                           <ul>
+                              <li> <a href="#" tabindex="0" class="link"> Adventure travel </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> Art & culture </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> Backpacking </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> Beaches, coasts & islands </a></li>
+                              <li> <a href="#" tabindex="0" class="link">Family holidays </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> Festivals </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> Food and drink </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> Honeymoon & romance </a></li>
+                              <li> <a href="#" tabindex="0" class="link">Road trips </a></li>
+                              <li> <a href="#" tabindex="0" class="link">Travel gear & tech </a></li>
+                              <li> <a href="#" tabindex="0" class="link"> Travel on a budget </a></li>
+                              <li> <a href="#" tabindex="0" class="link">Wildlife & nature</a></li>
+                           </ul>
                         </div>
                      </div>
                   </div>
-                  <div class="travel_col_right">
-                     <div class="inner_wrapper">
-                        <label class="block_label" tabindex="0">Travel by destinations</label>
-                        <div class="destination_card_row">
-                           
-
-                           <div class="flex_col_sm_4 flex_col_xs_4">
-                              <div class="card_sm">
-                                  <a href="#"  tabindex="0" >
+               </div>
+               <div class="travel_col_right">
+                  <div class="inner_wrapper">
+                     <label class="block_label" tabindex="0">Travel by destinations</label>
+                     <div class="destination_card_row">
+                        <div class="flex_col_sm_4 flex_col_xs_4">
+                           <div class="card_sm">
+                              <a href="#" tabindex="0">
                                  <figure class="icon">
-                                    <img src="assets/images/doha.png" alt="doha"/>
+                                    <img src="assets/images/doha.png" alt="doha" />
                                     <figcaption>
                                        <span class="title">Doha</span>
                                        <span class="thing_do"> 5 Things to do</span>
                                     </figcaption>
                                  </figure>
-                                 </a>
-                              </div>
+                              </a>
                            </div>
-
-
-                           <div class="flex_col_sm_4 flex_col_xs_4">
-                              <div class="card_sm">
-                                  <a href="#"  tabindex="0" >
-                                 <figure class="icon">
-                                    <img src="assets/images/Lusail.png" alt="doha"/>
-                                    <figcaption>
-                                       <span class="title">Doha</span>
-                                       <span class="thing_do"> 5 Things to do</span>
-                                    </figcaption>
-                                 </figure>
-                                 </a>
-                              </div>
-                           </div>
-
-
-
-                           <div class="flex_col_sm_4 flex_col_xs_4">
-                              <div class="card_sm">
-                                  <a href="#"  tabindex="0" >
-                                 <figure class="icon">
-                                    <img src="assets/images/doha.png" alt="doha"/>
-                                    <figcaption>
-                                       <span class="title">Doha</span>
-                                       <span class="thing_do"> 5 Things to do</span>
-                                    </figcaption>
-                                 </figure>
-                                 </a>
-                              </div>
-                           </div>
-
-
-
-                           <div class="flex_col_sm_4 flex_col_xs_4">
-                              <div class="card_sm">
-                                  <a href="#"  tabindex="0" >
-                                 <figure class="icon">
-                                    <img src="assets/images/doha.png" alt="doha"/>
-                                    <figcaption>
-                                       <span class="title">Doha</span>
-                                       <span class="thing_do"> 5 Things to do</span>
-                                    </figcaption>
-                                 </figure>
-                                 </a>
-                              </div>
-                           </div>
-
-
-
-                           <div class="flex_col_sm_4 flex_col_xs_4">
-                              <div class="card_sm">
-                                  <a href="#"  tabindex="0" >
-                                 <figure class="icon">
-                                    <img src="assets/images/doha.png" alt="doha"/>
-                                    <figcaption>
-                                       <span class="title">Doha</span>
-                                       <span class="thing_do"> 5 Things to do</span>
-                                    </figcaption>
-                                 </figure>
-                                 </a>
-                              </div>
-                           </div>
-
-
-                           <div class="flex_col_sm_4 flex_col_xs_4">
-                              <div class="card_sm">
-                                  <a href="#"  tabindex="0" >
-                                 <figure class="icon">
-                                    <img src="assets/images/doha.png" alt="doha"/>
-                                    <figcaption>
-                                       <span class="title">Doha</span>
-                                       <span class="thing_do"> 5 Things to do</span>
-                                    </figcaption>
-                                 </figure>
-                                 </a>
-                              </div>
-                           </div>
-
-                       
-                          
-                          
                         </div>
-                         <a href="#"  tabindex="0"  class="explore_all link">Explore all destinations</a> 
+                        <div class="flex_col_sm_4 flex_col_xs_4">
+                           <div class="card_sm">
+                              <a href="#" tabindex="0">
+                                 <figure class="icon">
+                                    <img src="assets/images/Lusail.png" alt="doha" />
+                                    <figcaption>
+                                       <span class="title">Doha</span>
+                                       <span class="thing_do"> 5 Things to do</span>
+                                    </figcaption>
+                                 </figure>
+                              </a>
+                           </div>
+                        </div>
+                        <div class="flex_col_sm_4 flex_col_xs_4">
+                           <div class="card_sm">
+                              <a href="#" tabindex="0">
+                                 <figure class="icon">
+                                    <img src="assets/images/doha.png" alt="doha" />
+                                    <figcaption>
+                                       <span class="title">Doha</span>
+                                       <span class="thing_do"> 5 Things to do</span>
+                                    </figcaption>
+                                 </figure>
+                              </a>
+                           </div>
+                        </div>
+                        <div class="flex_col_sm_4 flex_col_xs_4">
+                           <div class="card_sm">
+                              <a href="#" tabindex="0">
+                                 <figure class="icon">
+                                    <img src="assets/images/doha.png" alt="doha" />
+                                    <figcaption>
+                                       <span class="title">Doha</span>
+                                       <span class="thing_do"> 5 Things to do</span>
+                                    </figcaption>
+                                 </figure>
+                              </a>
+                           </div>
+                        </div>
+                        <div class="flex_col_sm_4 flex_col_xs_4">
+                           <div class="card_sm">
+                              <a href="#" tabindex="0">
+                                 <figure class="icon">
+                                    <img src="assets/images/doha.png" alt="doha" />
+                                    <figcaption>
+                                       <span class="title">Doha</span>
+                                       <span class="thing_do"> 5 Things to do</span>
+                                    </figcaption>
+                                 </figure>
+                              </a>
+                           </div>
+                        </div>
+                        <div class="flex_col_sm_4 flex_col_xs_4">
+                           <div class="card_sm">
+                              <a href="#" tabindex="0">
+                                 <figure class="icon">
+                                    <img src="assets/images/doha.png" alt="doha" />
+                                    <figcaption>
+                                       <span class="title">Doha</span>
+                                       <span class="thing_do"> 5 Things to do</span>
+                                    </figcaption>
+                                 </figure>
+                              </a>
+                           </div>
+                        </div>
                      </div>
+                     <a href="#" tabindex="0" class="explore_all link">Explore all destinations</a>
                   </div>
                </div>
             </div>
-         </section>
-          <!--Explore Travel Close-->
-        
-         <!-- Thing To Do Section -->
-         <section class="to_do_section">
-            <div class="custom_container">
-               <div class="flex_row">
-                  <div class="flex_col_sm_4 flex_col_xs_6">
-                     <h2 tabindex="0">Seems like you are already here. See things to do!</h2>
-                  </div>
-                  <div class="flex_col_sm_5 flex_col_xs_6">
-                     <div class="filter_wrapper">
-                        <div class="field_wrapper">
-                           <label class="field_label" for="location"  tabindex="0">Location</label>
-                           <div class="txt_wrapper">
-                              <input type="text" name="city"  id="location"  placeholder="AI Dafna" list="locationname" autocomplete="off">
-                              <datalist id="locationname">
+         </div>
+      </section>
+      <!--Explore Travel Close-->
+      <!-- Thing To Do Section -->
+      <section class="to_do_section">
+         <div class="custom_container">
+            <div class="flex_row">
+               <div class="flex_col_sm_4 flex_col_xs_6">
+                  <h2 tabindex="0">Seems like you are already here. See things to do!</h2>
+               </div>
+               <div class="flex_col_sm_5 flex_col_xs_6">
+                  <div class="filter_wrapper">
+                     <div class="field_wrapper">
+                        <label class="field_label" for="location" tabindex="0">Location</label>
+                        <div class="txt_wrapper">
+                           <input type="text" name="city" id="location" placeholder="AI Dafna" list="locationname"
+                              autocomplete="off">
+                           <datalist id="locationname">
                               <option value="Boston">
                               <option value="Cambridge">
-                              </datalist>
-                             
-                              <span class="detect-icon">
-                                 <img src="assets/images/location.png" alt="location" />
-                              </span>
-                           </div>
+                           </datalist>
+                           <span class="detect-icon">
+                              <img src="assets/images/location.png" alt="location" />
+                           </span>
                         </div>
-                        <div class="field_wrapper">
-                           <label class="field_label"  for="date_range"   tabindex="0">Date</label>
-                           <div class="txt_wrapper">
-
-                              <input type="text" name="daterange"  id="date_range" value="10-09-2020 - 15-09-2020" />
-                              <span class="detect-icon">
-                                 <img src="assets/images/calendar.png" alt="calendar" />
-                              </span>
-                           </div>
+                     </div>
+                     <div class="field_wrapper">
+                        <label class="field_label" for="date_range" tabindex="0">Date</label>
+                        <div class="txt_wrapper">
+                           <input type="text" name="daterange" id="date_range" value="" />
+                           <span class="detect-icon">
+                              <img src="assets/images/calendar.png" alt="calendar" />
+                           </span>
                         </div>
                      </div>
                   </div>
                </div>
-               <div class="flex_row">
+            </div>
+            <div class="flex_row">
+               <!--Owl Slider-->
+               <div id="places_owl" class="owl-carousel owl-loaded owl-drag">
+                  <!-- card repeat -->
+                  <div class="item">
+                     <div class="card">
+                        <figure class="places_img">
+                           <img src="assets/images/things-to-do1.jpg" alt="look-in-places" />
+                        </figure>
+                        <h3 tabindex="0">Shopping malls & theatres</h3>
+                        <ul>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Mall of Qatar</span>
+                                 <span class="location">Ar-Rayyan, Qatar</span>
+                                 <span class="view">View
+                                 </span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Villaggio Mall</span>
+                                 <span class="location">Doha, Qatar</span>
+                                 <span class="view">View</span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Landmark Mall</span>
+                                 <span class="location">Doha, Qatar</span>
+                                 <span class="view">View</span>
+                              </a>
+                           </li>
+                        </ul>
+                        <div class="vw">
+                           <a href="#" tabindex="0" class="view_all_wrap  link">
+                             View All
+                          </a>
+                       </div>
+                     </div>
+                  </div>
+                  <!-- card repeat close -->
+                  <!-- card repeat -->
+                  <div class="item">
+                     <div class="card">
+                        <figure class="places_img">
+                           <img src="assets/images/things-to-do1.jpg" alt="look-in-places" />
+                        </figure>
+                        <h3 tabindex="0">Shopping malls & theatres</h3>
+                        <ul>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Mall of Qatar</span>
+                                 <span class="location">Ar-Rayyan, Qatar</span>
+                                 <span class="view">View
+                                 </span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Villaggio Mall</span>
+                                 <span class="location">Doha, Qatar</span>
+                                 <span class="view">View</span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Landmark Mall</span>
+                                 <span class="location">Doha, Qatar</span>
+                                 <span class="view">View</span>
+                              </a>
+                           </li>
+                        </ul>
+                        <div class="vw">
+                           <a href="#" tabindex="0" class="view_all_wrap  link">
+                             View All
+                          </a>
+                       </div>
+                     </div>
+                  </div>
+                  <!-- card repeat close -->
+                  <!-- card repeat -->
+                  <div class="item">
+                     <div class="card">
+                        <figure class="places_img">
+                           <img src="assets/images/things-to-do1.jpg" alt="look-in-places" />
+                        </figure>
+                        <h3 tabindex="0">Shopping malls & theatres</h3>
+                        <ul>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Mall of Qatar</span>
+                                 <span class="location">Ar-Rayyan, Qatar</span>
+                                 <span class="view">View
+                                 </span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Villaggio Mall</span>
+                                 <span class="location">Doha, Qatar</span>
+                                 <span class="view">View</span>
+                              </a>
+                           </li>
+                           <li>
+                              <a href="#" tabindex="0">
+                                 <span class="name">Landmark Mall</span>
+                                 <span class="location">Doha, Qatar</span>
+                                 <span class="view">View</span>
+                              </a>
+                           </li>
+                        </ul>
+                        <div class="vw">
+                           <a href="#" tabindex="0" class="view_all_wrap  link">
+                             View All
+                          </a>
+                       </div>
+                     </div>
+                  </div>
+                  <!-- card repeat close -->
+               </div>
+               <!--Owl Slider close-->
+            </div>
+         </div>
+      </section>
+      <!-- Thing To Do Section close -->
+      <!--Latest News-->
+      <section class="news_section wave_blue_white">
+         <div class="custom_container">
+            <div class="flex_row">
+               <div class="left_col">
+                  <h2 tabindex="0">Latest in the News</h2>
+                  <p class="commn-para" tabindex="0">Keep yourself up-to-date with the latest news
+                     in and around Qatar on your official GOV.QA.
+                  </p>
                   <!--Owl Slider-->
-                  <div id="places_owl" class="owl-carousel owl-loaded owl-drag">
-                   
-                     <!-- card repeat -->
+                  <div id="latest_news_owl" class="owl-carousel owl-loaded owl-drag">
+                     <!--item repeat-->
                      <div class="item">
-                        <div class="card">
-                           <figure class="places_img">
-                              <img src="assets/images/things-to-do1.jpg" alt="look-in-places" />
-                           </figure>
-                           <h3 tabindex="0">Shopping malls & theatres</h3>
-                           <ul>
-                              <li>
-                                  <a href="#"  tabindex="0" >
-                                 <span class="name">Mall of Qatar</span>
-                                 <span class="location">Ar-Rayyan, Qatar</span>
-                                 <span class="view">View
-                                    </span>
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="#"  tabindex="0" >
-                                 <span class="name">Villaggio Mall</span>
-                                 <span class="location">Doha, Qatar</span>
-                                 <span class="view">View</span>
-                                </a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >
-                                 <span class="name">Landmark Mall</span>
-                                 <span class="location">Doha, Qatar</span>
-                                 <span class="view">View</span>
-                              </a>
-                              </li>
-                           </ul>
-                            <a href="#"  tabindex="0"  class="view_all_wrap link">
-                              View All
+                        <div class="cards_wrapper">
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/visa_permits.png" alt="icons-visas" />
+                              </figure>
+                              <span>Visas & Residence Permits</span>
                            </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/certificates.png" alt="icons-certificates" />
+                              </figure>
+                              <span>Certificates & Licenses</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-business.png" alt="icons-business" />
+                              </figure>
+                              <span>Business & Finance</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/workplace.png" alt="icons-workplace" />
+                              </figure>
+                              <span>Employment & Workplace</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-education.png" alt="icons-education" />
+                              </figure>
+                              <span>Education & Training</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-research.png" alt="icons-research" />
+                              </figure>
+                              <span>Research & Development</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-relegn.png" alt="icons-religion" />
+                              </figure>
+                              <span>Religion & Community</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-entertainment.png" alt="icons-entertainment" />
+                              </figure>
+                              <span>Culture & Media</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-tourism.png" alt="icons-tourism" />
+                              </figure>
+                              <span>Tourism & Recreation</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-tech.png" alt="icons-tech" />
+                              </figure>
+                              <span>Communications & IT</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/wheat.png" alt="icons-agriculture" />
+                              </figure>
+                              <span>Environment & Agriculture</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!--card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-sports.png" alt="icons-sports" />
+                              </figure>
+                              <span>Sports</span>
+                           </a>
+                           <!--card repeat close-->
                         </div>
                      </div>
-                     <!-- card repeat close -->
-
-                     <!-- card repeat -->
+                     <!--item repeat close-->
+                     <!--item repeat-->
                      <div class="item">
-                        <div class="card">
-                           <figure class="places_img">
-                              <img src="assets/images/things-to-do1.jpg" alt="look-in-places" />
-                           </figure>
-                           <h3 tabindex="0">Shopping malls & theatres</h3>
-                           <ul>
-                              <li>
-                                  <a href="#"  tabindex="0" >
-                                 <span class="name">Mall of Qatar</span>
-                                 <span class="location">Ar-Rayyan, Qatar</span>
-                                 <span class="view">View
-                                    </span>
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="#"  tabindex="0" >
-                                 <span class="name">Villaggio Mall</span>
-                                 <span class="location">Doha, Qatar</span>
-                                 <span class="view">View</span>
-                                </a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >
-                                 <span class="name">Landmark Mall</span>
-                                 <span class="location">Doha, Qatar</span>
-                                 <span class="view">View</span>
-                              </a>
-                              </li>
-                           </ul>
-                            <a href="#"  tabindex="0"  class="view_all_wrap link">
-                              View All
+                        <div class="cards_wrapper">
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/visa_permits.png" alt="icons-visas" />
+                              </figure>
+                              <span>Visas & Residence Permits</span>
                            </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/certificates.png" alt="icons-certificates" />
+                              </figure>
+                              <span>Certificates & Licenses</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-business.png" alt="icons-business" />
+                              </figure>
+                              <span>Business & Finance</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/workplace.png" alt="icons-workplace" />
+                              </figure>
+                              <span>Employment & Workplace</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-education.png" alt="icons-education" />
+                              </figure>
+                              <span>Education & Training</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-research.png" alt="icons-research" />
+                              </figure>
+                              <span>Research & Development</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-relegn.png" alt="icons-religion" />
+                              </figure>
+                              <span>Religion & Community</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-entertainment.png" alt="icons-entertainment" />
+                              </figure>
+                              <span>Culture & Media</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-tourism.png" alt="icons-tourism" />
+                              </figure>
+                              <span>Tourism & Recreation</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-tech.png" alt="icons-tech" />
+                              </figure>
+                              <span>Communications & IT</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/wheat.png" alt="icons-agriculture" />
+                              </figure>
+                              <span>Environment & Agriculture</span>
+                           </a>
+                           <!--card repeat close-->
+                           <!-- card repeat-->
+                           <a href="#" tabindex="0" class="news_card">
+                              <figure>
+                                 <img src="assets/images/icons-sports.png" alt="icons-sports" />
+                              </figure>
+                              <span>Sports</span>
+                           </a>
+                           <!--card repeat close-->
                         </div>
                      </div>
-                     <!-- card repeat close -->
-
-
-                     <!-- card repeat -->
-                     <div class="item">
-                        <div class="card">
-                           <figure class="places_img">
-                              <img src="assets/images/things-to-do1.jpg" alt="look-in-places" />
-                           </figure>
-                           <h3 tabindex="0">Shopping malls & theatres</h3>
-                           <ul>
-                              <li>
-                                  <a href="#"  tabindex="0" >
-                                 <span class="name">Mall of Qatar</span>
-                                 <span class="location">Ar-Rayyan, Qatar</span>
-                                 <span class="view">View
-                                    </span>
-                                 </a>
-                              </li>
-                              <li>
-                                 <a href="#"  tabindex="0" >
-                                 <span class="name">Villaggio Mall</span>
-                                 <span class="location">Doha, Qatar</span>
-                                 <span class="view">View</span>
-                                </a>
-                              </li>
-                              <li>
-                                  <a href="#"  tabindex="0" >
-                                 <span class="name">Landmark Mall</span>
-                                 <span class="location">Doha, Qatar</span>
-                                 <span class="view">View</span>
-                              </a>
-                              </li>
-                           </ul>
-                            <a href="#"  tabindex="0"  class="view_all_wrap link">
-                              View All
-                           </a>
-                        </div>
-                     </div>
-                     <!-- card repeat close -->
-
-
-                     
-                  
-                  
+                     <!--item repeat close-->
                   </div>
                   <!--Owl Slider close-->
                </div>
-            </div>
-         </section>
-         <!-- Thing To Do Section close -->
-
-         <!--Latest News-->
-         <section class="news_section wave_blue_white">
-            <div class="custom_container">
-               <div class="flex_row">
-                  <div class="left_col">
-                     <h2 tabindex="0">Latest in the News</h2>
-                     <p class="commn-para" tabindex="0">Keep yourself up-to-date with the latest news
-                        in and around Qatar on your official GOV.QA.
-                     </p>
-                     <!--Owl Slider-->
-                     <div id="latest_news_owl" class="owl-carousel owl-loaded owl-drag">
-                        <!--item repeat-->
-                        <div class="item">
-                           <div class="cards_wrapper">
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/visa_permits.png" alt="icons-visas" />
-                                 </figure>
-                                 <span>Visas & Residence Permits</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/certificates.png" alt="icons-certificates" />
-                                 </figure>
-                                 <span>Certificates & Licenses</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-business.png" alt="icons-business" />
-                                 </figure>
-                                 <span>Business & Finance</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/workplace.png" alt="icons-workplace" />
-                                 </figure>
-                                 <span>Employment & Workplace</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-education.png" alt="icons-education" />
-                                 </figure>
-                                 <span>Education & Training</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-research.png" alt="icons-research" />
-                                 </figure>
-                                 <span>Research & Development</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-relegn.png" alt="icons-religion" />
-                                 </figure>
-                                 <span>Religion & Community</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-entertainment.png" alt="icons-entertainment" />
-                                 </figure>
-                                 <span>Culture & Media</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-tourism.png" alt="icons-tourism" />
-                                 </figure>
-                                 <span>Tourism & Recreation</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-tech.png" alt="icons-tech" />
-                                 </figure>
-                                 <span>Communications & IT</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/wheat.png" alt="icons-agriculture" />
-                                 </figure>
-                                 <span>Environment & Agriculture</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!--card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-sports.png" alt="icons-sports" />
-                                 </figure>
-                                 <span>Sports</span>
-                              </a>
-                              <!--card repeat close-->
+               <div class="right_col">
+                  <div class="slider_wrap">
+                     <div class="news_wrapper">
+                        <h3 class="content-label" tabindex="0">News Highlights Today</h3>
+                        <div class="cards_wrapper">
+                           <!--Owl Slider-->
+                           <div id="heighlights_news_owl" class="owl-carousel owl-loaded owl-drag">
+                              <!-- item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="todays_news">
+                                    <figure>
+                                       <img src="assets/images/sheikh.jpg" alt="news" />
+                                       <div class="txt-img">
+                                          <span>Qatar Airways will not take new planes this year or next</span>
+                                       </div>
+                                    </figure>
+                                 </a>
+                              </div>
+                              <!-- item repeat close-->
+                              <!-- item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="todays_news">
+                                    <figure>
+                                       <img src="assets/images/sheikh.jpg" alt="news" />
+                                       <div class="txt-img">
+                                          <span>Qatar Airways will not take new planes this year or next</span>
+                                       </div>
+                                    </figure>
+                                 </a>
+                              </div>
+                              <!-- item repeat close-->
+                              <!-- item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="todays_news">
+                                    <figure>
+                                       <img src="assets/images/sheikh.jpg" alt="news" />
+                                       <div class="txt-img">
+                                          <span>Qatar Airways will not take new planes this year or next</span>
+                                       </div>
+                                    </figure>
+                                 </a>
+                              </div>
+                              <!-- item repeat close-->
                            </div>
+                           <!--Owl Slider close-->
+                           <div class="card_side_effect"></div>
+                           <!-- slider close -->
                         </div>
-                        <!--item repeat close-->
-                        <!--item repeat-->
-                        <div class="item">
-                           <div class="cards_wrapper">
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/visa_permits.png" alt="icons-visas" />
-                                 </figure>
-                                 <span>Visas & Residence Permits</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/certificates.png" alt="icons-certificates" />
-                                 </figure>
-                                 <span>Certificates & Licenses</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-business.png" alt="icons-business" />
-                                 </figure>
-                                 <span>Business & Finance</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/workplace.png" alt="icons-workplace" />
-                                 </figure>
-                                 <span>Employment & Workplace</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-education.png" alt="icons-education" />
-                                 </figure>
-                                 <span>Education & Training</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-research.png" alt="icons-research" />
-                                 </figure>
-                                 <span>Research & Development</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-relegn.png" alt="icons-religion" />
-                                 </figure>
-                                 <span>Religion & Community</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-entertainment.png" alt="icons-entertainment" />
-                                 </figure>
-                                 <span>Culture & Media</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-tourism.png" alt="icons-tourism" />
-                                 </figure>
-                                 <span>Tourism & Recreation</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-tech.png" alt="icons-tech" />
-                                 </figure>
-                                 <span>Communications & IT</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/wheat.png" alt="icons-agriculture" />
-                                 </figure>
-                                 <span>Environment & Agriculture</span>
-                              </a>
-                              <!--card repeat close-->
-                              <!-- card repeat-->
-                               <a href="#"  tabindex="0"  class="news_card">
-                                 <figure>
-                                    <img src="assets/images/icons-sports.png" alt="icons-sports" />
-                                 </figure>
-                                 <span>Sports</span>
-                              </a>
-                              <!--card repeat close-->
-                           </div>
-                        </div>
-                        <!--item repeat close-->
+                        <a href="#" tabindex="0" class="view_all_wrap link">
+                           View All News
+                        </a>
                      </div>
-                     <!--Owl Slider close-->
                   </div>
-                  <div class="right_col">
-                     <div class="slider_wrap">
+                  <div class="more_news">
+                     <div class="wheather_card">
                         <div class="news_wrapper">
-                           <h3 class="content-label" tabindex="0">News Highlights Today</h3>
-                           <div class="cards_wrapper">
-                              <!--Owl Slider-->
-                              <div id="heighlights_news_owl" class="owl-carousel owl-loaded owl-drag">
-                                 <!-- item repeat -->
-                                 <div class="item">
-                                     <a href="#"  tabindex="0"  class="todays_news">
-                                       <figure>
-                                          <img src="assets/images/sheikh.jpg" alt="news" />
-                                          <div class="txt-img">
-                                             <span>Qatar Airways will not take new planes this year or next</span>
-                                          </div>
-                                       </figure>
-                                    </a>
-                                 </div>
-                                 <!-- item repeat close-->
-                                 <!-- item repeat -->
-                                 <div class="item">
-                                     <a href="#"  tabindex="0"  class="todays_news">
-                                       <figure>
-                                          <img src="assets/images/sheikh.jpg" alt="news" />
-                                          <div class="txt-img">
-                                             <span>Qatar Airways will not take new planes this year or next</span>
-                                          </div>
-                                       </figure>
-                                    </a>
-                                 </div>
-                                 <!-- item repeat close-->
-                                 <!-- item repeat -->
-                                 <div class="item">
-                                     <a href="#"  tabindex="0"  class="todays_news">
-                                       <figure>
-                                          <img src="assets/images/sheikh.jpg" alt="news" />
-                                          <div class="txt-img">
-                                             <span>Qatar Airways will not take new planes this year or next</span>
-                                          </div>
-                                       </figure>
-                                    </a>
-                                 </div>
-                                 <!-- item repeat close-->
-                              </div>
-                              <!--Owl Slider close-->
-                              <div class="card_side_effect"></div>
-                              <!-- slider close -->
-                           </div>
-                            <a href="#"  tabindex="0"  class="view_all_wrap link">
-                              View All News
+                           <h3 class="content-label" tabindex="0">Doha</h3>
+                           <a href="#" tabindex="0" class="detect-icon">
+                              <img src="assets/images/location.png" alt="location" />
                            </a>
+                           <span class="info_title" tabindex="0">Sunny</span>
+                           <div class="daily_report">
+                              <div class="degree" tabindex="0">
+                                 <img src="assets/images/icons-sunset.svg" alt="temprature-img" />
+                                 <span>35 <sup>&#8451;</sup></span>
+                              </div>
+                              <div class="details_wrap">
+                                 <div class="time_detail" tabindex="0">
+                                    <label>Sunrise</label>
+                                    <span>4:30 AM</span>
+                                 </div>
+                                 <div class="time_detail" tabindex="0">
+                                    <label>Sunset</label>
+                                    <span>6:30 PM</span>
+                                 </div>
+                              </div>
+                           </div>
+                           <ul class="weekly_report">
+                              <li tabindex="0">
+                                 <label>Today</label>
+                                 <img src="assets/images/icons-sunset.svg" alt="temprature-img" />
+                                 <span class="deg">36 &deg;</span>
+                                 <span class="deg eve">12 &deg;</span>
+                              </li>
+                              <li tabindex="0">
+                                 <label>Mon</label>
+                                 <img src="assets/images/icons-sunrise.svg" alt="temprature-img" />
+                                 <span class="deg">36 &deg;</span>
+                                 <span class="deg eve">12 &deg;</span>
+                              </li>
+                              <li tabindex="0">
+                                 <label>Tue</label>
+                                 <img src="assets/images/icons-sunset.svg" alt="temprature-img" />
+                                 <span class="deg">36 &deg;</span>
+                                 <span class="deg eve">12 &deg;</span>
+                              </li>
+                              <li tabindex="0">
+                                 <label>Wed</label>
+                                 <img src="assets/images/icons-sunrise.svg" alt="temprature-img" />
+                                 <span class="deg">36 &deg;</span>
+                                 <span class="deg eve">12 &deg;</span>
+                              </li>
+                           </ul>
+                           <hr>
+                           <div class="bottom_wrapper">
+                              <ul>
+                                 <li><a href="javacript:void(0)" class="active">C</a></li>
+                                 <li><a href="javacript:void(0)">F</a></li>
+                                 <li><a href="javacript:void(0)">K</a></li>
+                              </ul>
+                              <a href="javacript:void(0)" class="more">More on weather.com</a>
+                           </div>
                         </div>
                      </div>
-                     <div class="more_news">
-                        <div class="wheather_card">
-                           <div class="news_wrapper">
-                              <h3 class="content-label" tabindex="0">Doha</h3>
-                               <a href="#"  tabindex="0"   class="detect-icon">
-                                 <img src="assets/images/location.png" alt="location" />
-                              </a>
-                              <span class="info_title" tabindex="0">Sunny</span>
-                              <div class="daily_report">
-                                 <div class="degree" tabindex="0">
-                                    <img src="assets/images/icons-sunset.svg" alt="temprature-img" />
-                                    <span>35 <sup>&#8451;</sup></span>
-                                 </div>
-                                 <div class="details_wrap">
-                                    <div class="time_detail" tabindex="0">
-                                       <label>Sunrise</label>
-                                       <span>4:30 AM</span>
-                                    </div>
-                                    <div class="time_detail" tabindex="0">
-                                       <label>Sunset</label>
-                                       <span>6:30 PM</span>
-                                    </div>
-                                 </div>
-                              </div>
-                              <ul class="weekly_report">
-                                 <li tabindex="0">
-                                    <label>Today</label>
-                                    <img src="assets/images/icons-sunset.svg" alt="temprature-img" />
-                                    <span class="deg">36 &deg;</span>
-                                    <span class="deg eve">12 &deg;</span>
-                                 </li>
-                                 <li tabindex="0">
-                                    <label>Mon</label>
-                                    <img src="assets/images/icons-sunrise.svg" alt="temprature-img" />
-                                    <span class="deg">36 &deg;</span>
-                                    <span class="deg eve">12 &deg;</span>
-                                 </li>
-                                 <li tabindex="0">
-                                    <label>Tue</label>
-                                    <img src="assets/images/icons-sunset.svg" alt="temprature-img" />
-                                    <span class="deg">36 &deg;</span>
-                                    <span class="deg eve">12 &deg;</span>
-                                 </li>
-                                 <li tabindex="0">
-                                    <label>Wed</label>
-                                    <img src="assets/images/icons-sunrise.svg" alt="temprature-img" />
-                                    <span class="deg">36 &deg;</span>
-                                    <span class="deg eve">12 &deg;</span>
-                                 </li>
-                              </ul>
-                              <hr>
-                              <div class="bottom_wrapper">
-                                 <ul>
-                                    <li><a href="javacript:void(0)" class="active">C</a></li>
-                                    <li><a href="javacript:void(0)">F</a></li>
-                                    <li><a href="javacript:void(0)">K</a></li>
-                                 </ul>
-                                 <a href="javacript:void(0)" class="more">More on weather.com</a>
-                              </div>
-                           </div>
-                        </div>
-                        <div class="prayer_card">
-                           <div class="news_wrapper">
-                              <h3 class="content-label" tabindex="0">Prayer Times</h3>
-                              <span class="info_title" tabindex="0">24 June, 2020</span>
-                              <ul class="prayer_time">
-                                 <li class="time_detail" tabindex="0">
-                                    <label>Fajr</label>
-                                    <span>4:06 AM</span>
-                                 </li>
-                                 <li class="time_detail" tabindex="0">
-                                    <label>Dhuhr</label>
-                                    <span>11:59 AM</span>
-                                 </li>
-                                 <li class="time_detail" tabindex="0">
-                                    <label>Asr</label>
-                                    <span>3:24 PM</span>
-                                 </li>
-                                 <li class="time_detail" tabindex="0">
-                                    <label>Maghrib</label>
-                                    <span>6:31 PM</span>
-                                 </li>
-                                 <li class="time_detail" tabindex="0">
-                                    <label>Isha</label>
-                                    <span>7:47 PM</span>
-                                 </li>
-                              </ul>
-                           </div>
+                     <div class="prayer_card">
+                        <div class="news_wrapper">
+                           <h3 class="content-label" tabindex="0">Prayer Times</h3>
+                           <span class="info_title" tabindex="0">24 June, 2020</span>
+                           <ul class="prayer_time">
+                              <li class="time_detail" tabindex="0">
+                                 <label>Fajr</label>
+                                 <span>4:06 AM</span>
+                              </li>
+                              <li class="time_detail" tabindex="0">
+                                 <label>Dhuhr</label>
+                                 <span>11:59 AM</span>
+                              </li>
+                              <li class="time_detail" tabindex="0">
+                                 <label>Asr</label>
+                                 <span>3:24 PM</span>
+                              </li>
+                              <li class="time_detail" tabindex="0">
+                                 <label>Maghrib</label>
+                                 <span>6:31 PM</span>
+                              </li>
+                              <li class="time_detail" tabindex="0">
+                                 <label>Isha</label>
+                                 <span>7:47 PM</span>
+                              </li>
+                           </ul>
                         </div>
                      </div>
                   </div>
                </div>
             </div>
-         </section>
-         <!--Latest News close-->
-
-
-         <!-- Blogs -->
-         <section class="blog_section">
-            <div class="custom_container">
-               <h2 tabindex="0">Blogs you’ll love to read</h2>
-               <p tabindex="0" class="commn-para">Our finest writers on GOV.QA bring together
-                  the most credible writings for you.
-               </p>
-               <div class="flex_row">
-                  <div class="flex_col_sm_6">
-                      <a href="#"  tabindex="0" >
+         </div>
+      </section>
+      <!--Latest News close-->
+      <!-- Blogs -->
+      <section class="blog_section">
+         <div class="custom_container">
+            <h2 tabindex="0">Blogs you’ll love to read</h2>
+            <p tabindex="0" class="commn-para">Our finest writers on GOV.QA bring together
+               the most credible writings for you.
+            </p>
+            <div class="flex_row">
+               <div class="flex_col_sm_6">
+                  <a href="#" tabindex="0">
                      <figure class="video_thumb">
                         <img src="assets/images/blog-thumb.png" alt="video-thumb" />
                         <div class="txt-img">
@@ -1194,11 +1290,11 @@
                         </div>
                      </figure>
                   </a>
-                  </div>
-                  <div class="flex_col_sm_6">
-                     <div class="flex_row blog_img">
-                        <div class="flex_col_sm_6 flex_col_xs_6">
-                            <a href="#"  tabindex="0" >
+               </div>
+               <div class="flex_col_sm_6">
+                  <div class="flex_row blog_img">
+                     <div class="flex_col_sm_6 flex_col_xs_6">
+                        <a href="#" tabindex="0">
                            <figure>
                               <img src="assets/images/look-in-places.png" alt="blog-img" />
                               <div class="txt-img">
@@ -1206,10 +1302,10 @@
                                  <span class="time">2 hours ago</span>
                               </div>
                            </figure>
-                          </a> 
-                        </div>
-                        <div class="flex_col_sm_6 flex_col_xs_6">
-                            <a href="#"  tabindex="0" >
+                        </a>
+                     </div>
+                     <div class="flex_col_sm_6 flex_col_xs_6">
+                        <a href="#" tabindex="0">
                            <figure>
                               <img src="assets/images/look-in-places.png" alt="blog-img" />
                               <div class="txt-img">
@@ -1217,10 +1313,10 @@
                                  <span class="time">05-08-2020</span>
                               </div>
                            </figure>
-                           </a>
-                        </div>
-                        <div class="flex_col_sm_6 flex_col_xs_6">
-                            <a href="#"  tabindex="0" >
+                        </a>
+                     </div>
+                     <div class="flex_col_sm_6 flex_col_xs_6">
+                        <a href="#" tabindex="0">
                            <figure>
                               <img src="assets/images/look-in-places.png" alt="blog-img" />
                               <div class="txt-img">
@@ -1228,10 +1324,10 @@
                                  <span class="time">2 hours ago</span>
                               </div>
                            </figure>
-                           </a>
-                        </div>
-                        <div class="flex_col_sm_6 flex_col_xs_6">
-                            <a href="#"  tabindex="0" >
+                        </a>
+                     </div>
+                     <div class="flex_col_sm_6 flex_col_xs_6">
+                        <a href="#" tabindex="0">
                            <figure>
                               <img src="assets/images/look-in-places.png" alt="blog-img" />
                               <div class="txt-img">
@@ -1239,290 +1335,270 @@
                                  <span class="time">2 hours ago</span>
                               </div>
                            </figure>
-                           </a>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-                <a href="#"  tabindex="0"  class="view_all_wrap link">
-                  View All Blogs
-               </a>
-            </div>
-         </section>
-         <!-- Blogs close -->
-
-         <!--Section  Polls and Survey -->
-         <section class="opinion_section wave_darkwhite_maroon">
-            <div class="custom_container">
-               <div class="inner_custom_container">
-                  <div class="flex_row">
-                     <div class="flex_col_sm_6">
-                        <h2 tabindex="0"> Polls</h2>
-                        <p  tabindex="0" class="commn-para">Latest Polls. Updated throughout the day in Hukoomi platform. </p>
-                        <div class="card_wrap">
-                           <!--Owl Slider-->
-                           <div id="polls_owl" class="owl-carousel owl-loaded owl-drag">
-                              <!-- item repeat -->
-                              <div class="item">
-                                 <div class="inner_wrap">
-                                    <h3  tabindex="0">How would you rate COVID-19 Self-Assessment Service?</h3>
-                                    <div class="rating_wrap">
-                                       <div class="radio_wrap"  tabindex="0">
-                                          <input type="radio" id="excellent" name="rate" value="excellent">
-                                          <label  for="excellent">Excellent</label>
-                                       </div>
-                                       <div class="radio_wrap"  tabindex="0">
-                                          <input type="radio" id="vgood" name="rate" value="vgood">
-                                          <label for="vgood">Very Good</label>
-                                       </div>
-                                       <div class="radio_wrap"  tabindex="0">
-                                          <input type="radio" id="good" name="rate" value="good">
-                                          <label for="good">Good</label>
-                                       </div>
-                                    </div>
-                                    <hr>
-                                    <div class="vote_wrap">
-                                       <button class="vote_btn">Vote</button>
-                                        <a href="#"  tabindex="0"  class="view_all_wrap link">
-                                          View All Polls
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                              <!-- item repeat close-->
-                              <!-- item repeat -->
-                              <div class="item">
-                                 <div class="inner_wrap">
-                                    <h3 tabindex="0">How would you rate COVID-19 Self-Assessment Service?</h3>
-                                 </div>
-                              </div>
-                              <!-- item repeat close-->
-                              <!-- item repeat -->
-                              <div class="item">
-                                 <div class="inner_wrap">
-                                    <h3>How would you rate COVID-19 Self-Assessment Service?</h3>
-                                 </div>
-                              </div>
-                              <!-- item repeat close-->
-                           </div>
-                        </div>
-                        <!--Owl Slider close-->
-                     </div>
-                     <div class="flex_col_sm_6">
-                        <h2>Surveys</h2>
-                        <p class="commn-para"  tabindex="0">Share your opinion by taking part in the online surveys posted by Qatar
-                           Government.
-                        </p>
-                        <div class="card_wrap survey_card">
-                           <!--Owl Slider-->
-                           <div id="survey_owl" class="owl-carousel owl-loaded owl-drag">
-                              <!-- item repeat -->
-                              <div class="item">
-                                 <div class="inner_wrap">
-                                    <h3>Take part in Qatar foreign Investment survey.</h3>
-                                    <p>We would love to hear your thoughts or feedback on how we can improve your
-                                       experience.
-                                    </p>
-                                    <div class="vote_wrap">
-                                       <button class="vote_btn">Start Survey</button>
-                                        <a href="#"  tabindex="0"  class="view_all_wrap link">
-                                          View All Survey
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                              <!-- item repeat close -->
-
-
-                               <!-- item repeat -->
-                               <div class="item">
-                                 <div class="inner_wrap">
-                                    <h3>Take part in Qatar foreign Investment survey.</h3>
-                                    <p>We would love to hear your thoughts or feedback on how we can improve your
-                                       experience.
-                                    </p>
-                                    <div class="vote_wrap">
-                                       <button class="vote_btn">Start Survey</button>
-                                        <a href="#"  tabindex="0"  class="view_all_wrap link">
-                                          View All Survey
-                                       </a>
-                                    </div>
-                                 </div>
-                              </div>
-                              <!-- item repeat close -->
-                            
-                           </div>
-                           <!--Owl Slider close-->
-                        </div>
+                        </a>
                      </div>
                   </div>
                </div>
             </div>
-         </section>
-         <!--Section  Polls and Survey close -->
-
-
-         <!-- Subscription Section -->
-         <section class="subscription_section">
-            <div class="custom_container">
+            <a href="#" tabindex="0" class="view_all_wrap link">
+               View All Blogs
+            </a>
+         </div>
+      </section>
+      <!-- Blogs close -->
+      <!--Section  Polls and Survey -->
+      <section class="opinion_section wave_darkwhite_maroon">
+         <div class="custom_container">
+            <div class="inner_custom_container">
                <div class="flex_row">
                   <div class="flex_col_sm_6">
-                     <h2 tabindex="0">Never miss an update</h2>
-                     <p class="commn-para" tabindex="0">Get all the latest updates about Qatar sent straight to your inbox. We help
-                        to keep you upbeat.
+                     <h2 tabindex="0"> Polls</h2>
+                     <p tabindex="0" class="commn-para">Latest Polls. Updated throughout the day in Hukoomi platform.
                      </p>
-                     <div class="txt_wrapper">
-                        <label for="emailid" class="none">email</label>
-                        <input type="text" id="emailid" placeholder="Enter e-mail id" />
-                        <button class="detect-icon">
-                           <img src="assets/images/send.png" alt="send" /> Subscribe
-                        </button>
-                     </div>
-                     <span class="note"  tabindex="0"><strong>Please note-</strong> Even if you may like it we don’t do spamming! If
-                        you wish to opt out later, you can unsubscribe later.</span>
-                     <!--Owl Slider-->
-                     <div id="review_owl" class="owl-carousel owl-loaded owl-drag">
-                        <!-- item repeat -->
-                        <div class="item">
-                           <div class="reviews_wrapper" tabindex="0">
-                              <figure>
-                                 <img src="assets/images/sheikh.jpg" alt="reviewd-by" />
-                              </figure>
-                              <p>“Your newsletters are beautifully crafted and they do a great job of keeping me well
-                                 informed
-                                 about all the latest news & events happening in Qatar.”
-                              </p>
+                     <div class="card_wrap">
+                        <!--Owl Slider-->
+                        <div id="polls_owl" class="owl-carousel owl-loaded owl-drag">
+                           <!-- item repeat -->
+                           <div class="item">
+                              <div class="inner_wrap">
+                                 <h3 tabindex="0">How would you rate COVID-19 Self-Assessment Service?</h3>
+                                 <div class="rating_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="excellent" name="rate" value="excellent">
+                                       <label for="excellent">Excellent</label>
+                                    </div>
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="vgood" name="rate" value="vgood">
+                                       <label for="vgood">Very Good</label>
+                                    </div>
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="good" name="rate" value="good">
+                                       <label for="good">Good</label>
+                                    </div>
+                                 </div>
+                                 <hr>
+                                 <div class="vote_wrap">
+                                    <button class="vote_btn">Vote</button>
+                                    <a href="#" tabindex="0" class="view_all_wrap link">
+                                       View All Polls
+                                    </a>
+                                 </div>
+                              </div>
                            </div>
-                        </div>
-                        <!-- item repeat close -->
-                        <!-- item repeat -->
-                        <div class="item">
-                           <div class="reviews_wrapper" tabindex="0">
-                              <figure>
-                                 <img src="assets/images/sheikh.jpg" alt="reviewd-by" />
-                              </figure>
-                              <p>“Your newsletters are beautifully crafted and they do a great job.”</p>
+                           <!-- item repeat close-->
+                           <!-- item repeat -->
+                           <div class="item">
+                              <div class="inner_wrap">
+                                 <h3 tabindex="0">How would you rate COVID-19 Self-Assessment Service?</h3>
+                              </div>
                            </div>
+                           <!-- item repeat close-->
+                           <!-- item repeat -->
+                           <div class="item">
+                              <div class="inner_wrap">
+                                 <h3>How would you rate COVID-19 Self-Assessment Service?</h3>
+                              </div>
+                           </div>
+                           <!-- item repeat close-->
                         </div>
-                        <!-- item repeat close -->
                      </div>
                      <!--Owl Slider close-->
                   </div>
                   <div class="flex_col_sm_6">
-                     <div class="sample_card">
+                     <h2>Surveys</h2>
+                     <p class="commn-para" tabindex="0">Share your opinion by taking part in the online surveys posted
+                        by Qatar
+                        Government.
+                     </p>
+                     <div class="card_wrap survey_card">
                         <!--Owl Slider-->
-                        <div id="newsletter_owl" class="owl-carousel owl-loaded owl-drag">
+                        <div id="survey_owl" class="owl-carousel owl-loaded owl-drag">
                            <!-- item repeat -->
                            <div class="item">
-                              <div class="inner_wrap" tabindex="0">
-                                 <figure class="sample_img">
-                                    <img src="assets/images/blog-thumb.png" alt="newsletter-sample" />
-                                 </figure>
-                                 <span class="headlines">Why Qatar is the Safest Country in the World?</span>
-                                  <a href="#"  tabindex="0"  class="view_all_wrap link">
-                                    Checkout a sample newsletter
-                                 </a>
+                              <div class="inner_wrap">
+                                 <h3>Take part in Qatar foreign Investment survey.</h3>
+                                 <p>We would love to hear your thoughts or feedback on how we can improve your
+                                    experience.
+                                 </p>
+                                 <div class="vote_wrap">
+                                    <button class="vote_btn">Start Survey</button>
+                                    <a href="#" tabindex="0" class="view_all_wrap link">
+                                       View All Survey
+                                    </a>
+                                 </div>
                               </div>
                            </div>
-                           <!-- item repeat close-->
-                        
-                          
+                           <!-- item repeat close -->
+                           <!-- item repeat -->
+                           <div class="item">
+                              <div class="inner_wrap">
+                                 <h3>Take part in Qatar foreign Investment survey.</h3>
+                                 <p>We would love to hear your thoughts or feedback on how we can improve your
+                                    experience.
+                                 </p>
+                                 <div class="vote_wrap">
+                                    <button class="vote_btn">Start Survey</button>
+                                    <a href="#" tabindex="0" class="view_all_wrap link">
+                                       View All Survey
+                                    </a>
+                                 </div>
+                              </div>
+                           </div>
+                           <!-- item repeat close -->
                         </div>
                         <!--Owl Slider close-->
                      </div>
-                     <!-- slider close-->
                   </div>
                </div>
             </div>
-         </section>
-         <!-- Subscription Section close-->
-
-         <!-- Wish to learn Section -->
-         <section class="know_section">
-            <div class="custom_container">
-               <h2 tabindex="0">What do you wish to learn today?</h2>
-               <div class="info_card_wrap" >
-                   <a href="#"  tabindex="0"    class="info_card card_effect next">
-                     <span class="next">
-                          Know Your
-                        <span class="info">Pre-requisites</span>
-                     </span>
-                  </a>
-
-                   <a href="#"  tabindex="0" class="info_card card_effect next">
-                     <span class="next">
-                          Know Your
-                        <span class="info">Eligibility</span>
-                     </span>
-                  </a>
-
-                   <a href="#"  tabindex="0"   class="info_card card_effect next">
-                     <span class="next">
-                          Know Your
-                        <span class="info">Rights</span>
-                     </span>
-                  </a>
-
-
-
-               </div>
-               <div class="foot_note">
-                  <p class="commn-para" tabindex="0">
-                     <strong>Hukoomi</strong> is the official source to get all the important information you need about
-                     Qatar.
+         </div>
+      </section>
+      <!--Section  Polls and Survey close -->
+      <!-- Subscription Section -->
+      <section class="subscription_section">
+         <div class="custom_container">
+            <div class="flex_row">
+               <div class="flex_col_sm_6">
+                  <h2 tabindex="0">Never miss an update</h2>
+                  <p class="commn-para" tabindex="0">Get all the latest updates about Qatar sent straight to your inbox.
+                     We help
+                     to keep you upbeat.
                   </p>
-                   <a href="#"  tabindex="0"  class="view_all_wrap signup link">
-                     Sign up now
-                  </a>
+                  <div class="txt_wrapper">
+                     <label for="emailid" class="none">email</label>
+                     <input type="text" id="emailid" placeholder="Enter e-mail id" />
+                  </div>
+                  <div class="select_lang_wrap">
+                     <span class="recv_option" tabindex="0">Receive Newsletter in</span>
+                     <div class="checkbox_wrap">
+                        <input class="filter-type filled-in" type="checkbox" name="english" id="english" />
+                        <label for="english"><span></span>English</label>
+                     </div>
+                     <div class="checkbox_wrap">
+                        <input class="filter-type filled-in" type="checkbox" name="qatar" id="qatar" />
+                        <label for="qatar"><span></span>عربى</label>
+                     </div>
+                  </div>
+                  <button class="subscribe_btn">Subscribe</button>
+                  <span class="thank_u_msg" tabindex="0">
+                     Thank you! You’re subscribed, look for a confirmation email shortly.
+                  </span>
+                  <span class="note" tabindex="0"><strong>Please note-</strong> Even if you may like it we don’t do
+                     spamming! If
+                     you wish to opt out later, you can unsubscribe later.</span>
+               </div>
+               <div class="flex_col_sm_6">
+                  <div class="sample_card">
+                     <!--Owl Slider-->
+                     <div id="newsletter_owl" class="owl-carousel owl-loaded owl-drag">
+                        <!-- item repeat -->
+                        <div class="item">
+                           <div class="inner_wrap" tabindex="0">
+                              <figure class="sample_img">
+                                 <img src="assets/images/blog-thumb.png" alt="newsletter-sample" />
+                              </figure>
+                              <span class="headlines">Why Qatar is the Safest Country in the World?</span>
+                              <a href="#" tabindex="0" class="view_all_wrap link">
+                                 Checkout a sample newsletter
+                              </a>
+                           </div>
+                        </div>
+                        <!-- item repeat close-->
+                        <!-- item repeat -->
+                        <div class="item">
+                           <div class="inner_wrap" tabindex="0">
+                              <figure class="sample_img">
+                                 <img src="assets/images/blog-thumb.png" alt="newsletter-sample" />
+                              </figure>
+                              <span class="headlines">Why Qatar is the Safest Country in the World?</span>
+                              <a href="#" tabindex="0" class="view_all_wrap link">
+                                 Checkout a sample newsletter
+                              </a>
+                           </div>
+                        </div>
+                        <!-- item repeat close-->
+                     </div>
+                     <!--Owl Slider close-->
+                  </div>
+                  <!-- slider close-->
                </div>
             </div>
-         </section>
-         <!-- Wish to learn Section close -->
-     
-
-         <!--footer-->
-         <footer>
-            <div class="footer_inner">
-               <div class="foot_row">
-                  <div class="copy_right" tabindex="0">
-                     Copyrigt © 2019 MOTC. All rights reserved.
-                  </div>
-                  <div class="foot_nav">
-                     <nav>
-                        <ul>
-                           <li> <a href="#"  tabindex="0" >Entity  Services’ Statistics</a></li>
-                           <li> <a href="#"  tabindex="0" >Useful Links</a></li>
-                           <li> <a href="#"  tabindex="0" >Customer Service</a></li>
-                           <li> <a href="#"  tabindex="0" >Contact Us</a></li>
-                           <li> <a href="#"  tabindex="0" >FAQ</a></li>
-                           <li> <a href="#"  tabindex="0" >Polls & Surveys</a></li>
-                           <li> <a href="#"  tabindex="0" >Mobile Apps</a></li>
-                           <li> <a href="#"  tabindex="0" >Site Map</a></li>
-                           <li> <a href="#"  tabindex="0" >Privacy & Legal</a></li>
-                           <li> <a href="#"  tabindex="0" >Find Help</a></li>
-                        </ul>
-                     </nav>
-                  </div>
+         </div>
+      </section>
+      <!-- Subscription Section close-->
+      <!-- Wish to learn Section -->
+      <section class="know_section">
+         <div class="custom_container">
+            <h2 tabindex="0">What do you wish to learn today?</h2>
+            <div class="info_card_wrap">
+               <a href="#" tabindex="0" class="info_card card_effect next">
+                  <span class="next">
+                     Know Your
+                     <span class="info">Pre-requisites</span>
+                  </span>
+               </a>
+               <a href="#" tabindex="0" class="info_card card_effect next">
+                  <span class="next">
+                     Know Your
+                     <span class="info">Eligibility</span>
+                  </span>
+               </a>
+               <a href="#" tabindex="0" class="info_card card_effect next">
+                  <span class="next">
+                     Know Your
+                     <span class="info">Rights</span>
+                  </span>
+               </a>
+            </div>
+            <div class="foot_note">
+               <p class="commn-para" tabindex="0">
+                  <strong>Hukoomi</strong> is the official source to get all the important information you need about
+                  Qatar.
+               </p>
+               <a href="#" tabindex="0" class="view_all_wrap signup link">
+                  Sign up now
+               </a>
+            </div>
+         </div>
+      </section>
+      <!-- Wish to learn Section close -->
+      <!--footer-->
+      <footer>
+         <div class="footer_inner">
+            <div class="foot_row">
+               <div class="copy_right" tabindex="0">
+                  Copyrigt © 2019 MOTC. All rights reserved.
+               </div>
+               <div class="foot_nav">
+                  <nav>
+                     <ul>
+                        <li> <a href="#" tabindex="0">Entity Services’ Statistics</a></li>
+                        <li> <a href="#" tabindex="0">Useful Links</a></li>
+                        <li> <a href="#" tabindex="0">Customer Service</a></li>
+                        <li> <a href="#" tabindex="0">Contact Us</a></li>
+                        <li> <a href="#" tabindex="0">FAQ</a></li>
+                        <li> <a href="#" tabindex="0">Polls & Surveys</a></li>
+                        <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                        <li> <a href="#" tabindex="0">Site Map</a></li>
+                        <li> <a href="#" tabindex="0">Privacy & Legal</a></li>
+                        <li> <a href="#" tabindex="0">Find Help</a></li>
+                     </ul>
+                  </nav>
                </div>
             </div>
-         </footer>
-         <!--footer close-->
-
+         </div>
+      </footer>
+      <!--footer close-->
    </div>
    <!--App_wrapper close-->
-
-
-  
    <!--Js-->
    <script src="assets/js/jquery.js"></script>
    <script>
-     window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
    </script>
    <script src="assets/js/popper.min.js"></script>
    <script src="assets/js/bootstrap.min.js"></script>
    <script src="assets/js/bootstrap-select.js"></script>
-   <script src="assets/js/moment.min.js"></script>
-   <script src="assets/js/daterangepicker.min.js"></script>
    <script src="assets/js/moment.min.js"></script>
    <script src="assets/js/daterangepicker.min.js"></script>
    <script src="assets/js/owl.carousel.min.js"></script>
@@ -1531,9 +1607,6 @@
    <!-- <script src="//f1-as.readspeaker.com/script/9256/webReader/webReader.js?pids=wr"></script> -->
    <!-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=SgqOta15"></script> -->
    <!--Js Close-->
-
-
-
 </body>
 
 </html>

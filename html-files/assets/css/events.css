@@ -11,6 +11,9 @@
       margin: 20px 10px; } }
   .events.full_view {
     min-height: 475px; }
+    @media (max-width: 640px) {
+      .events.full_view {
+        min-height: 368px; } }
     .events.full_view .daterangepicker .drp-calendar.left .calendar-table {
       height: auto;
       overflow: visible; }
@@ -27,6 +30,9 @@
     @media screen and (max-width: 768px) {
       .events .daterangepicker {
         padding: 5px 10px 50px 10px; } }
+    @media screen and (max-width: 640px) {
+      .events .daterangepicker {
+        padding: 0; } }
     .events .daterangepicker .drp-calendar {
       max-width: 100%; }
       .events .daterangepicker .drp-calendar.left {
@@ -189,7 +195,8 @@
     cursor: pointer;
     left: 50%;
     transform: translate(-50%, 0);
-    text-align: center; }
+    text-align: center;
+    z-index: 99; }
     .events .view_all img {
       margin: 0 auto; }
 
@@ -198,5 +205,9 @@
 .ar .events .daterangepicker select.monthselect {
   margin-right: 0;
   margin-left: 2%; }
+
+@media (max-width: 640px) {
+  .daterangepicker .drp-calendar.left {
+    padding: 0 !important; } }
 
 /*# sourceMappingURL=events.css.map */

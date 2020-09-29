@@ -24,9 +24,6 @@ $(document).ready(function(){
     });
 
 
-
-
-
     $('.dash_menu').click(function(e){
         e.stopPropagation();
         $('body').toggleClass('dash_menu_show')
@@ -47,3 +44,22 @@ $('.undo_button, .close_hku_alert').click(function(){
     $('.hku_alert, .alert_backdrop').css("display", "none");
     $('.card-box').removeClass('active');
 });
+
+
+
+
+
+
+/**************************************Contrast Js*******************************************************/
+$(document).ready(function(){
+    $('#themechange').click(function(){
+    if($('link#styles').attr('href')=="assets/css/Day.css"){
+    $('link#styles').attr('href','assets/css/blind.css')
+    }
+    else
+    {
+    $('link#styles').attr('href','assets/css/Day.css')
+    }
+    })
+    });
+    /**************************************Contrast Js close*******************************************************/

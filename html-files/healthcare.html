@@ -17,80 +17,183 @@
     <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
     <!-- healthcare -->
     <link rel="stylesheet" href="assets/css/healthcare.css">
+    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
 </head>
 
 <body class="">
     <div class="app_wrapper">
-        <header>
-            <div class="header_inner">
-                <div class="innner_wrapper">
-                    <div class="nav_brand">
-                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+        <!--header-->
+      <header>
+        <div class="header_inner">
+           <div class="innner_wrapper">
+              <div class="nav_brand">
+                 <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+              </div>
+              <div class="nav_col">
+                 <div class="header_row">
+                     <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                        <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                        </a>
+                     </figure>
+
+                    <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                       <ul>
+                          <li><a href="#" class="link">Life in Qatar</a></li>
+                         <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                          <li><a href="#" class="link">Open Data</a></li>
+                          <li><a href="#" class="link">E-Participation</a></li>
+                       </ul>
                     </div>
-                    <div class="nav_col">
-                        <div class="header_row">
-                            <div class="abt_qtr_nav desktop_view_head">
-                                <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
-                                    <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
-                                </ul>
-                            </div>
-                            <div class="auth_nav">
-                                <ul>
-                                    <li class="mob_hide">
-                                        <a href="#" tabindex="0" class="link">
-                                            <img src="assets/images/accessibility.png" alt="Accessibility"
-                                                class="access_icon"> Accessibility</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
-                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
-                                                alt="language-icon">
-                                        </a>
-                                    </li>
-                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
-                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
-                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="header_row b-top desktop_view_head">
-                            <div class="nav_menu">
-                                <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a>
-                                    </li>
-                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
-                                    <li>
-                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
-                                                title="Search" class="search_icon" alt="Search"></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                    <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                       <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                          href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                       <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                       <span>Listen</span></span></span>
+                       <span class="rsbtn_right rsimg rsplay rspart"></span>
+                       <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                       </a>
                     </div>
-                </div>
-            </div>
-            <!-- Mobile Menu-->
-            <div class="mob_nav">
-                <ul>
-                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Innovation</a></li>
-                    <li> <a href="#" tabindex="0">Open Data</a></li>
-                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Explore Services</a></li>
-                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
-                    <li> <a href="#" tabindex="0">Media</a></li>
-                    <li> <a href="#" tabindex="0">About Qatar</a></li>
-                </ul>
-            </div>
-            <!-- Mobile Menu-->
-        </header>
+                    <div class="auth_nav">
+                       <ul>
+                          <li class="mob_hide">
+                             <a href="#" class="link">
+                             <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                             <div class="access_submenu">
+                                <span class="title">Accessbility Options</span>
+                                <ul>
+                                   <li>
+                                      <span class="option">Text Size</span>
+                                      <div class="size_wrap">
+                                         <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                         <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                      </div>
+                                   </li>
+                                   <li>
+                                      <span class="option">Listen Content</span>
+                                      <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                      <img src="assets/images/volume.png" alt="speaker" />
+                                      <span>Listen</span>
+                                      </button>
+                                   </li>
+                                   <li>
+                                      <span class="option">Contrast</span>
+                                      <button id="themechange">
+                                      <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                      </button>
+                                   </li>
+                                </ul>
+                             </div>
+                          </li>
+                          <li>
+                             <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                             </a>
+                          </li>
+                          <li><a href="#" class="link">Login / Signup</a></li>
+                          <li class="mob_menu_nav">
+                            <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                          </li>
+                       </ul>
+                    </div>
+                 </div>
+                 <div class="header_row b-top desktop_view_head" id="head2_top">
+                    <div class="nav_menu">
+                       <ul>
+                          <li><a href="#" class="link">Explore Services</a></li>
+                          <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                          <li><a href="#" class="link">Media</a></li>
+                          <li class="">
+                             <a href="#" class="link about_qatar_nav">About Qatar</a>
+                             <div class="about_submenu">
+
+                                <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                                <div class="f_row">
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Qatar Government</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Hukoomi</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Qatar</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Qatar National Vision 2030</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">Government & Legislatives</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                   <!-- card repeat -->
+                                   <div class="card_col">
+                                      <a href="#" class="card_wrapper">
+                                         <figure class="card_img">
+                                            <img src="assets/images/amir.png" alt="thumb-img" />
+                                         </figure>
+                                         <h3 class="line-1">The Amir</h3>
+                                         <span class="descr line-2">Small description about Qatar Government
+                                         page.</span>
+                                      </a>
+                                   </div>
+                                   <!-- card repeat close-->
+                                </div>
+                             </div>
+                          </li>
+                          <li>
+                             <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                       </li>
+                       </ul>
+                    </div>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </header>
+     <!--header close-->
         <!-- ======= header ======= -->
 
         <div class="overlay"></div>
@@ -100,19 +203,19 @@
                 <div class="container">
                     <!-- healthcare_header -->
                     <div class="healthcare_header">
-                        <span class="menu-toggle"><img src="assets/images//menu.svg" alt="menu"></span>
+                        <span class="menu-toggle"><img src="assets/images/menu.svg" alt="menu"></span>
                         <!-- breadcrumb -->
                         <div class="breadcrumb">
                             <ul>
-                                <li><a href="javascript:void(0)" class="hover">Home</a></li>
-                                <li><a href="javascript:void(0)" class="hover">Topics</a></li>
+                                <li><a href="#" onclick="return false" class="hover">Home</a></li>
+                                <li><a href="#" onclick="return false" class="hover">Topics</a></li>
                                 <li>Healthcare</li>
                             </ul>
                         </div>
                         <!-- Searchbar -->
                         <div class="searchbar">
                             <div class="heading">
-                                <h2>Healthcare <img src="assets/images//down-icon.svg" alt=""></h2>
+                                <h1>Healthcare <img src="assets/images/down-icon.svg" alt=""></h1>
                             </div>
                             <div class="search">
                                 <label class="d-none" for="healtcareSearch">Topics</label>
@@ -123,27 +226,26 @@
                         </div>
                         <!-- Navigation -->
                         <nav class="healthcare-navbar">
-                            <span class="close-icon"><img src="assets/images//close-white.svg" alt=""></span>
                             <ul>
-                                <li class="active"><a href="#aboutHealthcare"><img src="assets/images//channel.svg"
+                                <li class="active"><a href="#aboutHealthcare"><img src="assets/images/channel.svg"
                                             alt="channel">
                                         About Channel</a>
                                 </li>
-                                <li><a href="#healthTopics"><img src="assets/images//health_topic.svg" alt="health_topic">
+                                <li><a href="#healthTopics"><img src="assets/images/health_topic.svg" alt="health_topic">
                                         A-Z
                                         Health Topics </a></li>
-                                <li><a href="#serviceSupport"><img src="assets/images//service_support.svg"
+                                <li><a href="#serviceSupport"><img src="assets/images/service_support.svg"
                                             alt="service_support">
                                         Services & Support</a></li>
-                                <li><a href="#directory"><img src="assets/images//directory.svg" alt="directory"
+                                <li><a href="#directory"><img src="assets/images/directory.svg" alt="directory"
                                             height="21">
                                         Directory</a>
                                 </li>
-                                <li><a href="#utility"><img src="assets/images//utility.svg" alt="utility"> Utility</a>
+                                <li><a href="#utility"><img src="assets/images/utility.svg" alt="utility_one"> Utility</a>
                                 </li>
-                                <li><a href="#downloadables"><img src="assets/images//downloadables.svg" alt="downloadables">
+                                <li><a href="#downloadables"><img src="assets/images/downloadables.svg" alt="downloadables">
                                         Downloadables</a></li>
-                                <li><a href="#quickLinks"><img src="assets/images//link_h.svg" alt="link"> Quick links</a>
+                                <li><a href="#quickLinks"><img src="assets/images/link_h.svg" alt="Quick_link"> Quick links</a>
                                 </li>
                             </ul>
                         </nav>
@@ -161,30 +263,30 @@
                                 <!-- day-date -->
                                 <div class="day-date">
                                     <span class="day">Sunday</span>
-                                    <span class="date hover">19 July, 2020 <img src="assets/images//chevron-down-grey.svg"
+                                    <span class="date hover">19 July, 2020 <img src="assets/images/chevron-down-grey.svg"
                                             alt=""></span>
                                 </div>
                                 <!-- news-info -->
                                 <div class="news-info">
                                     <!-- news-details -->
                                     <div class="news-details">
-                                        <img src="assets/images//healthcare_listing_1.jpg" alt="healthcare_listing_1">
+                                        <img src="assets/images/healthcare_listing_1.jpg" alt="healthcare_listing_1">
                                         <p>Chronic stress linked to racial discrimination may adversely impact
                                             cognition,
                                             Alzheimer’s disease</p>
                                         <div class="date">19 July, 2020</div>
-                                        <a href="javascript:void(0)" class="newspaper-name">Al Sharq Newspaper</a>
+                                        <a href="#" onclick="return false" class="newspaper-name">Al Sharq Newspaper</a>
                                     </div>
                                     <!-- news-details -->
                                     <div class="news-details">
-                                        <img src="assets/images//healthcare_listing_2.jpg" alt="healthcare_listing_2">
+                                        <img src="assets/images/healthcare_listing_2.jpg" alt="healthcare_listing_2">
                                         <p>"Prevention is better than cure" - Government's statement on healthcare
                                             process.
                                         </p>
                                         <div class="date">19 July, 2020</div>
-                                        <a href="javascript:void(0)" class="newspaper-name">Al Sharq Newspaper</a>
+                                        <a href="#" onclick="return false" class="newspaper-name">Al Sharq Newspaper</a>
                                     </div>
-                                    <a href="javascript:void(0)" class="view-all">View all Healthcare News <span
+                                    <a href="#" onclick="return false" class="view-all">View all Healthcare News <span
                                             class="icon"></span></a>
                                 </div>
                             </div>
@@ -229,17 +331,17 @@
                                             possible
                                             health outcomes”.</p>
                                     </div>
-                                    <div class="img"><img src="assets/images//healthcare_about.png" alt="healthcare_about"></div>
+                                    <div class="img"><img src="assets/images/healthcare_about.png" alt="healthcare_about"></div>
                                 </div>
                             </div>
                             <!-- healthcare-trails -->
                             <div class="healthcare-trails">
                                 <div class="media">
                                     <div class="img">
-                                        <img src="assets/images//healthcare_trails.png" alt="healthcare_trails">
+                                        <img src="assets/images/healthcare_trails.png" alt="healthcare_trails">
                                     </div>
                                     <div class="media-body">
-                                        <h4>Healthcare trails financial industry in IT adoption</h4>
+                                        <h3>Healthcare trails financial industry in IT adoption</h3>
                                         <p>…Greenline Synergy, discusses why the healthcare sector is “several years
                                             behind”
                                             the
@@ -248,8 +350,8 @@
                                     </div>
                                 </div>
                                 <div class="media-footer">
-                                    <a href="javascript:void(0)">Learn more on Healthcare.gov.qa <span class="icon"><img
-                                                src="assets/images//chevron-right-white.svg" alt=""></span></a>
+                                    <a href="#" onclick="return false">Learn more on Healthcare.gov.qa <span class="icon"><img
+                                                src="assets/images/chevron-right-white.svg" alt=""></span></a>
                                 </div>
                             </div>
                         </div>
@@ -267,7 +369,7 @@
                             <!-- filter-section -->
                             <div class="filter-section">
                                 <div class="filter-header">
-                                    <h5>Filter by</h5>
+                                    <h4>Filter by</h4>
                                     <span class="clear-all hover">Clear All</span>
                                 </div>
                                 <!-- show-hide-item -->
@@ -386,9 +488,9 @@
                                             placeholder="Search for a topic" title="Search for a topic"></div>
                                     <div class="sort-header">
                                         <span class="sort">Sort By:</span>
-                                        <div class="dropdown"><a href="javascript:void(0)" id="dropdownMenuButtonOne"
+                                        <div class="dropdown"><a href="#" onclick="return false" id="dropdownMenuButtonOne"
                                                 class="hover dropdown-toggle" data-toggle="dropdown">Relevance</a> <span
-                                                class="icon"><img src="assets/images//chevron-down-grey.svg"
+                                                class="icon"><img src="assets/images/chevron-down-grey.svg"
                                                     alt="chevron-down-grey"></span>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonOne">
                                                 <a class="dropdown-item" href="#">All</a>
@@ -404,28 +506,28 @@
                                                 <div class="number">A</div>
                                                 <div class="topic-navbar">
                                                     <ul>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
                                                     </ul>
@@ -436,13 +538,13 @@
                                                 <div class="number">B</div>
                                                 <div class="topic-navbar">
                                                     <ul>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
                                                     </ul>
@@ -455,16 +557,16 @@
                                                 <div class="number">C</div>
                                                 <div class="topic-navbar">
                                                     <ul>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
                                                     </ul>
@@ -475,7 +577,7 @@
                                                 <div class="number">D</div>
                                                 <div class="topic-navbar">
                                                     <ul>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
                                                     </ul>
@@ -486,16 +588,16 @@
                                                 <div class="number">E</div>
                                                 <div class="topic-navbar">
                                                     <ul>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
                                                     </ul>
@@ -508,22 +610,22 @@
                                                 <div class="number">F</div>
                                                 <div class="topic-navbar">
                                                     <ul>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
                                                     </ul>
@@ -534,19 +636,19 @@
                                                 <div class="number">G</div>
                                                 <div class="topic-navbar">
                                                     <ul>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
-                                                        <li><a href="javascript:void(0)">Availability of Personal
+                                                        <li><a href="#" onclick="return false">Availability of Personal
                                                                 Protective
                                                                 kits</a></li>
                                                     </ul>
@@ -557,9 +659,9 @@
                                 </div>
                                 <div class="pagination">
                                     <div class="d-flex">
-                                        <a href="javascript:void(0)" class="btn arrow-left"><img src="assets/images//back_h.png"
+                                        <a href="#" onclick="return false" class="btn arrow-left"><img src="assets/images/back_h.png"
                                                 alt="back"></a>
-                                        <a href="javascript:void(0)" class="btn arrow-right"><img src="assets/images//next_h.png"
+                                        <a href="#" onclick="return false" class="btn arrow-right"><img src="assets/images/next_h.png"
                                                 alt="next"></a>
                                     </div>
                                     <p>Showing 50 of All 200 Health topics</p>
@@ -576,7 +678,7 @@
                                 <!-- filter-section -->
                                 <div class="filter-section">
                                     <div class="filter-header">
-                                        <h5>Filter by</h5>
+                                        <h4>Filter by</h4>
                                         <span class="clear-all hover">Clear All</span>
                                     </div>
                                     <div class="show-hide-item">
@@ -761,21 +863,21 @@
                                 <div class="right-section">
                                     <!-- heading -->
                                     <div class="heading">
-                                        <h3>Services & Support</h3>
+                                        <h3>Services &amp; Support</h3>
                                     </div>
                                     <!-- details-info -->
                                     <div class="details-info">
                                         <!-- searchbar -->
                                         <div class="searchbar">
-                                            <label for="service"></label>
+                                            <label for="service" class="d-none">Search for a Service</label>
                                             <input type="search" class="search" name="service" id="service"
                                                 placeholder="Search for a Service"></div>
                                         <div class="sort-header">
                                             <span class="sort">Sort By:</span>
-                                            <div class="dropdown"><a href="javascript:void(0)"
+                                            <div class="dropdown"><a href="#" onclick="return false"
                                                     id="dropdownMenuButtonThree" class="hover dropdown-toggle"
                                                     data-toggle="dropdown">Relevance</a> <span class="icon"><img
-                                                        src="assets/images//chevron-down-grey.svg"
+                                                        src="assets/images/chevron-down-grey.svg"
                                                         alt="chevron-down-grey"></span>
                                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonThree">
                                                     <a class="dropdown-item" href="#">Example</a>
@@ -788,21 +890,21 @@
                                         <div class="service-details">
                                             <!-- card -->
                                             <div class="card">
-                                                <h4>Authentication of Medical Documents Through Foreign Ministry</h4>
-                                                <h5>Ministry of Foreign Affairs</h5>
+                                                <h3>Authentication of Medical Documents Through Foreign Ministry</h3>
+                                                <h4>Ministry of Foreign Affairs</h4>
                                                 <p>People who wish to have their medical documents authenticated shall
                                                     submit a request to the Consular Affairs Department.</p>
                                             </div>
                                             <!-- card -->
                                             <div class="card">
-                                                <h4>File Workplace Health and Safety Report</h4>
-                                                <h5>Ministry of Administrative Development Labor and Social Affairs</h5>
+                                                <h3>File Workplace Health and Safety Report</h3>
+                                                <h4>Ministry of Administrative Development Labor and Social Affairs</h4>
                                                 <p>Report workplace accidents, injuries and health issues</p>
                                             </div>
                                             <!-- card -->
                                             <div class="card">
-                                                <h4>Work Injuries Registration</h4>
-                                                <h5>Ministry of Administrative Development Labor and Social Affairs</h5>
+                                                <h3>Work Injuries Registration</h3>
+                                                <h4>Ministry of Administrative Development Labor and Social Affairs</h4>
                                                 <p>Companies and establishments in Qatar can register work injuries
                                                     online.
                                                     The registration process is periodical, and companies can also add
@@ -813,10 +915,10 @@
                                             </div>
                                             <!-- card -->
                                             <div class="card">
-                                                <h4>Briefing Service of Registered Health Service Providers, Hospitals
+                                                <h3>Briefing Service of Registered Health Service Providers, Hospitals
                                                     and
-                                                    Clinics</h4>
-                                                <h5>Ministry of Public Health</h5>
+                                                    Clinics</h3>
+                                                <h4>Ministry of Public Health</h4>
                                                 <p>The Health Financing and Insurance Department provides this service
                                                     to
                                                     facilitate communication with any of the health service providers,
@@ -827,15 +929,15 @@
                                     <div class="hrline"></div>
                                     <div class="pagination">
                                         <div class="d-flex">
-                                            <a href="javascript:void(0)" class="btn arrow-left"><img
-                                                    src="assets/images//back_h.png" alt="back"></a>
-                                            <a href="javascript:void(0)" class="btn arrow-right"><img
-                                                    src="assets/images//next_h.png" alt="next"></a>
+                                            <a href="#" onclick="return false" class="btn arrow-left"><img
+                                                    src="assets/images/back_h.png" alt="back"></a>
+                                            <a href="#" onclick="return false" class="btn arrow-right"><img
+                                                    src="assets/images/next_h.png" alt="next"></a>
                                         </div>
                                         <p>Showing 20 of All 80 Healthcare related services</p>
-                                        <a href="javascript:void(0)" class="view-all">View all Healthcare related
+                                        <a href="#" onclick="return false" class="view-all">View all Healthcare related
                                             services
-                                            <img src="assets/images//chevron-right-rouge.svg" alt="chevron-right-rouge"></a>
+                                            <img src="assets/images/chevron-right-rouge.svg" alt="chevron-right-rouge"></a>
                                     </div>
                                 </div>
 
@@ -863,7 +965,7 @@
                                         <label for="location">Location</label>
                                         <input type="text" class="form-control" name="location" id="location"
                                             value="Doha" title="Location">
-                                        <span class="icon"><img src="assets/images//location.svg" alt="location"></span>
+                                        <span class="icon"><img src="assets/images/location.svg" alt="location"></span>
                                     </div>
                                     <!-- form-group -->
                                     <div class="form-group col-3">
@@ -908,20 +1010,20 @@
                                     <div class="address-box">
                                         <!-- logo -->
                                         <div class="logo">
-                                            <div class="logo-img"><img src="assets/images//healthcare-services-logo.png"
+                                            <div class="logo-img"><img src="assets/images/healthcare-services-logo.png"
                                                     alt="healthcare-services-logo"></div>
-                                            <h5>Al-Ahli Hospital</h5>
+                                            <h3>Al-Ahli Hospital</h3>
                                         </div>
                                         <!-- address-info -->
                                         <div class="address-info">
-                                            <h6 class="title"><img src="assets/images//location-marker.svg"
-                                                    alt="location-marker">Address</h6>
+                                            <h4 class="title"><img src="assets/images/location-marker.svg"
+                                                    alt="location-marker">Address</h4>
                                             <p>Ahmed Bin Ali St, Doha, Qatar</p>
                                         </div>
                                         <!-- address-info -->
                                         <div class="address-info">
-                                            <h6 class="title"><img src="assets/images//location-marker.svg"
-                                                    alt="location-marker">Operating Hours</h6>
+                                            <h4 class="title"><img src="assets/images/location-marker.svg"
+                                                    alt="location-marker">Operating Hours</h4>
                                             <p>Mon - Sun (Open 24 hours)</p>
                                         </div>
                                     </div>
@@ -965,10 +1067,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="social-icons">
-                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
-                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
-                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
-                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                    <a href=""><img src="assets/images/fb.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images/twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images/linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images/marker.svg" alt="marker"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -993,10 +1095,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="social-icons">
-                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
-                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
-                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
-                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                    <a href=""><img src="assets/images/fb.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images/twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images/linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images/marker.svg" alt="marker"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1021,10 +1123,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="social-icons">
-                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
-                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
-                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
-                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                    <a href=""><img src="assets/images/fb.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images/twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images/linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images/marker.svg" alt="marker"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1049,10 +1151,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="social-icons">
-                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
-                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
-                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
-                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                    <a href=""><img src="assets/images/fb.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images/twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images/linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images/marker.svg" alt="marker"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1077,10 +1179,10 @@
                                                     </div>
                                                 </div>
                                                 <div class="social-icons">
-                                                    <a href=""><img src="assets/images//fb_n.svg" alt="fb"></a>
-                                                    <a href=""><img src="assets/images//twitter.svg" alt="twitter"></a>
-                                                    <a href=""><img src="assets/images//linkedin.svg" alt="linkedin"></a>
-                                                    <a href=""><img src="assets/images//marker.svg" alt="marker"></a>
+                                                    <a href=""><img src="assets/images/fb.svg" alt="fb"></a>
+                                                    <a href=""><img src="assets/images/twitter.svg" alt="twitter"></a>
+                                                    <a href=""><img src="assets/images/linkedin.svg" alt="linkedin"></a>
+                                                    <a href=""><img src="assets/images/marker.svg" alt="marker"></a>
                                                 </div>
                                             </div>
                                         </div>
@@ -1117,7 +1219,7 @@
                                         <!-- card -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <span class="icon"><img src="assets/images//mob-app.svg" alt="mob-app"></span>
+                                                <span class="icon"><img src="assets/images/mob-app.svg" alt="mob-app"></span>
                                                 <h3>Hukoomi mobile app</h3>
                                             </div>
                                             <div class="card-body">
@@ -1128,16 +1230,16 @@
                                                 </p>
                                             </div>
                                             <div class="footer-btn">
-                                                <a href="javascript:void(0)" class="store-btn"><img
-                                                        src="assets/images//play-store.png" alt="play-store"></a>
-                                                <a href="javascript:void(0)" class="store-btn"><img
-                                                        src="assets/images//apple-store.png" alt="apple-store"></a>
+                                                <a href="#" onclick="return false" class="store-btn"><img
+                                                        src="assets/images/play-store.png" alt="play-store"></a>
+                                                <a href="#" onclick="return false" class="store-btn"><img
+                                                        src="assets/images/apple-store.png" alt="apple-store"></a>
                                             </div>
                                         </div>
                                         <!-- card -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <span class="icon"><img src="assets/images//enteraz-app.png"
+                                                <span class="icon"><img src="assets/images/enteraz-app.png"
                                                         alt="enteraz-app"></span>
                                                 <h3>Enteraz App</h3>
                                             </div>
@@ -1149,16 +1251,16 @@
                                                     in Qatar.</p>
                                             </div>
                                             <div class="footer-btn">
-                                                <a href="javascript:void(0)" class="store-btn"><img
-                                                        src="assets/images//play-store.png" alt="play-store"></a>
-                                                <a href="javascript:void(0)" class="store-btn"><img
-                                                        src="assets/images//apple-store.png" alt="apple-store"></a>
+                                                <a href="#" onclick="return false" class="store-btn"><img
+                                                        src="assets/images/play-store.png" alt="play-store"></a>
+                                                <a href="#" onclick="return false" class="store-btn"><img
+                                                        src="assets/images/apple-store.png" alt="apple-store"></a>
                                             </div>
                                         </div>
                                         <!-- card -->
                                         <div class="card">
                                             <div class="card-header">
-                                                <span class="icon"><img src="assets/images//mob-app.svg" alt="mob-app"></span>
+                                                <span class="icon"><img src="assets/images/mob-app.svg" alt="mob-app"></span>
                                                 <h3>Hukoomi mobile app</h3>
                                             </div>
                                             <div class="card-body">
@@ -1169,10 +1271,10 @@
                                                 </p>
                                             </div>
                                             <div class="footer-btn">
-                                                <a href="javascript:void(0)" class="store-btn"><img
-                                                        src="assets/images//play-store.png" alt="play-store"></a>
-                                                <a href="javascript:void(0)" class="store-btn"><img
-                                                        src="assets/images//apple-store.png" alt="apple-store"></a>
+                                                <a href="#" onclick="return false" class="store-btn"><img
+                                                        src="assets/images/play-store.png" alt="play-store"></a>
+                                                <a href="#" onclick="return false" class="store-btn"><img
+                                                        src="assets/images/apple-store.png" alt="apple-store"></a>
                                             </div>
                                         </div>
                                     </div>
@@ -1215,9 +1317,9 @@
                             <!-- document-info -->
                             <div class="sort-header">
                                 <span class="sort">Sort By:</span>
-                                <div class="dropdown"><a href="javascript:void(0)" id="dropdownMenuButton"
+                                <div class="dropdown"><a href="#" onclick="return false" id="dropdownMenuButton"
                                         class="hover dropdown-toggle" data-toggle="dropdown">Relevance</a> <span
-                                        class="icon"><img src="assets/images//chevron-down-grey.svg"
+                                        class="icon"><img src="assets/images/chevron-down-grey.svg"
                                             alt="chevron-down-grey"></span>
                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <a class="dropdown-item" href="#">Example</a>
@@ -1292,14 +1394,14 @@
                             <!-- pagination -->
                             <div class="pagination">
                                 <div class="d-flex">
-                                    <a href="javascript:void(0)" class="btn arrow-left"><img src="assets/images//back_h.png"
+                                    <a href="#" onclick="return false" class="btn arrow-left"><img src="assets/images/back_h.png"
                                             alt="back"></a>
-                                    <a href="javascript:void(0)" class="btn arrow-right"><img src="assets/images//next_h.png"
+                                    <a href="#" onclick="return false" class="btn arrow-right"><img src="assets/images/next_h.png"
                                             alt="next"></a>
                                 </div>
                                 <p>Showing 03 of All 06 Healthcare related Documents</p>
-                                <a href="javascript:void(0)" class="view-all">View all Healthcare related services <img
-                                        src="assets/images//chevron-right-rouge.svg" alt="chevron-right-rouge"></a>
+                                <a href="#" onclick="return false" class="view-all">View all Healthcare related services <img
+                                        src="assets/images/chevron-right-rouge.svg" alt="chevron-right-rouge"></a>
                             </div>
                         </div>
                     </div>
@@ -1317,48 +1419,48 @@
                             <div class="links-card">
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Condition & Treatments</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Condition & Treatments</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Nutrition Tips and guidelines</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Nutrition Tips and guidelines</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Pre-marital Screening</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Pre-marital Screening</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Mental Health</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Mental Health</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Senior Care</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Senior Care</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Health Insurance</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Health Insurance</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Emergencies</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Emergencies</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Disability services</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Disability services</a>
                                 </div>
                                 <!-- links-info -->
                                 <div class="links-info">
-                                    <span class="icon"><img src="assets/images//quick-links.svg" alt="qucik-links"></span>
-                                    <a href="javascript:void(0)">Medical Commission Procedures</a>
+                                    <span class="icon"><img src="assets/images/quick-links.svg" alt="qucik-links"></span>
+                                    <a href="#" onclick="return false">Medical Commission Procedures</a>
                                 </div>
                             </div>
                         </div>
@@ -1380,7 +1482,7 @@
                                     <div class="card-box">
                                         <!-- media -->
                                         <div class="media">
-                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="icon"><img src="assets/images/phone.svg" alt="phone"></div>
                                             <div class="media-body">
                                                 <div class="name">Police</div>
                                                 <div class="number">999</div>
@@ -1391,7 +1493,7 @@
                                     <div class="card-box">
                                         <!-- media -->
                                         <div class="media">
-                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="icon"><img src="assets/images/phone.svg" alt="phone"></div>
                                             <div class="media-body">
                                                 <div class="name">Ambulance</div>
                                                 <div class="number">998</div>
@@ -1402,7 +1504,7 @@
                                     <div class="card-box">
                                         <!-- media -->
                                         <div class="media">
-                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="icon"><img src="assets/images/phone.svg" alt="phone"></div>
                                             <div class="media-body">
                                                 <div class="name">Civil Defence</div>
                                                 <div class="number">997</div>
@@ -1413,7 +1515,7 @@
                                     <div class="card-box">
                                         <!-- media -->
                                         <div class="media">
-                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="icon"><img src="assets/images/phone.svg" alt="phone"></div>
                                             <div class="media-body">
                                                 <div class="name">Electricity Authority</div>
                                                 <div class="number">996</div>
@@ -1423,7 +1525,7 @@
                                     <div class="card-box">
                                         <!-- media -->
                                         <div class="media">
-                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="icon"><img src="assets/images/phone.svg" alt="phone"></div>
                                             <div class="media-body">
                                                 <div class="name">Electricity Authority</div>
                                                 <div class="number">996</div>
@@ -1433,7 +1535,7 @@
                                     <div class="card-box">
                                         <!-- media -->
                                         <div class="media">
-                                            <div class="icon"><img src="assets/images//phone.svg" alt="phone"></div>
+                                            <div class="icon"><img src="assets/images/phone.svg" alt="phone"></div>
                                             <div class="media-body">
                                                 <div class="name">Electricity Authority</div>
                                                 <div class="number">996</div>
@@ -1460,7 +1562,7 @@
                                     <button type="button" class="btn">No</button>
                                 </div>
                                 <div class="right-side">
-                                    <p>Stuck somewhere? <a href="javascript:void(0)" class="hover">Find help</a></p>
+                                    <p>Stuck somewhere? <a href="#" onclick="return false" class="hover">Find help</a></p>
                                 </div>
                             </div>
                         </div>
@@ -1472,43 +1574,45 @@
 
         <footer>
             <div class="footer_inner">
-                <div class="foot_row">
-                    <div class="copy_right" tabindex="0">
-                        Copyrigt © 2019 MOTC. All rights reserved.
-                    </div>
-                    <div class="foot_nav">
-                        <nav>
-                            <ul>
-                                <li> <a href="#" tabindex="0">Entity Services’ Statistics</a></li>
-                                <li> <a href="#" tabindex="0">Useful Links</a></li>
-                                <li> <a href="#" tabindex="0">Customer Service</a></li>
-                                <li> <a href="#" tabindex="0">Contact Us</a></li>
-                                <li> <a href="#" tabindex="0">FAQ</a></li>
-                                <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
-                                <li> <a href="#" tabindex="0">Mobile Apps</a></li>
-                                <li> <a href="#" tabindex="0">Site Map</a></li>
-                                <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
-                                <li> <a href="#" tabindex="0">Find Help</a></li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
+               <div class="foot_row">
+                  <div class="copy_right" tabindex="0">
+                     Copyrigt © 2019 MOTC. All rights reserved.
+                  </div>
+                  <div class="foot_nav">
+                     <nav>
+                        <ul>
+                           <li> <a href="#" tabindex="0">Entity  Services’ Statistics</a></li>
+                           <li> <a href="#" tabindex="0">Useful Links</a></li>
+                           <li> <a href="#" tabindex="0">Customer Service</a></li>
+                           <li> <a href="#" tabindex="0">Contact Us</a></li>
+                           <li> <a href="#" tabindex="0">FAQ</a></li>
+                           <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                           <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                           <li> <a href="#" tabindex="0">Site Map</a></li>
+                           <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                           <li> <a href="#" tabindex="0">Find Help</a></li>
+                        </ul>
+                     </nav>
+                  </div>
+               </div>
             </div>
-        </footer>
+         </footer>
         <!-- footer -->
     </div>
 
-    <!-- script  -->
-    <script src="assets/js/jquery.js"></script>
-    <script src="assets/js/popper.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/bootstrap-select.js"></script>
-    <script src="assets/js/owl.carousel.min.js"></script>
-    <script src="assets/js/healthcare.js"></script>
-
-    <script>
-        window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
-    </script>
+   <!-- script  -->
+   <script src="assets/js/jquery.js"></script>
+   <script src="assets/js/popper.min.js"></script>
+   <script src="assets/js/bootstrap.min.js"></script>
+   <script src="assets/js/bootstrap-select.js"></script>
+   <script src="assets/js/owl.carousel.min.js"></script>
+   <script src="assets/js/healthcare.js"></script>
+   <script src="assets/js/moment.min.js"></script>
+   <script src="assets/js/daterangepicker.min.js"></script>
+   <script src="assets/js/custom.js"></script>
+   <script>
+       window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+   </script>
 
 </body>
 

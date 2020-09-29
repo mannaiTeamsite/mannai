@@ -64,117 +64,10 @@ fieldset legend {
 
 .ar {
   direction: rtl; }
-  .ar .accessibility h2,
-  .ar .accessibility p,
-  .ar .faq-section h2,
-  .ar .faq-section p,
-  .ar .privacy-policy h2,
-  .ar .privacy-policy p,
-  .ar .sitemap h2,
-  .ar .sitemap p {
-    text-align: right; }
-  .ar .accessibility .disabilities li,
-  .ar .faq-section .disabilities li,
-  .ar .privacy-policy .disabilities li,
-  .ar .sitemap .disabilities li {
-    text-align: right;
-    padding-left: 0;
-    padding-right: 22px; }
-    .ar .accessibility .disabilities li::before,
-    .ar .faq-section .disabilities li::before,
-    .ar .privacy-policy .disabilities li::before,
-    .ar .sitemap .disabilities li::before {
-      left: auto;
-      right: 0; }
-  .ar .faq-section .heading h2 {
-    padding-left: 0;
-    padding-right: 30px; }
-    .ar .faq-section .heading h2::before {
-      left: auto;
-      right: 0; }
-  .ar .faq-section .searchbar {
-    margin-left: auto; }
-    .ar .faq-section .searchbar .form-control {
-      direction: rtl;
-      text-align: right;
-      padding: 12px 40px 12px 4px;
-      background-position: 95%; }
-    .ar .faq-section .searchbar .search-btn {
-      left: 4px;
-      right: 0; }
-  .ar .faq-section .navtabs ul {
-    flex-direction: row-reverse; }
-    .ar .faq-section .navtabs ul li:not(:last-of-type) {
-      margin-left: 40px; }
-  .ar .faq-section .faq-container .faq-header {
-    flex-direction: row-reverse; }
-    .ar .faq-section .faq-container .faq-header .title {
-      text-align: right;
-      padding-right: 0; }
-  .ar .faq-section .faq-container .pagination ul {
-    flex-direction: row-reverse; }
-    .ar .faq-section .faq-container .pagination ul li:not(:last-of-type) {
-      margin-left: 10px;
-      margin-right: 0; }
-  .ar .sitemap .sitemap-box .highlight {
-    text-align: right; }
-  .ar .sitemap .sitemap-box .sitemap-link {
-    direction: rtl; }
-    .ar .sitemap .sitemap-box .sitemap-link .nav--link {
-      text-align: right;
-      direction: rtl; }
-  .ar .notification-wrapper .go-back-btn {
-    text-align: right; }
-  .ar .notification-wrapper .notification-container aside {
-    margin-left: 30px;
-    margin-right: 0; }
-    .ar .notification-wrapper .notification-container aside .total-noti-card .noti-header h4 {
-      margin-left: 0;
-      margin-right: 12px; }
-    .ar .notification-wrapper .notification-container aside .total-noti-card .noti-body p {
-      text-align: right; }
-    .ar .notification-wrapper .notification-container aside .total-noti-card .link-text {
-      direction: rtl;
-      float: right; }
-      .ar .notification-wrapper .notification-container aside .total-noti-card .link-text .icon svg {
-        transform: rotate(180deg); }
-      .ar .notification-wrapper .notification-container aside .total-noti-card .link-text::after {
-        left: auto;
-        right: 0; }
-  .ar .notification-wrapper .notification-container article .filter-header .date-section {
-    text-align: right; }
-    .ar .notification-wrapper .notification-container article .filter-header .date-section .date .form-control {
-      text-align: left; }
-  .ar .notification-wrapper .notification-container article .filter-header .filter-notification {
-    padding: 38px 40px 0 0px; }
-    @media (max-width: 414px) {
-      .ar .notification-wrapper .notification-container article .filter-header .filter-notification {
-        padding: 38px 20px 0 0px; } }
-    .ar .notification-wrapper .notification-container article .filter-header .filter-notification a .icon {
-      margin-right: 0;
-      margin-left: 8px; }
-    .ar .notification-wrapper .notification-container article .filter-header .filter-notification a .dropdown-icon {
-      margin-left: 0;
-      margin-right: auto; }
-    .ar .notification-wrapper .notification-container article .filter-header .filter-notification .filter-dropdown .filter-card .filter-card-header .toggle-icon {
-      margin-left: 0;
-      margin-right: auto; }
-    .ar .notification-wrapper .notification-container article .filter-header .filter-notification .filter-dropdown .filter-card .filter-card-body ul .custom-checkbox {
-      padding-left: 0;
-      padding-right: 25px;
-      text-align: right;
-      direction: ltr; }
-      .ar .notification-wrapper .notification-container article .filter-header .filter-notification .filter-dropdown .filter-card .filter-card-body ul .custom-checkbox span {
-        left: auto;
-        right: 0; }
-  .ar .notification-wrapper .notification-container article .notification-body .notification-date {
-    text-align: right; }
-  .ar .notification-wrapper .notification-container article .notification-body .notification-info .link {
-    float: right; }
-  .ar .notification-wrapper .notification-container article .notification-body .dropdown .dropdown-menu .dropdown-item img {
-    margin-right: 0;
-    margin-left: 8px; }
-  .ar .healthcare_wrapper .heading h3, .ar .healthcare_wrapper .heading h4, .ar .healthcare_wrapper .sub-heading h3, .ar .healthcare_wrapper .sub-heading h4 {
+  .ar .healthcare_wrapper .heading h3,
+  .ar .healthcare_wrapper .heading h4,
+  .ar .healthcare_wrapper .sub-heading h3,
+  .ar .healthcare_wrapper .sub-heading h4 {
     text-align: right; }
   .ar .healthcare_wrapper .healthcare_banner .healthcare_header .menu-toggle {
     left: 0;
@@ -187,19 +80,14 @@ fieldset legend {
       right: 4px;
       border-width: 0 0 1px 1px; }
   .ar .healthcare_wrapper .healthcare_banner .healthcare_header .searchbar .search .searchbox {
-    background: #b51647 url("../images/search-white.svg") no-repeat 5% 50%; }
-  @media (max-width: 992px) {
-    .ar .healthcare_wrapper .healthcare_banner .healthcare_header .healthcare-navbar ul {
-      padding-top: 40px; } }
+    background: #b51647 url("../images/search-white.svg") no-repeat 5% 50%;
+    padding: 8px 16px 8px 32px; }
   .ar .healthcare_wrapper .healthcare_banner .healthcare_header .healthcare-navbar ul li:not(:first-child) {
-    margin-left: 0;
-    margin-right: 40px; }
+    padding-left: 0;
+    padding-right: 40px; }
     @media (max-width: 992px) {
       .ar .healthcare_wrapper .healthcare_banner .healthcare_header .healthcare-navbar ul li:not(:first-child) {
-        margin-right: 0; } }
-  @media (max-width: 992px) {
-    .ar .healthcare_wrapper .healthcare_banner .healthcare_header .healthcare-navbar ul li {
-      margin-bottom: 15px; } }
+        padding-right: 20px; } }
   .ar .healthcare_wrapper .healthcare_banner .healthcare_header .healthcare-navbar ul li a img {
     margin-left: 12px;
     margin-right: 0; }
@@ -253,7 +141,9 @@ fieldset legend {
     .ar .healthcare_wrapper .health-topics .filter-section .filter-body .filter-card .filter-card-body ul .custom-checkbox span {
       left: auto;
       right: 0; }
-  .ar .healthcare_wrapper .health-topics .service-support .service-details .card h4, .ar .healthcare_wrapper .health-topics .service-support .service-details .card h5, .ar .healthcare_wrapper .health-topics .service-support .service-details .card p {
+  .ar .healthcare_wrapper .health-topics .service-support .service-details .card h3,
+  .ar .healthcare_wrapper .health-topics .service-support .service-details .card h4,
+  .ar .healthcare_wrapper .health-topics .service-support .service-details .card p {
     text-align: right;
     direction: rtl; }
   .ar .healthcare_wrapper .find-services .location-box .col-4 .address-box {
@@ -420,7 +310,7 @@ fieldset legend {
       @media (max-width: 520px) {
         .healthcare_banner .healthcare_header .searchbar {
           flex-wrap: wrap; } }
-      .healthcare_banner .healthcare_header .searchbar .heading h2 {
+      .healthcare_banner .healthcare_header .searchbar .heading h1 {
         font-family: "cairo_bold";
         font-size: 38px;
         line-height: 46px;
@@ -428,16 +318,20 @@ fieldset legend {
         color: #ffffff;
         margin-bottom: 0; }
         @media (max-width: 992px) {
-          .healthcare_banner .healthcare_header .searchbar .heading h2 {
+          .healthcare_banner .healthcare_header .searchbar .heading h1 {
             font-size: 26px;
             line-height: 34px; } }
         @media (max-width: 520px) {
-          .healthcare_banner .healthcare_header .searchbar .heading h2 {
+          .healthcare_banner .healthcare_header .searchbar .heading h1 {
             font-size: 22px;
             line-height: 28px;
             margin-bottom: 15px; } }
-        .healthcare_banner .healthcare_header .searchbar .heading h2 img {
-          display: inline-block; }
+        .healthcare_banner .healthcare_header .searchbar .heading h1 img {
+          display: inline-block;
+          vertical-align: -5px; }
+          @media (max-width: 992px) {
+            .healthcare_banner .healthcare_header .searchbar .heading h1 img {
+              vertical-align: -10px; } }
       @media (max-width: 414px) {
         .healthcare_banner .healthcare_header .searchbar .search {
           flex: 0 0 100%; } }
@@ -502,50 +396,32 @@ fieldset legend {
           .healthcare_banner .healthcare_header .searchbar .search .searchbox {
             max-width: 100%;
             width: 100%; } }
-    .healthcare_banner .healthcare_header .healthcare-navbar .close-icon {
-      display: none;
-      cursor: pointer;
-      position: absolute;
-      right: 15px;
-      top: 10px; }
-    @media (max-width: 992px) {
-      .healthcare_banner .healthcare_header .healthcare-navbar .close-icon {
-        display: block; } }
-    @media (max-width: 992px) {
-      .healthcare_banner .healthcare_header .healthcare-navbar {
-        position: fixed;
-        top: 0;
-        right: -100%;
-        bottom: 0;
-        background: #008099;
-        z-index: 9999;
-        width: 220px;
-        transition: all 0.3s ease-in-out;
-        opacity: 0;
-        visibility: hidden; }
-        .healthcare_banner .healthcare_header .healthcare-navbar.show {
-          opacity: 1;
-          visibility: visible;
-          right: 0; } }
     .healthcare_banner .healthcare_header .healthcare-navbar ul {
       display: flex;
       align-items: center; }
       @media (max-width: 992px) {
         .healthcare_banner .healthcare_header .healthcare-navbar ul {
-          align-items: flex-start;
-          flex-direction: column;
-          padding: 20px 10px 20px 20px; } }
+          display: block;
+          width: 100%;
+          overflow-x: auto;
+          white-space: nowrap; }
+          .healthcare_banner .healthcare_header .healthcare-navbar ul::-webkit-scrollbar {
+            height: 5px;
+            background-color: #cd4a04; }
+          .healthcare_banner .healthcare_header .healthcare-navbar ul::-webkit-scrollbar-track {
+            background-color: #ffffff; } }
       .healthcare_banner .healthcare_header .healthcare-navbar ul li:not(:first-child) {
-        margin-left: 40px; }
+        padding-left: 40px; }
         @media (max-width: 1080px) {
           .healthcare_banner .healthcare_header .healthcare-navbar ul li:not(:first-child) {
-            margin-left: 20px; } }
-        @media (max-width: 992px) {
+            padding-left: 20px; } }
+        @media (max-width: 950px) {
           .healthcare_banner .healthcare_header .healthcare-navbar ul li:not(:first-child) {
-            margin-left: 0; } }
+            padding-left: 20px; } }
       @media (max-width: 992px) {
         .healthcare_banner .healthcare_header .healthcare-navbar ul li {
-          margin-bottom: 20px; } }
+          margin-bottom: 4px;
+          display: inline-block; } }
       .healthcare_banner .healthcare_header .healthcare-navbar ul li a {
         font-family: "cairo_semibold";
         font-size: 14px;
@@ -558,10 +434,11 @@ fieldset legend {
         padding: 25px 0; }
         @media (max-width: 992px) {
           .healthcare_banner .healthcare_header .healthcare-navbar ul li a {
-            padding: 15px 0 5px; } }
+            padding: 15px 0; } }
         .healthcare_banner .healthcare_header .healthcare-navbar ul li a::after {
           content: '';
           position: absolute;
+          left: 0;
           bottom: -4px;
           width: 0;
           height: 5px;
@@ -714,7 +591,7 @@ fieldset legend {
         .about_healthcare .healthcare-trails .media .media-body {
           padding-left: 0;
           margin-top: 20px; } }
-      .about_healthcare .healthcare-trails .media .media-body h4 {
+      .about_healthcare .healthcare-trails .media .media-body h3 {
         font-family: "cairo_bold";
         font-size: 18px;
         line-height: 25px;
@@ -787,7 +664,7 @@ fieldset legend {
       align-items: center;
       justify-content: space-between;
       padding: 0 0 16px; }
-      .health-topics .filter-section .filter-header h5,
+      .health-topics .filter-section .filter-header h4,
       .health-topics .filter-section .filter-header .clear-all {
         font-family: "cairo_bold";
         font-size: 14px;
@@ -1088,7 +965,7 @@ fieldset legend {
         padding: 18px 24px; }
         .health-topics .service-support .service-details .card:not(:last-of-type) {
           margin-bottom: 16px; }
-        .health-topics .service-support .service-details .card h4 {
+        .health-topics .service-support .service-details .card h3 {
           font-family: "cairo_bold";
           font-size: 14px;
           line-height: 24px;
@@ -1096,7 +973,7 @@ fieldset legend {
           letter-spacing: 0.2px;
           color: var(--purple-brown);
           margin-bottom: 0; }
-        .health-topics .service-support .service-details .card h5 {
+        .health-topics .service-support .service-details .card h4 {
           font-family: "cairo_bold";
           font-size: 12px;
           line-height: 20px;
@@ -1296,7 +1173,7 @@ fieldset legend {
               width: 100%;
               height: 100%;
               object-fit: contain; }
-          .find-services .location-box .col-4 .address-box .logo h5 {
+          .find-services .location-box .col-4 .address-box .logo h3 {
             font-family: "cairo_bold";
             font-size: 16px;
             line-height: 22px;
@@ -1322,7 +1199,8 @@ fieldset legend {
           color: #6a6a6b; }
 
 .directory {
-  background: #8a1538 url("../images/healthcare-directory-wave.svg") no-repeat 50% 100%/100%;
+  background: #8a1538 url("../images/healthcare-directory-wave.svg") no-repeat 50% 100%;
+  background-size: contain;
   min-height: 560px; }
   @media (max-width: 768px) {
     .directory {
@@ -1429,18 +1307,24 @@ fieldset legend {
           width: 40px;
           height: 40px;
           border-radius: 50%;
+          display: inline-block;
           border: solid 1px #8a1538;
-          background-color: #ffffff;
+          background: #ffffff;
           transition: all 0.3s ease-in-out; }
           .directory .hospital-card-box .owl-theme .owl-controls .custom-nav .owl-prev img,
           .directory .hospital-card-box .owl-theme .owl-controls .custom-nav .owl-next img {
             width: 16px;
-            margin: 0 auto; }
+            margin: 0 auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); }
           @media (max-width: 768px) {
             .directory .hospital-card-box .owl-theme .owl-controls .custom-nav .owl-prev,
             .directory .hospital-card-box .owl-theme .owl-controls .custom-nav .owl-next {
               width: 30px;
-              height: 30px; }
+              height: 30px;
+              line-height: 24px; }
               .directory .hospital-card-box .owl-theme .owl-controls .custom-nav .owl-prev img,
               .directory .hospital-card-box .owl-theme .owl-controls .custom-nav .owl-next img {
                 width: 12px; } }
@@ -1552,18 +1436,24 @@ fieldset legend {
         width: 40px;
         height: 40px;
         border-radius: 50%;
+        display: inline-block;
         border: solid 1px #8a1538;
         background-color: #ffffff;
         transition: all 0.3s ease-in-out; }
         .mobile-apps .download-card-box .owl-theme .owl-controls .custom-nav .owl-prev img,
         .mobile-apps .download-card-box .owl-theme .owl-controls .custom-nav .owl-next img {
           width: 16px;
-          margin: 0 auto; }
+          margin: 0 auto;
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%); }
         @media (max-width: 768px) {
           .mobile-apps .download-card-box .owl-theme .owl-controls .custom-nav .owl-prev,
           .mobile-apps .download-card-box .owl-theme .owl-controls .custom-nav .owl-next {
             width: 30px;
-            height: 30px; }
+            height: 30px;
+            line-height: 24px; }
             .mobile-apps .download-card-box .owl-theme .owl-controls .custom-nav .owl-prev img,
             .mobile-apps .download-card-box .owl-theme .owl-controls .custom-nav .owl-next img {
               width: 12px; } }
@@ -1673,7 +1563,8 @@ fieldset legend {
         border: 0; }
     .related-documents .sort-header .dropdown .icon {
       width: 18px;
-      display: inline-block; }
+      display: inline-block;
+      vertical-align: middle; }
     .related-documents .sort-header .dropdown .dropdown-item {
       font-size: 14px;
       font-weight: 500;
@@ -1737,6 +1628,8 @@ fieldset legend {
         @media (max-width: 768px) {
           .related-documents .pagination .btn:not(:first-of-type) {
             margin-left: 10px; } }
+      .related-documents .pagination .btn img {
+        width: 100%; }
     .related-documents .pagination p {
       font-family: "cairo_semibold";
       font-size: 13px;
@@ -1850,6 +1743,9 @@ fieldset legend {
     border: solid 1px #dcdcdc;
     background-color: #ffffff;
     padding: 35px 20px; }
+    @media (max-width: 882px) {
+      .emergency-contacts .card-box {
+        min-width: auto; } }
     .emergency-contacts .card-box .media {
       align-items: center; }
       .emergency-contacts .card-box .media .icon {
@@ -1887,20 +1783,13 @@ fieldset legend {
     @media (max-width: 992px) {
       .emergency-contacts .contact-slider {
         max-width: 860px; } }
-    @media (max-width: 768px) {
+    @media (max-width: 882px) {
       .emergency-contacts .contact-slider {
-        max-width: 665px;
-        padding: 5px; } }
-    @media (max-width: 767px) {
-      .emergency-contacts .contact-slider {
-        max-width: 110%;
+        max-width: 100%;
         padding: 0; } }
-    .emergency-contacts .contact-slider .owl-stage {
-      height: 100%; }
-      @media (max-width: 414px) {
-        .emergency-contacts .contact-slider .owl-stage {
-          display: block; } }
-    @media (max-width: 767px) {
+    .emergency-contacts .contact-slider .owl-stage-outer {
+      height: 135px; }
+    @media (max-width: 882px) {
       .emergency-contacts .contact-slider .owl-nav {
         position: absolute;
         top: -35px;
@@ -1910,18 +1799,24 @@ fieldset legend {
       width: 40px;
       height: 40px;
       border-radius: 50%;
+      background: #ffffff;
+      display: inline-block;
       border: solid 1px rgba(138, 21, 56, 0.3);
       transition: all 0.3s ease-in-out;
       position: absolute;
-      top: 25%;
+      top: 50%;
       transform: translateY(-50%);
       left: -55px;
       z-index: 10; }
       .emergency-contacts .contact-slider .owl-nav .owl-prev img,
       .emergency-contacts .contact-slider .owl-nav .owl-next img {
         width: 16px;
-        margin: 0 auto; }
-      @media (max-width: 768px) {
+        margin: 0 auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%); }
+      @media (max-width: 882px) {
         .emergency-contacts .contact-slider .owl-nav .owl-prev,
         .emergency-contacts .contact-slider .owl-nav .owl-next {
           width: 30px;
@@ -1936,7 +1831,7 @@ fieldset legend {
     .emergency-contacts .contact-slider .owl-nav .owl-next {
       right: -55px;
       left: auto; }
-      @media (max-width: 768px) {
+      @media (max-width: 882px) {
         .emergency-contacts .contact-slider .owl-nav .owl-next {
           right: -20px; } }
 

@@ -195,7 +195,7 @@ fieldset {
             align-items: flex-start;
         }
 
-        h3 {
+        h1 {
             font-family: "cairo_bold";
             font-size: 24px;
             line-height: 1.17;
@@ -250,7 +250,7 @@ fieldset {
                 letter-spacing: 0.19px;
                 color: $black-600;
                 margin-bottom: 0;
-                width: 82px;
+                width: 92px;
                 @media screen and (max-width: 660px){
                     margin-left: 11px;
                     margin-bottom: 5px;
@@ -373,7 +373,7 @@ fieldset {
                     padding: 18px 20px;
                     display: flex;
                     align-items: center;
-                    transition: all .3s ease;
+                    transition: all .3s linear;
                     @media (max-width:567px) {
                         padding:12px 15px;                
                     }                   
@@ -385,12 +385,11 @@ fieldset {
 
                         .show-hide {
                             opacity: 0;
-                            visibility: hidden;
                             position: absolute;
                             top: 50%;
                             left: 0;
                             transform: translateY(-50%);
-                            transition: all .3s ease;
+                            transition: all .3s linear;
 
                         }
                     }
@@ -407,8 +406,6 @@ fieldset {
 
                             .show-hide {
                                 opacity: 1;
-                                visibility: visible;
-
                             }
                         }
                     }
@@ -461,7 +458,7 @@ fieldset {
                         margin-bottom: 10px;
                     }
 
-                    h4 {
+                    h2 {
                         font-family: "cairo_bold";
                         font-size: 14px;
                         line-height: 1.57;                        
@@ -1157,7 +1154,7 @@ fieldset {
             .tab-card {
                 .left-side {
                     .heading {
-                        h4 {
+                        h2 {
                             text-align: right;
                         }
                     }

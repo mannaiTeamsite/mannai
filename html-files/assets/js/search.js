@@ -19,13 +19,14 @@ $(document).ready(function(){
     $('.search_result').css('display', 'none')
    });
    // ======= for lang change =======
-$('#lang_toggle').click(function(){
-    $('body').toggleClass('ar').trigger('classChange')
-});
 
 $('#advance_search').click(function(){
   $('.search_result').css('display', 'none')
-})
+});
+
+// $('#search_btn').click(function(){
+//   $('#collapseExample').collapse('hide')
+//  })
 });
 
 // ======= to add class in dropdown menu in arabic version =======
@@ -49,3 +50,45 @@ function showSearch(e){
     $('.search_result').css('display', 'none')
   }
 }
+
+
+
+$('.nav_tab_next').click(function(){
+  console.log('yes')
+  $('#result_tabs').css({"transform":"translateX(200px)"})
+});
+
+$('.nav_tab_prev').click(function(){
+  $('#result_tabs').css({"transform":"translateX(-200px)"})
+});
+
+$('.carousel').carousel({
+  interval: false,
+})
+
+$(document).ready(function () {               // on document ready
+  checkitem();
+});
+
+$('#videoResultSlider').on('slid.bs.carousel', checkitem);
+
+function checkitem()                        // check function
+{
+  var $this = $('#videoResultSlider');
+  if ($('.carousel-inner .carousel-item:first').hasClass('active')) {
+      // Hide left arrow
+      $this.children('.carousel-control-prev').css({'opacity': '0.5', 'pointer-events': 'none'});
+      // But show right arrow
+      $this.children('.carousel-control-next').css({'opacity': '1', 'pointer-events': 'auto'});
+  } else if ($('.carousel-inner .carousel-item:last').hasClass('active')) {
+      // Hide right arrow
+      $this.children('.carousel-control-next').css({'opacity': '0.5', 'pointer-events': 'none'});
+      // But show left arrow
+      $this.children('.carousel-control-prev').css({'opacity': '1', 'pointer-events': 'auto'});
+  } else {
+      $this.children('.carousel-control').css({'opacity': '1', 'pointer-events': 'auto'});
+  }
+}
+
+
+

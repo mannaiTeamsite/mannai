@@ -46,6 +46,7 @@ strong:focus,strong:hover{
 body img{
 -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
 filter: grayscale(100%) !important;
+filter: gray; /* IE6-9 */
 }
 
 [class^='banner'], [class*='banner']{
@@ -113,7 +114,43 @@ input::-webkit-input-placeholder, input { color:#000 !important;}
   color:#fff !important;
 }
 
+header {
+    border-bottom: 1px solid #fff;
+}
 
 
 
+.personal_search_block .search_section .inner_custom_container{
+    border-radius: 12px;
+}
 
+
+.personal_search_block .search_section .srch_wrap ul {
+    display: flex;
+    flex: 1;
+    border-radius: 12px;
+}
+
+.services_section .service_card .title{
+    background-color: #000;
+}
+
+section{
+    background:#000  !important;
+    border-bottom: 1px solid #fff;
+}
+.news_section .right_col .more_news .news_wrapper {
+    border: 1px solid #fff;
+}
+.student_card_wrap .student_service_card{
+    border: 1px solid #fff;
+}
+
+.category_polls_card .row_wrap.active .progress_bar {
+    background: yellow !important;
+}
+
+
+.category_polls_card .row_wrap.active .percentage {
+    color: yellow !important;
+}
