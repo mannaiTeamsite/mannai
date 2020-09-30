@@ -175,8 +175,56 @@ section{
 .category_polls_card .row_wrap.active .progress_bar {
     background: yellow !important;
 }
+.news_wrapper .view_all_wrap{
+    z-index: 9;
+}
 
+.explore_travel_block .travel_grid .f_row .travel_card {
+    border: 1px solid #fff;
+}
+
+.explore_travel_block .wish_card_row .wish_card_sm {
+    border: 1px solid #fff;
+}
+
+.explore_travel_block .get_card {
+    border: 1px solid #fff;
+}
 
 .category_polls_card .row_wrap.active .percentage {
     color: yellow !important;
+}
+
+
+.categor_filter_wrap li a.filter::after {
+    background: url(../images/ic-filter-white.svg) center no-repeat;
+}
+
+.categor_filter_wrap li a.sort::after {
+    background: url(../images/ic-sort-white.svg) center no-repeat;
+}
+.category_filter_wrapper_layer .category_filter_wrapr .rouge_btn {
+    border: 1px solid #fff;
+}
+
+.category_sort_wrapper_layer .sort_wrapr {
+    border: 1px solid #fff;
+}
+
+
+.category_filter_wrapper_layer .category_filter_wrapr{
+    border: 1px solid #fff;
+}
+
+.select-picker-wrap .dropdown-toggle::after{
+    background-image: url(../images/arrow-down-white.svg);
+}
+
+
+.apply_filter_tag_wrapper ul li{
+    border: 1px solid #fff;
+}
+
+.category_view_menu_wrap li a:hover, .category_view_menu_wrap li a.active {
+    color: #fff !important;
 }

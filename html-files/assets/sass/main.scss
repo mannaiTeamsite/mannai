@@ -473,6 +473,24 @@ hr{
 /*-------------------------------------Home Page Close---------------------------------------------*/
 
 
+.ar{
+    #home_banner_tsb{
+        .owl-prev {
+            right: 10px;
+            left: auto;
+        }
+    
+        .owl-next {
+            left: auto;
+            right: 125px;
+        }
+    }
+    .btn-st {
+        right: 85px;
+        left: auto;
+    }
+}
+
 
 
 

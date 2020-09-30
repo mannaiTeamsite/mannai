@@ -893,9 +893,11 @@ footer {
 /************Arabic*****************/
 .ar footer .foot_row {
   display: flex; }
-  .ar footer .foot_row nav ul li {
-    display: inline-block;
-    margin: 0 20px 0 0; }
+  .ar footer .foot_row nav ul {
+    text-align: left; }
+    .ar footer .foot_row nav ul li {
+      display: inline-block;
+      margin: 0 20px 0 0; }
 
 /************Arabic close*****************/
 /*-----------------------------------------------Footer Close-----------------------------------------------*/
@@ -2002,6 +2004,16 @@ hr {
     top: 120px; } }
 
 /*-------------------------------------Home Page Close---------------------------------------------*/
+.ar #home_banner_tsb .owl-prev {
+  right: 10px;
+  left: auto; }
+.ar #home_banner_tsb .owl-next {
+  left: auto;
+  right: 125px; }
+.ar .btn-st {
+  right: 85px;
+  left: auto; }
+
 /*-------------------------------------Search Filter---------------------------------------------*/
 .personal_search_block {
   background-color: var(--white-five); }

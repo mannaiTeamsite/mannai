@@ -213,9 +213,9 @@ $(".close_map_img").click(function(){
    /*********************************Share Kit Icon Js*******************************************************/
     $(".share_g").click(function(e){
        e.stopPropagation();
-       $(".share_kit_wrapper").toggleClass("active");
+       $(".share_kit_wrapper").addClass("active");
        $(".share_g").removeClass("active");
-       $(this).toggleClass("active");
+       $(this).addClass("active");
     })
 
 
