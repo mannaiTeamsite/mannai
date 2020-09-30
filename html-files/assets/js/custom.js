@@ -109,6 +109,10 @@ function resetClass() {
     $(".map_col").removeClass("active");
     $(".calendar_wrapper").removeClass("active");
     $(".map_list_button").removeClass("active");
+    $(".category_search_input").removeClass("hide-element");
+    $(".category_tab_wrapper").removeClass("hide-element");
+    $(".categor_filter_wrap").removeClass("hide-element");
+    $(".date_event").removeClass("show-element")
 
  });
 
@@ -118,6 +122,10 @@ function resetClass() {
     $(".map_col").removeClass("active");
     $(".calendar_wrapper").removeClass("active");
     $(".map_list_button").removeClass("active");
+    $(".category_search_input").removeClass("hide-element");
+    $(".category_tab_wrapper").removeClass("hide-element");
+    $(".categor_filter_wrap").removeClass("hide-element");
+    $(".date_event").removeClass("show-element")
  });
  $(".map").click(function () {
     $(".list_row_wrapper").addClass("map_view");
@@ -125,6 +133,15 @@ function resetClass() {
     $(".map_col").addClass("active");
     $(".calendar_wrapper").removeClass("active");
     $(".map_list_button").addClass("active");
+
+   
+    $(".category_search_input").removeClass("hide-element");
+    $(".category_tab_wrapper").removeClass("hide-element");
+    $(".categor_filter_wrap").removeClass("hide-element");
+    $(".date_event").removeClass("show-element")
+
+
+
    });
 
    
@@ -133,6 +150,11 @@ $(".calendar_view").click(function(){
    $(".list_row_wrapper").removeClass("map_view");
    $(".map_col").removeClass("active");
    $(".map_list_button").removeClass("active");
+
+   $(".category_search_input").addClass("hide-element");
+   $(".category_tab_wrapper").addClass("hide-element");
+   $(".categor_filter_wrap").addClass("hide-element");
+   $(".date_event").addClass("show-element")
 });
 
 

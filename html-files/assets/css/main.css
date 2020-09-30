@@ -2004,15 +2004,16 @@ hr {
     top: 120px; } }
 
 /*-------------------------------------Home Page Close---------------------------------------------*/
-.ar #home_banner_tsb .owl-prev {
-  right: 10px;
-  left: auto; }
-.ar #home_banner_tsb .owl-next {
-  left: auto;
-  right: 125px; }
-.ar .btn-st {
-  right: 85px;
-  left: auto; }
+@media (min-width: 768px) {
+  .ar #home_banner_tsb .owl-prev {
+    right: 10px;
+    left: auto; }
+  .ar #home_banner_tsb .owl-next {
+    left: auto;
+    right: 125px; }
+  .ar .btn-st {
+    right: 85px;
+    left: auto; } }
 
 /*-------------------------------------Search Filter---------------------------------------------*/
 .personal_search_block {
@@ -11319,7 +11320,7 @@ h3 {
 
 .custom_error_banner {
   background-color: var(--white-thirteen);
-  padding: 110px 0 0; }
+  padding: 110px 0 50px; }
   .custom_error_banner .solution_block {
     margin: 14px 0 24px;
     border-radius: 12px;
@@ -12280,5 +12281,20 @@ h3 {
 /********* Contact Us close ************/
 .html5-title, #html5-watermark {
   display: none !important; }
+
+.date_event {
+  font-size: 22px;
+  line-height: 0.91;
+  letter-spacing: normal;
+  color: #000000;
+  font-family: "cairo_bold";
+  margin-bottom: 25px;
+  display: none; }
+
+.hide-element {
+  display: none; }
+
+.show-element {
+  display: block; }
 
 /*# sourceMappingURL=main.css.map */

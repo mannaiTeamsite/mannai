@@ -474,21 +474,24 @@ hr{
 
 
 .ar{
-    #home_banner_tsb{
-        .owl-prev {
-            right: 10px;
+    @media(min-width:768px){
+        #home_banner_tsb{
+            .owl-prev {
+                right: 10px;
+                left: auto;
+            }
+        
+            .owl-next {
+                left: auto;
+                right: 125px;
+            }
+        }
+        .btn-st {
+            right: 85px;
             left: auto;
         }
-    
-        .owl-next {
-            left: auto;
-            right: 125px;
-        }
     }
-    .btn-st {
-        right: 85px;
-        left: auto;
-    }
+ 
 }
 
 
@@ -13691,7 +13694,7 @@ color: var(--deep-orange);
 // ===banner section===//
 .custom_error_banner{
     background-color: var(--white-thirteen);
-    padding: 110px 0 0;
+    padding: 110px 0 50px;
     .solution_block{
         margin: 14px 0 24px;
         border-radius: 12px;
@@ -15048,4 +15051,37 @@ color: var(--deep-orange);
 
 .html5-title,#html5-watermark {
     display: none !important;
+}
+
+
+
+
+
+
+.date_event {
+    font-size: 22px;
+     line-height: 0.91;
+    letter-spacing: normal;
+    color: #000000;
+    font-family: "cairo_bold";
+    margin-bottom: 25px;
+    display: none;
+}
+
+
+
+.group_by{
+    &.active{
+
+    }
+}
+
+
+
+.hide-element{
+    display: none;
+}
+
+.show-element{
+    display: block;
 }

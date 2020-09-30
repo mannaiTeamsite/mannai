@@ -49,6 +49,8 @@ filter: grayscale(100%) !important;
 filter: gray; /* IE6-9 */
 }
 
+
+
 [class^='banner'], [class*='banner']{
     -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
 filter: grayscale(100%) !important;
@@ -118,7 +120,38 @@ header {
     border-bottom: 1px solid #fff;
 }
 
+::-webkit-scrollbar-thumb {
+    background-color:yellow !important;
+    border: 2px solid yellow !important; 
+}
 
+/* Home & Face pages */
+
+.view_all_wrap::before, .heading:before, .explore_all::before, .view::before, h2::before, .owl-prev, .owl-next, .get_card ul li::before,
+.checkbox_wrap [type="checkbox"].filled-in:checked + label:after, .info_card:before, .next::before, .did_you_block .block-label:before,
+.directory_block .directory_grid .block::before, .fact_figure_qatar .show_more::before, .duties_section ul li::before,
+.cards_section .card_wrap.dwnlod_card, .public_sector .para_sec ul.bullets.orange li, .characterstics ul.bullets.orange li, .card_fill,
+.achievement .section_wrapper .left_sec .links ul li a.active:before, .info .section_wrapper .right_sec .para_sec ul.bullets li, 
+.category_heading::before{
+    -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+    filter: grayscale(100%) !important;
+    filter: gray; /* IE6-9 */
+}
+
+
+button{
+    border: 1px solid #fff;
+}
+/* footer{
+    border-top: 1px solid #fff;
+} */
+.personal_search_block .search_section .srch_wrap .search_btn{
+    border: none;
+}
+
+.personal_search_block .search_section .srch_wrap .txt_wrapper .detect-icon, .personal_search_block .search_section .srch_wrap .txt_wrapper .detect-icon img{
+    background-color: transparent !important;
+}
 
 .personal_search_block .search_section .inner_custom_container{
     border-radius: 12px;
@@ -136,7 +169,9 @@ header {
 [type="radio"]:checked + label:after, [type="radio"]:checked + label:before, [type="radio"]:checked + label:after {
     border: 2px solid yellow;
 }
-
+.persona_tag_wrapper, .header_drp_dwn .option_wrapper{
+    overflow: hidden;
+}
 
 .personal_search_block .search_section .srch_wrap ul {
     display: flex;
@@ -168,6 +203,12 @@ section{
 .bussiness_card_sm .title {
     color: yellow !important;
 }
+.business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm:hover::before{
+    background-color: #616161 !important;
+    -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+    filter: grayscale(100%) !important;
+    filter: gray; /* IE6-9 */
+}
 .update_everyday_block .every_update_row .block figure {
     border: 1px solid yellow !important;
 }
@@ -187,14 +228,47 @@ section{
     border: 1px solid #fff;
 }
 
-.explore_travel_block .get_card {
+.explore_travel_block .get_card, .amir_banner_section .amir_detail, .cards_section .dwnld_wrap .circl_icon {
     border: 1px solid #fff;
 }
 
 .category_polls_card .row_wrap.active .percentage {
     color: yellow !important;
 }
+.tag_section .tags_wrapper li a, .mood_tag a, .tag_g{
+    background-color: #616161 !important;
+}
+.to_do_section .detect-icon, .to_do_section .detect-icon img, .map_col .srch_box .detect-icon, .map_col .map_img img, .map_col .srch_box,
+.txt_wrapper{
+    background-color: transparent !important
+}
+.opinion_section .card_wrap{
+    border: none;
+}
+.opinion_section .card_wrap .inner_wrap, .explore_life_qatar .explore_life_block .col_left .explore_list ul li a,
+.explore_life_qatar .explore_life_block .explore_list_horizontal .tag_about, .explore_life_qatar .explore_life_block{
+    border: 1px solid #fff;
+    border-radius: 12px;
+} 
+.work_exp_section .exp_card li{
+    -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+    filter: grayscale(100%) !important;
+    filter: gray; /* IE6-9 */
+    border: 1px solid #fff;
+}
 
+.header_drp_dwn .selected_option:after{
+    background-image: url(../images/arrow-dow_white.svg);
+}
+.structure_government .section_wrapper .left_sec .links ul li a.active:before{
+    background-color: #fff;
+}
+.modernise_develop .section_wrapper .flex_col .col_4 .card h3{
+    color: #fff !important;
+}
+/* Home & Face pages close */
+
+/* Category */
 
 .categor_filter_wrap li a.filter::after {
     background: url(../images/ic-filter-white.svg) center no-repeat;
@@ -227,4 +301,56 @@ section{
 
 .category_view_menu_wrap li a:hover, .category_view_menu_wrap li a.active {
     color: #fff !important;
+}
+
+.video_img_wrapper .tab_wrapper #detail_tab_owl::after{
+    background-image: none;
+}
+.article_topics .article_card, .customer_services .query_links a, .custom_error_explore .explore_card, .faq_section .accordian-block{
+    border: 1px solid #fff;
+}
+.category_sort_wrapper_layer .sort_wrapr ul li input[type=radio]:checked + label, .more_wrap h1::before,
+.icon::before, .gallry_wrap h1::before, .contact_us_form .info::before, .faq_section .accordian-block .cross-icon, 
+.faq_section .accordian-block .plus-icon{
+    -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
+    filter: grayscale(100%) !important;
+    filter: gray; /* IE6-9 */
+}
+.video_img_wrapper .tab_wrapper a:before{
+    background-color: yellow;
+}
+ .modal-content, .faq_section .accordian-block{
+    overflow: hidden;
+}
+.category_tab_wrapper ul li a.active{
+    color: #fff !important;
+}
+.tags_wrap{
+    background-color: transparent !important;
+}
+.report_section input, .report_section textarea{
+    background-color: #fff;
+}
+.faq_section .accordian-block .plus-icon{
+    background-color: #ff0 !important;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+
+/* Category close */
+
+
+
+
+.video_img_wrapper div {
+    background: transparent !important;
+}
+
+.video_img_wrapper .tab_wrapper .owl-nav .owl-next {
+    background: url(../images/ic_tab_arrow_forward.png) center no-repeat !important;
+}
+
+.video_img_wrapper .tab_wrapper .owl-nav .owl-prev {
+    background: url(../images/ic_tab_arrow_backward.png) center no-repeat !important;
 }
