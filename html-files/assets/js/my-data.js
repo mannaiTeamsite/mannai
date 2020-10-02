@@ -48,18 +48,3 @@ $('.undo_button, .close_hku_alert').click(function(){
 
 
 
-
-
-/**************************************Contrast Js*******************************************************/
-$(document).ready(function(){
-    $('#themechange').click(function(){
-    if($('link#styles').attr('href')=="assets/css/Day.css"){
-    $('link#styles').attr('href','assets/css/blind.css')
-    }
-    else
-    {
-    $('link#styles').attr('href','assets/css/Day.css')
-    }
-    })
-    });
-    /**************************************Contrast Js close*******************************************************/

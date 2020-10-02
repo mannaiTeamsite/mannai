@@ -63,6 +63,12 @@ a:hover {
     text-align: right; }
     .ar .notification-wrapper .notification-container article .filter-header .date-section .date .form-control {
       text-align: left; }
+    .ar .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker th .glyphicon-chevron-right {
+      border-width: 2px 0 0 2px;
+      left: calc(50% - 2px); }
+    .ar .notification-wrapper .notification-container article .filter-header .date-section .date .datepicker th .glyphicon-chevron-left {
+      border-width: 0 2px 2px 0;
+      left: calc(50% - 6px); }
   .ar .notification-wrapper .notification-container article .filter-header .filter-notification {
     padding: 35px 40px 0 0px; }
     @media (max-width: 414px) {

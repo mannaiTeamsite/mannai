@@ -172,10 +172,7 @@
     hr {
         margin: 40px 0;
     }
-    .flex-dir-col{
-        flex-direction: column-reverse;
-    }
-
+   
 
     .amir_component .banner_section .details{
         width: 100%;
@@ -323,6 +320,10 @@
 
 /**************** 640 ******************/
 @media(max-width:640px){
+    .flex-dir-col{
+        flex-direction: column-reverse;
+    }
+
     .commn-para {
         font-size: 15px;
     }

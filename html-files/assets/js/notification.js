@@ -4,7 +4,7 @@ $('#lang_toggle').click(function(){
 
 $(function () {
     $('#datetimepicker').datetimepicker({
-        format: 'L'
+        format: 'L',
     });
 });
 

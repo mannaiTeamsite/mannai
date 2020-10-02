@@ -14,11 +14,35 @@
       <link rel="stylesheet" href="assets/css/main.css">
       <link rel="stylesheet" href="assets/css/events.css">
       <link rel="stylesheet" href="assets/css/media.css">
+      <link rel="stylesheet" href="assets/css/pagination.css">
       <link rel="stylesheet" href="assets/css/event-daterangepicker.css">
       <link rel="stylesheet" href="assets/css/social-share-kit.css" type="text/css">
       <link rel="stylesheet" href="assets/css/simple-calendar.css" type="text/css">
       <link rel="stylesheet" href="assets/css/Day.css" id="styles" type="text/css" />
    </head>
+
+<style>
+   /*Generic*/
+.wrapper{
+  margin: 60px auto;
+  text-align: center;
+}
+h1{
+  margin-bottom: 1.25em;
+}
+
+/*Specific styling*/
+#content{
+  padding: 15px;
+  border: solid 1px #eee;
+  max-width: 660px;
+  margin: auto;
+  border-radius: 4px;
+}
+
+
+
+</style>
    <body>
       <!--App_wrapper-->
       <div class="app_wrapper">
@@ -605,22 +629,7 @@
                      </div>
                      <!-- Map card close -->
                   </div>
-                  <ul class="pagination_wrapper">
-                     <li>
-                        <a href="#" class="active">1</a>
-                     </li>
-                     <li>
-                        <a href="#">2</a>
-                     </li>
-                     <li>
-                        <a href="#">3</a>
-                     </li>
-                     <li>
-                        <a href="#">
-                        >
-                        </a>
-                     </li>
-                  </ul>
+                  <div id="pagination-here" class="pagination_wrapper"></div>
                </div>
             </div>
             <!--category card row  wrapper close--> 
@@ -666,9 +675,10 @@
       <script src="assets/js/daterangepicker.min.js"></script>
       <script src="assets/js/owl.carousel.min.js"></script>
       <script src="assets/js/app-slider.js"></script>
+      <script src="assets/js/jquery.bootpag.min.js"></script>
       <script src="assets/js/custom.js"></script>
       <script src="assets/js/daterangepicker.js"></script>
+   
       <!--Js Close-->
-
    </body>
 </html>

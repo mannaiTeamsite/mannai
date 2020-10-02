@@ -576,7 +576,7 @@ header{
 
     header .innner_wrapper .nav_col .header_row.desktop_view_head,.desktop_view_head{
        display: none;
-       padding: 0;
+       padding: 15px 19px;
     }
     .head1_top {
         position: absolute;
@@ -834,6 +834,11 @@ footer{
                nav {
                     ul {
                         text-align: left;
+
+                        @media(max-width:768px){
+                            text-align: center;
+                        }
+
                         li {
                             display: inline-block;
                             margin: 0 20px 0 0;

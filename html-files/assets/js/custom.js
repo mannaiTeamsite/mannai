@@ -58,6 +58,15 @@ $("#mob_menu_toggle2").click(function(){
    $("#head2_top").toggleClass("head2_top");
 });
 
+$(".nav_menu ul li a").click(function(){
+   $("#head2_top").removeClass("head2_top");
+});
+
+$(".abt_qtr_nav ul li a").click(function(){
+   $("#head1_top").removeClass("head1_top");
+});
+
+
 $(".about_qatar_nav").click(function(e){
    e.stopPropagation()
    $(".about_submenu").toggleClass("active");
@@ -100,6 +109,19 @@ function resetClass() {
     resetClass();
     $(this).addClass("active");
  });
+
+
+
+
+
+var c =$(".category_view_menu_wrap  li a").eq(0).html()
+
+ if ( $('.category_view_menu_wrap li').length == 2 && $(".category_view_menu_wrap  li a").eq(1).html()=='List'){
+    
+   $(".category_view_menu_wrap").addClass("mobhide")
+ }
+
+
 /**************************Category (List,grid,map,calendar) tab Js close*************************************************/
 
 
@@ -672,3 +694,19 @@ $(function () {
 
 
 
+
+
+
+$('#pagination-here').bootpag({
+   total: 10,          
+   page: 1,            
+   maxVisible: 5,     
+   leaps: true,
+   href: "#result-page-{{number}}",
+})
+
+//page click action
+$('#pagination-here').on("page", function(event, num){
+//show / hide content or pull via ajax etc
+$("#content").html("Page " + num); 
+});

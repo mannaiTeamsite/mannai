@@ -38,7 +38,7 @@ $('.btn-st').on('click', function(event){
 
 $('#higness_owl').owlCarousel({
     items: 1,
-    loop:false,
+    loop:true,
     autoplay: true,
     dots:true,
     nav:false,

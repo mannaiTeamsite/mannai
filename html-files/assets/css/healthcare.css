@@ -81,7 +81,7 @@ fieldset legend {
       border-width: 0 0 1px 1px; }
   .ar .healthcare_wrapper .healthcare_banner .healthcare_header .searchbar .search .searchbox {
     background: #b51647 url("../images/search-white.svg") no-repeat 5% 50%;
-    padding: 8px 16px 8px 32px; }
+    padding: 8px 16px 8px 50px; }
   .ar .healthcare_wrapper .healthcare_banner .healthcare_header .healthcare-navbar ul li:not(:first-child) {
     padding-left: 0;
     padding-right: 40px; }
@@ -715,6 +715,8 @@ fieldset legend {
           margin-bottom: 20px; }
           .health-topics .filter-section .filter-body .filter-card:not(:last-of-type) .sub-header {
             margin-bottom: 14px; }
+        .health-topics .filter-section .filter-body .filter-card:last-of-type .filter-card-body ul {
+          padding-top: 14px; }
         .health-topics .filter-section .filter-body .filter-card .sub-header {
           display: flex;
           align-items: center;
@@ -1238,7 +1240,8 @@ fieldset legend {
       .directory .hospital-card-box .owl-carousel .card-header {
         background-color: rgba(205, 74, 4, 0.1);
         padding: 22px 30px;
-        border: none; }
+        border: none;
+        border-radius: 12px 12px 0 0; }
         @media (max-width: 768px) {
           .directory .hospital-card-box .owl-carousel .card-header {
             padding: 15px 20px; } }
@@ -1287,8 +1290,16 @@ fieldset legend {
           display: flex;
           align-items: center;
           margin: 5px 0 10px; }
-          .directory .hospital-card-box .owl-carousel .card-body .social-icons a:not(:first-of-type) {
-            margin-left: 16px; }
+          .directory .hospital-card-box .owl-carousel .card-body .social-icons a {
+            width: 26px;
+            height: 26px; }
+            .directory .hospital-card-box .owl-carousel .card-body .social-icons a:not(:first-of-type) {
+              margin-left: 16px; }
+            .directory .hospital-card-box .owl-carousel .card-body .social-icons a img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+              object-position: center center; }
     .directory .hospital-card-box .owl-theme {
       border-top: solid 1px #d6d6d6;
       padding-top: 24px;

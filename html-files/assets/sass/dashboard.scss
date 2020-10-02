@@ -692,6 +692,7 @@ display: none;
         }
         .hku_card_body{
             padding: 25px 0;
+            
         ul{
             margin-bottom: 0;
             li{
@@ -714,7 +715,37 @@ display: none;
                         margin: 0 12px 0 0;
                     }
                 }
+                &.polls_survey{
+                    position: relative;
+                    .voted_percent{
+                        width: 32px;
+                        height: 25px;
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                        font-family: 'cairo_semibold';
+                        font-size: 14px;
+                        line-height: 1.8;
+                        text-align: center;
+                        letter-spacing: 0.2px;
+                        color: var(--slate-grey);
+                        display: none;
+                        &.excellent{
+                            color: var(--rouge)
+                        }
+                    }
+                }
+                
             }
+        }
+        .total_votes{
+            font-family: 'cairo_semibold';
+                font-size: 15px;
+                line-height: 1.83;
+                letter-spacing: 0.17px;
+                color: var(--greyish-brown-three);
+                margin: 10px 0 0 0;
+                display: none;
         }
         }
         .hku_card_footer{
@@ -989,7 +1020,7 @@ display: none;
             line-height: 1.57;
             letter-spacing: normal;
             color: var(--slate-grey);
-            display: flex;
+            display: flex !important;
             align-items: center;
             cursor: pointer;
             padding: 0 !important;
@@ -1015,7 +1046,7 @@ display: none;
     .polls{
         .slider{
             .carousel-item{
-                min-height: 240px;
+                min-height: 280px;
             }
         }
     }
@@ -1565,6 +1596,7 @@ display: none;
         }
         ul{
             margin-bottom: 0;
+            border-radius: 12px;
             li{
                 border-bottom: solid 1px #e0e0e0;
                 padding: 13px 25px;
@@ -1822,3 +1854,6 @@ fieldset{
 }
 
 
+#expore_services_container.view_exp_services {
+    display: block;
+}

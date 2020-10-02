@@ -1123,6 +1123,9 @@ legend {
   z-index: 9;
   padding: 7px;
   border-radius: 50%; }
+  .close_exp_services img {
+    max-width: 100%;
+    display: block; }
   @media screen and (max-width: 990px) {
     .close_exp_services {
       top: auto;
@@ -1155,5 +1158,8 @@ legend {
   width: 5px;
   height: 2px;
   background-color: #F5F5F5; }
+
+.ar .explore_result_content .explore_inner_content .sec_right .explore_inner_search {
+  text-align: right; }
 
 /*# sourceMappingURL=explore-services.css.map */

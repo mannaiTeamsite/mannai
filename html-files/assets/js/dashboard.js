@@ -104,8 +104,8 @@ $('#personal').click(function () {
 
 
 //======= change polls slide on button click =======
-$('#polls').on('slide.bs.carousel', function () {
-        currentIndex = $('#polls .carousel-item.active').index() + 1;
+$('#polls').on('slid.bs.carousel', function () {
+        currentIndex = $('#polls .carousel-item.active').index();
         $('#polls_indicator ol li').eq(currentIndex).addClass('active').siblings().removeClass('active');
        if(currentIndex == $('#polls .carousel-item').length){
         $('#polls_indicator ol li').eq(0).addClass('active').siblings().removeClass('active');
@@ -119,8 +119,8 @@ $('#polls').on('slide.bs.carousel', function () {
 });
 
 //======= change survey slide on button click =======
-  $('#survey').on('slide.bs.carousel', function () {
-    currentIndex = $('#survey .carousel-item.active').index() + 1;
+  $('#survey').on('slid.bs.carousel', function () {
+    currentIndex = $('#survey .carousel-item.active').index();
     console.log(currentIndex);
     $('#survey_indicator ol li').eq(currentIndex).addClass('active').siblings().removeClass('active');
     if(currentIndex == $('#survey .carousel-item').length){
@@ -141,33 +141,72 @@ $('#survey_indicator ol li').on('click', function () {
   })
   
   $(document).ready(function () {               // on document ready
-    // checkSurvey();
-    $('#survey').on('slide.bs.carousel', function () {
-        console.log('running...')
-      })
+    checkSurvey();
+    checkPolls();
+    $('#survey').on('slid.bs.carousel', function () {
+        checkSurvey();
+      });
+      $('#polls').on('slid.bs.carousel', function () {
+        checkPolls();
+      });
+
+      $('.view_explore').click(function(){
+        $('#expore_services_container').addClass('view_exp_services');
+        $('.mob_nav').removeClass('active')
+    });
+    
+    $('.close_exp_services').click(function(){
+        $('#expore_services_container').removeClass('view_exp_services')
+    });
   });
   
-  $('#survey').on('slide.bs.carousel', function(){
-      console.log('running...')
-  });
  
   
   function checkSurvey()                        // check function
   {
     var $this = $('#survey');
-    if ($('.carousel-inner .carousel-item:first').hasClass('active')) {
-        // Hide left arrow
-        $('.carousel-control-prev').css({'opacity': '0.5', 'pointer-events': 'none'});
-        // But show right arrow
-        $('.carousel-control-next').css({'opacity': '1', 'pointer-events': 'auto'});
-    } else if ($('.carousel-inner .carousel-item:last').hasClass('active')) {
-        // Hide right arrow
-        $('.carousel-control-next').css({'opacity': '0.5', 'pointer-events': 'none'});
-        // But show left arrow
-        $('.carousel-control-prev').css({'opacity': '1', 'pointer-events': 'auto'});
+    if ($this.parents('.hku_card').find('.carousel-item:first').hasClass('active')) {
+        $this.parents('.hku_card').find('.carousel-control-prev').css({'opacity': '0.5', 'pointer-events': 'none'});
+        $this.parents('.hku_card').find('.carousel-control-next').css({'opacity': '1', 'pointer-events': 'auto'});
+    } else if ($this.parents('.hku_card').find('.carousel-item:last').hasClass('active')) {
+        $this.parents('.hku_card').find('.carousel-control-next').css({'opacity': '0.5', 'pointer-events': 'none'});
+        $this.parents('.hku_card').find('.carousel-control-prev').css({'opacity': '1', 'pointer-events': 'auto'});
     } else {
-        $('.carousel-control').css({'opacity': '1', 'pointer-events': 'auto'});
+        $this.parents('.hku_card').find('.carousel-control-prev, .carousel-control-next').css({'opacity': '1', 'pointer-events': 'auto'});
+    }
+  }
+
+  function checkPolls()                        // check function
+  {
+    var $this = $('#polls');
+    if ($this.parents('.hku_card').find('.carousel-item:first').hasClass('active')) {
+        $this.parents('.hku_card').find('.carousel-control-prev').css({'opacity': '0.5', 'pointer-events': 'none'});
+        $this.parents('.hku_card').find('.carousel-control-next').css({'opacity': '1', 'pointer-events': 'auto'});
+    } else if ($this.parents('.hku_card').find('.carousel-item:last').hasClass('active')) {
+        $this.parents('.hku_card').find('.carousel-control-next').css({'opacity': '0.5', 'pointer-events': 'none'});
+        $this.parents('.hku_card').find('.carousel-control-prev').css({'opacity': '1', 'pointer-events': 'auto'});
+    } else {
+        $this.parents('.hku_card').find('.carousel-control-prev, .carousel-control-next').css({'opacity': '1', 'pointer-events': 'auto'});
     }
   }
 
 
+  $(document).on('click', '#vote', function(){
+      console.log('vote')
+      $('#polls').find('.carousel-item').each(function(){
+          if($(this).hasClass('active')){
+              if($(this).find('.options input').is(':checked')){
+                console.log($(this))
+                $(this).find('li .voted_percent').show();
+                $(this).find('.total_votes').show();
+              }
+              else{
+                  alert('Please select any one option')
+              }
+            
+          }
+          
+      })
+    //   $('#polls .carousel-item.active .voted_percent').show()
+  })
+  

@@ -43,6 +43,7 @@ $('a[href*="#"]')
 
 
 $('.carousel-slider .owl-carousel').owlCarousel({
+    stagePadding:1,
     loop:true,
     nav: true,
     dots: false,
@@ -76,6 +77,7 @@ $('.carousel-slider .owl-carousel').owlCarousel({
 });
 
 $('.carousel-slider2 .owl-carousel').owlCarousel({
+    stagePadding:1,
     loop:true,
     nav: true,
     dots: false,

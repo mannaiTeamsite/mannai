@@ -137,6 +137,20 @@ a:hover {
                             .form-control {
                                 text-align: left;
                             }
+
+                            .datepicker {
+                                th {
+                                    .glyphicon-chevron-right{
+                                        border-width: 2px 0 0 2px;
+                                        left: calc(50% - 2px);
+                                    }
+
+                                    .glyphicon-chevron-left{
+                                        border-width: 0 2px 2px 0;
+                                        left: calc(50% - 6px);
+                                    }
+                                }
+                            }
                         }
                     }
 
