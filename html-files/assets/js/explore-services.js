@@ -75,9 +75,41 @@ function getSelValue(e){
         selected.push(e.value)
         var selectedSre = selected.toString();
         selectedSre = selectedSre.replace(/,/g, ", ");
+        console.log(selectedSre);
         $(e).parents('.dropdown').find('input[type=text]').val(selectedSre);
-
-        applied_filters_arr.push(e.value)
+// console.log(e.value, applied_filters)
+        applied_filters_arr.push(e.value);
+        // console.log(e.value, applied_filters_arr);
+        
+        if(e.value == 'All'){
+            selected = $.grep(selected, function(value) {
+                return value != "Yes" && value != 'No';
+              });
+              applied_filters_arr = $.grep(applied_filters_arr, function(value) {
+                return value != "Yes" && value != 'No';
+            });
+            $(e).parents('.dropdown').find('input[type=text]').val('All');
+        }
+        if(e.value == 'Yes'){
+            selected = $.grep(selected, function(value) {
+                return value != "All" && value != 'No';
+              });
+              applied_filters_arr = $.grep(applied_filters_arr, function(value) {
+                return value != "All" && value != 'No';
+            });
+            $(e).parents('.dropdown').find('input[type=text]').val('Yes');
+        }
+        if(e.value == 'No'){
+            console.log("all----");
+            selected = $.grep(selected, function(value) {
+                return value != "All" && value != 'Yes';
+              });
+              applied_filters_arr = $.grep(applied_filters_arr, function(value) {
+                return value != "All" && value != 'Yes';
+            });
+            $(e).parents('.dropdown').find('input[type=text]').val('No');
+        }
+        
     }
     else{
         selected = $.grep(selected, function(value) {
@@ -101,7 +133,7 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
   function applied_filters(){
     var filter_tags = [];
     for(i = 0; i < applied_filters_arr.length; i++) {
-        filter_tags.push("<li class='tag' title='"+applied_filters_arr[i]+"' onclick='remove_filter(this)'><p>"+applied_filters_arr[i]+"</p><span></span></li>")
+        filter_tags.push("<li class='tag' title='"+applied_filters_arr[i]+"' onclick='remove_filter(this); updateFilter(this)'><p>"+applied_filters_arr[i]+"</p><span></span></li>")
     }
     $('.applied_option').html(filter_tags.join(""))
   }
@@ -114,7 +146,7 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
     });
     e.remove();
 // console.log(applied_filters_arr)
-    $('.check_input').prop('checked', false);
+    $('.check_input, .radio_input').prop('checked', false);
     var uncheck = document.getElementsByClassName('check_input');
     var thisTextbox;
     for (var i = 0; i < uncheck.length; i++){
@@ -151,10 +183,26 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
     applied_filters()
   };
   
-  $('.dropdown-menu .chech_lbl').click(function (e) {
+
+  function updateFilter(e){
+    //   console.log(e.title);
+     var filterToBeUpdate = $('input').filter(function(){
+         return this.value == e.title;
+     });
+     inFilter = [];
+     $(filterToBeUpdate).parents('.dropdown').find('input').each(function(){
+         if($(this).is(':checked')){
+            inFilter.push($(this).val())
+         }
+     });
+     console.log("--return--", inFilter)
+     $(filterToBeUpdate).parents('.dropdown').find('input[type=text]').val(inFilter);
+  }
+
+$('.dropdown-menu .chech_lbl').click(function (e) {
     e.stopPropagation();
 });
-$(' .radio_lbl').click(function (e) {
+$(' .radio_lbl, .uncheck_all').click(function (e) {
     e.stopPropagation();
 });
 

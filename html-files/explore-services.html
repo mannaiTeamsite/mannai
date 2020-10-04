@@ -547,16 +547,16 @@
                                                 <div class="filter_col">
                                                     <h3>Service Types</h3>
                                                     <div class="dropdown show">
-                                                        <div class="dropdown-toggle sel_filter" id="dropdownMenuLink"
+                                                        <div class="dropdown-toggle sel_filter" id="dropdownMenuTypes"
                                                             data-toggle="dropdown" role="group" aria-haspopup="true"
-                                                            aria-expanded="false" tabindex="0">
+                                                            aria-expanded="false" tabindex="0" data-filter="types">
                                                             <input type="text" id="service_type"
                                                                 placeholder="Select Service Types" readonly
                                                                 tabindex="-1">
                                                             <label for="service_type">Select Service Types</label>
                                                             <span class="plus_more">+1 more</span>
                                                         </div>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuTypes">
                                                             <div class="dropdown-item">
                                                                 <label for="e-service" class="chech_lbl">
                                                                     <input type="checkbox" id="e-service"
@@ -719,7 +719,7 @@
                                                                     Communications Regulatory Authority
                                                                 </label>
                                                             </div>
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
 
@@ -789,7 +789,7 @@
                                                                     Business
                                                                 </label>
                                                             </div>
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
 
@@ -849,7 +849,7 @@
                                                             </div>
 
 
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
 

@@ -148,6 +148,7 @@ $('#survey_indicator ol li').on('click', function () {
       });
       $('#polls').on('slid.bs.carousel', function () {
         checkPolls();
+        $('#vote').css('visibility', 'visible')
       });
 
       $('.view_explore').click(function(){
@@ -199,6 +200,7 @@ $('#survey_indicator ol li').on('click', function () {
                 console.log($(this))
                 $(this).find('li .voted_percent').show();
                 $(this).find('.total_votes').show();
+                $('#vote').css('visibility', 'hidden')
               }
               else{
                   alert('Please select any one option')

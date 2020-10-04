@@ -672,7 +672,8 @@
     padding: 8px 12px;
     width: 100%;
     display: flex;
-    align-items: center; }
+    align-items: center;
+    cursor: pointer; }
     .filter_col .sel_filter > label {
       display: none; }
     .filter_col .sel_filter input[type='text'] {
@@ -712,7 +713,8 @@
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
-    color: var(--slate-grey); }
+    color: var(--slate-grey);
+    cursor: pointer; }
   .filter_col .dropdown-menu {
     min-width: 100%;
     max-height: 385px;
