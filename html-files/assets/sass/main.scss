@@ -1407,7 +1407,8 @@ hr{
 						width: 38px;
 						height: 37px;
 						content: '';
-						background: url('../images/ic_location_view.svg') center no-repeat;
+                        background: url('../images/ic_location_view.svg') center no-repeat;
+                        background-size: contain;
 						position: absolute;
 						right: 42px;
 						top: 50%;
@@ -2902,7 +2903,7 @@ hr{
         padding: 20px 0 50px;
     }
 	h2{
-		max-width: 404px;
+		max-width: 450px;
 		padding: 0;
 		margin-bottom: 40px;
 		font-size: 28px;
@@ -3112,7 +3113,7 @@ hr{
         align-items: flex-end;
         margin-bottom: 30px;
         flex-flow: wrap;
-
+        direction: ltr;
 
         @media(max-width:1145px){
             align-items: start;
@@ -3235,7 +3236,7 @@ hr{
         display: flex;
         margin: 0 -10px;    
 		flex-flow: wrap;
-		
+        direction: ltr;
         @media(max-width:1180px){
             width: 100%;
             margin: 0;
@@ -3266,7 +3267,9 @@ hr{
                     &:hover{
                         box-shadow: 5px 5px 25px 0px rgba(46, 61, 73, 0.2);
                     }
-                   
+                   a{
+                       display: inline-block;
+                   }
                    
                     figure{
                         width: 100%;
@@ -3408,6 +3411,7 @@ hr{
         }
 
         .wish_card_row {
+            direction: rtl;
             .see_more{
                 margin: 19px 10px 0 10px;
 
@@ -3438,6 +3442,7 @@ hr{
             }
         }
         .travel_grid{
+            direction: rtl;
 			flex-flow: row-reverse;
 			flex-flow: wrap;
             .f_row {
@@ -5585,6 +5590,9 @@ color: var(--deep-orange);
                 align-items: flex-end;
             }
         }
+        .custom_modal_heading{
+            text-align: right;
+        }
         
     }
 
@@ -7358,7 +7366,8 @@ color: var(--deep-orange);
             top: 7px;
             width: 20px;
             height: 18px;
-            background-image: url('../images/bullet_pink.svg');
+            background: url('../images/bullet-orange.svg') center no-repeat;
+            background-size: contain;
         }
 
         @media(max-width: 640px){
@@ -7684,8 +7693,14 @@ color: var(--deep-orange);
 .f_row{
     display: flex;
     flex-flow: wrap;
+    direction: ltr;
   }
   
+.ar{
+    .f_row{
+        direction: rtl;
+      }
+}
   
   .f_col{
       flex: 1 1 auto;
@@ -7799,6 +7814,10 @@ color: var(--deep-orange);
         img{
             width: 16px;
             height: 16px;
+            position: absolute;
+            top:50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
         }
     }
     @media screen and (max-width: 768px){
@@ -8165,7 +8184,7 @@ color: var(--deep-orange);
             @media(max-width:640px){
                 width:100%;
             }
-            h3{
+            h3, .custom_modal_heading{
                 font-family: 'cairo_bold';
                 font-size: 20px;
                 line-height: 1.09;
@@ -8566,7 +8585,8 @@ color: var(--deep-orange);
 	//map view
 	.map_view{
 		.grid_view{
-			display: flex;
+            display: flex;
+            direction: ltr;
         }
         @media(max-width:1024px){
             .pagination_wrapper{
@@ -8630,7 +8650,18 @@ color: var(--deep-orange);
            
 		}
 		
-	}
+    }
+    
+
+    .ar{
+        .map_view{
+            .grid_view{
+                direction: rtl;
+            }
+        }
+     }
+
+
 	.map_col{
 		display: none;
 		&.active{
@@ -12828,8 +12859,8 @@ color: var(--deep-orange);
 /***************************Polls****************************/ 
 
 .category_card.category_polls_card {
-    width: 33%;
-    flex: none;
+    // width: 33%;
+    // flex: none;
 }
 
 .past_polls{
@@ -12856,12 +12887,14 @@ color: var(--deep-orange);
 }
 .category_polls_card{
     .list_card {
-        min-height: 340px;
+        min-height: 382px;
         .card_title {
             font-size: 20px;
             line-height: 1.5;
             margin: 0 0 15px;
             width: 100%;
+            overflow: visible;
+            white-space: normal;
         }
     }
     .row_wrap{
@@ -13047,6 +13080,15 @@ color: var(--deep-orange);
             padding-right: 35px;
             padding-left:0;
         }
+    }
+    .category_polls_card .row_wrap {
+        margin-bottom: 14px;
+        // flex-flow: row-reverse;
+    }
+    .category_polls_card.polls_inactive .progress_wrap {
+        opacity: 1;
+        visibility: visible;
+        direction: rtl;
     }
 }
 /***************************Polls close****************************/ 
@@ -13286,6 +13328,9 @@ color: var(--deep-orange);
     }
     .section_wrap{
         padding: 60px 0 20px;
+        @media(max-width:640px){
+            padding: 10px 0 15px;
+        }
     }
     .cards_wrap{
         display: flex;
@@ -13395,7 +13440,7 @@ color: var(--deep-orange);
             @media screen and (max-width: 640px){
                 width: 100%;
                 height: 120px;
-                margin: 0 0 15px;
+                margin: 0 auto 15px;
             }
             span{
                 font-family: 'cairo_bold';
@@ -15230,4 +15275,8 @@ color: var(--deep-orange);
 .pagination_wrapper .pagination{
     padding: 0;
     margin: 0;
+}
+
+.fade{
+
 }

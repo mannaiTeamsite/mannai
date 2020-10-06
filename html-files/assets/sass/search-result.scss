@@ -643,10 +643,13 @@ p, h1, h2, h3, h4, h5{
 .page_preview{
     width: 360px;
     position: relative;
+    overflow: auto;
     @media screen and (max-width: 768px){
         display: none;
     }
     figure{
+        position: relative;
+    overflow: hidden;
         img{
             width: 100%;
         }
@@ -958,16 +961,20 @@ p, h1, h2, h3, h4, h5{
     @media screen and (max-width: 720px){
         margin-top: 40px;
     }
-    .nav-tabs{
+    .result_carousal{
         border-radius: 12px;
         background-color: var(--white-five);
         border-bottom: 0;
-        padding: 2px 23px;
-        margin-bottom: 40px;
-        @media screen and (max-width: 720px){
-            padding: 6px 5px;
-            justify-content: space-between;
-        }
+        // padding: 2px 23px;
+        // margin-bottom: 40px;
+        // white-space: nowrap;
+        // flex-wrap: nowrap;
+        // transition: 0.3s ease-in-out;
+        // transform: translateX(0);
+        // @media screen and (max-width: 720px){
+        //     padding: 6px 5px;
+        //     justify-content: space-between;
+        // }
         .nav-item{
             .nav-link{
                 font-family: 'cairo_semibold';
@@ -983,20 +990,20 @@ p, h1, h2, h3, h4, h5{
                 border-bottom: 4px solid transparent;
                 white-space: nowrap;
                 @media screen and (max-width: 1024px){
-                    font-size: 13px;
-                    padding: 12px 6px;
+                    font-size: 14px;
+                    padding: 20px 15px;
                 }
-                @media screen and (max-width: 720px){
-                    font-size: 13px;
-                }
-                @media screen and (max-width: 570px){
-                    font-size: 13px;
-                    padding: 7px 6px;
-                }
-                @media screen and (max-width: 570px){
-                    font-size: 11px;
-                    padding: 7px 3px;
-                }
+                // @media screen and (max-width: 720px){
+                //     font-size: 13px;
+                // }
+                // @media screen and (max-width: 570px){
+                //     font-size: 13px;
+                //     padding: 7px 6px;
+                // }
+                // @media screen and (max-width: 570px){
+                //     font-size: 11px;
+                //     padding: 7px 3px;
+                // }
                 .icon{
                     margin-right: 11px;
                     @media screen and (max-width: 720px){
@@ -1177,38 +1184,62 @@ p, h1, h2, h3, h4, h5{
     border-radius: 12px;
     background-color: var(--white-five);
     border-bottom: 0;
-    padding: 2px 23px;
+    padding: 0 23px;
     margin-bottom: 40px;
     max-width: 745px;
     position: relative;
     background-color: var(--white-five);
-    // height: 68px;
+    height: 68px;
     overflow: hidden;
-    .nav_tab_prev, .nav_tab_next{
-        position: absolute;
-        top: 0;
-        width: 50px;
-        cursor: pointer;
-        z-index: 9;
-        height: 100%;
-        background-color: #f1f1f1;
-        padding: 22px 14px;
+    @media screen and (max-width: 1024px){
+        max-width: 665px;
     }
-    .nav_tab_prev{
-        left: 0;
+    @media screen and (max-width: 768px){
+        max-width: 730px;
     }
-    .nav_tab_next{
-        right: 0;
+    @media screen and (max-width: 600px){
+        max-width: 600px;
+    }
+    @media screen and (max-width: 540px){
+        max-width: 540px;
+    }
+    @media screen and (max-width: 425px){
+        max-width: 390px;
+    }
+    @media screen and (max-width: 414px){
+        max-width: 375px;
+    }
+    @media screen and (max-width: 375px){
+        max-width: 338px;
     }
 }
-#result_tabs{
-    // padding: 0 50px;
+.result_carousal{
+    width: 100% !important;
+    position: relative;
+}
+.owl-stage{
+    // width: 100% !important;
     // display: flex;
     // flex-wrap: nowrap;
-    // overflow: hidden;
-    // position: absolute;
-    // left: 0;
-    // top: 0;
-    // transition: 0.3s ease-in-out all;
-    // transform: translateX(0px);
+}
+// .owl-carousel.owl-drag .owl-item{
+//     width: calc(100% / 4) !important;
+// }
+.owl-prev{
+    width: 35px !important;
+    height: 35px !important;
+    padding: 5px 5px 0 10px;
+    left: -24px;
+    img{
+        width: 25px;
+    }
+}
+.owl-next{
+    width: 35px !important;
+    height: 35px !important;
+    padding: 5px 10px 0 0;
+    right: -24px;
+    img{
+        width: 25px;
+    }
 }

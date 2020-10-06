@@ -313,7 +313,7 @@
 
 .ar{
     .fact_figure_qatar {
-
+        text-align: right;
         .heading{
             padding-right: 30px;
             &:before{
@@ -335,7 +335,25 @@
                 }
             }
         }
+
+        .show_more{
+            position: relative;
+            cursor: pointer;
+            padding-left: 0;
+            padding-right: 0;
+            display: inline-block;
+
+            &::before {
+                left: -55px;
+                top: -3px;
+                right: auto;
+             }
+        }
+
+
     }
+
+
        
 }
 
@@ -431,7 +449,7 @@
                     font-size: 16px;
                     line-height: 1.5;
                     letter-spacing: normal;
-                    color: var(--white, 0.5) ;
+                    color: #ffffff80;
                     @media(max-width:1180px){
                         font-size: 14px;
                     }

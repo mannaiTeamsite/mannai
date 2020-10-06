@@ -205,7 +205,7 @@ section{
 .bussiness_card_sm {
     border: 1px solid #fff !important;
 }
-.bussiness_card_sm .title {
+.bussiness_card_sm .title, .field_label {
     color: yellow !important;
 }
 .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm:hover::before{
@@ -254,13 +254,14 @@ section{
     background-color: #616161 !important;
 }
 .to_do_section .detect-icon, .to_do_section .detect-icon img, .map_col .srch_box .detect-icon, .map_col .map_img img, .map_col .srch_box,
-.txt_wrapper, .find_help_contact .inner_wrapr .category_search_input .detect-icon, .category_search_input .detect-icon img{
+.txt_wrapper, .find_help_contact .inner_wrapr .category_search_input .detect-icon, .category_search_input .detect-icon img, 
+.helpline, .helpline img{
     background-color: transparent !important
 }
 .opinion_section .card_wrap{
     border: none;
 }
-.opinion_section .card_wrap .inner_wrap, .explore_life_qatar .explore_life_block .col_left .explore_list ul li a,
+.opinion_section .card_wrap  .owl-item.active .inner_wrap, .explore_life_qatar .explore_life_block .col_left .explore_list ul li a,
 .explore_life_qatar .explore_life_block .explore_list_horizontal .tag_about, .explore_life_qatar .explore_life_block{
     border: 1px solid #fff;
     border-radius: 12px;
@@ -278,12 +279,17 @@ section{
 .structure_government .section_wrapper .left_sec .links ul li a.active:before{
     background-color: #fff;
 }
-.modernise_develop .section_wrapper .flex_col .col_4 .card h3{
+.modernise_develop .section_wrapper .flex_col .col_4 .card h3, .info_txt, .accessibility .disabilities li{
     color: #fff !important;
 }
 /* Home & Face pages close */
 
 /* Category */
+
+.pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, 
+.pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover{
+    background-color: gray !important;
+}
 
 .categor_filter_wrap li a.filter::after {
     background: url(../images/ic-filter-white.svg) center no-repeat;
@@ -477,14 +483,16 @@ section{
 #reach-out-modal .reachout_modal{
     border-radius: 5px;
 }
-.category_tab_wrapper ul li a.active, .download_utility_directory .category_tab_wrapper.directory_tab ul li a.active{
+.category_tab_wrapper ul li a.active, .download_utility_directory .category_tab_wrapper.directory_tab ul li a.active,
+.news_section .bottom_wrapper ul li a.active{
     color: #fff !important;
 }
 .tags_wrap{
     background-color: transparent !important;
 }
 .report_section input, .report_section textarea, .download_utility_directory .category_tab_wrapper.directory_tab ul li a.link::after,
-.category_tab_wrapper ul li a.link::after, .link:after, .structure_government .section_wrapper .left_sec .links .divider{
+.category_tab_wrapper ul li a.link::after, .link:after, .structure_government .section_wrapper .left_sec .links .divider,
+.explore_travel_block .travel_grid .f_row .travel_card li a:before{
     background-color: #fff !important;
 }
 .faq_section .accordian-block .plus-icon{
@@ -510,8 +518,42 @@ table td, th{
     background-color: transparent !important;
 }
 .news_section .right_col .todays_news .txt-img, .blog_section .txt-img, 
-.explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure .title{
+.explore_life_qatar .explore_life_block .col_right .card_wrapper .img_card figure .title, 
+.explore_travel_block .travel_grid .travel_col_right .inner_wrapper .card_sm figure figcaption{
     background-color: #00000057 !important;
+}
+
+/*Text bg transparent*/
+.explore_travel_block .travel_grid .travel_col_right .inner_wrapper .card_sm figure figcaption span,
+.news_section .right_col .txt-img span, .blog_section .blog_img .txt-img span, .blog_section .video_thumb .txt-img span,
+.know_section .info_card_wrap .info_card span{
+    background-color: transparent !important;
+}
+/*Text bg transparent close*/
+
+.subscription_section .sample_card{
+    border: 1px solid #fff;
+    border-bottom: none;
+}
+
+.banner_section .banner_row .col_left .banner_container .app-link{
+    border: 1px solid #fff;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+header .innner_wrapper .nav_col .header_row .auth_nav ul li a img.access_icon{
+    background-color: #fff !important;
+    border-radius: 50%;
+    border: 1px solid #fff;
+}
+
+.ar .know_section .info_card_wrap .info_card:last-child {
+    border-left: 1px solid #d6d8da;
+}
+
+.ar .know_section .info_card_wrap{
+    border-left: none;
 }
 
 /* Category close */
@@ -629,6 +671,7 @@ table td, th{
 .img-magnifier-glass{
     z-index: 9;
     filter: grayscale(100%);
+    background-color: transparent !important;
 }
 .search_block .search_input .advance_search_wrap .advance_search .search_form .form_row .flex_row ul{
     margin: -6px 0;
@@ -657,10 +700,14 @@ table td, th{
 .explore_result_wrap .explore_result_inner .result_tab_header .back_btn .back .back_arrow{
     border: 1px solid #ffffff;
 }
-.serv_tabs .nav-tabs .nav-item .nav-link{
-    border-color: #000000 !important;
+.tabs_slder{
+    border: 1px solid #ffffff;
 }
-.serv_tabs .nav-tabs .nav-item .nav-link.active{
+.tabs_result .result_carousal .nav-item .nav-link{
+    border-color: #000000 !important;
+    padding: 1.166rem 1rem !important;
+}
+.tabs_result .result_carousal .nav-item .nav-link.active{
     border-color: #ffff00 !important;
 }
 .new_bedge {
@@ -701,4 +748,11 @@ table td, th{
   }
   .applied_filters .applied_option li span{
       background-image: url('../images/ic_exp_close_white.png');
+  }
+  .search_pagination ul li.current_page{
+      background-color: #ffffff !important;
+  }
+  .search_pagination ul li.current_page a{
+    background-color: #ffffff !important;
+    color: #000000 !important;
   }

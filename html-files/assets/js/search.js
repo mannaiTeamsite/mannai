@@ -51,13 +51,6 @@ function showSearch(e){
   }
 }
 
-
-
-$('.nav_tab_next').click(function(){
-  console.log('yes')
-  $('#result_tabs').css({"transform":"translateX(200px)"})
-});
-
 $('.nav_tab_prev').click(function(){
   $('#result_tabs').css({"transform":"translateX(-200px)"})
 });
@@ -90,5 +83,76 @@ function checkitem()                        // check function
   }
 }
 
+// ======= search result tabs slider =======
+// var slideItem = $('.tabs_result .nav-tabs li').length;
+// viewSlideItem(0, 3);
+// console.log(slideItem);
+// function viewSlideItem(firts, last){
+//   $('.tabs_result .nav-tabs li').eq(firts).addClass('first-active');
+//   $('.tabs_result .nav-tabs li').eq(last).addClass('last-active');
+//   // for(i = 0; i <= num - 1; i++){
+//   //   $('.tabs_result .nav-tabs li').eq(i).addClass('inView');
+//   // }
+// }
+// var nextWdth = 0;
+// var lastWidth = 0;
+// function slideNext(){
+//   var lastActive = $('.tabs_result .nav-tabs').find('.last-active').next('li');
+//   var firstActive = $('.tabs_result .nav-tabs').find('.first-active').next('li');
+//   nextWdth = nextWdth + $(lastActive).width();
+//   console.log(nextWdth)
+//   $('.tabs_result').find('.nav-tabs').css({'transform' : 'translateX(-' + nextWdth +'px)'});
+//   $('.tabs_result .nav-tabs li').removeClass('last-active');
+//   $(lastActive).addClass('last-active');
+//   $('.tabs_result .nav-tabs li').removeClass('first-active');
+//   $(firstActive).addClass('first-active');
+// }
 
+// function slidePrev(){
+//   var firstActive = $('.tabs_result .nav-tabs').find('.first-active').prev('li');
+//   lastWidth = nextWdth - $(firstActive).width();
+//   console.log(lastWidth)
+//   $('.tabs_result').find('.nav-tabs').css({'transform' : 'translateX(' + lastWidth +'px)'});
+//   $('.tabs_result .nav-tabs li').removeClass('first-active');
+//   $(firstActive).addClass('first-active')
+// }
 
+$('.result_carousal').owlCarousel({
+  loop:false,
+  // margin:2,   
+  responsiveClass:true,
+  autoplayHoverPause:true,
+  autoplay:false,
+  //  autoWidth: true,
+   dots: false,
+   nav: true,
+  //  items: 34
+   navText: [
+     '<img src="assets/images/arrow-left.svg">', 
+     '<img src="assets/images/arrow-right.svg">'
+    ],
+  responsive:{
+      0:{
+        items:2,
+      },
+      600:{
+          items:2
+      },
+      768:{
+        items:3
+      },
+      900:{
+        items:4
+      },
+      1024:{
+        items:4
+      }
+  }
+})
+
+$(document) .ready(function(){
+var li =  $(".owl-item a ");
+$(".owl-item a").click(function(){
+li.removeClass('active');
+});
+});

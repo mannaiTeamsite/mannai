@@ -21,7 +21,8 @@ header{
     }
     .innner_wrapper{
         margin: 0 auto;
-        display: flex;      
+        display: flex;    
+        direction: ltr;  
         .nav_brand{
             display: flex;
             padding: 28px 27px;
@@ -336,6 +337,16 @@ header{
     margin: 0;
     cursor: pointer;
     width: 16px;
+}
+
+
+
+.ar{
+    header{
+        .innner_wrapper{
+            direction: rtl;
+        }
+    }
 }
 /************Arabic*****************/
 

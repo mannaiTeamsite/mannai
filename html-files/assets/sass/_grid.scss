@@ -2,7 +2,17 @@
     display: flex;
     margin: 0 -10px;
     flex-wrap: wrap;
+    direction: ltr;
 }
+
+
+.ar{
+    .flex_row {
+        direction: rtl;
+    }
+}
+
+
 .right_flex{
     align-items: flex-end;
 }

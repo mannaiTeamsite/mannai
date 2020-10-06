@@ -678,9 +678,10 @@ $(document).ready(function(){
    /*************************Date Range Calendar*****************************************/
 $(function () {
    $('input[name="daterange"]').daterangepicker({
-      opens: 'left'
+      opens: 'left',
+      format:'MM-YYYY',
    }, function (start, end, label) {
-      console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
+      console.log("A new date selection was made: " + start.format('MM-YYYY') + ' to ' + end.format('MM-YYYY'));
    });
 });
 /*************************Date Range Calendar*****************************************/

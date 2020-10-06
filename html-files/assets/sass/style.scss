@@ -317,7 +317,7 @@ input{
 	[type="radio"]:not(:checked),
 		[type="radio"]:checked {
 			position: absolute;
-			right: -9999px;
+			// right: -9999px;
 			left: auto;
 			opacity: 0;
 		}
@@ -366,6 +366,9 @@ input{
 				vertical-align: top;
 				border: none;
 				padding: 13px 0 13px 30px;
+				&:last-child{
+					text-align: center;
+				}
 			}
 		}
 		tbody{
@@ -383,6 +386,9 @@ input{
 					line-height: 1.57;
 					letter-spacing: 0.2px;
 					color: var(--purple-brown);
+				}
+				&:last-child{
+					text-align: center;
 				}
 			}
 			tr{
@@ -474,3 +480,5 @@ input{
 .lb-data .lb-details {
     display: none;
 }
+
+

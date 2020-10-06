@@ -245,7 +245,11 @@ body.loader_show .loader {
 .flex_row {
   display: flex;
   margin: 0 -10px;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  direction: ltr; }
+
+.ar .flex_row {
+  direction: rtl; }
 
 .right_flex {
   align-items: flex-end; }
@@ -534,7 +538,6 @@ input:focus {
 .ar [type="radio"]:not(:checked),
 .ar [type="radio"]:checked {
   position: absolute;
-  right: -9999px;
   left: auto;
   opacity: 0; }
 .ar [type="radio"]:not(:checked) + label:before, .ar [type="radio"]:not(:checked) + label:after {
@@ -569,6 +572,8 @@ input:focus {
       vertical-align: top;
       border: none;
       padding: 13px 0 13px 30px; }
+      .table_wrap table thead th:last-child {
+        text-align: center; }
   .table_wrap table tbody td {
     width: 15%;
     font-size: 13px;
@@ -583,6 +588,8 @@ input:focus {
       line-height: 1.57;
       letter-spacing: 0.2px;
       color: var(--purple-brown); }
+    .table_wrap table tbody td:last-child {
+      text-align: center; }
   .table_wrap table tbody tr:nth-of-type(odd) {
     background-color: var(--white-five); }
   .table_wrap table tbody .total_count {
