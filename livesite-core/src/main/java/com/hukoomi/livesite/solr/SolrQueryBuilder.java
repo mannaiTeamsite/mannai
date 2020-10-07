@@ -76,6 +76,10 @@ public class SolrQueryBuilder {
      * will define the group field to group
      * the results fetching from solr query url. */
     private String groupingField;
+    /** facetField String that
+     * will define the facet field to group
+     * the results fetching from solr query url. */
+    private String facetField;
 
     /** This method will be called from Component
      * External Java for solr query building.
@@ -130,6 +134,16 @@ public class SolrQueryBuilder {
             logger.error("Unable to decode groupingField="
                     + context.getParameterString("groupingField"), e);
         }
+
+        try {
+            this.facetField = URLDecoder.decode(context
+                    .getParameterString("facet", ""), UTF);
+            logger.debug("Solr Facet Fields: " + fieldQuery);
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Unable to decode facet Field="
+                    + context.getParameterString("facet"), e);
+        }
+
         String strRows = context.getParameterString("rows", "9");
         try {
             if (StringUtils.isNotBlank(strRows)) {
@@ -277,6 +291,14 @@ public class SolrQueryBuilder {
             sb.append("&group=true").append("&group.field="
                     + this.groupingField).append("&group.limit="
                     + Integer.toString(this.rows));
+        }
+
+        if (StringUtils.isNotBlank(this.facetField)) {
+            sb.append("&facet=true");
+            String[] values = this.facetField.split(",");
+            for (int i = 0; i < values.length; i++) {
+                sb.append("&facet.field=" + values[i]);
+            }
         }
 
         for (Map.Entry<String, String> entry : parameterMap.entrySet()) {
