@@ -307,6 +307,26 @@ body.loader_show .loader {
   .flex_col_xs_4 {
     width: 50%; } }
 /*----------------------------Font------------------------------*/
+@font-face {
+  font-family: "cairo_light";
+  src: url("../fonts/cairo-light-webfont.woff2") format("woff2"), url("../fonts/cairo-light-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: "cairo_regular";
+  src: url("../fonts/cairo-regular-webfont.woff2") format("woff2"), url("../fonts/cairo-regular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: "cairo_semibold";
+  src: url("../fonts/cairo-semibold-webfont.woff2") format("woff2"), url("../fonts/cairo-semibold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
+@font-face {
+  font-family: "cairo_bold";
+  src: url("../fonts/cairo-bold-webfont.woff2") format("woff2"), url("../fonts/cairo-bold-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal; }
 /*----------------------------Font Close------------------------------*/
 ::-webkit-scrollbar-track {
   -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);

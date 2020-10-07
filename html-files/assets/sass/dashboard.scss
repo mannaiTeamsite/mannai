@@ -70,8 +70,6 @@ display: none;
                 }
             .user_name{
                 h1{
-                    font-family: 'cairo_bold';
-                    font-weight: 700;
                     font-weight: 700;
                     font-size: 15px;
                     line-height: 1.25;
@@ -85,7 +83,6 @@ display: none;
                     overflow: hidden;
                 }
                 h2{
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 24px;
                     line-height: 1.25;
@@ -107,7 +104,6 @@ display: none;
                 flex-direction: column;
             }
             p{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 13px;
                 line-height: 1.92;
@@ -149,7 +145,6 @@ display: none;
                     align-items: center;
                     position: relative;
                     margin-bottom: 0;
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 14px;
                     font-weight: 600;
@@ -264,7 +259,6 @@ display: none;
                             li{
                                 margin-bottom: 0;
                                 a{
-                                    font-family: 'cairo_semibold';
                                     font-weight: 600;
                                     font-size: 14px;
                                     line-height: 2.86;
@@ -273,7 +267,6 @@ display: none;
                                     transition: 0.3s ease-in-out all;
                                     position: relative;
                                     &.active{
-                                        font-family: 'cairo_bold';
                                         font-weight: 700;
                                         color: var(--dark-orange);
                                         font-size: 15px;
@@ -407,7 +400,6 @@ display: none;
                     }
                     .nav_text{
                         opacity: 0.6;
-                        font-family: 'cairo_semibold';
                         font-size: 16px;
                         font-weight: 600;
                         line-height: normal;
@@ -522,8 +514,7 @@ display: none;
         
                     }
                 }
-                h3{
-                    font-family: 'cairo_bold';
+                h3{ 
                     font-weight: 700;
                     font-size: 20px;
                     line-height: 1.65;
@@ -547,7 +538,6 @@ display: none;
                         margin: 0 0 0 12px;
                     }
                     .link{
-                        font-family: 'cairo_bold';
                         font-weight: 700;
                         font-size: 16px;
                         line-height: 1.38;
@@ -583,7 +573,6 @@ display: none;
                     }
                 }
                 h3{
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 20px;
                     line-height: 1.65;
@@ -601,7 +590,6 @@ display: none;
                     color: var(--slate-grey);
                 }
                 .link{
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 16px;
                     line-height: 1.38;
@@ -618,7 +606,6 @@ display: none;
                 }
             .show_more{
                 &.link{
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 14px;
                     line-height: 1.57;
@@ -674,7 +661,6 @@ display: none;
             img{
                 margin: 0 10px 0 0;
             }
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             line-height: 1.56;
@@ -690,7 +676,6 @@ display: none;
                 margin: 0 12px 0 0;
             }
             h3{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 16px;
                 line-height: 1.56;
@@ -715,14 +700,12 @@ display: none;
                     margin-bottom: 0;
                 }
                 h4{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 14px;
                     line-height: 1.57;
                     letter-spacing: 0.2px;
                     color: var(--purple-brown);
                     span{
-                        font-family: 'cairo_semibold';
                         font-weight: 600;
                         font-size: 12px;
                         line-height: 1.83;
@@ -739,7 +722,6 @@ display: none;
                         position: absolute;
                         top: 0;
                         right: 0;
-                        font-family: 'cairo_semibold';
                         font-weight: 600;
                         font-size: 14px;
                         line-height: 1.8;
@@ -756,7 +738,6 @@ display: none;
             }
         }
         .total_votes{
-            font-family: 'cairo_semibold';
             font-weight: 600;
             font-size: 15px;
             line-height: 1.83;
@@ -780,7 +761,6 @@ display: none;
             .arrow_link_red{
                 display: flex;
                 align-items: center;
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
@@ -794,7 +774,6 @@ display: none;
                 }
             }
             .dark_link{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;
@@ -827,7 +806,6 @@ display: none;
             .data_item{
                 h4{
                     text-align: left;
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 18px;
                     line-height: 1.22;
@@ -843,7 +821,6 @@ display: none;
                 border-radius: 13px;
                 background-color: var(--white-five);
                 border: 1px solid transparent;
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
@@ -858,7 +835,6 @@ display: none;
             }
         }
         .card_heading{
-            font-family: 'cairo_bold';
             font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
@@ -956,7 +932,6 @@ display: none;
         }
         .nav-item{
             .nav-link{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 16px;
                 font-stretch: normal;
@@ -1038,7 +1013,6 @@ display: none;
         }
         .inp_radio{
             margin-bottom: 0;
-            font-family: 'cairo_semibold';
             font-weight: 600;
             font-size: 14px;
             line-height: 1.57;
@@ -1085,7 +1059,6 @@ display: none;
     .btn_rouge{
         border-radius: 13px;
     background-color: var(--rouge);
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
@@ -1112,7 +1085,6 @@ display: none;
             margin-bottom: 0;
         }
         h3{
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 14px;
             line-height: 1.43;
@@ -1120,7 +1092,6 @@ display: none;
             color: var(--purple-brown);
         }
         p{
-            font-family: 'cairo_semibold';
             font-weight: 600;
             font-size: 13px;
             line-height: 1.54;
@@ -1132,7 +1103,6 @@ display: none;
                 background-color: var(--dark-orange) !important;  
             }
             &.link_orange{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
@@ -1160,7 +1130,6 @@ display: none;
             padding: 14px;
             margin-bottom: 23px;
             h3{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.43;
@@ -1172,7 +1141,6 @@ display: none;
         }
         .directory_info{
             .para_ocean{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
@@ -1181,7 +1149,6 @@ display: none;
                 margin-bottom: 0;
             }
             .para_light{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;
@@ -1228,7 +1195,6 @@ display: none;
         .select_bill{
             .chech_lbl{
                 text-align: left;
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 18px;
             line-height: 1.22;
@@ -1244,7 +1210,6 @@ display: none;
             }
         }
         h4{
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 14px;
             line-height: 1.57;
@@ -1253,7 +1218,6 @@ display: none;
             margin-bottom: 5px !important;
         }
         p{
-            font-family: 'cairo_semibold';
             font-weight: 600;
             font-size: 12px;
             line-height: 1.83;
@@ -1272,7 +1236,6 @@ display: none;
         }
         .link{
             margin: 0 !important;
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 14px;
             line-height: 1.57;
@@ -1281,7 +1244,6 @@ display: none;
             color: var(--rouge);
             cursor: pointer;
             &.link_light{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 12px;
                 line-height: 2;
@@ -1352,7 +1314,6 @@ display: none;
         display: none;
     }
     label{
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px;
         line-height: 1.43;
@@ -1378,7 +1339,6 @@ display: none;
         .subscribe_btn{
             border-style: none;
             background-color: var(--white);
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 14px;
             line-height: 1.57;
@@ -1477,7 +1437,6 @@ display: none;
             flex: 1;
             margin: 0 17px;
             p{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 14px;
                 line-height: 1.43;
@@ -1491,7 +1450,6 @@ display: none;
             width: 76px;
             min-width: 35px;
             .link{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.43;
@@ -1653,7 +1611,6 @@ display: none;
                     border-radius: 0 0 12px 12px;
                 }
                 a{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 16px;
                     line-height: 1.38;
@@ -1671,7 +1628,6 @@ display: none;
                     height: 22px;
                     border-radius: 7px;
                     background-color: var(--rouge-two);
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 12px;
                     line-height: 1.67;
@@ -1718,7 +1674,7 @@ display: none;
         background-color: var(--white);
         border-bottom: 0px solid rgba(0,0,0,.125);
         h3{
-            font-family: "cairo_bold";
+            font-weight: 700;
             font-size: 20px;
             line-height: 1.2;
             letter-spacing: 0.29px;
@@ -1731,7 +1687,6 @@ display: none;
     .card-body{
         padding: 32px;
             .legend {
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 16px;
                 line-height: 1.5;
@@ -1814,7 +1769,6 @@ display: none;
             border-right: 1px solid #dadada;
             text-align: left;
             h3{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 16px;
                 line-height: 1.38;
@@ -1822,7 +1776,6 @@ display: none;
                 color: var(--purple-brown);
             }
             p{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 12px;
                 line-height: 1.83;
@@ -1835,7 +1788,6 @@ display: none;
                     margin-top: 3px;
                 }
                 .link{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 13px;
                     line-height: normal;
@@ -1847,7 +1799,6 @@ display: none;
             .pay_bill_now{
                 border-radius: 13px;
                 background-color: var(--rouge);
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;

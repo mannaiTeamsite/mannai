@@ -169,10 +169,27 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
 
   function uncheckAll(e){
     $(e).parents('.dropdown-menu').find('.check_input').prop('checked', false);
+    $(e).parents('.dropdown-menu').find('.radio_input').prop('checked', false);
     $(e).parents('.filter_col').find('input[type=text]').val('');
 
     var toRemoveAry = [];
     var chk = $(e).parents('.dropdown-menu').find('.check_input');
+    for(i = 0; i<chk.length; i++){
+        toRemoveAry.push(chk[i].value)
+    }
+    applied_filters_arr = applied_filters_arr.filter(function(el){
+        return toRemoveAry.indexOf(el) < 0;
+    });
+    console.log(applied_filters_arr);
+    applied_filters()
+  };
+
+  function uncheckAllRadio(e){
+    $(e).parents('.dropdown-menu').find('.radio_input').prop('checked', false);
+    $(e).parents('.filter_col').find('input[type=text]').val('');
+
+    var toRemoveAry = [];
+    var chk = $(e).parents('.dropdown-menu').find('.radio_input');
     for(i = 0; i<chk.length; i++){
         toRemoveAry.push(chk[i].value)
     }

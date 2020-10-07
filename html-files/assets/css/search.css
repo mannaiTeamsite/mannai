@@ -115,7 +115,6 @@ p, h1, h2, h3, h4, h5 {
         cursor: pointer;
         margin: 0 64px 0 32px; }
         .search_input .input_wrap .adv_search_wrapper .adv_search .text {
-          font-family: 'cairo_semibold';
           font-weight: 600;
           font-size: 13px;
           font-weight: 600;
@@ -175,7 +174,6 @@ p, h1, h2, h3, h4, h5 {
   .search_input .search_btn button {
     border-radius: 12px;
     background-color: var(--rouge);
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 16px;
     letter-spacing: 0.18px;
@@ -197,7 +195,6 @@ p, h1, h2, h3, h4, h5 {
       .search_input .search_btn button {
         padding: 1px 10px;
         border-radius: 7px;
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px;
         justify-content: baseline; }
@@ -242,7 +239,6 @@ p, h1, h2, h3, h4, h5 {
         .search_input .search_result ul li:last-child {
           border-bottom: 0; }
         .search_input .search_result ul li h2 {
-          font-family: 'cairo_bold';
           font-weight: 700;
           font-size: 16px;
           line-height: 1.5;
@@ -276,7 +272,6 @@ p, h1, h2, h3, h4, h5 {
         top: 96px;
         padding: 15px; } }
     .search_input .advance_search_wrap .adv_heading {
-      font-family: 'cairo_bold';
       font-weight: 700;
       font-size: 16px;
       line-height: 1.5;
@@ -284,7 +279,6 @@ p, h1, h2, h3, h4, h5 {
       color: var(--greyish-brown-three);
       margin-bottom: 20px !important; }
       .search_input .advance_search_wrap .adv_heading > a {
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 13px;
         line-height: 1.85;
@@ -309,7 +303,6 @@ p, h1, h2, h3, h4, h5 {
             color: var(--purple-brown);
             margin-bottom: 7px; }
             .search_input .advance_search_wrap .advance_search .search_info ul li h3.info_title {
-              font-family: 'cairo_bold';
               font-weight: 700;
               font-size: 15px;
               font-style: normal;
@@ -351,7 +344,6 @@ p, h1, h2, h3, h4, h5 {
           .search_input .advance_search_wrap .advance_search .search_form .form_row .title {
             margin-bottom: 14px; }
             .search_input .advance_search_wrap .advance_search .search_form .form_row .title h3 {
-              font-family: 'cairo_bold';
               font-weight: 700;
               font-size: 16px;
               line-height: 1.38;
@@ -474,7 +466,6 @@ p, h1, h2, h3, h4, h5 {
       .ar .search_input .search_btn button {
         padding: 0px 10px;
         border-radius: 9px;
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px; } }
   .ar .search_input .search_result ul li {
@@ -566,7 +557,6 @@ p, h1, h2, h3, h4, h5 {
       .link_cards .supporting_links .links_card h1, .link_cards .supporting_links .links_card h2, .link_cards .supporting_links .links_card h3 {
         display: flex;
         align-items: center;
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 16px;
         line-height: 1.38;
@@ -580,7 +570,6 @@ p, h1, h2, h3, h4, h5 {
         .link_cards .supporting_links .links_card ul li {
           margin-bottom: 10px; }
           .link_cards .supporting_links .links_card ul li a {
-            font-family: 'cairo_semibold';
             font-weight: 600;
             font-size: 14px;
             line-height: 1.57;
@@ -644,7 +633,6 @@ p, h1, h2, h3, h4, h5 {
     display: flex;
     align-items: center;
     position: relative;
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 16px;
     line-height: normal;
@@ -676,7 +664,6 @@ p, h1, h2, h3, h4, h5 {
       border: solid 1px var(--silver-three);
       background-color: var(--white);
       padding: 10px 15px;
-      font-family: 'cairo_semibold';
       font-weight: 600;
       font-size: 14px;
       line-height: 1.57;
@@ -714,7 +701,6 @@ p, h1, h2, h3, h4, h5 {
         .search_filter .search_accordion .search_accordion_container ul li .dropdown-menu .dropdown-item {
           display: flex;
           align-items: center;
-          font-family: 'cairo_semibold';
           font-weight: 600;
           font-size: 13px;
           line-height: 1.54;
@@ -797,7 +783,6 @@ p, h1, h2, h3, h4, h5 {
   display: flex;
   align-items: center;
   cursor: pointer;
-  font-family: 'cairo_semibold';
   font-weight: 600;
   font-size: 14px;
   line-height: 1.27;
@@ -836,7 +821,6 @@ p, h1, h2, h3, h4, h5 {
       cursor: pointer;
       transition: 0.3s ease-in-out all; }
       .search_pagination ul li a {
-        font-family: 'cairo_bold';
         font-size: 16px;
         font-weight: 700;
         color: var(--rouge); }

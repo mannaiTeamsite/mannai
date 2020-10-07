@@ -82,7 +82,6 @@
   .serv_tabs .nav-tabs .nav-item {
     position: relative; }
     .serv_tabs .nav-tabs .nav-item .nav-link {
-      font-family: 'cairo_semibold';
       font-size: 16px;
       font-weight: 600;
       font-stretch: normal;
@@ -160,7 +159,6 @@
       background-color: var(--white);
       width: 100%;
       border: 1px solid transparent;
-      font-family: 'cairo_semibold';
       font-weight: 600;
       font-size: 14px;
       line-height: 1.57;
@@ -175,7 +173,6 @@
       width: 100%;
       left: 1px;
       top: 3px;
-      font-family: 'cairo_semibold';
       font-weight: 600;
       font-size: 14px;
       line-height: 1.57;
@@ -252,7 +249,6 @@
         margin-bottom: 0; }
 
 .chech_lbl {
-  font-family: 'cairo_semibold';
   font-weight: 600;
   font-size: 18px;
   line-height: 1.33;
@@ -295,7 +291,6 @@
       right: 0; }
 
 .radio_lbl {
-  font-family: 'cairo_semibold';
   font-weight: 600;
   font-size: 18px;
   line-height: 1.33;
@@ -394,7 +389,6 @@
     align-items: center;
     position: relative; }
     .bottom_understand .understand p {
-      font-family: 'cairo_semibold';
       font-size: 14px;
       font-weight: 600;
       letter-spacing: normal;
@@ -475,7 +469,6 @@
           width: auto; } }
       .explore_result_wrap .explore_result_inner .result_tab_header .back_btn .back {
         cursor: pointer;
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px;
         line-height: 1.57;
@@ -523,7 +516,6 @@
             min-width: auto; } }
         .explore_result_wrap .explore_result_inner .result_tab_header .nav-tabs .nav-item .nav-link {
           text-align: center;
-          font-family: 'cairo_semibold';
           font-size: 14px;
           font-weight: 600;
           font-stretch: normal;
@@ -693,7 +685,6 @@
     .filter_col .sel_filter input[type='text'] {
       width: 90%;
       outline: none;
-      font-family: 'cairo_semibold';
       font-weight: 600;
       font-size: 13px;
       line-height: 1.54;
@@ -842,7 +833,7 @@
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 14px;
           line-height: 1.57;
           letter-spacing: 0.2px;
@@ -909,7 +900,6 @@
   padding: 0 26px;
   min-height: 35px; }
   .applied_filters h4 {
-    font-family: 'cairo_semibold';
     font-weight: 600;
     font-size: 16px;
     line-height: 1.5;
@@ -997,7 +987,6 @@ legend {
       flex: 1;
       margin: 0 17px; }
       .hku_alert .remove_favourite .sucess_text p {
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px;
         line-height: 1.43;
@@ -1130,7 +1119,6 @@ legend {
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.23);
   background-color: var(--white);
   text-align: center;
-  font-family: 'cairo_semibold';
   font-weight: 600;
   font-size: 10px;
   line-height: 1.5;

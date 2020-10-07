@@ -6,6 +6,7 @@
 @import'effect.scss';
 
 @import'about-us.scss';
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
 *:focus{
   border: 0.5px dotted #000;  
@@ -11353,7 +11354,7 @@ color: var(--deep-orange);
     .heading {
         padding-bottom: 20px;
 
-        h2 {
+        h1 {
           font-size: 28px;
           font-weight: 700;
             color: var(--black);
@@ -11439,7 +11440,7 @@ color: var(--deep-orange);
             padding-bottom: 30px;
         }
 
-        h2 {
+        h1 {
             font-size: 28px;
             font-weight: 700;
             color: var(--black-two);
@@ -11535,7 +11536,7 @@ color: var(--deep-orange);
     }
 
     .heading {
-        h2 {
+        h1 {
             font-weight: 700;
             color: var(--blaack);
             margin-bottom: 30px;
@@ -13000,6 +13001,11 @@ color: var(--deep-orange);
         justify-content: space-between;
         align-items: center;
         margin: 25px 0 0;
+        position: absolute;
+        width: 100%;
+        left: 0;
+        bottom: 30px;
+        padding: 0 25px;
         .total_count{
             font-weight: 600;
             font-size: 16px;
@@ -13119,6 +13125,8 @@ color: var(--deep-orange);
             font-size: 20px;
             line-height: 1.5;
             margin: 0 0 15px;
+            overflow: initial;
+            white-space: initial;
         }
         .commn_para{
             margin-bottom: 20px;
@@ -13128,6 +13136,9 @@ color: var(--deep-orange);
         }
         .rouge_btn{
             padding: 10px 24px;
+            position: absolute;
+            right: 24px;
+            bottom: 46px;
         }
     }
 }
@@ -14777,6 +14788,7 @@ color: var(--deep-orange);
             color: var(--purple-brown);
             margin-bottom: 20px;
             padding: 0 20px;
+            display: block;
         }
         .modal-body {
             padding: 10px 0 0;
@@ -14863,7 +14875,7 @@ color: var(--deep-orange);
                 background: url('../images/ic-reach-us-email-us.png') center no-repeat;
             }
         }
-        h3{
+        .title{
             font-weight: 700;
             font-size: 16px;
             line-height: 1.5;

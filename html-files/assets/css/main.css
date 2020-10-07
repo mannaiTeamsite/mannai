@@ -1,4 +1,5 @@
 /* 1. Reset***************************************************************/
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap");
 * {
   border: 0 none;
   outline: 0;
@@ -9826,7 +9827,7 @@ h3 {
       padding: 30px 0; } }
   .accessibility .heading {
     padding-bottom: 20px; }
-    .accessibility .heading h2 {
+    .accessibility .heading h1 {
       font-size: 28px;
       font-weight: 700;
       color: var(--black);
@@ -9880,7 +9881,7 @@ h3 {
     @media (max-width: 992px) {
       .sitemap .heading {
         padding-bottom: 30px; } }
-    .sitemap .heading h2 {
+    .sitemap .heading h1 {
       font-size: 28px;
       font-weight: 700;
       color: var(--black-two);
@@ -9941,13 +9942,13 @@ h3 {
   @media (max-width: 992px) {
     .privacy-policy {
       padding: 30px 0; } }
-  .privacy-policy .heading h2 {
+  .privacy-policy .heading h1 {
     font-weight: 700;
     color: var(--blaack);
     margin-bottom: 30px;
     font-size: 22px; }
     @media (max-width: 992px) {
-      .privacy-policy .heading h2 {
+      .privacy-policy .heading h1 {
         margin-bottom: 15px; } }
   .privacy-policy p {
     font-size: 16px;
@@ -10929,7 +10930,12 @@ h3 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 25px 0 0; }
+  margin: 25px 0 0;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 30px;
+  padding: 0 25px; }
   .category_polls_card .vote_wrap .total_count {
     font-weight: 600;
     font-size: 16px;
@@ -11003,14 +11009,19 @@ h3 {
   .category_surveys_card .list_card .card_title {
     font-size: 20px;
     line-height: 1.5;
-    margin: 0 0 15px; }
+    margin: 0 0 15px;
+    overflow: initial;
+    white-space: initial; }
   .category_surveys_card .list_card .commn_para {
     margin-bottom: 20px;
     line-height: 1.38;
     letter-spacing: 0.23px;
     color: var(--slate-grey); }
   .category_surveys_card .list_card .rouge_btn {
-    padding: 10px 24px; }
+    padding: 10px 24px;
+    position: absolute;
+    right: 24px;
+    bottom: 46px; }
 
 .survey_form .custom_container {
   max-width: 800px; }
@@ -12153,7 +12164,8 @@ h3 {
     font-size: 20px;
     color: var(--purple-brown);
     margin-bottom: 20px;
-    padding: 0 20px; }
+    padding: 0 20px;
+    display: block; }
   #reach-out-modal .reachout_modal .modal-body {
     padding: 10px 0 0; }
   #reach-out-modal .reachout_modal .close_btn img {
@@ -12218,7 +12230,7 @@ h3 {
     background: url("../images/ic-reach-us-visit-us.png") center no-repeat; }
   #reach-out-modal .reachout_details.email::before {
     background: url("../images/ic-reach-us-email-us.png") center no-repeat; }
-  #reach-out-modal .reachout_details h3 {
+  #reach-out-modal .reachout_details .title {
     font-weight: 700;
     font-size: 16px;
     line-height: 1.5;

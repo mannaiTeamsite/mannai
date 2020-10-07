@@ -84,7 +84,7 @@ fieldset legend {
         flex-direction: column;
         align-items: flex-start; } }
     .card-wrapper .sub-header h1 {
-      font-family: "cairo_bold";
+      font-weight: 700;
       font-size: 24px;
       line-height: 1.17;
       letter-spacing: 0.34px;
@@ -94,7 +94,7 @@ fieldset legend {
       margin-bottom: 0; }
       .card-wrapper .sub-header h1 .user-name {
         position: relative;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         font-size: 18px;
         line-height: 1.56;
         letter-spacing: 0.26px;
@@ -124,7 +124,7 @@ fieldset legend {
         .card-wrapper .sub-header .switch_profile {
           margin-top: 15px; } }
       .card-wrapper .sub-header .switch_profile p {
-        font-family: "cairo_semibold";
+        font-weight: 600;
         font-size: 13px;
         line-height: 1.92;
         letter-spacing: 0.19px;
@@ -170,7 +170,7 @@ fieldset legend {
           justify-content: center;
           position: relative;
           margin-bottom: 0;
-          font-family: "cairo_semibold";
+          font-weight: 600;
           font-size: 14px;
           line-height: 1.57;
           letter-spacing: 0.2px;
@@ -288,7 +288,7 @@ fieldset legend {
             padding-bottom: 12px;
             margin-bottom: 10px; } }
         .card-wrapper .navtabsbar .tab-card .left-side .heading h2 {
-          font-family: "cairo_bold";
+          font-weight: 700;
           font-size: 14px;
           line-height: 1.57;
           letter-spacing: 0.2px;
@@ -301,7 +301,7 @@ fieldset legend {
             .card-wrapper .navtabsbar .tab-card .left-side .navbar li {
               margin-bottom: 15px; } }
           .card-wrapper .navtabsbar .tab-card .left-side .navbar li a {
-            font-family: "cairo_semibold";
+            font-weight: 600;
             font-size: 14px;
             line-height: 22px;
             letter-spacing: 0.2px;
@@ -309,9 +309,9 @@ fieldset legend {
             transition: all 0.3s ease-in; }
             .card-wrapper .navtabsbar .tab-card .left-side .navbar li a:hover {
               color: #cd4a04;
-              font-family: "cairo_bold"; }
+              font-weight: 700; }
           .card-wrapper .navtabsbar .tab-card .left-side .navbar li.active a {
-            font-family: "cairo_bold";
+            font-weight: 700;
             color: #cd4a04; }
     .card-wrapper .navtabsbar .tab-card .right-side {
       max-width: 845px;
@@ -344,7 +344,7 @@ fieldset legend {
           border: none;
           background: #ffffff; }
           .card-wrapper .navtabsbar .tab-card .right-side .card-header h3 {
-            font-family: "cairo_bold";
+            font-weight: 700;
             font-size: 20px;
             line-height: 1.2;
             letter-spacing: 0.29px;
@@ -365,7 +365,7 @@ fieldset legend {
               .card-wrapper .navtabsbar .tab-card .right-side .card-body fieldset .form-group {
                 margin-bottom: 20px; } }
             .card-wrapper .navtabsbar .tab-card .right-side .card-body fieldset .form-group label {
-              font-family: "cairo_semibold";
+              font-weight: 600;
               font-size: 13px;
               line-height: 0.92;
               letter-spacing: 0.19px;
@@ -375,7 +375,7 @@ fieldset legend {
               border: solid 1px #c9cacd;
               background-color: #fafafa;
               padding: 10px 16px;
-              font-family: "cairo_semibold";
+              font-weight: 600;
               font-size: 14px;
               line-height: 1.71;
               letter-spacing: 0.2px;
@@ -398,14 +398,14 @@ fieldset legend {
                 padding: 12px 15px;
                 margin: 10px 0 20px; } }
             .card-wrapper .navtabsbar .tab-card .right-side .card-body .card-expired p {
-              font-family: "cairo_semibold";
+              font-weight: 600;
               font-size: 13px;
               line-height: 1.54;
               color: #6a6a6b;
               color: #6a6a6b;
               margin-bottom: 0; }
             .card-wrapper .navtabsbar .tab-card .right-side .card-body .card-expired .renew {
-              font-family: "cairo_bold";
+              font-weight: 700;
               font-size: 14px;
               line-height: 1.57;
               letter-spacing: 0.2px;
@@ -425,7 +425,7 @@ fieldset legend {
               .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .profile-navtabs {
                 margin: 0 -15px 20px; } }
             .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .profile-navtabs li a {
-              font-family: "cairo_semibold";
+              font-weight: 600;
               font-size: 14px;
               line-height: 24px;
               letter-spacing: 0.2px;
@@ -471,7 +471,7 @@ fieldset legend {
               position: relative;
               cursor: pointer; }
               .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .profile-img .upload-button label {
-                font-family: "cairo_bold";
+                font-weight: 700;
                 font-size: 13px;
                 line-height: 18px;
                 letter-spacing: 0.19px;
@@ -500,7 +500,7 @@ fieldset legend {
               margin: 0 -15px 20px -21px;
               padding: 0 21px; }
               .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .related-services .title h4 {
-                font-family: "cairo_bold";
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.43;
                 color: #1c1517;
@@ -508,7 +508,7 @@ fieldset legend {
             .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .related-services .services ul li {
               margin-bottom: 10px; }
               .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .related-services .services ul li a {
-                font-family: "cairo_semibold";
+                font-weight: 600;
                 font-size: 13px;
                 line-height: 20px;
                 color: #6a6a6b;
@@ -528,13 +528,13 @@ fieldset legend {
                   transition: all .3s ease-in-out; }
                 .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .related-services .services ul li a:hover {
                   color: #cd4a04;
-                  font-family: "cairo_bold"; }
+                  font-weight: 700; }
                   .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .related-services .services ul li a:hover::after {
                     width: 100%;
                     background-color: #cd4a04; }
               .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .related-services .services ul li.active a {
                 color: #cd4a04;
-                font-family: "cairo_bold"; }
+                font-weight: 700; }
                 .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .related-services .services ul li.active a::after {
                   width: 100%;
                   background-color: #cd4a04; }
@@ -548,7 +548,7 @@ fieldset legend {
             .card-wrapper .navtabsbar .tab-card .right-side .card-body .inner-navtabs .my-profile .footer-btn .btn {
               min-width: 103px;
               border-radius: 13px;
-              font-family: "cairo_bold";
+              font-weight: 700;
               font-size: 14px;
               line-height: 1.57;
               letter-spacing: 0.2px;
@@ -591,7 +591,7 @@ fieldset legend {
                   .card-wrapper .navtabsbar .tab-card .right-side.favorite .card-body .accordion .card-panel .card-header .sub-header {
                     padding: 0; } }
                 .card-wrapper .navtabsbar .tab-card .right-side.favorite .card-body .accordion .card-panel .card-header .sub-header h4 {
-                  font-family: "cairo_bold";
+                  font-weight: 700;
                   font-size: 16px;
                   line-height: 1.5;
                   color: #6e6259;
@@ -663,7 +663,7 @@ fieldset legend {
                   opacity: 0;
                   visibility: hidden; }
                 .card-wrapper .navtabsbar .tab-card .right-side.favorite .card-body .accordion .card-panel .card-box-container .card-box h4 {
-                  font-family: "cairo_bold";
+                  font-weight: 700;
                   font-size: 14px;
                   line-height: 1.57;
                   letter-spacing: 0.2px;
@@ -671,7 +671,7 @@ fieldset legend {
                   letter-spacing: 0.2px;
                   margin-bottom: 5px; }
                 .card-wrapper .navtabsbar .tab-card .right-side.favorite .card-body .accordion .card-panel .card-box-container .card-box .link {
-                  font-family: "cairo_bold";
+                  font-weight: 700;
                   font-size: 12px;
                   line-height: 20px;
                   letter-spacing: 0.17px;
@@ -695,7 +695,7 @@ fieldset legend {
         flex: 0 0 100%;
         max-width: 100%; } }
     .card-wrapper .navtabsbar .tab-card .card-services .card-services-navbar .title h5 {
-      font-family: "cairo_bold";
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.79;
       letter-spacing: 0.2px;
@@ -703,7 +703,7 @@ fieldset legend {
     .card-wrapper .navtabsbar .tab-card .card-services .card-services-navbar ul li {
       margin-bottom: 15px; }
       .card-wrapper .navtabsbar .tab-card .card-services .card-services-navbar ul li a {
-        font-family: "cairo_semibold";
+        font-weight: 600;
         font-size: 13px;
         line-height: 22px;
         letter-spacing: 0.19px;
@@ -817,7 +817,7 @@ fieldset legend {
           opacity: 0.6; }
         .dashboard_left_nav nav ul li a .nav_text {
           opacity: 0.6;
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 16px;
           font-weight: 600;
           line-height: normal;
@@ -902,7 +902,6 @@ fieldset legend {
       flex: 1;
       margin: 0 17px; }
       .hku_alert .remove_favourite .sucess_text p {
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px;
         line-height: 1.43;
@@ -914,7 +913,6 @@ fieldset legend {
       width: 76px;
       min-width: 35px; }
       .hku_alert .remove_favourite .undo_button .link {
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 14px;
         line-height: 1.43;

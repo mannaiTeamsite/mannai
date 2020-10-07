@@ -126,7 +126,6 @@ p, h1, h2, h3, h4, h5{
                 margin: 0 64px 0 32px;
               
                 .text{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 13px;
                     font-weight: 600;
@@ -201,7 +200,6 @@ p, h1, h2, h3, h4, h5{
         button{
             border-radius: 12px;
             background-color: var(--rouge);
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             letter-spacing: 0.18px;
@@ -223,7 +221,6 @@ p, h1, h2, h3, h4, h5{
             @media screen and (max-width: 540px){
                 padding: 1px 10px;
                 border-radius: 7px;
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 14px;
                 justify-content: baseline;
@@ -278,7 +275,6 @@ p, h1, h2, h3, h4, h5{
                         border-bottom: 0;
                     }
                 h2{
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 16px;
                     line-height: 1.5;
@@ -318,7 +314,6 @@ p, h1, h2, h3, h4, h5{
             padding: 15px;
         }
         .adv_heading{
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             line-height: 1.5;
@@ -326,7 +321,6 @@ p, h1, h2, h3, h4, h5{
             color: var(--greyish-brown-three);
             margin-bottom: 20px !important;
             >a{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 13px;
                 line-height: 1.85;
@@ -354,7 +348,6 @@ p, h1, h2, h3, h4, h5{
                             color: var(--purple-brown); 
                             margin-bottom: 7px;
                             &.info_title{
-                                font-family: 'cairo_bold';
                                 font-weight: 700;
                                 font-size: 15px;
                                 font-style: normal;
@@ -405,7 +398,6 @@ p, h1, h2, h3, h4, h5{
                     .title{
                         margin-bottom: 14px;
                         h3{
-                            font-family: 'cairo_bold';
                             font-weight: 700;
                             font-size: 16px;
                             line-height: 1.38;
@@ -559,7 +551,6 @@ p, h1, h2, h3, h4, h5{
                 @media screen and (max-width: 540px){
                     padding: 0px 10px;
                     border-radius: 9px;
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 14px;
                 }
@@ -693,7 +684,6 @@ p, h1, h2, h3, h4, h5{
             h1, h2, h3{
                 display: flex;
                 align-items: center;
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 16px;
                 line-height: 1.38;
@@ -708,7 +698,6 @@ p, h1, h2, h3, h4, h5{
                 margin-bottom: 0 !important;
                 li{
                    a{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 14px;
                     line-height: 1.57;
@@ -800,7 +789,6 @@ p, h1, h2, h3, h4, h5{
                 display: flex;
             align-items: center;
             position: relative;
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             line-height: normal;
@@ -841,7 +829,6 @@ p, h1, h2, h3, h4, h5{
                         border: solid 1px var(--silver-three);
                         background-color: var(--white);
                         padding: 10px 15px;
-                        font-family: 'cairo_semibold';
                         font-weight: 600;
                         font-size: 14px;
                         line-height: 1.57;
@@ -884,7 +871,6 @@ p, h1, h2, h3, h4, h5{
                         .dropdown-item{
                             display: flex;
                             align-items: center;
-                            font-family: 'cairo_semibold';
                             font-weight: 600;
                             font-size: 13px;
                             line-height: 1.54;
@@ -1017,7 +1003,6 @@ p, h1, h2, h3, h4, h5{
         display: flex;
         align-items: center;
         cursor: pointer;
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px;
         line-height: 1.27;
@@ -1071,7 +1056,6 @@ p, h1, h2, h3, h4, h5{
             margin: 0 5px;
             cursor: pointer;
             a{
-                font-family: 'cairo_bold';
                 font-size: 16px;
                 font-weight: 700;
                 color: var(--rouge);

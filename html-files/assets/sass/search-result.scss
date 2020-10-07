@@ -95,8 +95,6 @@ p, h1, h2, h3, h4, h5{
         }
         .search{
             flex: 1;
-            font-family: 'cairo_semibold';
-            font-weight: 600;
             font-size: 18px;
             line-height: 1.22;
             letter-spacing: 0.26px;
@@ -153,7 +151,6 @@ p, h1, h2, h3, h4, h5{
                 margin: 0 64px 0 0;
               
                 .text{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 13px;
                     line-height: 1.29;
@@ -227,7 +224,6 @@ p, h1, h2, h3, h4, h5{
         button{
             border-radius: 12px;
             background-color: var(--rouge);
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             letter-spacing: 0.18px;
@@ -249,7 +245,6 @@ p, h1, h2, h3, h4, h5{
             @media screen and (max-width: 540px){
                 padding: 1px 10px;
                 border-radius: 7px;
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 14px;
                 justify-content: baseline;
@@ -303,7 +298,6 @@ p, h1, h2, h3, h4, h5{
                         border-bottom: 0;
                     }
                 h2{
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 16px;
                     line-height: 1.5;
@@ -342,7 +336,6 @@ p, h1, h2, h3, h4, h5{
             padding: 15px;
         }
         .adv_heading{
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             line-height: 1.5;
@@ -350,7 +343,6 @@ p, h1, h2, h3, h4, h5{
             color: var(--greyish-brown-three);
             margin-bottom: 20px !important;
             >a{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 13px;
                 line-height: 1.85;
@@ -378,7 +370,6 @@ p, h1, h2, h3, h4, h5{
                             color: var(--purple-brown); 
                             margin-bottom: 7px;
                             &.info_title{
-                                font-family: 'cairo_bold';
                                 font-weight: 700;
                                 font-size: 15px;
                                 font-style: normal;
@@ -429,7 +420,6 @@ p, h1, h2, h3, h4, h5{
                     .title{
                         margin-bottom: 14px;
                         h3{
-                            font-family: 'cairo_bold';
                             font-weight: 700;
                             font-size: 16px;
                             line-height: 1.38;
@@ -589,7 +579,7 @@ p, h1, h2, h3, h4, h5{
        
         .search_btn{  //search button
             @media screen  and (max-width: 768px){
-                margin-left: 20px;
+                margin-left: 0;
             }
             @media screen  and (max-width: 540px){
                 margin-left: 10px;
@@ -604,7 +594,6 @@ p, h1, h2, h3, h4, h5{
                 @media screen and (max-width: 540px){
                     padding: 0px 10px;
                     border-radius: 9px;
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 14px;
                 }
@@ -725,7 +714,6 @@ p, h1, h2, h3, h4, h5{
         }
     }
     .title{
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 14px;
         margin-bottom: 23px !important;
@@ -743,7 +731,6 @@ p, h1, h2, h3, h4, h5{
             display: flex;
             align-items: center;
             text-decoration: none;
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             line-height: 1.69;
@@ -870,7 +857,6 @@ p, h1, h2, h3, h4, h5{
         display: flex;
         align-items: center;
         cursor: pointer;
-        font-family: 'cairo_semibold';
         font-weight: 600;
         font-size: 14px;
         line-height: 1.27;
@@ -959,7 +945,6 @@ p, h1, h2, h3, h4, h5{
                     padding: 30px 0 0 0;
                 }
                 h3{
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 20px;
                     line-height: 1.5;
@@ -967,13 +952,11 @@ p, h1, h2, h3, h4, h5{
                     color: var(--purple-brown);
                     margin-bottom: 12px !important;
                     @media screen and (max-width: 600px){
-                        font-family: 'cairo_semibold';
                         font-weight: 600;
                         font-size: 16px;
                     }
                 }
                 p{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 14px;
                     line-height: 1.57;
@@ -1064,7 +1047,6 @@ p, h1, h2, h3, h4, h5{
         // }
         .nav-item{
             .nav-link{
-                font-family: 'cairo_semibold';
                 font-weight: 600;
                 font-size: 16px;
                 font-stretch: normal;
@@ -1073,7 +1055,8 @@ p, h1, h2, h3, h4, h5{
                 letter-spacing: 0.23px;
                 color: var(--purple-brown);
                 border: 0;
-                padding: 1.266rem 1rem;
+                padding: 1.166rem 0.3rem;
+                text-align: center;
                 border-bottom: 4px solid transparent;
                 white-space: nowrap;
                 @media screen and (max-width: 1024px){
@@ -1133,7 +1116,6 @@ p, h1, h2, h3, h4, h5{
                     padding: 14px 24px 14px 14px
                 }
                 h3{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 22px;
                     line-height: 1.09;
@@ -1145,7 +1127,6 @@ p, h1, h2, h3, h4, h5{
                     }
                 }
                 p{
-                    font-family: 'cairo_semibold';
                     font-weight: 600;
                     font-size: 16px;
                     line-height: 1.5;
@@ -1192,7 +1173,6 @@ p, h1, h2, h3, h4, h5{
                     .dropdown-item{
                         display: flex;
                         align-items: center;
-                        font-family: 'cairo_semibold';
                         font-weight: 600;
                         font-size: 13px;
                         line-height: 1.54;
@@ -1335,5 +1315,85 @@ p, h1, h2, h3, h4, h5{
     right: -24px;
     img{
         width: 25px;
+    }
+}
+
+.search_pagination{
+    text-align: right;
+    margin-top: 30px;
+    @media screen and (max-width: 600px){
+        text-align: center;
+    }
+    ul{
+        margin: 0 -5px;
+        li{
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background-color: var(--white);
+            border: 1px solid #e9e9e9;
+            display: inline-block;
+            vertical-align: middle;
+            text-align: center;
+            line-height: 2.2;
+            margin: 0 5px;
+            cursor: pointer;
+            a{
+                font-size: 16px;
+                font-weight: 700;
+                color: var(--rouge);
+            }
+            transition: 0.3s ease-in-out all;
+            &:hover{
+                border: 1px solid var(--rouge);
+            }
+            &.current_page{
+                background-color: var(--rouge);
+                border: 1px solid var(--rouge);
+                a{
+                    color: var(--white);
+                }
+            }
+            .page_prev{
+                width: 8px;
+                height: 8px;
+                border-style: solid;
+                border-color: #8a8a8a;
+                border-width: 2px 0 0 2px;
+                display: inline-block;
+                transform: rotate(-45deg);
+                transition: 0.3s ease-in-out all;
+                &:hover{
+                    border-color: var(--rouge);
+                }
+            }
+            .page_next{
+                width: 8px;
+                height: 8px;
+                border-style: solid;
+                border-color: #8a8a8a;
+                border-width: 2px 2px 0 0;
+                display: inline-block;
+                transform: rotate(45deg);
+                transition: 0.3s ease-in-out all;
+                &:hover{
+                    border-color: var(--rouge);
+                }
+            }
+        }
+    }
+}
+.ar{
+    .search_pagination{
+        ul{
+            li{
+                .page_next{
+                    border-width: 0px 0px 2px 2px;
+                }
+                .page_prev{
+                    border-width: 0px 2px 2px 0px;
+                }
+            }
+        }
     }
 }
