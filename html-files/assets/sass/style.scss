@@ -7,52 +7,52 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
 /*----------------------------Font------------------------------*/
-@font-face {
-	font-family: "cairo_light";
-	src: url("../fonts/cairo-light-webfont.woff2") format("woff2"),
-	  url("../fonts/cairo-light-webfont.woff") format("woff");
-	font-weight: normal;
-	font-style: normal;
-  }
+// @font-face {
+// 	font-family: "cairo_light";
+// 	src: url("../fonts/cairo-light-webfont.woff2") format("woff2"),
+// 	  url("../fonts/cairo-light-webfont.woff") format("woff");
+// 	font-weight: normal;
+// 	font-style: normal;
+//   }
   
-  @font-face {
-	font-family: "cairo_regular";
-	src: url("../fonts/cairo-regular-webfont.woff2") format("woff2"),
-	  url("../fonts/cairo-regular-webfont.woff") format("woff");
-	font-weight: normal;
-	font-style: normal;
-  }
-  
-
+//   @font-face {
+// 	font-family: "cairo_regular";
+// 	src: url("../fonts/cairo-regular-webfont.woff2") format("woff2"),
+// 	  url("../fonts/cairo-regular-webfont.woff") format("woff");
+// 	font-weight: normal;
+// 	font-style: normal;
+//   }
   
 
+  
 
-  @font-face {
-	font-family: "cairo_semibold";
-	src: url("../fonts/cairo-semibold-webfont.woff2") format("woff2"),
-	  url("../fonts/cairo-semibold-webfont.woff") format("woff");
-	font-weight: normal;
-	font-style: normal;
-  }
+
+//   @font-face {
+// 	font-family: "cairo_semibold";
+// 	src: url("../fonts/cairo-semibold-webfont.woff2") format("woff2"),
+// 	  url("../fonts/cairo-semibold-webfont.woff") format("woff");
+// 	font-weight: normal;
+// 	font-style: normal;
+//   }
 
  
 
-  @font-face {
-	font-family: "cairo_bold";
-	src: url("../fonts/cairo-bold-webfont.woff2") format("woff2"),
-	  url("../fonts/cairo-bold-webfont.woff") format("woff");
-	font-weight: normal;
-	font-style: normal;
-  }
+//   @font-face {
+// 	font-family: "cairo_bold";
+// 	src: url("../fonts/cairo-bold-webfont.woff2") format("woff2"),
+// 	  url("../fonts/cairo-bold-webfont.woff") format("woff");
+// 	font-weight: normal;
+// 	font-style: normal;
+//   }
 
 
-  @font-face {
-	font-family: "ge-ss-two-medium";
-	src: url("../fonts/fontsge-ss-two-medium.woff2") format("woff2"),
-	  url("../fonts/ge-ss-two-medium.woff") format("woff");
-	font-weight: normal;
-	font-style: normal;
-  }
+//   @font-face {
+// 	font-family: "ge-ss-two-medium";
+// 	src: url("../fonts/fontsge-ss-two-medium.woff2") format("woff2"),
+// 	  url("../fonts/ge-ss-two-medium.woff") format("woff");
+// 	font-weight: normal;
+// 	font-style: normal;
+//   }
 
 /*----------------------------Font Close------------------------------*/  
 ::-webkit-scrollbar-track
@@ -87,7 +87,8 @@ input::-webkit-calendar-picker-indicator {
 }
 /*-------------------Base---------------*/
 body {
-	font-family: "cairo_regular";
+	// font-family: "cairo_regular";
+	font-family: 'Cairo', sans-serif;
 	font-weight: 400;
   }
   
@@ -482,3 +483,17 @@ input{
 }
 
 
+.view_on_map{
+	font-family: "cairo_semibold";
+    line-height: 1.5;
+    color: var(--rouge);
+	margin-left: 10px;
+	opacity: 0;
+	visibility: hidden;
+}
+.map_view{
+	.view_on_map{
+		opacity: 1;
+		visibility: visible;
+	}
+}

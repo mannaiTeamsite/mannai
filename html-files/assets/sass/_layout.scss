@@ -11,9 +11,11 @@
 header{
     position: fixed;
     top: 0;
-    left: 0;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
     z-index: 999;
+    max-width: 1640px;
 
     .header_inner{
         background-color: var(--white);
@@ -54,7 +56,7 @@ header{
                             a{
                                 cursor: pointer;
                                 font-size: 13px;
-                                font-family: "cairo_semibold";
+                                font-weight: 600;
                                 color: var(--purple-brown);
                             }
                         }
@@ -98,7 +100,7 @@ header{
                                         }
                                     }
                                     font-size: 13px;
-                                    font-family: "cairo_semibold";
+                                    font-weight: 600;
                                     display: block;
                                     color: var(--purple-brown);
 
@@ -115,7 +117,7 @@ header{
                         padding: 0 10px;
                         position: relative;
                         font-size: 16px;
-                        font-family: "cairo_semibold";
+                        font-weight: 600;
                         line-height: 1.38;
                         letter-spacing: normal;
                         color: var(--purple-brown);
@@ -152,7 +154,7 @@ header{
                             cursor: pointer;
                             display: block;
                             font-size: 16px;
-                            font-family: "cairo_semibold";
+                            font-weight: 600;
                             letter-spacing: normal;
                             border-bottom: solid 1px var(--border-color);
                             &:last-child{
@@ -186,7 +188,7 @@ header{
                             
                             a{
                                 font-size: 16px;
-                                font-family: "cairo_semibold";
+                                font-weight: 600;
                                 color: var(--purple-brown);
                             }
                         }
@@ -225,7 +227,7 @@ header{
         padding: 0 10px;
         position: relative;
         font-size: 16px;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         line-height: 1.38;
         letter-spacing: normal;
         color: var(--purple-brown);
@@ -263,7 +265,7 @@ header{
             cursor: pointer;
             display: block;
             font-size: 16px;
-            font-family: "cairo_semibold";
+            font-weight: 600;
             border-bottom: solid 1px var(--border-color);
             a{
                 padding: 19px;
@@ -301,7 +303,7 @@ header{
             
             a{
                 font-size: 16px;
-                font-family: "cairo_semibold";
+                font-weight: 600;
                 color: var(--purple-brown);
             }
         }
@@ -321,7 +323,7 @@ header{
                 display: block;
                 padding: 12px;
                 font-size: 16px;
-                font-family: "cairo_semibold";
+                font-weight: 600;
                 border-bottom: solid 1px #e3e3e3;
                 color: var(--purple-brown);
             }
@@ -701,7 +703,7 @@ header{
              a{
                  font-size: 12px;
                  display: block;
-                 font-family: "cairo_semibold";
+                 font-weight: 600;
                  letter-spacing: 0.5px;
                  color: var(--eggplant);
                  border-bottom: 1px solid #979797;
@@ -780,7 +782,7 @@ footer{
 
             .copy_right{
                 font-size: 14px;
-                font-family: "cairo_semibold";
+                font-weight: 600;
                 line-height: 1.67;
                 letter-spacing: 0.17px;
                 color: rgba(252, 252, 252, 0.50);
@@ -814,7 +816,7 @@ footer{
                     a{
                         cursor: pointer;
                         font-size: 13px;
-                        font-family: "cairo_semibold";
+                        font-weight: 600;
                         line-height: 1.67;
                         letter-spacing: 0.17px;
                         text-align: right;

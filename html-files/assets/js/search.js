@@ -135,11 +135,14 @@ $('.result_carousal').owlCarousel({
       0:{
         items:2,
       },
+      540:{
+        items:2
+    },
       600:{
-          items:2
+          items:3
       },
       768:{
-        items:3
+        items:4
       },
       900:{
         items:4
@@ -151,8 +154,51 @@ $('.result_carousal').owlCarousel({
 })
 
 $(document) .ready(function(){
-var li =  $(".owl-item a ");
-$(".owl-item a").click(function(){
-li.removeClass('active');
+  var li =  $(".owl-item a ");
+    $(".owl-item a").click(function(){
+    li.removeClass('active');
+  });
+
+  magnify("previewImage", 3);
 });
+
+$('body').scroll(function(){
+  console.log('--scroll--')
+  var scroll = $('body').scrollTop();
+  if(scroll > 80){
+    $('.page_preview').addClass('fix_preview')
+  }
+  else{
+    $('.page_preview').removeClass('fix_preview')
+  }
+});
+
+$('.result_blocks li').mouseover(function(){
+  console.log($(this).attr('data-image'));
+  var image = $(this).attr('data-image');
+  if(!image == ''){
+    setPreview(image)
+  }
+  else{
+    $('.img-magnifier-glass').remove();
+    $('.page_preview figure #previewImage').attr('src', 'assets/images/no_image.png');
+  }
+});
+
+function setPreview(url){
+  $('.img-magnifier-glass').remove();
+  $('.page_preview figure #previewImage').attr('src', url);
+  magnify("previewImage", 3);
+}
+
+
+// ======= to add class in dropdown menu in arabic version =======
+$('body').on('classChange', function(){
+  if($('body').hasClass('ar')){
+    $('.search_accordion_container ul li').addClass('dropright');
+    $('.result_blocks li').addClass('dropright');
+  }
+  else{
+    $('.search_accordion_container ul li').removeClass('dropright')
+  }
 });

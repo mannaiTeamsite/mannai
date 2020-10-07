@@ -207,6 +207,7 @@
                 width: 100%;
                 border: 1px solid transparent;
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -230,6 +231,7 @@
                 left: 1px;
                 top: 3px;
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -238,6 +240,7 @@
                 > span{
                     color: var(--deep-orange);
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                 }
             }
         }
@@ -266,6 +269,7 @@
 
 .expl_headin{
     font-family: 'cairo_bold';
+    font-weight: 700;
   font-size: 36px;
   line-height: 1.19;
   letter-spacing: 0.51px;
@@ -304,6 +308,7 @@
         }
         h2, h3, h4{
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 18px;
             line-height: 1.33;
             letter-spacing: 0.26px;
@@ -327,6 +332,7 @@
 // ================checkbox====================
 .chech_lbl{
     font-family: 'cairo_semibold';
+    font-weight: 600;
   font-size: 18px;
   line-height: 1.33;
   letter-spacing: 0.26px;
@@ -385,6 +391,7 @@
 // ================ radio button ====================
 .radio_lbl{
     font-family: 'cairo_semibold';
+    font-weight: 600;
   font-size: 18px;
   line-height: 1.33;
   letter-spacing: 0.26px;
@@ -450,6 +457,7 @@
         border-radius: 12px;
         background-color: var(--rouge);
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 16px;
         line-height: 1.5;
         letter-spacing: 0.23px;
@@ -529,6 +537,7 @@
                     text-align: center;
                     background-color: var(--white);
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 15px;
                     line-height: 1.8;
                     color: var(--rouge-two);
@@ -609,6 +618,7 @@
                 .back{
                     cursor: pointer;
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 14px;
                     line-height: 1.57;
                     letter-spacing: normal;
@@ -638,6 +648,7 @@
                     }
                     &:hover{
                         font-family: 'cairo_bold';
+                        font-weight: 700;
                         color: var(--purple-brown);
                     }
                 }
@@ -696,10 +707,12 @@
                         }
                         &:hover{
                             font-family: 'cairo_bold';
+                            font-weight: 700;
                             color: var(--purple-brown);
                         }
                         &.active{
                             font-family: 'cairo_bold';
+                            font-weight: 700;
                             color: var(--purple-brown);
                             border-radius: 12px;
                             box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.06);
@@ -872,6 +885,7 @@
     }
     h3{
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 14px;
         line-height: 1.57;
         letter-spacing: normal;
@@ -894,6 +908,7 @@
             width: 90%;
             outline: none;
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 13px;
             line-height: 1.54;
             letter-spacing: normal;
@@ -971,6 +986,7 @@
             // text-align: center;
             text-decoration: underline;
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 13px;
             line-height: 1.69;
             letter-spacing: normal;
@@ -989,6 +1005,7 @@
         }
         .dropdown-header{
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 13px;
             line-height: 1.69;
             letter-spacing: 0.19px;
@@ -1029,6 +1046,7 @@
         }
         h3{
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             line-height: 1.38;
             letter-spacing: 0.23px;
@@ -1060,6 +1078,7 @@
             }
             h4{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -1103,6 +1122,7 @@
             }
             .more_opt{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 15px;
                 line-height: 1.57;
                 letter-spacing: normal;
@@ -1136,6 +1156,7 @@
         display: flex;
         align-items: center;
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 16px;
         line-height: 1.5;
         letter-spacing: 0.23px;
@@ -1168,6 +1189,7 @@
     min-height: 35px;
     h4{
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 16px;
         line-height: 1.5;
         letter-spacing: 0.23px;
@@ -1272,6 +1294,7 @@ legend{
             margin: 0 17px;
             p{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 line-height: 1.43;
                 letter-spacing: 0.2px;
@@ -1285,6 +1308,7 @@ legend{
             min-width: 35px;
             .link{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.43;
                 letter-spacing: 0.2px;
@@ -1424,6 +1448,7 @@ legend{
 }
 h3{
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 16px;
     line-height: 1.38;
     letter-spacing: normal;
@@ -1461,6 +1486,7 @@ p{
   background-color: var(--white);
   text-align: center;
   font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 10px;
   line-height: 1.5;
   letter-spacing: 0.35px;

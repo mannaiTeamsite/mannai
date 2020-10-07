@@ -1,7 +1,7 @@
 
 /**********************language Switch function ********************************/
 $("#lang_toggle").click(function(){
-    $("body").toggleClass("ar");
+    $("body").toggleClass("ar").trigger('classChange');
 });
 
 /**********************language Switch function close********************************/
@@ -713,3 +713,17 @@ $('#pagination-here').on("page", function(event, num){
 //show / hide content or pull via ajax etc
 $("#content").html("Page " + num); 
 });
+
+
+
+var a= $(".tags_wrap ").attr('id');
+console.log(a)
+var  b=   $('#'+a).children().length;
+
+console.log(b);
+if(b>=2){
+   $('#'+a).append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
+}
+
+
+

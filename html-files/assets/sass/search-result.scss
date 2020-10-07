@@ -41,6 +41,19 @@ p, h1, h2, h3, h4, h5{
 
 .search_block{
     flex: 1;
+    max-width: 777px;
+    margin-right: auto;
+    @media screen and (max-width: 1240px){
+        width: calc(100% - 300px);
+        margin-right: 300px;
+    }
+    @media screen and (max-width: 1100px){
+        width: calc(100% - 350px);
+        margin-right: 350px;
+    }
+    @media screen and (max-width: 768px){
+        margin: 0;
+    }
 .search_input{
     border-radius: 12px;
     box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.09);
@@ -53,9 +66,10 @@ p, h1, h2, h3, h4, h5{
     max-width: 747px;
     flex: 1;
     margin-right: 30px;
-        @media screen  and (max-width: 768px){
+        @media screen  and (max-width: 800px){
             padding: 0 15px 0 0;
             margin-right: 0;
+            max-width: 100%;
         }
         @media screen  and (max-width: 540px){
             flex-direction: column;
@@ -82,6 +96,7 @@ p, h1, h2, h3, h4, h5{
         .search{
             flex: 1;
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 18px;
             line-height: 1.22;
             letter-spacing: 0.26px;
@@ -139,8 +154,8 @@ p, h1, h2, h3, h4, h5{
               
                 .text{
                     font-family: 'cairo_semibold';
-                    font-size: 13px;
                     font-weight: 600;
+                    font-size: 13px;
                     line-height: 1.29;
                     letter-spacing: 0.19px;
                     color: var(--rouge);
@@ -213,6 +228,7 @@ p, h1, h2, h3, h4, h5{
             border-radius: 12px;
             background-color: var(--rouge);
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             letter-spacing: 0.18px;
             color: var(--white);
@@ -234,6 +250,7 @@ p, h1, h2, h3, h4, h5{
                 padding: 1px 10px;
                 border-radius: 7px;
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 justify-content: baseline;
                 span{
@@ -287,6 +304,7 @@ p, h1, h2, h3, h4, h5{
                     }
                 h2{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 16px;
                     line-height: 1.5;
                     letter-spacing: 0.23px;
@@ -325,6 +343,7 @@ p, h1, h2, h3, h4, h5{
         }
         .adv_heading{
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             line-height: 1.5;
             letter-spacing: 0.23px;
@@ -332,6 +351,7 @@ p, h1, h2, h3, h4, h5{
             margin-bottom: 20px !important;
             >a{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 13px;
                 line-height: 1.85;
                 letter-spacing: 0.19px;
@@ -359,6 +379,7 @@ p, h1, h2, h3, h4, h5{
                             margin-bottom: 7px;
                             &.info_title{
                                 font-family: 'cairo_bold';
+                                font-weight: 700;
                                 font-size: 15px;
                                 font-style: normal;
                                 line-height: 1.57;
@@ -409,6 +430,7 @@ p, h1, h2, h3, h4, h5{
                         margin-bottom: 14px;
                         h3{
                             font-family: 'cairo_bold';
+                            font-weight: 700;
                             font-size: 16px;
                             line-height: 1.38;
                             letter-spacing: 0.23px;
@@ -476,6 +498,25 @@ p, h1, h2, h3, h4, h5{
         
     }
 }
+}
+.ar{
+    .search_block{
+        margin-right: 0;
+        margin-left: auto;
+        @media screen and (max-width: 1240px){
+            width: calc(100% - 300px);
+            margin-right: 0;
+            margin-left: 300px;
+        }
+        @media screen and (max-width: 1100px){
+            width: calc(100% - 350px);
+            margin-left: 350px;
+            margin-right: 0;
+        }
+        @media screen and (max-width: 768px){
+            margin: 0;
+        }
+    }
 }
 .ar{
     .search_input{
@@ -564,6 +605,7 @@ p, h1, h2, h3, h4, h5{
                     padding: 0px 10px;
                     border-radius: 9px;
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 14px;
                 }
             }
@@ -640,22 +682,51 @@ p, h1, h2, h3, h4, h5{
         }
     }
 }
-.page_preview{
+.page_preview_container{
     width: 360px;
-    position: relative;
+    position: absolute;
     overflow: auto;
-    @media screen and (max-width: 768px){
+    top: 44px;
+    right: 50px;
+    @media screen and (max-width: 1240px){
+        width: 300px;
+        right: 50px;
+    }
+    .page_preview {
+        &.fix_preview{
+            position: fixed;
+            max-width: 360px;
+            top: 80px;
+            @media screen and (max-width: 1240px){
+                width: 300px;
+            }
+        }
+        
+    }
+    @media screen and (max-width: 800px){
         display: none;
     }
     figure{
         position: relative;
-    overflow: hidden;
+        overflow: hidden;
+        background-color: white;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-radius: 12px;
+        height: calc(100vh - 220px);
         img{
-            width: 100%;
+            // width: 100%;
+            width: 360px;
+            height: calc(100vh - 220px);
+            object-fit: contain;
+            object-position: center;
+            @media screen and (max-width: 1240px){
+                width: 300px;
+            }
         }
     }
     .title{
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 14px;
         margin-bottom: 23px !important;
         font-style: normal;
@@ -673,6 +744,7 @@ p, h1, h2, h3, h4, h5{
             align-items: center;
             text-decoration: none;
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             line-height: 1.69;
             letter-spacing: normal;
@@ -688,8 +760,19 @@ p, h1, h2, h3, h4, h5{
             // border: solid 1px #e2e5ed;
         }
     }
+    
 }
-
+.ar{
+    .page_preview_container{
+        right: auto;
+        left: 50px;
+        @media screen and (max-width: 1280px){
+            width: 300px;
+            right: auto;
+            left: 50px;
+        }
+    }
+}
 .img-zoom-lens {
     position: absolute;
     border: 1px solid #d4d4d4;
@@ -788,6 +871,7 @@ p, h1, h2, h3, h4, h5{
         align-items: center;
         cursor: pointer;
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.27;
         letter-spacing: 0.2px;
@@ -808,7 +892,7 @@ p, h1, h2, h3, h4, h5{
 // ============slider===============
 .search_outcome{
     margin: 48px 30px 40px 0;
-    @media screen  and (max-width: 768px){
+    @media screen  and (max-width: 800px){
         margin: 48px 0;
     }
     .slider{
@@ -876,6 +960,7 @@ p, h1, h2, h3, h4, h5{
                 }
                 h3{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 20px;
                     line-height: 1.5;
                     letter-spacing: 0.29px;
@@ -883,11 +968,13 @@ p, h1, h2, h3, h4, h5{
                     margin-bottom: 12px !important;
                     @media screen and (max-width: 600px){
                         font-family: 'cairo_semibold';
+                        font-weight: 600;
                         font-size: 16px;
                     }
                 }
                 p{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 14px;
                     line-height: 1.57;
                     letter-spacing: 0.2px;
@@ -978,8 +1065,8 @@ p, h1, h2, h3, h4, h5{
         .nav-item{
             .nav-link{
                 font-family: 'cairo_semibold';
-                font-size: 16px;
                 font-weight: 600;
+                font-size: 16px;
                 font-stretch: normal;
                 font-style: normal;
                 line-height: 1.5;
@@ -1041,11 +1128,13 @@ p, h1, h2, h3, h4, h5{
                 transition: 0.3s ease-in-out all;
                 position: relative;
                 margin-bottom: 24px;
+                cursor: pointer;
                 @media screen and (max-width: 600px){
                     padding: 14px 24px 14px 14px
                 }
                 h3{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 22px;
                     line-height: 1.09;
                     letter-spacing: 0.31px;
@@ -1057,6 +1146,7 @@ p, h1, h2, h3, h4, h5{
                 }
                 p{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 16px;
                     line-height: 1.5;
                     letter-spacing: 0.23px;
@@ -1103,6 +1193,7 @@ p, h1, h2, h3, h4, h5{
                         display: flex;
                         align-items: center;
                         font-family: 'cairo_semibold';
+                        font-weight: 600;
                         font-size: 13px;
                         line-height: 1.54;
                         letter-spacing: 0.19px;
@@ -1193,6 +1284,9 @@ p, h1, h2, h3, h4, h5{
     overflow: hidden;
     @media screen and (max-width: 1024px){
         max-width: 665px;
+    }
+    @media screen and (max-width: 800px){
+        max-width: 100%;
     }
     @media screen and (max-width: 768px){
         max-width: 730px;

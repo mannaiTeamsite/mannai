@@ -61,6 +61,8 @@ p, h1, h2, h3, h4, h5 {
         border-radius: 50%; }
     .user_info_wrapper .user_info .user_name h1 {
       font-family: 'cairo_bold';
+      font-weight: 700;
+      font-weight: 700;
       font-size: 15px;
       line-height: 1.25;
       letter-spacing: 0.29px;
@@ -73,6 +75,7 @@ p, h1, h2, h3, h4, h5 {
       overflow: hidden; }
     .user_info_wrapper .user_info .user_name h2 {
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 24px;
       line-height: 1.25;
       letter-spacing: 0.29px;
@@ -91,6 +94,7 @@ p, h1, h2, h3, h4, h5 {
         flex-direction: column; } }
     .user_info_wrapper .switch_profile p {
       font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 13px;
       line-height: 1.92;
       letter-spacing: 0.19px;
@@ -126,6 +130,7 @@ p, h1, h2, h3, h4, h5 {
         position: relative;
         margin-bottom: 0;
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         font-weight: 600;
         line-height: 1.57;
@@ -210,6 +215,7 @@ p, h1, h2, h3, h4, h5 {
           margin-bottom: 0; }
           .inner_container .container_left .quick_links .hku_card .hku_card_body ul li a {
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 14px;
             line-height: 2.86;
             letter-spacing: 0.2px;
@@ -218,6 +224,7 @@ p, h1, h2, h3, h4, h5 {
             position: relative; }
             .inner_container .container_left .quick_links .hku_card .hku_card_body ul li a.active {
               font-family: 'cairo_bold';
+              font-weight: 700;
               color: var(--dark-orange);
               font-size: 15px; }
             .inner_container .container_left .quick_links .hku_card .hku_card_body ul li a:hover {
@@ -390,6 +397,7 @@ p, h1, h2, h3, h4, h5 {
       margin: 69px 0 27px 0; }
     .dashboard_card_wrapper .hku_card .dashboard_card h3 {
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.65;
       letter-spacing: normal;
@@ -410,6 +418,7 @@ p, h1, h2, h3, h4, h5 {
         margin: 0 0 0 12px; }
       .dashboard_card_wrapper .hku_card .dashboard_card .explore_url .link {
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 16px;
         line-height: 1.38;
         letter-spacing: normal;
@@ -429,6 +438,7 @@ p, h1, h2, h3, h4, h5 {
       margin: 59px 0 27px 0; }
     .bills_card_wrapper .hku_card .bills_card.no_data h3 {
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.65;
       letter-spacing: normal;
@@ -444,6 +454,7 @@ p, h1, h2, h3, h4, h5 {
       color: var(--slate-grey); }
     .bills_card_wrapper .hku_card .bills_card.no_data .link {
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       line-height: 1.38;
       letter-spacing: normal;
@@ -455,6 +466,7 @@ p, h1, h2, h3, h4, h5 {
         margin: 0 0 0 12px; }
 .bills_card_wrapper .hku_card .show_more.link {
   font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 14px;
   line-height: 1.57;
   letter-spacing: 0.2px;
@@ -488,6 +500,7 @@ p, h1, h2, h3, h4, h5 {
     display: flex;
     align-items: center;
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 16px;
     line-height: 1.56;
     letter-spacing: 0.23px;
@@ -503,6 +516,7 @@ p, h1, h2, h3, h4, h5 {
       margin: 0 12px 0 0; }
     .hku_card .hku_card_header h3 {
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       line-height: 1.56;
       letter-spacing: 0.23px;
@@ -521,12 +535,14 @@ p, h1, h2, h3, h4, h5 {
           margin-bottom: 0; }
         .hku_card .hku_card_body ul li h4 {
           font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 14px;
           line-height: 1.57;
           letter-spacing: 0.2px;
           color: var(--purple-brown); }
           .hku_card .hku_card_body ul li h4 span {
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 12px;
             line-height: 1.83;
             letter-spacing: 0.17px;
@@ -541,6 +557,7 @@ p, h1, h2, h3, h4, h5 {
             top: 0;
             right: 0;
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 14px;
             line-height: 1.8;
             text-align: center;
@@ -551,6 +568,7 @@ p, h1, h2, h3, h4, h5 {
               color: var(--rouge); }
     .hku_card .hku_card_body .total_votes {
       font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 15px;
       line-height: 1.83;
       letter-spacing: 0.17px;
@@ -570,6 +588,7 @@ p, h1, h2, h3, h4, h5 {
       display: flex;
       align-items: center;
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.57;
       letter-spacing: 0.2px;
@@ -581,6 +600,7 @@ p, h1, h2, h3, h4, h5 {
         margin: 0 0 0 5px; }
     .hku_card .hku_card_footer .dark_link {
       font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 14px;
       line-height: 1.57;
       letter-spacing: 0.2px;
@@ -603,6 +623,7 @@ p, h1, h2, h3, h4, h5 {
     .hku_card .hku_card_footer .data_item h4 {
       text-align: left;
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 18px;
       line-height: 1.22;
       letter-spacing: 0.26px;
@@ -615,6 +636,7 @@ p, h1, h2, h3, h4, h5 {
       background-color: var(--white-five);
       border: 1px solid transparent;
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.57;
       letter-spacing: 0.2px;
@@ -626,6 +648,7 @@ p, h1, h2, h3, h4, h5 {
         border: 1px solid var(--rouge); }
   .hku_card .card_heading {
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -691,8 +714,8 @@ p, h1, h2, h3, h4, h5 {
       padding: 1px 15px; } }
   .nav-tabs .nav-item .nav-link {
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 16px;
-    font-weight: bold;
     font-stretch: normal;
     font-style: normal;
     line-height: 1.56;
@@ -750,6 +773,7 @@ p, h1, h2, h3, h4, h5 {
   .options .inp_radio {
     margin-bottom: 0;
     font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: normal;
@@ -783,6 +807,7 @@ p, h1, h2, h3, h4, h5 {
   border-radius: 13px;
   background-color: var(--rouge);
   font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 14px;
   line-height: 1.57;
   letter-spacing: 0.2px;
@@ -805,12 +830,14 @@ p, h1, h2, h3, h4, h5 {
     margin-bottom: 0; }
   .hku_card_grey h3 {
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.43;
     letter-spacing: normal;
     color: var(--purple-brown); }
   .hku_card_grey p {
     font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 13px;
     line-height: 1.54;
     letter-spacing: 0.19px;
@@ -819,6 +846,7 @@ p, h1, h2, h3, h4, h5 {
     background-color: var(--dark-orange) !important; }
   .hku_card_grey .link.link_orange {
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -839,6 +867,7 @@ p, h1, h2, h3, h4, h5 {
   margin-bottom: 23px; }
   .directory_information .hku_card_grey h3 {
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.43;
     letter-spacing: normal;
@@ -846,6 +875,7 @@ p, h1, h2, h3, h4, h5 {
     margin-bottom: 0; }
 .directory_information .directory_info .para_ocean {
   font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 14px;
   line-height: 1.57;
   letter-spacing: 0.2px;
@@ -853,6 +883,7 @@ p, h1, h2, h3, h4, h5 {
   margin-bottom: 0; }
 .directory_information .directory_info .para_light {
   font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.57;
   letter-spacing: 0.2px;
@@ -888,6 +919,7 @@ p, h1, h2, h3, h4, h5 {
     .hku_data_card_grey .data_item .select_bill .chech_lbl {
       text-align: left;
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 18px;
       line-height: 1.22;
       letter-spacing: 0.26px;
@@ -901,6 +933,7 @@ p, h1, h2, h3, h4, h5 {
           max-width: 200px; } }
     .hku_data_card_grey .data_item h4 {
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.57;
       letter-spacing: 0.2px;
@@ -908,6 +941,7 @@ p, h1, h2, h3, h4, h5 {
       margin-bottom: 5px !important; }
     .hku_data_card_grey .data_item p {
       font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 12px;
       line-height: 1.83;
       letter-spacing: 0.17px;
@@ -925,6 +959,7 @@ p, h1, h2, h3, h4, h5 {
     .hku_data_card_grey .data_item .link {
       margin: 0 !important;
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.57;
       letter-spacing: 0.2px;
@@ -933,6 +968,7 @@ p, h1, h2, h3, h4, h5 {
       cursor: pointer; }
       .hku_data_card_grey .data_item .link.link_light {
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 12px;
         line-height: 2;
         letter-spacing: 0.17px;
@@ -980,6 +1016,7 @@ p, h1, h2, h3, h4, h5 {
   display: none; }
 .news_letter label {
   font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.43;
   letter-spacing: 0.2px;
@@ -1002,6 +1039,7 @@ p, h1, h2, h3, h4, h5 {
     border-style: none;
     background-color: var(--white);
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -1071,6 +1109,7 @@ p, h1, h2, h3, h4, h5 {
       margin: 0 17px; }
       .hku_alert .hku_alert_container .sucess_text p {
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.43;
         letter-spacing: 0.2px;
@@ -1082,6 +1121,7 @@ p, h1, h2, h3, h4, h5 {
       min-width: 35px; }
       .hku_alert .hku_alert_container .undo_button .link {
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 14px;
         line-height: 1.43;
         letter-spacing: 0.2px;
@@ -1207,6 +1247,7 @@ p, h1, h2, h3, h4, h5 {
           border-radius: 0 0 12px 12px; }
         .user_info .dropdown-menu ul li a {
           font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 16px;
           line-height: 1.38;
           letter-spacing: normal;
@@ -1221,6 +1262,7 @@ p, h1, h2, h3, h4, h5 {
           border-radius: 7px;
           background-color: var(--rouge-two);
           font-family: 'cairo_bold';
+          font-weight: 700;
           font-size: 12px;
           line-height: 1.67;
           letter-spacing: normal;
@@ -1256,6 +1298,7 @@ p, h1, h2, h3, h4, h5 {
     padding: 32px; }
     .card .card-body .legend {
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       line-height: 1.5;
       letter-spacing: 0.23px;
@@ -1321,12 +1364,14 @@ p, h1, h2, h3, h4, h5 {
       text-align: left; }
       .bill_summary .bill_block li h3 {
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 16px;
         line-height: 1.38;
         letter-spacing: 0.23px;
         color: var(--purple-brown); }
       .bill_summary .bill_block li p {
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 12px;
         line-height: 1.83;
         letter-spacing: 0.17px;
@@ -1336,6 +1381,7 @@ p, h1, h2, h3, h4, h5 {
         margin-top: 3px; }
       .bill_summary .bill_block li .add_bill .link {
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 13px;
         line-height: normal;
         letter-spacing: 0.19px;
@@ -1345,6 +1391,7 @@ p, h1, h2, h3, h4, h5 {
         border-radius: 13px;
         background-color: var(--rouge);
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.57;
         letter-spacing: 0.2px;

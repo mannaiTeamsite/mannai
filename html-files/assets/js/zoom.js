@@ -60,5 +60,5 @@ function magnify(imgID, zoom) {
   }
   
   
-  magnify("previewImage", 3);
+  // magnify("previewImage", 3);
   // imageZoom("previewImage", "myresult");

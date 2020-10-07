@@ -71,6 +71,8 @@ display: none;
             .user_name{
                 h1{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
+                    font-weight: 700;
                     font-size: 15px;
                     line-height: 1.25;
                     letter-spacing: 0.29px;
@@ -84,6 +86,7 @@ display: none;
                 }
                 h2{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 24px;
                     line-height: 1.25;
                     letter-spacing: 0.29px;
@@ -105,6 +108,7 @@ display: none;
             }
             p{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 13px;
                 line-height: 1.92;
                 letter-spacing: 0.19px;
@@ -146,6 +150,7 @@ display: none;
                     position: relative;
                     margin-bottom: 0;
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 14px;
                     font-weight: 600;
                     line-height: 1.57;
@@ -260,6 +265,7 @@ display: none;
                                 margin-bottom: 0;
                                 a{
                                     font-family: 'cairo_semibold';
+                                    font-weight: 600;
                                     font-size: 14px;
                                     line-height: 2.86;
                                     letter-spacing: 0.2px;
@@ -268,6 +274,7 @@ display: none;
                                     position: relative;
                                     &.active{
                                         font-family: 'cairo_bold';
+                                        font-weight: 700;
                                         color: var(--dark-orange);
                                         font-size: 15px;
                                     }
@@ -517,6 +524,7 @@ display: none;
                 }
                 h3{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 20px;
                     line-height: 1.65;
                     letter-spacing: normal;
@@ -540,6 +548,7 @@ display: none;
                     }
                     .link{
                         font-family: 'cairo_bold';
+                        font-weight: 700;
                         font-size: 16px;
                         line-height: 1.38;
                         letter-spacing: normal;
@@ -575,6 +584,7 @@ display: none;
                 }
                 h3{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 20px;
                     line-height: 1.65;
                     letter-spacing: normal;
@@ -592,6 +602,7 @@ display: none;
                 }
                 .link{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 16px;
                     line-height: 1.38;
                     letter-spacing: normal;
@@ -608,6 +619,7 @@ display: none;
             .show_more{
                 &.link{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 14px;
                     line-height: 1.57;
                     letter-spacing: 0.2px;
@@ -663,6 +675,7 @@ display: none;
                 margin: 0 10px 0 0;
             }
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             line-height: 1.56;
             letter-spacing: 0.23px;
@@ -678,6 +691,7 @@ display: none;
             }
             h3{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 16px;
                 line-height: 1.56;
                 letter-spacing: 0.23px;
@@ -702,12 +716,14 @@ display: none;
                 }
                 h4{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 14px;
                     line-height: 1.57;
                     letter-spacing: 0.2px;
                     color: var(--purple-brown);
                     span{
                         font-family: 'cairo_semibold';
+                        font-weight: 600;
                         font-size: 12px;
                         line-height: 1.83;
                         letter-spacing: 0.17px;
@@ -724,6 +740,7 @@ display: none;
                         top: 0;
                         right: 0;
                         font-family: 'cairo_semibold';
+                        font-weight: 600;
                         font-size: 14px;
                         line-height: 1.8;
                         text-align: center;
@@ -740,12 +757,13 @@ display: none;
         }
         .total_votes{
             font-family: 'cairo_semibold';
-                font-size: 15px;
-                line-height: 1.83;
-                letter-spacing: 0.17px;
-                color: var(--greyish-brown-three);
-                margin: 10px 0 0 0;
-                display: none;
+            font-weight: 600;
+            font-size: 15px;
+            line-height: 1.83;
+            letter-spacing: 0.17px;
+            color: var(--greyish-brown-three);
+            margin: 10px 0 0 0;
+            display: none;
         }
         }
         .hku_card_footer{
@@ -763,6 +781,7 @@ display: none;
                 display: flex;
                 align-items: center;
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -776,6 +795,7 @@ display: none;
             }
             .dark_link{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -808,6 +828,7 @@ display: none;
                 h4{
                     text-align: left;
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 18px;
                     line-height: 1.22;
                     letter-spacing: 0.26px;
@@ -823,6 +844,7 @@ display: none;
                 background-color: var(--white-five);
                 border: 1px solid transparent;
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -837,6 +859,7 @@ display: none;
         }
         .card_heading{
             font-family: 'cairo_bold';
+            font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -934,8 +957,8 @@ display: none;
         .nav-item{
             .nav-link{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 16px;
-                font-weight: bold;
                 font-stretch: normal;
                 font-style: normal;
                 line-height: 1.56;
@@ -1016,6 +1039,7 @@ display: none;
         .inp_radio{
             margin-bottom: 0;
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 14px;
             line-height: 1.57;
             letter-spacing: normal;
@@ -1062,6 +1086,7 @@ display: none;
         border-radius: 13px;
     background-color: var(--rouge);
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -1088,6 +1113,7 @@ display: none;
         }
         h3{
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 14px;
             line-height: 1.43;
             letter-spacing: normal;
@@ -1095,6 +1121,7 @@ display: none;
         }
         p{
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 13px;
             line-height: 1.54;
             letter-spacing: 0.19px;
@@ -1106,6 +1133,7 @@ display: none;
             }
             &.link_orange{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -1133,6 +1161,7 @@ display: none;
             margin-bottom: 23px;
             h3{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.43;
                 letter-spacing: normal;
@@ -1144,6 +1173,7 @@ display: none;
         .directory_info{
             .para_ocean{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -1152,6 +1182,7 @@ display: none;
             }
             .para_light{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -1198,6 +1229,7 @@ display: none;
             .chech_lbl{
                 text-align: left;
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 18px;
             line-height: 1.22;
             letter-spacing: 0.26px;
@@ -1213,6 +1245,7 @@ display: none;
         }
         h4{
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 14px;
             line-height: 1.57;
             letter-spacing: 0.2px;
@@ -1221,6 +1254,7 @@ display: none;
         }
         p{
             font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 12px;
             line-height: 1.83;
             letter-spacing: 0.17px;
@@ -1239,6 +1273,7 @@ display: none;
         .link{
             margin: 0 !important;
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 14px;
             line-height: 1.57;
             letter-spacing: 0.2px;
@@ -1247,6 +1282,7 @@ display: none;
             cursor: pointer;
             &.link_light{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 12px;
                 line-height: 2;
                 letter-spacing: 0.17px;
@@ -1317,6 +1353,7 @@ display: none;
     }
     label{
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.43;
         letter-spacing: 0.2px;
@@ -1342,6 +1379,7 @@ display: none;
             border-style: none;
             background-color: var(--white);
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 14px;
             line-height: 1.57;
             letter-spacing: 0.2px;
@@ -1440,6 +1478,7 @@ display: none;
             margin: 0 17px;
             p{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 line-height: 1.43;
                 letter-spacing: 0.2px;
@@ -1453,6 +1492,7 @@ display: none;
             min-width: 35px;
             .link{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 14px;
                 line-height: 1.43;
                 letter-spacing: 0.2px;
@@ -1614,6 +1654,7 @@ display: none;
                 }
                 a{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 16px;
                     line-height: 1.38;
                     letter-spacing: normal;
@@ -1631,6 +1672,7 @@ display: none;
                     border-radius: 7px;
                     background-color: var(--rouge-two);
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 12px;
                     line-height: 1.67;
                     letter-spacing: normal;
@@ -1690,6 +1732,7 @@ display: none;
         padding: 32px;
             .legend {
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 16px;
                 line-height: 1.5;
                 letter-spacing: 0.23px;
@@ -1772,6 +1815,7 @@ display: none;
             text-align: left;
             h3{
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 16px;
                 line-height: 1.38;
                 letter-spacing: 0.23px;
@@ -1779,6 +1823,7 @@ display: none;
             }
             p{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 12px;
                 line-height: 1.83;
                 letter-spacing: 0.17px;
@@ -1791,6 +1836,7 @@ display: none;
                 }
                 .link{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 13px;
                     line-height: normal;
                     letter-spacing: 0.19px;
@@ -1802,6 +1848,7 @@ display: none;
                 border-radius: 13px;
                 background-color: var(--rouge);
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;

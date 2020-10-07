@@ -127,6 +127,7 @@ p, h1, h2, h3, h4, h5{
               
                 .text{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 13px;
                     font-weight: 600;
                     line-height: 1.29;
@@ -201,6 +202,7 @@ p, h1, h2, h3, h4, h5{
             border-radius: 12px;
             background-color: var(--rouge);
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             letter-spacing: 0.18px;
             color: var(--white);
@@ -222,6 +224,7 @@ p, h1, h2, h3, h4, h5{
                 padding: 1px 10px;
                 border-radius: 7px;
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 14px;
                 justify-content: baseline;
                 span{
@@ -276,6 +279,7 @@ p, h1, h2, h3, h4, h5{
                     }
                 h2{
                     font-family: 'cairo_bold';
+                    font-weight: 700;
                     font-size: 16px;
                     line-height: 1.5;
                     letter-spacing: 0.23px;
@@ -315,6 +319,7 @@ p, h1, h2, h3, h4, h5{
         }
         .adv_heading{
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             line-height: 1.5;
             letter-spacing: 0.23px;
@@ -322,6 +327,7 @@ p, h1, h2, h3, h4, h5{
             margin-bottom: 20px !important;
             >a{
                 font-family: 'cairo_semibold';
+                font-weight: 600;
                 font-size: 13px;
                 line-height: 1.85;
                 letter-spacing: 0.19px;
@@ -349,6 +355,7 @@ p, h1, h2, h3, h4, h5{
                             margin-bottom: 7px;
                             &.info_title{
                                 font-family: 'cairo_bold';
+                                font-weight: 700;
                                 font-size: 15px;
                                 font-style: normal;
                                 line-height: 1.57;
@@ -399,6 +406,7 @@ p, h1, h2, h3, h4, h5{
                         margin-bottom: 14px;
                         h3{
                             font-family: 'cairo_bold';
+                            font-weight: 700;
                             font-size: 16px;
                             line-height: 1.38;
                             letter-spacing: 0.23px;
@@ -552,6 +560,7 @@ p, h1, h2, h3, h4, h5{
                     padding: 0px 10px;
                     border-radius: 9px;
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 14px;
                 }
             }
@@ -685,6 +694,7 @@ p, h1, h2, h3, h4, h5{
                 display: flex;
                 align-items: center;
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 16px;
                 line-height: 1.38;
                 letter-spacing: 0.23px;
@@ -699,6 +709,7 @@ p, h1, h2, h3, h4, h5{
                 li{
                    a{
                     font-family: 'cairo_semibold';
+                    font-weight: 600;
                     font-size: 14px;
                     line-height: 1.57;
                     letter-spacing: 0.2px;
@@ -790,6 +801,7 @@ p, h1, h2, h3, h4, h5{
             align-items: center;
             position: relative;
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             line-height: normal;
             letter-spacing: 0.23px;
@@ -830,6 +842,7 @@ p, h1, h2, h3, h4, h5{
                         background-color: var(--white);
                         padding: 10px 15px;
                         font-family: 'cairo_semibold';
+                        font-weight: 600;
                         font-size: 14px;
                         line-height: 1.57;
                         letter-spacing: 0.2px;
@@ -872,6 +885,7 @@ p, h1, h2, h3, h4, h5{
                             display: flex;
                             align-items: center;
                             font-family: 'cairo_semibold';
+                            font-weight: 600;
                             font-size: 13px;
                             line-height: 1.54;
                             letter-spacing: 0.19px;
@@ -1004,6 +1018,7 @@ p, h1, h2, h3, h4, h5{
         align-items: center;
         cursor: pointer;
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.27;
         letter-spacing: 0.2px;
@@ -1058,7 +1073,7 @@ p, h1, h2, h3, h4, h5{
             a{
                 font-family: 'cairo_bold';
                 font-size: 16px;
-                font-weight: 600;
+                font-weight: 700;
                 color: var(--rouge);
             }
             transition: 0.3s ease-in-out all;

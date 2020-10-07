@@ -296,9 +296,11 @@ body.loader_show .loader {
 header {
   position: fixed;
   top: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   width: 100%;
-  z-index: 999; }
+  z-index: 999;
+  max-width: 1640px; }
   header .header_inner {
     background-color: var(--white);
     box-shadow: 0 2px 1px 0 rgba(0, 0, 0, 0.06); }
@@ -331,7 +333,7 @@ header {
               header .innner_wrapper .nav_col .header_row .abt_qtr_nav ul li a {
                 cursor: pointer;
                 font-size: 13px;
-                font-family: "cairo_semibold";
+                font-weight: 600;
                 color: var(--purple-brown); }
         header .innner_wrapper .nav_col .header_row .auth_nav {
           width: 50%; }
@@ -353,7 +355,7 @@ header {
               header .innner_wrapper .nav_col .header_row .auth_nav ul li a {
                 cursor: pointer;
                 font-size: 13px;
-                font-family: "cairo_semibold";
+                font-weight: 600;
                 display: block;
                 color: var(--purple-brown); }
                 header .innner_wrapper .nav_col .header_row .auth_nav ul li a img {
@@ -373,7 +375,7 @@ header {
             padding: 0 10px;
             position: relative;
             font-size: 16px;
-            font-family: "cairo_semibold";
+            font-weight: 600;
             line-height: 1.38;
             letter-spacing: normal;
             color: var(--purple-brown);
@@ -406,7 +408,7 @@ header {
               cursor: pointer;
               display: block;
               font-size: 16px;
-              font-family: "cairo_semibold";
+              font-weight: 600;
               letter-spacing: normal;
               border-bottom: solid 1px var(--border-color); }
               header .innner_wrapper .nav_col .header_row .header_drp_dwn .option_wrapper li:last-child {
@@ -428,7 +430,7 @@ header {
               margin: 0 0 0 30px; }
               header .innner_wrapper .nav_col .header_row .nav_menu ul li a {
                 font-size: 16px;
-                font-family: "cairo_semibold";
+                font-weight: 600;
                 color: var(--purple-brown); }
     header .innner_wrapper .b-top {
       border-top: solid 1px var(--border-color);
@@ -454,7 +456,7 @@ header {
     padding: 0 10px;
     position: relative;
     font-size: 16px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     line-height: 1.38;
     letter-spacing: normal;
     color: var(--purple-brown);
@@ -488,7 +490,7 @@ header {
       cursor: pointer;
       display: block;
       font-size: 16px;
-      font-family: "cairo_semibold";
+      font-weight: 600;
       border-bottom: solid 1px var(--border-color); }
       .header_drp_dwn .option_wrapper li a {
         padding: 19px;
@@ -514,7 +516,7 @@ header {
       margin: 0 0 0 30px; }
       .nav_menu ul li a {
         font-size: 16px;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         color: var(--purple-brown); }
 
 .mob_nav {
@@ -528,7 +530,7 @@ header {
     display: block;
     padding: 12px;
     font-size: 16px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     border-bottom: solid 1px #e3e3e3;
     color: var(--purple-brown); }
   .mob_nav.active {
@@ -797,7 +799,7 @@ header {
       .breadcrumbs_wrapper ul li a {
         font-size: 12px;
         display: block;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         letter-spacing: 0.5px;
         color: var(--eggplant);
         border-bottom: 1px solid #979797;
@@ -854,7 +856,7 @@ footer {
       align-items: center; }
       footer .footer_inner .foot_row .copy_right {
         font-size: 14px;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         line-height: 1.67;
         letter-spacing: 0.17px;
         color: rgba(252, 252, 252, 0.5); }
@@ -880,7 +882,7 @@ footer {
         footer .footer_inner nav ul li a {
           cursor: pointer;
           font-size: 13px;
-          font-family: "cairo_semibold";
+          font-weight: 600;
           line-height: 1.67;
           letter-spacing: 0.17px;
           text-align: right;
@@ -1710,14 +1712,14 @@ header .innner_wrapper .nav_col .header_row .abt_qtr_nav, .mob_nav, .card_effect
 
 .title {
   font-size: 36px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   line-height: 1.22;
   color: var(--deep-orange);
   margin-bottom: 10px; }
 
 .sub-title {
   font-size: 56px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   line-height: 1.11;
   color: var(--rouge);
   margin-bottom: 10px; }
@@ -1730,7 +1732,7 @@ header .innner_wrapper .nav_col .header_row .abt_qtr_nav, .mob_nav, .card_effect
 
 .content-label {
   font-size: 22px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   line-height: 1.23;
   color: var(--purple-brown);
   margin-bottom: 12px; }
@@ -1739,11 +1741,11 @@ header .innner_wrapper .nav_col .header_row .abt_qtr_nav, .mob_nav, .card_effect
   font-size: 16px;
   color: var(--rouge);
   line-height: 24px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   display: block; }
 
 strong {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-weight: normal; }
 
 .m-t-30 {
@@ -1781,7 +1783,7 @@ hr {
       display: none; } }
 
 .view_all_wrap {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 16px;
   line-height: 1.38;
   color: var(--rouge-three);
@@ -1880,7 +1882,7 @@ hr {
 
 .tourist_component h2 {
   max-width: 371px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 28px;
   line-height: 33.6px;
   color: var(--purple-brown);
@@ -1901,7 +1903,7 @@ hr {
 .tourist_component .field_wrapper {
   margin: 0 20px; }
   .tourist_component .field_wrapper .field_label {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 13px;
     line-height: 0.92;
     letter-spacing: 0.19px;
@@ -2002,7 +2004,7 @@ hr {
       transform: translatex(-50%); } }
   .home.home_banner_section .banner_container h1 {
     max-width: 506px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 46px;
     line-height: 56px;
     color: var(--white); }
@@ -2085,7 +2087,7 @@ hr {
         -webkit-border-radius: 12px;
         border-radius: 12px;
         background-color: var(--rouge);
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 16px;
         letter-spacing: 0.18px;
         color: var(--white);
@@ -2163,7 +2165,7 @@ hr {
         line-height: 1.71;
         letter-spacing: 0.2px;
         color: var(--purple-brown);
-        font-family: 'cairo_bold';
+        font-weight: 700;
         margin-bottom: 5px; }
       .personal_search_block .search_section .srch_wrap input, .personal_search_block .search_section .srch_wrap select {
         width: 100%;
@@ -2172,7 +2174,7 @@ hr {
         line-height: 1.38;
         letter-spacing: 0.23px;
         color: var(--purple-brown);
-        font-family: 'cairo_semibold'; }
+        font-weight: 600; }
       .personal_search_block .search_section .srch_wrap input::-webkit-calendar-picker-indicator {
         display: none; }
       .personal_search_block .search_section .srch_wrap .person_col select {
@@ -2241,7 +2243,7 @@ hr {
     .persona_tag_wrapper .box .persona_title {
       display: inline-block;
       font-size: 16px;
-      font-family: "cairo_bold";
+      font-weight: 700;
       line-height: 1.5;
       margin-bottom: 5px;
       letter-spacing: 0.23px;
@@ -2396,7 +2398,7 @@ hr {
             margin: 0 auto 25px; } }
         .banner_section .banner_row .col_left .banner_container h1 {
           max-width: 506px;
-          font-family: 'cairo_bold';
+          font-weight: 700;
           font-size: 48px;
           line-height: 56px;
           color: var(--rouge); }
@@ -2465,7 +2467,7 @@ hr {
         -webkit-border-radius: 20px;
         border-radius: 20px;
         background-color: var(--white);
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 24px;
         text-align: center;
@@ -2486,7 +2488,7 @@ hr {
     margin-bottom: 48px;
     max-width: 100%;
     width: 100%;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 28px;
     line-height: 33.6px;
     color: var(--purple-brown);
@@ -2513,7 +2515,7 @@ hr {
     border: solid 1px #dbdbdb;
     margin: 0 auto 20px; }
     .services_section .service_card .title {
-      font-family: "cairo_semibold";
+      font-weight: 600;
       font-size: 18px;
       line-height: 1.67;
       color: var(--rouge);
@@ -2537,7 +2539,7 @@ hr {
         border-bottom: 1px solid #e0e0e0;
         padding: 15px 0; }
         .services_section .service_card .links_wrap li a {
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           color: var(--purple-brown);
           display: block;
           white-space: nowrap;
@@ -2560,7 +2562,7 @@ hr {
         letter-spacing: 0.2px; }
         .services_section .service_card .sub-links li a:hover, .services_section .service_card .sub-links li a.active {
           color: var(--dark-orange);
-          font-family: 'cairo_bold';
+          font-weight: 700;
           text-decoration: underline !important; }
   @media (max-width: 1200px) {
     .services_section .owl-dots {
@@ -2597,7 +2599,7 @@ hr {
       padding: 50px 0 50px; } }
   .to_do_section h2 {
     max-width: 371px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 28px;
     line-height: 33.6px;
     color: var(--purple-brown);
@@ -2631,7 +2633,7 @@ hr {
   .to_do_section .field_wrapper {
     margin: 0 20px; }
     .to_do_section .field_wrapper .field_label {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 13px;
       line-height: 0.92;
       letter-spacing: 0.19px;
@@ -2686,7 +2688,7 @@ hr {
         height: 150px;
         object-fit: cover; }
     .to_do_section .card h3 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 18px;
       line-height: 27px;
       color: var(--purple-brown);
@@ -2699,16 +2701,16 @@ hr {
         position: relative; }
         .to_do_section .card ul li .name {
           font-size: 14px;
-          font-family: 'cairo_bold';
+          font-weight: 700;
           line-height: 1.93;
           color: var(--purple-brown);
           display: block; }
         .to_do_section .card ul li .location {
           color: var(--slate-grey);
-          font-family: 'cairo_semibold'; }
+          font-weight: 600; }
         .to_do_section .card ul li .view {
           font-size: 14px;
-          font-family: 'cairo_bold';
+          font-weight: 700;
           line-height: 1.57;
           letter-spacing: 0.2px;
           color: var(--dark-orange);
@@ -2767,7 +2769,7 @@ hr {
       padding: 40px 0; } }
   .opinion_section h2 {
     max-width: 371px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 28px;
     line-height: 33.6px;
     color: var(--purple-brown);
@@ -2798,7 +2800,7 @@ hr {
     max-width: 358px;
     opacity: 0.7;
     font-size: 18px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     line-height: 1.5;
     color: var(--white);
     margin-bottom: 30px; }
@@ -2819,7 +2821,7 @@ hr {
         max-width: 100%; } }
     .opinion_section .card_wrap h3 {
       max-width: 316px;
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.35;
       color: var(--purple-brown);
@@ -2829,7 +2831,7 @@ hr {
       align-items: center;
       margin-bottom: 20px; }
       .opinion_section .card_wrap .rating_wrap .radio_wrap label {
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.57;
         letter-spacing: 0.2px;
@@ -2841,11 +2843,10 @@ hr {
         border: solid 1.4px #b3b7bd;
         background-color: #f9f9f9; }
     .opinion_section .card_wrap .inner_wrap {
-      min-height: 320px;
+      min-height: 434px;
       padding: 26px 20px;
       display: flex;
-      flex-flow: column;
-      justify-content: center; }
+      flex-flow: column; }
       @media (max-width: 765px) {
         .opinion_section .card_wrap .inner_wrap {
           padding: 26px 20px; } }
@@ -2881,7 +2882,7 @@ hr {
     margin-bottom: 16px; }
   .opinion_section .survey_card p {
     max-width: 316px;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -2910,7 +2911,9 @@ hr {
         background-color: #008099; }
   .opinion_section .owl-dots {
     display: inline-flex;
-    margin: 0 0 0 47px; }
+    margin: 0 0 0 47px;
+    position: absolute;
+    bottom: 25px; }
 
 .ar .opinion_section .owl-dots {
   display: flex;
@@ -2965,17 +2968,17 @@ hr {
   .subscription_section ::-webkit-input-placeholder {
     /* Edge */
     color: var(--purple-brown);
-    font-family: "cairo_semibold"; }
+    font-weight: 600; }
   .subscription_section :-ms-input-placeholder {
     /* Internet Explorer 10-11 */
     color: var(--purple-brown);
-    font-family: "cairo_semibold"; }
+    font-weight: 600; }
   .subscription_section ::placeholder {
     color: var(--purple-brown);
-    font-family: "cairo_semibold"; }
+    font-weight: 600; }
   .subscription_section h2 {
     max-width: 371px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 28px;
     line-height: 33.6px;
     color: var(--purple-brown);
@@ -2997,7 +3000,7 @@ hr {
   .subscription_section .commn-para {
     max-width: 390px;
     font-size: 18px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     margin-bottom: 30px;
     line-height: 1.5;
     letter-spacing: normal;
@@ -3018,7 +3021,7 @@ hr {
     color: var(--purple-brown);
     font-size: 14px;
     width: 100%;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     display: block; }
     .subscription_section input:focus {
       border: 1px solid var(--berry); }
@@ -3029,7 +3032,7 @@ hr {
     transform: translateY(-50%);
     right: 30px;
     background-color: transparent;
-    font-family: "cairo_bold";
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -3046,7 +3049,7 @@ hr {
     position: relative; }
   .subscription_section .note {
     max-width: 472px;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 14px;
     line-height: 1.57;
     color: #111925b3;
@@ -3128,7 +3131,7 @@ hr {
         object-fit: cover; }
     .subscription_section .sample_card .headlines {
       max-width: 284px;
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 18px;
       line-height: 1.44;
       color: var(--purple-brown);
@@ -3157,7 +3160,7 @@ hr {
     margin: 24px 0; }
     .subscription_section .select_lang_wrap .recv_option {
       margin-right: 24px;
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.57;
       color: #111925b3; }
@@ -3179,7 +3182,7 @@ hr {
         padding-left: 30px;
         cursor: pointer;
         display: inline-block;
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.57;
         letter-spacing: 0.2px;
@@ -3245,7 +3248,7 @@ hr {
         border-radius: 4px; }
   .subscription_section .subscribe_btn {
     margin-bottom: 34px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -3376,7 +3379,7 @@ hr {
       padding: 20px 0; } }
   .news_section h2 {
     max-width: 371px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 28px;
     line-height: 33.6px;
     color: var(--purple-brown);
@@ -3397,7 +3400,7 @@ hr {
         font-size: 22px; } }
   .news_section .commn-para {
     max-width: 358px;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     color: #121a26b3;
     margin-bottom: 30px; }
   .news_section .owl-dot:hover, .news_section .owl-dot.active {
@@ -3466,7 +3469,7 @@ hr {
         border-bottom-left-radius: 12px;
         border-bottom-right-radius: 12px;
         font-size: 18px;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         line-height: 1.53;
         color: var(--white);
         position: absolute;
@@ -3560,7 +3563,7 @@ hr {
         max-width: 120px;
         display: block;
         font-size: 14px;
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         line-height: 1.57;
         text-align: center;
         color: var(--eggplant); }
@@ -3572,7 +3575,7 @@ hr {
       .news_section .cards_wrapper .news_card:focus {
         border: 1px dotted; }
   .news_section .info_title {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 13px;
     line-height: 1.54;
     color: #6a6a6ba3; }
@@ -3588,7 +3591,7 @@ hr {
         height: 29px;
         margin-right: 10px; }
       .news_section .daily_report .degree span {
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 32px;
         line-height: 0.84;
         color: var(--rouge); }
@@ -3607,7 +3610,7 @@ hr {
       width: 25%;
       text-align: center; }
       .news_section .weekly_report li label {
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 13px;
         letter-spacing: 0.19px;
         color: var(--slate-grey);
@@ -3619,7 +3622,7 @@ hr {
         margin: 3px auto 7px; }
       .news_section .weekly_report li .deg {
         font-size: 14px;
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         line-height: 1.29;
         color: var(--purple-brown); }
         .news_section .weekly_report li .deg.eve {
@@ -3638,7 +3641,7 @@ hr {
         border-right: 1px solid #acacac;
         margin-right: 5px; }
         .news_section .bottom_wrapper ul li a {
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 14px;
           line-height: 1.29;
           color: #acacac;
@@ -3647,21 +3650,21 @@ hr {
             color: var(--dark-orange); }
     .news_section .bottom_wrapper .more {
       font-size: 11px;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       line-height: 1.64;
       color: var(--dark-orange);
       text-decoration: underline; }
   .news_section .time_detail {
     padding: 0 10px; }
     .news_section .time_detail label {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 12px;
       line-height: 22px;
       letter-spacing: 0.17px;
       color: #009dbd;
       display: block; }
     .news_section .time_detail span {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.38;
       letter-spacing: 0.23px;
@@ -3732,7 +3735,7 @@ hr {
         margin: 0 0 18px; } }
   .blog_section h2 {
     max-width: 371px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 28px;
     line-height: 33.6px;
     color: var(--purple-brown);
@@ -3753,7 +3756,7 @@ hr {
         font-size: 22px; } }
   .blog_section .commn-para {
     max-width: 358px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     color: #121a26b3;
     margin-bottom: 30px; }
   .blog_section .video_thumb {
@@ -3827,14 +3830,14 @@ hr {
       display: block; }
   .blog_section .time {
     font-size: 14px;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     color: var(--white-five);
     opacity: 0.6;
     line-height: 22px;
     display: block; }
   .blog_section .txt-img {
     font-size: 18px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 1.53;
     color: var(--white);
     position: absolute;
@@ -3876,7 +3879,7 @@ hr {
     padding: 0;
     margin-bottom: 40px;
     font-size: 28px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 33.6px;
     color: var(--purple-brown);
     position: relative;
@@ -3912,7 +3915,7 @@ hr {
           border-bottom: 1px solid #d6d8da;
           border-right: none; } }
       .know_section .info_card_wrap .info_card .next {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 14px;
         color: var(--purple-brown);
         display: block;
@@ -3976,7 +3979,7 @@ hr {
   padding: 50px 0; }
   .explore_travel_block .heading {
     font-size: 28px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 1.18;
     letter-spacing: normal;
     color: var(--purple-brown);
@@ -3997,7 +4000,7 @@ hr {
     max-width: 358px;
     width: 100%;
     font-size: 18px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     line-height: 1.5;
     letter-spacing: normal;
     color: #111925;
@@ -4005,7 +4008,7 @@ hr {
     margin: 20px 0; }
   .explore_travel_block .block_label {
     font-size: 18px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 1.5;
     letter-spacing: normal;
     color: var(--purple-brown); }
@@ -4030,7 +4033,7 @@ hr {
           width: 100%; } }
     .explore_travel_block .wish_card_row .see_more {
       font-size: 16px;
-      font-family: "cairo_bold";
+      font-weight: 700;
       line-height: 1.38;
       cursor: pointer;
       color: var(--rouge);
@@ -4061,7 +4064,7 @@ hr {
         margin-bottom: 10px; }
       .explore_travel_block .wish_card_row .wish_card_sm .title {
         font-size: 16px;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         line-height: 1.69;
         text-align: center;
         color: var(--eggplant);
@@ -4181,7 +4184,7 @@ hr {
                   bottom: 0; }
     .explore_travel_block .travel_grid .explore_all {
       font-size: 16px;
-      font-family: "cairo_bold";
+      font-weight: 700;
       line-height: 1.38;
       color: #a8002f;
       position: relative;
@@ -4307,7 +4310,7 @@ hr {
           width: 100%; } }
       .business_qatar .block_row .col_left .heading {
         font-size: 28px;
-        font-family: "cairo_bold";
+        font-weight: 700;
         line-height: 1.18;
         letter-spacing: normal;
         color: var(--purple-brown);
@@ -4328,7 +4331,7 @@ hr {
         max-width: 358px;
         width: 100%;
         font-size: 18px;
-        font-family: "cairo_semibold";
+        font-weight: 600;
         line-height: 1.5;
         letter-spacing: normal;
         color: #111925;
@@ -4348,7 +4351,7 @@ hr {
             display: block;
             color: var(--purple-brown);
             font-size: 14px;
-            font-family: "cairo_semibold";
+            font-weight: 600;
             line-height: 1.93;
             text-align: center;
             padding: 17px 30px; }
@@ -4364,7 +4367,7 @@ hr {
                 height: 35px; }
       .business_qatar .block_row .col_left .did_you_block .block-label {
         font-size: 18px;
-        font-family: "cairo_bold";
+        font-weight: 700;
         line-height: 1.78;
         letter-spacing: normal;
         color: var(--purple-brown);
@@ -4417,7 +4420,7 @@ hr {
           .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm .title {
             width: 93px;
             font-size: 16px;
-            font-family: "cairo_semibold";
+            font-weight: 600;
             line-height: 1.5;
             letter-spacing: normal;
             text-align: center;
@@ -4434,14 +4437,14 @@ hr {
 
 .business_title {
   font-size: 16px;
-  font-family: "cairo_bold";
+  font-weight: 700;
   line-height: 1.38;
   letter-spacing: 0.23px;
   color: var(--greyish-brown-three); }
 
 .explore_all {
   font-size: 16px;
-  font-family: "cairo_bold";
+  font-weight: 700;
   font-stretch: normal;
   font-style: normal;
   line-height: 1.38;
@@ -4505,7 +4508,7 @@ hr {
         margin: 0 auto 20px; } }
     .student_card_wrap .student_service_card h2 {
       font-size: 28px;
-      font-family: "cairo_bold";
+      font-weight: 700;
       line-height: 1.18;
       letter-spacing: normal;
       color: var(--purple-brown);
@@ -4522,7 +4525,7 @@ hr {
         background-image: url("../images/bullet_orange.svg"); }
     .student_card_wrap .student_service_card .commn-para {
       max-width: 100%;
-      font-family: "cairo_semibold";
+      font-weight: 600;
       min-height: 50px; }
     .student_card_wrap .student_service_card .services_list {
       display: flex;
@@ -4538,7 +4541,7 @@ hr {
           display: block;
           padding: 30px;
           font-size: 14px;
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           line-height: 1.93;
           color: var(--purple-brown); }
           .student_card_wrap .student_service_card .services_list li a figure {
@@ -4564,7 +4567,7 @@ hr {
   width: 300px; }
   .did_you_block .block-label {
     font-size: 18px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 1.78;
     letter-spacing: normal;
     color: var(--purple-brown);
@@ -4621,7 +4624,7 @@ hr {
   .amir_banner_section .sub-title {
     font-size: 40px;
     line-height: 0.65;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     color: var(--rouge); }
     @media (max-width: 768px) {
       .amir_banner_section .sub-title {
@@ -4632,7 +4635,7 @@ hr {
     line-height: 1.56;
     margin-top: 30px;
     display: block;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     margin-bottom: 26px; }
   .amir_banner_section .details {
     width: 500px;
@@ -4679,7 +4682,7 @@ hr {
       max-width: 418px;
       width: 100%;
       font-size: 20px;
-      font-family: 'cairo_bold';
+      font-weight: 700;
       line-height: 1.3;
       color: var(--white);
       margin-bottom: 10px;
@@ -4701,7 +4704,7 @@ hr {
   background-size: contain !important; }
   .work_exp_section h2 {
     max-width: 411px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 44px;
     line-height: 1.2;
     color: var(--purple-brown);
@@ -4736,7 +4739,7 @@ hr {
     .work_exp_section .exp_card li:last-child {
       background-image: url("../images/card-fill-brown.svg"); }
     .work_exp_section .exp_card li h3 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 18px;
       line-height: 1.5;
       color: var(--rouge-two); }
@@ -4778,7 +4781,7 @@ hr {
   .honors_section h2 {
     max-width: 264px;
     width: 100%;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 32px;
     line-height: 1.31;
     color: var(--purple-brown);
@@ -4806,7 +4809,7 @@ hr {
   .honors_section .honors_detail span {
     max-width: 359px;
     width: 100%;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 16px;
     line-height: 1.5;
     color: var(--purple-brown);
@@ -4820,7 +4823,7 @@ hr {
   .duties_section h2 {
     max-width: 427px;
     width: 100%;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 36px;
     line-height: 1.2;
     color: var(--eggplant);
@@ -4880,13 +4883,13 @@ hr {
       .about_section .detail_col {
         padding: 60px 0 0 15px; } }
     .about_section .detail_col h1 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.2;
       color: var(--dark-orange); }
       .about_section .detail_col h1 span {
         max-width: 411px;
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 44px;
         line-height: 1.2;
         color: var(--purple-brown);
@@ -4902,7 +4905,7 @@ hr {
       margin-bottom: 23px;
       color: var(--greyish-brown); }
     .about_section .detail_col .birth {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       color: var(--eggplant);
       display: block; }
 
@@ -4929,7 +4932,7 @@ hr {
   .acadmic_section h3 {
     max-width: 333px;
     width: 100%;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 32px;
     line-height: 1.38;
     text-align: center;
@@ -4963,7 +4966,7 @@ hr {
           margin: 20px 0; } }
       .acadmic_section .qualification_card_row .qualification_card span {
         max-width: 392px;
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 18px;
         line-height: 1.5;
         color: var(--white);
@@ -4988,7 +4991,7 @@ hr {
 .all_about {
   max-width: 357px;
   font-size: 28px;
-  font-family: "cairo_bold";
+  font-weight: 700;
   color: var(--purple-brown);
   line-height: 1.4; }
   @media (max-width: 768px) {
@@ -5054,7 +5057,7 @@ hr {
       .pagination ul li .arrow_link.prev {
         flex-direction: row-reverse; }
       .pagination ul li p {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 20px;
         line-height: 1.55;
         letter-spacing: normal;
@@ -5064,7 +5067,7 @@ hr {
             font-size: 12px; } }
 
 .berry_text {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   color: var(--berry); }
 
 .orange_text {
@@ -5075,7 +5078,7 @@ hr {
   background-color: var(--white-two);
   padding: 29px 30px; }
   .card h3 {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 20px;
     line-height: 1.36;
     letter-spacing: normal;
@@ -5084,7 +5087,7 @@ hr {
     margin-bottom: 19px; }
 
 .arrow_link {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 17px;
   line-height: 1.38;
   letter-spacing: normal;
@@ -5114,7 +5117,7 @@ hr {
   position: absolute;
   right: 0;
   font-size: 13px;
-  font-family: "cairo_bold";
+  font-weight: 700;
   line-height: 1.54;
   letter-spacing: normal;
   text-align: center;
@@ -5159,7 +5162,7 @@ hr {
     color: var(--deep-orange); }
   .flag_banner_section .sub-title {
     font-size: 56px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     line-height: 1.11;
     color: var(--rouge);
     margin-bottom: 10px; }
@@ -5202,7 +5205,7 @@ hr {
       padding: 20px 0; } }
   .ladaam_section .title {
     font-size: 36px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     line-height: 1.22;
     color: var(--deep-orange);
     margin-bottom: 30px; }
@@ -5211,7 +5214,7 @@ hr {
         font-size: 22px; } }
   .ladaam_section .content-label {
     font-size: 20px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     line-height: 1.23;
     color: var(--purple-brown);
     margin-bottom: 12px; }
@@ -5332,7 +5335,7 @@ hr {
     width: 100%; }
 .new_flag_section .sub-title {
   font-size: 36px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   line-height: 1.11;
   color: var(--rouge);
   margin-bottom: 10px; }
@@ -5410,7 +5413,7 @@ hr {
   font-size: 16px;
   color: var(--rouge);
   line-height: 24px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   display: block; }
 
 /***********************Vision*********************************************/
@@ -5456,7 +5459,7 @@ hr {
     padding: 0 141px 0 0; } }
 
 .banner .section_wrapper .left_sec h1 {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 56px;
   line-height: 1.2;
   letter-spacing: normal;
@@ -5497,7 +5500,7 @@ hr {
   .info .section_wrapper .right_sec .para_sec:last-child {
     margin-bottom: 0; }
   .info .section_wrapper .right_sec .para_sec h2 {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 23px;
     line-height: 1.5;
     letter-spacing: normal;
@@ -5510,7 +5513,7 @@ hr {
     letter-spacing: normal;
     color: var(--greyish-brown); }
     .info .section_wrapper .right_sec .para_sec p span {
-      font-family: 'cairo_bold'; }
+      font-weight: 700; }
   .info .section_wrapper .right_sec .para_sec ul.bullets {
     padding-left: 27px; }
     .info .section_wrapper .right_sec .para_sec ul.bullets li {
@@ -5535,7 +5538,7 @@ hr {
     .facing_challenges .section_wrapper .left_sec .title {
       max-width: 300px; }
       .facing_challenges .section_wrapper .left_sec .title h2 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 44px;
         line-height: 1.2;
         letter-spacing: normal;
@@ -5557,7 +5560,7 @@ hr {
     .facing_challenges .section_wrapper .right_sec .para_sec {
       max-width: 479px; }
       .facing_challenges .section_wrapper .right_sec .para_sec h3 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 23px;
         line-height: 1.5;
         letter-spacing: normal;
@@ -5598,7 +5601,7 @@ hr {
     .achievement .section_wrapper .left_sec .title {
       max-width: 380px; }
       .achievement .section_wrapper .left_sec .title h2 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 44px;
         line-height: 1.2;
         letter-spacing: normal;
@@ -5628,7 +5631,7 @@ hr {
       .achievement .section_wrapper .left_sec .links ul li {
         margin-bottom: 10px; }
         .achievement .section_wrapper .left_sec .links ul li a {
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 16px;
           line-height: 2.13;
           letter-spacing: normal;
@@ -5667,7 +5670,7 @@ hr {
         margin-bottom: 46px; }
       .achievement .section_wrapper .right_sec .bullet_sec .number {
         opacity: 0.25;
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 44px;
         line-height: 0.68;
         letter-spacing: normal;
@@ -5677,7 +5680,7 @@ hr {
           .achievement .section_wrapper .right_sec .bullet_sec .number {
             font-size: 28px; } }
       .achievement .section_wrapper .right_sec .bullet_sec h2 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 28px;
         line-height: 1.07;
         letter-spacing: normal;
@@ -5688,7 +5691,7 @@ hr {
     .achievement .section_wrapper .right_sec .para_sec {
       margin-top: 40px; }
       .achievement .section_wrapper .right_sec .para_sec h3 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 23px;
         line-height: 1.23;
         letter-spacing: normal;
@@ -5715,7 +5718,7 @@ hr {
           margin-bottom: 0; }
         .achievement .section_wrapper .right_sec .para_sec p span {
           color: var(--berry);
-          font-family: "cairo_bold"; }
+          font-weight: 700; }
       .achievement .section_wrapper .right_sec .para_sec .aspects_points ul {
         display: flex;
         align-items: flex-start;
@@ -5793,14 +5796,14 @@ hr {
       .pagination ul li .arrow_link.prev {
         flex-direction: row-reverse; }
       .pagination ul li p {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 20px;
         line-height: 1.55;
         letter-spacing: normal;
         color: var(--purple-brown); }
 
 .berry_text {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   color: var(--berry); }
 
 .orange_text {
@@ -5811,7 +5814,7 @@ hr {
   background-color: var(--white-two);
   padding: 29px 30px; }
   .card h3 {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 20px;
     line-height: 1.36;
     letter-spacing: normal;
@@ -5820,7 +5823,7 @@ hr {
     margin-bottom: 19px; }
 
 .arrow_link {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 17px;
   line-height: 1.38;
   letter-spacing: normal;
@@ -5884,7 +5887,7 @@ hr {
         padding: 0;
         top: 0; } }
     .vision_banner .section_wrapper .left_sec h1 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 56px;
       line-height: 1.2;
       letter-spacing: normal;
@@ -5896,7 +5899,7 @@ hr {
           max-width: 100%;
           margin: 0 auto; } }
     .vision_banner .section_wrapper .left_sec .heading-sm {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 56px;
       display: block;
       color: var(--berry); }
@@ -5989,7 +5992,7 @@ hr {
           margin: 0 15px 0 0;
           padding: 0; } }
       .government_banner .section_wrapper .left_sec h1 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 56px;
         line-height: 1.2;
         letter-spacing: normal;
@@ -6086,7 +6089,7 @@ hr {
           position: relative;
           top: auto; } }
       .structure_government .section_wrapper .left_sec .heading .heading_28 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 28px;
         line-height: 1.21;
         letter-spacing: normal;
@@ -6107,7 +6110,7 @@ hr {
           .structure_government .section_wrapper .left_sec .links {
             margin: 30px 0; } }
         .structure_government .section_wrapper .left_sec .links .para_13 {
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 13px;
           line-height: 1.69;
           letter-spacing: normal;
@@ -6177,7 +6180,7 @@ hr {
       .structure_government .section_wrapper .right_sec .para_sec {
         margin-top: 40px; }
         .structure_government .section_wrapper .right_sec .para_sec h3 {
-          font-family: 'cairo_bold';
+          font-weight: 700;
           font-size: 23px;
           line-height: 1.23;
           letter-spacing: normal;
@@ -6280,7 +6283,7 @@ hr {
       display: block;
       width: 100%; }
       .history .section_wrapper .title .heading_28 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 28px;
         line-height: 1.21;
         letter-spacing: normal;
@@ -6380,7 +6383,7 @@ hr {
         .public_sector .section_wrapper .title {
           max-width: 100%; } }
       .public_sector .section_wrapper .title .heading_36 {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 36px;
         line-height: 1.2;
         letter-spacing: normal;
@@ -6394,7 +6397,7 @@ hr {
       .public_sector .para_sec {
         margin-bottom: 0; } }
     .public_sector .para_sec .heading_22 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.5;
       letter-spacing: normal;
@@ -6412,7 +6415,7 @@ hr {
         .public_sector .para_sec p {
           font-size: 14px; } }
       .public_sector .para_sec p span {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         color: var(--rouge-two); }
     .public_sector .para_sec ul.bullets {
       padding-left: 27px;
@@ -6456,7 +6459,7 @@ hr {
   .characterstics .para_sec {
     margin-bottom: 23px; }
     .characterstics .para_sec .heading_36 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 36px;
       letter-spacing: normal;
       color: var(--rouge-two);
@@ -6516,7 +6519,7 @@ hr {
   .modernise_develop .section_wrapper:first-child {
     padding-bottom: 0; }
   .modernise_develop .section_wrapper .para_sec .heading_36 {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 36px;
     line-height: 1.33;
     letter-spacing: normal;
@@ -6555,7 +6558,7 @@ hr {
             line-height: 1.5;
             letter-spacing: normal; }
         .modernise_develop .section_wrapper .flex_col .col_4 .card h3 {
-          font-family: 'cairo_bold';
+          font-weight: 700;
           font-size: 20px;
           line-height: 1.36;
           letter-spacing: normal;
@@ -6675,7 +6678,7 @@ hr {
           width: 100%; } }
   .government_assessed .section_wrapper .para_sec h2 {
     margin-bottom: 33px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 36px;
     line-height: 1.33;
     letter-spacing: normal;
@@ -6686,7 +6689,7 @@ hr {
   .government_assessed .section_wrapper .para_sec h3 {
     line-height: 1.35;
     margin-bottom: 23px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 20px;
     letter-spacing: normal;
     margin-bottom: 12px;
@@ -6711,7 +6714,7 @@ hr {
       .government_assessed .section_wrapper .card {
         margin: 30px 0; } }
     .government_assessed .section_wrapper .card h3 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 23px;
       line-height: 1.36;
       letter-spacing: normal;
@@ -6731,9 +6734,9 @@ hr {
       justify-content: flex-end;
       margin-top: 24px;
       font-size: 14px;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       color: var(--eggplant);
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 17px;
       line-height: 1.38;
       letter-spacing: normal;
@@ -6813,7 +6816,7 @@ hr {
             margin-bottom: 0;
             height: 59px; } }
       .bottom_links ul li p, .bottom_links ul a p {
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.5;
         letter-spacing: normal;
@@ -6858,7 +6861,7 @@ hr {
             height: 31px;
             text-align: center;
             background-color: var(--white-five);
-            font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 15px;
             line-height: 1.8;
             color: var(--rouge-two);
@@ -6966,7 +6969,7 @@ hr {
       .pagination ul li:last-child:after {
         width: 0px; }
       .pagination ul li .arrow_link {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 14px;
         line-height: 1.38;
         letter-spacing: normal;
@@ -6990,14 +6993,14 @@ hr {
         .pagination ul li .arrow_link.prev {
           flex-direction: row-reverse; }
       .pagination ul li p {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 22px;
         line-height: 1.55;
         letter-spacing: normal;
         color: var(--purple-brown); }
         @media screen and (max-width: 1024px) {
           .pagination ul li p {
-            font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 14px;
             line-height: 1.25; } }
       @media screen and (max-width: 768px) {
@@ -7008,7 +7011,7 @@ hr {
     background-color: var(--white-five);
     padding: 10px 23px;
     text-decoration: none;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 13px;
     line-height: 1.54;
     letter-spacing: normal;
@@ -7044,7 +7047,7 @@ hr {
   padding: 50px 0; }
   .what_mood_block .heading {
     font-size: 32px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 1.06;
     color: var(--purple-brown);
     margin-bottom: 30px; }
@@ -7059,7 +7062,7 @@ hr {
     .what_mood_block .mood .mood_tag {
       display: inline-block;
       font-size: 16px;
-      font-family: "cairo_semibold";
+      font-weight: 600;
       line-height: 1.5;
       text-align: center;
       cursor: pointer; }
@@ -7095,7 +7098,7 @@ hr {
   .update_everyday_block .heading {
     width: 303px;
     font-size: 36px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 1.2;
     letter-spacing: normal;
     color: var(--white);
@@ -7136,7 +7139,7 @@ hr {
               height: 20px; } }
       .update_everyday_block .every_update_row .block .title {
         font-size: 18px;
-        font-family: "cairo_bold";
+        font-weight: 700;
         font-stretch: normal;
         font-style: normal;
         line-height: 1.33;
@@ -7166,7 +7169,7 @@ hr {
   background-repeat: no-repeat; }
   .directory_block .heading {
     font-size: 28px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     line-height: 1.21;
     letter-spacing: normal;
     color: var(--purple-brown);
@@ -7199,7 +7202,7 @@ hr {
       border-bottom: solid 1px #d6d8da;
       padding: 46px 20px;
       font-size: 16px;
-      font-family: "cairo_semibold";
+      font-weight: 600;
       text-align: center;
       position: relative;
       cursor: pointer; }
@@ -7317,7 +7320,7 @@ hr {
     padding: 0 10px;
     position: relative;
     font-size: 16px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     line-height: 1.38;
     letter-spacing: normal;
     color: var(--purple-brown);
@@ -7354,7 +7357,7 @@ hr {
       font-weight: 600;
       border-bottom: solid 1px var(--border-color); }
       .header_drp_dwn .option_wrapper li a {
-        font-family: "cairo_semibold";
+        font-weight: 600;
         padding: 19px;
         display: block;
         color: var(--purple-brown);
@@ -7415,7 +7418,7 @@ hr {
   .f_flow_col {
     flex-flow: column; } }
 .category_heading {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 28px;
   line-height: 1.07;
   color: var(--black);
@@ -7495,7 +7498,7 @@ hr {
         display: none; } }
     .category_view_menu_wrap li a {
       font-size: 14px;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       line-height: 1.79;
       color: var(--black-two);
       display: block;
@@ -7525,14 +7528,14 @@ hr {
         margin: 0 8px; } }
     .category_tab_wrapper ul li a {
       text-transform: uppercase;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 15px;
       line-height: 1.33;
       color: var(--black-two);
       padding: 0 0 12px 0; }
       .category_tab_wrapper ul li a.active {
         color: var(--blue) !important;
-        font-family: 'cairo_bold'; }
+        font-weight: 700; }
         .category_tab_wrapper ul li a.active:after {
           width: 100%; }
       .category_tab_wrapper ul li a.link:hover {
@@ -7586,7 +7589,7 @@ hr {
   z-index: 9;
   display: none; }
   .mob_tab_wrapr li a {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 15px;
     color: var(--black-two);
     line-height: 30px; }
@@ -7620,7 +7623,7 @@ hr {
     margin-left: 15px;
     padding-right: 20px; }
     .categor_filter_wrap li a {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 15px;
       line-height: 1.33;
       color: var(--black-two);
@@ -7668,7 +7671,7 @@ hr {
   border-radius: 22px;
   background-color: var(--rouge);
   color: var(--white);
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 16px;
   padding: 12px 68px; }
 
@@ -7676,7 +7679,7 @@ hr {
   border: 1px solid var(--white-six);
   color: var(--black-two);
   border-radius: 22px;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 16px;
   padding: 11px 25px;
   background-color: var(--white); }
@@ -7733,7 +7736,7 @@ hr {
       .category_filter_wrapper_layer .category_filter_wrapr {
         width: 100%; } }
     .category_filter_wrapper_layer .category_filter_wrapr h3, .category_filter_wrapper_layer .category_filter_wrapr .custom_modal_heading {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.09;
       color: var(--black);
@@ -7764,7 +7767,7 @@ hr {
     .category_filter_wrapper_layer .category_filter_wrapr input {
       padding: 12px 15px; }
     .category_filter_wrapper_layer .category_filter_wrapr label {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 14px;
       line-height: 1.43;
       color: var(--black-two);
@@ -7832,7 +7835,7 @@ hr {
         background-repeat: no-repeat;
         background-position: right; }
     .category_sort_wrapper_layer .sort_wrapr h3 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 22px;
       line-height: 1.36;
       color: var(--black);
@@ -7852,7 +7855,7 @@ hr {
 .show_label_grey {
   color: var(--warm-grey);
   font-size: 15px;
-  font-family: "cairo_semibold"; }
+  font-weight: 600; }
 
 .brief_wrap {
   display: flex;
@@ -7861,7 +7864,7 @@ hr {
 
 .brief_descr {
   font-size: 15px;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   line-height: 1.56;
   color: var(--black-two);
   overflow: hidden;
@@ -7873,7 +7876,7 @@ hr {
 
 .read_more {
   font-size: 15px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   line-height: 1.56;
   color: var(--deep-orange);
   width: 23%; }
@@ -8089,7 +8092,7 @@ hr {
       font-size: 14px;
       line-height: 1.57;
       color: #8a8a8a;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       padding: 11px 15px 11px 45px;
       width: 300px;
       border-radius: 12px; }
@@ -8170,7 +8173,7 @@ hr {
 .tag_g {
   padding: 5px 10px;
   font-size: 12px;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   border-radius: 8px;
   background-color: #b51647b3;
   color: var(--white);
@@ -8251,7 +8254,7 @@ hr {
       height: 30px; } }
 
 .card_title {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 22px;
   line-height: 1;
   color: var(--black);
@@ -8272,14 +8275,14 @@ hr {
       height: 20px;
       object-fit: cover; }
   .author_wrap .by {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 12px;
     line-height: 1.67;
     color: #4a4a4a; }
 
 .show_label {
   display: block;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 15px;
   line-height: 1.5;
   color: var(--black-two);
@@ -8290,7 +8293,7 @@ hr {
       font-size: 14px; } }
 
 .custom_label {
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 12px;
   line-height: 1.67;
   color: #8a8a8a; }
@@ -8299,7 +8302,7 @@ hr {
   font-size: 14px;
   color: var(--rouge);
   display: block;
-  font-family: 'cairo_semibold'; }
+  font-weight: 600; }
 
 .icon {
   position: relative; }
@@ -8406,7 +8409,7 @@ hr {
           transform: translateY(-50%); }
 
 h3 {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 22px;
   line-height: 0.91;
   color: var(--black);
@@ -8451,7 +8454,7 @@ h3 {
     padding: 34px 0;
     color: var(--black-two);
     font-size: 16px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     display: inline-block;
     text-transform: uppercase;
     position: relative;
@@ -8539,7 +8542,7 @@ h3 {
         .video_img_wrapper .detail_card .author_wrap, .video_img_wrapper .detail_card .show_label {
           margin-bottom: 12px; } }
     .video_img_wrapper .detail_card .add {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 12px;
       line-height: 1.67;
       color: var(--rouge);
@@ -8580,7 +8583,7 @@ h3 {
     margin: 0 0 0 0;
     display: block; } }
 .commn_para {
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 16px;
   line-height: 2.19;
   color: var(--black-two);
@@ -8595,7 +8598,7 @@ h3 {
   .schedule_wrap li {
     display: flex; }
     .schedule_wrap li span {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 16px;
       line-height: 2.19;
       color: var(--black-two);
@@ -8626,7 +8629,7 @@ h3 {
       .facilities_wrap li {
         margin: 0 10px 5px 0; } }
     .facilities_wrap li span {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 16px;
       line-height: 1.56;
       color: var(--black-two);
@@ -8660,13 +8663,15 @@ h3 {
   @media (max-width: 640px) {
     .detail_card {
       margin: 0; } }
+  .detail_card .category_card {
+    width: 100%; }
   .detail_card .title_wrap {
     display: flex;
     justify-content: space-between; }
     .detail_card .title_wrap h3 {
       margin: 0; }
     .detail_card .title_wrap a {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 14px;
       line-height: 1.43;
       color: #4a4a4a;
@@ -8705,12 +8710,12 @@ h3 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 12px;
     line-height: 1.67;
     color: var(--black-two); }
   .ev_card .view_map {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 16px;
     padding: 5px;
     color: var(--black-two);
@@ -8722,7 +8727,7 @@ h3 {
     .ev_card.servce_card li:last-child {
       border: none; }
     .ev_card.servce_card li .heading {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       color: var(--black-two);
       display: block; }
@@ -8746,7 +8751,7 @@ h3 {
       font-size: 12px;
       line-height: 1.67; }
     .ev_card .provider_detail .name {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.71;
       color: var(--black-two);
@@ -8765,7 +8770,7 @@ h3 {
     position: relative;
     padding-left: 30px;
     margin: 0 0 28px 0;
-    font-family: "cairo_bold";
+    font-weight: 700;
     position: relative; }
     .gallry_wrap h1::before {
       background: url(../images/bullet_orange.svg) center no-repeat;
@@ -8835,7 +8840,7 @@ h3 {
     position: relative;
     padding-left: 30px;
     margin: 0 0 28px 0;
-    font-family: "cairo_bold";
+    font-weight: 700;
     position: relative; }
     @media (max-width: 768px) {
       .more_wrap h1 {
@@ -8907,7 +8912,7 @@ h3 {
     .similar_services .ev_card.servce_card li:last-child {
       border: none; }
     .similar_services .ev_card.servce_card li .heading {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       color: var(--black-two);
       display: block; }
@@ -8917,13 +8922,13 @@ h3 {
       margin: 5px 0;
       display: block; }
 .similar_services .txt_booking {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 18px;
   display: block;
   margin: 12px 0 0;
   color: var(--black1); }
 .similar_services .subtext {
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 15px; }
 .similar_services .hotel .txt_booking {
   color: var(--black1); }
@@ -8947,12 +8952,12 @@ h3 {
       border: solid 1px #e9e9e9;
       display: inline-block;
       font-size: 16px;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       color: var(--rouge) !important;
       padding: 8px 15px; }
       .pagination_wrapper li a:hover, .pagination_wrapper li a.active {
         background-color: var(--rouge);
-        color: var(--white); }
+        color: var(--white) !important; }
       .pagination_wrapper li a img {
         width: 13px;
         height: 8px; }
@@ -8960,6 +8965,12 @@ h3 {
 .map_view .pagination_wrapper {
   justify-content: flex-start;
   margin: 7px 0 0 0px; }
+
+.pagination > .disabled > a, .pagination > .disabled > a:focus, .pagination > .disabled > a:hover, .pagination > .disabled > span, .pagination > .disabled > span:focus, .pagination > .disabled > span:hover {
+  color: #777 !important;
+  cursor: not-allowed;
+  background-color: #fff;
+  border-color: #ddd; }
 
 /*********************************************************************************/
 /***************************************Category News******************************************/
@@ -9003,7 +9014,7 @@ h3 {
       padding-right: 8px;
       display: inline-block; }
   .category_pharmacy_card .list_card .distance {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 14px;
     line-height: 1.43;
     color: var(--warm-grey);
@@ -9036,7 +9047,7 @@ h3 {
     background-color: #ffedf2; }
 .category_hospital_card .close_hp {
   color: #c32626;
-  font-family: "cairo_semibold"; }
+  font-weight: 600; }
 .category_hospital_card .open_hp {
   color: #45ca19 !important; }
 .category_hospital_card .details {
@@ -9061,7 +9072,7 @@ h3 {
       .category_hospital_card .details .content_wrap.speciality_wrap .more {
         padding-left: 10px; }
 .category_hospital_card .distance {
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.43;
   color: var(--warm-grey);
@@ -9102,7 +9113,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .hospital_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9169,7 +9180,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .malls_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9180,7 +9191,7 @@ h3 {
     display: none; }
 .malls_detail .facilities_wrap a {
   color: #009dbd;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   line-height: 2.19; }
 .malls_detail .hd {
   display: block; }
@@ -9203,7 +9214,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .areas_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9214,7 +9225,7 @@ h3 {
     display: none; }
 .areas_detail .facilities_wrap a {
   color: #009dbd;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   line-height: 2.19; }
 .areas_detail .hd {
   display: block; }
@@ -9267,7 +9278,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .police_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9307,7 +9318,7 @@ h3 {
       top: 80px;
       right: 10px; }
     .category_job_card .list_card .details .org_name {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 14px;
       display: block;
       line-height: 1.43;
@@ -9338,7 +9349,7 @@ h3 {
 
 .job_detail .hd {
   display: block;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   color: var(--black-two);
   line-height: 1.56;
   margin-bottom: 15px; }
@@ -9357,7 +9368,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 100%; }
     .job_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9396,7 +9407,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .museum_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9422,7 +9433,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .bank_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9433,7 +9444,7 @@ h3 {
     display: none; }
 .bank_detail .facilities_wrap a {
   color: #009dbd;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   line-height: 2.19; }
 .bank_detail .hd {
   display: block; }
@@ -9441,10 +9452,12 @@ h3 {
 /***************************************Bank close******************************************/
 /***************************************Insaurance******************************************/
 .category_insaurance_card .list_card {
-  min-height: 460px; }
+  min-height: 500px; }
+  .category_insaurance_card .list_card .details {
+    padding: 17px 20px 10px; }
 
 .list_view .category_insaurance_card .list_card .details {
-  padding: 24px 20px 10px 32px; }
+  padding: 10px 20px 10px 32px; }
 
 /*************************************Insaurance close*************************************/
 /***************************************Benefits******************************************/
@@ -9512,7 +9525,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .law_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -9535,7 +9548,7 @@ h3 {
   .custom_modal .modal-header {
     border: none; }
   .custom_modal .modal_heading {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 22px;
     line-height: 1.36;
     color: var(--black); }
@@ -9815,7 +9828,7 @@ h3 {
     padding-bottom: 20px; }
     .accessibility .heading h2 {
       font-size: 28px;
-      font-family: "cairo_bold";
+      font-weight: 700;
       color: var(--black);
       margin-bottom: 0; }
   .accessibility .disabilities li,
@@ -9823,19 +9836,19 @@ h3 {
     font-size: 16px;
     color: var(--black);
     margin-bottom: 15px;
-    font-family: 'cairo_semibold'; }
+    font-weight: 600; }
     .accessibility .disabilities li .link-text,
     .accessibility p .link-text {
-      font-family: "cairo_bold";
+      font-weight: 700;
       color: var(--berry); }
   .accessibility .disabilities p {
     margin-bottom: 25px;
-    font-family: "cairo_semibold"; }
+    font-weight: 600; }
   .accessibility .disabilities li {
     position: relative;
     padding-left: 22px;
     margin-bottom: 25px;
-    font-family: 'cairo_semibold'; }
+    font-weight: 600; }
     .accessibility .disabilities li::before {
       content: '';
       width: 8px;
@@ -9869,7 +9882,7 @@ h3 {
         padding-bottom: 30px; } }
     .sitemap .heading h2 {
       font-size: 28px;
-      font-family: "cairo_bold";
+      font-weight: 700;
       color: var(--black-two);
       margin-bottom: 0; }
   .sitemap .sitemap-box {
@@ -9882,7 +9895,7 @@ h3 {
         padding: 12px 20px; } }
     .sitemap .sitemap-box .highlight {
       font-size: 22px;
-      font-family: "cairo_bold";
+      font-weight: 700;
       color: var(--rouge);
       display: block; }
       @media (max-width: 992px) {
@@ -9929,7 +9942,7 @@ h3 {
     .privacy-policy {
       padding: 30px 0; } }
   .privacy-policy .heading h2 {
-    font-family: "cairo_bold";
+    font-weight: 700;
     color: var(--blaack);
     margin-bottom: 30px;
     font-size: 22px; }
@@ -9938,7 +9951,7 @@ h3 {
         margin-bottom: 15px; } }
   .privacy-policy p {
     font-size: 16px;
-    font-family: "cairo_semibold";
+    font-weight: 600;
     color: var(--blaack);
     line-height: 2.19;
     margin-bottom: 20px; }
@@ -9955,7 +9968,7 @@ h3 {
 .customer_services .query_links {
   margin-bottom: 25px; }
   .customer_services .query_links a {
-    font-family: "cairo_bold";
+    font-weight: 700;
     font-size: 14px;
     line-height: 0.71;
     color: var(--rouge);
@@ -9976,7 +9989,7 @@ h3 {
         padding: 9px 11px;
         margin-right: 6px; } }
 .customer_services .txt_wrapper .title {
-  font-family: "cairo_bold";
+  font-weight: 700;
   font-size: 22px;
   line-height: 0.91;
   color: var(--black);
@@ -9986,7 +9999,7 @@ h3 {
       font-size: 20px;
       margin-bottom: 12px; } }
 .customer_services .txt_wrapper .brief {
-  font-family: "cairo_semibold";
+  font-weight: 600;
   font-size: 16px;
   line-height: 2.19;
   color: var(--black-two);
@@ -10031,7 +10044,7 @@ h3 {
   .custom_modal.customer_service_modal .modal-body {
     padding: 0; }
   .custom_modal.customer_service_modal label {
-    font-family: "cairo_semibold";
+    font-weight: 600;
     font-size: 13px;
     line-height: 0.92;
     letter-spacing: 0.19px;
@@ -10062,7 +10075,7 @@ h3 {
   .custom_modal.customer_service_modal #attach_file {
     padding-left: 135px; }
   .custom_modal.customer_service_modal .note {
-    font-family: "cairo_semibold";
+    font-weight: 600;
     font-size: 12px;
     line-height: 1;
     margin: 12px 0 0 0;
@@ -10120,7 +10133,7 @@ h3 {
     cursor: pointer; }
   .faq-section .ac-title p {
     font-size: 20px;
-    font-family: "cairo_bold";
+    font-weight: 700;
     word-wrap: break-word;
     color: var(--black);
     margin: 0;
@@ -10135,7 +10148,7 @@ h3 {
     border-top: none;
     margin: 0px 0 0 0; }
   .faq-section .commn-para-sm {
-    font-family: "cairo_semibold";
+    font-weight: 600;
     font-size: 16px;
     color: var(--slate-grey);
     padding: 0px 20px 0px 20px;
@@ -10197,7 +10210,7 @@ h3 {
     max-width: 928px;
     margin: 0 100px 0 0;
     color: var(--slate-grey);
-    font-family: "cairo_semibold";
+    font-weight: 600;
     line-height: 1.9; }
     @media (max-width: 1024px) {
       .cookies_banner_wrapper p {
@@ -10211,7 +10224,7 @@ h3 {
         padding: 0 20px; } }
   .cookies_banner_wrapper .primary_btn {
     background-color: var(--rouge);
-    font-family: "cairo_bold";
+    font-weight: 700;
     font-size: 16px;
     width: 150px;
     border-radius: 25px;
@@ -10283,7 +10296,7 @@ h3 {
           .download_utility_directory .category_tab_wrapper.directory_tab ul li {
             margin: 0 13px 0 0; } }
         .download_utility_directory .category_tab_wrapper.directory_tab ul li a {
-          font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 16px;
           line-height: 1.5;
           letter-spacing: 0.23px;
@@ -10294,7 +10307,7 @@ h3 {
               font-size: 12px; } }
           .download_utility_directory .category_tab_wrapper.directory_tab ul li a.active {
             color: var(--dark-orange) !important;
-            font-family: 'cairo_bold'; }
+            font-weight: 700; }
             .download_utility_directory .category_tab_wrapper.directory_tab ul li a.active:after {
               width: 100%; }
           .download_utility_directory .category_tab_wrapper.directory_tab ul li a.link:hover {
@@ -10307,7 +10320,7 @@ h3 {
         display: block !important;
         margin: 22px 0; } }
   .download_utility_directory .tag {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 10px;
     line-height: 1.3;
     color: var(--purple-brown);
@@ -10317,7 +10330,7 @@ h3 {
     background-color: var(--white);
     margin-left: 3px; }
   .download_utility_directory .title {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 30px;
     line-height: 1.43;
     color: #2a2a2a33;
@@ -10327,7 +10340,7 @@ h3 {
         font-size: 21px;
         margin: 15px 0; } }
   .download_utility_directory .directory_title {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 36px;
     line-height: 1.19;
     color: var(--purple-brown);
@@ -10353,20 +10366,20 @@ h3 {
       margin: 0 20px 20px 0; }
       @media screen and (max-width: 768px) {
         .download_utility_directory .directory_card_row .directory_card {
-          width: 192px; } }
+          width: 184px; } }
       @media screen and (max-width: 640px) {
         .download_utility_directory .directory_card_row .directory_card {
           width: 100%;
           margin: 10px auto; } }
       .download_utility_directory .directory_card_row .directory_card .card_title {
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 17px;
         line-height: 1.59;
         color: var(--dark-orange);
         margin-bottom: 7px;
         text-align: center; }
       .download_utility_directory .directory_card_row .directory_card .card_brief {
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px;
         line-height: 1.57;
         color: var(--slate-grey);
@@ -10379,7 +10392,7 @@ h3 {
     padding: 30px 0; }
     .download_utility_directory .feedback_link p {
       font-size: 14px;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       color: var(--purple-brown);
       margin-right: 50px; }
     .download_utility_directory .feedback_link .like {
@@ -10390,7 +10403,7 @@ h3 {
         height: 31px;
         text-align: center;
         background-color: var(--white-five);
-        font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 15px;
         line-height: 2;
         color: var(--rouge-two);
@@ -10404,13 +10417,13 @@ h3 {
         height: 0;
         opacity: 0; }
   .download_utility_directory .txt_link {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     line-height: 2.69;
     color: var(--dark-orange); }
   .download_utility_directory .backtoprev_wrap {
     padding-bottom: 30px; }
   .download_utility_directory .back {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 20px;
     line-height: 2.15;
     color: var(--purple-brown);
@@ -10459,7 +10472,7 @@ h3 {
     position: relative;
     margin-bottom: 45px; }
   .download_utility_directory h3 {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 20px;
     line-height: 2.15;
     margin-bottom: 12px;
@@ -10468,12 +10481,12 @@ h3 {
     align-items: center;
     padding: 0 30px 0 10px; }
   .download_utility_directory .view_all {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     color: var(--rouge-three);
     display: inline-block;
     margin-bottom: 12px; }
   .download_utility_directory .heading {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 28px;
     color: var(--black);
     position: relative;
@@ -10627,7 +10640,7 @@ h3 {
     list-style-type: decimal;
     margin: 0;
     color: var(--black-two);
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     flex: 1 1 auto; }
     .charity_detail .digit_wrap li .commn_para {
       margin-bottom: 10px; }
@@ -10825,7 +10838,7 @@ h3 {
         transform-origin: center center;
         transition: transform 0.6s cubic-bezier(0.215, 0.61, 0.355, 1); }
     .article_topics .article_card .topic_name {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 16px;
       line-height: 1.5;
       color: var(--eggplant);
@@ -10859,7 +10872,9 @@ h3 {
     margin: 0 0 15px;
     width: 100%;
     overflow: visible;
-    white-space: normal; }
+    color: var(--black);
+    white-space: normal;
+    padding: 0; }
 .category_polls_card .row_wrap {
   margin-bottom: 14px; }
 .category_polls_card .radio_wrap {
@@ -10872,7 +10887,7 @@ h3 {
     background-color: #f9f9f9;
     margin-right: 16px; }
   .category_polls_card .radio_wrap label {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 16px;
     line-height: 1.38;
     letter-spacing: 0.23px;
@@ -10885,7 +10900,7 @@ h3 {
   position: relative; }
   .category_polls_card .progress_wrap .percentage {
     font-size: 16px;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     line-height: 1.38;
     letter-spacing: 0.23px;
     color: var(--black-two);
@@ -10916,7 +10931,7 @@ h3 {
   align-items: center;
   margin: 25px 0 0; }
   .category_polls_card .vote_wrap .total_count {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 16px;
     line-height: 1.38;
     letter-spacing: 0.23px;
@@ -11008,7 +11023,7 @@ h3 {
     height: 250px;
     object-fit: cover; }
 .survey_form .title {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 28px;
   color: var(--black); }
 .survey_form .form_wrapper {
@@ -11016,7 +11031,7 @@ h3 {
   .survey_form .form_wrapper .form_field {
     margin-bottom: 40px; }
     .survey_form .form_wrapper .form_field .question {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 18px;
       line-height: 1.94;
       color: var(--black-two);
@@ -11027,7 +11042,7 @@ h3 {
       resize: none;
       min-height: 120px;
       font-size: 14px;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       line-height: 1.57;
       color: var(--warm-grey);
       max-width: 570px;
@@ -11047,7 +11062,7 @@ h3 {
       background-color: var(--white);
       margin-right: 15px; }
     .survey_form .form_wrapper .radio_wrap label {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 18px;
       line-height: 1.33;
       color: var(--black-two); }
@@ -11100,7 +11115,7 @@ h3 {
     height: 250px;
     object-fit: cover; }
 .entity_services .txt_wrapper .title, .statistics .txt_wrapper .title, .e_participation .txt_wrapper .title {
-  font-family: "cairo_bold";
+  font-weight: 700;
   color: var(--black);
   font-size: 28px;
   line-height: 0.71;
@@ -11110,7 +11125,7 @@ h3 {
       font-size: 20px;
       margin-bottom: 12px; } }
 .entity_services .txt_wrapper .brief, .statistics .txt_wrapper .brief, .e_participation .txt_wrapper .brief {
-  font-family: "cairo_semibold";
+  font-weight: 600;
   font-size: 16px;
   line-height: 2.19;
   color: var(--black-two);
@@ -11121,7 +11136,7 @@ h3 {
       line-height: 2;
       margin-bottom: 20px; } }
   .entity_services .txt_wrapper .brief .heighlight, .statistics .txt_wrapper .brief .heighlight, .e_participation .txt_wrapper .brief .heighlight {
-    font-family: "cairo_bold";
+    font-weight: 700;
     color: var(--rouge); }
 .entity_services .category_heading, .statistics .category_heading, .e_participation .category_heading {
   margin: 0 0 50px 0; }
@@ -11140,7 +11155,7 @@ h3 {
     border: solid 1px #d5d6d8;
     text-align: center;
     font-size: 16px;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     padding: 37px 10px 20px;
     margin: 0 20px 20px 0; }
     @media (max-width: 640px) {
@@ -11163,7 +11178,7 @@ h3 {
       text-align: center; }
     .entity_services .cards_wrap .statistics_card .count, .statistics .cards_wrap .statistics_card .count, .e_participation .cards_wrap .statistics_card .count {
       font-size: 24px;
-      font-family: 'cairo_bold';
+      font-weight: 700;
       line-height: 1.13;
       color: var(--dark-orange);
       margin-bottom: 5px;
@@ -11205,6 +11220,9 @@ h3 {
     flex: 1 1 auto; }
     .entity_services .objectves_card_wrap a:last-child, .statistics .objectves_card_wrap a:last-child, .e_participation .objectves_card_wrap a:last-child {
       margin: 0; }
+      @media screen and (max-width: 640px) {
+        .entity_services .objectves_card_wrap a:last-child, .statistics .objectves_card_wrap a:last-child, .e_participation .objectves_card_wrap a:last-child {
+          margin: auto; } }
     @media screen and (max-width: 820px) {
       .entity_services .objectves_card_wrap a, .statistics .objectves_card_wrap a, .e_participation .objectves_card_wrap a {
         max-width: 315px; } }
@@ -11214,7 +11232,7 @@ h3 {
         height: 120px;
         margin: 0 auto 15px; } }
     .entity_services .objectves_card_wrap a span, .statistics .objectves_card_wrap a span, .e_participation .objectves_card_wrap a span {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 18px;
       color: var(--purple-brown);
       line-height: 32px; }
@@ -11373,7 +11391,7 @@ h3 {
   flex-flow: column;
   padding: 70px 0; }
   .no_data_found_wrap .no_data {
-    font-family: "cairo_semibold";
+    font-weight: 600;
     font-size: 24px;
     line-height: 0.83;
     color: var(--warm-grey);
@@ -11414,7 +11432,7 @@ h3 {
       bottom: 168px; } }
 
 .custom_error h2 {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 28px;
   line-height: 33.6px;
   color: var(--purple-brown);
@@ -11433,18 +11451,18 @@ h3 {
 .custom_error .tag_section .tags_wrapper {
   max-width: 100%; }
 .custom_error .tag_section .title {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 18px;
   color: var(--purple-brown);
   margin-bottom: 15px; }
 .custom_error .rouge_btn {
   border-radius: 13px;
   font-size: 14px;
-  font-family: 'cairo_bold';
+  font-weight: 700;
   padding: 9px 14px; }
 .custom_error .go_back {
   position: relative;
-  font-family: "cairo_semibold";
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.57;
   color: var(--slate-grey);
@@ -11477,7 +11495,7 @@ h3 {
     max-width: 486px;
     padding: 40px 24px; }
     .custom_error_banner .solution_block .title {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.35;
       color: var(--rouge);
@@ -11503,7 +11521,7 @@ h3 {
           background: url(../images/bullet_pink.svg) center no-repeat;
           background-size: contain; }
         .custom_error_banner .solution_block .steps_to_follow li p a {
-          font-family: 'cairo_bold';
+          font-weight: 700;
           color: var(--dark-orange); }
   .custom_error_banner .banner_img {
     width: 594px;
@@ -11522,13 +11540,13 @@ h3 {
   .custom_error_banner .go_back {
     display: block; }
   .custom_error_banner h1 {
-    font-family: "cairo_bold";
+    font-weight: 700;
     font-size: 64px;
     line-height: 1.05;
     color: var(--rouge);
     display: inline-block; }
     .custom_error_banner h1 span {
-      font-family: "cairo_bold";
+      font-weight: 700;
       font-size: 32px;
       line-height: 1;
       color: var(--purple-brown);
@@ -11540,7 +11558,7 @@ h3 {
     color: var(--slate-grey);
     margin-bottom: 10px; }
     .custom_error_banner .error_msg span {
-      font-family: "cairo_bold";
+      font-weight: 700;
       font-size: 14px;
       line-height: 1.93;
       color: var(--slate-grey);
@@ -11601,7 +11619,7 @@ h3 {
         height: 40px;
         object-fit: contain; }
     .custom_error_explore .explore_card span {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 18px;
       line-height: 1.5;
       color: var(--purple-brown);
@@ -11663,7 +11681,7 @@ h3 {
           cursor: pointer;
           justify-content: flex-end; }
           .custom_search .search_input .input_wrap .adv_search_wrapper .adv_search .text {
-            font-family: 'cairo_semibold';
+            font-weight: 600;
             font-size: 13px;
             font-weight: 600;
             line-height: 1.29;
@@ -11679,7 +11697,7 @@ h3 {
     .custom_search .search_input .search_btn button {
       border-radius: 12px;
       background-color: var(--rouge);
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       letter-spacing: 0.18px;
       color: var(--white);
@@ -11714,7 +11732,7 @@ h3 {
         padding-right: 0;
         width: 100%; } }
   .report_section label {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 13px;
     line-height: 0.92;
     letter-spacing: 0.19px;
@@ -11729,7 +11747,7 @@ h3 {
     font-size: 14px;
     letter-spacing: 0.2px;
     color: #ffffffb3;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     width: 100%; }
     .report_section input:hover, .report_section input:focus, .report_section textarea:hover, .report_section textarea:focus {
       border: 1px solid #fff; }
@@ -11742,13 +11760,13 @@ h3 {
   .report_section .report_btn {
     border-radius: 12px;
     background-color: var(--white);
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 16px;
     letter-spacing: 0.18px;
     color: var(--rouge);
     padding: 13px 20px; }
   .report_section .cancel {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 16px;
     line-height: 1.69;
     color: var(--white);
@@ -11758,7 +11776,7 @@ h3 {
     .report_section .cancel::after {
       background: var(--white); }
   .report_section .contact_us li {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 18px;
     color: var(--white);
     position: relative;
@@ -11780,7 +11798,7 @@ h3 {
     .report_section .contact_us li .address {
       font-size: 16px;
       line-height: 1.5;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       display: block;
       max-width: 280px; }
     .report_section .contact_us li .view_on_map {
@@ -11839,14 +11857,14 @@ h3 {
         background: url("../images/contact-num.png") center no-repeat; }
       .contact_section .contact_card .contact_detail .contact_person {
         font-size: 16px;
-        font-family: 'cairo_bold';
+        font-weight: 700;
         line-height: 1.38;
         letter-spacing: 0.23px;
         color: var(--rouge);
         margin-bottom: 10px;
         display: block; }
       .contact_section .contact_card .contact_detail .num {
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 32px;
         line-height: 0.69;
         letter-spacing: 0.46px;
@@ -11865,14 +11883,14 @@ h3 {
       cursor: pointer; }
       .faq_section .accordian-block .ac-title p {
         font-size: 18px;
-        font-family: 'cairo_semibold';
+        font-weight: 600;
         color: var(--purple-brown);
         padding: 10px 32px 10px 25px; }
     .faq_section .accordian-block .accordian-para {
       display: none; }
     .faq_section .accordian-block .answer {
       font-size: 15px;
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       color: var(--purple-brown);
       padding: 5px 25px 5px 40px;
       margin: 0 0 15px; }
@@ -11915,7 +11933,7 @@ h3 {
     .footer_section .foot_wrapper .rouge_btn {
       margin-left: 33px; }
     .footer_section .foot_wrapper h3 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 22px;
       line-height: 1.5;
       color: var(--purple-brown);
@@ -12021,7 +12039,7 @@ h3 {
         .find_help_contact .inner_wrapr .f_col {
           width: 100%; } }
     .find_help_contact .inner_wrapr h1 {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 20px;
       line-height: 1.2;
       letter-spacing: 0.29px;
@@ -12069,14 +12087,14 @@ h3 {
           background-size: contain; }
         .find_help_contact .faq_section .accordian-block .answer a {
           color: var(--dark-orange);
-          font-family: 'cairo_bold'; }
+          font-weight: 700; }
           .find_help_contact .faq_section .accordian-block .answer a.link:hover {
             color: var(--dark-orange); }
           .find_help_contact .faq_section .accordian-block .answer a.link::after {
             background: var(--dark-orange); }
   .find_help_contact .more_link {
     margin-top: 24px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -12103,7 +12121,7 @@ h3 {
       height: 145px;
       margin: 0 0 16px; }
     .find_help_contact .reach_out_col .note {
-      font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 14px;
       margin-bottom: 16px;
       max-width: 273px;
@@ -12147,7 +12165,7 @@ h3 {
       #reach-out-modal .reachout_modal .close_btn img {
         right: 0; } }
   #reach-out-modal .reachout_modal label {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 13px;
     line-height: 0.92;
     letter-spacing: 0.19px;
@@ -12159,7 +12177,7 @@ h3 {
     padding: 12px 15px;
     color: var(--slate-grey);
     font-size: 14px;
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     width: 100%; }
     #reach-out-modal .reachout_modal input:hover, #reach-out-modal .reachout_modal input:focus, #reach-out-modal .reachout_modal textarea:hover, #reach-out-modal .reachout_modal textarea:focus {
       border: solid 1px var(--slate-grey); }
@@ -12170,7 +12188,7 @@ h3 {
   #reach-out-modal .reachout_modal .rouge_btn {
     padding: 10px 22px;
     border-radius: 12px;
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px; }
 #reach-out-modal hr {
   height: 1px;
@@ -12201,13 +12219,13 @@ h3 {
   #reach-out-modal .reachout_details.email::before {
     background: url("../images/ic-reach-us-email-us.png") center no-repeat; }
   #reach-out-modal .reachout_details h3 {
-    font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 16px;
     line-height: 1.5;
     color: var(--purple-brown);
     margin-bottom: 5px; }
   #reach-out-modal .reachout_details span {
-    font-family: 'cairo_semibold';
+    font-weight: 600;
     font-size: 14px;
     line-height: 1.57;
     color: var(--slate-grey);
@@ -12219,7 +12237,7 @@ h3 {
     display: inline-block;
     color: var(--slate-grey); }
     #reach-out-modal .reachout_details a.view_map {
-      font-family: 'cairo_bold';
+      font-weight: 700;
       color: var(--dark-orange); }
   #reach-out-modal .reachout_details.email {
     margin: 54px 0 20px; }
@@ -12299,23 +12317,23 @@ h3 {
     height: 250px;
     object-fit: cover; }
 .contact_us_form h1 {
-  font-family: 'cairo_bold';
+  font-weight: 700;
   font-size: 22px;
   line-height: 0.91;
   color: var(--black);
   margin-bottom: 20px; }
 .contact_us_form .info_txt {
   font-size: 16px;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   line-height: 1.5;
   color: var(--black-two);
   display: block; }
   .contact_us_form .info_txt a {
     color: var(--rouge);
-    font-family: 'cairo_bold'; }
+    font-weight: 700; }
 .contact_us_form .field_label {
   font-size: 14px;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   line-height: 1.71;
   color: var(--warm-grey);
   margin-bottom: 5px;
@@ -12336,7 +12354,7 @@ h3 {
         width: 100%;
         padding: 0 10px; } }
 .contact_us_form label {
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.43;
   color: var(--black-two);
@@ -12349,7 +12367,7 @@ h3 {
   width: 100%;
   color: var(--slate-grey);
   font-size: 14px;
-  font-family: 'cairo_semibold'; }
+  font-weight: 600; }
   .contact_us_form input:hover, .contact_us_form input:focus, .contact_us_form textarea:hover, .contact_us_form textarea:focus {
     border: solid 1px var(--slate-grey); }
 .contact_us_form textarea {
@@ -12435,7 +12453,7 @@ h3 {
   line-height: 0.91;
   letter-spacing: normal;
   color: #000000;
-  font-family: "cairo_bold";
+  font-weight: 700;
   margin-bottom: 25px;
   display: none; }
 
@@ -12452,7 +12470,7 @@ h3 {
   border: solid 1px #e9e9e9;
   display: inline-block;
   font-size: 16px;
-  font-family: 'cairo_semibold';
+  font-weight: 600;
   padding: 8px 15px !important; }
 
 .pagination > .active > a, .pagination > .active > a:focus, .pagination > .active > a:hover, .pagination > .active > span, .pagination > .active > span:focus, .pagination > .active > span:hover {
@@ -12468,5 +12486,81 @@ h3 {
 .pagination_wrapper .pagination {
   padding: 0;
   margin: 0; }
+
+/************Newsletter popscreens***************/
+.newsletter_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center; }
+  .newsletter_wrapper .pop_screen {
+    width: 623px;
+    border-radius: 12px;
+    background-color: var(--white);
+    padding: 17px 26px; }
+    @media (max-width: 768px) {
+      .newsletter_wrapper .pop_screen {
+        width: 90%; } }
+    @media (max-width: 640px) {
+      .newsletter_wrapper .pop_screen {
+        padding: 20px; } }
+    .newsletter_wrapper .pop_screen .icon-img {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 24px; }
+      @media (max-width: 640px) {
+        .newsletter_wrapper .pop_screen .icon-img {
+          width: 55px;
+          height: 55px;
+          margin: 0 auto 18px; } }
+      .newsletter_wrapper .pop_screen .icon-img img {
+        width: 100%;
+        height: 100%; }
+    .newsletter_wrapper .pop_screen h3 {
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1.18;
+      color: var(--purple-brown);
+      margin-bottom: 16px;
+      text-align: center; }
+      @media (max-width: 640px) {
+        .newsletter_wrapper .pop_screen h3 {
+          font-size: 26px;
+          margin-bottom: 12px; } }
+      @media (max-width: 375px) {
+        .newsletter_wrapper .pop_screen h3 {
+          font-size: 22px;
+          margin-bottom: 8px; } }
+    .newsletter_wrapper .pop_screen .msg {
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 1.5;
+      text-align: center;
+      color: var(--slate-grey); }
+      @media (max-width: 640px) {
+        .newsletter_wrapper .pop_screen .msg {
+          font-size: 16px; } }
+      @media (max-width: 375px) {
+        .newsletter_wrapper .pop_screen .msg {
+          font-size: 15px; } }
+  .newsletter_wrapper .btn_row {
+    text-align: center;
+    margin: 25px auto 0; }
+    .newsletter_wrapper .btn_row .ok_btn {
+      padding: 10px 25px;
+      border-radius: 12px;
+      background-color: var(--rouge);
+      color: var(--white);
+      display: inline-block;
+      font-weight: 600;
+      font-size: 16px; }
+
+/************Newsletter popscreens close***************/
+#exampleModal .modal-content {
+  border-radius: 12px; }
+
+.error_messg {
+  color: #f00;
+  font-size: 14px; }
 
 /*# sourceMappingURL=main.css.map */

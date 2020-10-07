@@ -35,7 +35,20 @@ p, h1, h2, h3, h4, h5 {
         height: 30px; } }
 
 .search_block {
-  flex: 1; }
+  flex: 1;
+  max-width: 777px;
+  margin-right: auto; }
+  @media screen and (max-width: 1240px) {
+    .search_block {
+      width: calc(100% - 300px);
+      margin-right: 300px; } }
+  @media screen and (max-width: 1100px) {
+    .search_block {
+      width: calc(100% - 350px);
+      margin-right: 350px; } }
+  @media screen and (max-width: 768px) {
+    .search_block {
+      margin: 0; } }
   .search_block .search_input {
     border-radius: 12px;
     box-shadow: 0 16px 80px 0 rgba(0, 0, 0, 0.09);
@@ -48,10 +61,11 @@ p, h1, h2, h3, h4, h5 {
     max-width: 747px;
     flex: 1;
     margin-right: 30px; }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: 800px) {
       .search_block .search_input {
         padding: 0 15px 0 0;
-        margin-right: 0; } }
+        margin-right: 0;
+        max-width: 100%; } }
     @media screen and (max-width: 540px) {
       .search_block .search_input {
         flex-direction: column;
@@ -76,6 +90,7 @@ p, h1, h2, h3, h4, h5 {
       .search_block .search_input .input_wrap .search {
         flex: 1;
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 18px;
         line-height: 1.22;
         letter-spacing: 0.26px;
@@ -127,8 +142,8 @@ p, h1, h2, h3, h4, h5 {
           margin: 0 64px 0 0; }
           .search_block .search_input .input_wrap .adv_search_wrapper .adv_search .text {
             font-family: 'cairo_semibold';
-            font-size: 13px;
             font-weight: 600;
+            font-size: 13px;
             line-height: 1.29;
             letter-spacing: 0.19px;
             color: var(--rouge);
@@ -186,6 +201,7 @@ p, h1, h2, h3, h4, h5 {
       border-radius: 12px;
       background-color: var(--rouge);
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       letter-spacing: 0.18px;
       color: var(--white);
@@ -207,6 +223,7 @@ p, h1, h2, h3, h4, h5 {
           padding: 1px 10px;
           border-radius: 7px;
           font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 14px;
           justify-content: baseline; }
           .search_block .search_input .search_btn button span img {
@@ -250,6 +267,7 @@ p, h1, h2, h3, h4, h5 {
             border-bottom: 0; }
           .search_block .search_input .search_result ul li h2 {
             font-family: 'cairo_bold';
+            font-weight: 700;
             font-size: 16px;
             line-height: 1.5;
             letter-spacing: 0.23px;
@@ -282,6 +300,7 @@ p, h1, h2, h3, h4, h5 {
           padding: 15px; } }
       .search_block .search_input .advance_search_wrap .adv_heading {
         font-family: 'cairo_bold';
+        font-weight: 700;
         font-size: 16px;
         line-height: 1.5;
         letter-spacing: 0.23px;
@@ -289,6 +308,7 @@ p, h1, h2, h3, h4, h5 {
         margin-bottom: 20px !important; }
         .search_block .search_input .advance_search_wrap .adv_heading > a {
           font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 13px;
           line-height: 1.85;
           letter-spacing: 0.19px;
@@ -313,6 +333,7 @@ p, h1, h2, h3, h4, h5 {
               margin-bottom: 7px; }
               .search_block .search_input .advance_search_wrap .advance_search .search_info ul li h3.info_title {
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 15px;
                 font-style: normal;
                 line-height: 1.57;
@@ -354,6 +375,7 @@ p, h1, h2, h3, h4, h5 {
               margin-bottom: 14px; }
               .search_block .search_input .advance_search_wrap .advance_search .search_form .form_row .title h3 {
                 font-family: 'cairo_bold';
+                font-weight: 700;
                 font-size: 16px;
                 line-height: 1.38;
                 letter-spacing: 0.23px;
@@ -400,6 +422,23 @@ p, h1, h2, h3, h4, h5 {
                   line-height: 1.57;
                   letter-spacing: 0.2px;
                   color: var(--slate-grey); }
+
+.ar .search_block {
+  margin-right: 0;
+  margin-left: auto; }
+  @media screen and (max-width: 1240px) {
+    .ar .search_block {
+      width: calc(100% - 300px);
+      margin-right: 0;
+      margin-left: 300px; } }
+  @media screen and (max-width: 1100px) {
+    .ar .search_block {
+      width: calc(100% - 350px);
+      margin-left: 350px;
+      margin-right: 0; } }
+  @media screen and (max-width: 768px) {
+    .ar .search_block {
+      margin: 0; } }
 
 .ar .search_input {
   padding: 0 0 0 32px;
@@ -479,6 +518,7 @@ p, h1, h2, h3, h4, h5 {
         padding: 0px 10px;
         border-radius: 9px;
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 14px; } }
   .ar .search_input .search_result ul li {
     text-align: right; }
@@ -519,42 +559,76 @@ p, h1, h2, h3, h4, h5 {
             margin-left: 0;
             margin-right: 9px; }
 
-.page_preview {
+.page_preview_container {
   width: 360px;
-  position: relative;
-  overflow: auto; }
-  @media screen and (max-width: 768px) {
-    .page_preview {
+  position: absolute;
+  overflow: auto;
+  top: 44px;
+  right: 50px; }
+  @media screen and (max-width: 1240px) {
+    .page_preview_container {
+      width: 300px;
+      right: 50px; } }
+  .page_preview_container .page_preview.fix_preview {
+    position: fixed;
+    max-width: 360px;
+    top: 80px; }
+    @media screen and (max-width: 1240px) {
+      .page_preview_container .page_preview.fix_preview {
+        width: 300px; } }
+  @media screen and (max-width: 800px) {
+    .page_preview_container {
       display: none; } }
-  .page_preview figure {
+  .page_preview_container figure {
     position: relative;
-    overflow: hidden; }
-    .page_preview figure img {
-      width: 100%; }
-  .page_preview .title {
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    border-radius: 12px;
+    height: calc(100vh - 220px); }
+    .page_preview_container figure img {
+      width: 360px;
+      height: calc(100vh - 220px);
+      object-fit: contain;
+      object-position: center; }
+      @media screen and (max-width: 1240px) {
+        .page_preview_container figure img {
+          width: 300px; } }
+  .page_preview_container .title {
     font-family: 'cairo_bold';
+    font-weight: 700;
     font-size: 14px;
     margin-bottom: 23px !important;
     font-style: normal;
     line-height: normal;
     letter-spacing: normal;
     color: var(--purple-brown); }
-  .page_preview .go_to_page {
+  .page_preview_container .go_to_page {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     margin-top: 40px; }
-    .page_preview .go_to_page a {
+    .page_preview_container .go_to_page a {
       display: flex;
       align-items: center;
       text-decoration: none;
       font-family: 'cairo_bold';
+      font-weight: 700;
       font-size: 16px;
       line-height: 1.69;
       letter-spacing: normal;
       color: var(--rouge); }
-      .page_preview .go_to_page a span {
+      .page_preview_container .go_to_page a span {
         margin-left: 16px; }
+
+.ar .page_preview_container {
+  right: auto;
+  left: 50px; }
+  @media screen and (max-width: 1280px) {
+    .ar .page_preview_container {
+      width: 300px;
+      right: auto;
+      left: 50px; } }
 
 .img-zoom-lens {
   position: absolute;
@@ -626,6 +700,7 @@ p, h1, h2, h3, h4, h5 {
   align-items: center;
   cursor: pointer;
   font-family: 'cairo_semibold';
+  font-weight: 600;
   font-size: 14px;
   line-height: 1.27;
   letter-spacing: 0.2px;
@@ -640,7 +715,7 @@ p, h1, h2, h3, h4, h5 {
 
 .search_outcome {
   margin: 48px 30px 40px 0; }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 800px) {
     .search_outcome {
       margin: 48px 0; } }
   .search_outcome .slider {
@@ -693,6 +768,7 @@ p, h1, h2, h3, h4, h5 {
             padding: 30px 0 0 0; } }
         .search_outcome .slider .carousel-item .slide_container .video_info h3 {
           font-family: 'cairo_bold';
+          font-weight: 700;
           font-size: 20px;
           line-height: 1.5;
           letter-spacing: 0.29px;
@@ -701,9 +777,11 @@ p, h1, h2, h3, h4, h5 {
           @media screen and (max-width: 600px) {
             .search_outcome .slider .carousel-item .slide_container .video_info h3 {
               font-family: 'cairo_semibold';
+              font-weight: 600;
               font-size: 16px; } }
         .search_outcome .slider .carousel-item .slide_container .video_info p {
           font-family: 'cairo_semibold';
+          font-weight: 600;
           font-size: 14px;
           line-height: 1.57;
           letter-spacing: 0.2px;
@@ -761,8 +839,8 @@ p, h1, h2, h3, h4, h5 {
     border-bottom: 0; }
     .tabs_result .result_carousal .nav-item .nav-link {
       font-family: 'cairo_semibold';
-      font-size: 16px;
       font-weight: 600;
+      font-size: 16px;
       font-stretch: normal;
       font-style: normal;
       line-height: 1.5;
@@ -799,12 +877,14 @@ p, h1, h2, h3, h4, h5 {
     padding: 32px 40px 32px 32px;
     transition: 0.3s ease-in-out all;
     position: relative;
-    margin-bottom: 24px; }
+    margin-bottom: 24px;
+    cursor: pointer; }
     @media screen and (max-width: 600px) {
       .tabs_result .tab-content .result_blocks li {
         padding: 14px 24px 14px 14px; } }
     .tabs_result .tab-content .result_blocks li h3 {
       font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 22px;
       line-height: 1.09;
       letter-spacing: 0.31px;
@@ -815,6 +895,7 @@ p, h1, h2, h3, h4, h5 {
           font-size: 18px; } }
     .tabs_result .tab-content .result_blocks li p {
       font-family: 'cairo_semibold';
+      font-weight: 600;
       font-size: 16px;
       line-height: 1.5;
       letter-spacing: 0.23px;
@@ -855,6 +936,7 @@ p, h1, h2, h3, h4, h5 {
         display: flex;
         align-items: center;
         font-family: 'cairo_semibold';
+        font-weight: 600;
         font-size: 13px;
         line-height: 1.54;
         letter-spacing: 0.19px;
@@ -915,6 +997,9 @@ p, h1, h2, h3, h4, h5 {
   @media screen and (max-width: 1024px) {
     .tabs_slder {
       max-width: 665px; } }
+  @media screen and (max-width: 800px) {
+    .tabs_slder {
+      max-width: 100%; } }
   @media screen and (max-width: 768px) {
     .tabs_slder {
       max-width: 730px; } }

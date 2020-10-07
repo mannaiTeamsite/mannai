@@ -150,7 +150,9 @@ footer {
     border-top: 1px solid #8c858561 !important;
 }
 .personal_search_block .search_section .srch_wrap .search_btn{
-    border: none;
+    /* border: none; */
+    right: 14px;
+    top: 51px;
 }
 
 .personal_search_block .search_section .srch_wrap .txt_wrapper .detect-icon, .personal_search_block .search_section .srch_wrap .txt_wrapper .detect-icon img{
@@ -255,7 +257,7 @@ section{
 }
 .to_do_section .detect-icon, .to_do_section .detect-icon img, .map_col .srch_box .detect-icon, .map_col .map_img img, .map_col .srch_box,
 .txt_wrapper, .find_help_contact .inner_wrapr .category_search_input .detect-icon, .category_search_input .detect-icon img, 
-.helpline, .helpline img{
+.helpline, .helpline img, .ediit_persona, .ediit_persona img{
     background-color: transparent !important
 }
 .opinion_section .card_wrap{
@@ -322,6 +324,7 @@ section{
 
 .category_view_menu_wrap li a:hover, .category_view_menu_wrap li a.active {
     color: #fff !important;
+    border: 1px solid #fff;
 }
 
 .video_img_wrapper .tab_wrapper #detail_tab_owl::after{
@@ -487,18 +490,28 @@ section{
 .news_section .bottom_wrapper ul li a.active{
     color: #fff !important;
 }
-.tags_wrap{
+.tags_wrap, .flag_banner_section .flag_botom_img, .flag_banner_section .flag_img img{
     background-color: transparent !important;
 }
 .report_section input, .report_section textarea, .download_utility_directory .category_tab_wrapper.directory_tab ul li a.link::after,
-.category_tab_wrapper ul li a.link::after, .link:after, .structure_government .section_wrapper .left_sec .links .divider,
+.link:after,.structure_government .section_wrapper .left_sec .links .divider,
 .explore_travel_block .travel_grid .f_row .travel_card li a:before{
     background-color: #fff !important;
 }
+.category_tab_wrapper ul li a.link::after{
+    background-color: #fff !important;
+    height: 17px;
+}
+
 .faq_section .accordian-block .plus-icon{
     background-color: #ff0 !important;
     padding: 10px;
     border-radius: 3px;
+}
+.name:before, .mob:before, .time:before{
+    background-color: #fff !important;
+    border-radius: 2px;
+    padding: 4px;
 }
 
 .link:hover, .category_tab_wrapper ul li a.link:hover, .download_utility_directory .category_tab_wrapper.directory_tab ul li a.link:hover{

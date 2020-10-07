@@ -427,7 +427,8 @@
                      <div class="service_card">
                         <h3 class="title travel" tabindex="0">
                            <img src="assets/images/ic_planning_journey.svg" alt="Journey Travel" class="Qatar travel" />
-                           Planning your journey/travel</h3>
+                           التخطيط لرحلتك / سفرك   
+                        </h3>
                         <ul class="links_wrap">
                            <li>
                               <a href="#" tabindex="0">Getting here</a>
@@ -1361,7 +1362,7 @@
                            <!-- item repeat -->
                            <div class="item">
                               <div class="inner_wrap">
-                                 <h3 tabindex="0">How would you rate COVID-19 Self-Assessment Service?</h3>
+                                 <!-- <h3 tabindex="0">How would you rate COVID-19 Self-Assessment Service?</h3>
                                  <div class="rating_wrap">
                                     <div class="radio_wrap" tabindex="0">
                                        <input type="radio" id="excellent" name="rate" value="excellent">
@@ -1382,7 +1383,80 @@
                                     <a href="#" tabindex="0" class="view_all_wrap link">
                                        View All Polls
                                     </a>
+                                 </div> -->
+                                   <!-- card repeat -->
+                                   <div class="category_card category_polls_card polls_start">
+                                    <div tabindex="0" class="list_card">
+                                       <div class="details">
+                                          <div class="card_title" tabindex="0">How would you rate COVID-19 Self-
+                                             Assessment Service?</div>
+                                          <div class="row_wrap">
+                                             <div class="radio_wrap" tabindex="0">
+                                                <input type="radio" id="excellent" name="rate" value="excellent" checked>
+                                                <label for="excellent" tabindex="0">Excellent</label>
+                                             </div>
+                                             <div class="progress_wrap">
+                                                <span class="progress_bar " style="width: 15%;"></span>
+                                                <span class="percentage" tabindex="0">15%</span>
+                                             </div>
+                                          </div>
+                                          <div class="row_wrap">
+                                             <div class="radio_wrap" tabindex="0">
+                                                <input type="radio" id="vgood" name="rate" value="vgood">
+                                                <label for="vgood" tabindex="0">Very Good</label>
+                                             </div>
+                                             <div class="progress_wrap">
+                                                <span class="progress_bar" style="width: 35%;"></span>
+                                                <span class="percentage" tabindex="0">35%</span>
+                                             </div>
+                                          </div>
+                                          <div class="row_wrap">
+                                             <div class="radio_wrap" tabindex="0">
+                                                <input type="radio" id="good" name="rate" value="good">
+                                                <label for="good" tabindex="0">Good</label>
+                                             </div>
+                                             <div class="progress_wrap">
+                                                <span class="progress_bar" style="width: 5%;"></span>
+                                                <span class="percentage" tabindex="0">5%</span>
+                                             </div>
+                                          </div>
+                                          <div class="row_wrap">
+                                             <div class="radio_wrap" tabindex="0">
+                                                <input type="radio" id="acceptable" name="rate" value="acceptable">
+                                                <label for="acceptable" tabindex="0">Acceptable</label>
+                                             </div>
+                                             <div class="progress_wrap">
+                                                <span class="progress_bar" style="width: 18%;"></span>
+                                                <span class="percentage" tabindex="0">18%</span>
+                                             </div>
+                                          </div>
+                                          <div class="row_wrap">
+                                             <div class="radio_wrap" tabindex="0">
+                                                <input type="radio" id="nacceptable" name="rate" value="nacceptable">
+                                                <label for="nacceptable" tabindex="0">Not Acceptable</label>
+                                             </div>
+                                             <div class="progress_wrap">
+                                                <span class="progress_bar" style="width: 8%;"></span>
+                                                <span class="percentage" tabindex="0">8%</span>
+                                             </div>
+                                          </div>
+                                             <div class="f_row vote_wrap">
+                                                   <div class="f_col">
+                                                      <span class="total_count" tabindex="0">Total Votes 450</span>
+                                                   </div>
+                                                   <div class="f_col text-right">
+                                                      <button class="rouge_btn   polls_btn" tabindex="0">Vote</button>
+                                                   </div>
+
+                                             </div>
+                                            
+                                             
+                                         
+                                       </div>
+      
+                                    </div>
                                  </div>
+                                 <!-- card repeat close -->
                               </div>
                            </div>
                            <!-- item repeat close-->
@@ -1466,7 +1540,8 @@
                   </p>
                   <div class="txt_wrapper">
                      <label for="emailid" class="none">email</label>
-                     <input type="text" id="emailid" placeholder="Enter e-mail id" />
+                     <input type="email" required id="emailid" placeholder="Enter e-mail id" />
+                     <span class="error_messg hide">Please Enter valid email</span>
                   </div>
                   <div class="select_lang_wrap">
                      <span class="recv_option" tabindex="0">Receive Newsletter in</span>
@@ -1479,13 +1554,13 @@
                         <label for="qatar"><span></span>Arabic</label>
                      </div>
                   </div>
-                  <button class="subscribe_btn">Subscribe</button>
-                  <span class="thank_u_msg" tabindex="0">
+                  <button type="submit" class="subscribe_btn" data-toggle="modal" data-target="#exampleModal">Subscribe</button>
+                  <!-- <span class="thank_u_msg hide" tabindex="0">
                      Thank you! You’re subscribed, look for a confirmation email shortly.
                   </span>
-                  <span class="note" tabindex="0"><strong>Please note-</strong> Even if you may like it we don’t do
+                  <span class="note hide" tabindex="0"><strong>Please note-</strong> Even if you may like it we don’t do
                      spamming! If
-                     you wish to opt out later, you can unsubscribe later.</span>
+                     you wish to opt out later, you can unsubscribe later.</span> -->
                </div>
                <div class="flex_col_sm_6">
                   <div class="sample_card">
@@ -1591,6 +1666,42 @@
       <!--footer close-->
    </div>
    <!--App_wrapper close-->
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+     <div class="modal-content">
+       
+       <div class="modal-body">
+         
+             <!-- Subscription modal -->
+            <div class="newsletter_wrapper">
+               <div class="pop_screen">
+                  <figure class="icon-img">
+                     <img src="assets/images/subscibe-img.png" alt="subscribe-img" />
+                  </figure>
+                  <h3 tabindex="0">Thank you for subscribing!</h3>
+                  <p class="msg" tabindex="0">
+                     A confirmation mail has been sent to dummy@gmail.com
+                  </p>
+               <div class="btn_row">
+                     <button class="ok_btn" data-dismiss="modal">OK</button>
+               </div>
+               </div>
+            </div>
+            <!-- Subscription modal close-->
+
+       </div>
+     
+     </div>
+   </div>
+ </div>
+ <!--Modal-->
+
+
+
    <!--Js-->
    <script src="assets/js/jquery.js"></script>
    <script>
