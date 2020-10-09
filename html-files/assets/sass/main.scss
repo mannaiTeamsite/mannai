@@ -9,7 +9,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
 *:focus{
-  border: 0.5px dotted #000;  
+    //   border: 0.5px dotted #000;
+        outline: 2px auto -webkit-focus-ring-color !important;
+        outline-offset: -2px;  
 }
 
 .ar{
@@ -62,7 +64,7 @@
 	color: var(--rouge);
 	margin-bottom: 10px;
 }
-.commn-para{
+.commn-para,p{
 	font-size: 18px;
 	line-height: 1.5;
 	color: var(--greyish-brown);
@@ -73,7 +75,8 @@
 	font-weight: 700;
 	line-height: 1.23;
 	color: var(--purple-brown);
-	margin-bottom: 12px;
+    margin-bottom: 12px;
+    display: block;
 }
 .txt-highlight {
     font-size: 16px;
@@ -1249,6 +1252,9 @@ hr{
 
 
 /*************************things to do section****************************/
+.daterangepicker{
+    z-index: 9 !important;
+}
 .to_do_section{
 	padding: 84px 0 100px;
     @media(max-width:768px){
@@ -1317,9 +1323,12 @@ hr{
 			border: solid 1px #cccccc;
 			font-size: 14px;
 			width: 100%;
-		}
+        }
+        
+       
 		
 	}
+
 
 	@media(max-width:910px){
 	.filter_wrapper {
@@ -3973,7 +3982,7 @@ hr{
            font-size:22px;
          }
     }
-    .content_title{
+    span{
         font-size: 18px;
         color: var(--eggplant);
         line-height: 1.56;
@@ -3985,10 +3994,11 @@ hr{
     .details{
         width: 500px;
         max-width: 100%;
-        .commn-para{
+       p{
             line-height: 1.56;
             color: var(--slate-grey);
             margin-bottom: 20px;
+            font-size: 18px;
         }
     }
     .amir_detail{
@@ -4029,7 +4039,7 @@ hr{
                 object-fit: cover;
             }
         }
-        .name {
+        &>.name {
             max-width: 418px;
             width: 100%;
             font-size: 20px;
@@ -4046,6 +4056,8 @@ hr{
             text-align: center;
             color: var(--white);
             z-index: 99;
+            margin: 0;
+            font-weight: 400;
         }
     }
 }
@@ -4068,7 +4080,7 @@ hr{
 .work_exp_section{
     margin: 37px 0 0 0;
     background-size: contain !important;
-    h2{
+    h4{
         max-width: 411px;
         font-weight: 700;
         font-size: 44px;
@@ -4110,7 +4122,7 @@ hr{
             &:last-child{
                 background-image: url('../images/card-fill-brown.svg');
             }
-            h3{
+            .title{
                 font-weight: 700;
                 font-size: 18px;
                 line-height: 1.5;
@@ -4164,7 +4176,7 @@ hr{
     @media(max-width:768px){
         padding: 20px 0;
         }
-    h2{
+    h6{
         max-width: 264px;
         width: 100%;
         font-weight: 700;
@@ -4242,6 +4254,14 @@ hr{
             margin-bottom: 25px;
             padding-left: 30px;
             position: relative;
+
+            max-width: 455px;
+            width: 100%;
+            display: inline-block;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--greyish-brown);
+
             &::before{
                 width: 16px;
                 height: 14px;
@@ -4252,14 +4272,7 @@ hr{
                 background: url('../images/bullet_orange.svg') center no-repeat;
                 background-size: contain;
             }
-            span{
-                max-width: 455px;
-                width: 100%;
-                display: inline-block;
-                font-size: 16px;
-                line-height: 1.5;
-                color: var(--greyish-brown);
-            }
+       
         }
     }
     hr {
@@ -4300,7 +4313,7 @@ hr{
        @media (max-width: 700px){
         padding: 60px 0 0 15px;
        }
-        h1{
+        h3{
             font-weight: 700;
             font-size: 20px;
             line-height: 1.2;
@@ -4318,7 +4331,7 @@ hr{
                     }
             }
         }
-        .commn-para{
+        p{
             max-width: 379px;
             width: 100%;
             font-size: 16px;
@@ -4359,7 +4372,7 @@ hr{
         background-image: none;
         margin: 0;
     }
-    h3{
+    h5{
         max-width: 333px;
         width: 100%;
         font-weight: 700;
@@ -4655,7 +4668,7 @@ color: var(--deep-orange);
             font-size: 30px;
           }
     }
-    .commn-para{
+    p{
         color: var(--slate-grey);
         line-height: 1.56;
         max-width: 447px;
@@ -4719,11 +4732,19 @@ color: var(--deep-orange);
         line-height: 1.23;
         color: var(--purple-brown);
         margin-bottom: 12px;
+        display: block;
     }
-    .commn-para{
+    p{
         max-width: 468px;
         font-size: 16px;
         margin-bottom: 20px;
+        span{
+            font-size: 16px;
+            color: var(--rouge);
+            line-height: 24px;
+            font-weight: 700;
+            display: block;
+        }
     }
     figure{
         width: 553px;
@@ -4765,7 +4786,7 @@ color: var(--deep-orange);
         margin-bottom: 30px;
         color: var(--dark-orange);
     }
-    .commn-para{
+    p{
         max-width: 468px;
         font-size: 16px;
     }
@@ -4837,13 +4858,18 @@ color: var(--deep-orange);
         }
     }
 
-    .title {
+    h4 {
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 1.22;
+        color: var(--deep-orange);
+        margin-bottom: 10px;
      @media(max-width:768px){
         font-size: 22px;
      }
     }
 
-    .commn-para{
+    p{
         margin-bottom: 20px;
         font-size: 16px;
         max-width: 454px;
@@ -4881,7 +4907,7 @@ color: var(--deep-orange);
     .content-label{
         font-size: 18px;
     }
-    .commn-para{
+    p{
         margin-bottom: 20px;
         font-size: 16px;
         max-width: 434px;
@@ -4911,22 +4937,24 @@ color: var(--deep-orange);
             @media(max-width:768px){
                 margin-bottom: 20px;
             }
-            .commn-para{
+            p{
                 max-width: 353px;
             }
         }
         &.qatar_fl{
             background-image: url('../images/card-fill-berry.svg');
         }
-        .commn-para{
+        p{
             max-width: 489px;
+            font-size: 16px;
+            margin-bottom: 10px;
         }
     }
     .content-label{
         font-size: 22px;
         line-height: 1.36;
     }
-    .commn-para{
+    p{
         max-width: 353px;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -5139,6 +5167,14 @@ color: var(--deep-orange);
                     li{
                         list-style-image: url('../../assets/images/bullet.svg');
                         margin-bottom: 24px;
+                        font-family: 'cairo_regular';
+                        font-size: 16px;
+                        line-height: 1.5;
+                        letter-spacing: normal;
+                        color: var(--greyish-brown);
+                        span{
+                            font-weight: 700;
+                        }
                         &:last-child{
                             margin-bottom: 0;
                         } 
@@ -5224,6 +5260,14 @@ color: var(--deep-orange);
                     li{
                         list-style-image: url('../../assets/images/bullet-white.svg');
                         margin-bottom: 24px;
+                        font-family: 'cairo_regular';
+                        font-size: 18px;
+                        line-height: 1.56;
+                        letter-spacing: normal;
+                        color: var(--pinkish-grey);
+                        @media screen and (max-width: 768px){
+                            font-size: 16px;
+                        }
                         &:last-child{
                             margin-bottom: 0;
                         }
@@ -15008,8 +15052,6 @@ color: var(--deep-orange);
         }	
         }
 
-
-
 }
 
 .ar{
@@ -15288,6 +15330,10 @@ color: var(--deep-orange);
     font-size: 16px;
     font-weight: 600;
     padding: 8px 15px !important;
+
+    @media(max-width: 640px){
+        font-size: 12px;
+    }
 }
 
 
@@ -15307,6 +15353,9 @@ color: var(--deep-orange);
 .pagination_wrapper .pagination{
     padding: 0;
     margin: 0;
+    @media(max-width: 650px){
+        flex-direction: row;
+    }
 }
 
 .fade{

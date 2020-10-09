@@ -574,10 +574,12 @@ p, h1, h2, h3, h4, h5 {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.12);
     border-radius: 12px;
-    height: calc(100vh - 220px); }
+    height: calc(100vh - 220px);
+    max-height: 460px; }
     .page_preview_container figure img {
       width: 360px;
       height: calc(100vh - 220px);
+      max-height: 460px;
       object-fit: contain;
       object-position: center; }
       @media screen and (max-width: 1240px) {

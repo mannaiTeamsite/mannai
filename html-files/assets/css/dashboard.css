@@ -1120,7 +1120,7 @@ p, h1, h2, h3, h4, h5 {
   animation-name: zoomIn; }
 
 .chech_lbl {
-  font-family: 'cairo_regular';
+  font-weight: 400;
   font-size: 14px;
   line-height: 1.57;
   letter-spacing: 0.2px;
@@ -1378,6 +1378,32 @@ fieldset.head_info legend {
   display: none; }
 
 #expore_services_container.view_exp_services {
+<<<<<<< HEAD
+<<<<<<< HEAD
   display: block; }
 
 /*# sourceMappingURL=dashboard.css.map */
+=======
+  display: block;
+}
+=======
+  display: block; }
+>>>>>>> af8c02f14aaaa43c70592a08342be35e3979a635
+
+.letter_for p, .letter_for label {
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0 5px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.57;
+<<<<<<< HEAD
+  letter-spacing: 0.2px;
+}
+/*# sourceMappingURL=dashboard.css.map */
+>>>>>>> 40e4d24def65408416aa242138a87576bcc5e7b8
+=======
+  letter-spacing: 0.2px; }
+
+/*# sourceMappingURL=dashboard.css.map */
+>>>>>>> af8c02f14aaaa43c70592a08342be35e3979a635

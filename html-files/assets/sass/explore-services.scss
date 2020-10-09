@@ -236,7 +236,6 @@
                 cursor: text;
                 > span{
                     color: var(--deep-orange);
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                 }
             }
@@ -265,7 +264,6 @@
 }
 
 .expl_headin{
-    font-family: 'cairo_bold';
     font-weight: 700;
   font-size: 36px;
   line-height: 1.19;
@@ -304,7 +302,6 @@
             margin-bottom: 20px;
         }
         h2, h3, h4{
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 18px;
             line-height: 1.33;
@@ -451,7 +448,6 @@
     .explore_btn{
         border-radius: 12px;
         background-color: var(--rouge);
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 16px;
         line-height: 1.5;
@@ -530,7 +526,6 @@
                     height: 31px;
                     text-align: center;
                     background-color: var(--white);
-                    font-family: 'cairo_bold';
                     font-weight: 700;
                     font-size: 15px;
                     line-height: 1.8;
@@ -640,7 +635,6 @@
                         margin: 0 5px 0 0;
                     }
                     &:hover{
-                        font-family: 'cairo_bold';
                         font-weight: 700;
                         color: var(--purple-brown);
                     }
@@ -698,12 +692,10 @@
                             
                         }
                         &:hover{
-                            font-family: 'cairo_bold';
                             font-weight: 700;
                             color: var(--purple-brown);
                         }
                         &.active{
-                            font-family: 'cairo_bold';
                             font-weight: 700;
                             color: var(--purple-brown);
                             border-radius: 12px;
@@ -794,7 +786,7 @@
                         border: solid 1px #cacaca;
                         background-color: var(--white);
                         padding: 12px 85px 12px 19px;
-                        font-family: 'cairo_regular';
+                        font-weight: 400;
                         font-size: 14px;
                         line-height: normal;
                         letter-spacing: 0.58px;
@@ -803,7 +795,7 @@
                     }
                     .inner_srch_icon{
                         position: absolute;
-                        top: 17px;
+                        top: 15px;
                         right: 18px;
                         width: 16px;
                         height: 16px;
@@ -814,7 +806,7 @@
                     }
                     .clear_search{
                         position: absolute;
-                        top: 18px;
+                        top: 16px;
                         right: 48px;
                         width: 14px;
                         height: 16px;
@@ -876,7 +868,6 @@
         top: -7px;
     }
     h3{
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 14px;
         line-height: 1.57;
@@ -912,7 +903,7 @@
             }
         }
         .plus_more{
-            font-family: 'cairo_regular';
+            font-weight: 400;
             font-size: 12px;
             line-height: 1.67;
             letter-spacing: normal;
@@ -934,7 +925,7 @@
         }
     }
     .chech_lbl, .radio_lbl{
-        font-family: 'cairo_regular';
+        font-weight: 400;
         font-size: 14px;
         line-height: 1.57;
         letter-spacing: 0.2px;
@@ -976,7 +967,6 @@
             display: block;
             // text-align: center;
             text-decoration: underline;
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 13px;
             line-height: 1.69;
@@ -995,7 +985,6 @@
             }
         }
         .dropdown-header{
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 13px;
             line-height: 1.69;
@@ -1036,7 +1025,6 @@
             margin: 0 12px 0 0;
         }
         h3{
-            font-family: 'cairo_bold';
             font-weight: 700;
             font-size: 16px;
             line-height: 1.38;
@@ -1068,7 +1056,6 @@
                 width: calc(100% / 1);
             }
             h4{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.57;
@@ -1112,7 +1099,6 @@
                 }
             }
             .more_opt{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 15px;
                 line-height: 1.57;
@@ -1146,7 +1132,6 @@
     a{
         display: flex;
         align-items: center;
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 16px;
         line-height: 1.5;
@@ -1202,7 +1187,7 @@
             border-radius: 6px;
             p{
                 margin: 0 5px 0 0;
-                font-family: 'cairo_regular';
+                font-weight: 400;
                 font-size: 13px;
                 line-height: 1.57;
                 letter-spacing: 0.2px;
@@ -1296,7 +1281,6 @@ legend{
             width: 76px;
             min-width: 35px;
             .link{
-                font-family: 'cairo_bold';
                 font-weight: 700;
                 font-size: 14px;
                 line-height: 1.43;
@@ -1436,7 +1420,6 @@ legend{
 	margin-left: -20px;
 }
 h3{
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 16px;
     line-height: 1.38;

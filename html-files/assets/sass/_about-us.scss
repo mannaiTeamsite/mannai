@@ -299,12 +299,18 @@
         cursor: pointer;
         &::before{
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: 26px;
+            height: 26px;
             content: "";
-            right: -55px;
-            top: -3px;
-            background-image: url('../images/show_more_icon.svg');
+            right: -40px;
+            top: 0;
+            background: url('../images/show_more_icon.svg') center no-repeat;
+            background-size: contain;
+        }
+        &.active{
+            &:before{
+                transform: rotate(180deg);
+            }
         }
     }
 }

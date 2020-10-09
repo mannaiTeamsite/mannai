@@ -200,6 +200,7 @@ $('#survey_indicator ol li').on('click', function () {
                 console.log($(this))
                 $(this).find('li .voted_percent').show();
                 $(this).find('.total_votes').show();
+                $(this).find('.options .inp_radio span').hide();
                 $('#vote').css('visibility', 'hidden')
               }
               else{

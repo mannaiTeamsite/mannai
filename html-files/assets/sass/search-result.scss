@@ -702,10 +702,12 @@ p, h1, h2, h3, h4, h5{
         border: 1px solid rgba(0, 0, 0, 0.12);
         border-radius: 12px;
         height: calc(100vh - 220px);
+        max-height: 460px;
         img{
             // width: 100%;
             width: 360px;
             height: calc(100vh - 220px);
+            max-height: 460px;
             object-fit: contain;
             object-position: center;
             @media screen and (max-width: 1240px){

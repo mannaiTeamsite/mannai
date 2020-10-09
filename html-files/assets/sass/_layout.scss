@@ -617,7 +617,7 @@ header{
         display: block !important;
         background: #fff;
         left: 0;
-        height: 100%;
+        height: 100vh;
         li{
             display: block !important;
             margin: 0 !important;
@@ -656,13 +656,13 @@ header{
       display: block;
     }
 
-   header .innner_wrapper .nav_col .header_row .auth_nav {
-    flex: 1;
-}
+    header .innner_wrapper .nav_col .header_row .auth_nav {
+        flex: 1;
+    }
 
-.nav_brand img{
-    width: 95px;
-}
+    .nav_brand img{
+        width: 95px;
+    }
 }
 
 

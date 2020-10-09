@@ -495,7 +495,7 @@ section{
 }
 .report_section input, .report_section textarea, .download_utility_directory .category_tab_wrapper.directory_tab ul li a.link::after,
 .link:after,.structure_government .section_wrapper .left_sec .links .divider,
-.explore_travel_block .travel_grid .f_row .travel_card li a:before{
+.explore_travel_block .travel_grid .f_row .travel_card li a:before, .directory_block .directory_grid .block .title::before{
     background-color: #fff !important;
 }
 .category_tab_wrapper ul li a.link::after{
@@ -527,7 +527,9 @@ table td, th{
 
 .owl-carousel .owl-dot, .owl-carousel .owl-nav .owl-next, .owl-carousel .owl-nav .owl-prev,
 .national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video .play,
-.national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video .play img{
+.national_flag_block .flag_card_row .natinalflag_card .inner_wrapper .img_video_wrapper .video .play img, 
+.directory_block .directory_grid .block:hover .title, .directory_block .directory_grid .block:hover .arow_icon, 
+.directory_block .directory_grid .block:hover .arow_icon img, .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm .title{
     background-color: transparent !important;
 }
 .news_section .right_col .todays_news .txt-img, .blog_section .txt-img, 
@@ -769,3 +771,21 @@ header .innner_wrapper .nav_col .header_row .auth_nav ul li a img.access_icon{
     background-color: #ffffff !important;
     color: #000000 !important;
   }
+  .sercive_section .service_row .service_col ul li a{
+      border-color: transparent !important;
+  }
+  .sercive_section .service_row .service_col ul li a:hover{
+    border-color: #ffffff !important;
+}
+.serv_tabs .nav-tabs .nav-item .nav-link{
+    border-color: transparent !important;
+}
+.serv_tabs .nav-tabs .nav-item .nav-link.active{
+    border-color: #ffffff !important;
+}
+.explore_result_content .explore_inner_content .sec_right .explore_inner_search .inner_search .clear_search{
+    background-color: #ffffff !important;
+}
+.explore_result_content .explore_inner_content .sec_right .explore_inner_search .inner_search .clear_search img{
+    background-color: #ffffff !important;
+}

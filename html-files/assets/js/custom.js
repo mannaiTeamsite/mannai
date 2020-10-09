@@ -52,10 +52,12 @@ $(window).scroll(function () {
 /*********************Mobile Menu Toggle***********************************************************/
 $("#mob_menu_toggle").click(function(){
     $("#head1_top").toggleClass("head1_top");
+    $("#head2_top").removeClass("head2_top");
 });
 
 $("#mob_menu_toggle2").click(function(){
    $("#head2_top").toggleClass("head2_top");
+   $("#head1_top").removeClass("head1_top");
 });
 
 $(".nav_menu ul li a").click(function(){
@@ -316,7 +318,8 @@ $(".show_more_fact").click(function(){
        } else {
            $(".show_more_fact").text('Less More Facts');
        }
-   $(".fact_figure_card_wrap").toggleClass("active");   
+   $(".fact_figure_card_wrap").toggleClass("active");  
+   $(".show_more").toggleClass("active");  
 });
 
 });
@@ -716,7 +719,10 @@ $("#content").html("Page " + num);
 
 
 
-var a= $(".tags_wrap ").attr('id');
+
+
+
+var a= $(".tags_wrap").attr('id');
 console.log(a)
 var  b=   $('#'+a).children().length;
 
@@ -725,5 +731,14 @@ if(b>=2){
    $('#'+a).append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
 }
 
+
+
+
+// var  b=   $(".tags_wrap").children().length;
+
+// console.log(b);
+// if(b>=2){
+//    $('tags_wrap').append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
+// }
 
 

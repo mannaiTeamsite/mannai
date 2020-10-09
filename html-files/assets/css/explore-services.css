@@ -181,7 +181,6 @@
       cursor: text; }
       .search_wrap .search_box .explore_search .placeholder > span {
         color: var(--deep-orange);
-        font-family: 'cairo_bold';
         font-weight: 700; }
 
 .ar .search_wrap .search_box {
@@ -197,7 +196,6 @@
     right: 1px; }
 
 .expl_headin {
-  font-family: 'cairo_bold';
   font-weight: 700;
   font-size: 36px;
   line-height: 1.19;
@@ -233,7 +231,6 @@
         width: calc(100% / 1);
         margin-bottom: 20px; } }
     .multi_select_service .check_options h2, .multi_select_service .check_options h3, .multi_select_service .check_options h4 {
-      font-family: 'cairo_bold';
       font-weight: 700;
       font-size: 18px;
       line-height: 1.33;
@@ -340,7 +337,6 @@
   .explore_btn_wrap .explore_btn {
     border-radius: 12px;
     background-color: var(--rouge);
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 16px;
     line-height: 1.5;
@@ -407,7 +403,6 @@
           height: 31px;
           text-align: center;
           background-color: var(--white);
-          font-family: 'cairo_bold';
           font-weight: 700;
           font-size: 15px;
           line-height: 1.8;
@@ -491,7 +486,6 @@
           justify-content: center;
           margin: 0 5px 0 0; }
         .explore_result_wrap .explore_result_inner .result_tab_header .back_btn .back:hover {
-          font-family: 'cairo_bold';
           font-weight: 700;
           color: var(--purple-brown); }
     .explore_result_wrap .explore_result_inner .result_tab_header .nav-tabs {
@@ -542,11 +536,9 @@
             .explore_result_wrap .explore_result_inner .result_tab_header .nav-tabs .nav-item .nav-link {
               padding: 8px 8px; } }
           .explore_result_wrap .explore_result_inner .result_tab_header .nav-tabs .nav-item .nav-link:hover {
-            font-family: 'cairo_bold';
             font-weight: 700;
             color: var(--purple-brown); }
           .explore_result_wrap .explore_result_inner .result_tab_header .nav-tabs .nav-item .nav-link.active {
-            font-family: 'cairo_bold';
             font-weight: 700;
             color: var(--purple-brown);
             border-radius: 12px;
@@ -611,7 +603,7 @@
           border: solid 1px #cacaca;
           background-color: var(--white);
           padding: 12px 85px 12px 19px;
-          font-family: 'cairo_regular';
+          font-weight: 400;
           font-size: 14px;
           line-height: normal;
           letter-spacing: 0.58px;
@@ -619,7 +611,7 @@
           width: 100%; }
         .explore_result_content .explore_inner_content .sec_right .explore_inner_search .inner_search .inner_srch_icon {
           position: absolute;
-          top: 17px;
+          top: 15px;
           right: 18px;
           width: 16px;
           height: 16px; }
@@ -628,7 +620,7 @@
             width: 100%; }
         .explore_result_content .explore_inner_content .sec_right .explore_inner_search .inner_search .clear_search {
           position: absolute;
-          top: 18px;
+          top: 16px;
           right: 48px;
           width: 14px;
           height: 16px;
@@ -664,7 +656,6 @@
     left: 70px;
     top: -7px; }
   .filter_col h3 {
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 14px;
     line-height: 1.57;
@@ -696,7 +687,7 @@
       .filter_col .sel_filter input[type='text']:focus {
         border: 0; }
     .filter_col .sel_filter .plus_more {
-      font-family: 'cairo_regular';
+      font-weight: 400;
       font-size: 12px;
       line-height: 1.67;
       letter-spacing: normal;
@@ -715,7 +706,7 @@
       border-bottom: 0;
       border-left: 0; }
   .filter_col .chech_lbl, .filter_col .radio_lbl {
-    font-family: 'cairo_regular';
+    font-weight: 400;
     font-size: 14px;
     line-height: 1.57;
     letter-spacing: 0.2px;
@@ -752,7 +743,6 @@
       width: 100%;
       display: block;
       text-decoration: underline;
-      font-family: 'cairo_bold';
       font-weight: 700;
       font-size: 13px;
       line-height: 1.69;
@@ -765,7 +755,6 @@
       .filter_col .dropdown-menu.life_stage .dropdown-item:last-child {
         border-bottom: 0; }
     .filter_col .dropdown-menu .dropdown-header {
-      font-family: 'cairo_bold';
       font-weight: 700;
       font-size: 13px;
       line-height: 1.69;
@@ -792,7 +781,6 @@
     .sercive_section .service_heading figure {
       margin: 0 12px 0 0; }
     .sercive_section .service_heading h3 {
-      font-family: 'cairo_bold';
       font-weight: 700;
       font-size: 16px;
       line-height: 1.38;
@@ -820,7 +808,6 @@
         .sercive_section .service_row .service_col {
           width: calc(100% / 1); } }
       .sercive_section .service_row .service_col h4 {
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 14px;
         line-height: 1.57;
@@ -854,7 +841,6 @@
           .sercive_section .service_row .service_col ul li .remove_fav img {
             width: 16px; }
       .sercive_section .service_row .service_col .more_opt {
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 15px;
         line-height: 1.57;
@@ -877,7 +863,6 @@
   .explore_inner_bottom a {
     display: flex;
     align-items: center;
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 16px;
     line-height: 1.5;
@@ -922,7 +907,7 @@
       border-radius: 6px; }
       .applied_filters .applied_option li p {
         margin: 0 5px 0 0;
-        font-family: 'cairo_regular';
+        font-weight: 400;
         font-size: 13px;
         line-height: 1.57;
         letter-spacing: 0.2px;
@@ -998,7 +983,6 @@ legend {
       width: 76px;
       min-width: 35px; }
       .hku_alert .remove_favourite .undo_button .link {
-        font-family: 'cairo_bold';
         font-weight: 700;
         font-size: 14px;
         line-height: 1.43;
@@ -1099,7 +1083,6 @@ legend {
     border-width: 20px;
     margin-left: -20px; }
   .dropdown_ttr h3 {
-    font-family: 'cairo_bold';
     font-weight: 700;
     font-size: 16px;
     line-height: 1.38;

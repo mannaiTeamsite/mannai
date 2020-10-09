@@ -348,36 +348,10 @@ body.loader_show .loader {
   display: none; }
 
 /*-------------------Base---------------*/
-body {
-  font-family: 'Cairo', sans-serif;
-  font-weight: 400; }
-
-.line-1 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical; }
-
-.line-2 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical; }
-
-.line-3 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical; }
-
 html,
 body {
   height: 100%;
   overflow-y: auto;
-  overflow-x: hidden;
   scroll-behavior: smooth; }
 
 .app_wrapper {

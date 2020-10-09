@@ -1509,7 +1509,7 @@ display: none;
 //   ======= alert end =======
 // ================checkbox====================
 .chech_lbl{
-    font-family: 'cairo_regular';
+    font-weight: 400;
   font-size: 14px;
   line-height: 1.57;
   letter-spacing: 0.2px;
@@ -1854,4 +1854,16 @@ fieldset{
 
 #expore_services_container.view_exp_services {
     display: block;
+}
+
+.letter_for{
+    p, label{
+        display: inline-block;
+        vertical-align: middle;
+        margin: 0 5px;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 1.57;
+        letter-spacing: 0.2px;
+    }
 }
