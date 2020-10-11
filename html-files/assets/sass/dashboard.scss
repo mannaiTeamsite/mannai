@@ -1857,10 +1857,11 @@ fieldset{
 }
 
 .letter_for{
+    margin: 20px -10px 0;
     p, label{
         display: inline-block;
         vertical-align: middle;
-        margin: 0 5px;
+        margin: 0 10px;
         font-weight: 600;
         font-size: 14px;
         line-height: 1.57;

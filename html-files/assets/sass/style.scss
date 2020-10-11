@@ -86,11 +86,11 @@ input::-webkit-calendar-picker-indicator {
 
 }
 /*-------------------Base---------------*/
-// body {
-// 	// font-family: "cairo_regular";
-// 	font-family: 'Cairo', sans-serif;
-// 	font-weight: 400;
-//   }
+body {
+	// font-family: "cairo_regular";
+	font-family: 'Cairo', sans-serif;
+	font-weight: 400;
+  }
   
 
 //   .line-1 {
@@ -121,7 +121,7 @@ input::-webkit-calendar-picker-indicator {
   html,
   body {
     height: 100%;
-    overflow-y: auto;
+   // overflow-y: auto;
     scroll-behavior: smooth;
   }
 

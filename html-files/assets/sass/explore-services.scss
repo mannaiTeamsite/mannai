@@ -854,6 +854,12 @@
                     }
                 }
             }
+            &.show_mobile_filter{
+                .explore_filter{
+                    right: 0;
+                    left: auto;
+                }
+            }
         }
     }
     

@@ -82,7 +82,11 @@ a:hover {
     .notification-wrapper {
         .go-back-btn {
             text-align: right;
-        }
+            img{
+                margin-left: 12px;
+                margin-right: 0;
+            }
+        }   
 
         .notification-container {
 
@@ -93,9 +97,7 @@ a:hover {
 
                 .total-noti-card {
                     .noti-header {
-
-                        // flex-direction: row-reverse;
-                        h4 {
+                        h1 {
                             margin-left: 0;
                             margin-right: 12px;
                         }

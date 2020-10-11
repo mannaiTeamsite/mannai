@@ -648,6 +648,11 @@
   left: 48px;
   right: auto; }
 
+.ar .explore_result_content .explore_inner_content.show_mobile_filter .explore_filter {
+  right: 0;
+  left: auto;
+}
+
 .filter_col {
   margin-bottom: 32px;
   position: relative; }

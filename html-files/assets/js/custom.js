@@ -722,23 +722,44 @@ $("#content").html("Page " + num);
 
 
 
-var a= $(".tags_wrap").attr('id');
-console.log(a)
-var  b=   $('#'+a).children().length;
-
-console.log(b);
-if(b>=2){
-   $('#'+a).append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
-}
-
-
-
-
-// var  b=   $(".tags_wrap").children().length;
+// var a= $(".tags_wrap").attr('id');
+// console.log(a)
+// var  b=   $('#'+a).children().length;
 
 // console.log(b);
 // if(b>=2){
-//    $('tags_wrap').append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
+//    $('#'+a).append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
 // }
+
+
+
+
+// $(document).ready(function(){
+// var a= $(".tags_wrap").attr('id');
+// console.log(a)
+// var  b=   $('#'+a).children().length;
+
+// console.log(b);
+// if(b>=2){
+//    $('#'+a).append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
+// }
+// });
+
+
+// for(i=1;i<=$(".category_card").length[0];i++){
+//    console.log(i)
+// }
+
+
+var a= $(".tags_wrap").attr('id');
+console.log(a)
+// var  b=   $('#'+a).children().length;
+
+
+var  b=   $('#'+a ).children().length;
+console.log(b);
+if(b>=2){
+   $('#'+a ).append("<li class='tag_g  tag_l' tabindex='0'>+2 more</li>")
+}
 
 

@@ -602,7 +602,7 @@ header {
           .about_submenu .card_col .card_wrapper .card_img {
             height: 96px;
             width: 100%; } }
-      .about_submenu .card_col .card_wrapper h3 {
+      .about_submenu .card_col .card_wrapper h3, .about_submenu .card_col .card_wrapper .line-1 {
         font-family: 'cairo_bold';
         font-size: 22px;
         line-height: 1.27;
@@ -610,7 +610,7 @@ header {
         color: var(--purple-brown);
         margin-bottom: 12px; }
         @media (max-width: 640px) {
-          .about_submenu .card_col .card_wrapper h3 {
+          .about_submenu .card_col .card_wrapper h3, .about_submenu .card_col .card_wrapper .line-1 {
             font-size: 16px; } }
       .about_submenu .card_col .card_wrapper .descr {
         font-size: 16px;
@@ -4698,7 +4698,7 @@ hr {
       margin-bottom: 10px;
       z-index: 99; }
     .amir_banner_section .amir_detail .by {
-      width: 195px;
+      max-width: 209px;
       font-size: 18px;
       line-height: 1.44;
       text-align: center;
@@ -4762,7 +4762,7 @@ hr {
       color: var(--slate-grey);
       margin-bottom: 18px;
       display: block; }
-    .work_exp_section .exp_card li .commn-para {
+    .work_exp_section .exp_card li p {
       max-width: 411px;
       font-size: 16px; }
   .work_exp_section #higness_owl {
@@ -4791,7 +4791,7 @@ hr {
     .honors_section {
       padding: 20px 0; } }
   .honors_section h6 {
-    max-width: 264px;
+    max-width: 350px;
     width: 100%;
     font-weight: 700;
     font-size: 32px;
@@ -4941,7 +4941,7 @@ hr {
       background-image: none;
       margin: 0; } }
   .acadmic_section h5 {
-    max-width: 333px;
+    max-width: 365px;
     width: 100%;
     font-weight: 700;
     font-size: 32px;
@@ -6034,7 +6034,7 @@ hr {
           padding: 0; } }
       .government_banner .section_wrapper .left_sec h1 {
         font-weight: 700;
-        font-size: 56px;
+        font-size: 54px;
         line-height: 1.2;
         letter-spacing: normal;
         color: var(--rouge);
@@ -6338,14 +6338,14 @@ hr {
       @media screen and (max-width: 768px) {
         .history .section_wrapper .para_sec {
           max-width: 100%; } }
-      .history .section_wrapper .para_sec .para_16 {
+      .history .section_wrapper .para_sec .para_16, .history .section_wrapper .para_sec p {
         font-family: 'cairo_regular';
         font-size: 16px;
         line-height: 1.5;
         letter-spacing: normal;
         color: var(--white); }
         @media screen and (max-width: 768px) {
-          .history .section_wrapper .para_sec .para_16 {
+          .history .section_wrapper .para_sec .para_16, .history .section_wrapper .para_sec p {
             font-size: 14px; } }
     .history .section_wrapper .flex_col {
       margin: 0 -16px;
@@ -7137,7 +7137,7 @@ hr {
     .update_everyday_block {
       padding: 20px 0; } }
   .update_everyday_block .heading {
-    width: 303px;
+    max-width: 330px;
     font-size: 36px;
     font-weight: 700;
     line-height: 1.2;
@@ -7155,42 +7155,42 @@ hr {
         width: 100%; } }
     .update_everyday_block .every_update_row .block_row {
       display: flex;
-      margin-top: 50px; }
-    .update_everyday_block .every_update_row .block {
-      width: 33%; }
+      margin: 50px auto 0;
+      max-width: 800px;
+      justify-content: space-between; }
+    @media (max-width: 640px) {
+      .update_everyday_block .every_update_row .block {
+        text-align: center; } }
+    .update_everyday_block .every_update_row .block figure {
+      width: 99px;
+      height: 99px;
+      margin-bottom: 15px;
+      background-color: var(--white-two);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center; }
       @media (max-width: 640px) {
-        .update_everyday_block .every_update_row .block {
-          text-align: center; } }
-      .update_everyday_block .every_update_row .block figure {
-        width: 99px;
-        height: 99px;
-        margin-bottom: 15px;
-        background-color: var(--white-two);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center; }
-        @media (max-width: 640px) {
-          .update_everyday_block .every_update_row .block figure {
-            width: 50px;
-            height: 50px;
-            margin: 0 auto 15px; }
-            .update_everyday_block .every_update_row .block figure img {
-              width: 20px;
-              height: 20px; } }
-      .update_everyday_block .every_update_row .block .title {
-        font-size: 18px;
-        font-weight: 700;
-        font-stretch: normal;
-        font-style: normal;
-        line-height: 1.33;
-        letter-spacing: normal;
-        color: var(--white);
-        margin-left: 25px; }
-        @media (max-width: 640px) {
-          .update_everyday_block .every_update_row .block .title {
-            font-size: 14px;
-            margin: 0; } }
+        .update_everyday_block .every_update_row .block figure {
+          width: 50px;
+          height: 50px;
+          margin: 0 auto 15px; }
+          .update_everyday_block .every_update_row .block figure img {
+            width: 20px;
+            height: 20px; } }
+    .update_everyday_block .every_update_row .block .title {
+      font-size: 18px;
+      font-weight: 700;
+      font-stretch: normal;
+      font-style: normal;
+      line-height: 1.33;
+      letter-spacing: normal;
+      color: var(--white);
+      margin-left: 25px; }
+      @media (max-width: 640px) {
+        .update_everyday_block .every_update_row .block .title {
+          font-size: 14px;
+          margin: 0; } }
 
 .ar .every_update_row {
   text-align: right; }

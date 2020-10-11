@@ -1390,10 +1390,14 @@ fieldset.head_info legend {
   display: block; }
 >>>>>>> af8c02f14aaaa43c70592a08342be35e3979a635
 
+.letter_for {
+  margin: 20px -10px 0;
+}
+
 .letter_for p, .letter_for label {
   display: inline-block;
   vertical-align: middle;
-  margin: 0 5px;
+  margin: 0 10px;
   font-weight: 600;
   font-size: 14px;
   line-height: 1.57;

@@ -348,10 +348,13 @@ body.loader_show .loader {
   display: none; }
 
 /*-------------------Base---------------*/
+body {
+  font-family: 'Cairo', sans-serif;
+  font-weight: 400; }
+
 html,
 body {
   height: 100%;
-  overflow-y: auto;
   scroll-behavior: smooth; }
 
 .app_wrapper {
