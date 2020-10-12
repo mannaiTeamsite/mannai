@@ -5206,7 +5206,7 @@ color: var(--deep-orange);
             .title{
                 max-width: 300px;
 
-                h2{
+                h3{
                     font-weight: 700;
                     font-size: 44px;
                     line-height: 1.2;
@@ -5233,7 +5233,7 @@ color: var(--deep-orange);
         .right_sec{
             .para_sec{
                 max-width: 479px;
-                h3{
+                .title{
                     font-weight: 700;
                     font-size: 23px;
                     line-height: 1.5;
@@ -5299,7 +5299,7 @@ color: var(--deep-orange);
         .left_sec{
             .title{
                 max-width: 380px;
-                h2{
+                h4{
                     font-weight: 700;
                     font-size: 44px;
                     line-height: 1.2;
@@ -5395,7 +5395,7 @@ color: var(--deep-orange);
                         font-size: 28px;
                     }
                 }
-                h2{
+                .main_title{
                     font-weight: 700;
                     font-size: 28px;
                     line-height: 1.07;
@@ -5409,7 +5409,7 @@ color: var(--deep-orange);
             .para_sec{
                 // max-width: 479px;
                 margin-top: 40px;
-                h3{
+                .sub_title{
                     font-weight: 700;
                     font-size: 23px;
                     line-height: 1.23;
@@ -7775,6 +7775,13 @@ color: var(--deep-orange);
         flex: none;
         width: 100%;
       }
+
+      .tag_g {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        max-width: 227px;
+        white-space: nowrap;
+    }
   }
 
   .map_view{
@@ -11692,6 +11699,17 @@ color: var(--deep-orange);
         .f_col_full{
             flex: 1 1 100%;
         }
+        .tckt_submt_btn{
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 25px;
+            border-radius: 10px;
+        }
+        .tckt_num{
+            padding: 10px 110px 10px 15px;
+        }
         .rouge_btn{
             @media screen and (max-width: 840px) {
                 font-size: 14px;
@@ -11773,13 +11791,31 @@ color: var(--deep-orange);
         max-width:100%;
         }
     .modal-content{
-        width: 460px;
+        width: 700px;
         margin: 0 auto;
         @media screen and (max-width: 840px) {
             width: 100%;
         }
     }
+    .txt_wrapper{
+        max-width: 380px;
+    }
+    .table_wrap{
+        width: 100%;
+        table {
+            tbody {
+                td{
+                    width: auto;
+                    &:first-child{
+                        width: auto;
+                    }
+                }
+            }
+        }
+    }
 }
+
+
 #ticket-modal{
     .modal-dialog{
         max-width:100%;
@@ -11809,6 +11845,13 @@ color: var(--deep-orange);
         .upload_btn {
             right: 5px;
             left: auto;
+        }
+        .tckt_submt_btn{
+            right: auto;
+            left: 4px;
+        }
+        .tckt_num{
+            padding: 10px 15px 10px 110px;
         }
     }
 }

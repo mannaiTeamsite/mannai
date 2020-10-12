@@ -153,8 +153,8 @@ $('#review_owl').owlCarousel({
 $('#newsletter_owl').owlCarousel({
     items: 1,
     // loop:true,
-    dots: true,
-    autoplay: true,
+    dots: false,
+    autoplay: false,
 });
 
 

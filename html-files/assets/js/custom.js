@@ -698,8 +698,12 @@ $(function () {
 
 
 
-
-
+/*************Uplaod File Path******************/
+$('#upload_img').on('change', function () {
+   var xVal = $(this).val();
+   $('#attach_file').val(xVal);
+});
+/*************Uplaod File Path******************/
 
 
 
@@ -751,15 +755,42 @@ $("#content").html("Page " + num);
 // }
 
 
-var a= $(".tags_wrap").attr('id');
-console.log(a)
-// var  b=   $('#'+a).children().length;
+// var a = $(".tags_wrap").attr('id');
+// console.log(a)
+// var  b =   $('#'+a).children().length;
 
 
-var  b=   $('#'+a ).children().length;
-console.log(b);
-if(b>=2){
-   $('#'+a ).append("<li class='tag_g  tag_l' tabindex='0'>+2 more</li>")
-}
+// var  b=   $('#'+a ).children().length;
+// console.log(b);
+// if(b>=2){
+//    $('#'+a ).append("<li class='tag_g  tag_l' tabindex='0'>+2 more</li>")
+// }
 
 
+// var i= $(".category_card  .tags_wrap").find('li').size();
+// console.log(i)
+
+// if(i>=2){
+//    $('.tags_wrap' ).append("<li class='tag_g  tag_l' tabindex='0'>+2 more</li>")
+// }
+
+
+
+
+// var lengths = $(".tags_wrap").map(function(){
+//    return $(this).find('li').length;
+// }).get();
+
+
+// console.log(lengths)
+
+/**************************+2more category card*******************************************************/
+$(".tags_wrap").map(function(){
+      var d = $(this).find('li').length;
+
+      console.log(d)
+
+      if(d>=2){
+         $(this).append("<li class='tag_g  tag_l' tabindex='0' data-toggle='modal' data-target='#more-modal'>+2 more</li>")
+      }
+})

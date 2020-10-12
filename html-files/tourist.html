@@ -270,125 +270,120 @@
       </a>
    <!--Edit Persona Button close-->
    <div class="custom_container">
-     <div class="search_section">
-        <!-- search -->
-        <div class="inner_custom_container">
-           <div class="srch_wrap">
-              <ul>
-
-              <li tabindex="0" class="select_persona">
-                 <div class="person_col">
-                    <label for="persona">I'm a</label>
-                    <div class="txt_wrapper">
-                       <input type="text" placeholder="eg. Tourist" id="persona"  value="" />
-                       <span class="detect-icon">
-                       <img src="assets/images/arrow-down-s-line.svg" alt="location" />
-                       </span>
-                    </div>
-                 </div>
-              </li>
-              <li tabindex="0">
-                 <div class="location_col">
-                    <label for="place">And I'm from</label>
-                    <div class="txt_wrapper">
-                      
-                    <input type="text" name="city"  id="place" placeholder="eg. Qatar" list="cityname" autocomplete="off">
-                    <datalist id="cityname">
-                    <option value="Boston">
-                    <option value="Cambridge">
-                    </datalist>
-                       <span class="detect-icon">
-                       <img src="assets/images/location.svg" alt="location" />
-                       </span>
-                      
-                    </div>
-                 </div>
-              </li>
-              <li tabindex="0">
-                 <div class="looking_for_col">
-                    <label for="looking_for">And I'm looking for</label>
-                    <input type="text" id="looking_for" placeholder="eg. qatar travel with family" />
-                 </div>
-              </li>
-              </ul>
-
-              <div class="btn_wrapper">
-                 <button class="search_btn">Search</button>
-              </div>
-              
-           </div>
-        </div>
-        <div class="persona_tag_wrapper">
-           <div class="box">
-              <span class="persona_title">Citizen</span>
-              <ul>
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Parent" name="persona" value="Parent">
-                       <label for="Parent">Parent</label>
-                    </div>
-                 </li>
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Employee" name="persona" value="Employee">
-                       <label for="Employee">Employee</label>
-                    </div>
-                 </li>
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Businessman" name="persona"  value="Businessman">
-                       <label for="Businessman">Businessman</label>
-                    </div>
-                 </li>
-              </ul>
-           </div>
-           <div class="box">
-              <span class="persona_title">Resident</span>
-              <ul>
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Demo1" name="persona" value="Demo1">
-                       <label for="Demo1">Demo1</label>
-                    </div>
-                 </li>
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Demo2" name="persona" value="Demo2">
-                       <label for="Demo2">Demo2</label>
-                    </div>
-                 </li>
-              </ul>
-           </div>
-           <div class="box">
-              <span class="persona_title">Visitor</span>
-              <ul>
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Demo3" name="persona" value="Demo3">
-                       <label for="Demo3">Demo3</label>
-                    </div>
-                 </li>
-
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Demo4" name="persona" value="Demo4">
-                       <label for="Demo4">Demo4</label>
-                    </div>
-                 </li>
-
-
-                 <li>
-                    <div class="radio_wrap">
-                       <input type="radio" id="Demo5" name="persona" value="Tourist">
-                       <label for="Demo5">Demo5</label>
-                    </div>
-                 </li>
-            
-              </ul>
-           </div>
-        </div>
-        <!-- search close -->
-     </div>
+      <div class="search_section">
+         <!-- search -->
+         <div class="inner_custom_container">
+            <div class="srch_wrap">
+               <ul>
+                  <li tabindex="0" class="select_persona">
+                     <div class="person_col">
+                        <label for="persona">I'm a</label>
+                        <div class="txt_wrapper">
+                           <input type="text" placeholder="eg. Tourist" id="persona"  value=""  />
+                           <span class="detect-icon">
+                           <img src="assets/images/arrow-down-s-line.svg" alt="persona dropdown" />
+                           </span>
+                        </div>
+                     </div>
+                  </li>
+                  <li tabindex="0">
+                     <div class="location_col">
+                        <label for="place">And I'm from</label>
+                        <div class="txt_wrapper">
+                           <input type="text" name="city"  id="place" placeholder="eg. Qatar" list="cityname" autocomplete="off">
+                           <datalist id="cityname">
+                              <option value="Boston">
+                              <option value="Cambridge">
+                           </datalist>
+                           <span class="detect-icon">
+                           <img src="assets/images/location.svg" alt="location" />
+                           </span>
+                        </div>
+                     </div>
+                  </li>
+                  <li tabindex="0">
+                  <div class="looking_for_col">
+                  <label for="looking_for">And I'm looking for</label>
+                  <input type="text" id="looking_for" placeholder="eg. qatar travel with family" />
+                  </div>
+                  </li>
+               </ul>
+               <div class="btn_wrapper">
+               <button class="search_btn">Search</button>
+               </div>
+            </div>
+         </div>
+               <fieldset class="persona_tag_wrapper"> 
+        
+                  <legend class="hide">Persona Selection</legend>
+          <div class="box">
+         <span class="persona_title">Citizen</span>
+         <ul>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Parent" name="persona" value="Parent">
+         <label for="Parent">Parent</label>
+         </div>
+         </li>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Employee" name="persona" value="Employee">
+         <label for="Employee">Employee</label>
+         </div>
+         </li>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Businessman" name="persona"  value="Businessman">
+         <label for="Businessman">Businessman</label>
+         </div>
+         </li>
+         </ul>
+         </div>
+         <div class="box">
+         <span class="persona_title">Resident</span>
+         <ul>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Demo1" name="persona" value="Demo1">
+         <label for="Demo1">Demo1</label>
+         </div>
+         </li>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Demo2" name="persona" value="Demo2">
+         <label for="Demo2">Demo2</label>
+         </div>
+         </li>
+         </ul>
+         </div>
+         <div class="box">
+         <span class="persona_title">Visitor</span>
+         <ul>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Demo3" name="persona" value="Demo3">
+         <label for="Demo3">Demo3</label>
+         </div>
+         </li>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Demo4" name="persona" value="Demo4">
+         <label for="Demo4">Demo4</label>
+         </div>
+         </li>
+         <li>
+         <div class="radio_wrap">
+         <input type="radio" id="Demo5" name="persona" value="Tourist">
+         <label for="Demo5">Demo5</label>
+         </div>
+         </li>
+         </ul>
+         </div>
+      </fieldset>
+         
+      
+         <!-- search close -->
+      </div>
   </div>
 </div>
 <!-- Search Section close-->
@@ -1579,19 +1574,7 @@
                            </div>
                         </div>
                         <!-- item repeat close-->
-                        <!-- item repeat -->
-                        <div class="item">
-                           <div class="inner_wrap" tabindex="0">
-                              <figure class="sample_img">
-                                 <img src="assets/images/blog-thumb.png" alt="newsletter-sample" />
-                              </figure>
-                              <span class="headlines">Why Qatar is the Safest Country in the World?</span>
-                              <a href="#" tabindex="0" class="view_all_wrap link">
-                                 Checkout a sample newsletter
-                              </a>
-                           </div>
-                        </div>
-                        <!-- item repeat close-->
+                   
                      </div>
                      <!--Owl Slider close-->
                   </div>

@@ -938,7 +938,7 @@ fieldset legend {
         @media (max-width: 768px) {
           .health-topics .right-section .pagination .btn:not(:first-of-type) {
             margin-left: 10px; } }
-    .health-topics .right-section .pagination p {
+    .health-topics .right-section .pagination span {
       font-family: "cairo_semibold";
       font-size: 13px;
       line-height: 20px;
@@ -947,7 +947,7 @@ fieldset legend {
       margin-bottom: 0;
       padding-left: 24px; }
       @media (max-width: 768px) {
-        .health-topics .right-section .pagination p {
+        .health-topics .right-section .pagination span {
           padding-left: 15px; } }
   .health-topics .service-support {
     padding: 98px 0 0; }

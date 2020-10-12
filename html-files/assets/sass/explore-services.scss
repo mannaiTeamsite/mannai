@@ -506,6 +506,7 @@
         display: flex;
         align-items: center;
         position: relative;
+        max-width: 340px;
         p{
             font-size: 14px;
             font-weight: 600;
@@ -1535,5 +1536,110 @@ display: none;
                 }
             }
         }
+    }
+}
+
+#feedback, #thankyou{
+    .modal-body{
+        @media screen and (min-width: 1366px){
+            padding: 2.5em   
+        }
+    }
+}
+.feedback_form{
+    .close_feedback{
+        position: relative;
+        // padding: 0 0 0 15px;
+        font-size: 16px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: var(--slate-grey);
+        cursor: pointer;
+        float: right;
+    }
+    fieldset{
+        clear: both;
+        legend{
+            display: block !important;
+            font-size: 18px;
+                font-weight: 700;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: var(--purple-brown);
+                margin-bottom: 20px;
+        }
+        textarea{
+            width: 100%;
+            border-radius: 6px;
+            border: solid 1px #c7c7c7;
+            background-color: var(--white);
+            padding: 12px;
+            box-sizing: border-box;
+            color: #000000;
+            resize: none;
+        }
+        .send_feedback_btn{
+            border-radius: 13px;
+            background-color: var(--rouge);
+            border-style: hidden;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.38;
+            letter-spacing: 0.23px;
+            text-align: center;
+            color: var(--white);
+        }
+    }
+}
+.ar{
+    .feedback_form{
+        .close_feedback{
+            float: left;
+        }
+        fieldset{
+            text-align: right;
+        }
+    }
+}
+
+.thankyou_form{
+    text-align: center;
+        p{
+            display: block !important;
+            font-size: 18px;
+                font-weight: 700;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: var(--purple-brown);
+                margin-bottom: 20px;
+        }
+        .send_feedback_btn{
+            border-radius: 13px;
+            background-color: var(--rouge);
+            border-style: hidden;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.38;
+            letter-spacing: 0.23px;
+            text-align: center;
+            color: var(--white);
+        }
+}
+.ar{
+    .thankyou_form{
+       text-align: center;
     }
 }

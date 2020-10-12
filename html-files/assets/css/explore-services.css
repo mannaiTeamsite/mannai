@@ -383,7 +383,8 @@
   .bottom_understand .understand {
     display: flex;
     align-items: center;
-    position: relative; }
+    position: relative;
+    max-width: 340px; }
     .bottom_understand .understand p {
       font-size: 14px;
       font-weight: 600;
@@ -647,11 +648,9 @@
 .ar .explore_result_content .explore_inner_content .sec_right .explore_inner_search .inner_search .clear_search {
   left: 48px;
   right: auto; }
-
 .ar .explore_result_content .explore_inner_content.show_mobile_filter .explore_filter {
   right: 0;
-  left: auto;
-}
+  left: auto; }
 
 .filter_col {
   margin-bottom: 32px;
@@ -1165,5 +1164,89 @@ legend {
 
 .ar .explore_result_content .explore_inner_content .sec_right .explore_inner_search {
   text-align: right; }
+
+@media screen and (min-width: 1366px) {
+  #feedback .modal-body, #thankyou .modal-body {
+    padding: 2.5em; } }
+
+.feedback_form .close_feedback {
+  position: relative;
+  font-size: 16px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  color: var(--slate-grey);
+  cursor: pointer;
+  float: right; }
+.feedback_form fieldset {
+  clear: both; }
+  .feedback_form fieldset legend {
+    display: block !important;
+    font-size: 18px;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: var(--purple-brown);
+    margin-bottom: 20px; }
+  .feedback_form fieldset textarea {
+    width: 100%;
+    border-radius: 6px;
+    border: solid 1px #c7c7c7;
+    background-color: var(--white);
+    padding: 12px;
+    box-sizing: border-box;
+    color: #000000;
+    resize: none; }
+  .feedback_form fieldset .send_feedback_btn {
+    border-radius: 13px;
+    background-color: var(--rouge);
+    border-style: hidden;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.38;
+    letter-spacing: 0.23px;
+    text-align: center;
+    color: var(--white); }
+
+.ar .feedback_form .close_feedback {
+  float: left; }
+.ar .feedback_form fieldset {
+  text-align: right; }
+
+.thankyou_form {
+  text-align: center; }
+  .thankyou_form p {
+    display: block !important;
+    font-size: 18px;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    color: var(--purple-brown);
+    margin-bottom: 20px; }
+  .thankyou_form .send_feedback_btn {
+    border-radius: 13px;
+    background-color: var(--rouge);
+    border-style: hidden;
+    padding: 12px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.38;
+    letter-spacing: 0.23px;
+    text-align: center;
+    color: var(--white); }
+
+.ar .thankyou_form {
+  text-align: center; }
 
 /*# sourceMappingURL=explore-services.css.map */

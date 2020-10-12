@@ -5570,7 +5570,7 @@ hr {
     align-items: flex-start; }
     .facing_challenges .section_wrapper .left_sec .title {
       max-width: 300px; }
-      .facing_challenges .section_wrapper .left_sec .title h2 {
+      .facing_challenges .section_wrapper .left_sec .title h3 {
         font-weight: 700;
         font-size: 44px;
         line-height: 1.2;
@@ -5578,7 +5578,7 @@ hr {
         color: var(--white);
         margin-bottom: 20px; }
         @media screen and (max-width: 768px) {
-          .facing_challenges .section_wrapper .left_sec .title h2 {
+          .facing_challenges .section_wrapper .left_sec .title h3 {
             font-size: 40px; } }
       .facing_challenges .section_wrapper .left_sec .title p {
         font-family: 'cairo_regular';
@@ -5592,7 +5592,7 @@ hr {
             font-size: 16px; } }
     .facing_challenges .section_wrapper .right_sec .para_sec {
       max-width: 479px; }
-      .facing_challenges .section_wrapper .right_sec .para_sec h3 {
+      .facing_challenges .section_wrapper .right_sec .para_sec .title {
         font-weight: 700;
         font-size: 23px;
         line-height: 1.5;
@@ -5600,7 +5600,7 @@ hr {
         color: var(--white);
         margin-bottom: 16px; }
         @media screen and (max-width: 768px) {
-          .facing_challenges .section_wrapper .right_sec .para_sec h3 {
+          .facing_challenges .section_wrapper .right_sec .para_sec .title {
             font-size: 18px; } }
       .facing_challenges .section_wrapper .right_sec .para_sec p {
         font-family: 'cairo_regular';
@@ -5641,14 +5641,14 @@ hr {
     align-items: flex-start; }
     .achievement .section_wrapper .left_sec .title {
       max-width: 380px; }
-      .achievement .section_wrapper .left_sec .title h2 {
+      .achievement .section_wrapper .left_sec .title h4 {
         font-weight: 700;
         font-size: 44px;
         line-height: 1.2;
         letter-spacing: normal;
         color: var(--purple-brown); }
         @media screen and (max-width: 768px) {
-          .achievement .section_wrapper .left_sec .title h2 {
+          .achievement .section_wrapper .left_sec .title h4 {
             font-size: 40px; } }
       .achievement .section_wrapper .left_sec .title p {
         font-family: 'cairo_regular';
@@ -5720,18 +5720,18 @@ hr {
         @media screen and (max-width: 768px) {
           .achievement .section_wrapper .right_sec .bullet_sec .number {
             font-size: 28px; } }
-      .achievement .section_wrapper .right_sec .bullet_sec h2 {
+      .achievement .section_wrapper .right_sec .bullet_sec .main_title {
         font-weight: 700;
         font-size: 28px;
         line-height: 1.07;
         letter-spacing: normal;
         color: var(--purple-brown); }
         @media screen and (max-width: 768px) {
-          .achievement .section_wrapper .right_sec .bullet_sec h2 {
+          .achievement .section_wrapper .right_sec .bullet_sec .main_title {
             font-size: 25px; } }
     .achievement .section_wrapper .right_sec .para_sec {
       margin-top: 40px; }
-      .achievement .section_wrapper .right_sec .para_sec h3 {
+      .achievement .section_wrapper .right_sec .para_sec .sub_title {
         font-weight: 700;
         font-size: 23px;
         line-height: 1.23;
@@ -5739,7 +5739,7 @@ hr {
         color: var(--purple-brown);
         margin-bottom: 16px; }
         @media screen and (max-width: 768px) {
-          .achievement .section_wrapper .right_sec .para_sec h3 {
+          .achievement .section_wrapper .right_sec .para_sec .sub_title {
             font-size: 20px; } }
       .achievement .section_wrapper .right_sec .para_sec figure {
         margin-bottom: 32px; }
@@ -7446,6 +7446,11 @@ hr {
     .category_card {
       flex: none;
       width: 100%; } }
+  .category_card .tag_g {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 227px;
+    white-space: nowrap; }
 
 .map_view .category_card {
   width: 100%;
@@ -10066,6 +10071,15 @@ h3 {
         padding: 0 10px; } }
   .custom_modal.customer_service_modal .f_col_full {
     flex: 1 1 100%; }
+  .custom_modal.customer_service_modal .tckt_submt_btn {
+    position: absolute;
+    right: 4px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 25px;
+    border-radius: 10px; }
+  .custom_modal.customer_service_modal .tckt_num {
+    padding: 10px 110px 10px 15px; }
   @media screen and (max-width: 840px) {
     .custom_modal.customer_service_modal .rouge_btn {
       font-size: 14px;
@@ -10132,11 +10146,19 @@ h3 {
 #query-modal .modal-dialog {
   max-width: 100%; }
 #query-modal .modal-content {
-  width: 460px;
+  width: 700px;
   margin: 0 auto; }
   @media screen and (max-width: 840px) {
     #query-modal .modal-content {
       width: 100%; } }
+#query-modal .txt_wrapper {
+  max-width: 380px; }
+#query-modal .table_wrap {
+  width: 100%; }
+  #query-modal .table_wrap table tbody td {
+    width: auto; }
+    #query-modal .table_wrap table tbody td:first-child {
+      width: auto; }
 
 #ticket-modal .modal-dialog {
   max-width: 100%; }
@@ -10156,6 +10178,11 @@ h3 {
 .ar .customer_service_modal .upload_btn {
   right: 5px;
   left: auto; }
+.ar .customer_service_modal .tckt_submt_btn {
+  right: auto;
+  left: 4px; }
+.ar .customer_service_modal .tckt_num {
+  padding: 10px 15px 10px 110px; }
 
 /*****************************Customer Service close***************************************/
 .faq-section {

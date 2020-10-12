@@ -269,14 +269,14 @@
                         <p>Switch Profile</p>
                         <div class="switch_group">
                             <div class="switch_btn">
-                                <input type="radio" id="personal" name="switch_group">
+                                <input type="radio" id="personal" name="switch_group" aria-label="Personal">
                                 <label for="personal" title="Personal Profile"> 
                                     <span><img src="assets/images/tick_red.svg" alt="Personal"></span>
                                     Personal
                                     </label>
                             </div>
                            <div class="switch_btn">
-                            <input type="radio" id="business" name="switch_group" checked>
+                            <input type="radio" id="business" name="switch_group" aria-label="Business" checked>
                             <label for="business" title="Business Profile">
                                 <span><img src="assets/images/tick_red.svg" alt="Business"></span>
                                 Business
@@ -525,15 +525,15 @@
                         <div class="bills_card_wrapper">
                             <div class="hku_card">
                                 <div class="hku_card_header no_border">
-                                    <ul class="nav nav-tabs mt__20" id="bills_tab_nav" role="tablist">
+                                    <ul class="nav nav-tabs mt__20" id="bills_tab_nav" role="navigation">
                                         <li class="nav-item">
-                                          <a class="nav-link active" id="bills-due" data-toggle="tab" href="#bills" role="tab" aria-controls="bills" aria-selected="true">Bills Due (04)</a>
+                                          <a class="nav-link active" id="bills-due" data-toggle="tab" href="#bills" role="navigation" aria-controls="bills" aria-selected="true">Bills Due (04)</a>
                                         </li>
                                       </ul>
                                 </div>
                                 <div class="select_all">
                                     <label class="chech_lbl" for="servicesck">
-                                        <input id="servicesck" class="check_input" type="checkbox" tabindex="0" onchange="checkAll(this)">
+                                        <input id="servicesck" class="check_input" type="checkbox" aria-label="Select All" tabindex="0" onchange="checkAll(this)">
                                         <span></span>
                                         Select All</label>
                                 </div>
@@ -545,7 +545,8 @@
                                                     
                                                     <div class="data_item">
                                                         <div class="select_bill">
-                                                            <label class="chech_lbl" for="bill_1"><input id="bill_1" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <label class="chech_lbl" for="bill_1">
+                                                                <input id="bill_1" class="check_input bill_check" type="checkbox" aria-label="Electricity Bill one Electricity Bill one" tabindex="0">
                                                                 <span></span>Electricity Bill one Electricity Bill one</label>
                                                         </div>
                                                         <!-- <h4>Electricity Bill</h4> -->
@@ -571,7 +572,8 @@
                                                     
                                                     <div class="data_item">
                                                         <div class="select_bill">
-                                                            <label class="chech_lbl" for="bill_2"><input id="bill_2" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <label class="chech_lbl" for="bill_2">
+                                                                <input id="bill_2" aria-label="Electricity Bill two" class="check_input bill_check" type="checkbox" tabindex="0">
                                                                 <span></span>Electricity Bill two</label>
                                                         </div>
                                                         <!-- <h4>Electricity Bill</h4> -->
@@ -594,8 +596,8 @@
                                                    
                                                     <div class="data_item">
                                                         <div class="select_bill">
-                                                            <label class="chech_lbl" for="bill_3"><input id="bill_3" class="check_input bill_check" type="checkbox" tabindex="0">
-                                                                <span></span>Electricity Bill hree</label>
+                                                            <label class="chech_lbl" for="bill_3"><input id="bill_3" aria-label="Electricity Bill three" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                                <span></span>Electricity Bill three</label>
                                                         </div>
                                                         <!-- <h4>Electricity Bill</h4> -->
                                                         <p>Qatar Power Company</p>
@@ -617,7 +619,7 @@
                                                     
                                                     <div class="data_item">
                                                         <div class="select_bill">
-                                                            <label class="chech_lbl" for="bill_4"><input id="bill_4" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <label class="chech_lbl" for="bill_4"><input id="bill_4" aria-label="Electricity Bill four" class="check_input bill_check" type="checkbox" tabindex="0">
                                                                 <span></span>
                                                                 Electricity Bill four</label>
                                                         </div>
@@ -640,7 +642,7 @@
                                                     
                                                     <div class="data_item">
                                                         <div class="select_bill">
-                                                            <label class="chech_lbl" for="bill_5"><input id="bill_5" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                            <label class="chech_lbl" for="bill_5"><input id="bill_5" aria-label="Electricity Bill five" class="check_input bill_check" type="checkbox" tabindex="0">
                                                                 <span></span>
                                                                 Electricity Bill five</label>
                                                         </div>
@@ -665,8 +667,7 @@
                                                     <div class="data_item">
                                                         <div class="select_bill">
                                                             <label class="chech_lbl" for="bill_6">
-                                                                
-                                                                <input id="bill_6" class="check_input bill_check" type="checkbox" tabindex="0">
+                                                                <input id="bill_6" aria-label="Electricity Bill six" class="check_input bill_check" type="checkbox" tabindex="0">
                                                                 <span></span>
                                                                 Electricity Bill six</label>
                                                         </div>
@@ -722,12 +723,12 @@
                                 </div>
                                 <div class="hku_card_header no_border">
                                     
-                                    <ul class="nav nav-tabs" id="favorites_tab_nab" role="tablist">
+                                    <ul class="nav nav-tabs" id="favorites_tab_nab" role="navigation">
                                         <li class="nav-item">
-                                          <a class="nav-link active" id="fav-services-tab" data-toggle="tab" href="#services" role="tab" aria-controls="services" aria-selected="true">Services (06)</a>
+                                          <a class="nav-link active" id="fav-services-tab" data-toggle="tab" href="#services" role="button" aria-controls="services" aria-selected="true">Services (06)</a>
                                         </li>
                                         <li class="nav-item">
-                                          <a class="nav-link" id="fav-utilities-tab" data-toggle="tab" href="#utilities" role="tab" aria-controls="utilities" aria-selected="false">Utilities (04)</a>
+                                          <a class="nav-link" id="fav-utilities-tab" data-toggle="tab" href="#utilities" role="button" aria-controls="utilities" aria-selected="false">Utilities (04)</a>
                                         </li>
                                       </ul>
                                 </div>

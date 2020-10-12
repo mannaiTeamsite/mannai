@@ -196,19 +196,19 @@
             <div class="services_inner" id="services_inner" tabindex="-1">
                 <div class="serv_tabs">
                     <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs" id="myTab" role="navigation">
                         <li class="nav-item">
                             <div class="new_bedge">New</div>
-                            <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="tab"
-                                aria-controls="explore" aria-selected="true" tabindex="0">Explore</a>
+                            <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="button"
+                                aria-controls="explore" aria-selected="true" tabindex="0" aria-label="Explore" title="Explore">Explore</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="tab"
-                                aria-controls="favourites" aria-selected="false" tabindex="0">Bookmarked Services (11)</a>
+                            <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="button"
+                                aria-controls="favourites" aria-selected="false" tabindex="0" aria-label="Bookmarked Services">Bookmarked Services (11)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="tab"
-                                aria-controls="last-viewed" aria-selected="false" tabindex="0">Last Viewed (1)</a>
+                            <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="button"
+                                aria-controls="last-viewed" aria-selected="false" tabindex="0" aria-label="Last Viewed">Last Viewed (1)</a>
                         </li>
                     </ul>
 
@@ -237,21 +237,21 @@
                                         <ul>
                                             <li>
                                                 <label class="chech_lbl" for="parent">
-                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0">
+                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
                                                     <span></span>
                                                     <span class="chk_text">Parent</span>
                                                 </label>
                                             </li>
                                             <li>
-                                                <label class="chech_lbl" for="employee"><input id="employee"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                <label class="chech_lbl" for="employee">
+                                                    <input id="employee" class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
                                                     <span></span>
                                                     <span class="chk_text">Employee</span>
                                                     </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="businessman"><input id="businessman"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
                                                     <span></span>
                                                     <span class="chk_text">Businessman</span>
                                                     </label>
@@ -266,7 +266,7 @@
                                                 <fieldset>
                                                     <legend>a</legend>
                                                     <label class="chech_lbl" for="parent1"><input id="parent1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
                                                         <span></span>
                                                         <span class="chk_text">Parent</span>
                                                         </label>
@@ -276,7 +276,7 @@
                                                 <fieldset>
                                                     <legend>b</legend>
                                                     <label class="chech_lbl" for="employee1"><input id="employee1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
                                                         <span></span>
                                                         <span class="chk_text">Employee</span>
                                                         </label>
@@ -290,14 +290,14 @@
                                         <ul>
                                             <li>
                                                 <label class="chech_lbl" for="tourist"><input id="tourist"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Tourist">
                                                     <span></span>
                                                     <span class="chk_text">Tourist</span>
                                                     </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="student"><input id="student"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Student">
                                                     <span></span>
                                                     <span class="chk_text">Student</span>
                                                     </label>
@@ -306,7 +306,7 @@
                                                 <fieldset>
                                                     <legend>c</legend>
                                                     <label class="chech_lbl" for="businessman1"><input id="businessman1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
                                                         <span></span>
                                                         <span class="chk_text">Businessman</span>
                                                         </label>
@@ -332,11 +332,11 @@
                                         <p>Is this easy to understand?</p>
                                         <div class="like">
                                             <div class="like_btn" tabindex="0">
-                                                <input type="radio" checked name="like" id="yes">
+                                                <input type="radio" name="like" id="yes" aria-label="Yes" data-toggle="modal" data-target="#thankyou">
                                                 <label for="yes">Yes</label>
                                             </div>
                                             <div class="like_btn" tabindex="0">
-                                                <input type="radio" name="like" id="no">
+                                                <input type="radio" name="like" id="no" aria-label="No" data-toggle="modal" data-target="#feedback">
                                                 <label for="no">No</label>
                                             </div>
                                         </div>
@@ -1163,7 +1163,52 @@
                
             </div>
         <!-- ======= remove favourite alert ======= -->
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="feedback_form">
+                <div class="close_feedback" data-dismiss="modal"><span></span> Close</div>
+                <fieldset>
+                    <legend>Help us improve Hukoomi</legend>
+                    <form class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <textarea cols="3" placeholder="What went wrong?" required></textarea>
+                            <div class="invalid-feedback">
+                                Please field is required.
+                              </div>
+                        </div>
+                        <button type="submit" class="send_feedback_btn">Send</button>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
 
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="thankyou_form">
+                <div class="form-group">
+                    <p> Thank you for the feedback.</p>
+                </div>
+                <button type="submit" class="send_feedback_btn" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
     </div>
     <!-- =============== bootstrap js=============== -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>

@@ -7,6 +7,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap');
 
 /*----------------------------Font------------------------------*/
+
+@font-face {
+	font-family: "GESSTwoMedium-Medium";
+	src: url("../fonts/GESSTwoMedium-Medium.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal; 
+}
+
 @font-face {
 	font-family: "cairo_light";
 	src: url("../fonts/cairo-light-webfont.woff2") format("woff2"),
@@ -90,8 +98,11 @@ body {
 	// font-family: "cairo_regular";
 	font-family: 'Cairo', sans-serif;
 	font-weight: 400;
-  }
-  
+}
+    
+body.ar *{
+	font-family: "GESSTwoMedium-Medium" !important;
+}
 
 //   .line-1 {
 //     overflow: hidden;

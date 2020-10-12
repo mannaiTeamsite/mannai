@@ -128,8 +128,8 @@ $('.result_carousal').owlCarousel({
    nav: true,
   //  items: 34
    navText: [
-     '<img src="assets/images/arrow-left.svg">', 
-     '<img src="assets/images/arrow-right.svg">'
+     '<img src="assets/images/arrow-left.svg" alt="Previous">', 
+     '<img src="assets/images/arrow-right.svg" alt="Next">'
     ],
   responsive:{
       0:{
