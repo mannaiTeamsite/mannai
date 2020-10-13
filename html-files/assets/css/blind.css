@@ -480,7 +480,7 @@ section{
 .video_img_wrapper .tab_wrapper a:before{
     background-color: yellow;
 }
-.faq_section .accordian-block{
+.faq_section .accordian-block, #login-prompt-modal .modal-dialog .modal-content{
     overflow: hidden;
 }
 #reach-out-modal .reachout_modal{

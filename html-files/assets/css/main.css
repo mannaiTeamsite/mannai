@@ -9612,6 +9612,31 @@ h3 {
   left: 20px; }
 
 /***************************************Custom Modal close******************************************/
+/**************Login prompt modal*****************/
+#login-prompt-modal .modal-dialog {
+  max-width: 100%; }
+  #login-prompt-modal .modal-dialog .modal-content {
+    border-radius: 12px;
+    width: 340px;
+    margin: 0 auto; }
+    @media screen and (max-width: 640px) {
+      #login-prompt-modal .modal-dialog .modal-content {
+        width: 100%; } }
+    #login-prompt-modal .modal-dialog .modal-content .custom_modal {
+      padding: 15px 30px 35px; }
+      #login-prompt-modal .modal-dialog .modal-content .custom_modal .modal-body {
+        padding: 0;
+        text-align: center; }
+        #login-prompt-modal .modal-dialog .modal-content .custom_modal .modal-body p {
+          font-size: 16px;
+          font-family: 'cairo_semibold';
+          line-height: 1.88;
+          text-align: center;
+          color: var(--black-two); }
+      #login-prompt-modal .modal-dialog .modal-content .custom_modal a.rouge_btn {
+        display: inline-block; }
+
+/*************Login prompt modal close**************/
 /***************************************Articles******************************************/
 .category_articles_card .list_card {
   min-height: 260px;

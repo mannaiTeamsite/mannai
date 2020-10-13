@@ -10930,6 +10930,41 @@ color: var(--deep-orange);
 /***************************************Custom Modal close******************************************/
 
 
+/**************Login prompt modal*****************/ 
+#login-prompt-modal{
+    .modal-dialog{
+      max-width:100%;
+        .modal-content{
+            border-radius: 12px;
+            width: 340px;
+            margin: 0 auto;
+            @media screen and (max-width: 640px) {
+                width: 100%;
+            }
+            .custom_modal {
+                padding: 15px 30px 35px;
+                .modal-body {
+                    padding: 0;
+                    text-align: center;
+                    p{
+                        font-size: 16px;
+                        font-family: 'cairo_semibold';
+                        line-height: 1.88;
+                        text-align: center;
+                        color: var(--black-two);
+                    }
+                }
+                a.rouge_btn{
+                    display: inline-block;
+                }
+            }
+        }
+    }
+}
+/*************Login prompt modal close**************/ 
+
+
+
 /***************************************Articles******************************************/
 .category_articles_card{
     .list_card {
