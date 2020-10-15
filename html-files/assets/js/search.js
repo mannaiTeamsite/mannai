@@ -117,6 +117,87 @@ function checkitem()                        // check function
 //   $(firstActive).addClass('first-active')
 // }
 
+
+
+$(document) .ready(function(){
+  var li =  $(".owl-item a ");
+    $(".owl-item a").click(function(){
+    li.removeClass('active');
+  });
+
+  magnify("previewImage", 3);
+});
+
+
+
+$('.result_blocks li').mouseover(function(){
+  console.log($(this).attr('data-image'));
+  var image = $(this).attr('data-image');
+  if(!image == ''){
+    setPreview(image)
+  }
+  else{
+    $('.img-magnifier-glass').remove();
+    $('.page_preview figure #previewImage').attr('src', 'assets/images/no_image.png');
+  }
+});
+
+function setPreview(url){
+  $('.img-magnifier-glass').remove();
+  $('.page_preview figure #previewImage').attr('src', url);
+  magnify("previewImage", 3);
+}
+
+
+// ======= to add class in dropdown menu in arabic version =======
+$('body').on('classChange', function(){
+  if($('body').hasClass('ar')){
+    $('.search_accordion_container ul li').addClass('dropright');
+    $('.result_blocks li').addClass('dropright');
+  }
+  else{
+    $('.search_accordion_container ul li').removeClass('dropright')
+  }
+});
+
+$(window).scroll(function(){
+  console.log('--scroll--')
+  var scroll = $(window).scrollTop();
+  if(scroll > 80){
+    $('.page_preview').addClass('fix_preview')
+  }
+  else{
+    $('.page_preview').removeClass('fix_preview')
+  }
+});
+
+// ======= feedback form validation =======
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        else{
+          event.preventDefault();
+          event.stopPropagation();
+          $('#feedback').modal('hide');
+          $('#thankyou').modal('show')
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+
+
 $('.result_carousal').owlCarousel({
   loop:false,
   // margin:2,   
@@ -152,53 +233,3 @@ $('.result_carousal').owlCarousel({
       }
   }
 })
-
-$(document) .ready(function(){
-  var li =  $(".owl-item a ");
-    $(".owl-item a").click(function(){
-    li.removeClass('active');
-  });
-
-  magnify("previewImage", 3);
-});
-
-$('body').scroll(function(){
-  console.log('--scroll--')
-  var scroll = $('body').scrollTop();
-  if(scroll > 80){
-    $('.page_preview').addClass('fix_preview')
-  }
-  else{
-    $('.page_preview').removeClass('fix_preview')
-  }
-});
-
-$('.result_blocks li').mouseover(function(){
-  console.log($(this).attr('data-image'));
-  var image = $(this).attr('data-image');
-  if(!image == ''){
-    setPreview(image)
-  }
-  else{
-    $('.img-magnifier-glass').remove();
-    $('.page_preview figure #previewImage').attr('src', 'assets/images/no_image.png');
-  }
-});
-
-function setPreview(url){
-  $('.img-magnifier-glass').remove();
-  $('.page_preview figure #previewImage').attr('src', url);
-  magnify("previewImage", 3);
-}
-
-
-// ======= to add class in dropdown menu in arabic version =======
-$('body').on('classChange', function(){
-  if($('body').hasClass('ar')){
-    $('.search_accordion_container ul li').addClass('dropright');
-    $('.result_blocks li').addClass('dropright');
-  }
-  else{
-    $('.search_accordion_container ul li').removeClass('dropright')
-  }
-});

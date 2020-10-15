@@ -26,7 +26,12 @@
 	direction: ltr;
    }
 
-
+.online, .green{
+	color: var(--green) !important;
+}
+.offline, .rouge{
+	color: var(--rouge) !important;
+}
 .dark_orange{
     color: var(--dark-orange) !important;
 }
@@ -9020,11 +9025,11 @@ color: var(--deep-orange);
                 width: 35px;
                 height: 35px;
             }
-			&:hover{
+			&:hover, &.active{
 				&::before{
                     width: 35px;
                     height: 35px;
-					background: url('../images/ic_event_details_like_active.png') center no-repeat;
+					background: url('../images/ic-like-active.png') center no-repeat;
 				}
 			}
 		}
@@ -10491,7 +10496,7 @@ color: var(--deep-orange);
 /***************************************Police and Useful NUmbers close******************************************/
 
 
-/***************************************Job******************************************/
+/***************************************Job  & Service******************************************/
 .category_job_card{
     .list_card {
         min-height: 360px;
@@ -10566,7 +10571,7 @@ color: var(--deep-orange);
         }
     } 
 }
-.job_detail{
+.job_detail, .service_detail{
     .hd{
         display: block;
         font-weight: 600;
@@ -10578,7 +10583,33 @@ color: var(--deep-orange);
         display: flex;
         align-items: center;
     }
+   .service_info{
+        display: flex;
+        margin-bottom: 15px;
+        li{
+            margin-right: 40px;
+            display: inline-flex;
+            &:last-child{
+                margin-right: 0;
+            }
+        }
+    }
+    .more_service_info{
+        flex-wrap: wrap;
+        display: flex;
+        li{
+            margin-right: 25px;
+            display: inline-flex;
+            &:last-child{
+                margin-right: 0;
+            }
+        }
+        .show_label{
+            padding-left: 5px;
+        }
+    }
     .facilities_wrap{
+        flex-flow: column;
         li{
             span{
                 display: block;
@@ -10628,7 +10659,7 @@ color: var(--deep-orange);
             }
         }
         &.detail_card{
-            margin: 0 0 0 50px;
+            margin: 0 0 0 40px;
             @media(max-width:768px){
                 margin: 0 0 0 30px;
             }
@@ -10636,7 +10667,7 @@ color: var(--deep-orange);
     }
 }
 
-/***************************************Job close******************************************/
+/***************************************Job & Service close******************************************/
 
 
 /***************************************Museum******************************************/
@@ -12813,8 +12844,8 @@ color: var(--deep-orange);
 
 
 
-/***************************************Articles******************************************/
-.category_articles_card{
+/***************************************Articles & Services******************************************/
+.category_articles_card, .category_services_card{
     .list_card {
         min-height: 260px;
         padding: 25px 30px 30px;
@@ -12854,6 +12885,13 @@ color: var(--deep-orange);
         &.save{
             background: url("../images/ic-list-fill-bookmark.svg") center no-repeat;
         }
+    }
+}
+
+.category_services_card{
+    .list_card {
+        min-height: 300px;
+        padding: 22px 10px 30px 15px;
     }
 }
 .list_view{
@@ -12896,10 +12934,10 @@ color: var(--deep-orange);
     }
 }
 
-.article_topics{
+.article_topics, .service_type{
     display: flex;
     flex-wrap: wrap;
-    .article_card{
+    .article_card, .service_card{
         width: 150px;
         height: 150px;
         border-radius: 8px;
@@ -12966,8 +13004,8 @@ color: var(--deep-orange);
     }
 }
 .ar{
-    .article_topics {
-        .article_card {
+    .article_topics, .service_type {
+        .article_card, .service_card {
             .topic_icon{
                 &:before{
                     right: auto;
@@ -12982,7 +13020,7 @@ color: var(--deep-orange);
 //     margin-right: 0;
 //  }
 
-/***************************************Artcles close******************************************/
+/***************************************Artcles  & Services close******************************************/
 
 
 
@@ -15536,3 +15574,89 @@ color: var(--deep-orange);
     color: #f00;
     font-size: 14px;
 }
+
+
+
+
+
+
+
+
+.page_like_wrapper input[type=radio] + .like {
+    background: url(../images/ic-event-details-like.svg);
+    opacity: 1;
+    background-repeat: no-repeat;
+    background-position: left;
+    height: 38px;
+    color: transparent;
+    padding-left: 17px;
+}
+
+
+.page_like_wrapper input[type=radio]:checked + .like {
+    background: url('../images/ic-like-active.png');
+    opacity: 1;
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+
+.page_like_wrapper input[type=radio] + .dislike {
+    background: url('../images/ic_event_details_dislike_inactive.png');
+    opacity: 1;
+    height: 38px;
+    background-repeat: no-repeat;
+    background-position: left;
+    color: transparent;
+    padding-left: 17px;
+}
+
+.page_like_wrapper input[type=radio]:checked + .dislike {
+    background: url('../images/ic_event_details_dislike_hover.png');
+    opacity: 1;
+    background-repeat: no-repeat;
+    background-position: left;
+}
+
+
+
+.page_like_wrapper {
+    display: flex;
+    span {
+        font-size: 16px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: 2.19;
+        letter-spacing: normal;
+        color: var(--black-two);
+        margin-right: 20px; 
+    }
+
+    input[type=radio] {
+        margin: 0;
+        width: auto;
+        width: 17px;
+        height: 12px;
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        background-size: contain;
+    }
+    [type="radio"] + label:before, 
+    [type="radio"] + label:after{
+    display: none;
+    }
+    ul{
+        li{
+            display: inline-block;
+            position: relative;
+            margin: 0 0px 0 10px;
+        }
+    }
+}
+
+

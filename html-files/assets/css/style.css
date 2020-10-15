@@ -240,7 +240,8 @@ body.loader_show .loader {
   --white-eleven: #ededed;
   --white-twelve: #e2e2e2;
   --black-7: rgba(0, 0, 0, 0.07);
-  --white-thirteen: #f2f2f2; }
+  --white-thirteen: #f2f2f2;
+  --green: #2fc326; }
 
 .flex_row {
   display: flex;
@@ -358,7 +359,8 @@ body {
   font-weight: 400; }
 
 body.ar * {
-  font-family: "GESSTwoMedium-Medium" !important; }
+  font-family: "GESSTwoMedium-Medium" !important;
+  font-weight: 400 !important; }
 
 html,
 body {

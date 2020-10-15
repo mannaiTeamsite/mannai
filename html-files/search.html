@@ -233,7 +233,7 @@
             <!-- ===== serach button end ===== -->
             <!-- ========= advance search =============== -->
             <div class="advance_search_wrap collapse" id="collapseExample">
-                <p class="adv_heading">Hukoomi Advance Search <a href="">Share feedback</a></p>
+                <p class="adv_heading">Hukoomi Advance Search <a href="javascript:void(0)" data-toggle="modal" data-target="#feedback">Share feedback</a></p>
                 <div class="advance_search">
                     <div class="search_info">
                         <ul>
@@ -337,7 +337,7 @@
                             </div>
                         </div>
 
-                        <div class="form_row">
+                        <!-- <div class="form_row">
                             <div class="title">
                                 <h3>Channels</h3>
                                 <p>Get results from selected government ministries and other departments.</p>
@@ -361,7 +361,7 @@
                                     </li>
                                 </ul>
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="form_row">
                             <div class="title">
@@ -660,6 +660,52 @@
 <!-- ======= bottom section and serach filter end ======= -->
        
    </section>
+   <!-- ======= feedback popup ======= -->
+<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="feedback_form">
+                <div class="close_feedback" data-dismiss="modal"><span></span> Close</div>
+                <fieldset>
+                    <legend>Help us improve Hukoomi</legend>
+                    <form class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <textarea cols="3" placeholder="What went wrong?" required></textarea>
+                            <div class="invalid-feedback">
+                                Please field is required.
+                              </div>
+                        </div>
+                        <button type="submit" class="send_feedback_btn">Send</button>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
+
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="thankyou_form">
+                <div class="form-group">
+                    <p> Thank you for the feedback.</p>
+                </div>
+                <button type="submit" class="send_feedback_btn" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
 </div>
    <!-- =============== bootstrap js=============== -->
    <script src="assets/js/jquery.js"></script>

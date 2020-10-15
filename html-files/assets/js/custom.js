@@ -286,8 +286,8 @@ $(".close_map_img").click(function(){
          $(this).text("Collapse All");
    });
 
-/****************Articles**********************/
-$(".article_card").click(function () {
+/****************Articles & Service**********************/
+$(".article_card, .service_card").click(function () {
    $(this).toggleClass("active");
    if (!$(this).hasClass('active')) {
       $(".all").removeClass("active");
@@ -298,11 +298,10 @@ $(".all").click(function (e) {
  
    $(this).nextAll().toggleClass("active");
    if ($(this).hasClass('active')) {
-      $(".article_card").addClass("active");
+      $(".article_card, .service_card").addClass("active");
    }
 })
-/****************Articles Close**********************/
-
+/****************Articles & Service Close**********************/
 
 
 
@@ -794,3 +793,40 @@ $(".tags_wrap").map(function(){
          $(this).append("<li class='tag_g  tag_l' tabindex='0' data-toggle='modal' data-target='#more-modal'>+2 more</li>")
       }
 })
+
+
+
+
+$(".insurance_mob").map(function(){
+   var d = $(this).find('a').length;
+
+   if(d>=2){
+      $('a:nth-child(2)').nextAll().addClass("hide")
+   }
+
+   console.log(d)
+
+   if(d>=2){
+      $(this).append(",<span class='more' tabindex='0' data-toggle='modal' data-target='#more-modal'>more</span>")
+   }
+})
+
+
+
+
+$(document).ready(function() {
+   $('#lang_toggle').click(function() {
+       $('div').css("font-size", function() {
+           return parseInt($(this).css('font-size')) - 2 + 'px';
+       });
+   });
+});
+
+
+
+
+/**************************Like/Unlike Js***********************************************/
+$(".like").click(function(){
+   $(".like").toggleClass("active");
+});
+/******************************Like/Unlike Js Close***********************************/

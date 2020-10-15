@@ -207,7 +207,7 @@ section{
 .bussiness_card_sm {
     border: 1px solid #fff !important;
 }
-.bussiness_card_sm .title, .field_label {
+.bussiness_card_sm .title, .field_label , .online{
     color: yellow !important;
 }
 .business_qatar .block_row .col_right .bussiness_card_row .bussiness_card_sm:hover::before{
@@ -460,7 +460,7 @@ section{
     border-bottom-color: #353535;
 }
 
-.article_topics .article_card, .customer_services .query_links a, .custom_error_explore .explore_card, .faq_section .accordian-block,
+.article_topics .article_card, .service_type .service_card, .customer_services .query_links a, .custom_error_explore .explore_card, .faq_section .accordian-block,
 .download_utility_directory .feedback_link .like label, .e_participation .objectves_card_wrap a, 
 .structure_government .section_wrapper .left_sec .links, .achievement .section_wrapper .left_sec .links{
     border: 1px solid #fff !important;
@@ -469,7 +469,7 @@ section{
 .icon::before, .gallry_wrap h1::before, .contact_us_form .info::before, .faq_section .accordian-block .cross-icon, 
 .faq_section .accordian-block .plus-icon, .custom_error .go_back:before, .download_utility_directory .back::before, 
 .find_help_contact .faq_section .accordian-block .answer::before, #reach-out-modal .reachout_details::before,
-.article_topics .article_card .topic_icon:before, .explore_life_qatar .explore_life_block{
+ .topic_icon:before, .explore_life_qatar .explore_life_block{
     -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
     filter: grayscale(100%) !important;
     filter: gray; /* IE6-9 */
@@ -487,7 +487,7 @@ section{
     border-radius: 5px;
 }
 .category_tab_wrapper ul li a.active, .download_utility_directory .category_tab_wrapper.directory_tab ul li a.active,
-.news_section .bottom_wrapper ul li a.active{
+.news_section .bottom_wrapper ul li a.active, .offline{
     color: #fff !important;
 }
 .tags_wrap, .flag_banner_section .flag_botom_img, .flag_banner_section .flag_img img{
@@ -508,7 +508,7 @@ section{
     padding: 10px;
     border-radius: 3px;
 }
-.name:before, .mob:before, .time:before{
+.name:before, .mob:before, .time:before, .service-fee::before{
     background-color: #fff !important;
     border-radius: 2px;
     padding: 4px;

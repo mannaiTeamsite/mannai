@@ -1540,6 +1540,9 @@ display: none;
 }
 
 #feedback, #thankyou{
+    .modal-dialog{
+        max-width: 500px !important;
+    }
     .modal-body{
         @media screen and (min-width: 1366px){
             padding: 2.5em   

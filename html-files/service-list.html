@@ -12,6 +12,8 @@
    <link rel="stylesheet" href="assets/css/style.css">
    <link rel="stylesheet" href="assets/css/main.css">
    <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+   <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
 </head>
 
@@ -198,20 +200,22 @@
          </div>
       </header>
       <!--header close-->
+
       <!--Breadcrumb-->
       <div class="breadcrumbs_wrapper">
          <ul>
-            <li><a href="#" tabindex="0">Home</a></li>
-            <li><a href="#" tabindex="0">Insurances Around You</a></li>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Services</a></li>
          </ul>
       </div>
       <!--Breadcrumb-->
 
       <section class="category_block_wrapper">
 
+
          <!--category heading-->
          <div class="custom_container">
-            <h1 class="category_heading" tabindex="0">Insurances Around You</h1>
+            <h1 class="category_heading" tabindex="0">Services</h1>
          </div>
          <!--category heading-->
 
@@ -221,34 +225,217 @@
             <div class="f_row f_flow_col">
                <div class="f_col">
                   <div class="category_search_input">
-                     <label class="none" for="search">Search</label>
-                     <input type="text" placeholder="Search Insurance" id="search" />
-                     <button class="detect-icon">
+                     <label for="search" class="hide">search</label>
+                     <input type="text" id="search" placeholder="Search by Services" />
+                     <button class="detect-icon" tabindex="0">
                         <img src="assets/images/search-line-white.png" alt="search-img" />
                      </button>
                   </div>
                </div>
                <div class="f_col text-right">
-                  <ul class="category_view_menu_wrap">
-                     <li>
-                        <a href="#" tabindex="0" class="grid   active">Grid</a>
-                     </li>
-                     <li>
-                        <a href="#" tabindex="0" class="list">List</a>
-                     </li>
-                     <li>
-                        <a href="#" tabindex="0" class="map">Map</a>
-                     </li>
-                  </ul>
                </div>
             </div>
          </div>
          <!--Category Search and Category view tab close-->
 
 
+         <!-- Services Types -->
+         <div class="custom_container">
+            <div class="service_type">
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card all">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-all-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">All Services</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-business-industry-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Business &
+                     Industry</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-communication-it-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Communication
+                     & IT</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-culture-arts-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Culture, Arts &
+                     Media</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-education-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Education</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-employment-workspace-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Employment &
+                     Workspace</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-evironment-agriculture-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Environment &
+                     Agriculture</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-family-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Family</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-healthcare-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Healthcare</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-media-events-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Media, Events &
+                     Festivals</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-money-taxes-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Money & Taxes</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-property-housing-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Property &
+                     Housing</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-public-safety-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Public Safety &
+                     Law</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-religion-community-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Religion &
+                     Community</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-senior-citizen-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Senior Citizens &
+                     Specially Abled</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-sports-recreation-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Sports &
+                     Recreation</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-tourism-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Tourism</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-transport-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Transport</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-visas-immigration-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Visas &
+                     Immigration</span>
+               </a>
+               <!-- card repeat close -->
+
+
+            </div>
+         </div>
+
+         <!-- Services Types close-->
+
+
          <!--category sort and filter-->
          <div class="custom_container">
             <div class="f_row">
+               <div class="f_col"></div>
                <div class="f_col">
                   <ul class="categor_filter_wrap">
                      <li>
@@ -261,25 +448,23 @@
                </div>
             </div>
          </div>
+
          <!--category sort and filter close-->
+
 
          <!--Category Sort Modal -->
          <div class="category_sort_wrapper_layer">
             <div class="sort_wrapr">
                <h3>Sort</h3>
                <ul>
-                  <li>
-                     <input type="radio" id="near_me" name="category_sort" value="near me">
-                     <label for="near_me" class="radio_wrap">Nearest to Me</label>
 
+                  <li>
+                     <input type="radio" id="Alphabet" name="category_sort" value="By Latest">
+                     <label for="Alphabet" class="radio_wrap"> By Name(A-Z)</label>
                   </li>
                   <li>
-                     <input type="radio" id="a-z" name="category_sort" value="By Name(A-Z)">
-                     <label for="a-z" class="radio_wrap"> By Name(A-Z)</label>
-                  </li>
-                  <li>
-                     <input type="radio" id="z-a" name="category_sort" value="By Name(Z-A)">
-                     <label for="z-a" class="radio_wrap">By Name(Z-A)</label>
+                     <input type="radio" id="oldest" name="category_sort" value="By Oldest">
+                     <label for="oldest" class="radio_wrap">By Name(Z-A)</label>
 
                   </li>
                   <li>
@@ -297,15 +482,87 @@
                   <img src="assets/images/ic-popup-cross.png" alt="close" />
                </span>
 
-               <div class="form_field">
-                  <label for="location">Location</label>
-                  <div class="txt_wrapper">
-                     <div class="select-picker-wrap">
-                        <select class="selectpicker" id="location">
-                           <option>Select</option>
-                           <option>Location 1</option>
-                           <option>Location 2</option>
-                        </select>
+               <div>
+                  <div class="form_field">
+                     <label for="service-type">Service Types</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="service-type" id="service-type">
+                              <option>Select</option>
+                              <option>Option</option>
+                              <option>Option</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form_field">
+                     <label for="topic">Topic</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="year" id="topic" style="display: none;">
+                              <option>Select</option>
+                              <option>option</option>
+                              <option>option</option>
+                              <option>option</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form_field">
+                     <label for="entities">Entities</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="year" id="entities" style="display: none;">
+                              <option>Select</option>
+                              <option>option</option>
+                              <option>option</option>
+                              <option>option</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form_field">
+                     <label for="Intended">Intended Audience</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="month" id="Intended" style="display: none;">
+                              <option>Select</option>
+                              <option>Individuals</option>
+                              <option>Tourist</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="flex_row">
+                  <div class="flex_col_sm_6">
+                     <div class="form_field">
+                        <label for="life-stage">Life Stage</label>
+                        <div class="txt_wrapper">
+                           <div class="select-picker-wrap">
+                              <select class="selectpicker" name="year" id="life-stage" style="display: none;">
+                                 <option>Select</option>
+                                 <option>option</option>
+                                 <option>option</option>
+                                 <option>option</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="flex_col_sm_6">
+                     <div class="form_field">
+                        <label for="with-fees">Services with Fees</label>
+                        <div class="txt_wrapper">
+                           <div class="select-picker-wrap">
+                              <select class="selectpicker" name="month" id="with-fees" style="display: none;">
+                                 <option>Select</option>
+                                 <option>option</option>
+                                 <option>option</option>
+                                 <option>option</option>
+                              </select>
+                           </div>
+                        </div>
                      </div>
                   </div>
                </div>
@@ -315,200 +572,101 @@
                   <button class="rouge_btn m-l-20">Apply</button>
                </div>
             </div>
+
          </div>
          <!--category filter modal close-->
-
-
-
          <!--category card row  wrapper-->
          <div class="custom_container">
             <div class="list_row_wrapper">
                <div class="grid_view">
                   <div class="f_row">
                      <!-- card repeat -->
-                     <div class="category_card category_insaurance_card">
-                        <div class="list_card">
-                           <figure class="card_img">
-                              <img src="assets/images/expat-life-qatar.png" alt="insaurance-thumb" />
-                              <ul class="more_info_links">
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
-                                 </li>
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
-                                 </li>
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/web-link.png"
-                                          alt="wikipedia" /></a>
-                                 </li>
-                              </ul>
-                           </figure>
-
+                     <div class="category_card category_services_card">
+                        <a href="#" class="list_card">
                            <div class="details">
-                              <div class="inner_wrap">
-                                 <div class="author_wrap" tabindex="0">
-                                    <figure>
-                                       <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                    </figure>
-                                    <span class="by" tabindex="0">Qatar Insurance</span>
+                              <span class="tag_g tag_l">Residence and Work Permits</span>
+                              <h2 class="card_title">Request to Extend Exempted Visa</h2>
+                              <span class="show_label icon job-exp">Service Mode: <span
+                                    class="online">Online</span></span>
+                              <span class="show_label icon calendar">12:30PM - 3:30PM AST</span>
+                              <div class="content_list_wrap">
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Service Provider : </span>
+                                    <span class="show_label">Qatar National Library</span>
                                  </div>
-                                 <h2 class="card_title" tabindex="0">Doha Insurance</h2>
                               </div>
-                              <span class="show_label icon time" tabindex="0">09:30 AM - 03:30 PM</span>
-                              <span class="show_label icon location" tabindex="0">Sheraton Grand Doha Resort &
-                                 Conventional hotel
-                                 <a href="#" class="view_on_map link">View on map</a>
-                              </span>
-                              <span class="show_label icon mob insurance_mob" tabindex="0">
-                                 <a href="tel:+9747973278927">+974 7973278927</a> <a href="tel:+9747973278927">+974 7973278927</a>  
-                                 <a href="tel:+9747973278927">+974 7973278927</a>
-                                 <a href="tel:+9747973278927">+974 7973278927</a>
-                              
-                              </span>
-                              <span class="show_label icon email" tabindex="0">insurance@doha.com</span>
+                              <span class="custom_label">Intended Audience</span>
+                              <span class="custom_show_label">Individuals & Tourists</span>
                            </div>
-                        </div>
+
+                           <span class="share_g share_l" tabindex="0" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                        </a>
                      </div>
                      <!-- card repeat close -->
 
 
                      <!-- card repeat -->
-                     <div class="category_card category_insaurance_card">
-                        <div class="list_card">
-                           <figure class="card_img">
-                              <img src="assets/images/expat-life-qatar.png" alt="insaurance-thumb" />
-                              <ul class="more_info_links">
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
-                                 </li>
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
-                                 </li>
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/web-link.png"
-                                          alt="wikipedia" /></a>
-                                 </li>
-                              </ul>
-                           </figure>
-
+                     <div class="category_card category_services_card">
+                        <a href="#" class="list_card">
                            <div class="details">
-                              <div class="inner_wrap">
-                                 <div class="author_wrap" tabindex="0">
-                                    <figure>
-                                       <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                    </figure>
-                                    <span class="by" tabindex="0">Qatar Insurance</span>
+                              <span class="tag_g tag_l">Charity Work</span>
+                              <h2 class="card_title">Calculate Zakat</h2>
+                              <span class="show_label icon job-exp">Service Mode: <span
+                                    class="offline">Offline</span></span>
+                              <div class="content_list_wrap">
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Service Provider : </span>
+                                    <span class="show_label">Qatar National Library</span>
                                  </div>
-                                 <h2 class="card_title" tabindex="0">Doha Insurance</h2>
                               </div>
-                              <span class="show_label icon time" tabindex="0">09:30 AM - 03:30 PM</span>
-                              <span class="show_label icon location" tabindex="0">Sheraton Grand Doha Resort &
-                                 Conventional hotel
-                                 <a href="#" class="view_on_map link">View on map</a>
-                              </span>
-                              <span class="show_label icon mob" tabindex="0">+974 7973278927</span>
-                              <span class="show_label icon email" tabindex="0">insurance@doha.com</span>
+                              <span class="custom_label">Intended Audience</span>
+                              <span class="custom_show_label">Individuals & Tourists</span>
                            </div>
-                        </div>
+
+                           <span class="share_g share_l" tabindex="0" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                        </a>
                      </div>
                      <!-- card repeat close -->
-
-
-
 
                      <!-- card repeat -->
-                     <div class="category_card category_insaurance_card">
-                        <div class="list_card">
-                           <figure class="card_img">
-                              <img src="assets/images/expat-life-qatar.png" alt="insaurance-thumb" />
-                              <ul class="more_info_links">
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
-                                 </li>
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
-                                 </li>
-                                 <li>
-                                    <a href="#" target="_blank"><img src="assets/images/web-link.png"
-                                          alt="wikipedia" /></a>
-                                 </li>
-                              </ul>
-                           </figure>
-
+                     <div class="category_card category_services_card">
+                        <a href="#" class="list_card">
                            <div class="details">
-                              <div class="inner_wrap">
-                                 <div class="author_wrap" tabindex="0">
-                                    <figure>
-                                       <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                    </figure>
-                                    <span class="by" tabindex="0">Qatar Insurance</span>
+                              <span class="tag_g tag_l">Business Sector</span>
+                              <h2 class="card_title">Apply to Write Off Commercial</h2>
+                              <span class="show_label icon job-exp">Service Mode: <span
+                                    class="offline">Offline</span></span>
+                              <span class="show_label icon calendar">12:30PM - 3:30PM AST</span>
+                              <div class="content_list_wrap">
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Service Provider : </span>
+                                    <span class="show_label">Ministry of Commerce and Industry</span>
                                  </div>
-                                 <h2 class="card_title" tabindex="0">Doha Insurance</h2>
                               </div>
-                              <span class="show_label icon time" tabindex="0">09:30 AM - 03:30 PM</span>
-                              <span class="show_label icon location" tabindex="0">Sheraton Grand Doha Resort &
-                                 Conventional hotel
-                                 <a href="#" class="view_on_map link">View on map</a>
-                              </span>
-                              <span class="show_label icon mob" tabindex="0">+974 7973278927</span>
-                              <span class="show_label icon email" tabindex="0">insurance@doha.com</span>
+                              <span class="custom_label">Intended Audience</span>
+                              <span class="custom_show_label">Individuals & Tourists</span>
                            </div>
-                        </div>
+
+                           <span class="share_g share_l" tabindex="0" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                        </a>
                      </div>
                      <!-- card repeat close -->
 
 
 
 
-
-
                   </div>
-
-                  <!-- Map card -->
-                  <div class="map_col">
-                     <figure class="map_img">
-                        <img src="assets/images/map.jpg" alt="map" />
-
-                        <div class="srch_box">
-                           <label for="location_search_map" class="hide">Map Search</label>
-                           <div class="txt_wrapper">
-                              <input type="text" id="location_search_map" placeholder="Search Location" />
-                              <span class="detect-icon">
-                                 <img src="assets/images/search-line-gray.svg" alt="search-img">
-                              </span>
-                           </div>
-                        </div>
-
-
-
-                     </figure>
-                  </div>
-                  <!-- Map card close -->
                </div>
-               <ul class="pagination_wrapper">
-                  <li>
-                     <a href="#" class="active">1</a>
-                  </li>
-                  <li>
-                     <a href="#">2</a>
-                  </li>
-                  <li>
-                     <a href="#">3</a>
-                  </li>
-                  <li>
-                     <a href="#">
-                        >
-                     </a>
-                  </li>
-               </ul>
-            </div>
 
+               <div id="pagination-here" class="pagination_wrapper"></div>
+
+            </div>
          </div>
          <!--category card row  wrapper close-->
-
       </section>
-
-
       <!--footer-->
       <footer>
          <div class="footer_inner">
@@ -536,35 +694,8 @@
          </div>
       </footer>
       <!--footer close-->
-
    </div>
    <!--App_wrapper close-->
-
-
-     <!--More Modal-->
-     <div id="more-modal" class="modal fade" role="dialog">
-      <div class="modal-dialog">
-         <!-- Modal content-->
-         <div class="modal-content">
-            <div class="custom_modal">
-               <div class="modal-header">
-                  <h1 class="modal_heading">Mobile Number</h1>
-                  <span class="close_btn" data-dismiss="modal"><img src="assets/images/ic-popup-cross.png" alt="close"></span>
-               </div>
-               <div class="modal-body">
-                  <div class="tags_wrap">
-                     <span class="tag_g tag_l">999 999  9999</span>
-                     <span class="tag_g tag_l">Healthcare</span>
-                     <span class="tag_g tag_l">Education</span>
-                     <span class="tag_g tag_l">Healthcare Services</span>
-                  </div>
-               </div>
-            </div>
-
-         </div>
-      </div>
-   </div>
-   <!--More Modal close-->
 
 
    <!--Js-->
@@ -582,6 +713,7 @@
    <script src="assets/js/jquery.bootpag.min.js"></script>
    <script src="assets/js/custom.js"></script>
    <script src="assets/js/daterangepicker.js"></script>
+
    <!--Js Close-->
 
 </body>

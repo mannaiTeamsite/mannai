@@ -1165,6 +1165,8 @@ legend {
 .ar .explore_result_content .explore_inner_content .sec_right .explore_inner_search {
   text-align: right; }
 
+#feedback .modal-dialog, #thankyou .modal-dialog {
+  max-width: 500px !important; }
 @media screen and (min-width: 1366px) {
   #feedback .modal-body, #thankyou .modal-body {
     padding: 2.5em; } }
