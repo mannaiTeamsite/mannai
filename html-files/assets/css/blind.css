@@ -469,11 +469,17 @@ section{
 .icon::before, .gallry_wrap h1::before, .contact_us_form .info::before, .faq_section .accordian-block .cross-icon, 
 .faq_section .accordian-block .plus-icon, .custom_error .go_back:before, .download_utility_directory .back::before, 
 .find_help_contact .faq_section .accordian-block .answer::before, #reach-out-modal .reachout_details::before,
- .topic_icon:before, .explore_life_qatar .explore_life_block{
+ .topic_icon:before, .explore_life_qatar .explore_life_block, .page_like_wrapper input[type=radio] + .like, 
+ .page_like_wrapper input[type=radio]:checked + .dislike{
     -webkit-filter: grayscale(100%); /* Chrome, Safari, Opera */
     filter: grayscale(100%) !important;
     filter: gray; /* IE6-9 */
 }
+
+.page_like_wrapper label{
+    color: transparent !important;
+}
+
 #higness_owl .owl-dots .owl-dot{
     background-color: yellow !important;
 }
@@ -508,7 +514,7 @@ section{
     padding: 10px;
     border-radius: 3px;
 }
-.name:before, .mob:before, .time:before, .service-fee::before{
+.name:before, .mob:before, .time:before, .service-fee::before, .job-exp:before{
     background-color: #fff !important;
     border-radius: 2px;
     padding: 4px;

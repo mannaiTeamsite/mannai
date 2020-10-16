@@ -26,19 +26,19 @@
    <div class="header_inner">
       <div class="innner_wrapper">
          <div class="nav_brand">
-           <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+         <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
          </div>
          <div class="nav_col">
             <div class="header_row">
-                <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
-                   <img src="assets/images/menu-2-line.png" alt="toggle_menu">
-                   </a>
-                </figure>
+               <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                  <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                  </a>
+               </figure>
 
                <div class="abt_qtr_nav desktop_view_head" id="head1_top">
                   <ul>
                      <li><a href="#" class="link">Life in Qatar</a></li>
-                    <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                  <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
                      <li><a href="#" class="link">Open Data</a></li>
                      <li><a href="#" class="link">E-Participation</a></li>
                   </ul>
@@ -89,7 +89,7 @@
                      </li>
                      <li><a href="#" class="link">Login / Signup</a></li>
                      <li class="mob_menu_nav">
-                       <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                     <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
                      </li>
                   </ul>
                </div>
@@ -183,7 +183,8 @@
                         </div>
                      </li>
                      <li>
-                        <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                        <a href="#"  title="Search" tabindex="0" >
+                            <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
                   </li>
                   </ul>
                </div>
@@ -193,6 +194,7 @@
    </div>
 </header>
 <!--header close-->
+
 
          <!--Jump Link header-->
          <div class="jump_link_header solid_white_two">
@@ -414,7 +416,7 @@
       <!-- New Flag Section close-->
 
       <!--Flag Law Card-->
-      <section class="content_wrap cards_section">
+      <div class="content_wrap cards_section">
          <div class="custom_container">
             <div class="flex_row">
                <div class="flex_col_sm_6 flex_col_xs_6">
@@ -453,18 +455,18 @@
                </div>
             </div>
          </div>
-      </section>
+      </div>
       <!--Flag Law Card-->
 
    
 
-      <section class="note_block">
+      <div class="note_block">
 
          <div class="custom_container">
             <div class="all_about" tabindex="0">…and that, is all about
                Al-adaam & the national flag.</div>
          </div>
-      </section>
+      </div>
 
 
       <div class="bottom_links">
@@ -482,17 +484,20 @@
                </a>
             </li>
             <li>
-               
+          
                <p tabindex="0">Like this page?</p>
-               <div class="like">
-                  <div class="like_btn">
-                      <input type="radio" checked name="like" id="yes">
-                  <label for="yes">Yes</label>
-                  </div>
-                  <div class="like_btn"><input type="radio" name="like" id="no">
-                      <label for="no">No</label>
-                  </div>
-              </div>
+               <fieldset>  
+                  <legend class="hide">like</legend>
+              <div class="like">
+                 <div class="like_btn">
+                     <input type="radio" checked name="like" id="yes">
+                 <label for="yes">Yes</label>
+                 </div>
+                 <div class="like_btn"><input type="radio" name="like" id="no">
+                     <label for="no">No</label>
+                 </div>
+             </div>
+           </fieldset>
               
             </li>
          </ul>

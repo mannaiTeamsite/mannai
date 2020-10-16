@@ -212,6 +212,7 @@
         <!--header close-->
         <!-- ======= header ======= -->
         <section class="search_wrapper">
+            <span class="clear_filter">Clear Filter</span>
             <div class="close" tabindex="0"><img src="assets/images/close.svg" alt="Close" title="Close Icon"></div>
             <div class="search_block">
                 <!-- ====== search input box, aslo includes autocomplete dropdown and advance search ======= -->
@@ -277,7 +278,22 @@
                     <!-- ============search result dropdown========== -->
                     <!-- ========= advance search=============== -->
                     <div class="advance_search_wrap collapse" id="collapseExample">
-                        <p class="adv_heading">Hukoomi Advance Search <a href="javascript:void(0)" data-toggle="modal" data-target="#feedback">Share feedback</a></p>
+                        <div class="adv_share_feedback">
+                            <p class="adv_heading">Hukoomi Advance Search</p>
+                            <div class="understand">
+                                <p>Is this easy to understand?</p>
+                                <div class="like">
+                                    <div class="like_btn" tabindex="0">
+                                        <input type="radio" name="like" id="yes" aria-label="Yes" data-toggle="modal" data-target="#thankyou">
+                                        <label for="yes">Yes</label>
+                                    </div>
+                                    <div class="like_btn" tabindex="0">
+                                        <input type="radio" name="like" id="no" aria-label="No" data-toggle="modal" data-target="#feedback">
+                                        <label for="no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="advance_search">
                             <div class="search_info">
                                 <ul>
@@ -321,7 +337,7 @@
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="downloads"><input id="downloads"
-                                                        class="check_input" type="checkbox" checked tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0">
                                                     <span></span>
                                                     Downloads, utilities and directory</label>
                                             </li>
@@ -427,7 +443,7 @@
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="education1"><input id="education1"
-                                                        class="check_input" type="checkbox" checked
+                                                        class="check_input" type="checkbox"
                                                         tabindex="0"><span></span>Education</label>
                                             </li>
                                             <li>

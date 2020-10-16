@@ -1562,6 +1562,29 @@ display: none;
         color: var(--slate-grey);
         cursor: pointer;
         float: right;
+        padding: 0 0 0 15px;
+        span{
+            &:after{
+                content: '';
+                width: 12px;
+                height: 2px;
+                background-color: var(--rouge);
+                position: absolute;
+                left: 0px;
+                transform: rotate(45deg);
+                top: 10px;
+            }
+            &:before{
+                content: '';
+                width: 12px;
+                height: 2px;
+                background-color: var(--rouge);
+                position: absolute;
+                left: 0px;
+                transform: rotate(-45deg);
+                top: 10px;
+            }
+        }
     }
     fieldset{
         clear: both;

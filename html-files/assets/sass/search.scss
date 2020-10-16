@@ -319,7 +319,7 @@ p, h1, h2, h3, h4, h5{
             line-height: 1.5;
             letter-spacing: 0.23px;
             color: var(--greyish-brown-three);
-            margin-bottom: 20px !important;
+            // margin-bottom: 20px !important;
             >a{
                 font-weight: 600;
                 font-size: 13px;
@@ -955,9 +955,12 @@ p, h1, h2, h3, h4, h5{
   color: var(--slate-grey);
   padding-left: 18px;
   position: relative;
+  cursor: pointer;
 .check_input{
     position: relative;
     left: -18px;
+    opacity: 0;
+    
     +span{
         content: '';
         width: 18px;
@@ -1138,6 +1141,29 @@ p, h1, h2, h3, h4, h5{
         color: var(--slate-grey);
         cursor: pointer;
         float: right;
+        padding: 0 0 0 15px;
+        span{
+            &:after{
+                content: '';
+                width: 12px;
+                height: 2px;
+                background-color: var(--rouge);
+                position: absolute;
+                left: 0px;
+                transform: rotate(45deg);
+                top: 10px;
+            }
+            &:before{
+                content: '';
+                width: 12px;
+                height: 2px;
+                background-color: var(--rouge);
+                position: absolute;
+                left: 0px;
+                transform: rotate(-45deg);
+                top: 10px;
+            }
+        }
     }
     fieldset{
         clear: both;
@@ -1220,5 +1246,103 @@ p, h1, h2, h3, h4, h5{
 .ar{
     .thankyou_form{
        text-align: center;
+    }
+}
+
+.understand{
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex: none;
+    p{
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: normal;
+        color: var(--purple-brown);
+        margin: 0;
+    }
+    .like{
+        margin-left: 24px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        .like_btn{
+            margin: 0 5px;
+            label{
+                position: relative;
+                width: 49px;
+                height: 31px;
+                text-align: center;
+                background-color: var(--white-five);
+                font-weight: 700;
+                font-size: 15px;
+                line-height: 1.8;
+                color: var(--rouge-two);
+                display: inline-block;
+                border-radius: 16px;
+                border: 2px solid transparent;
+                transition: 0.3s ease-in-out all;
+                cursor: pointer;
+                padding: 0;
+                margin-bottom: 0;
+                &:first-child{
+                    margin-right: 18px;
+                }
+                
+            }
+            input[type='radio']{
+                position: absolute;
+                width: 0;
+                height: 0;
+                opacity: 0;
+                &:checked{
+                    +label{
+                        border: 2px solid var(--rouge);
+                    }
+                }
+            }
+        }
+        
+    }
+}
+
+[type="radio"] + label:before, 
+[type="radio"] + label:after{
+display: none;
+}
+.adv_share_feedback{
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.clear_filter{
+    display: none;
+    position: absolute;
+    top: 28px;
+    font-size: 15px;
+    color: #676364;
+    cursor: pointer;
+}
+.ar{
+    .clear_filter{
+        left: auto;
+        right: 50px;
+    }
+}
+.ar [type="radio"]:not(:checked) + label, .ar [type="radio"]:checked + label {
+    position: relative;
+    padding-right: 0 !important;
+    padding-left: 0;
+}
+.ar .like{
+    height: auto !important;
+}
+.ar{
+    .search_wrapper{
+        .close{
+            left: 0;
+            right: auto;
+        }
     }
 }
