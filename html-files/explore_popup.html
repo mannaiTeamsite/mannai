@@ -255,8 +255,8 @@
                             </label>
                     </div>
                    <div class="switch_btn">
-                    <input type="radio" id="business" name="switch_group" >
-                    <label for="business" title="Business Profile">
+                    <input type="radio" id="business_profile" name="switch_group" >
+                    <label for="business_profile" title="Business Profile">
                         <span><img src="assets/images/tick_red.svg" alt="Business"></span>
                         Business
                     </label>
@@ -683,19 +683,19 @@
             <div class="services_inner" id="services_inner" tabindex="-1">
                 <div class="serv_tabs">
                     <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs" id="main_tab" role="group">
                         <li class="nav-item">
                             <div class="new_bedge">New</div>
-                            <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="tab"
-                                aria-controls="explore" aria-selected="true" tabindex="0">Explore</a>
+                            <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="button"
+                                aria-controls="explore" tabindex="0" aria-label="Explore" title="Explore">Explore</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="tab"
-                                aria-controls="favourites" aria-selected="false" tabindex="0">Bookmarked Services (11)</a>
+                            <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="button"
+                                aria-controls="favourites" tabindex="0" aria-label="Bookmarked Services">Bookmarked Services (11)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="tab"
-                                aria-controls="last-viewed" aria-selected="false" tabindex="0">Last Viewed (1)</a>
+                            <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="button"
+                                aria-controls="last-viewed" tabindex="0" aria-label="Last Viewed">Last Viewed (1)</a>
                         </li>
                     </ul>
     
@@ -720,40 +720,40 @@
     
                                 <div class="multi_select_service">
                                     <div class="check_options">
-                                        <h4>Citizen</h4>
+                                        <h2>Citizen</h2>
                                         <ul>
                                             <li>
                                                 <label class="chech_lbl" for="parent">
-                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0">
+                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
                                                     <span></span>
                                                     <span class="chk_text">Parent</span>
                                                 </label>
                                             </li>
                                             <li>
-                                                <label class="chech_lbl" for="employee"><input id="employee"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                <label class="chech_lbl" for="employee">
+                                                    <input id="employee" class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
                                                     <span></span>
                                                     <span class="chk_text">Employee</span>
                                                     </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="businessman"><input id="businessman"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
                                                     <span></span>
                                                     <span class="chk_text">Businessman</span>
                                                     </label>
                                             </li>
                                         </ul>
                                     </div>
-    
+
                                     <div class="check_options">
-                                        <h4>Rresident</h4>
+                                        <h3>Rresident</h3>
                                         <ul>
                                             <li>
                                                 <fieldset>
                                                     <legend>a</legend>
                                                     <label class="chech_lbl" for="parent1"><input id="parent1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
                                                         <span></span>
                                                         <span class="chk_text">Parent</span>
                                                         </label>
@@ -763,7 +763,7 @@
                                                 <fieldset>
                                                     <legend>b</legend>
                                                     <label class="chech_lbl" for="employee1"><input id="employee1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
                                                         <span></span>
                                                         <span class="chk_text">Employee</span>
                                                         </label>
@@ -771,20 +771,20 @@
                                             </li>
                                         </ul>
                                     </div>
-    
+
                                     <div class="check_options">
                                         <h4>Visitor</h4>
                                         <ul>
                                             <li>
                                                 <label class="chech_lbl" for="tourist"><input id="tourist"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Tourist">
                                                     <span></span>
                                                     <span class="chk_text">Tourist</span>
                                                     </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="student"><input id="student"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Student">
                                                     <span></span>
                                                     <span class="chk_text">Student</span>
                                                     </label>
@@ -793,7 +793,7 @@
                                                 <fieldset>
                                                     <legend>c</legend>
                                                     <label class="chech_lbl" for="businessman1"><input id="businessman1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
                                                         <span></span>
                                                         <span class="chk_text">Businessman</span>
                                                         </label>
@@ -1028,31 +1028,31 @@
                                                 <div class="filter_col">
                                                     <h3>Service Types</h3>
                                                     <div class="dropdown show">
-                                                        <div class="dropdown-toggle sel_filter" id="dropdownMenuLink"
+                                                        <div class="dropdown-toggle sel_filter" id="dropdownMenuTypes"
                                                             data-toggle="dropdown" role="group" aria-haspopup="true"
-                                                            aria-expanded="false" tabindex="0">
+                                                            aria-expanded="false" tabindex="0" data-filter="types">
                                                             <input type="text" id="service_type"
                                                                 placeholder="Select Service Types" readonly
                                                                 tabindex="-1">
                                                             <label for="service_type">Select Service Types</label>
                                                             <span class="plus_more">+1 more</span>
                                                         </div>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuTypes">
                                                             <div class="dropdown-item">
                                                                 <label for="e-service" class="chech_lbl">
                                                                     <input type="checkbox" id="e-service"
                                                                         class="check_input" value="e-service"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="E-service">
                                                                     <span></span>
                                                                     E-service
                                                                 </label>
                                                             </div>
-    
+
                                                             <div class="dropdown-item">
                                                                 <label for="ofs" class="chech_lbl">
                                                                     <input type="checkbox" id="ofs" class="check_input"
                                                                         value="Offline Service"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Offline Service">
                                                                     <span></span>
                                                                     Offline Service
                                                                 </label>
@@ -1061,7 +1061,7 @@
                                                                 <label for="is" class="chech_lbl">
                                                                     <input type="checkbox" id="is" class="check_input"
                                                                         value="Information services"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Information services">
                                                                     <span></span>
                                                                     Information services
                                                                 </label>
@@ -1070,9 +1070,9 @@
                                                                 onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
-    
+
                                                 </div>
-    
+
                                                 <div class="filter_col">
                                                     <h3>Topics</h3>
                                                     <div class="dropdown show">
@@ -1089,7 +1089,7 @@
                                                                 <label for="a" class="chech_lbl">
                                                                     <input type="checkbox" id="a" class="check_input"
                                                                         value="Visas & Official documents"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Visas & Official documents">
                                                                     <span></span>
                                                                     Visas & Official documents
                                                                 </label>
@@ -1098,7 +1098,7 @@
                                                                 <label for="b" class="chech_lbl">
                                                                     <input type="checkbox" id="b" class="check_input"
                                                                         value="Business & Finance"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Business & Finance">
                                                                     <span></span>
                                                                     Business & Finance
                                                                 </label>
@@ -1107,7 +1107,7 @@
                                                                 <label for="c" class="chech_lbl">
                                                                     <input type="checkbox" id="c" class="check_input"
                                                                         value="Employment & Workplace"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Employment & Workplace">
                                                                     <span></span>
                                                                     Employment & Workplace
                                                                 </label>
@@ -1116,7 +1116,7 @@
                                                                 <label for="d" class="chech_lbl">
                                                                     <input type="checkbox" id="d" class="check_input"
                                                                         value="Education & Training"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Education & Training">
                                                                     <span></span>
                                                                     Education & Training
                                                                 </label>
@@ -1125,7 +1125,7 @@
                                                                 <label for="e" class="chech_lbl">
                                                                     <input type="checkbox" id="e" class="check_input"
                                                                         value="Health" onclick="getSelValue(this)"
-                                                                        onkeypress="">
+                                                                        onkeypress="" aria-label="Health">
                                                                     <span></span>
                                                                     Health
                                                                 </label>
@@ -1134,9 +1134,9 @@
                                                                 onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
-    
+
                                                 </div>
-    
+
                                                 <div class="filter_col">
                                                     <h3>Entities</h3>
                                                     <div class="dropdown show">
@@ -1153,7 +1153,7 @@
                                                                 <label for="abq" class="chech_lbl">
                                                                     <input type="checkbox" id="abq" class="check_input"
                                                                         value="Audit Bureau Qatar"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Audit Bureau Qatar">
                                                                     <span></span>
                                                                     Audit Bureau Qatar
                                                                 </label>
@@ -1163,7 +1163,7 @@
                                                                     <input type="checkbox" id="control_authority"
                                                                         class="check_input"
                                                                         value="Administrative and control authority"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Administrative and control authority">
                                                                     <span></span>
                                                                     Administrative and control authority
                                                                 </label>
@@ -1173,7 +1173,7 @@
                                                                     <input type="checkbox" id="aspire_zone"
                                                                         class="check_input"
                                                                         value="Aspire Zone Foundation"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Aspire Zone Foundation">
                                                                     <span></span>
                                                                     Aspire Zone Foundation
                                                                 </label>
@@ -1183,7 +1183,7 @@
                                                                     <input type="checkbox" id="civil_aviation"
                                                                         class="check_input"
                                                                         value="Civil Aviation authority"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Civil Aviation authority">
                                                                     <span></span>
                                                                     Civil Aviation authority
                                                                 </label>
@@ -1195,7 +1195,7 @@
                                                                         id="communications_regulatory"
                                                                         class="check_input"
                                                                         value="Communications Regulatory Authority"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Communications Regulatory Authority">
                                                                     <span></span>
                                                                     Communications Regulatory Authority
                                                                 </label>
@@ -1203,9 +1203,9 @@
                                                             <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
-    
+
                                                 </div>
-    
+
                                                 <div class="filter_col">
                                                     <div class="new_bedge">New</div>
                                                     <h3>Life Stage </h3>
@@ -1220,23 +1220,23 @@
                                                         </div>
                                                         <div class="dropdown-menu life_stage"
                                                             aria-labelledby="dropdownLifeStage">
-                                                            <h6 class="dropdown-header">Birth</h6>
+                                                            <h4 class="dropdown-header">Birth</h4>
                                                             <div class="dropdown-item">
                                                                 <label for="birth" class="chech_lbl">
                                                                     <input type="checkbox" id="birth"
                                                                         class="check_input" value="Birth"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Birth">
                                                                     <span></span>
                                                                     Birth
                                                                 </label>
                                                             </div>
                                                             <div class="dropdown-divider"></div>
-                                                            <h6 class="dropdown-header">Education</h6>
+                                                            <h5 class="dropdown-header">Education</h5>
                                                             <div class="dropdown-item">
                                                                 <label for="school" class="chech_lbl">
                                                                     <input type="checkbox" id="school"
                                                                         class="check_input" value="School"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="School">
                                                                     <span></span>
                                                                     School
                                                                 </label>
@@ -1245,18 +1245,18 @@
                                                                 <label for="university" class="chech_lbl">
                                                                     <input type="checkbox" id="university"
                                                                         class="check_input" value="University"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="University">
                                                                     <span></span>
                                                                     University
                                                                 </label>
                                                             </div>
                                                             <div class="dropdown-divider"></div>
-                                                            <h6 class="dropdown-header">Work</h6>
+                                                            <h5 class="dropdown-header">Work</h5>
                                                             <div class="dropdown-item">
                                                                 <label for="employment" class="chech_lbl">
                                                                     <input type="checkbox" id="employment"
                                                                         class="check_input" value="Employment"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Employment">
                                                                     <span></span>
                                                                     Employment
                                                                 </label>
@@ -1265,17 +1265,17 @@
                                                                 <label for="business" class="chech_lbl">
                                                                     <input type="checkbox" id="business"
                                                                         class="check_input" value="Business"
-                                                                        onclick="getSelValue(this)" onkeypress="">
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Business">
                                                                     <span></span>
                                                                     Business
                                                                 </label>
                                                             </div>
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all"  onclick="uncheckAll(this)">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
-    
+
                                                 </div>
-    
+
                                                 <div class="filter_col">
                                                     <h3>Services with fees</h3>
                                                     <div class="dropdown show">
@@ -1294,26 +1294,26 @@
                                                                     <label for="all" class="radio_lbl">
                                                                         <input class="radio_input" type="radio" id="all"
                                                                             name="fees" value="All"
-                                                                            onclick="getSelValue(this)" onkeypress="">
+                                                                            onclick="getSelValue(this)" onkeypress="" aria-label="All">
                                                                         <span></span>
                                                                         All
                                                                     </label>
                                                                 </fieldset>
-    
+
                                                             </div>
-    
+
                                                             <div class="dropdown-item">
                                                                 <fieldset>
                                                                     <legend>cat</legend>
                                                                     <label for="fees_yes" class="radio_lbl">
                                                                         <input class="radio_input" type="radio"
                                                                             id="fees_yes" name="fees" value="Yes"
-                                                                            onclick="getSelValue(this)" onkeypress="">
+                                                                            onclick="getSelValue(this)" onkeypress="" aria-label="Yes">
                                                                         <span></span>
                                                                         Yes
                                                                     </label>
                                                                 </fieldset>
-    
+
                                                             </div>
                                                             <div class="dropdown-item">
                                                                 <fieldset>
@@ -1321,19 +1321,19 @@
                                                                     <label for="fees_no" class="radio_lbl">
                                                                         <input class="radio_input" type="radio"
                                                                             id="fees_no" name="fees" value="No"
-                                                                            onclick="getSelValue(this)" onkeypress="">
+                                                                            onclick="getSelValue(this)" onkeypress="" aria-label="No">
                                                                         <span></span>
                                                                         No
                                                                     </label>
                                                                 </fieldset>
-    
+
                                                             </div>
-    
-    
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all"  onclick="uncheckAllRadio(this)">Uncheck All</a>
+
+
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAllRadio(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
-    
+
                                                 </div>
                                             </div>
     
@@ -1670,7 +1670,7 @@
 <!-- footer -->
 
 <!-- ======= feedback popup ======= -->
-<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="feedback" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
       
@@ -1698,7 +1698,7 @@
 <!-- ======= feedback popup ======= -->
 
 <!-- ======= feedback popup ======= -->
-<div class="modal fade" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="thankyou" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content">
       

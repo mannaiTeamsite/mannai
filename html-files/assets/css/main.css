@@ -4798,7 +4798,7 @@ hr {
   @media (max-width: 768px) {
     .honors_section {
       padding: 20px 0; } }
-  .honors_section h6 {
+  .honors_section .heading {
     max-width: 350px;
     width: 100%;
     font-weight: 700;
@@ -4806,11 +4806,11 @@ hr {
     line-height: 1.31;
     color: var(--purple-brown);
     margin-bottom: 40px; }
-    .honors_section h6 span {
+    .honors_section .heading span {
       color: var(--dark-orange);
       display: inline-block; }
     @media (max-width: 768px) {
-      .honors_section h6 {
+      .honors_section .heading {
         font-size: 22px; } }
   .honors_section .honors_detail .item_block {
     width: 359px;

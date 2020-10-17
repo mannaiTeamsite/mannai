@@ -1081,6 +1081,7 @@ display: none;
         background-color: var(--white-five);
         padding: 14px;
         margin-bottom: 8px;
+        position: relative;
         &:last-child{
             margin-bottom: 0;
         }
@@ -1866,5 +1867,16 @@ fieldset{
         font-size: 14px;
         line-height: 1.57;
         letter-spacing: 0.2px;
+    }
+}
+.remove_fav{
+    position: absolute;
+    width: 15px;
+    height: 20px;
+    top: 4px;
+    right: 10px;
+    cursor: pointer;
+    img{
+        width: 15px;
     }
 }

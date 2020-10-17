@@ -93,7 +93,7 @@ $('.bill_check').on('change', function () {
 });
 
 //======= profile switch redirection =======
-$('#business').click(function () {
+$('#business_profile').click(function () {
     window.location.href = 'business-profile.html'
 });
 $('#personal').click(function () {
