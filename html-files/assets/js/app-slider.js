@@ -38,7 +38,7 @@ $('.btn-st').on('click', function(event){
 
 $('#higness_owl').owlCarousel({
     items: 1,
-    loop:false,
+    loop:true,
     autoplay: true,
     dots:true,
     nav:false,
@@ -79,8 +79,8 @@ $('#medal_owners').owlCarousel({
 
 $('#services_owl').owlCarousel({
     items: 3,
-    nav:false,
-    dots:true,
+    nav:true,
+    dots:false,
     responsive:{
         0:{
             items:1,
@@ -153,8 +153,8 @@ $('#review_owl').owlCarousel({
 $('#newsletter_owl').owlCarousel({
     items: 1,
     // loop:true,
-    dots: true,
-    autoplay: true,
+    dots: false,
+    autoplay: false,
 });
 
 
@@ -378,6 +378,99 @@ $('#explore_tag').owlCarousel({
         },
         700: {
             items: 3,
+
+        },
+        765: {
+            items: 3,
+
+        },
+        1200: {
+            items: 5,
+        }
+    }
+});
+
+
+
+
+
+
+$('#contact_card_owl').owlCarousel({
+    items: 4,
+    loop: false,
+    dots: false,
+    //  autoplay: true,
+    nav: true,
+    navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive: {
+        0: {
+            items: 1,
+
+        },
+        700: {
+            items: 2,
+
+        },
+        765: {
+            items: 3,
+
+        },
+        1200: {
+            items: 4,
+        }
+    }
+});
+
+
+
+
+
+
+
+
+
+
+$('#currents_polls_owl').owlCarousel({
+    items: 2,
+    loop: false,
+    dots: false,
+    //  autoplay: true,
+    nav: true,
+    navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive: {
+        0: {
+            items: 1,
+
+        },
+        700: {
+            items: 2,
+
+        },
+        765: {
+            items: 2,
+
+        },
+        1200: {
+            items: 2,
+        }
+    }
+});
+
+
+$('#media_card_owl').owlCarousel({
+    items: 5,
+    loop: false,
+    dots: false,
+    //  autoplay: true,
+    nav: true,
+    navText: ["<img src='../images/arrow-left-gray.svg'", "<img src='../images/arrow-right-gray'"],
+    responsive: {
+        0: {
+            items: 1,
+
+        },
+        700: {
+            items: 2,
 
         },
         765: {

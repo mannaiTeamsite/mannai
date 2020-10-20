@@ -12,580 +12,890 @@
     <!-- ================== bootstrap css ========================= -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- ================== bootstrap css ========================= -->
-
+    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
     <!-- ============ owl carousal css ========== -->
-<!-- <link rel="stylesheet" href="../../plugins/scss/owl.carousel.css"> -->
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
     <!-- ============ owl carousal css end ========== -->
 </head>
 
 <body class="">
     <div class="app_wrapper">
+        <!--header-->
         <header>
             <div class="header_inner">
                 <div class="innner_wrapper">
                     <div class="nav_brand">
-                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
+                        <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" class="head_logo" /> </a>
                     </div>
                     <div class="nav_col">
                         <div class="header_row">
-                            <div class="abt_qtr_nav desktop_view_head">
+                            <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                                    <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                                </a>
+                            </figure>
+
+                            <div class="abt_qtr_nav desktop_view_head" id="head1_top">
                                 <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
+                                    <li><a href="#" class="link">Life in Qatar</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Digital Projects</a></li>
+                                    <li><a href="#" class="link">Open Data</a></li>
+                                    <li><a href="#" class="link">E-Participation</a></li>
                                 </ul>
+                            </div>
+                            <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">
+                                <a rel="nofollow" class="rsbtn_play" title="Listen"
+                                    href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                                    <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                                            <span>Listen</span></span></span>
+                                    <span class="rsbtn_right rsimg rsplay rspart"></span>
+                                    <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png"
+                                        alt="Read Speaker" style="display:none" />
+                                </a>
                             </div>
                             <div class="auth_nav">
                                 <ul>
                                     <li class="mob_hide">
-                                        <a href="#" tabindex="0" class="link">
+                                        <a href="#" class="link">
                                             <img src="assets/images/accessibility.png" alt="Accessibility"
-                                                class="access_icon"> Accessibility</a>
+                                                class="access_icon" /> Accessibility</a>
+                                        <div class="access_submenu">
+                                            <span class="title">Accessbility Options</span>
+                                            <ul>
+                                                <li>
+                                                    <span class="option">Text Size</span>
+                                                    <div class="size_wrap">
+                                                        <button class="text_size_minus font_minus"
+                                                            title="Decrease font size">-</button>
+                                                        <button class="text_size_plus  font_plus"
+                                                            title="Increase font size">+</button>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <span class="option">Listen Content</span>
+                                                    <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"
+                                                        class="lisitin">
+                                                        <img src="assets/images/volume.png" alt="speaker" />
+                                                        <span>Listen</span>
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <span class="option">Contrast</span>
+                                                    <button id="themechange">
+                                                        <img src="assets/images/ic_accessibility_contrast.png"
+                                                            alt="contrast" />
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </li>
                                     <li>
-                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
+                                        <a href="#" id="lang_toggle" class="link"> عربى <img
                                                 src="assets/images/flag-oval.png" class="flag_oval_icon"
-                                                alt="language-icon">
+                                                alt="language-icon" />
                                         </a>
                                     </li>
-                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
-                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
-                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                                        </a>
+                                    <li><a href="#" class="link">Login / Signup</a></li>
+                                    <li class="mob_menu_nav">
+                                        <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <div class="header_row b-top desktop_view_head">
+                        <div class="header_row b-top desktop_view_head" id="head2_top">
                             <div class="nav_menu">
                                 <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
-                                    <li>
-                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
-                                                title="Search" class="search_icon" alt="Search"></a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Mobile Menu-->
-            <div class="mob_nav">
-                <ul>
-                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Innovation</a></li>
-                    <li> <a href="#" tabindex="0">Open Data</a></li>
-                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Explore Services</a></li>
-                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
-                    <li> <a href="#" tabindex="0">Media</a></li>
-                    <li> <a href="#" tabindex="0">About Qatar</a></li>
-                </ul>
-            </div>
-            <!-- Mobile Menu-->
-        </header>
-        <!-- ======= header ======= -->
-   <section class="search_wrapper">
-      <div class="close" tabindex="0"><img src="assets/images/close.svg" alt="Close" title="Close"></div>
-       <div class="search_block">
-            <!-- ====== search input box, aslo includes autocomplete dropdown and advance search ======= -->
-        <div class="search_input">
-            <div class="input_wrap">
-             <input 
-                 type="text" 
-                 class="search" 
-                 id="search" 
-                 aria-labelledby="search"
-                 placeholder="Search here eg. how to get a driving license…"
-                 tabindex="1"
-                 onkeyup="showSearch(this)">
-                 <label for="search">Search here eg. how to get a driving license…</label>
-             <div class="adv_search_wrapper"> <!-- add class "applied" when advance saerch applied-->
-                 <a 
-                     class="adv_search collapsed applied"
-                     data-toggle="collapse" 
-                     href="#collapseExample" 
-                     role="button" 
-                     aria-expanded="false" 
-                     aria-controls="collapseExample"
-                     tabindex="2"
-                 >
-                     <span class="text">Advanced Search</span> 
-                     <span class="adv_caret">
-                    </span>
-                 </a>
-             </div>
-             
-        
-        
-            </div>
- 
-             <div class="search_btn">
-                 <button id="search_btn" tabindex="3"> <span><img src="assets/images/search.svg" alt="Search"></span> Search</button>
-             </div>
-              <!-- ============search result dropdown========== -->
-              <div class="search_result">
-                <ul>
-                    <li tabindex="0">
-                        <h2>Service (2)</h2>
-                        <p>How qatar <b>government works</b></p>
-                        <p>How qatar <b>national vision 2030</b> is structured</p>
-                    </li>
-                    <li tabindex="0">
-                        <h2>Articles (2)</h2>
-                        <p>How qatar <b>driving license is created</b></p>
-                        <p>How qatar <b>sports academy</b> functions</p>
-                    </li>
-                    <li tabindex="0">
-                        <h2>Utilities (2)</h2>
-                        <p>How qatar <b>water bill</b> is paid</p>
-                        <p>How qatar <b>electricity bill</b> is paid</p>
-                    </li>
-                    <li tabindex="0">
-                        <h2>Service (2)</h2>
-                        <p>How qatar <b>government works</b></p>
-                        <p>How qatar <b>national vision 2030</b> is structured</p>
-                    </li>
-                    <li tabindex="0">
-                        <h2>Articles (2)</h2>
-                        <p>How qatar <b>driving license is created</b></p>
-                        <p>How qatar <b>sports academy</b> functions</p>
-                    </li>
-                    <li tabindex="0">
-                        <h2>Utilities (2)</h2>
-                        <p>How qatar <b>water bill</b> is paid</p>
-                        <p>How qatar <b>electricity bill</b> is paid</p>
-                    </li>
-                </ul>
-            </div>
-        <!-- ============search result dropdown========== -->
-             <!-- ========= advance search=============== -->
-             <div class="advance_search_wrap collapse" id="collapseExample">
-                <p class="adv_heading">Hukoomi Advance Search <a href="">Share feedback</a></p>
-                <div class="advance_search">
-                    <div class="search_info">
-                        <ul>
-                            <li>
-                                <h3 class="info_title" tabindex="0">Search inside</h3>
-                            </li>
-                            <li tabindex="0">
-                                <h3>Select audience</h3>
-                                <p>Whom are you searching for?</p>
-                            </li>
-                            <li tabindex="0">
-                                <h3>Channels</h3>
-                                <p>Get results from selected government ministries</p>
-                            </li>
-                            <li tabindex="0">
-                                <h3>Service topic filters</h3>
-                                <p>Customize search results with topics of your interest</p>
-                            </li>
-                            <li tabindex="0">
-                                <h3>Has downloads</h3>
-                                <p>Should your search results includes downloads?</p>
-                            </li>
-                            <li tabindex="0">
-                                <h3>Life journeys</h3>
-                                <p>Find life journeys here</p>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="search_form">
-                        <div class="form_row">
-                            <div class="title">
-                                <h3>Search inside</h3>
-                            </div>
-                            <div class="flex_row">
-                                <ul>
-                                    <li>
-                                        <label class="chech_lbl" for="servicesck"><input id="servicesck" class="check_input" type="checkbox" tabindex="0">
-                                           <span></span>
-                                           Government services</label>
-                                    </li>
-                                    <li>
-                                        <label class="chech_lbl" for="downloads"><input id="downloads" class="check_input" type="checkbox" checked tabindex="0">
-                                           <span></span>
-                                           Downloads, utilities and directory</label>
-                                    </li>
-                                    <li>
-                                        <label class="chech_lbl" for="media"><input id="media" class="check_input" type="checkbox" tabindex="0">
-                                           <span></span>
-                                           Media center (news, events, blogs)</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                                    <li><a href="#" class="link">Explore Services</a></li>
+                                    <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                                    <li><a href="#" class="link">Media</a></li>
+                                    <li class="">
+                                        <a href="#" class="link about_qatar_nav">About Qatar</a>
+                                        <div class="about_submenu">
 
-                        <div class="form_row">
-                            <div class="title">
-                                <h3>Select audience</h3>
-                                <p>Whom are you searching for?</p>
-                            </div>
-                            <div class="flex_row">
-                                <ul>
-                                    <li>
-                                        <label class="chech_lbl" for="myself"><input id="myself" class="check_input" type="checkbox" tabindex="0">
-                                           <span></span>
-                                           Myself</label>
-                                    </li>
-                                    <li class="flex_inline">
-                                        <p>I am a</p>
-                                        <div class="dropdown">
-                                            <a 
-                                            class="dropdown-link" 
-                                            id="dropdownMenuButton" 
-                                            data-toggle="dropdown" 
-                                            aria-haspopup="true" 
-                                            aria-expanded="false" 
-                                            role="link"
-                                            tabindex="0">
-                                                 <span class="text">tourist businessman</span> <span class="caret"><img src="assets/images/caret-down.svg" alt="tourist businessman"></span>
-                                            </a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                              <a class="dropdown-item" href="#">tourist businessman</a>
-                                              <a class="dropdown-item" href="#">tourist businessman</a>
+                                            <img src="assets/images/close-line.png" alt="close"
+                                                class="reomve_about_menu" />
+
+                                            <div class="f_row">
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Qatar Government</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Hukoomi</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Qatar</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/rectangle-2-copy-3.png"
+                                                                alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Qatar National Vision 2030</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Government & Legislatives</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/amir.png" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">The Amir</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
                                             </div>
-                                          </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="flex_row">
-                                <ul>
-                                    <li>
-                                        <label class="chech_lbl" for="option_1"><input id="option_1" class="check_input" type="checkbox" tabindex="0">
-                                           <span></span>Option 1</label>
+                                        </div>
                                     </li>
                                     <li>
-                                        <label class="chech_lbl" for="option_2"><input id="option_2" class="check_input" type="checkbox" tabindex="0"><span></span>Option 2</label>
-                                    </li>
-                                    <li>
-                                        <label class="chech_lbl" for="option_3"><input id="option_3" class="check_input" type="checkbox" tabindex="0"><span></span>Option 3</label>
+                                        <a href="#" title="Search" tabindex="0"> <img
+                                                src="assets/images/ic_header_search.png" title="Search"
+                                                class="search_icon" alt="Search" /></a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-
-                        <div class="form_row">
-                            <div class="title">
-                                <h3>Channels</h3>
-                                <p>Get results from selected government ministries and other departments.</p>
-                            </div>
-                            <div class="flex_row">
-                                <ul>
-                                    <li>
-                                        <label class="chech_lbl" for="healthcare"><input id="healthcare" class="check_input" type="checkbox" tabindex="0"><span></span>Healthcare</label>
-                                    </li>
-                                    <li>
-                                        <label class="chech_lbl" for="education"><input id="education" class="check_input" type="checkbox" checked tabindex="0"><span></span>Education</label>
-                                    </li>
-                                    <li>
-                                        <label class="chech_lbl" for="labour"><input id="labour" class="check_input" type="checkbox" tabindex="0"><span></span>Labour</label>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="form_row">
-                            <div class="title">
-                                <h3>Service topic filters</h3>
-                                <p>Customize search results with topics of your interest</p>
-                            </div>
-                            <div class="flex_row">
-                                <ul>
-                                   <li>
-                                       <label class="chech_lbl" for="healthcare1"><input id="healthcare1" class="check_input" type="checkbox" tabindex="0"><span></span>Healthcare</label>
-                                   </li>
-                                   <li>
-                                       <label class="chech_lbl" for="education1"><input id="education1" class="check_input" type="checkbox" checked tabindex="0"><span></span>Education</label>
-                                   </li>
-                                   <li>
-                                       <label class="chech_lbl" for="labour1"><input id="labour1" class="check_input" type="checkbox" tabindex="0"><span></span>Labour</label>
-                                   </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        <div class="form_row">
-                            <div class="title">
-                                <h3>Services by life journeys <span class="new">New</span></h3>
-                            </div>
-                            <div class="flex_row">
-                                <ul class="adv_search_images">
-                                    <li>
-                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
-                                    </li>
-                                    <li>
-                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
-                                    </li>
-                                    <li>
-                                        <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Search Image"></figure>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-
-                        
                     </div>
                 </div>
             </div>
-        <!-- ========= advance search=============== -->
-        </div>
-   <!-- =========== search result ====== -->
-        <div class="search_outcome">
-            <div class="slider">
-               
-                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                      <div class="carousel-item active">
-                          <div class="slide_container">
-                            <div class="video">
-                                <div class="play" onclick="playPause()" onkeypress="playPause()" role="button"><img src="assets/images/play.png" alt="Play"></div>
-                                <video id="video" poster="assets/images/rectangle-2@3x.jpg">
-                                    <source src="assets/images/movie.mp4">
-                                </video>
-                            </div>
-                            <div class="video_info">
-                                <h3>1. Qatar Visa Renewals and Extensions During Covid-19 Situation</h3>
-                                <p>4 hours ago</p>
-                            </div>
-                          </div>
-                      </div>
-                    </div>
-                    <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev" tabindex="0">
-                      <img src="assets/images/arrow-left.svg" alt="Previous">
-                      <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next" tabindex="0">
-                        <img src="assets/images/arrow-right.svg" alt="Next">
-                      <span class="sr-only">Next</span>
-                    </a>
-                  </div>
-            </div>
+        </header>
+        <!--header close-->
+        <!-- ======= header ======= -->
+        <section class="search_wrapper">
+            <span class="clear_filter">Clear Filter</span>
+            <div class="close" tabindex="0"><img src="assets/images/close.svg" alt="Close" title="Close Icon"></div>
+            <div class="search_block">
+                <!-- ====== search input box, aslo includes autocomplete dropdown and advance search ======= -->
+                <div class="search_input">
+                    <div class="input_wrap">
+                        <input type="text" class="search" id="search" aria-labelledby="search"
+                            placeholder="Search here eg. how to get a driving license…" tabindex="-1"
+                            onkeyup="showSearch(this)">
+                        <label for="search">Search here eg. how to get a driving license…</label>
+                        <div class="adv_search_wrapper">
+                            <!-- add class "applied" when advance saerch applied-->
+                            <a class="adv_search collapsed applied" data-toggle="collapse" href="#collapseExample"
+                                role="button" aria-expanded="false" aria-controls="collapseExample" tabindex="-1">
+                                <h1 class="text">Advanced Search</h1>
+                                <span class="adv_caret">
+                                </span>
+                            </a>
+                        </div>
 
-            <div class="tabs_result">
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" >
-                      <a class="nav-link active" id="services_tab" data-toggle="tab" href="#services" role="tab" aria-controls="services" aria-selected="true" tabindex="0">
-                          <span class="icon">
-                            <svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                                    <g transform="translate(-186.000000, -500.000000)" stroke="#1C1517" stroke-width="1.3">
-                                        <g transform="translate(152.000000, 474.000000)">
-                                            <g id="Group-6" transform="translate(35.000000, 24.000000)">
-                                                <path d="M12.3012139,11.5878963 C11.8285549,11.0669144 11.1399527,10.7467748 10.360745,10.7467748 C8.77967806,10.7135527 7.71204263,12.1405902 7.71204263,13.3652752 C7.71355272,14.5733493 8.77514778,16.0018968 10.3682954,15.9792454 C11.2275381,15.9671647 11.9795642,15.5715204 12.4537332,14.9493623 M-9.32587341e-13,14.6971769 L-9.32587341e-13,12.1194489 C0.161579902,11.583366 0.483229615,11.272287 1.07518589,11.2330246 C1.46932005,11.207353 1.86043402,11.1001364 2.24550761,11.0004703 C2.58376835,10.914395 2.84803454,10.7029821 3.01414472,10.3873727 C3.20592647,10.0249505 3.14854296,9.65346775 2.9582713,9.32879786 C2.72118677,8.92107287 2.43577928,8.53750936 2.14584151,8.16300641 C1.87553494,7.81266494 1.83476244,7.37020783 2.10808919,7.02590673 C2.6532326,6.33881462 3.26028981,5.71061612 3.96852321,5.18963419 C4.38379866,4.88610559 4.85947781,4.90120651 5.25210187,5.24701771 C5.6115039,5.56413714 5.99506741,5.84048408 6.44054471,6.02471537 C6.99021839,6.25273934 7.53083152,6.09115944 7.8404005,5.58527844 C7.95063725,5.40557742 8.03369234,5.20020484 8.07899512,4.99332216 C8.16205021,4.6203293 8.19527224,4.23676579 8.27530715,3.86226284 C8.30701909,3.70521322 8.39460446,3.55873424 8.47312927,3.41527545 C8.65283028,3.08909546 9.00468185,3.09815602 9.30368017,3 L11.4208299,3 C11.4616024,3.0196312 11.5023749,3.04983305 11.5446575,3.05889361 C12.139634,3.17215055 12.3963497,3.46963878 12.4567534,4.06763543 C12.4869553,4.38475486 12.5307479,4.70791467 12.6183333,5.01446346 C12.9294124,6.12589157 13.6995596,6.42186971 14.6841399,5.81179232 C14.9816281,5.62756103 15.2519347,5.39651687 15.5297917,5.18057364 C15.82728,4.94952948 16.3558124,4.90875698 16.6366896,5.12168003 C17.3736147,5.67739408 18.030505,6.31767332 18.5907493,7.0515783 C18.6632338,7.14671413 18.7598797,7.26450135 18.7538393,7.36567755 C18.7357182,7.69638782 18.716087,8.01652744 18.454841,8.29589456 C18.1679234,8.60546353 17.9187581,8.96939583 17.7254663,9.34691897 C17.4415689,9.89961284 17.5276442,10.7195931 18.4397401,10.9883896 C18.8776669,11.1167474 19.3337149,11.1998025 19.7867426,11.2526558 C20.054029,11.2843677 20.2669521,11.3659127 20.4179613,11.5697752 C20.5417889,11.7389056 20.6233339,11.9337075 20.723,12.1194489 L20.723,14.6971769 C20.6218238,14.8617769 20.5372586,15.0399679 20.413431,15.1864468 C20.1929575,15.4492029 19.8924491,15.532258 19.5511682,15.5367883 C19.0573679,15.5443388 18.5726282,15.6319241 18.128661,15.8644784 C17.7707691,16.0517299 17.5880479,16.3431777 17.5940882,16.7569431 C17.5986185,17.0921836 17.6816736,17.3972223 17.8704352,17.6675289 C18.0863784,17.9831382 18.3234629,18.2851567 18.5469566,18.5962358 C18.8217935,18.9797993 18.8066926,19.4509482 18.5092043,19.8179007 C18.0063435,20.4415689 17.4279781,20.9852022 16.7997796,21.4835328 C16.5521244,21.6813549 16.3089995,21.7523292 16.0009406,21.7281677 C15.7865075,21.7085365 15.632478,21.6239714 15.4724082,21.4941034 C15.0314612,21.1362115 14.5980646,20.7662388 14.016679,20.6454314 C13.6542568,20.5699268 13.3220364,20.6454314 13.0834418,20.9021471 C12.8916601,21.1090298 12.7361205,21.3763162 12.6515553,21.6451127 C12.5398085,22.0060248 12.4899754,22.3926085 12.4567534,22.7731518 C12.434102,23.0177868 12.3812488,23.2322199 12.1819166,23.3771888 C12.0022156,23.5085669 11.7983531,23.608233 11.6050612,23.723 L9.11944888,23.723 C8.58487612,23.5629302 8.26322641,23.2443007 8.23604474,22.6493242 C8.22094382,22.3155937 8.13637863,21.9833734 8.0623841,21.6556833 C7.88268309,20.8492939 7.07629367,20.2845193 6.14003629,20.8538242 C5.8138563,21.0531564 5.50881761,21.2872207 5.20981928,21.5227952 C4.84437689,21.8112228 4.3747381,21.8323641 3.99872506,21.552997 C3.2814311,21.0184243 2.63662158,20.409857 2.09751855,19.6955832 C2.0054029,19.5702455 1.95707994,19.3950748 1.93744874,19.236515 C1.89667624,18.9450672 2.03711484,18.7200634 2.21530576,18.4875091 C2.50373344,18.1145163 2.79820149,17.7279326 2.99300342,17.3035966 C3.3222036,16.5863026 3.04434657,15.9852858 2.29685076,15.7421609 C1.93895883,15.6258838 1.55086504,15.5609498 1.17334191,15.5413186 C0.582895723,15.5126268 0.194801938,15.2513808 -9.32587341e-13,14.6971769 Z" id="ic_advance_search_services_inactive"></path>
-                                            </g>
-                                        </g>
-                                    </g>
-                                </g>
-                            </svg>
-                          </span>
-                          Services (3)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="blogs_tab" data-toggle="tab" href="#blogs" role="tab" aria-controls="blogs" aria-selected="false" tabindex="0">
-                          <span class="icon">
-                            <svg width="21px" height="23px" viewBox="0 0 21 23" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                                    <g transform="translate(-346.000000, -499.000000)" stroke="#1C1517">
-                                        <g transform="translate(152.000000, 474.000000)">
-                                            <g id="Group-13" transform="translate(195.000000, 24.000000)">
-                                                <g id="ic_advance_search_blogs_inactive" transform="translate(0.000000, 2.000000)">
-                                                    <path d="M17.958496,21.20856 L17.264616,21.2100809 C16.685496,21.21084 16.215816,20.74344 16.215056,20.16432 L16.192256,8.64272 L18.981456,8.63664 L19.0042569,20.159 C19.005016,20.73736 18.537616,21.20704 17.958496,21.20856 Z"></path>
-                                                    <polyline points="16.192104 8.642568 17.580624 5.759888 18.981304 8.636488"></polyline>
-                                                    <path d="M16.667104,21.20932 L1.673064,21.20932 C0.906984,21.20932 0.284544,20.58764 0.284544,19.8208 L0.284544,1.67352 C0.284544,0.90668 0.906984,0.285 1.673064,0.285 L15.278584,0.285 C16.046184,0.285 16.667104,0.90668 16.667104,1.67352 L16.667104,4.31072" ></path>
-                                                    <polyline points="11.381988 8.868972 11.381988 11.091212 5.602188 11.091212 5.602188 5.310652 10.855308 5.310652"></polyline>
-                                                    <polyline points="7.927104 7.82914 8.895344 9.31494 12.964384 5.31126"></polyline>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </g>
-                                </g>
-                            </svg>
-                          </span>
-                          Blogs (2)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" id="resources_tab" data-toggle="tab" href="#resources" role="tab" aria-controls="resources" aria-selected="false" tabindex="0">
-                          <span class="icon">
-                            <svg width="22px" height="23px" viewBox="0 0 22 23" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                                    <g transform="translate(-483.000000, -500.000000)" stroke="#1C1517" stroke-width="1.2">
-                                        <g transform="translate(152.000000, 474.000000)">
-                                            <g id="Group-14" transform="translate(332.000000, 24.000000)">
-                                                <g id="ic_advance_search_resources_inactive" transform="translate(0.000000, 3.000000)">
-                                                    <line x1="11.5916667" y1="9.3285" x2="19.4333333" y2="6.556"></line>
-                                                    <line x1="0.312416667" y1="6.55591667" x2="8.14241667" y2="9.32341667"></line>
-                                                    <path d="M13.2575833,17.1491667 L0.845083333,17.13 C0.55175,17.13 0.312583333,16.8908333 0.312583333,16.5966667 L0.312583333,3.27583333 C0.312583333,2.98083333 0.55175,2.7425 0.845083333,2.7425 L18.9000833,2.7425 C19.19425,2.7425 19.4334167,2.98083333 19.4334167,3.27583333 L19.4334167,12.5566667" ></path>
-                                                    <polygon points="8.4425 10.79025 11.3508333 10.79025 11.3508333 8.70191667 8.4425 8.70191667"></polygon>
-                                                    <path d="M6.45825,2.74241667 L6.45825,1.31908333 C6.45825,0.76325 6.90908333,0.312416667 7.46491667,0.312416667 L12.6399167,0.312416667 C13.19575,0.312416667 13.6465833,0.76325 13.6465833,1.31908333 L13.6465833,2.74241667"></path>
-                                                    <path d="M19.3269167,14.3626667 C19.9610833,15.6443333 19.4360833,17.1968333 18.1544167,17.831 C16.8735833,18.4651667 15.3194167,17.9401667 14.6860833,16.6585 C14.0519167,15.3776667 14.5769167,13.8243333 15.8585833,13.1901667 C17.1394167,12.556 18.69275,13.081 19.3269167,14.3626667 Z" id="Stroke-10"></path>
-                                                    <line x1="18.28925" y1="18.10375" x2="19.5950833" y2="20.7429167"></line>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </g>
-                                </g>
-                            </svg>
-                          </span>
-                          Resources (2)
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="press_releases-tab" data-toggle="tab" href="#press_releases" role="tab" aria-controls="press_releases" aria-selected="false" tabindex="0">
-                            <span class="icon">
-                                <svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1">
-                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
-                                        <g transform="translate(-654.000000, -500.000000)" stroke="#1C1517">
-                                            <g transform="translate(152.000000, 474.000000)">
-                                                <g id="Group-17" transform="translate(503.000000, 24.000000)">
-                                                    <g id="ic_advance_search_press_inactive" transform="translate(0.000000, 3.000000)">
-                                                        <path d="M19.37536,17.14816 C19.37536,18.28096 18.45776,19.19936 17.32496,19.19936 L2.61056,19.19936 C3.69056,19.19936 4.56496,18.32416 4.56496,17.24416 L4.56496,0.29936 L19.37536,0.29936 L19.37536,17.14816 Z"></path>
-                                                        <path d="M4.5652,19.19976 L2.774,19.19976 C1.4076,19.19976 0.3004,18.09176 0.3004,16.72536 L0.3004,3.58056 C0.3004,3.03976 0.7388,2.60136 1.2796,2.60136 C1.8196,2.60136 2.2588,3.03976 2.2588,3.58056 L2.2588,16.78936"></path>
-                                                        <line x1="1.2792" y1="2.60128" x2="3.1176" y2="2.60128" ></line>
-                                                        <polygon points="7.1488 7.9872 12.3992 6.0136 17.6504 7.9872 12.3992 9.7008"></polygon>
-                                                        <path d="M15.3792,8.91848 L15.3792,12.60488 L14.8848,12.47528 C13.256,12.04808 11.544,12.05048 9.9168,12.48328 L9.4576,12.60488 L9.4576,9.03048"></path>
-                                                        <line x1="7.1488" y1="2.60128" x2="17.0016" y2="2.60128"></line>
-                                                        <line x1="9.39568" y1="16.01376" x2="15.02688" y2="16.01376" id="Stroke-13"></line>
-                                                    </g>
-                                                </g>
-                                            </g>
-                                        </g>
-                                    </g>
-                                </svg>
-                            </span>
-                            Press Releases (2)
-                        </a>
-                      </li>
-                  </ul>
-                  <div class="tab-content" id="myTabContent">
-                    <div class="tab-pane fade show active" id="services" role="tabpanel" aria-labelledby="services_tab">
-                        <ul class="result_blocks">
+
+
+                    </div>
+
+                    <div class="search_btn">
+                        <button id="search_btn" tabindex="-1"> <span><img src="assets/images/search.svg"
+                                    alt="Search Button"></span> Search</button>
+                    </div>
+                    <!-- ============search result dropdown========== -->
+                    <div class="search_result">
+                        <ul>
                             <li tabindex="0">
-                                <h3>
-                                    Visas for Visitors | Visit Qatar
-                                </h3>
-                                <p>Individuals not eligible for visa-free entry or ETA can apply for a Tourist Visa online. Visitors to Qatar travelling on board any airline may apply for a Tourist Visa ...</p>
-                                <span
-                                    id="dropdownMenuButton1" 
-                                    data-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false"
-                                    role="link"
-                                    tabindex="0"
-                                ><img src="assets/images/ellipse.svg" alt="Arrow"></span>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton1">
-                                    <a class="dropdown-item" href="#">
-                                        <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
-                                        Remove Bookmark</a>
-                                    <a class="dropdown-item" href="#">
-                                        <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
-                                        Share Page</a>
-                                    </div>
+                                <h2>Service (2)</h2>
+                                <p>How qatar <b>government works</b></p>
+                                <p>How qatar <b>national vision 2030</b> is structured</p>
                             </li>
                             <li tabindex="0">
-                                <h3>
-                                    Apply for Tourist Visa - Hukoomi - Qatar E-government
-                                </h3>
-                                <p>Apply for Tourist Visa. Visitors and tourists who wish to visit Qatar can issue tourist visas through some easy steps. Such visas can be obtained through employer ...</p>
-                                <span
-                                    id="dropdownMenuButton2" 
-                                    data-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false"
-                                    role="link"
-                                    tabindex="0"
-                                ><img src="assets/images/ellipse.svg" alt="Dropdown"></span>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton2">
-                                    <a class="dropdown-item" href="#">
-                                        <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
-                                        Remove Bookmark</a>
-                                    <a class="dropdown-item" href="#">
-                                        <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
-                                        Share Page</a>
-                                    </div>
+                                <h2>Articles (2)</h2>
+                                <p>How qatar <b>driving license is created</b></p>
+                                <p>How qatar <b>sports academy</b> functions</p>
                             </li>
                             <li tabindex="0">
-                                <h3>
-                                    Qatar Visit Visa Rules and Requirements - Qatar Guide
-                                </h3>
-                                <p>Visitors from all other nations who are not included in the above-said list of nations will have to obtain a visa prior to their arrival in Qatar. Visas ...</p>
-                                <span
-                                    id="dropdownMenuButton3" 
-                                    data-toggle="dropdown" 
-                                    aria-haspopup="true" 
-                                    aria-expanded="false"
-                                    role="link"
-                                    tabindex="0"
-                                ><img src="assets/images/ellipse.svg" alt="Dropdown"></span>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton3">
-                                    <a class="dropdown-item" href="#">
-                                        <span><img src="assets/images/bookmark-red.svg" alt="Remove Bookmark"></span> 
-                                        Remove Bookmark</a>
-                                    <a class="dropdown-item" href="#">
-                                        <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
-                                        Share Page</a>
-                                    </div>
+                                <h2>Utilities (2)</h2>
+                                <p>How qatar <b>water bill</b> is paid</p>
+                                <p>How qatar <b>electricity bill</b> is paid</p>
+                            </li>
+                            <li tabindex="0">
+                                <h2>Service (2)</h2>
+                                <p>How qatar <b>government works</b></p>
+                                <p>How qatar <b>national vision 2030</b> is structured</p>
+                            </li>
+                            <li tabindex="0">
+                                <h2>Articles (2)</h2>
+                                <p>How qatar <b>driving license is created</b></p>
+                                <p>How qatar <b>sports academy</b> functions</p>
+                            </li>
+                            <li tabindex="0">
+                                <h2>Utilities (2)</h2>
+                                <p>How qatar <b>water bill</b> is paid</p>
+                                <p>How qatar <b>electricity bill</b> is paid</p>
                             </li>
                         </ul>
                     </div>
-                    <div class="tab-pane fade" id="blogs" role="tabpanel" aria-labelledby="blogs_tab">blogs_tab</div>
+                    <!-- ============search result dropdown========== -->
+                    <!-- ========= advance search=============== -->
+                    <div class="advance_search_wrap collapse" id="collapseExample">
+                        <div class="adv_share_feedback">
+                            <p class="adv_heading">Hukoomi Advance Search</p>
+                            <div class="understand">
+                                <p>Is this easy to understand?</p>
+                                <div class="like">
+                                    <div class="like_btn" tabindex="0">
+                                        <input type="radio" name="like" id="yes" aria-label="Yes" data-toggle="modal" data-target="#thankyou">
+                                        <label for="yes">Yes</label>
+                                    </div>
+                                    <div class="like_btn" tabindex="0">
+                                        <input type="radio" name="like" id="no" aria-label="No" data-toggle="modal" data-target="#feedback">
+                                        <label for="no">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="advance_search">
+                            <div class="search_info">
+                                <ul>
+                                    <li>
+                                        <h3 class="info_title" tabindex="0">Search inside</h3>
+                                    </li>
+                                    <li tabindex="0">
+                                        <h3>Select audience</h3>
+                                        <p>Whom are you searching for?</p>
+                                    </li>
+                                    <!-- <li tabindex="0">
+                                        <h3>Channels</h3>
+                                        <p>Get results from selected government ministries</p>
+                                    </li> -->
+                                    <li tabindex="0">
+                                        <h3>Service topic filters</h3>
+                                        <p>Customize search results with topics of your interest</p>
+                                    </li>
+                                    <!-- <li tabindex="0">
+                                        <h3>Has downloads</h3>
+                                        <p>Should your search results includes downloads?</p>
+                                    </li> -->
+                                    <li tabindex="0">
+                                        <h3>Life journeys</h3>
+                                        <p>Find life journeys here</p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="search_form">
+                                <div class="form_row">
+                                    <div class="title">
+                                        <h3>Search inside</h3>
+                                    </div>
+                                    <div class="flex_row">
+                                        <ul>
+                                            <li>
+                                                <label class="chech_lbl" for="servicesck"><input id="servicesck"
+                                                        class="check_input" type="checkbox" tabindex="0">
+                                                    <span></span>
+                                                    Government services</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="downloads"><input id="downloads"
+                                                        class="check_input" type="checkbox" tabindex="0">
+                                                    <span></span>
+                                                    Downloads, utilities and directory</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="media"><input id="media"
+                                                        class="check_input" type="checkbox" tabindex="0">
+                                                    <span></span>
+                                                    Media center (news, events, blogs)</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                    <div class="tab-pane fade" id="resources" role="tabpanel" aria-labelledby="resources">resources_tab</div>
+                                <div class="form_row">
+                                    <div class="title">
+                                        <h3>Select audience</h3>
+                                        <p>Whom are you searching for?</p>
+                                    </div>
+                                    <div class="flex_row">
+                                        <ul>
+                                            <li>
+                                                <label class="chech_lbl" for="myself"><input id="myself"
+                                                        class="check_input" type="checkbox" tabindex="0">
+                                                    <span></span>
+                                                    Myself</label>
+                                            </li>
+                                            <li class="flex_inline">
+                                                <p>I am a</p>
+                                                <div class="dropdown">
+                                                    <a class="dropdown-link" id="dropdownMenuButton"
+                                                        data-toggle="dropdown" aria-haspopup="true"
+                                                        aria-expanded="false" role="link" tabindex="0">
+                                                        <span class="text">tourist businessman</span> <span
+                                                            class="caret"><img src="assets/images/caret-down.svg"
+                                                                alt="tourist businessman"></span>
+                                                    </a>
+                                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        <a class="dropdown-item" href="#">tourist businessman</a>
+                                                        <a class="dropdown-item" href="#">tourist businessman</a>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="flex_row">
+                                        <ul>
+                                            <li>
+                                                <label class="chech_lbl" for="option_1"><input id="option_1"
+                                                        class="check_input" type="checkbox" tabindex="0">
+                                                    <span></span>Option 1</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="option_2"><input id="option_2"
+                                                        class="check_input" type="checkbox"
+                                                        tabindex="0"><span></span>Option 2</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="option_3"><input id="option_3"
+                                                        class="check_input" type="checkbox"
+                                                        tabindex="0"><span></span>Option 3</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
 
-                    <div class="tab-pane fade" id="press_releases" role="tabpanel" aria-labelledby="press_releases">press_releases</div>
-                  </div>
+                                <!-- <div class="form_row">
+                                    <div class="title">
+                                        <h3>Channels</h3>
+                                        <p>Get results from selected government ministries and other departments.</p>
+                                    </div>
+                                    <div class="flex_row">
+                                        <ul>
+                                            <li>
+                                                <label class="chech_lbl" for="healthcare"><input id="healthcare"
+                                                        class="check_input" type="checkbox"
+                                                        tabindex="0"><span></span>Healthcare</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="education"><input id="education"
+                                                        class="check_input" type="checkbox" checked
+                                                        tabindex="0"><span></span>Education</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="labour"><input id="labour"
+                                                        class="check_input" type="checkbox"
+                                                        tabindex="0"><span></span>Labour</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div> -->
+
+                                <div class="form_row">
+                                    <div class="title">
+                                        <h3>Service topic filters</h3>
+                                        <p>Customize search results with topics of your interest</p>
+                                    </div>
+                                    <div class="flex_row">
+                                        <ul>
+                                            <li>
+                                                <label class="chech_lbl" for="healthcare1"><input id="healthcare1"
+                                                        class="check_input" type="checkbox"
+                                                        tabindex="0"><span></span>Healthcare</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="education1"><input id="education1"
+                                                        class="check_input" type="checkbox"
+                                                        tabindex="0"><span></span>Education</label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="labour1"><input id="labour1"
+                                                        class="check_input" type="checkbox"
+                                                        tabindex="0"><span></span>Labour</label>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="form_row">
+                                    <div class="title">
+                                        <h3>Services by life journeys <span class="new">New</span></h3>
+                                    </div>
+                                    <div class="flex_row">
+                                        <ul class="adv_search_images">
+                                            <li>
+                                                <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Services">
+                                                </figure>
+                                            </li>
+                                            <li>
+                                                <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Life"></figure>
+                                            </li>
+                                            <li>
+                                                <figure><img src="assets/images/rectangle-2@3x.jpg" alt="Journeys">
+                                                </figure>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ========= advance search=============== -->
+                </div>
+                <!-- =========== search result ====== -->
+                <div class="search_outcome">
+                    <div class="slider">
+
+                        <div id="videoResultSlider" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+                                    <div class="slide_container">
+                                        <div class="video">
+                                            <div class="play" onclick="playPause()" onkeypress="playPause()"
+                                                role="button"><img src="assets/images/play.png" alt="Play"></div>
+                                            <video id="video_2" poster="assets/images/rectangle-2@3x.jpg">
+                                                <source src="assets/images/movie.mp4">
+                                            </video>
+                                        </div>
+                                        <div class="video_info">
+                                            <h3>1. Qatar Visa Renewals and Extensions During Covid-19 Situation</h3>
+                                            <p>4 hours ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <div class="slide_container">
+                                        <div class="video">
+                                            <div class="play" onclick="playPause()" onkeypress="playPause()"
+                                                role="button"><img src="assets/images/play.png" alt="Play"></div>
+                                            <video id="video" poster="assets/images/rectangle-2@3x.jpg">
+                                                <source src="assets/images/movie.mp4">
+                                            </video>
+                                        </div>
+                                        <div class="video_info">
+                                            <h3>2. some question come here</h3>
+                                            <p>4 hours ago</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a class="carousel-control-prev" href="#videoResultSlider" role="button" data-slide="prev"
+                                tabindex="0">
+                                <img src="assets/images/arrow-left.svg" alt="Previous">
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#videoResultSlider" role="button" data-slide="next"
+                                tabindex="0">
+                                <img src="assets/images/arrow-right.svg" alt="Next">
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="tabs_result">
+                        <div class="tabs_slder">
+                            <!-- <ul class="nav nav-tabs" role="tablist"> -->
+                                <div class="result_carousal owl-carousel owl-theme">
+
+
+                                    <div class="item nav-item" role="tablist">
+                                        <a class="nav-link active" id="services_tab" data-toggle="tab" href="#services"
+                                            role="tab" aria-controls="services" aria-selected="true" tabindex="0">
+                                            <span class="icon">
+                                                <svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <g transform="translate(-186.000000, -500.000000)"
+                                                            stroke="#1C1517" stroke-width="1.3">
+                                                            <g transform="translate(152.000000, 474.000000)">
+                                                                <g id="Group-6"
+                                                                    transform="translate(35.000000, 24.000000)">
+                                                                    <path
+                                                                        d="M12.3012139,11.5878963 C11.8285549,11.0669144 11.1399527,10.7467748 10.360745,10.7467748 C8.77967806,10.7135527 7.71204263,12.1405902 7.71204263,13.3652752 C7.71355272,14.5733493 8.77514778,16.0018968 10.3682954,15.9792454 C11.2275381,15.9671647 11.9795642,15.5715204 12.4537332,14.9493623 M-9.32587341e-13,14.6971769 L-9.32587341e-13,12.1194489 C0.161579902,11.583366 0.483229615,11.272287 1.07518589,11.2330246 C1.46932005,11.207353 1.86043402,11.1001364 2.24550761,11.0004703 C2.58376835,10.914395 2.84803454,10.7029821 3.01414472,10.3873727 C3.20592647,10.0249505 3.14854296,9.65346775 2.9582713,9.32879786 C2.72118677,8.92107287 2.43577928,8.53750936 2.14584151,8.16300641 C1.87553494,7.81266494 1.83476244,7.37020783 2.10808919,7.02590673 C2.6532326,6.33881462 3.26028981,5.71061612 3.96852321,5.18963419 C4.38379866,4.88610559 4.85947781,4.90120651 5.25210187,5.24701771 C5.6115039,5.56413714 5.99506741,5.84048408 6.44054471,6.02471537 C6.99021839,6.25273934 7.53083152,6.09115944 7.8404005,5.58527844 C7.95063725,5.40557742 8.03369234,5.20020484 8.07899512,4.99332216 C8.16205021,4.6203293 8.19527224,4.23676579 8.27530715,3.86226284 C8.30701909,3.70521322 8.39460446,3.55873424 8.47312927,3.41527545 C8.65283028,3.08909546 9.00468185,3.09815602 9.30368017,3 L11.4208299,3 C11.4616024,3.0196312 11.5023749,3.04983305 11.5446575,3.05889361 C12.139634,3.17215055 12.3963497,3.46963878 12.4567534,4.06763543 C12.4869553,4.38475486 12.5307479,4.70791467 12.6183333,5.01446346 C12.9294124,6.12589157 13.6995596,6.42186971 14.6841399,5.81179232 C14.9816281,5.62756103 15.2519347,5.39651687 15.5297917,5.18057364 C15.82728,4.94952948 16.3558124,4.90875698 16.6366896,5.12168003 C17.3736147,5.67739408 18.030505,6.31767332 18.5907493,7.0515783 C18.6632338,7.14671413 18.7598797,7.26450135 18.7538393,7.36567755 C18.7357182,7.69638782 18.716087,8.01652744 18.454841,8.29589456 C18.1679234,8.60546353 17.9187581,8.96939583 17.7254663,9.34691897 C17.4415689,9.89961284 17.5276442,10.7195931 18.4397401,10.9883896 C18.8776669,11.1167474 19.3337149,11.1998025 19.7867426,11.2526558 C20.054029,11.2843677 20.2669521,11.3659127 20.4179613,11.5697752 C20.5417889,11.7389056 20.6233339,11.9337075 20.723,12.1194489 L20.723,14.6971769 C20.6218238,14.8617769 20.5372586,15.0399679 20.413431,15.1864468 C20.1929575,15.4492029 19.8924491,15.532258 19.5511682,15.5367883 C19.0573679,15.5443388 18.5726282,15.6319241 18.128661,15.8644784 C17.7707691,16.0517299 17.5880479,16.3431777 17.5940882,16.7569431 C17.5986185,17.0921836 17.6816736,17.3972223 17.8704352,17.6675289 C18.0863784,17.9831382 18.3234629,18.2851567 18.5469566,18.5962358 C18.8217935,18.9797993 18.8066926,19.4509482 18.5092043,19.8179007 C18.0063435,20.4415689 17.4279781,20.9852022 16.7997796,21.4835328 C16.5521244,21.6813549 16.3089995,21.7523292 16.0009406,21.7281677 C15.7865075,21.7085365 15.632478,21.6239714 15.4724082,21.4941034 C15.0314612,21.1362115 14.5980646,20.7662388 14.016679,20.6454314 C13.6542568,20.5699268 13.3220364,20.6454314 13.0834418,20.9021471 C12.8916601,21.1090298 12.7361205,21.3763162 12.6515553,21.6451127 C12.5398085,22.0060248 12.4899754,22.3926085 12.4567534,22.7731518 C12.434102,23.0177868 12.3812488,23.2322199 12.1819166,23.3771888 C12.0022156,23.5085669 11.7983531,23.608233 11.6050612,23.723 L9.11944888,23.723 C8.58487612,23.5629302 8.26322641,23.2443007 8.23604474,22.6493242 C8.22094382,22.3155937 8.13637863,21.9833734 8.0623841,21.6556833 C7.88268309,20.8492939 7.07629367,20.2845193 6.14003629,20.8538242 C5.8138563,21.0531564 5.50881761,21.2872207 5.20981928,21.5227952 C4.84437689,21.8112228 4.3747381,21.8323641 3.99872506,21.552997 C3.2814311,21.0184243 2.63662158,20.409857 2.09751855,19.6955832 C2.0054029,19.5702455 1.95707994,19.3950748 1.93744874,19.236515 C1.89667624,18.9450672 2.03711484,18.7200634 2.21530576,18.4875091 C2.50373344,18.1145163 2.79820149,17.7279326 2.99300342,17.3035966 C3.3222036,16.5863026 3.04434657,15.9852858 2.29685076,15.7421609 C1.93895883,15.6258838 1.55086504,15.5609498 1.17334191,15.5413186 C0.582895723,15.5126268 0.194801938,15.2513808 -9.32587341e-13,14.6971769 Z"
+                                                                        id="ic_advance_search_services_inactive"></path>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            Services (3)
+                                        </a>
+                                    </div>
+                                    <div class="item nav-item" role="tablist">
+                                        <a class="nav-link" id="blogs_tab" data-toggle="tab" href="#blogs" role="tab"
+                                            aria-controls="blogs" aria-selected="false" tabindex="0">
+                                            <span class="icon">
+                                                <svg width="21px" height="23px" viewBox="0 0 21 23" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <g transform="translate(-346.000000, -499.000000)"
+                                                            stroke="#1C1517">
+                                                            <g transform="translate(152.000000, 474.000000)">
+                                                                <g id="Group-13"
+                                                                    transform="translate(195.000000, 24.000000)">
+                                                                    <g id="ic_advance_search_blogs_inactive"
+                                                                        transform="translate(0.000000, 2.000000)">
+                                                                        <path
+                                                                            d="M17.958496,21.20856 L17.264616,21.2100809 C16.685496,21.21084 16.215816,20.74344 16.215056,20.16432 L16.192256,8.64272 L18.981456,8.63664 L19.0042569,20.159 C19.005016,20.73736 18.537616,21.20704 17.958496,21.20856 Z">
+                                                                        </path>
+                                                                        <polyline
+                                                                            points="16.192104 8.642568 17.580624 5.759888 18.981304 8.636488">
+                                                                        </polyline>
+                                                                        <path
+                                                                            d="M16.667104,21.20932 L1.673064,21.20932 C0.906984,21.20932 0.284544,20.58764 0.284544,19.8208 L0.284544,1.67352 C0.284544,0.90668 0.906984,0.285 1.673064,0.285 L15.278584,0.285 C16.046184,0.285 16.667104,0.90668 16.667104,1.67352 L16.667104,4.31072">
+                                                                        </path>
+                                                                        <polyline
+                                                                            points="11.381988 8.868972 11.381988 11.091212 5.602188 11.091212 5.602188 5.310652 10.855308 5.310652">
+                                                                        </polyline>
+                                                                        <polyline
+                                                                            points="7.927104 7.82914 8.895344 9.31494 12.964384 5.31126">
+                                                                        </polyline>
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            Blogs (2)
+                                        </a>
+                                    </div>
+                                    <div class="item nav-item" role="tablist">
+                                        <a class="nav-link" id="resources_tab" data-toggle="tab" href="#resources"
+                                            role="tab" aria-controls="resources" aria-selected="false" tabindex="0">
+                                            <span class="icon">
+                                                <svg width="22px" height="23px" viewBox="0 0 22 23" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <g transform="translate(-483.000000, -500.000000)"
+                                                            stroke="#1C1517" stroke-width="1.2">
+                                                            <g transform="translate(152.000000, 474.000000)">
+                                                                <g id="Group-14"
+                                                                    transform="translate(332.000000, 24.000000)">
+                                                                    <g id="ic_advance_search_resources_inactive"
+                                                                        transform="translate(0.000000, 3.000000)">
+                                                                        <line x1="11.5916667" y1="9.3285"
+                                                                            x2="19.4333333" y2="6.556"></line>
+                                                                        <line x1="0.312416667" y1="6.55591667"
+                                                                            x2="8.14241667" y2="9.32341667"></line>
+                                                                        <path
+                                                                            d="M13.2575833,17.1491667 L0.845083333,17.13 C0.55175,17.13 0.312583333,16.8908333 0.312583333,16.5966667 L0.312583333,3.27583333 C0.312583333,2.98083333 0.55175,2.7425 0.845083333,2.7425 L18.9000833,2.7425 C19.19425,2.7425 19.4334167,2.98083333 19.4334167,3.27583333 L19.4334167,12.5566667">
+                                                                        </path>
+                                                                        <polygon
+                                                                            points="8.4425 10.79025 11.3508333 10.79025 11.3508333 8.70191667 8.4425 8.70191667">
+                                                                        </polygon>
+                                                                        <path
+                                                                            d="M6.45825,2.74241667 L6.45825,1.31908333 C6.45825,0.76325 6.90908333,0.312416667 7.46491667,0.312416667 L12.6399167,0.312416667 C13.19575,0.312416667 13.6465833,0.76325 13.6465833,1.31908333 L13.6465833,2.74241667">
+                                                                        </path>
+                                                                        <path
+                                                                            d="M19.3269167,14.3626667 C19.9610833,15.6443333 19.4360833,17.1968333 18.1544167,17.831 C16.8735833,18.4651667 15.3194167,17.9401667 14.6860833,16.6585 C14.0519167,15.3776667 14.5769167,13.8243333 15.8585833,13.1901667 C17.1394167,12.556 18.69275,13.081 19.3269167,14.3626667 Z"
+                                                                            id="Stroke-10"></path>
+                                                                        <line x1="18.28925" y1="18.10375"
+                                                                            x2="19.5950833" y2="20.7429167"></line>
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            Resources (2)
+                                        </a>
+                                    </div>
+                                    <div class="item nav-item" role="tablist">
+                                        <a class="nav-link" id="press_releases-tab" data-toggle="tab"
+                                            href="#press_releases" role="tab" aria-controls="press_releases"
+                                            aria-selected="false" tabindex="0">
+                                            <span class="icon">
+                                                <svg width="21px" height="21px" viewBox="0 0 21 21" version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"
+                                                        stroke-linecap="round" stroke-linejoin="round">
+                                                        <g transform="translate(-654.000000, -500.000000)"
+                                                            stroke="#1C1517">
+                                                            <g transform="translate(152.000000, 474.000000)">
+                                                                <g id="Group-17"
+                                                                    transform="translate(503.000000, 24.000000)">
+                                                                    <g id="ic_advance_search_press_inactive"
+                                                                        transform="translate(0.000000, 3.000000)">
+                                                                        <path
+                                                                            d="M19.37536,17.14816 C19.37536,18.28096 18.45776,19.19936 17.32496,19.19936 L2.61056,19.19936 C3.69056,19.19936 4.56496,18.32416 4.56496,17.24416 L4.56496,0.29936 L19.37536,0.29936 L19.37536,17.14816 Z">
+                                                                        </path>
+                                                                        <path
+                                                                            d="M4.5652,19.19976 L2.774,19.19976 C1.4076,19.19976 0.3004,18.09176 0.3004,16.72536 L0.3004,3.58056 C0.3004,3.03976 0.7388,2.60136 1.2796,2.60136 C1.8196,2.60136 2.2588,3.03976 2.2588,3.58056 L2.2588,16.78936">
+                                                                        </path>
+                                                                        <line x1="1.2792" y1="2.60128" x2="3.1176"
+                                                                            y2="2.60128"></line>
+                                                                        <polygon
+                                                                            points="7.1488 7.9872 12.3992 6.0136 17.6504 7.9872 12.3992 9.7008">
+                                                                        </polygon>
+                                                                        <path
+                                                                            d="M15.3792,8.91848 L15.3792,12.60488 L14.8848,12.47528 C13.256,12.04808 11.544,12.05048 9.9168,12.48328 L9.4576,12.60488 L9.4576,9.03048">
+                                                                        </path>
+                                                                        <line x1="7.1488" y1="2.60128" x2="17.0016"
+                                                                            y2="2.60128"></line>
+                                                                        <line x1="9.39568" y1="16.01376" x2="15.02688"
+                                                                            y2="16.01376" id="Stroke-13"></line>
+                                                                    </g>
+                                                                </g>
+                                                            </g>
+                                                        </g>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            Press Releases (2)
+                                        </a>
+                                    </div>
+                                </div>
+                            <!-- </ul> -->
+                        </div>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="services" role="tabpanel"
+                                aria-labelledby="services_tab">
+                                <ul class="result_blocks">
+                                    <li tabindex="0" data-image="assets/images/govt_banner.png">
+                                        <h3>
+                                            Visas for Visitors | Visit Qatar
+                                        </h3>
+                                        <p>Individuals not eligible for visa-free entry or ETA can apply for a Tourist
+                                            Visa online. Visitors to Qatar travelling on board any airline may apply for
+                                            a Tourist Visa ...</p>
+                                        <span id="dropdownMenuButton1" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false" role="link" tabindex="0"><img
+                                                src="assets/images/ellipse.svg" alt="Open Search"></span>
+                                        <div class="dropdown-menu dropdown-menu-right"
+                                            aria-labelledby="dropdownMenuButton1">
+                                            <a class="dropdown-item" href="#">
+                                                <span><img src="assets/images/bookmark-red.svg"
+                                                        alt="Remove Bookmark"></span>
+                                                Add to Bookmark</a>
+                                            <a class="dropdown-item" href="#">
+                                                <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                                Share Page</a>
+                                        </div>
+                                    </li>
+                                    <li tabindex="0" data-image="">
+                                        <h3>
+                                            Apply for Tourist Visa - Hukoomi - Qatar E-government
+                                        </h3>
+                                        <p>Apply for Tourist Visa. Visitors and tourists who wish to visit Qatar can
+                                            issue tourist visas through some easy steps. Such visas can be obtained
+                                            through employer ...</p>
+                                        <span id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false" role="link" tabindex="0"><img
+                                                src="assets/images/ellipse.svg" alt="Dropdown"></span>
+                                        <div class="dropdown-menu dropdown-menu-right"
+                                            aria-labelledby="dropdownMenuButton2">
+                                            <a class="dropdown-item" href="#">
+                                                <span><img src="assets/images/bookmark-red.svg"
+                                                        alt="Remove Bookmark"></span>
+                                                Add to Bookmark</a>
+                                            <a class="dropdown-item" href="#">
+                                                <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                                Share Page</a>
+                                        </div>
+                                    </li>
+                                    <li tabindex="0" data-image="assets/images/dummy1.png">
+                                        <h3>
+                                            Qatar Visit Visa Rules and Requirements - Qatar Guide
+                                        </h3>
+                                        <p>Visitors from all other nations who are not included in the above-said list
+                                            of nations will have to obtain a visa prior to their arrival in Qatar. Visas
+                                            ...</p>
+                                        <span id="dropdownMenuButton3" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false" role="link" tabindex="0"><img
+                                                src="assets/images/ellipse.svg" alt="Dropdown"></span>
+                                        <div class="dropdown-menu dropdown-menu-right"
+                                            aria-labelledby="dropdownMenuButton3">
+                                            <a class="dropdown-item" href="#">
+                                                <span><img src="assets/images/bookmark-red.svg"
+                                                        alt="Remove Bookmark"></span>
+                                                        Add to Bookmark</a>
+                                            <a class="dropdown-item" href="#">
+                                                <span><img src="assets/images/share-red.svg" alt="Share Page"></span>
+                                                Share Page</a>
+                                        </div>
+                                    </li>
+                                </ul>
+                                  <!-- ======= pagination ======= -->
+            <div class="search_pagination">
+                <ul>
+                    <li><span class="page_prev"></span></li>
+                    <li class="current_page"><a href="result_page">1</a></li>
+                    <li><a href="result_page_03">2</a></li>
+                    <li><a href="result_page_04">3</a></li>
+                    <li><a href="result_page_05">4</a></li>
+                    <li><span class="page_next"></span></li>
+                </ul>
+            </div>
+            <!-- ======= pagination ======= -->
+                            </div>
+                            <div class="tab-pane fade" id="blogs" role="tabpanel" aria-labelledby="blogs_tab">blogs_tab
+                            </div>
+
+                            <div class="tab-pane fade" id="resources" role="tabpanel" aria-labelledby="resources">
+                                resources_tab</div>
+
+                            <div class="tab-pane fade" id="press_releases" role="tabpanel"
+                                aria-labelledby="press_releases">press_releases</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- =========== search result end ====== -->
+            </div>
+
+
+            <!-- ====== search input box ends here ======= -->
+
+            <!-- ========= page preview ========== -->
+            <div class="page_preview_container">
+                <div class="page_preview">
+                    <h3 class="title">Page Preview</h3>
+                    <figure>
+                        <img id="previewImage" src="assets/images/govt_banner.png" alt="Page Preview">
+                        <div id="myresult" class="img-zoom-result"></div>
+                    </figure>
+                    <div class="go_to_page">
+                        <a href="">
+                            Goto Page
+                            <span><img src="assets/images/right_arrow.svg" alt="Go to Page"></span>
+                        </a>
+                    </div>
+                </div>
+               
+            </div>
+            <!-- ======= page preview end ======== -->
+
+
+        </section>
+
+        <!-- footer -->
+        <footer>
+            <div class="footer_inner">
+                <div class="foot_row">
+                    <div class="copy_right" tabindex="0">
+                        Copyright © 2019 MOTC. All rights reserved.
+                    </div>
+                    <div class="foot_nav">
+                        <nav>
+                            <ul>
+                                <li> <a href="#" tabindex="0">Entity Services’ Statistics</a></li>
+                                <li> <a href="#" tabindex="0">Useful Links</a></li>
+                                <li> <a href="#" tabindex="0">Customer Service</a></li>
+                                <li> <a href="#" tabindex="0">Contact Us</a></li>
+                                <li> <a href="#" tabindex="0">FAQ</a></li>
+                                <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                                <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                                <li> <a href="#" tabindex="0">Site Map</a></li>
+                                <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                                <li> <a href="#" tabindex="0">Find Help</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- footer -->
+
+           <!-- ======= feedback popup ======= -->
+<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="feedback" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="feedback_form">
+                <div class="close_feedback" data-dismiss="modal"><span></span> Close</div>
+                <fieldset>
+                    <legend>Help us improve Hukoomi</legend>
+                    <form class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <textarea cols="3" placeholder="What went wrong?" required></textarea>
+                            <div class="invalid-feedback">
+                                Please field is required.
+                              </div>
+                        </div>
+                        <button type="submit" class="send_feedback_btn">Send</button>
+                    </form>
+                </fieldset>
             </div>
         </div>
-    <!-- =========== search result end ====== -->
-       </div>
-       
-     
-<!-- ====== search input box ends here ======= -->
-
-<!-- ========= page preview ========== -->
-<div class="page_preview">
-    <h3 class="title">Page Preview</h3>
-    <figure>
-        <img src="assets/images/page.png" alt="Page Preview">
-    </figure>
-    <div class="go_to_page">
-        <a href="">
-            Go to Page
-            <span><img src="assets/images/right_arrow.svg" alt="Go to Page"></span>
-        </a>
-    </div>
-</div>
-<!-- ======= page preview end ======== -->
-
-       
-   </section>
-    </div>
-   <!-- =============== bootstrap js=============== -->
-   <script src="assets/js/jquery.js"></script>
-   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-   <script>
-    window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
-    </script>
-   <!-- =============== bootstrap js=============== -->
-   <script src="assets/js/custom.js"></script>
-   <script src="assets/js/search.js"></script>
-
-   <script>
-    $(document).ready(function(){
-      $('#search_btn').click(function(){
-          $('#collapseExample').collapse('hide')
-         })
-    })
         
-     </script>
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
+
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="thankyou" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="thankyou_form">
+                <div class="form-group">
+                    <p> Thank you for the feedback.</p>
+                </div>
+                <button type="submit" class="send_feedback_btn" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
+    </div>
+    <!-- =============== bootstrap js=============== -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+    </script>
+    <!-- =============== bootstrap js=============== -->
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/search.js"></script>
+    <script src="assets/js/zoom.js"></script>
+    <script src="assets/js/custom.js"></script>
 </body>
 
 </html>

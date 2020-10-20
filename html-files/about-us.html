@@ -11,80 +11,190 @@
       <link rel="stylesheet" href="assets/css/style.css">
       <link rel="stylesheet" href="assets/css/main.css">
       <link rel="stylesheet" href="assets/css/media.css">
-      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+      <link rel="stylesheet" type="text/css" href="assets/css/daterangepicker.css" />
       <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
       <link rel="stylesheet" href="assets/css/component_bg.css">
+      <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
    </head>
    <body>
       <!--App_wrapper-->
       <div class="app_wrapper">
-         <!--header-->
-         <header>
-            <div class="header_inner">
-               <div class="innner_wrapper">
-                  <div class="nav_brand">
-                     <a href="#"  tabindex="0" > <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+    <!--header-->
+    <header>
+      <div class="header_inner">
+         <div class="innner_wrapper">
+            <div class="nav_brand">
+            <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+            </div>
+            <div class="nav_col">
+               <div class="header_row">
+                  <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                     <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                     </a>
+                  </figure>
+  
+                  <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                     <ul>
+                        <li><a href="#" class="link">Life in Qatar</a></li>
+                     <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                        <li><a href="#" class="link">Open Data</a></li>
+                        <li><a href="#" class="link">E-Participation</a></li>
+                     </ul>
                   </div>
-                  <div class="nav_col">
-                     <div class="header_row">
-                        <div class="abt_qtr_nav desktop_view_head">
-                           <ul>
-                              <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
-                              <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
-                              <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
-                           </ul>
-                        </div>
-                        <div class="auth_nav">
-                           <ul>
-                              <li class="mob_hide">
-                                 <a href="#"  tabindex="0"  class="link" >
-                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                              </li>
-                              <li>
-                                 <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                                 </a>
-                              </li>
-                              <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
-                              <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
-                                 <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                                 </a>
-                              </li>
-                           </ul>
-                        </div>
-                     </div>
-                     <div class="header_row b-top desktop_view_head">
-                        <div class="nav_menu">
-                           <ul>
-                              <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
-                              <li> <a href="#"  tabindex="0"  class="link">About Qatar</a></li>
-                              <li>
-                                 <a href="#"  tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                              </li>
-                           </ul>
-                        </div>
-                     </div>
+                  <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                     <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                        href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                     <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                     <span>Listen</span></span></span>
+                     <span class="rsbtn_right rsimg rsplay rspart"></span>
+                     <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                     </a>
+                  </div>
+                  <div class="auth_nav">
+                     <ul>
+                        <li class="mob_hide">
+                           <a href="#" class="link">
+                           <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                           <div class="access_submenu">
+                              <span class="title">Accessbility Options</span>
+                              <ul>
+                                 <li>
+                                    <span class="option">Text Size</span>
+                                    <div class="size_wrap">
+                                       <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                       <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <span class="option">Listen Content</span>
+                                    <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                    <img src="assets/images/volume.png" alt="speaker" />
+                                    <span>Listen</span>
+                                    </button>
+                                 </li>
+                                 <li>
+                                    <span class="option">Contrast</span>
+                                    <button id="themechange">
+                                    <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                    </button>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                           </a>
+                        </li>
+                        <li><a href="#" class="link">Login / Signup</a></li>
+                        <li class="mob_menu_nav">
+                        <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="header_row b-top desktop_view_head" id="head2_top">
+                  <div class="nav_menu">
+                     <ul>
+                        <li><a href="#" class="link">Explore Services</a></li>
+                        <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                        <li><a href="#" class="link">Media</a></li>
+                        <li class="">
+                           <a href="#" class="link about_qatar_nav">About Qatar</a>
+                           <div class="about_submenu">
+  
+                              <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+  
+                              <div class="f_row">
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                       </figure>
+                                       <div class="line-1">Qatar Government</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                       </figure>
+                                       <div class="line-1">Hukoomi</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                       </figure>
+                                       <div class="line-1">Qatar</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                       </figure>
+                                       <div class="line-1">Qatar National Vision 2030</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                       </figure>
+                                       <div class="line-1">Government & Legislatives</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/amir.png" alt="The Amir" />
+                                       </figure>
+                                       <div class="line-1">The Amir</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                              </div>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#"  title="Search" tabindex="0" >
+                               <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
+                     </li>
+                     </ul>
                   </div>
                </div>
             </div>
-            <!-- Mobile Menu-->
-            <div class="mob_nav">
-               <ul>
-                  <li tabindex="0" > <a href="#"  tabindex="0" >Life in Qatar</a></li>
-                  <li> <a href="#"  tabindex="0" >Innovation</a></li>
-                  <li> <a href="#"  tabindex="0" >Open Data</a></li>
-                  <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-                  <li> <a href="#"  tabindex="0" >Explore Services</a></li>
-                  <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
-                  <li> <a href="#"  tabindex="0" >Media</a></li>
-                  <li> <a href="#"  tabindex="0" >About Qatar</a></li>
-               </ul>
-            </div>
-            <!-- Mobile Menu-->
-         </header>
-         <!--header close--> 
+         </div>
+      </div>
+   </header>
+   <!--header close-->
+
+
+
          <!--Jump Link header-->
          <div class="jump_link_header solid_white_five">
             <div class="header_row b-top">
@@ -109,9 +219,9 @@
                      <li><a href="#life_qatar" tabindex="0" class="link">Life in Qatar</a></li>
                      <li><a href="#travel" tabindex="0" class="link">Travel</a></li>
                      <li><a href="#business" tabindex="0" class="link">Business</a></li>
-                     <li><a href="#future" tabindex="0" class="link">Future</a></li>
+                     <li><a href="#" tabindex="0" class="link">Future</a></li>
                      <li><a href="#media" tabindex="0" class="link">Media</a></li>
-                     <li><a href="#contact" tabindex="0" class="link">Contact</a></li>
+                     <li><a href="#" tabindex="0" class="link">Contact</a></li>
                   </ul>
                </div>
             </div>
@@ -319,9 +429,9 @@
                         </figure>
                         <span class="national_title"  tabindex="0">National Flag</span>
                         <p class="description"  tabindex="0">
-                           QThe national flag is in the ratio of 11:28. It is the maroon wit...
+                           The national flag is in the ratio of 11:28. It is the maroon wit...
                         </p>
-                        <a href="#"   tabindex="0" class="read_more link white_link" >Read More</a>
+                        <a href="#" tabindex="0" class="read_more link white_link" title="Click here">Read More</a>
                      </div>
                   </div>
                   <!--national card close-->
@@ -340,9 +450,9 @@
                         </figure>
                         <span class="national_title"  tabindex="0">National Flag</span>
                         <p class="description"  tabindex="0">
-                           QThe national flag is in the ratio of 11:28. It is the maroon wit...
+                           The national flag is in the ratio of 11:28. It is the maroon wit...
                         </p>
-                        <a href="#"   tabindex="0" class="read_more link white_link" >Read More</a>
+                        <a href="#" class="read_more link white_link"  title="Read More National Anthem">Read More</a>
                      </div>
                   </div>
                   <!--national card close-->
@@ -350,13 +460,13 @@
                   <div class="natinalflag_card" >
                      <div class="inner_wrapper">
                         <figure class="img_video_wrapper">
-                           <img src="assets/images//national-emblem.png"  alt="nationa_flag"/>
+                           <img src="assets/images//national-emblem.png"  alt="nationa emblem"/>
                         </figure>
                         <span class="national_title"  tabindex="0">National Flag</span>
                         <p class="description"  tabindex="0">
-                           QThe national flag is in the ratio of 11:28. It is the maroon wit...
+                           The national flag is in the ratio of 11:28. It is the maroon wit...
                         </p>
-                        <a href="#"   tabindex="0" class="read_more link white_link" >Read More</a>
+                        <a href="#" class="read_more link white_link" title="Read More National Animal">Read More</a>
                      </div>
                   </div>
                   <!--national card close-->
@@ -364,13 +474,13 @@
                   <div class="natinalflag_card" >
                      <div class="inner_wrapper">
                         <figure class="img_video_wrapper">
-                           <img src="assets/images/national-animal.png"  alt="nationa_flag"/>
+                           <img src="assets/images/national-animal.png"  alt="nationa_animal"/>
                         </figure>
                         <span class="national_title"  tabindex="0">National Flag</span>
                         <p class="description"  tabindex="0">
-                           QThe national flag is in the ratio of 11:28. It is the maroon wit...
+                           The national flag is in the ratio of 11:28. It is the maroon wit...
                         </p>
-                        <a href="#"   tabindex="0" class="read_more link white_link" >Read More</a>
+                        <a href="#" class="read_more link white_link" title="Read More National">Read More</a>
                      </div>
                   </div>
                   <!--national card close-->
@@ -465,7 +575,8 @@
                      </div>
                      
                </div>
-            </div>
+             </div>
+         </div>
          </section>
          <!--Explore Block close-->
          <!--Explore Travel-->
@@ -663,32 +774,63 @@
          <!--Mood Block-->
          <section class="what_mood_block">
             <div class="custom_container">
-               <h3 class="heading" tabindex="0"> So what’s your mood like?</h3>
+               <h3 class="heading" tabindex="0">So what’s your mood like?</h3>
                <div class="mood">
-                  <a  href="#" class="mood_tag" tabindex="0">
-                  Just eat
-                  </a>
-                  <a href="#" class="mood_tag" tabindex="0">
-                  Go shopping
-                  </a>
-                  <a  href="#" tabindex="0" class="mood_tag">
-                  Book a hotel
-                  </a>
-                  <a href="#" tabindex="0" class="mood_tag">
-                  What to wear
-                  </a>
-                  <a href="#" tabindex="0"  class="mood_tag">
-                  Ride in private cruise
-                  </a>
-                  <a href="#" tabindex="0" class="mood_tag">
-                  Hit the beaches
-                  </a>
-                  <a href="#" tabindex="0" class="mood_tag">
-                  Nature travel
-                  </a>
-                  <a href="#" tabindex="0" class="mood_tag">
-                  See movie
-                  </a>
+
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        Just eat
+                        </a>
+                  </div>
+
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        Go shopping
+                        </a>
+                  </div>
+
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        Book a hotel
+                        </a>
+                  </div>
+
+
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        What to wear
+                        </a>
+                  </div>
+     
+
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        Ride in private cruise
+                        </a>
+                  </div>
+
+
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        Hit the beaches
+                        </a>
+                  </div>
+
+
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        Nature travel
+                        </a>
+                  </div>
+    
+                  <div class="mood_tag">
+                     <a  href="#"  tabindex="0">
+                        See movie
+                        </a>
+                  </div>
+    
+            
+            
                </div>
             </div>
          </section>
@@ -704,30 +846,45 @@
                      </p>
                    
                      <div class="business_vision_row">
-                        <a href="#" class="bn_card">
+                        <div class="bn_card">
+                        <a href="#">
                            <figure>
                               <img src="assets/images/vision-icon.svg"  alt="vision"/>  
                            </figure>
                            <span class="">Vision 2030</span>
                         </a>
-                        <a href="#" class="bn_card">
+                        </div>
+                        
+                        <div  class="bn_card"> 
+                        <a href="#">
                            <figure>
                               <img src="assets/images/business-news.svg" alt="business" />  
                            </figure>
                            <span class="">Business news</span>
                         </a>
-                        <a href="#" class="bn_card">
+                        </div>
+
+                        <div class="bn_card">
+                        <a href="#">
                            <figure>
                               <img src="assets/images/business-event.svg"  alt="business event" />  
                            </figure>
                            <span class="">Business events</span>
                         </a>
-                        <a href="#" class="bn_card">
+                        </div>
+
+
+                        <div class="bn_card">
+                        <a href="#" >
                            <figure>
                               <img src="assets/images/job-portal.svg" alt="job portals" />  
                            </figure>
                            <span class="">Job portals</span>
                         </a>
+                     </div>
+
+
+
                      </div>
                      <div class="did_you_block">
                         <label class="block-label"  tabindex="0">
@@ -873,9 +1030,9 @@
          <section class="update_everyday_block  wave_white_maroon">
             <div class="custom_container">
                <div class="every_update_row">
-                  <h4 class="heading" tabindex="0">Updated. Everyday.
+                  <h2 class="heading" tabindex="0">Updated. Everyday.
                      All about Qatar.
-                  </h4>
+                  </h2>
                   <div class="block_row">
                      <a href="#" class="block"  tabindex="0">
                         <figure>
@@ -901,7 +1058,7 @@
          </section>
          <!--Update  Every Day Close-->
          <!--Directory Block-->
-         <section class="directory_block">
+         <section class="directory_block" id="media"> 
             <div class="custom_container">
                <h2 class="heading"  tabindex="0">Directory.<br>
                   Every contact you need.
@@ -909,39 +1066,75 @@
                <div class="directory_grid">
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Travel advisories</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Tourism & leisure</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0"  class="block card_effect">
                   <span class="title">Hospitals</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Embassies</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Banks</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Useful numbers</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Insurance companies</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title"> Ministries & ministers</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Agencies & organisations</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Police stations</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Courts</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                   <a href="#"  tabindex="0" class="block card_effect">
                   <span class="title">Fire brigdes</span>
+                  <span class="arow_icon">
+                     <img src="assets/images/ic_about_directory_arrow.png" alt="arrow-icon" />
+                  </span>
                   </a>
                </div>
             </div>
@@ -968,15 +1161,18 @@
                </li>
                <li>
                   <p tabindex="0">Like this page?</p>
-                  <div class="like">
-                     <div class="like_btn">
-                        <input type="radio" checked name="like" id="yes">
+                   <fieldset>  
+                           <legend class="hide">like</legend>
+                     <div class="like">
+                        <div class="like_btn">
+                              <input type="radio" checked name="like" id="yes">
                         <label for="yes">Yes</label>
+                        </div>
+                        <div class="like_btn"><input type="radio" name="like" id="no">
+                              <label for="no">No</label>
+                        </div>
                      </div>
-                     <div class="like_btn"><input type="radio" name="like" id="no">
-                        <label for="no">No</label>
-                     </div>
-                  </div>
+                  </fieldset>
                </li>
             </ul>
          </div>
@@ -1006,7 +1202,7 @@
             <div class="footer_inner">
                <div class="foot_row">
                   <div class="copy_right" tabindex="0">
-                     Copyrigt © 2019 MOTC. All rights reserved.
+                     Copyright © 2019 MOTC. All rights reserved.
                   </div>
                   <div class="foot_nav">
                      <nav>
@@ -1030,18 +1226,20 @@
          <!--footer close-->
       </div>
       <!--App_wrapper close-->
-      <!--Js-->
-      <script src="assets/js/jquery.js"></script>
-      <script>
-         window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
-      </script>
-      <script src="assets/js/bootstrap.min.js"></script>
-      <script src="assets/js/bootstrap-select.js"></script>
-      <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-      <script src="assets/js/owl.carousel.min.js"></script>
-      <script src="assets/js/app-slider.js"></script>
-      <script src="assets/js/custom.js"></script>
-      <!--Js Close-->
+<!--Js-->
+<script src="assets/js/jquery.js"></script>
+<script>
+   window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+</script>
+<script src="assets/js/popper.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script src="assets/js/bootstrap-select.js"></script>
+<script src="assets/js//moment.min.js"></script>
+<script src="assets/js/daterangepicker.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/app-slider.js"></script>
+<script src="assets/js/custom.js"></script>
+<script src="assets/js/daterangepicker.js"></script>
+<!--Js Close-->
    </body>
 </html>

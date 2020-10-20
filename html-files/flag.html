@@ -13,80 +13,188 @@
       <link rel="stylesheet" href="assets/css/main.css">
       <link rel="stylesheet" href="assets/css/media.css">
       <link rel="stylesheet" href="assets/css/component_bg.css">
-      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+      <link rel="stylesheet" type="text/css" href="assets/css/daterangepicker.css" />
       <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+      <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
    </head>
 
 <body>
    <!--App_wrapper-->
    <div class="app_wrapper">
-     <!--header-->
-     <header>
-      <div class="header_inner">
-         <div class="innner_wrapper">
-            <div class="nav_brand">
-               <a href="#"  tabindex="0" > <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
-            </div>
-            <div class="nav_col">
-               <div class="header_row">
-                  <div class="abt_qtr_nav desktop_view_head">
-                     <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Innovation</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
-                     </ul>
-                  </div>
-                  <div class="auth_nav">
-                     <ul>
-                        <li class="mob_hide">
-                            <a href="#"  tabindex="0"  class="link" >
-                           <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                        </li>
-                        <li>
-                            <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                           </a>
-                        </li>
-                        <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
-                        <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
-                           <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                           </a>
-                        </li>
-                     </ul>
-                  </div>
+  <!--header-->
+  <header>
+   <div class="header_inner">
+      <div class="innner_wrapper">
+         <div class="nav_brand">
+         <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+         </div>
+         <div class="nav_col">
+            <div class="header_row">
+               <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                  <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                  </a>
+               </figure>
+
+               <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                  <ul>
+                     <li><a href="#" class="link">Life in Qatar</a></li>
+                  <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                     <li><a href="#" class="link">Open Data</a></li>
+                     <li><a href="#" class="link">E-Participation</a></li>
+                  </ul>
                </div>
-               <div class="header_row b-top desktop_view_head">
-                  <div class="nav_menu">
-                     <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">About Qatar</a></li>
-                        <li>
-                            <a href="#"  tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                       </li>
-                     </ul>
-                  </div>
+               <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                  <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                     href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                  <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                  <span>Listen</span></span></span>
+                  <span class="rsbtn_right rsimg rsplay rspart"></span>
+                  <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                  </a>
+               </div>
+               <div class="auth_nav">
+                  <ul>
+                     <li class="mob_hide">
+                        <a href="#" class="link">
+                        <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                        <div class="access_submenu">
+                           <span class="title">Accessbility Options</span>
+                           <ul>
+                              <li>
+                                 <span class="option">Text Size</span>
+                                 <div class="size_wrap">
+                                    <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                    <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                 </div>
+                              </li>
+                              <li>
+                                 <span class="option">Listen Content</span>
+                                 <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                 <img src="assets/images/volume.png" alt="speaker" />
+                                 <span>Listen</span>
+                                 </button>
+                              </li>
+                              <li>
+                                 <span class="option">Contrast</span>
+                                 <button id="themechange">
+                                 <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                 </button>
+                              </li>
+                           </ul>
+                        </div>
+                     </li>
+                     <li>
+                        <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                        </a>
+                     </li>
+                     <li><a href="#" class="link">Login / Signup</a></li>
+                     <li class="mob_menu_nav">
+                     <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="header_row b-top desktop_view_head" id="head2_top">
+               <div class="nav_menu">
+                  <ul>
+                     <li><a href="#" class="link">Explore Services</a></li>
+                     <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                     <li><a href="#" class="link">Media</a></li>
+                     <li class="">
+                        <a href="#" class="link about_qatar_nav">About Qatar</a>
+                        <div class="about_submenu">
+
+                           <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                           <div class="f_row">
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                    </figure>
+                                    <div class="line-1">Qatar Government</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                    </figure>
+                                    <div class="line-1">Hukoomi</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                    </figure>
+                                    <div class="line-1">Qatar</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                    </figure>
+                                    <div class="line-1">Qatar National Vision 2030</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                    </figure>
+                                    <div class="line-1">Government & Legislatives</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/amir.png" alt="The Amir" />
+                                    </figure>
+                                    <div class="line-1">The Amir</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <a href="#"  title="Search" tabindex="0" >
+                            <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
+                  </li>
+                  </ul>
                </div>
             </div>
          </div>
       </div>
-      <!-- Mobile Menu-->
-      <div class="mob_nav">
-         <ul>
-            <li tabindex="0" > <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Innovation</a></li>
-            <li> <a href="#"  tabindex="0" >Open Data</a></li>
-            <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Explore Services</a></li>
-            <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
-            <li> <a href="#"  tabindex="0" >Media</a></li>
-            <li> <a href="#"  tabindex="0" >About Qatar</a></li>
-         </ul>
-      </div>
-      <!-- Mobile Menu-->
-   </header>
-   <!--header close--> 
+   </div>
+</header>
+<!--header close-->
+
 
          <!--Jump Link header-->
          <div class="jump_link_header solid_white_two">
@@ -108,13 +216,13 @@
                </div>
                <div class="nav_menu">
                   <ul>
-                     <li><a href="#fact_figure" tabindex="0" class="link">Facts & Figures</a></li>
-                     <li><a href="#life_qatar" tabindex="0" class="link">Life in Qatar</a></li>
-                     <li><a href="#travel" tabindex="0" class="link">Travel</a></li>
-                     <li><a href="#business" tabindex="0" class="link">Business</a></li>
-                     <li><a href="#future" tabindex="0" class="link">Future</a></li>
-                     <li><a href="#media" tabindex="0" class="link">Media</a></li>
-                     <li><a href="#contact" tabindex="0" class="link">Contact</a></li>
+                     <li><a href="#" tabindex="0" class="link">Facts & Figures</a></li>
+                     <li><a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                     <li><a href="#" tabindex="0" class="link">Travel</a></li>
+                     <li><a href="#" tabindex="0" class="link">Business</a></li>
+                     <li><a href="#" tabindex="0" class="link">Future</a></li>
+                     <li><a href="#" tabindex="0" class="link">Media</a></li>
+                     <li><a href="#" tabindex="0" class="link">Contact</a></li>
                   </ul>
                </div>
             </div>
@@ -132,7 +240,6 @@
       <!--Breadcrumb-->
       
       <!--Flag Banner-->
-      
       <section class="flag_banner_section">
          <div class="custom_container">
             <div class="flex_row">
@@ -146,11 +253,8 @@
                <div class="flex_col_sm_6">
                   <div class="details">
                      <span class="title" tabindex="0">History of a nation</span>
-                     <h1 class="sub-title" tabindex="0">
-                       
-                        Al-Adaam
-                     </h1>
-                     <p class="commn-para" tabindex="0">Qatar’s flag - the symbol of pride and dignity - with its purple-red
+                     <h1 class="sub-title" tabindex="0"> Al-Adaam </h1>
+                     <p tabindex="0">Qatar’s flag - the symbol of pride and dignity - with its purple-red
                         (maroon) and white, stimulates our enthusiasm and dignity. It inspires our admiration for the
                         history of this country and the glories of its people connecting our present to our past.</p>
                   </div>
@@ -166,19 +270,20 @@
             <div class="flex_row">
                <div class="flex_col_sm_6 flex_col_xs_6">
                   <h2 class="title" tabindex="0">Ladaam (Al Adaam)</h2>
-                     <h3 class="content-label" tabindex="0">What does Ladaam mean?</h3>
-                     <p class="commn-para" tabindex="0">“Ladaam” means to the Qataris, since ancient times, <span
-                           class="txt-highlight">dark red color.</span> </p>
+                     <span class="content-label" tabindex="0">What does Ladaam mean?</span>
+                     <p  tabindex="0">“Ladaam” means to the Qataris, since ancient times, 
+                        <span>dark red color.</span> 
+                      </p>
                   
-                     <h3 class="content-label" tabindex="0">Origins of Ladaam</h3>
-                     <p class="commn-para" tabindex="0">The maroon color dates back to the 3rd millennium BC, and it has been
+                     <span class="content-label" tabindex="0">Origins of Ladaam</span>
+                     <p  tabindex="0">The maroon color dates back to the 3rd millennium BC, and it has been
                         associated with the Phoenicians (descended from the Canaanites) in the Arabian Peninsula.
                      </p>
                  
-                     <p class="commn-para" tabindex="0">
+                     <p  tabindex="0">
                         The word Phoenician was derived from the Greek word “Phoenix”, which means maroon people.
                      </p>
-                     <p class="commn-para" tabindex="0">
+                     <p  tabindex="0">
                         The Bin Ghannam Island, which lies near AlKhor, only 40 kilometers from Doha, was the source
                         of this red dye. Affected by the scorching desert sunlight, the reddish dye dried up to turn
                         to purplish red color (maroon). The maroon color of the Qatari flag comes, therefore, in line
@@ -192,13 +297,13 @@
                      <img src="assets/images/flag-sky.jpg" alt="flag" />
                   </figure>
                   <div class="text_wrapper">
-                     <p class="commn-para" tabindex="0">
+                     <p  tabindex="0">
                         It is also the color of the banner of the founder, <strong>Sheikh Jassim bin Mohammed bin
                            Thani</strong>, may God rest his soul.
                      </p>
                   </div>
                   <div class="text_wrapper">
-                     <p class="commn-para" tabindex="0">
+                     <p  tabindex="0">
                         This glorious color places Qatar’s flag among the most outstanding flags in the world,
                         particularly among the Arab countries
                      </p>
@@ -210,7 +315,6 @@
       <!--Ladaam Section-->
 
      <!-- About Sheikh Section -->
-     
      <section class="content_wrap adoption">
       <div class="custom_container">
          <div class="flex_row">
@@ -222,14 +326,14 @@
             <div class="flex_col_sm_6 flex_col_xs_6 m-t-30">
                <div class="text_wrapper">
                   <h3 class="content-label" tabindex="0">Adoption of Alad’am</h3>
-                  <p class="commn-para" tabindex="0"><strong>Sheikh Mohammed bin Thani</strong> envisaged early the need to
+                  <p tabindex="0"><strong>Sheikh Mohammed bin Thani</strong> envisaged early the need to
                      unify the Qataris
                      under one banner, and proposed adopting the purplish red color as it best suited their
                      history and environment.
                   </p>
                </div>
                <div class="text_wrapper">
-                  <p class="commn-para" tabindex="0">After consultation, all Qataris were convinced by the proposal to adopt
+                  <p  tabindex="0">After consultation, all Qataris were convinced by the proposal to adopt
                      the flag, added the name of Qatar on it, and called their unified flag “Alada’am”. Perhaps
                      the raising of a unified flag for the first time inspired young Qataris, headed at that time
                      by Sheikh Jassim bin Mohammed bin Thani the dream of establishing the State.
@@ -238,7 +342,7 @@
             </div>
          </div>
       </div>
-   </section>
+    </section>
      <!-- About Sheikh Section Close-->
 
 
@@ -246,19 +350,19 @@
      <!--The Old Flag-->
      <section class="content_wrap old_flag_section">
       <div class="custom_container">
-      <div class="flex_row">
+      <div class="flex_row flex-dir-col">
           <div class="flex_col_sm_6 flex_col_xs_6">
-              <h2 class="title" tabindex="0">The old flag</h2>
-                  <h3 class="content-label" tabindex="0">When was it adopted?</h3>
-                  <p class="commn-para" tabindex="0">In April of 1932, the British Navy decided that Qatar should have its own
+                  <h4 tabindex="0">The old flag</h4>
+                  <span class="content-label" tabindex="0">When was it adopted?</span>
+                  <p tabindex="0">In April of 1932, the British Navy decided that Qatar should have its own
                   flag.
                   </p>
-                  <p class="commn-para" tabindex="0">It was proposed that the new Qatari flag be in red color, but with nine
+                  <p tabindex="0">It was proposed that the new Qatari flag be in red color, but with nine
                   points (Qatar was the 9th member in Trucial Coast Convention). Qatar, however, refused the
                   use of the red color, and replaced it with the maroon color, being a symbol of its pride
                   throughout history.
                   </p>
-                  <p class="commn-para" tabindex="0">
+                  <p tabindex="0">
                   The nine points were kept with the addition of diamonds with purplish red color separating
                   each point, and also adding the name of Qatar in white color on the maroon background.
                   </p>
@@ -269,18 +373,19 @@
               <figure class="old-flag-img">
                   <img src="assets/images/old-flag.jpg" alt="old-flag" />
               </figure>
-              <span class="botm-right-img"></span>
+          
           </div>
       </div>
       </div>
-  </section>
+      <span class="botm-right-img"></span>
+    </section>
 
      <!--The Old Flag close-->
 
 
         <!-- New Flag Section -->
         <section class="content_wrap new_flag_section">
-         <div class="custom_container">
+          <div class="custom_container">
             <div class="flex_row">
                <div class="flex_col_sm_6 flex_col_xs_6">
                   <figure class="new-flag-img">
@@ -288,17 +393,19 @@
                   </figure>
                </div>
                <div class="flex_col_sm_6 flex_col_xs_6 m-t-30">
-                  <h2 class="sub-title" tabindex="0">The New flag</h2>
+                  <h5 class="sub-title" tabindex="0">The New flag</h5>
                   <div class="text_wrapper">
-                     <h3 class="content-label" tabindex="0">When was the change proposed?</h3>
-                     <p class="commn-para" tabindex="0">In 1960, the ruler of Qatar at the time, Sheikh Ali bin Abdullah Al Thani
+                     <span class="content-label" tabindex="0">When was the change proposed?</span>
+                     
+                     <p  tabindex="0">In 1960, the ruler of Qatar at the time, Sheikh Ali bin Abdullah Al Thani
                         made a slight change on the flag, keeping the white and purplish red colors, as well as the
                         serrated points, but removing the word Qatar and the diamonds. Since then, Qatar has been
                         flying the current flag.
                      </p>
+
                   </div>
                   <div class="text_wrapper">
-                     <p class="commn-para" tabindex="0">In 1971, Qatar joined the United Nations, in the wake of the abolition of
+                     <p  tabindex="0">In 1971, Qatar joined the United Nations, in the wake of the abolition of
                         British Protection, and the Qatari flag with its maroon and white colors was raised.
                      </p>
                   </div>
@@ -309,14 +416,14 @@
       <!-- New Flag Section close-->
 
       <!--Flag Law Card-->
-      <section class="content_wrap cards_section">
+      <div class="content_wrap cards_section">
          <div class="custom_container">
             <div class="flex_row">
                <div class="flex_col_sm_6 flex_col_xs_6">
                   <div class="card_wrap dwnlod_card">
                      <div class="text_wrapper">
-                        <h3 class="content-label" tabindex="0">National flag - Digital copy</h3>
-                        <p class="commn-para" tabindex="0">A digital copy of the national flag Is now available to the public</p>
+                        <span class="content-label" tabindex="0">National flag - Digital copy</span>
+                        <p tabindex="0">A digital copy of the national flag Is now available to the public</p>
                      </div>
                      <a href="#" tabindex="0" class="dwnld_wrap">
                         <figure class="circl_icon">
@@ -330,13 +437,14 @@
                <div class="flex_col_sm_6 flex_col_xs_6">
                   <div class="card_wrap qatar_fl">
                      <div class="text_wrapper">
-                        <h3 class="content-label" tabindex="0">Qatari Flag Law</h3>
-                        <p class="commn-para" tabindex="0"><span class="txt-highlight">Law No.14 of 2012</span> concerning the
+                        <span class="content-label" tabindex="0">Qatari Flag Law</span>
+                        <span class="txt-highlight">Law No.14 of 2012</span>
+                        <p tabindex="0"> concerning the
                            Qatari flag, determines the flag’s color, technical specifications, and protocol, in line
                            with the State constitution.
                         </p>
 
-                        <p class="commn-para" tabindex="0">The Qatari flag (Al Adaam) will continue to fly high in the sky as a
+                        <p  tabindex="0">The Qatari flag (Al Adaam) will continue to fly high in the sky as a
                            symbol of our
                            pride, dignity and freedom.
                         </p>
@@ -347,18 +455,18 @@
                </div>
             </div>
          </div>
-      </section>
+      </div>
       <!--Flag Law Card-->
 
    
 
-      <section class="note_block">
+      <div class="note_block">
 
          <div class="custom_container">
-            <h2 class="all_about" tabindex="0">…and that, is all about
-               Al-adaam & the national flag.</h2>
+            <div class="all_about" tabindex="0">…and that, is all about
+               Al-adaam & the national flag.</div>
          </div>
-      </section>
+      </div>
 
 
       <div class="bottom_links">
@@ -376,17 +484,20 @@
                </a>
             </li>
             <li>
-               
+          
                <p tabindex="0">Like this page?</p>
-               <div class="like">
-                  <div class="like_btn">
-                      <input type="radio" checked name="like" id="yes">
-                  <label for="yes">Yes</label>
-                  </div>
-                  <div class="like_btn"><input type="radio" name="like" id="no">
-                      <label for="no">No</label>
-                  </div>
-              </div>
+               <fieldset>  
+                  <legend class="hide">like</legend>
+              <div class="like">
+                 <div class="like_btn">
+                     <input type="radio" checked name="like" id="yes">
+                 <label for="yes">Yes</label>
+                 </div>
+                 <div class="like_btn"><input type="radio" name="like" id="no">
+                     <label for="no">No</label>
+                 </div>
+             </div>
+           </fieldset>
               
             </li>
          </ul>
@@ -416,33 +527,33 @@
          </div>
       </div>
 
- <!--footer-->
- <footer>
-   <div class="footer_inner">
-      <div class="foot_row">
-         <div class="copy_right" tabindex="0">
-            Copyrigt © 2019 MOTC. All rights reserved.
-         </div>
-         <div class="foot_nav">
-            <nav>
-               <ul>
-                  <li> <a href="#"  tabindex="0" >Entity  Services’ Statistics</a></li>
-                  <li> <a href="#"  tabindex="0" >Useful Links</a></li>
-                  <li> <a href="#"  tabindex="0" >Customer Service</a></li>
-                  <li> <a href="#"  tabindex="0" >Contact Us</a></li>
-                  <li> <a href="#"  tabindex="0" >FAQ</a></li>
-                  <li> <a href="#"  tabindex="0" >Polls & Surveys</a></li>
-                  <li> <a href="#"  tabindex="0" >Mobile Apps</a></li>
-                  <li> <a href="#"  tabindex="0" >Site Map</a></li>
-                  <li> <a href="#"  tabindex="0" >Privacy & Legal</a></li>
-                  <li> <a href="#"  tabindex="0" >Find Help</a></li>
-               </ul>
-            </nav>
+   <!--footer-->
+   <footer>
+      <div class="footer_inner">
+         <div class="foot_row">
+            <div class="copy_right" tabindex="0">
+               Copyright © 2019 MOTC. All rights reserved.
+            </div>
+            <div class="foot_nav">
+               <nav>
+                  <ul>
+                     <li> <a href="#"  tabindex="0" >Entity  Services’ Statistics</a></li>
+                     <li> <a href="#"  tabindex="0" >Useful Links</a></li>
+                     <li> <a href="#"  tabindex="0" >Customer Service</a></li>
+                     <li> <a href="#"  tabindex="0" >Contact Us</a></li>
+                     <li> <a href="#"  tabindex="0" >FAQ</a></li>
+                     <li> <a href="#"  tabindex="0" >Polls & Surveys</a></li>
+                     <li> <a href="#"  tabindex="0" >Mobile Apps</a></li>
+                     <li> <a href="#"  tabindex="0" >Site Map</a></li>
+                     <li> <a href="#"  tabindex="0" >Privacy & Legal</a></li>
+                     <li> <a href="#"  tabindex="0" >Find Help</a></li>
+                  </ul>
+               </nav>
+            </div>
          </div>
       </div>
-   </div>
-</footer>
-<!--footer close-->
+   </footer>
+   <!--footer close-->
    </div>
    <!--App_wrapper close-->
 
@@ -453,13 +564,16 @@
    <script>
       window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
    </script>
-   <script src="assets/js/bootstrap.min.js"></script>
-   <script src="assets/js/bootstrap-select.js"></script>
-   <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-   <script src="assets/js/owl.carousel.min.js"></script>
-   <script src="assets/js/app-slider.js"></script>
-   <script src="assets/js/custom.js"></script>
+     <script src="assets/js/popper.min.js"></script>
+     <script src="assets/js/bootstrap.min.js"></script>
+     <script src="assets/js/bootstrap-select.js"></script>
+     <script src="assets/js/moment.min.js"></script>
+     <script src="assets/js/daterangepicker.min.js"></script>
+     <script src="assets/js/moment.min.js"></script>
+     <script src="assets/js/daterangepicker.min.js"></script>
+     <script src="assets/js/owl.carousel.min.js"></script>
+     <script src="assets/js/app-slider.js"></script>
+     <script src="assets/js/custom.js"></script>
    <!--Js Close-->
 
 </body>

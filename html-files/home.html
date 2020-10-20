@@ -13,121 +13,228 @@
       <link rel="stylesheet" href="assets/css/main.css">
       <link rel="stylesheet" href="assets/css/media.css">
       <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+      <link rel="stylesheet" href="assets/css/Day.css" id="styles" type="text/css" />
    </head>
    <body>
       <!--App_wrapper-->
       <div class="app_wrapper">
-          <!--header-->
-         <header>
-            <div class="header_inner">
-               <div class="innner_wrapper">
-                  <div class="nav_brand">
-                  <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+  <!--header-->
+   <header>
+      <div class="header_inner">
+         <div class="innner_wrapper">
+            <div class="nav_brand">
+            <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+            </div>
+            <div class="nav_col">
+               <div class="header_row">
+                  <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                     <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                     </a>
+                  </figure>
+
+                  <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                     <ul>
+                        <li><a href="#" class="link">Life in Qatar</a></li>
+                     <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                        <li><a href="#" class="link">Open Data</a></li>
+                        <li><a href="#" class="link">E-Participation</a></li>
+                     </ul>
                   </div>
-                  <div class="nav_col">
-                     <div class="header_row">
-                        <div class="abt_qtr_nav desktop_view_head">
-                           <ul>
-                              <li><a href="#" class="link">Life in Qatar</a></li>
-                              <li><a href="#" class="link">Digital Projects</a></li>
-                              <li><a href="#" class="link">Open Data</a></li>
-                              <li><a href="#" class="link">E-Participation</a></li>
-                           </ul>
-                        </div>
-                        <div class="auth_nav">
-                           <ul>
-                              <li class="mob_hide">
-                                 <a href="#" class="link">
-                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                              </li>
-                              <li>
-                                 <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                                 </a>
-                              </li>
-                              <li><a href="#" class="link">Login / Signup</a></li>
-                              <li class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
-                                 <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                                 </a>
-                              </li>
-                           </ul>
-                        </div>
-                     </div>
-                     <div class="header_row b-top desktop_view_head">
-                        <div class="nav_menu">
-                           <ul>
-                              <li><a href="#" class="link">Explore Services</a></li>
-                              <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
-                              <li><a href="#" class="link">Media</a></li>
-                              <li><a href="#" class="link">About Qatar</a></li>
-                              <li>
-                                 <a href="#"> <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                           </li>
-                           </ul>
-                        </div>
-                     </div>
+                  <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                     <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                        href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                     <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                     <span>Listen</span></span></span>
+                     <span class="rsbtn_right rsimg rsplay rspart"></span>
+                     <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                     </a>
+                  </div>
+                  <div class="auth_nav">
+                     <ul>
+                        <li class="mob_hide">
+                           <a href="#" class="link">
+                           <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                           <div class="access_submenu">
+                              <span class="title">Accessbility Options</span>
+                              <ul>
+                                 <li>
+                                    <span class="option">Text Size</span>
+                                    <div class="size_wrap">
+                                       <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                       <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <span class="option">Listen Content</span>
+                                    <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                    <img src="assets/images/volume.png" alt="speaker" />
+                                    <span>Listen</span>
+                                    </button>
+                                 </li>
+                                 <li>
+                                    <span class="option">Contrast</span>
+                                    <button id="themechange">
+                                    <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                    </button>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                           </a>
+                        </li>
+                        <li><a href="#" class="link">Login / Signup</a></li>
+                        <li class="mob_menu_nav">
+                        <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="header_row b-top desktop_view_head" id="head2_top">
+                  <div class="nav_menu">
+                     <ul>
+                        <li><a href="#" class="link">Explore Services</a></li>
+                        <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                        <li><a href="#" class="link">Media</a></li>
+                        <li class="">
+                           <a href="#" class="link about_qatar_nav">About Qatar</a>
+                           <div class="about_submenu">
+
+                              <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                              <div class="f_row">
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                       </figure>
+                                       <div class="line-1">Qatar Government</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                       </figure>
+                                       <div class="line-1">Hukoomi</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                       </figure>
+                                       <div class="line-1">Qatar</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                       </figure>
+                                       <div class="line-1">Qatar National Vision 2030</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                       </figure>
+                                       <div class="line-1">Government & Legislatives</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/amir.png" alt="The Amir" />
+                                       </figure>
+                                       <div class="line-1">The Amir</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                              </div>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#"  title="Search" tabindex="0" >
+                               <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
+                     </li>
+                     </ul>
                   </div>
                </div>
             </div>
-            <!-- Mobile Menu-->
-            <!-- <div class="mob_nav">
-               <ul>
-                  <li><a href="#">Life in Qatar</a></li>
-                  <li><a href="#">Innovation</a></li>
-                  <li><a href="#">Open Data</a></li>
-                  <li><a href="#">Life in Qatar</a></li>
-                  <li><a href="#">Explore Services</a></li>
-                  <li><a href="#">Downloads, Utilities & Directory</a></li>
-                  <li><a href="#">Media</a></li>
-                  <li><a href="#">About Qatar</a></li>
-               </ul>
-            </div> -->
-            <!-- Mobile Menu-->
-         </header>
-      <!--header close-->
+         </div>
+      </div>
+   </header>
+   <!--header close-->
+
+
          <!-- Home Module -->
-         <div class="home">
-            <!--Banner section-->
-            <section class="home_banner_section">
-               <figure class="banner_img">
-                  <img src="assets/images/home-banner.jpg" alt="banner-img" />
-                  <div class="banner_container">
-                     <!--Owl Slider-->
-                     <div id="home_owl" class="owl-carousel owl-loaded owl-drag">
-                        <!-- content repeat -->
-                        <div class="item" tabindex="0">
-                           <h1>Welcome to Hukoomi</h1>
-                           <p class="commn-para">We help you find authentic information about all
-                              government services and benefits for you.
-                           </p>
-                        </div>
-                        <!-- content repeat close-->
-                        <!-- content repeat -->
-                        <div class="item" tabindex="0">
-                           <h1>Welcome to Hukoomi</h1>
-                        </div>
-                        <!-- content repeat close-->
+         <!--Banner section-->
+         <section class="home home_banner_section">
+            <figure class="banner_img">
+               <img src="assets/images/home-banner.jpg" alt="banner-img" />
+               <div class="banner_container">
+                  <!--Owl Slider-->
+                  <div id="home_owl" class="owl-carousel owl-loaded owl-drag">
+                     <!-- content repeat -->
+                     <div class="item" tabindex="0">
+                        <h1>Welcome to Hukoomi</h1>
+                        <p class="commn-para">We help you find authentic information about all
+                           government services and benefits for you.
+                        </p>
                      </div>
-                     <!--Owl Slider close-->
+                     <!-- content repeat close-->
+                     <!-- content repeat -->
+                     <div class="item" tabindex="0">
+                        <h1>Welcome to Hukoomi</h1>
+                     </div>
+                     <!-- content repeat close-->
                   </div>
-               </figure>
-            </section>
-            <!--Banner section close-->
-            <!-- Search Section -->
-            <div class="personal_search_block">
-               <div class="custom_container">
-                  <div class="search_section">
-                     <!-- search -->
-                     <div class="inner_custom_container">
-                        <div class="srch_wrap">
-                           <ul>
-   
+                  <!--Owl Slider close-->
+               </div>
+            </figure>
+         </section>
+         <!--Banner section close-->
+         <!-- Search Section -->
+         <div class="home personal_search_block">
+            <div class="custom_container">
+               <div class="search_section">
+                  <!-- search -->
+                  <div class="inner_custom_container">
+                     <div class="srch_wrap">
+                        <ul>
                            <li tabindex="0" class="select_persona">
                               <div class="person_col">
                                  <label for="persona">I'm a</label>
                                  <div class="txt_wrapper">
                                     <input type="text" placeholder="eg. Tourist" id="persona"  value=""  />
                                     <span class="detect-icon">
-                                    <img src="assets/images/arrow-down-s-line.svg" alt="location" />
+                                    <img src="assets/images/arrow-down-s-line.svg" alt="persona dropdown" />
                                     </span>
                                  </div>
                               </div>
@@ -136,168 +243,155 @@
                               <div class="location_col">
                                  <label for="place">And I'm from</label>
                                  <div class="txt_wrapper">
-                                   
-                                 <input type="text" name="city"  id="place" placeholder="eg. Qatar" list="cityname" autocomplete="off">
-                                 <datalist id="cityname">
-                                 <option value="Boston">
-                                 <option value="Cambridge">
-                                 </datalist>
+                                    <input type="text" name="city"  id="place" placeholder="eg. Qatar" list="cityname" autocomplete="off">
+                                    <datalist id="cityname">
+                                       <option value="Boston">
+                                       <option value="Cambridge">
+                                    </datalist>
                                     <span class="detect-icon">
                                     <img src="assets/images/location.svg" alt="location" />
                                     </span>
-                                   
                                  </div>
                               </div>
                            </li>
                            <li tabindex="0">
-                              <div class="looking_for_col">
-                                 <label for="looking_for">And I'm looking for</label>
-                                 <input type="text" id="looking_for" placeholder="eg. qatar travel with family" />
-                              </div>
-                           </li>
-                           </ul>
-   
-                           <div class="btn_wrapper">
-                              <button class="search_btn">Search</button>
+                           <div class="looking_for_col">
+                           <label for="looking_for">And I'm looking for</label>
+                           <input type="text" id="looking_for" placeholder="eg. qatar travel with family" />
                            </div>
-                           
+                           </li>
+                        </ul>
+                        <div class="btn_wrapper">
+                        <button class="search_btn">Search</button>
                         </div>
                      </div>
-                     <div class="persona_tag_wrapper">
-                        <div class="box">
-                           <span class="persona_title">Citizen</span>
-                           <ul>
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Parent" name="persona" value="Parent">
-                                    <label for="Parent">Parent</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Employee" name="persona" value="Employee">
-                                    <label for="Employee">Employee</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Businessman" name="persona"  value="Businessman">
-                                    <label for="Businessman">Businessman</label>
-                                 </div>
-                              </li>
-                           </ul>
-                        </div>
-                        <div class="box">
-                           <span class="persona_title">Resident</span>
-                           <ul>
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Demo1" name="persona" value="Demo1">
-                                    <label for="Demo1">Demo1</label>
-                                 </div>
-                              </li>
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Demo2" name="persona" value="Demo2">
-                                    <label for="Demo2">Demo2</label>
-                                 </div>
-                              </li>
-                           </ul>
-                        </div>
-                        <div class="box">
-                           <span class="persona_title">Visitor</span>
-                           <ul>
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Demo3" name="persona" value="Demo3">
-                                    <label for="Demo3">Demo3</label>
-                                 </div>
-                              </li>
-   
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Demo4" name="persona" value="Demo4">
-                                    <label for="Demo4">Demo4</label>
-                                 </div>
-                              </li>
-   
-   
-                              <li>
-                                 <div class="radio_wrap">
-                                    <input type="radio" id="Demo5" name="persona" value="Tourist">
-                                    <label for="Demo5">Demo5</label>
-                                 </div>
-                              </li>
-                         
-                           </ul>
-                        </div>
-                     </div>
-                     <!-- search close -->
                   </div>
+                        <fieldset class="persona_tag_wrapper"> 
+                 
+                           <legend class="hide">Persona Selection</legend>
+                   <div class="box">
+                  <span class="persona_title">Citizen</span>
+                  <ul>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Parent" name="persona" value="Parent">
+                  <label for="Parent">Parent</label>
+                  </div>
+                  </li>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Employee" name="persona" value="Employee">
+                  <label for="Employee">Employee</label>
+                  </div>
+                  </li>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Businessman" name="persona"  value="Businessman">
+                  <label for="Businessman">Businessman</label>
+                  </div>
+                  </li>
+                  </ul>
+                  </div>
+                  <div class="box">
+                  <span class="persona_title">Resident</span>
+                  <ul>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Demo1" name="persona" value="Demo1">
+                  <label for="Demo1">Demo1</label>
+                  </div>
+                  </li>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Demo2" name="persona" value="Demo2">
+                  <label for="Demo2">Demo2</label>
+                  </div>
+                  </li>
+                  </ul>
+                  </div>
+                  <div class="box">
+                  <span class="persona_title">Visitor</span>
+                  <ul>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Demo3" name="persona" value="Demo3">
+                  <label for="Demo3">Demo3</label>
+                  </div>
+                  </li>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Demo4" name="persona" value="Demo4">
+                  <label for="Demo4">Demo4</label>
+                  </div>
+                  </li>
+                  <li>
+                  <div class="radio_wrap">
+                  <input type="radio" id="Demo5" name="persona" value="Tourist">
+                  <label for="Demo5">Demo5</label>
+                  </div>
+                  </li>
+                  </ul>
+                  </div>
+               </fieldset>
+                  
+               
+                  <!-- search close -->
                </div>
             </div>
-           <!-- Search Section close-->
          </div>
+         <!-- Search Section close-->
          <!-- Home Module close-->
          <!--footer-->
          <footer>
-            <div class="footer_inner">
-               <div class="foot_row">
-                  <div class="copy_right">
-                     Copyrigt © 2019 MOTC. All rights reserved.
-                  </div>
-                  <div class="foot_nav">
-                     <nav>
-                        <ul>
-                           <li><a href="#">Entity  Services’ Statistics</a></li>
-                           <li><a href="#">Useful Links</a></li>
-                           <li><a href="#">Customer Service</a></li>
-                           <li><a href="#">Contact Us</a></li>
-                           <li><a href="#">FAQ</a></li>
-                           <li><a href="#">Polls & Surveys</a></li>
-                           <li><a href="#">Mobile Apps</a></li>
-                           <li><a href="#">Site Map</a></li>
-                           <li><a href="#">Privacy & Legal</a></li>
-                           <li><a href="#">Find Help</a></li>
-                        </ul>
-                     </nav>
-                  </div>
-               </div>
-            </div>
+         <div class="footer_inner">
+         <div class="foot_row">
+         <div class="copy_right">
+         Copyright © 2019 MOTC. All rights reserved.
+         </div>
+         <div class="foot_nav">
+         <nav>
+         <ul>
+         <li><a href="#">Entity  Services’ Statistics</a></li>
+         <li><a href="#">Useful Links</a></li>
+         <li><a href="#">Customer Service</a></li>
+         <li><a href="#">Contact Us</a></li>
+         <li><a href="#">FAQ</a></li>
+         <li><a href="#">Polls & Surveys</a></li>
+         <li><a href="#">Mobile Apps</a></li>
+         <li><a href="#">Site Map</a></li>
+         <li><a href="#">Privacy & Legal</a></li>
+         <li><a href="#">Find Help</a></li>
+         </ul>
+         </nav>
+         </div>
+         </div>
+         </div>
          </footer>
          <!--footer close-->
-
-
          <!--Cookies Banner-->
-
-            <div class="cookies_banner_wrapper">
-                     <p tabindex="0">
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                     </p>
-
-                     <button class="primary_btn" tabindex="0">
-                        Allow
-                     </button>
-            </div>
-
-          <!--Cookies Banner close-->
-
-
-
+         <div class="cookies_banner_wrapper">
+         <p tabindex="0">
+            Hukoomi uses cookies in order to offer you the most relevant information and experience. Please accept cookies for optimal performance. 
+         </p>
+         <button class="primary_btn" tabindex="0">
+         Allow
+         </button>
+         </div>
+         <!--Cookies Banner close-->
       </div>
       <!--App_wrapper close-->
-
       <!--Js-->
       <script src="assets/js/jquery.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
       <script>
          window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
       </script>
+      <script src="assets/js/popper.min.js"></script>
       <script src="assets/js/bootstrap.min.js"></script>
       <script src="assets/js/bootstrap-select.js"></script>
-      <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-      <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-      <script>window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');</script>
+      <script src="assets/js/moment.min.js"></script>
+      <script src="assets/js/daterangepicker.min.js"></script>
+      <script src="assets/js/moment.min.js"></script>
+      <script src="assets/js/daterangepicker.min.js"></script>
       <script src="assets/js/owl.carousel.min.js"></script>
       <script src="assets/js/app-slider.js"></script>
       <script src="assets/js/custom.js"></script>

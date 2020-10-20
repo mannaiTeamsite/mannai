@@ -12,6 +12,7 @@
    <link rel="stylesheet" href="assets/css/style.css">
    <link rel="stylesheet" href="assets/css/main.css">
    <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" href="assets/css/owl.carousel.min.css" />
 </head>
 
 <body>
@@ -31,7 +32,7 @@
                      <div class="abt_qtr_nav desktop_view_head">
                         <ul>
                            <li><a href="#" class="link">Life in Qatar</a></li>
-                           <li><a href="#" class="link">Innovation</a></li>
+                          <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
                            <li><a href="#" class="link">Open Data</a></li>
                            <li><a href="#" class="link">E-Participation</a></li>
                         </ul>
@@ -112,7 +113,7 @@
          <div class="custom_container">
             <div class="f_row f_flow_col">
                <div class="f_col">
-                  <label for="search">Search</label>
+                  <label for="search" class="none"> Search</label>
                   <div class="category_search_input" tabindex="0">
                      <input type="text" id="search" placeholder="Search" />
                      <span class="detect-icon">
@@ -162,224 +163,299 @@
             <div class="list_row_wrapper">
                <div class="grid_view">
                   <div class="f_row current_polls">
+
+                      <!--Owl Slider-->
+                  <div id="currents_polls_owl" class="owl-carousel owl-loaded owl-drag">
+                   
                      <!-- card repeat -->
-                     <div class="category_card category_polls_card">
-                        <div tabindex="0" class="list_card">
-                           <div class="details">
-                              <h2 class="card_title" tabindex="0">How would you rate COVID-19 Self-
-                                 Assessment Service?</h2>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="excellent" name="rate" value="excellent" checked>
-                                    <label for="excellent" tabindex="0">Excellent</label>
+                     <div class="item">
+                           <!-- card repeat -->
+                           <div class="category_card category_polls_card">
+                              <div tabindex="0" class="list_card">
+                                 <div class="details">
+                                    <h2 class="card_title" tabindex="0">How would you rate COVID-19 Self-
+                                       Assessment Service?</h2>
+                                    <div class="row_wrap">
+                                       <div class="radio_wrap" tabindex="0">
+                                          <input type="radio" id="excellent" name="rate" value="excellent" checked>
+                                          <label for="excellent" tabindex="0">Excellent</label>
+                                       </div>
+                                       <div class="progress_wrap active">
+                                          <span class="progress_bar " style="width: 15%;"></span>
+                                          <span class="percentage" tabindex="0">15%</span>
+                                       </div>
+                                    </div>
+                                    <div class="row_wrap">
+                                       <div class="radio_wrap" tabindex="0">
+                                          <input type="radio" id="vgood" name="rate" value="vgood">
+                                          <label for="vgood" tabindex="0">Very Good</label>
+                                       </div>
+                                       <div class="progress_wrap">
+                                          <span class="progress_bar" style="width: 35%;"></span>
+                                          <span class="percentage" tabindex="0">35%</span>
+                                       </div>
+                                    </div>
+                                    <div class="row_wrap">
+                                       <div class="radio_wrap" tabindex="0">
+                                          <input type="radio" id="good" name="rate" value="good">
+                                          <label for="good" tabindex="0">Good</label>
+                                       </div>
+                                       <div class="progress_wrap">
+                                          <span class="progress_bar" style="width: 5%;"></span>
+                                          <span class="percentage" tabindex="0">5%</span>
+                                       </div>
+                                    </div>
+                                    <div class="row_wrap">
+                                       <div class="radio_wrap" tabindex="0">
+                                          <input type="radio" id="acceptable" name="rate" value="acceptable">
+                                          <label for="acceptable" tabindex="0">Acceptable</label>
+                                       </div>
+                                       <div class="progress_wrap">
+                                          <span class="progress_bar" style="width: 18%;"></span>
+                                          <span class="percentage" tabindex="0">18%</span>
+                                       </div>
+                                    </div>
+                                    <div class="row_wrap">
+                                       <div class="radio_wrap" tabindex="0">
+                                          <input type="radio" id="nacceptable" name="rate" value="nacceptable">
+                                          <label for="nacceptable" tabindex="0">Not Acceptable</label>
+                                       </div>
+                                       <div class="progress_wrap">
+                                          <span class="progress_bar" style="width: 8%;"></span>
+                                          <span class="percentage" tabindex="0">8%</span>
+                                       </div>
+                                    </div>
+                                    <div class="vote_wrap">
+                                       <span class="total_count" tabindex="0">Total Votes 450</span>
+                                    
+                                    </div>
                                  </div>
-                                 <div class="progress_wrap active">
-                                    <span class="progress_bar " style="width: 15%;"></span>
-                                    <span class="percentage" tabindex="0">15%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="vgood" name="rate" value="vgood">
-                                    <label for="vgood" tabindex="0">Very Good</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 35%;"></span>
-                                    <span class="percentage" tabindex="0">35%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="good" name="rate" value="good">
-                                    <label for="good" tabindex="0">Good</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 5%;"></span>
-                                    <span class="percentage" tabindex="0">5%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="acceptable" name="rate" value="acceptable">
-                                    <label for="acceptable" tabindex="0">Acceptable</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 18%;"></span>
-                                    <span class="percentage" tabindex="0">18%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="nacceptable" name="rate" value="nacceptable">
-                                    <label for="nacceptable" tabindex="0">Not Acceptable</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 8%;"></span>
-                                    <span class="percentage" tabindex="0">8%</span>
-                                 </div>
-                              </div>
-                              <div class="vote_wrap">
-                                 <span class="total_count" tabindex="0">Total Votes 450</span>
-                                 <button class="rouge_btn" tabindex="0">Back to Voting</button>
+
                               </div>
                            </div>
-
-                        </div>
+                           <!-- card repeat close -->
                      </div>
-                     <!-- card repeat close -->
-                     <!-- card repeat -->
-                     <div class="category_card category_polls_card">
-                        <div  tabindex="0" class="list_card">
-                           <div class="details">
-                              <h2 class="card_title" tabindex="0">How would you rate COVID-19 Self-
-                                 Assessment Service?</h2>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="excellent" name="rate" value="excellent" checked>
-                                    <label for="excellent" tabindex="0">Excellent</label>
+                      <!-- card repeat -->
+
+
+                        <!-- card repeat -->
+                       <div class="item">
+                        <!-- card repeat -->
+                        <div class="category_card category_polls_card">
+                           <div tabindex="0" class="list_card">
+                              <div class="details">
+                                 <h2 class="card_title" tabindex="0">How would you rate COVID-19 Self-
+                                    Assessment Service?</h2>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="excellent" name="rate" value="excellent" checked>
+                                       <label for="excellent" tabindex="0">Excellent</label>
+                                    </div>
+                                    <div class="progress_wrap active">
+                                       <span class="progress_bar " style="width: 15%;"></span>
+                                       <span class="percentage" tabindex="0">15%</span>
+                                    </div>
                                  </div>
-                                 <div class="progress_wrap active">
-                                    <span class="progress_bar " style="width: 15%;"></span>
-                                    <span class="percentage" tabindex="0">15%</span>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="vgood" name="rate" value="vgood">
+                                       <label for="vgood" tabindex="0">Very Good</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 35%;"></span>
+                                       <span class="percentage" tabindex="0">35%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="good" name="rate" value="good">
+                                       <label for="good" tabindex="0">Good</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 5%;"></span>
+                                       <span class="percentage" tabindex="0">5%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="acceptable" name="rate" value="acceptable">
+                                       <label for="acceptable" tabindex="0">Acceptable</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 18%;"></span>
+                                       <span class="percentage" tabindex="0">18%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="nacceptable" name="rate" value="nacceptable">
+                                       <label for="nacceptable" tabindex="0">Not Acceptable</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 8%;"></span>
+                                       <span class="percentage" tabindex="0">8%</span>
+                                    </div>
+                                 </div>
+                                 <div class="vote_wrap">
+                                    <span class="total_count" tabindex="0">Total Votes 450</span>
+                                 
                                  </div>
                               </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="vgood" name="rate" value="vgood">
-                                    <label for="vgood" tabindex="0">Very Good</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 35%;"></span>
-                                    <span class="percentage" tabindex="0">35%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="good" name="rate" value="good">
-                                    <label for="good" tabindex="0">Good</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 5%;"></span>
-                                    <span class="percentage" tabindex="0">5%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="acceptable" name="rate" value="acceptable">
-                                    <label for="acceptable" tabindex="0">Acceptable</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 18%;"></span>
-                                    <span class="percentage" tabindex="0">18%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="nacceptable" name="rate" value="nacceptable">
-                                    <label for="nacceptable" tabindex="0">Not Acceptable</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 8%;"></span>
-                                    <span class="percentage" tabindex="0">8%</span>
-                                 </div>
-                              </div>
-                              <div class="vote_wrap">
-                                 <span class="total_count" tabindex="0">Total Votes 450</span>
-                                 <button class="rouge_btn" tabindex="0">Back to Voting</button>
-                              </div>
+
                            </div>
-
                         </div>
-                     </div>
-                     <!-- card repeat close -->
+                        <!-- card repeat close -->
+                       </div>
+                       <!-- card repeat -->
 
                      <!-- card repeat -->
-                     <div class="category_card category_polls_card">
-                        <div tabindex="0" class="list_card">
-                           <div class="details">
-                              <h2 class="card_title" tabindex="0">How would you rate COVID-19 Self-
-                                 Assessment Service?</h2>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="excellent" name="rate" value="excellent" checked>
-                                    <label for="excellent" tabindex="0">Excellent</label>
+                      <div class="item">
+                        <!-- card repeat -->
+                        <div class="category_card category_polls_card">
+                           <div tabindex="0" class="list_card">
+                              <div class="details">
+                                 <h2 class="card_title" tabindex="0">How would you rate COVID-19 Self-
+                                    Assessment Service?</h2>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="excellent" name="rate" value="excellent" checked>
+                                       <label for="excellent" tabindex="0">Excellent</label>
+                                    </div>
+                                    <div class="progress_wrap active">
+                                       <span class="progress_bar " style="width: 15%;"></span>
+                                       <span class="percentage" tabindex="0">15%</span>
+                                    </div>
                                  </div>
-                                 <div class="progress_wrap active">
-                                    <span class="progress_bar " style="width: 15%;"></span>
-                                    <span class="percentage" tabindex="0">15%</span>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="vgood" name="rate" value="vgood">
+                                       <label for="vgood" tabindex="0">Very Good</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 35%;"></span>
+                                       <span class="percentage" tabindex="0">35%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="good" name="rate" value="good">
+                                       <label for="good" tabindex="0">Good</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 5%;"></span>
+                                       <span class="percentage" tabindex="0">5%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="acceptable" name="rate" value="acceptable">
+                                       <label for="acceptable" tabindex="0">Acceptable</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 18%;"></span>
+                                       <span class="percentage" tabindex="0">18%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="nacceptable" name="rate" value="nacceptable">
+                                       <label for="nacceptable" tabindex="0">Not Acceptable</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 8%;"></span>
+                                       <span class="percentage" tabindex="0">8%</span>
+                                    </div>
+                                 </div>
+                                 <div class="vote_wrap">
+                                    <span class="total_count" tabindex="0">Total Votes 450</span>
+                                 
                                  </div>
                               </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="vgood" name="rate" value="vgood">
-                                    <label for="vgood" tabindex="0">Very Good</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 35%;"></span>
-                                    <span class="percentage" tabindex="0">35%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="good" name="rate" value="good">
-                                    <label for="good" tabindex="0">Good</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 5%;"></span>
-                                    <span class="percentage" tabindex="0">5%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="acceptable" name="rate" value="acceptable">
-                                    <label for="acceptable" tabindex="0">Acceptable</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 18%;"></span>
-                                    <span class="percentage" tabindex="0">18%</span>
-                                 </div>
-                              </div>
-                              <div class="row_wrap">
-                                 <div class="radio_wrap" tabindex="0">
-                                    <input type="radio" id="nacceptable" name="rate" value="nacceptable">
-                                    <label for="nacceptable" tabindex="0">Not Acceptable</label>
-                                 </div>
-                                 <div class="progress_wrap">
-                                    <span class="progress_bar" style="width: 8%;"></span>
-                                    <span class="percentage" tabindex="0">8%</span>
-                                 </div>
-                              </div>
-                              <div class="vote_wrap">
-                                 <span class="total_count" tabindex="0">Total Votes 450</span>
-                                 <button class="rouge_btn" tabindex="0">Back to Voting</button>
-                              </div>
-                           </div>
 
+                           </div>
                         </div>
+                        <!-- card repeat close -->
+                      </div>
+                      <!-- card repeat -->
+
+
+                     <!-- card repeat -->
+                     <div class="item">
+                        <!-- card repeat -->
+                        <div class="category_card category_polls_card">
+                           <div tabindex="0" class="list_card">
+                              <div class="details">
+                                 <h2 class="card_title" tabindex="0">How would you rate COVID-19 Self-
+                                    Assessment Service?</h2>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="excellent" name="rate" value="excellent" checked>
+                                       <label for="excellent" tabindex="0">Excellent</label>
+                                    </div>
+                                    <div class="progress_wrap active">
+                                       <span class="progress_bar " style="width: 15%;"></span>
+                                       <span class="percentage" tabindex="0">15%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="vgood" name="rate" value="vgood">
+                                       <label for="vgood" tabindex="0">Very Good</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 35%;"></span>
+                                       <span class="percentage" tabindex="0">35%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="good" name="rate" value="good">
+                                       <label for="good" tabindex="0">Good</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 5%;"></span>
+                                       <span class="percentage" tabindex="0">5%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="acceptable" name="rate" value="acceptable">
+                                       <label for="acceptable" tabindex="0">Acceptable</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 18%;"></span>
+                                       <span class="percentage" tabindex="0">18%</span>
+                                    </div>
+                                 </div>
+                                 <div class="row_wrap">
+                                    <div class="radio_wrap" tabindex="0">
+                                       <input type="radio" id="nacceptable" name="rate" value="nacceptable">
+                                       <label for="nacceptable" tabindex="0">Not Acceptable</label>
+                                    </div>
+                                    <div class="progress_wrap">
+                                       <span class="progress_bar" style="width: 8%;"></span>
+                                       <span class="percentage" tabindex="0">8%</span>
+                                    </div>
+                                 </div>
+                                 <div class="vote_wrap">
+                                    <span class="total_count" tabindex="0">Total Votes 450</span>
+                                 
+                                 </div>
+                              </div>
+
+                           </div>
+                        </div>
+                        <!-- card repeat close -->
                      </div>
-                     <!-- card repeat close -->
+                     <!-- card repeat -->
+                     
+                   </div>
+              
 
                   </div>
                </div>
 
-                <!-- Pagenation -->
-                <ul class="pagination_wrapper">
-                  <li>
-                     <a href="#" class="active">1</a>
-                  </li>
-                  <li>
-                     <a href="#">2</a>
-                  </li>
-                  <li>
-                     <a href="#">3</a>
-                  </li>
-                  <li>
-                     <a href="#">
-                        >
-                     </a>
-                  </li>
-               </ul>
-               <!-- Pagenation close -->
+      
 
             </div>
            </div>
@@ -421,15 +497,21 @@
 
 
 
-   <!-- JS -->
-   <script src="assets/js/jquery.js"></script>
-   <script>
-      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
-   </script>
-   <script src="assets/js/bootstrap.min.js"></script>
-   <script src="assets/js/bootstrap-select.js"></script>
-   <script src="assets/js/custom.js"></script>
-   <!-- JS close -->
+      <!--Js-->
+      <script src="assets/js/jquery.js"></script>
+      <script>
+         window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+      </script>
+      <script src="assets/js/popper.min.js"></script>
+      <script src="assets/js/bootstrap.min.js"></script>
+      <script src="assets/js/bootstrap-select.js"></script>
+      <script src="assets/js//moment.min.js"></script>
+      <script src="assets/js/daterangepicker.min.js"></script>
+      <script src="assets/js/owl.carousel.min.js"></script>
+      <script src="assets/js/app-slider.js"></script>
+      <script src="assets/js/custom.js"></script>
+      <script src="assets/js/daterangepicker.js"></script>
+      <!--Js Close-->
 
 </body>
 

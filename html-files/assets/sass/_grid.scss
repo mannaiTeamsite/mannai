@@ -2,7 +2,17 @@
     display: flex;
     margin: 0 -10px;
     flex-wrap: wrap;
+    direction: ltr;
 }
+
+
+.ar{
+    .flex_row {
+        direction: rtl;
+    }
+}
+
+
 .right_flex{
     align-items: flex-end;
 }
@@ -43,7 +53,7 @@
     padding: 0 10px;
 }
 .flex_col_sm_8{
-    width: 76.7%;
+    width: 66.666667%;
     padding: 0 10px;
 }
 .flex_col_sm_9{

@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/explore-services.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
     <!-- ================== bootstrap css ========================= -->
     <link rel="stylesheet" href="assets/css/bootstrap.css">
     <!-- ================== bootstrap css ========================= -->
@@ -17,95 +18,197 @@
 
 <body class="">
     <div class="app_wrapper">
-        <header>
+         <!--header-->
+         <header>
             <div class="header_inner">
-                <div class="innner_wrapper">
-                    <div class="nav_brand">
-                        <a href="#" tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
-                    </div>
-                    <div class="nav_col">
-                        <div class="header_row">
-                            <div class="abt_qtr_nav desktop_view_head">
-                                <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Life in Qatar</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Innovation</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Open Data</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">E-Participation</a></li>
-                                </ul>
-                            </div>
-                            <div class="auth_nav">
-                                <ul>
-                                    <li class="mob_hide">
-                                        <a href="#" tabindex="0" class="link">
-                                            <img src="assets/images/accessibility.png" alt="Accessibility"
-                                                class="access_icon"> Accessibility</a>
-                                    </li>
-                                    <li>
-                                        <a href="#" tabindex="0" id="lang_toggle" class="link"> عربى <img
-                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
-                                                alt="language-icon">
-                                        </a>
-                                    </li>
-                                    <li> <a href="#" tabindex="0" class="link">Login / Signup</a></li>
-                                    <li class="mob_menu_nav"> <a href="#" tabindex="0" id="mob_menu_toggle">
-                                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
+               <div class="innner_wrapper">
+                  <div class="nav_brand">
+                    <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+                  </div>
+                  <div class="nav_col">
+                     <div class="header_row">
+                         <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                            <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                            </a>
+                         </figure>
+
+                        <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                           <ul>
+                              <li><a href="#" class="link">Life in Qatar</a></li>
+                             <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                              <li><a href="#" class="link">Open Data</a></li>
+                              <li><a href="#" class="link">E-Participation</a></li>
+                           </ul>
                         </div>
-                        <div class="header_row b-top desktop_view_head">
-                            <div class="nav_menu">
-                                <ul>
-                                    <li> <a href="#" tabindex="0" class="link">Explore Services</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">Downloads, Utilities &amp; Directory</a>
-                                    </li>
-                                    <li> <a href="#" tabindex="0" class="link">Media</a></li>
-                                    <li> <a href="#" tabindex="0" class="link">About Qatar</a></li>
-                                    <li>
-                                        <a href="#" tabindex="0"> <img src="assets/images/ic_header_search.png"
-                                                title="Search" class="search_icon" alt="Search"></a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                           <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                              href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                           <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                           <span>Listen</span></span></span>
+                           <span class="rsbtn_right rsimg rsplay rspart"></span>
+                           <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                           </a>
                         </div>
-                    </div>
-                </div>
+                        <div class="auth_nav">
+                           <ul>
+                              <li class="mob_hide">
+                                 <a href="#" class="link">
+                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                                 <div class="access_submenu">
+                                    <span class="title">Accessbility Options</span>
+                                    <ul>
+                                       <li>
+                                          <span class="option">Text Size</span>
+                                          <div class="size_wrap">
+                                             <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                             <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                          </div>
+                                       </li>
+                                       <li>
+                                          <span class="option">Listen Content</span>
+                                          <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                          <img src="assets/images/volume.png" alt="speaker" />
+                                          <span>Listen</span>
+                                          </button>
+                                       </li>
+                                       <li>
+                                          <span class="option">Contrast</span>
+                                          <button id="themechange">
+                                          <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                          </button>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                              <li>
+                                 <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                                 </a>
+                              </li>
+                              <li><a href="#" class="link">Login / Signup</a></li>
+                              <li class="mob_menu_nav">
+                                <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="header_row b-top desktop_view_head" id="head2_top">
+                        <div class="nav_menu">
+                           <ul>
+                              <li><a href="#" class="link">Explore Services</a></li>
+                              <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                              <li><a href="#" class="link">Media</a></li>
+                              <li class="">
+                                 <a href="#" class="link about_qatar_nav">About Qatar</a>
+                                 <div class="about_submenu">
+
+                                    <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                                    <div class="f_row">
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar Government</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Hukoomi</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar National Vision 2030</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Government & Legislatives</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/amir.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">The Amir</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                    </div>
+                                 </div>
+                              </li>
+                              <li>
+                                 <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                           </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
             </div>
-            <!-- Mobile Menu-->
-            <div class="mob_nav">
-                <ul>
-                    <li tabindex="0"> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Innovation</a></li>
-                    <li> <a href="#" tabindex="0">Open Data</a></li>
-                    <li> <a href="#" tabindex="0">Life in Qatar</a></li>
-                    <li> <a href="#" tabindex="0">Explore Services</a></li>
-                    <li> <a href="#" tabindex="0">Downloads, Utilities &amp; Directory</a></li>
-                    <li> <a href="#" tabindex="0">Media</a></li>
-                    <li> <a href="#" tabindex="0">About Qatar</a></li>
-                </ul>
-            </div>
-            <!-- Mobile Menu-->
-        </header>
+         </header>
+         <!--header close-->
         <!-- ======= header ======= -->
 
         <div class="explore_services_wrapper" tabindex="-1">
             <div class="services_inner" id="services_inner" tabindex="-1">
                 <div class="serv_tabs">
                     <!-- Nav tabs -->
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <ul class="nav nav-tabs" id="myTab" role="navigation">
                         <li class="nav-item">
                             <div class="new_bedge">New</div>
-                            <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="tab"
-                                aria-controls="explore" aria-selected="true" tabindex="0">Explore</a>
+                            <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="button"
+                                aria-controls="explore" aria-selected="true" tabindex="0" aria-label="Explore" title="Explore">Explore</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="tab"
-                                aria-controls="favourites" aria-selected="false" tabindex="0">Bookmarked Services (11)</a>
+                            <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="button"
+                                aria-controls="favourites" aria-selected="false" tabindex="0" aria-label="Bookmarked Services">Bookmarked Services (11)</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="tab"
-                                aria-controls="last-viewed" aria-selected="false" tabindex="0">Last Viewed (1)</a>
+                            <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="button"
+                                aria-controls="last-viewed" aria-selected="false" tabindex="0" aria-label="Last Viewed">Last Viewed (1)</a>
                         </li>
                     </ul>
 
@@ -126,29 +229,29 @@
                                         </label>
                                     </div>
                                 </div>
-                                <div class="expl_headin">Whom are you finding services for?</div>
+                                <h1 class="expl_headin">Whom are you finding services for?</h1>
 
                                 <div class="multi_select_service">
                                     <div class="check_options">
-                                        <h4>Citizen</h4>
+                                        <h2>Citizen</h2>
                                         <ul>
                                             <li>
                                                 <label class="chech_lbl" for="parent">
-                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0">
+                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
                                                     <span></span>
                                                     <span class="chk_text">Parent</span>
                                                 </label>
                                             </li>
                                             <li>
-                                                <label class="chech_lbl" for="employee"><input id="employee"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                <label class="chech_lbl" for="employee">
+                                                    <input id="employee" class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
                                                     <span></span>
                                                     <span class="chk_text">Employee</span>
                                                     </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="businessman"><input id="businessman"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
                                                     <span></span>
                                                     <span class="chk_text">Businessman</span>
                                                     </label>
@@ -157,13 +260,13 @@
                                     </div>
 
                                     <div class="check_options">
-                                        <h4>Rresident</h4>
+                                        <h3>Rresident</h3>
                                         <ul>
                                             <li>
                                                 <fieldset>
                                                     <legend>a</legend>
                                                     <label class="chech_lbl" for="parent1"><input id="parent1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
                                                         <span></span>
                                                         <span class="chk_text">Parent</span>
                                                         </label>
@@ -173,7 +276,7 @@
                                                 <fieldset>
                                                     <legend>b</legend>
                                                     <label class="chech_lbl" for="employee1"><input id="employee1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
                                                         <span></span>
                                                         <span class="chk_text">Employee</span>
                                                         </label>
@@ -187,14 +290,14 @@
                                         <ul>
                                             <li>
                                                 <label class="chech_lbl" for="tourist"><input id="tourist"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Tourist">
                                                     <span></span>
                                                     <span class="chk_text">Tourist</span>
                                                     </label>
                                             </li>
                                             <li>
                                                 <label class="chech_lbl" for="student"><input id="student"
-                                                        class="check_input" type="checkbox" tabindex="0">
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Student">
                                                     <span></span>
                                                     <span class="chk_text">Student</span>
                                                     </label>
@@ -203,7 +306,7 @@
                                                 <fieldset>
                                                     <legend>c</legend>
                                                     <label class="chech_lbl" for="businessman1"><input id="businessman1"
-                                                            class="check_input" type="checkbox" tabindex="0">
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
                                                         <span></span>
                                                         <span class="chk_text">Businessman</span>
                                                         </label>
@@ -223,23 +326,29 @@
 
                             <div class="bottom_understand">
                                 <!-- <div class="bg_image"></div> -->
+                                <fieldset>
+                                    <legend>Is this easy to understand?</legend>
                                 <div class="understand">
-                                    <p>Is this easy to understand?</p>
-                                    <div class="like">
-                                        <div class="like_btn" tabindex="0">
-                                            <input type="radio" checked name="like" id="yes">
-                                            <label for="yes">Yes</label>
+                                        <p>Is this easy to understand?</p>
+                                        <div class="like">
+                                            <div class="like_btn" tabindex="0">
+                                                <input type="radio" name="like" id="yes" aria-label="Yes" data-toggle="modal" data-target="#thankyou">
+                                                <label for="yes">Yes</label>
+                                            </div>
+                                            <div class="like_btn" tabindex="0">
+                                                <input type="radio" name="like" id="no" aria-label="No" data-toggle="modal" data-target="#feedback">
+                                                <label for="no">No</label>
+                                            </div>
                                         </div>
-                                        <div class="like_btn" tabindex="0">
-                                            <input type="radio" name="like" id="no">
-                                            <label for="no">No</label>
-                                        </div>
-                                    </div>
+                                   
+                                    
+                                    
                                 </div>
+                            </fieldset>
                             </div>
                             <div class="explore_inner_bottom">
                                 <a href="" tabindex="0">Just see all (300) <img
-                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just See All"></a>
+                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Explore"></a>
                             </div>
                         </div>
                         <div class="tab-pane" id="favourites" role="tabpanel" aria-labelledby="favourites-tab">
@@ -325,7 +434,7 @@
                             </div>
                             <div class="explore_inner_bottom">
                                 <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
-                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just See All"></a>
+                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just View All"></a>
                             </div>
                         </div>
                         <div class="tab-pane" id="last-viewed" role="tabpanel" aria-labelledby="last-viewed-tab">
@@ -369,7 +478,7 @@
                             </div>
                             <div class="explore_inner_bottom">
                                 <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
-                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just See All"></a>
+                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just Show All"></a>
                             </div>
                         </div>
                     </div>
@@ -438,16 +547,16 @@
                                                 <div class="filter_col">
                                                     <h3>Service Types</h3>
                                                     <div class="dropdown show">
-                                                        <div class="dropdown-toggle sel_filter" id="dropdownMenuLink"
+                                                        <div class="dropdown-toggle sel_filter" id="dropdownMenuTypes"
                                                             data-toggle="dropdown" role="group" aria-haspopup="true"
-                                                            aria-expanded="false" tabindex="0">
+                                                            aria-expanded="false" tabindex="0" data-filter="types">
                                                             <input type="text" id="service_type"
                                                                 placeholder="Select Service Types" readonly
                                                                 tabindex="-1">
                                                             <label for="service_type">Select Service Types</label>
                                                             <span class="plus_more">+1 more</span>
                                                         </div>
-                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuTypes">
                                                             <div class="dropdown-item">
                                                                 <label for="e-service" class="chech_lbl">
                                                                     <input type="checkbox" id="e-service"
@@ -610,7 +719,7 @@
                                                                     Communications Regulatory Authority
                                                                 </label>
                                                             </div>
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
 
@@ -630,7 +739,7 @@
                                                         </div>
                                                         <div class="dropdown-menu life_stage"
                                                             aria-labelledby="dropdownLifeStage">
-                                                            <h6 class="dropdown-header">Birth</h6>
+                                                            <h4 class="dropdown-header">Birth</h4>
                                                             <div class="dropdown-item">
                                                                 <label for="birth" class="chech_lbl">
                                                                     <input type="checkbox" id="birth"
@@ -641,7 +750,7 @@
                                                                 </label>
                                                             </div>
                                                             <div class="dropdown-divider"></div>
-                                                            <h6 class="dropdown-header">Education</h6>
+                                                            <h5 class="dropdown-header">Education</h5>
                                                             <div class="dropdown-item">
                                                                 <label for="school" class="chech_lbl">
                                                                     <input type="checkbox" id="school"
@@ -661,7 +770,7 @@
                                                                 </label>
                                                             </div>
                                                             <div class="dropdown-divider"></div>
-                                                            <h6 class="dropdown-header">Work</h6>
+                                                            <h5 class="dropdown-header">Work</h5>
                                                             <div class="dropdown-item">
                                                                 <label for="employment" class="chech_lbl">
                                                                     <input type="checkbox" id="employment"
@@ -680,7 +789,7 @@
                                                                     Business
                                                                 </label>
                                                             </div>
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
 
@@ -740,7 +849,7 @@
                                                             </div>
 
 
-                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all">Uncheck All</a>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAllRadio(this)">Uncheck All</a>
                                                         </div>
                                                     </div>
 
@@ -843,6 +952,9 @@
                                                             </ul>
                                                         </div>
 
+                                                        
+                                                    </div>
+                                                    <div class="service_row">
                                                         <div class="service_col">
                                                             <h4>Agent Services (05)</h4>
                                                             <ul>
@@ -984,7 +1096,7 @@
                                         <div class="explore_inner_bottom">
                                             <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
                                                     src="assets/images/ic_explore_see_all_arrow.png"
-                                                    alt="Just See All"></a>
+                                                    alt="View All"></a>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="for_students" role="tabpanel"
@@ -993,7 +1105,7 @@
                                         <div class="explore_inner_bottom">
                                             <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
                                                     src="assets/images/ic_explore_see_all_arrow.png"
-                                                    alt="Just See All"></a>
+                                                    alt="All Services"></a>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="for_parent" role="tabpanel"
@@ -1002,7 +1114,7 @@
                                         <div class="explore_inner_bottom">
                                             <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
                                                     src="assets/images/ic_explore_see_all_arrow.png"
-                                                    alt="Just See All"></a>
+                                                    alt="All Links"></a>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="for_businessman" role="tabpanel"
@@ -1011,7 +1123,7 @@
                                         <div class="explore_inner_bottom">
                                             <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
                                                     src="assets/images/ic_explore_see_all_arrow.png"
-                                                    alt="Just See All"></a>
+                                                    alt="Services"></a>
                                         </div>
                                     </div>
                                 </div>
@@ -1051,11 +1163,52 @@
                
             </div>
         <!-- ======= remove favourite alert ======= -->
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="feedback_form">
+                <div class="close_feedback" data-dismiss="modal"><span></span> Close</div>
+                <fieldset>
+                    <legend>Help us improve Hukoomi</legend>
+                    <form class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <textarea cols="3" placeholder="What went wrong?" required></textarea>
+                            <div class="invalid-feedback">
+                                Please field is required.
+                              </div>
+                        </div>
+                        <button type="submit" class="send_feedback_btn">Send</button>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
 
-        <!-- ======= tutorial ======= -->
-            
-        <!-- ======= tutorial ======= -->
-
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="thankyou_form">
+                <div class="form-group">
+                    <p> Thank you for the feedback.</p>
+                </div>
+                <button type="submit" class="send_feedback_btn" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
     </div>
     <!-- =============== bootstrap js=============== -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
@@ -1063,18 +1216,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
         crossorigin="anonymous"></script>
     <script src="assets/js/explore-services.js"></script>
+    <script src="assets/js/daterangepicker.js"></script>
+    <script src="assets/js/custom.js"></script>
     <script>
         window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
-    </script>
-
-    <!-- ======= script for select dropdown ======= -->
-    <script>
-        $('.dropdown-menu .chech_lbl').click(function (e) {
-            e.stopPropagation();
-        });
-        $(' .radio_lbl').click(function (e) {
-            e.stopPropagation();
-        });
-
     </script>
 </body>
