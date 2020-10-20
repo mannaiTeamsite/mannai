@@ -784,15 +784,15 @@ $("#content").html("Page " + num);
 // console.log(lengths)
 
 /**************************+2more category card*******************************************************/
-$(".tags_wrap").map(function(){
-      var d = $(this).find('li').length;
+// $(".tags_wrap").map(function(){
+//       var d = $(this).find('li').length;
 
-      console.log(d)
+//       console.log(d)
 
-      if(d>=2){
-         $(this).append("<li class='tag_g  tag_l' tabindex='0' data-toggle='modal' data-target='#more-modal'>+2 more</li>")
-      }
-})
+//       if(d>=2){
+//          $(this).append("<li class='tag_g  tag_l' tabindex='0' data-toggle='modal' data-target='#more-modal'>+2 more</li>")
+//       }
+// })
 
 
 
@@ -801,27 +801,28 @@ $(".insurance_mob").map(function(){
    var d = $(this).find('a').length;
 
    if(d>=2){
-      $('a:nth-child(2)').nextAll().addClass("hide")
+     $('a:nth-child(2)').nextAll('a').addClass("hide")
+       $(this).append("<span class='more  more_data_modal' tabindex='0'>more</span>")
    }
 
    console.log(d)
 
-   if(d>=2){
-      $(this).append(",<span class='more' tabindex='0' data-toggle='modal' data-target='#more-modal'>more</span>")
-   }
+
+   // if(d>=2){
+   //  //  $('.insurance_mob').append("<span class='more' tabindex='0' data-toggle='modal' data-target='#more-modal'>more</span>")
+   // }
+
 })
 
 
 
 
-$(document).ready(function() {
-   $('#lang_toggle').click(function() {
-       $('div').css("font-size", function() {
-           return parseInt($(this).css('font-size')) - 2 + 'px';
-       });
-   });
+$(".more_data_modal").click(function(){
+   $(this).parent().next().addClass("active");
+})
+$(".close_card_modal").click(function(){
+   $(".card_modal_wrapper").removeClass("active");
 });
-
 
 
 

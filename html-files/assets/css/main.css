@@ -1054,7 +1054,7 @@ header .innner_wrapper .nav_col .header_row .auth_nav ul li:hover .access_submen
 @media (max-width: 650px) {
   .flex_col_xs_4 {
     width: 50%; } }
-header .innner_wrapper .nav_col .header_row .abt_qtr_nav, .mob_nav, .card_effect:before, .fact_figure_qatar .fact_figure_card_wrap, .persona_tag_wrapper, .news_section .cards_wrapper .news_card, .explore_travel_block .get_card, .explore_travel_block .travel_grid .travel_col_left .inner_wrapper .card_sm, .explore_travel_block .travel_grid .travel_col_right .inner_wrapper .card_sm, .what_mood_block .mood .mood_tag, .directory_block .directory_grid .block .title, .category_filter_wrapper_layer, .category_sort_wrapper_layer, .video_img_wrapper .tab_wrapper a, .video_img_wrapper .tab_wrapper a:before {
+header .innner_wrapper .nav_col .header_row .abt_qtr_nav, .mob_nav, .card_effect:before, .fact_figure_qatar .fact_figure_card_wrap, .persona_tag_wrapper, .news_section .cards_wrapper .news_card, .explore_travel_block .get_card, .explore_travel_block .travel_grid .travel_col_left .inner_wrapper .card_sm, .explore_travel_block .travel_grid .travel_col_right .inner_wrapper .card_sm, .what_mood_block .mood .mood_tag, .directory_block .directory_grid .block .title, .category_filter_wrapper_layer, .category_sort_wrapper_layer, .video_img_wrapper .tab_wrapper a, .video_img_wrapper .tab_wrapper a:before, .card_modal_wrapper {
   -webkit-transition: all ease .2s;
   -o-transition: all ease .2s;
   transition: all ease .2s; }
@@ -7952,6 +7952,7 @@ hr {
   display: block;
   width: 100%; }
 .grid_view .list_card {
+  position: relative;
   min-height: 480px;
   border-radius: 12px;
   border: 1px solid var(--white-nine);
@@ -8345,6 +8346,8 @@ hr {
   @media (max-width: 640px) {
     .show_label {
       font-size: 14px; } }
+  .show_label a {
+    color: var(--black-two); }
 
 .custom_label {
   font-weight: 600;
@@ -8999,7 +9002,6 @@ h3 {
   justify-content: flex-end;
   padding: 15px 0; }
   .pagination_wrapper li {
-    display: inline-block !important;
     margin: 0 10px 0 0; }
     .pagination_wrapper li a {
       border-radius: 12px;
@@ -10515,7 +10517,8 @@ h3 {
       font-size: 14px;
       font-weight: 600;
       color: var(--purple-brown);
-      margin-right: 50px; }
+      margin-right: 50px;
+      width: auto; }
     .download_utility_directory .feedback_link .like {
       display: flex; }
       .download_utility_directory .feedback_link .like label {
@@ -10684,22 +10687,22 @@ h3 {
   border-left: none; }
 
 /*****************************Useful Links close***************************************/
-/*****************************Downloadables***************************************/
-.category_downloadable_card .list_card {
+/**Downloadables & Ministry**/
+.category_downloadable_card .list_card, .category_ministry_card .list_card {
   min-height: 180px;
   position: relative; }
-  .category_downloadable_card .list_card .details {
+  .category_downloadable_card .list_card .details, .category_ministry_card .list_card .details {
     padding: 60px 30px 35px; }
-    .category_downloadable_card .list_card .details .card_title {
-      margin: 0;
+    .category_downloadable_card .list_card .details .card_title, .category_ministry_card .list_card .details .card_title {
+      margin: 0 0 15px;
       line-height: 1.9; }
-.category_downloadable_card .share_l {
+.category_downloadable_card .share_l, .category_ministry_card .share_l {
   background: url("../images/ic-list-share.svg") center no-repeat;
   border: solid 1px var(--white-nine); }
-.category_downloadable_card .bookmark_l {
+.category_downloadable_card .bookmark_l, .category_ministry_card .bookmark_l {
   border: solid 1px var(--white-nine);
   background: url("../images/ic-list-bookmark.svg") center no-repeat; }
-  .category_downloadable_card .bookmark_l.save {
+  .category_downloadable_card .bookmark_l.save, .category_ministry_card .bookmark_l.save {
     background: url("../images/ic-list-fill-bookmark.svg") center no-repeat; }
 
 .list_view .category_downloadable_card .list_card .details {
@@ -10721,7 +10724,16 @@ h3 {
 .downloadable_detail .btn_wrap {
   border: none; }
 
-/*****************************Downloadables close***************************************/
+.category_ministry_card .list_card {
+  min-height: 340px; }
+  .category_ministry_card .list_card .details {
+    padding: 40px 30px 33px; }
+.category_ministry_card .card_title {
+  line-height: 1.2 !important;
+  white-space: pre-wrap;
+  margin-top: 20px !important; }
+
+/**Downloadables & Ministry close**/
 /*****************************Govt Offices***************************************/
 .category_govt_offc_card .list_card {
   min-height: 520px; }
@@ -12765,5 +12777,112 @@ h3 {
     display: inline-block;
     position: relative;
     margin: 0 0px 0 10px; }
+
+.card_modal_wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  background: #1f1d1d91;
+  left: 0;
+  z-index: 99;
+  padding: 29px 0 0 8px;
+  transform: scale(0);
+  opacity: 0;
+  visibility: hidden; }
+  .card_modal_wrapper.active {
+    transform: scale(1);
+    opacity: 1;
+    visibility: visible; }
+  .card_modal_wrapper .tags_wrap {
+    position: relative;
+    flex-flow: column; }
+    .card_modal_wrapper .tags_wrap .tag_g {
+      max-width: fit-content  !important; }
+  .card_modal_wrapper .close_card_modal {
+    position: absolute;
+    right: 17px;
+    z-index: 99;
+    top: 15px;
+    cursor: pointer; }
+
+.sercive_section {
+  padding-top: 36px; }
+  .sercive_section .service_heading {
+    display: flex;
+    align-items: center;
+    padding: 7px 26px 24px; }
+    .sercive_section .service_heading figure {
+      margin: 0 12px 0 0; }
+    .sercive_section .service_heading h3 {
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 1.38;
+      letter-spacing: 0.23px;
+      color: var(--ocean);
+      margin: 0; }
+  .sercive_section .service_row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%; }
+    .sercive_section .service_row .service_col {
+      padding: 0 26px;
+      width: calc(100% / 3);
+      border-right: 1px solid #e4e4e5;
+      margin-bottom: 40px; }
+      .sercive_section .service_row .service_col:last-child {
+        border-right: 0; }
+      @media screen and (max-width: 990px) {
+        .sercive_section .service_row .service_col {
+          width: calc(100% / 2); } }
+      @media screen and (max-width: 768px) {
+        .sercive_section .service_row .service_col {
+          width: calc(100% / 2); } }
+      @media screen and (max-width: 700px) {
+        .sercive_section .service_row .service_col {
+          width: calc(100% / 1); } }
+      .sercive_section .service_row .service_col h4 {
+        font-weight: 700;
+        font-size: 14px;
+        line-height: 1.57;
+        letter-spacing: 0.2px;
+        color: var(--purple-brown);
+        margin: 0 0 16px 0; }
+      .sercive_section .service_row .service_col ul {
+        margin-bottom: 0; }
+        .sercive_section .service_row .service_col ul li a {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          font-weight: 600;
+          font-size: 14px;
+          line-height: 1.57;
+          letter-spacing: 0.2px;
+          color: var(--slate-grey);
+          padding: 10px 0;
+          text-decoration: underline;
+          border-top: 1px solid transparent;
+          border-bottom: 1px solid transparent; }
+          .sercive_section .service_row .service_col ul li a:hover {
+            color: var(--dark-orange);
+            border-top: 1px solid #e4e4e5;
+            border-bottom: 1px solid #e4e4e5; }
+        .sercive_section .service_row .service_col ul li:last-child {
+          margin-bottom: 0; }
+        .sercive_section .service_row .service_col ul li .remove_fav {
+          margin: 0 0 0 18px;
+          padding: 4px 0; }
+          .sercive_section .service_row .service_col ul li .remove_fav img {
+            width: 16px; }
+      .sercive_section .service_row .service_col .more_opt {
+        font-weight: 700;
+        font-size: 15px;
+        line-height: 1.57;
+        letter-spacing: normal;
+        color: var(--rouge);
+        cursor: pointer; }
+
+.ar .sercive_section .service_heading figure {
+  margin: 0 0 0 12px; }
 
 /*# sourceMappingURL=main.css.map */

@@ -20,8 +20,8 @@
    <!--App_wrapper-->
    <div class="app_wrapper">
 
-    <!--header-->
-    <header>
+     <!--header-->
+     <header>
       <div class="header_inner">
          <div class="innner_wrapper">
             <div class="nav_brand">
@@ -183,7 +183,7 @@
                         </li>
                         <li>
                            <a href="#"  title="Search" tabindex="0" >
-                              <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
+                               <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
                      </li>
                      </ul>
                   </div>
@@ -198,7 +198,8 @@
       <div class="breadcrumbs_wrapper">
          <ul>
             <li><a href="#" tabindex="0">Home</a></li>
-            <li><a href="#" tabindex="0">Banks Around You</a></li>
+            <li><a href="#" tabindex="0">Directory</a></li>
+            <li><a href="#" tabindex="0">Ministries</a></li>
          </ul>
       </div>
       <!--Breadcrumb-->
@@ -207,7 +208,7 @@
 
          <!--category heading-->
          <div class="custom_container">
-            <h1 class="category_heading" tabindex="0">Banks Around You</h1>
+            <h1 class="category_heading" tabindex="0">Ministries</h1>
          </div>
          <!--category heading-->
 
@@ -216,24 +217,22 @@
          <div class="custom_container">
             <div class="f_row f_flow_col">
                <div class="f_col">
-                  <label for="search-bank" class="hide">Search_bank</label>
+                  <label for="search_category" class="none">Search</label>
                   <div class="category_search_input">
-                     <input type="text" placeholder="Search Bank" id="search-bank" />
-                     <button class="detect-icon">
-                        <img src="assets/images/search-line-white.png" alt="search-img" />
+
+                     <input type="text" id="search_category" name="search" tabindex="0" placeholder="Search">
+                     <button class="detect-icon" tabindex="0">
+                        <img src="assets/images/search-line-white.png" alt="search-img">
                      </button>
                   </div>
                </div>
                <div class="f_col text-right">
                   <ul class="category_view_menu_wrap">
                      <li>
-                        <a href="#" tabindex="0" class="grid   active">Grid</a>
+                        <a href="#" tabindex="0" class="grid active">Grid</a>
                      </li>
                      <li>
                         <a href="#" tabindex="0" class="list">List</a>
-                     </li>
-                     <li>
-                        <a href="#" tabindex="0" class="map">Map</a>
                      </li>
                   </ul>
                </div>
@@ -259,80 +258,127 @@
          </div>
          <!--category sort and filter close-->
 
-            <!--Category Sort Modal -->
-            <div class="category_sort_wrapper_layer">
-               <div class="sort_wrapr">
-                  <span class="filter_close">
-                  <img src="assets/images/ic-popup-cross.png" alt="close sort" />
-                  </span>
-                  <div class="custom_modal_heading">Sort</div>
-                  <fieldset>
-                     <legend class="hide">Sort</legend>
-                     <ul>
-                        <li>
-                           <input type="radio" id="near_me" name="category_sort" value="near me">
-                           <label for="near_me" class="radio_wrap">Nearest to Me</label>
-      
-                        </li>
-                        <li>
-                           <input type="radio" id="a-z" name="category_sort" value="By Name(A-Z)">
-                           <label for="a-z" class="radio_wrap"> By Name(A-Z)</label>
-                        </li>
-                        <li>
-                           <input type="radio" id="z-a" name="category_sort" value="By Name(Z-A)">
-                           <label for="z-a" class="radio_wrap">By Name(Z-A)</label>
-      
-                        </li>
-                     </ul>
-                  </fieldset>
-               </div>
-            </div>
-            <!-- Category Sort Modal close -->
-
-         <!--category filter Modal -->
-         <div class="category_filter_wrapper_layer">
-            <div class="category_filter_wrapr">
-               <div class="custom_modal_heading">Filter</div>
+          <!--Category Sort Modal -->
+          <div class="category_sort_wrapper_layer">
+            <div class="sort_wrapr">
                <span class="filter_close">
-                  <img src="assets/images/ic-popup-cross.png" alt="close" />
+               <img src="assets/images/ic-popup-cross.png" alt="close sort" />
                </span>
-
-
-               <div class="form_field">
-                  <label for="flocation">Location</label>
-                  <div class="txt_wrapper">
-                     <div class="select-picker-wrap">
-                        <select class="selectpicker" id="flocation">
-                           <option>Select</option>
-                           <option>Location 1</option>
-                           <option>Location 2</option>
-                        </select>
-                     </div>
-                  </div>
-               </div>
-
-               <div class="form_field">
-                  <label for="bank_name">Bank Name</label>
-                  <div class="txt_wrapper">
-                     <div class="select-picker-wrap">
-                        <select class="selectpicker" id="bank_name">
-                           <option>Arab Bank</option>
-                           <option>Doha Bank</option>
-                           <option>Arab Bank</option>
-                        </select>
-                     </div>
-                  </div>
-               </div>
-
-
-               <div class="btn_wrap">
-                  <button class="outline_btn cancel">Cancel</button>
-                  <button class="rouge_btn m-l-20">Apply</button>
-               </div>
+               <div class="custom_modal_heading">Sort</div>
+               <fieldset>
+                  <legend class="hide">Sort</legend>
+                  <ul>
+                     <li>
+                        <input type="radio" id="Alphabet" name="category_sort" value="By Latest">
+                        <label for="Alphabet" class="radio_wrap"> By Name(A-Z)</label>
+                     </li>
+                     <li>
+                        <input type="radio" id="oldest" name="category_sort" value="By Oldest">
+                        <label for="oldest" class="radio_wrap">By Name(Z-A)</label>
+                     </li>
+                     
+                  </ul>
+               </fieldset>
             </div>
          </div>
-         <!--category filter modal close-->
+         <!-- Category Sort Modal close -->
 
+
+
+
+   <!--category filter Modal -->
+   <div class="category_filter_wrapper_layer">
+      <div class="category_filter_wrapr">
+         <div class="custom_modal_heading">Filter</div>
+         <span class="filter_close">
+         <img src="assets/images/ic-popup-cross.png" alt="close" />
+         </span>
+        
+            <div class="form_field">
+               <div class="flex_row">
+                  <div class="flex_col_sm_6">
+                     <label for="month">Month</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker"  name="month" id="month">
+                              <option>Month</option>
+                              <option>Jan</option>
+                              <option>Feb</option>
+                              <option>Mar</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="flex_col_sm_6">
+                     <label for="year">Year</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="year"  id="year">
+                              <option>Year</option>
+                              <option>2019</option>
+                              <option>2020</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="location"> Location</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker" id="location"  name="location">
+                        <option  value="sasa">Select</option>
+                        <option value="sasaasas">New Delhi</option>
+                        <option>NW</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="intended">Intended Audience</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker"   name="intended" id="intended">
+                        <option>Select</option>
+                        <option>2019</option>
+                        <option>2020</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="organizers">Organizers</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker"   name="organizers" id="organizers">
+                        <option>Select</option>
+                        <option>2019</option>
+                        <option>2020</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="category">Category</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker"   name="organizers" id="category">
+                        <option>Select</option>
+                        <option>Category1</option>
+                        <option>Category2</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="btn_wrap">
+               <input type="reset" class="outline_btn cancel"  value="Reset" />
+               <button type="button" class="rouge_btn apply_filter m-l-20">Apply</button>
+            </div>
+         
+      </div>
+   </div>
+   <!--category filter modal close-->
 
 
          <!--category card row  wrapper-->
@@ -341,163 +387,147 @@
                <div class="grid_view">
                   <div class="f_row">
                      <!-- card repeat -->
-                     <div class="category_card category_bank_card">
-                        <a href="#" class="list_card" tabindex="0">
-                           <figure class="card_img">
-                              <img src="assets/images/Masaieed.png" alt="bank-thumb" />
-                              <span class="share_g share_l" title="Share"></span>
-                              <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
-                           </figure>
-
+                     <div class="category_card category_ministry_card">
+                        <div tabindex="0" class="list_card">
+                           <ul class="more_info_links">
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/web-link.png"
+                                       alt="wikipedia" /></a>
+                              </li>
+                           </ul>
                            <div class="details">
-                              <div class="inner_wrap">
-                                 <div class="author_wrap">
-                                    <figure>
-                                       <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                    </figure>
-                                    <span class="by">Arab Bank</span>
-                                 </div>
-                                 <h2 class="card_title">Qatar Islamic Bank</h2>
-                              </div>
-                              <span class="show_label icon time">09:30 AM - 03:30 PM</span>
-                              <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
-                                 hotel</span>
-                              <div>
-                                 <span class="custom_label">Branch Audience Type</span>
-                                 <span class="custom_show_label">Business</span>
-                              </div>
-                           </div>
-                        </a>
-                     </div>
-                     <!-- card repeat close -->
-
-                     <!-- card repeat -->
-                     <div class="category_card category_bank_card">
-                        <a href="#" class="list_card" tabindex="0">
-                           <figure class="card_img">
-                              <img src="assets/images/Masaieed.png" alt="bank-thumb" />
-                              <span class="share_g share_l" title="Share"></span>
-                              <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
-                           </figure>
-
-                           <div class="details">
-                              <div class="inner_wrap">
-                                 <div class="author_wrap">
-                                    <figure>
-                                       <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                    </figure>
-                                    <span class="by">Arab Bank</span>
-                                 </div>
-                                 <h2 class="card_title">Qatar Islamic Bank</h2>
-                              </div>
-                              <span class="show_label icon time">09:30 AM - 03:30 PM</span>
-                              <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
-                                 hotel</span>
-                                 <div>
-                                    <span class="custom_label">Branch Audience Type</span>
-                                    <span class="custom_show_label">VIP</span>
-                                 </div>
-                           </div>
-                        </a>
-                     </div>
-                     <!-- card repeat close -->
-
-
-                     <!-- card repeat -->
-                     <div class="category_card category_bank_card">
-                        <a href="#" class="list_card" tabindex="0">
-                           <figure class="card_img">
-                              <img src="assets/images/Masaieed.png" alt="bank-thumb" />
-                              <span class="share_g share_l" title="Share"></span>
-                              <span class="bookmark_g bookmark_l category_bookmark" title="Bookmark"></span>
-                           </figure>
-
-                           <div class="details">
-                              <div class="inner_wrap">
-                                 <div class="author_wrap">
-                                    <figure>
-                                       <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                                    </figure>
-                                    <span class="by">Arab Bank</span>
-                                 </div>
-                                 <h2 class="card_title">Qatar Islamic Bank</h2>
-                              </div>
-                              <span class="show_label icon time">09:30 AM - 03:30 PM</span>
-                              <span class="show_label icon location">Sheraton Grand Doha Resort & Conventional
-                                 hotel</span>
-                                 <div>
-                                    <span class="custom_label">Branch Audience Type</span>
-                                    <span class="custom_show_label">VIP</span>
-                                 </div>
-                           </div>
-                        </a>
-                     </div>
-                     <!-- card repeat close -->
-
-                  </div>
-                  <!-- Map card -->
-                  <div class="map_col">
-                     <figure class="map_img">
-                        <img src="assets/images/map.jpg" alt="map" />
-
-                        <div class="srch_box">
-                           <label for="location_search" class="hide">Search bank</label>
-                           <div class="txt_wrapper">
-                              <input type="text" id="location_search" placeholder="Search Location" />
-                              <span class="detect-icon">
-                                 <img src="assets/images/search-line-gray.svg" alt="search-img">
+                              <h2 class="card_title" tabindex="0">Government Website and e-Services Framework</h2>
+                           
+                              
+                              <span class="show_label icon mob insurance_mob" tabindex="0">
+                                 <a href="tel:+9747973278927">+974 7973278927</a> <a href="tel:+9747973278927">+974 7973278927</a>  
+                                 <a href="tel:+9747973278927">+974 7973278927</a>
                               </span>
+                              <div class="card_modal_wrapper">
+                                    <img src="assets/images/close-white.svg"  class="close_card_modal" alt="close"/>
+                                    <div class="tags_wrap">
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                    </div>
+                               </div>
+
+                              
+
+                              <span class="show_label icon fax">44111195</span>
+                              <span class="show_label icon email">info@adlsa.gov.qa</span>
+                              <span class="show_label icon location">Villa 25, Street 605, Zone 51, Al Gharaffa,
+                                 Qatar</span>
                            </div>
                         </div>
+                     </div>
+                     <!-- card repeat close -->
 
-                        <div class="map_card">
-                           <figure class="card_img">
-                              <img src="assets/images/event-image.png" alt="event-thumb" />
-                           </figure>
+
+                       <!-- card repeat -->
+                       <div class="category_card category_ministry_card">
+                        <div tabindex="0" class="list_card">
+                           <ul class="more_info_links">
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/web-link.png"
+                                       alt="wikipedia" /></a>
+                              </li>
+                           </ul>
                            <div class="details">
-                              <div class="inner_wrap">
-                                 <div class="author_wrap">
-                                    <figure>
-                                       <img src="assets/images/new-flag.jpg" alt="author-logo">
-                                    </figure>
-                                    <span class="by">Ministry Public Health</span>
-                                 </div>
-                                 <h2 class="card_title">Smart City Award 2020</h2>
-                              </div>
-                              <span class="show_label icon calendar">27 Apr, 2020 - 03 May, 2020
-                                 <span class="dot_g dot_l"> 09:30 AM - 03:30 PM AST</span>
+                              <h2 class="card_title" tabindex="0">Government Website and e-Services Framework</h2>
+                           
+                              
+                              <span class="show_label icon mob insurance_mob" tabindex="0">
+                                 <a href="tel:+9747973278927">+974 7973278927</a> <a href="tel:+9747973278927">+974 7973278927</a>  
+                                 <a href="tel:+9747973278927">+974 7973278927</a>
                               </span>
-                              <span class="show_label icon location">Sheraton Grand Doha Resort &amp; Conventional
-                                 hotel
-                              </span>
-                              <div class="audience_wrap">
-                                 <span class="custom_label">Intended Audience</span>
-                                 <span class="custom_show_label">Student &amp; Visitor</span>
-                              </div>
+                              <div class="card_modal_wrapper">
+                                    <img src="assets/images/close-white.svg"  class="close_card_modal" alt="close"/>
+                                    <div class="tags_wrap">
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                    </div>
+                               </div>
+
+                              
+
+                              <span class="show_label icon fax">44111195</span>
+                              <span class="show_label icon email">info@adlsa.gov.qa</span>
+                              <span class="show_label icon location">Villa 25, Street 605, Zone 51, Al Gharaffa,
+                                 Qatar</span>
                            </div>
-
                         </div>
+                     </div>
+                     <!-- card repeat close -->
 
-                     </figure>
+
+
+                       <!-- card repeat -->
+                       <div class="category_card category_ministry_card">
+                        <div tabindex="0" class="list_card">
+                           <ul class="more_info_links">
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/web-link.png"
+                                       alt="wikipedia" /></a>
+                              </li>
+                           </ul>
+                           <div class="details">
+                              <h2 class="card_title" tabindex="0">Government Website and e-Services Framework</h2>
+                           
+                              
+                              <span class="show_label icon mob insurance_mob" tabindex="0">
+                                 <a href="tel:+9747973278927">+974 7973278927</a> <a href="tel:+9747973278927">+974 7973278927</a>  
+                                 <a href="tel:+9747973278927">+974 7973278927</a>
+                              </span>
+                              <div class="card_modal_wrapper">
+                                    <img src="assets/images/close-white.svg"  class="close_card_modal" alt="close"/>
+                                    <div class="tags_wrap">
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                    </div>
+                               </div>
+
+                              
+
+                              <span class="show_label icon fax">44111195</span>
+                              <span class="show_label icon email">info@adlsa.gov.qa</span>
+                              <span class="show_label icon location">Villa 25, Street 605, Zone 51, Al Gharaffa,
+                                 Qatar</span>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- card repeat close -->
+                
+
                   </div>
-                  <!-- Map card close -->
                </div>
-               <ul class="pagination_wrapper">
-                  <li>
-                     <a href="#" class="active">1</a>
-                  </li>
-                  <li>
-                     <a href="#">2</a>
-                  </li>
-                  <li>
-                     <a href="#">3</a>
-                  </li>
-                  <li>
-                     <a href="#">
-                        >
-                     </a>
-                  </li>
-               </ul>
+               <div id="pagination-here" class="pagination_wrapper"></div>
             </div>
 
          </div>
@@ -551,6 +581,7 @@
    <script src="assets/js/daterangepicker.min.js"></script>
    <script src="assets/js/owl.carousel.min.js"></script>
    <script src="assets/js/app-slider.js"></script>
+   <script src="assets/js/jquery.bootpag.min.js"></script>
    <script src="assets/js/custom.js"></script>
    <script src="assets/js/daterangepicker.js"></script>
    <!--Js Close-->

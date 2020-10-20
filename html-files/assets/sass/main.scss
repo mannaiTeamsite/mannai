@@ -8468,6 +8468,7 @@ color: var(--deep-orange);
             width: 100%;
         }
 		.list_card{
+            position: relative;
 			min-height: 480px;
 			border-radius: 12px;
 			border: 1px solid var(--white-nine);
@@ -8976,7 +8977,10 @@ color: var(--deep-orange);
 		margin-bottom: 10px;
 		@media(max-width:640px){
 			font-size: 14px;
-		}
+        }
+        a{
+            color: var(--black-two);
+        }
 	}
 	.custom_label{
 		font-weight: 600;
@@ -9897,7 +9901,7 @@ color: var(--deep-orange);
 	justify-content: flex-end;
   	padding: 15px 0;
 	li{
-        display: inline-block !important;
+       // display: inline-block !important;
         margin: 0 10px 0 0;
 		a{
 			border-radius: 12px;
@@ -12137,7 +12141,6 @@ color: var(--deep-orange);
         padding: 10px 0;
     }
 
-
     .category_tab_wrapper{
         margin-bottom: 43px;
         @media screen and(max-width: 800px){
@@ -12287,6 +12290,7 @@ color: var(--deep-orange);
             font-weight: 600;
             color: var(--purple-brown);
             margin-right: 50px;
+            width: auto;
         }
         .like{
             display: flex;
@@ -12545,15 +12549,15 @@ color: var(--deep-orange);
 }
 /*****************************Useful Links close***************************************/
 
-/*****************************Downloadables***************************************/
-.category_downloadable_card{
+/**Downloadables & Ministry**/
+.category_downloadable_card, .category_ministry_card{
     .list_card{
         min-height: 180px;
         position: relative;
         .details {
             padding: 60px 30px 35px;
             .card_title{
-                margin: 0;
+                margin: 0 0 15px;
                 line-height: 1.9;
             }
         }
@@ -12602,7 +12606,24 @@ color: var(--deep-orange);
         border: none;
     }
 }
-/*****************************Downloadables close***************************************/
+
+.category_ministry_card{
+    .list_card{
+        min-height: 340px;
+        .details {
+            padding: 40px 30px 33px;
+        }
+    }
+
+    .card_title{
+        line-height: 1.2 !important;
+        white-space: pre-wrap;
+        margin-top: 20px !important;
+    }
+}
+/**Downloadables & Ministry close**/
+
+
 
 /*****************************Govt Offices***************************************/
 .category_govt_offc_card{
@@ -12773,8 +12794,6 @@ color: var(--deep-orange);
         }
     }
 }
-
-
 .ar{
     .list_view{
         .category_application_card{
@@ -12805,7 +12824,6 @@ color: var(--deep-orange);
 /***************************************Mobile Applications close******************************************/
 
 
-
 .ssk-sticky.ssk-left{
     // left: -100% !important;
 }
@@ -12827,8 +12845,6 @@ color: var(--deep-orange);
     left: 11px !important;
 }
 
-
-
 .ssk-sticky .ssk {
     flex: 1;
     width: auto;
@@ -12841,8 +12857,6 @@ color: var(--deep-orange);
        left:auto !important;
     }
 }
-
-
 
 /***************************************Articles & Services******************************************/
 .category_articles_card, .category_services_card{
@@ -15660,3 +15674,154 @@ color: var(--deep-orange);
 }
 
 
+
+
+
+
+
+
+.card_modal_wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    background: #1f1d1d91;
+    left: 0;
+    z-index: 99;
+    padding: 29px 0 0 8px;
+    transform: scale(0);
+    opacity: 0;
+    visibility: hidden;
+    @extend %basic_transition;
+    &.active{
+        transform: scale(1);
+        opacity: 1;
+        visibility: visible;
+    }
+    
+    .tags_wrap {
+        position: relative;
+        flex-flow: column;
+        .tag_g{
+            max-width: fit-content  !important;
+        }
+    }
+
+
+    .close_card_modal{
+        position: absolute;
+        right: 17px;
+        z-index: 99;
+        top: 15px;
+        cursor: pointer;
+    }
+
+}
+
+
+
+
+
+.sercive_section{
+    padding-top: 36px;
+    .service_heading{
+        display: flex;
+        align-items: center;
+        padding: 7px 26px 24px;
+        figure{
+            margin: 0 12px 0 0;
+        }
+        h3{
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 1.38;
+            letter-spacing: 0.23px;
+            color: var(--ocean);
+            margin: 0;
+
+        }
+    }
+    .service_row{
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        .service_col{
+            padding: 0 26px;
+            width: calc(100% / 3);
+            border-right: 1px solid #e4e4e5;
+            margin-bottom: 40px;
+            &:last-child{
+                border-right: 0;
+            }
+            @media screen and (max-width: 990px){
+                width: calc(100% / 2);
+            }
+            @media screen and (max-width: 768px){
+                width: calc(100% / 2);
+            }
+            @media screen and (max-width: 700px){
+                width: calc(100% / 1);
+            }
+            h4{
+                font-weight: 700;
+                font-size: 14px;
+                line-height: 1.57;
+                letter-spacing: 0.2px;
+                color: var(--purple-brown);
+                margin: 0 0 16px 0;
+            }
+            ul{
+                margin-bottom: 0;
+                li{
+                    
+                    a{
+                        display: flex;
+                        align-items: flex-start;
+                        justify-content: space-between;
+                        font-weight: 600;
+                        font-size: 14px;
+                        line-height: 1.57;
+                        letter-spacing: 0.2px;
+                        color: var(--slate-grey);
+                        padding: 10px 0;
+                        text-decoration: underline;
+                        border-top: 1px solid transparent;
+                            border-bottom: 1px solid transparent;
+                        &:hover{
+                            color: var(--dark-orange);
+                            border-top: 1px solid #e4e4e5;
+                            border-bottom: 1px solid #e4e4e5;
+                        }
+                    }
+                    &:last-child{
+                        margin-bottom: 0;
+                    }
+                    .remove_fav{
+                        margin: 0 0 0 18px;
+                        padding: 4px 0;
+                        img{
+                            width: 16px;
+                        }
+                    }
+                }
+            }
+            .more_opt{
+                font-weight: 700;
+                font-size: 15px;
+                line-height: 1.57;
+                letter-spacing: normal;
+                color: var(--rouge);
+                cursor: pointer;
+            }
+        }
+    }
+}
+.ar{
+    .sercive_section{
+        .service_heading{
+            figure{
+                margin: 0 0 0 12px;
+            }
+        }
+    }
+}
