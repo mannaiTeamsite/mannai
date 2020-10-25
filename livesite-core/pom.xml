@@ -7,6 +7,7 @@
   <version>0.0.1</version>
   <build>
 	<finalName>${project.artifactId}</finalName>
+	<pluginManagement>
     <plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -136,12 +137,21 @@
 					<goals>
 						<goal>run</goal>
 					</goals>
-				</execution>
+				</execution>				
 			</executions>
       </plugin>
     </plugins>
+     </pluginManagement>
   </build>
   <dependencies>
+  <!-- Added by pramesh -->
+  <dependency>
+	  <groupId>javax.json</groupId>
+	  <artifactId>javax.json-api</artifactId>
+	  <version>1.0</version>
+	  <scope>compile</scope>
+	</dependency>
+  <!-- Added by pramesh -->
       <dependency>
           <groupId>org.json</groupId>
           <artifactId>json</artifactId>
@@ -212,6 +222,13 @@
 		<artifactId>springframework-core</artifactId>
 		<version>3.1.1</version>
 	</dependency>
+	<!-- Added by pramesh -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-context-support</artifactId>
+	    <version>3.2.0.RELEASE</version>
+	</dependency>
+	<!-- Added by pramesh -->
 	<dependency>
 		<groupId>log4j</groupId>
 		<artifactId>log4j</artifactId>
@@ -262,6 +279,6 @@
                     </reportSet>
                 </reportSets>
             </plugin>
-        </plugins>
+        </plugins>       
     </reporting>
 </project>
