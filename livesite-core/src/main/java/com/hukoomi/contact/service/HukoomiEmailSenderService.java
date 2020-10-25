@@ -2,10 +2,10 @@ package com.hukoomi.contact.service;
 
 import java.util.Locale;
 
-import com.hukoomi.contact.model.ContactHukoomiEmail;
+import com.hukoomi.contact.model.ContactEmail;
 
 public interface HukoomiEmailSenderService {
 	
-	void sendEmailToHukoomi(ContactHukoomiEmail email, Locale locale);
+	void sendEmailToHukoomi(ContactEmail email, Locale locale);
 
 }
