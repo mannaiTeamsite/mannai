@@ -54,7 +54,7 @@ public class CustomerServiceExternal {
 		HtmlFileupload file=null;
 		Document result = null;
 		logger.info("ReportIncident");
-		action = context.getParameterString("Action");		
+		action = context.getParameterString("action");		
 		if (!action.equals("")) {
 			switch (action) {
 			case ACTION_ESERVICE:
@@ -93,7 +93,7 @@ public class CustomerServiceExternal {
 	private Document getIdType(String language) throws UnsupportedEncodingException {
 		logger.debug("IncidentReport:getIdType:Entering");
 		Locale lang = getLocale(language);
-		ResourceBundle bundle = ResourceBundle.getBundle("com.hukoomi.utils.ReportIncidentPortletResource", lang);
+		ResourceBundle bundle = ResourceBundle.getBundle("com.hukoomi.resources.ReportIncidentPortletResource", lang);
 		String validationMessage = bundle.getString("idType");
 		Document document = DocumentHelper.createDocument();
 		Element resultElement = document.addElement("Result");
@@ -126,7 +126,7 @@ public class CustomerServiceExternal {
 		Locale lang = getLocale(language);
 		logger.debug("IncidentReport:getComment:" + lang);
 		ResourceBundle bundle = ResourceBundle
-				.getBundle("com.hukoomi.utils.ReportIncidentPortletResource", lang);
+				.getBundle("com.hukoomi.resources.ReportIncidentPortletResource", lang);
 		String comments = bundle.getString(eService);
 		if(!comments.equals("") && !comments.equals(null) ) {
 		if(language.equals("ar")) {

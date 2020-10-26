@@ -3,6 +3,7 @@ package com.hukoomi.contact.service.impl;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.ResourceBundle;
 
 import javax.activation.DataHandler;
 import javax.mail.Address;
@@ -17,7 +18,7 @@ import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
 import com.hukoomi.contact.model.ContactEmail;
-import com.hukoomi.contact.service.impl.ContactEmailSenderService;
+import com.hukoomi.contact.service.HukoomiEmailSenderService;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 
@@ -28,7 +29,7 @@ import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.validation.Validator;
 
-public class ContactEmailSenderService {
+public class ContactEmailSenderService implements HukoomiEmailSenderService {
 	
 	private static final String EMAIL_START_TEXT = "text.email_start";
 
@@ -42,13 +43,20 @@ public class ContactEmailSenderService {
 	private MessageSource messageSource;
 	private MailSender mailSender;
 
-	public void sendEmailToHukoomi(ContactEmail email, Locale locale) throws AddressException, MessagingException {
+	public void sendEmailToHukoomi(ContactEmail email, Locale locale) {
 
-		/* ValidationUtils.validate(email, "email", contactEmailValidator); */
 
-		MimeMessage mailMessage = createMailMessage(email, locale);
+
+		MimeMessage mailMessage;
 		try {
+			mailMessage = createMailMessage(email, locale);
 			Transport.send(mailMessage);
+		} catch (AddressException e1) {
+
+			e1.printStackTrace();
+		} catch (MessagingException e1) {
+
+			e1.printStackTrace();
 		}
 		catch (MailException e) {
 			logger.error(e);
@@ -56,8 +64,8 @@ public class ContactEmailSenderService {
 		}
 	}
 
-	private MimeMessage createMailMessage(ContactEmail email, Locale locale) throws AddressException, MessagingException {
-		//SimpleMailMessage mailMessage = new SimpleMailMessage();
+	private MimeMessage createMailMessage(ContactEmail email, Locale locale) throws  MessagingException {
+
 		String from = "noreply@hukoomi.qa";
 		String to = "thavamani.sakthivel@gfi.in";
 		Properties props = new Properties();
@@ -69,8 +77,14 @@ public class ContactEmailSenderService {
 		MimeMessage msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(from));
 		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-		msg.setSubject("test"); 
-		msg.setText("Hi, This mail is to inform you...");  
+		ResourceBundle bundle = ResourceBundle.getBundle("com.hukoomi.utils.ContactUs", email.getLanguage());
+		
+		msg.setSubject(bundle.getString("text.mail_subject."+ email.getEmailSubject()));
+		StringBuilder sb = new StringBuilder();
+		sb.append(bundle.getString(EMAIL_START_TEXT));
+		sb.append(email.getSenderName()).append(" ").append(email.getSenderEmail()).append(" ").append(
+				email.getEmailText());
+		msg.setText(sb.toString());  
 		
 //		email.getEmailSubject();
 //		mailMessage.setFrom(mailFrom);

@@ -1,5 +1,8 @@
 package com.hukoomi.contact.model;
 
+import java.util.Locale;
+import java.util.ResourceBundle.Control;
+
 public class ContactEmail {
 	
 	private String senderName;
@@ -7,6 +10,8 @@ public class ContactEmail {
 	private String senderEmail;
 
 	private String emailText;
+	
+	private Locale locale;
 
 	/* private ContactHukoomiEmailSubject emailSubject; */
 	
@@ -43,7 +48,12 @@ public class ContactEmail {
 	public void setEmailText(String emailText) {
 		this.emailText = emailText;
 	}
-
+	public Locale getLanguage() {
+		return locale;
+	}
+	public void setLanguage(Locale locale) {
+		this.locale = locale;
+	}
 	/*
 	 * public ContactHukoomiEmailSubject getEmailSubject() { return emailSubject; }
 	 * 
