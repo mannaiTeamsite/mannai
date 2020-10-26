@@ -25,6 +25,7 @@ import com.hukoomi.utils.Constants;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.VerifyRecaptcha;
 import com.ibm.faces.component.html.HtmlFileupload;
+import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.RequestContext;
 import com.hukoomi.utils.VerifyRecaptcha;
 
@@ -66,6 +67,7 @@ public class CustomerServiceExternal {
 				break;
 			case ACTION_SUBMIT_TICKET:
 				captcha = context.getParameterString("captcha");
+				FileDal test = context.getFileDal();
 				file = (HtmlFileupload) context.getParameters().get("file");
 				result = submitTicket(captcha,file);
 				break;
