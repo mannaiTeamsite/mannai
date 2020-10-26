@@ -66,7 +66,7 @@ public class CustomerServiceExternal {
 				break;
 			case ACTION_SUBMIT_TICKET:
 				captcha = context.getParameterString("captcha");
-				String test = context.getFileDal();
+				
 				file = (HtmlFileupload) context.getParameters().get("file");
 				result = submitTicket(captcha,file);
 				break;
