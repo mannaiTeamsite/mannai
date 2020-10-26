@@ -1,7 +1,5 @@
 package com.hukoomi.contact.model;
 
-import com.hukoomi.contact.model.ContactHukoomiEmailSubject;
-
 public class ContactEmail {
 	
 	private String senderName;
