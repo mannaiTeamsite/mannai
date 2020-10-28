@@ -1,4 +1,4 @@
-package src.main.java.com.hukoomi.livesite.weather;
+package com.hukoomi.livesite.weather;
 
 import java.io.IOException;
 import com.interwoven.livesite.runtime.RequestContext;
