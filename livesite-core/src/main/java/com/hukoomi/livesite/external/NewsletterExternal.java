@@ -18,6 +18,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 
@@ -189,7 +191,7 @@ public class NewsletterExternal {
 	 * @throws NoSuchAlgorithmException
 	 * @throws JSONException
 	 * 
-	 * This methos is used to make call to 
+	 * This method is used to make call to mailchimp and check if the users is already subscribed or not
 	 */
 	private Document createSubscriberinMailChimp(String email, String lang)
 			throws IOException, DocumentException, NoSuchAlgorithmException, JSONException {
@@ -197,6 +199,8 @@ public class NewsletterExternal {
 		logger.debug("add subcriber:");
 		
 		Document document = DocumentHelper.createDocument() ;
+		ResourceBundle bundle = ResourceBundle.getBundle("com.hukoomi.resources.Newsletter", getLocaleLanguage(lang));
+		String validationMessage ="";
 		if (email.equalsIgnoreCase("")) {
 			logger.debug("email id not provided ");
 		} else {
@@ -210,10 +214,11 @@ public class NewsletterExternal {
 				String status="";
 				status = isSubscriberexist(email);
 				String response ="";
-				String responseStr="";
-				String str1="<Result><status>";
+				String responseStr="";				
+				String str1 = "<Result><status>";
 				String str2 = "</status><email>";
-				String str3="</email></Result>";
+				String str3 = "</email><message>";
+				String str4 = "</message></Result>";
 				logger.debug("info: " + status);
 				if (status != null && !status.equals("")) {
 					switch(status) {
@@ -223,11 +228,21 @@ public class NewsletterExternal {
 						break;
 					case STATUS_SUBSCRIBED:
 						status = "Already Subscribed";
-						responseStr = str1 + status + str2 + email + str3;				
+						validationMessage = bundle.getString("subscribed.msg") ;
+						if("ar".equals(lang)) {
+							
+							validationMessage = decodeToArabicString(validationMessage);
+						}
+						responseStr = str1 + status + str2 + email + str3 +validationMessage+ " : "+ email+str4;
 						break;
 					case STATUS_PENDING:
 						status = "In Pending";
-						responseStr = str1 + status + str2 + email + str3;					
+						validationMessage = bundle.getString("pending.msg");	
+						if("ar".equals(lang)) {
+							
+							validationMessage = decodeToArabicString(validationMessage);
+						}
+						responseStr = str1 + status + str2 + email + str3 +validationMessage+ " : "+ email+str4;
 						break;
 					case STATUS_UNSUBSCRIBED:
 						status = STATUS_PENDING;
@@ -238,7 +253,7 @@ public class NewsletterExternal {
 					break;
 					}
 					if(response != null && !response.equals("")) {
-					 responseStr = getDocument(email,status,response);
+					 responseStr = getDocument(email,status,response,lang);
 					}
 					logger.debug("after get document responseStr: " + responseStr);					
 					document = DocumentHelper.parseText(responseStr);
@@ -260,27 +275,46 @@ public class NewsletterExternal {
 	 * @return
 	 * @throws JSONException
 	 */
-	private String  getDocument(String email,String status, String response) throws JSONException {
+	private String  getDocument(String email,String status, String response,String lang) throws JSONException {
 		String responseStr ="" ; 
-		String str1="<Result><status>";
+		String str1 = "<Result><status>";
 		String str2 = "</status><email>";
-		String str3="</email></Result>";
+		String str3 = "</email><message>";
+		String str5 = "</message></Result>";
 		String str4 = "xmlstring ";
+		
+		ResourceBundle bundle = ResourceBundle.getBundle("com.hukoomi.resources.Newsletter", getLocaleLanguage(lang));
+		String validationMessage ="";
+		String pendingMessage ="";
+		String pendingMessage1 ="";
 		
 		if (!response.equals("")) {
 			JSONObject jsonObj = new JSONObject(response);
 			status = (String) jsonObj.get(KEY_STATUS);
 			email = (String) jsonObj.get(KEY_EMAIL);
 		}
+		logger.debug(status);
+		if (status.equals(STATUS_SUBSCRIBED)  ) {	
+			
+			validationMessage = bundle.getString("success.msg");
+			if("ar".equals(lang)) {
+				
+				validationMessage = decodeToArabicString(validationMessage);
+			}
+			responseStr = str1 + status + str2 + email + str3 +validationMessage+ " : " +email+str5;
 		
-		if (status.equals(STATUS_SUBSCRIBED) || status.equals(STATUS_PENDING)) {
-			logger.debug(status);
-			responseStr = str1 + status + str2 + email + str3;
-			logger.debug(str4 + responseStr);
-		
+		} else if (status.equals(STATUS_PENDING)){
+			pendingMessage = bundle.getString("unsubscribed.msg");
+			pendingMessage1 = bundle.getString("unsubscribed.msg");
+			if("ar".equals(lang)) {
+				
+				pendingMessage = decodeToArabicString(pendingMessage);
+				pendingMessage1 = decodeToArabicString(pendingMessage1);
+			}
+			validationMessage = pendingMessage +" : " +email+ " " +pendingMessage1;
+			responseStr = str1 + status + str2 + email + str3 +validationMessage+str5;
 		} else {
-			responseStr = str1 + status + str2 + email + str3;
-			logger.debug(str4 + responseStr);
+			responseStr = str1 + status + str2 + email + str3;			
 			
 		}
 		return responseStr;
@@ -401,11 +435,16 @@ public class NewsletterExternal {
 	 * 
 	 * This method is used to get URL Connection to the Mailchimp service endpoint
 	 */
+	/**
+	 * @param email
+	 * @return
+	 * @throws NoSuchAlgorithmException
+	 * @throws IOException
+	 */
 	private HttpURLConnection getConnection(String email) throws NoSuchAlgorithmException, IOException {
 		String emailHash = md5Java(email);
 		String endpoint = baseUrl + "/lists/" + listId + "/members/" + emailHash;
-		URL url = new URL(endpoint);
-		logger.debug(url);
+		URL url = new URL(endpoint);		
 		httpConnection = (HttpURLConnection) url.openConnection();
 		return httpConnection;
 	}
@@ -432,4 +471,22 @@ public class NewsletterExternal {
 		return digest;
 	}
 
+	public Locale getLocaleLanguage(String language){
+		switch (language) {
+		case "en":
+			return Locale.ENGLISH;
+		case "ar":
+			return new Locale("ar");
+		default:
+			return Locale.ENGLISH;
+		}
+	}
+	
+	public String decodeToArabicString(String str) {
+	      
+	      byte[] charset = str.getBytes(StandardCharsets.UTF_8);
+	      return new String(charset, StandardCharsets.UTF_8);
+	   }
+	
+	
 }
