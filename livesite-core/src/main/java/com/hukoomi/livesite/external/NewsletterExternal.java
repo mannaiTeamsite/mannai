@@ -54,15 +54,16 @@ public class NewsletterExternal {
 	 * @param configCode
 	 * @return
 	 */
-	public static String getConfiguration(String configCode) {
+	public static String getConfiguration(String configCode,RequestContext context) {
 		logger.debug("in getConfiguration:" + configCode);
+		Postgre postgre =  new Postgre(context);
 		Statement st = null;
 		ResultSet rs = null;
 		String configParamValue = "";
 		final String GET_OPTION_ID = "SELECT CONFIG_PARAM_VALUE FROM CONFIG_PARAM WHERE CONFIG_PARAM_CODE = '"
 				+ configCode + "'";
 		try {
-			NewsletterExternal.connection = Postgre.getConnection();
+			NewsletterExternal.connection = postgre.getConnection();
 			st = NewsletterExternal.connection.createStatement();
 			rs = st.executeQuery(GET_OPTION_ID);
 			while (rs.next()) {
@@ -75,9 +76,9 @@ public class NewsletterExternal {
 			e.printStackTrace();
 			return configParamValue;
 		} finally {
-			Postgre.releaseConnection(NewsletterExternal.connection, st, rs);
+			postgre.releaseConnection(NewsletterExternal.connection, st, rs);
 		}
-		Postgre.releaseConnection(NewsletterExternal.connection, st, rs);
+		postgre.releaseConnection(NewsletterExternal.connection, st, rs);
 		return configParamValue;
 	}
 
@@ -87,11 +88,12 @@ public class NewsletterExternal {
 	 * @param status
 	 * This method is used to update the subscriber details in backend (DB)
 	 */
-	public static void insertSubscriber(String email, String lang, String status) {
+	public static void insertSubscriber(String email, String lang, String status,RequestContext context) {
 		logger.debug("NewsletterExternal : insertSubscriber");
+		Postgre postgre =  new Postgre(context);
 		PreparedStatement prepareStatement = null;
 		String insertQuery = "";
-		if (isscubscriberExist(email) > 0) {
+		if (isscubscriberExist(email,context) > 0) {
 			logger.debug("NewsletterExternal : update");
 			insertQuery = "UPDATE NEWSLETTER_SUBSCRIBERS SET LANGUAGE = ?,STATUS = ? WHERE EMAIL = ?";
 
@@ -101,7 +103,7 @@ public class NewsletterExternal {
 
 		}
 		try {
-			NewsletterExternal.connection = Postgre.getConnection();
+			NewsletterExternal.connection = postgre.getConnection();
 			prepareStatement = NewsletterExternal.connection.prepareStatement(insertQuery);
 
 			prepareStatement.setString(1, lang);
@@ -121,10 +123,10 @@ public class NewsletterExternal {
 			logger.error((Object) errorMsg);
 
 		} finally {
-			Postgre.releaseConnection(NewsletterExternal.connection, prepareStatement, null);
+			postgre.releaseConnection(NewsletterExternal.connection, prepareStatement, null);
 		}
 
-		Postgre.releaseConnection(NewsletterExternal.connection, prepareStatement, null);
+		postgre.releaseConnection(NewsletterExternal.connection, prepareStatement, null);
 	}
 
 	/**
@@ -132,13 +134,14 @@ public class NewsletterExternal {
 	 * @return
 	 * This method is used to check if the subscriber exits in the Mailchimp Tool
 	 */
-	private static int isscubscriberExist(String email) {
+	private static int isscubscriberExist(String email,RequestContext context) {
+		Postgre postgre =  new Postgre(context);
 		Statement st = null;
 		ResultSet rs = null;
 
 		final String getcount = "SELECT COUNT(*) as total FROM NEWSLETTER_SUBSCRIBERS WHERE EMAIL = '" + email + "'";
 		try {
-			NewsletterExternal.connection = Postgre.getConnection();
+			NewsletterExternal.connection = postgre.getConnection();
 			st = NewsletterExternal.connection.createStatement();
 			rs = st.executeQuery(getcount);
 
@@ -151,9 +154,9 @@ public class NewsletterExternal {
 			e.printStackTrace();
 
 		} finally {
-			Postgre.releaseConnection(NewsletterExternal.connection, st, rs);
+			postgre.releaseConnection(NewsletterExternal.connection, st, rs);
 		}
-		Postgre.releaseConnection(NewsletterExternal.connection, st, rs);
+		postgre.releaseConnection(NewsletterExternal.connection, st, rs);
 		return 0;
 
 	}
@@ -177,7 +180,7 @@ public class NewsletterExternal {
 		String lang = context.getParameterString("lang");
 		logger.debug("lang:" + lang);
 		if (!email.equals("") && !lang.equals("")) {
-			memberdetail = createSubscriberinMailChimp(email, lang);
+			memberdetail = createSubscriberinMailChimp(email, lang,context);
 		}
 		return memberdetail;
 	}
@@ -193,7 +196,7 @@ public class NewsletterExternal {
 	 * 
 	 * This method is used to make call to mailchimp and check if the users is already subscribed or not
 	 */
-	private Document createSubscriberinMailChimp(String email, String lang)
+	private Document createSubscriberinMailChimp(String email, String lang,RequestContext context)
 			throws IOException, DocumentException, NoSuchAlgorithmException, JSONException {
 		// add subcriber
 		logger.debug("add subcriber:");
@@ -204,10 +207,10 @@ public class NewsletterExternal {
 		if (email.equalsIgnoreCase("")) {
 			logger.debug("email id not provided ");
 		} else {
-			listId = getConfiguration("Mailchimp_List_Id");
+			listId = getConfiguration("Mailchimp_List_Id",context);
 			logger.debug("listId:" + listId);
-			authorizationHeader = "Basic "+getConfiguration("Mailchimp_Authorization_Header");			
-			baseUrl = getConfiguration("Mailchimp_BaseURL");
+			authorizationHeader = "Basic "+getConfiguration("Mailchimp_Authorization_Header",context);			
+			baseUrl = getConfiguration("Mailchimp_BaseURL",context);
 			logger.debug("baseUrl:" + baseUrl);
 			try {
 

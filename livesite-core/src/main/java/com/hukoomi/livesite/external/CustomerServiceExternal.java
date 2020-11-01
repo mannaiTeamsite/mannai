@@ -58,16 +58,16 @@ public class CustomerServiceExternal {
 		if (!action.equals("")) {
 			switch (action) {
 			case ACTION_ESERVICE:
-				result = getEServices();
+				result = getEServices(context);
 				break;
 			case ACTION_SERVICE:
 				eService = context.getParameterString("eService");
-				result = getServices(eService);
+				result = getServices(eService,context);
 				break;
 			case ACTION_SUBMIT_TICKET:
 				captcha = context.getParameterString("captcha");
 				
-				file = (HtmlFileupload) context.getParameters().get("file");
+				//file = (HtmlFileupload) context.getParameters().get("file");
 				result = submitTicket(captcha,file);
 				break;
 			case ACTION_QUERY_TICKET:
@@ -93,7 +93,7 @@ public class CustomerServiceExternal {
 	private Document getIdType(String language) throws UnsupportedEncodingException {
 		logger.debug("IncidentReport:getIdType:Entering");
 		Locale lang = getLocale(language);
-		ResourceBundle bundle = ResourceBundle.getBundle("com.hukoomi.resources.ReportIncidentPortletResource", lang);
+		ResourceBundle bundle = ResourceBundle.getBundle("com.hukoomi.resources.CustomerServiceResource", lang);
 		String validationMessage = bundle.getString("idType");
 		Document document = DocumentHelper.createDocument();
 		Element resultElement = document.addElement("Result");
@@ -126,7 +126,7 @@ public class CustomerServiceExternal {
 		Locale lang = getLocale(language);
 		logger.debug("IncidentReport:getComment:" + lang);
 		ResourceBundle bundle = ResourceBundle
-				.getBundle("com.hukoomi.resources.ReportIncidentPortletResource", lang);
+				.getBundle("com.hukoomi.resources.CustomerServiceResource", lang);
 		String comments = bundle.getString(eService);
 		if(!comments.equals("") && !comments.equals(null) ) {
 		if(language.equals("ar")) {
@@ -180,16 +180,16 @@ public class CustomerServiceExternal {
 		return DocumentHelper.parseText( "<recaptcha>" + VerifyRecaptcha.verify(captcha) + "</recaptcha>");
 	}
 
-	private Document getServices(String eService) throws IOException {
+	private Document getServices(String eService,RequestContext context) throws IOException {
 		logger.debug("IncidentReportDAO:getServices:Entering");
+		Postgre postgre =  new Postgre(context);
 		ResultSet resultSet = null;
 		Statement statement = null;
 		PreparedStatement preparedStatement = null;
 		StringBuilder builder = new StringBuilder();
-		connection = Postgre.getConnection();
+		connection = postgre.getConnection();
 		Document document = DocumentHelper.createDocument();
 		Element resultElement = document.addElement("Result");
-
 		builder.append(
 				"SELECT S.\"ESERVICEID\" as ESERVICEID,S.\"SERVICEID\" as SERVICEID,S.\"SERVICEEDESC\" as SERVICEEDESC,S.\"SERVICEADESC\" as SERVICEADESC ");
 		builder.append("FROM public.\"SERVICES\" S ");
@@ -224,21 +224,22 @@ public class CustomerServiceExternal {
 			logger.debug("IncidentReportDAO:getServices:document" + document.toString());
 		} catch (SQLException e) {
 			logger.error((Object) ("getConfiguration()" + e.getMessage()));
-			Postgre.releaseConnection(connection, statement, resultSet);
+			postgre.releaseConnection(connection, statement, resultSet);
 			e.printStackTrace();
 			return document;
 		} finally {
-			Postgre.releaseConnection(connection, statement, resultSet);
+			postgre.releaseConnection(connection, statement, resultSet);
 		}
 		Postgre.releaseConnection(connection, statement, resultSet);
 		return document;
 	}
 
-	private Document getEServices() {
+	private Document getEServices(RequestContext context) {
+		Postgre postgre =  new Postgre(context);
 		logger.debug("IncidentReportDAO:geteServices:Begin");
 		ResultSet resultSet = null;
 		Statement statement = null;
-		CustomerServiceExternal.connection = Postgre.getConnection();
+		CustomerServiceExternal.connection = postgre.getConnection();
 		PreparedStatement preparedStatement = null;
 		StringBuilder builder = new StringBuilder();
 		List<Map<String, String>> resultList = null;
@@ -276,9 +277,9 @@ public class CustomerServiceExternal {
 			e.printStackTrace();
 			return document;
 		} finally {
-			Postgre.releaseConnection(CustomerServiceExternal.connection, statement, resultSet);
+			postgre.releaseConnection(CustomerServiceExternal.connection, statement, resultSet);
 		}
-		Postgre.releaseConnection(CustomerServiceExternal.connection, statement, resultSet);
+		postgre.releaseConnection(CustomerServiceExternal.connection, statement, resultSet);
 		return document;
 	}
 
