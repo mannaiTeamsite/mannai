@@ -94,8 +94,8 @@ public class LabelListGenerator {
                         + "</Value><Display>" + nodeKey
                         + "</Display></Option>");
                 Element eleOption = eleList.addElement("Option");
-                eleOption.addElement(value).addText(finalLabel);
-                eleOption.addElement(label).addText(nodeKey);
+                eleOption.addElement(label).addText(finalLabel);
+                eleOption.addElement(value).addText(nodeKey);
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getClass().getCanonicalName()
