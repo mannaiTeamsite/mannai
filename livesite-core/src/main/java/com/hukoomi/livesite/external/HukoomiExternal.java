@@ -1,15 +1,18 @@
 package com.hukoomi.livesite.external;
 
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
+import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.SolrQueryUtil;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.List;
 
 public class HukoomiExternal {
 /** Logger object to check the flow of the code.*/
@@ -28,6 +31,7 @@ public static final String DEFAULT_QUERY = "*:*";
 public Document getLandingContent(final RequestContext context) {
     SolrQueryUtil squ = new SolrQueryUtil();
     SolrQueryBuilder sqb = new SolrQueryBuilder(context);
+    CommonUtils commonUtils = new CommonUtils(context);
     String fieldQuery = "";
     String fq = context.getParameterString(
             "fieldQuery", "");
@@ -50,7 +54,30 @@ public Document getLandingContent(final RequestContext context) {
         }
         logger.debug("fieldQuery : " + fieldQuery);
         sqb.addFieldQuery(fieldQuery);
+        }
+    String curatedContent = context
+            .getParameterString("curated-content", "");
+    logger.debug("curated content : " + curatedContent);
+    if (StringUtils.isNotBlank(curatedContent)) {
+        Document curatedDoc = commonUtils.readDCR(curatedContent);
+        String curatedXpath = context
+                .getParameterString("curatedXpath",
+                        "/Root/CuratedContent/ContentType/ContentType");
+        List<Node> categoryNodes = curatedDoc.selectNodes(curatedXpath);
+        String curatedQuery = "(";
+        for (Node eleNode : categoryNodes) {
+            curatedQuery = curatedQuery + " "
+                    + eleNode.getText();
+        }
+        curatedQuery = curatedQuery + " )";
+        if (StringUtils.isNotBlank(fieldQuery)) {
+            fieldQuery += " AND category:" + curatedQuery;
+        } else {
+            fieldQuery = "category:" + curatedQuery;
+        }
+        sqb.addFieldQuery(fieldQuery);
     }
+
     String fields = context.getParameterString(
             "fields", "");
     logger.debug("fields : " + fields);
