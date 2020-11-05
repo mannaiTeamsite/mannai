@@ -31,6 +31,8 @@ import org.json.JSONObject;
 
 import com.hukoomi.utils.Postgre;
 import com.interwoven.livesite.runtime.RequestContext;
+import com.interwoven.ui.base.impl.command.CommandServletMapper;
+
 
 public class NewsletterExternal {
 	/** Logger object to check the flow of the code. */

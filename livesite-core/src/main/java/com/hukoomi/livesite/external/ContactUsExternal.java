@@ -242,15 +242,16 @@ public class ContactUsExternal {
 		return configParamValue;
 
 	}
+	
 
 	private static void loadConfigparams(RequestContext context) {
 		logger.debug("in getmailserverProperty:");
 		Statement st = null;
 		ResultSet rs = null;
-		Postgre postgre =  new Postgre(context);
+		Postgre objPostgre =  new Postgre(context);
 		final String GET_OPTION_ID = "SELECT CONFIG_PARAM_CODE,CONFIG_PARAM_VALUE FROM CONFIG_PARAM";
 		try {
-			ContactUsExternal.connection = postgre.getConnection();
+			ContactUsExternal.connection = objPostgre.getConnection();
 			st = ContactUsExternal.connection.createStatement();
 			rs = st.executeQuery(GET_OPTION_ID);
 			while (rs.next()) {
@@ -265,9 +266,9 @@ public class ContactUsExternal {
 			logger.error((Object) ("getConfiguration()" + e.getMessage()));
 			e.printStackTrace();
 		} finally {
-			postgre.releaseConnection(ContactUsExternal.connection, st, rs);
+			objPostgre.releaseConnection(ContactUsExternal.connection, st, rs);
 		}
-		postgre.releaseConnection(ContactUsExternal.connection, st, rs);
+		objPostgre.releaseConnection(ContactUsExternal.connection, st, rs);
 
 	}
 
