@@ -30,7 +30,6 @@ public static final String DEFAULT_QUERY = "*:*";
  */
 public Document getLandingContent(final RequestContext context) {
     Document document = DocumentHelper.createDocument();
-    String field = "";
     String fieldQuery = "";
     String fq = context.getParameterString(
             "fieldQuery", "");
@@ -42,12 +41,11 @@ public Document getLandingContent(final RequestContext context) {
         logger.warn("Unable to decode fieldQuery="
                 + fq, e);
     }
-    field = fieldQuery;
     String curatedContent = context
             .getParameterString("curated-content", "");
     logger.debug("curated content : " + curatedContent);
     return getCuratedContent(context,
-            document, curatedContent, fieldQuery, field);
+            document, curatedContent, fieldQuery);
 }
     /** This method will be called from Component
      * External for solr Content fetching.
@@ -71,12 +69,12 @@ public Document getLandingContent(final RequestContext context) {
             fieldQuery = "category:" + curatedCategory;
         }
         if (node.selectSingleNode("is-location-filter-required")
-                .getText().equals("yes")) {
-            fieldQuery += " AND " + city;
+                .getText().equals("yes") && StringUtils.isNotBlank(city)) {
+                fieldQuery += " AND " + city;
         }
         if (node.selectSingleNode("is-date-filter-required")
-                .getText().equals("yes")) {
-            fieldQuery += " AND " + date;
+                .getText().equals("yes") && StringUtils.isNotBlank(date)) {
+                fieldQuery += " AND " + date;
         }
         return fieldQuery;
     }
@@ -87,7 +85,6 @@ public Document getLandingContent(final RequestContext context) {
      * @param document The final content document to be returned.
      * @param curatedContent curated DCR path passed as param to java.
      * @param fq solr field query.
-     * @param field field variable with query content.
      *
      * @return document return the solr response document
      * generated from solr query.
@@ -95,8 +92,7 @@ public Document getLandingContent(final RequestContext context) {
     public Document getCuratedContent(
             final RequestContext context,
             final Document document, final String curatedContent,
-            final String fq, final String field) {
-        String fieldQuery = fq;
+            final String fq) {
         CommonUtils commonUtils = new CommonUtils(context);
         SolrQueryUtil squ = new SolrQueryUtil();
         SolrQueryBuilder sqb = new SolrQueryBuilder(context);
@@ -115,25 +111,41 @@ public Document getLandingContent(final RequestContext context) {
                     curatedDoc.selectNodes(
                             curatedXpath);
             for (Node eleNode : categoryNodes) {
-                fieldQuery = field;
                 sqb.addFieldQuery(
                         getCuratedQuery(
-                    fieldQuery, eleNode, city, date));
+                    fq, eleNode, city, date));
 
                 String fields = context.getParameterString(
                         "fields", "");
                 logger.debug("fields : " + fields);
             if (StringUtils.isNotBlank(fields)) {
-                logger.debug("fieldQuery : " + fieldQuery);
+                logger.debug("fields : " + fields);
                 sqb.addFields(fields);
             }
                 String query = sqb.build();
                 logger.debug("Landing Query : " + query);
                 Document curDoc = squ.doJsonQuery(
                         query, "SolrResponse");
-                curDoc.getRootElement().add(eleNode);
-                document.getRootElement().add(
-                        curDoc.getRootElement());
+                if (curDoc != null) {
+                    logger.debug("curDoc : " + curDoc);
+                    curDoc.getRootElement()
+                            .addElement("content-type")
+                            .addText(
+                                    eleNode.selectSingleNode("ContentType")
+                                            .getText());
+                    curDoc.getRootElement()
+                            .addElement("title")
+                            .addText(
+                                    eleNode.selectSingleNode("title")
+                                            .getText());
+                    curDoc.getRootElement()
+                            .addElement("image")
+                            .addText(
+                                    eleNode.selectSingleNode("image")
+                                            .getText());
+                    document.getRootElement().add(
+                            curDoc.getRootElement());
+                }
             }
         }
         return document;
