@@ -19,6 +19,7 @@ import org.dom4j.Element;
 
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
+import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -28,10 +29,17 @@ import com.interwoven.livesite.runtime.RequestContext;
 public class SurveyExternal {
 	/** Logger object to check the flow of the code.*/
 	private final Logger logger = Logger.getLogger(SurveyExternal.class);
+	Postgre postgre =  null;
 	
 	public Document submitSurvey(final RequestContext context) {
 		logger.debug("SurveyExternal : submitSurvey");
 		
+		FileDal fileDal = context.getFileDal();
+		logger.debug("fileDal : "+fileDal);
+        String root = fileDal.getRoot();
+        logger.debug("File Dal Root: " + root);
+		
+		postgre =  new Postgre(context);
 		DetailExternal detailExt = new DetailExternal();
 		String surveyAction = context.getParameterString("surveyAction");
 	    logger.info("surveyAction : " + surveyAction);
@@ -96,7 +104,7 @@ public class SurveyExternal {
         	if(totalQuestions != null && !"".equals(totalQuestions)) {
         		totalCount = Integer.parseInt(totalQuestions);
         	}
-        	connection = Postgre.getConnection();
+        	connection = postgre.getConnection();
         	String responseIdQuery = "SELECT nextval('survey_response_response_id_seq') as responseId";
         	responseIdStmt = connection.createStatement();
         	rs = responseIdStmt.executeQuery(responseIdQuery);

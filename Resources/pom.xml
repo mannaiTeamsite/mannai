@@ -67,7 +67,49 @@
 							<version>3.1.1</version>
 							<packaging>jar</packaging>
 						</configuration>
-					</execution>								
+					</execution>
+					<execution>
+						<id>teamsite_install_cssdk-sci</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/teamsite/lib/cssdk_sci.jar</file>
+							<groupId>com.opentext.teamsite.commons</groupId>
+							<artifactId>cssdk_sci</artifactId>
+							<version>16.6.1.0.0</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>	
+					<execution>
+						<id>teamsite_install_cssdkiface</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/teamsite/lib/cssdkiface.jar</file>
+							<groupId>com.opentext.teamsite.commons</groupId>
+							<artifactId>cssdkiface</artifactId>
+							<version>16.6.1.0.0</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+					<execution>
+						<id>teamsite_install_cssdkjava</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/teamsite/lib/cssdkjava.jar</file>
+							<groupId>com.opentext.teamsite.commons</groupId>
+							<artifactId>cssdkjava</artifactId>
+							<version>16.6.1.0.0</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>							
 				</executions>
 			</plugin>
 		</plugins>

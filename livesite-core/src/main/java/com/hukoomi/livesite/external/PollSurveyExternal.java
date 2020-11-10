@@ -1,7 +1,5 @@
 package com.hukoomi.livesite.external;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -9,7 +7,6 @@ import java.util.StringJoiner;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -17,6 +14,7 @@ import org.dom4j.Element;
 import org.dom4j.Node;
 
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
+import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.SolrQueryUtil;
 import com.interwoven.livesite.runtime.RequestContext;
 
@@ -35,6 +33,7 @@ public class PollSurveyExternal {
 	private final String ID_NODE = "/content/root/information/id";
 	private final String START = "0";
 	private final String ROW = "100";
+	Postgre postgre =  null;
 
 	public Document getContent(final RequestContext context) {
 		logger.debug("PollSurveyExternal : getContent");
@@ -42,6 +41,7 @@ public class PollSurveyExternal {
 		String lang = null;
 		PollsExternal pollsExt = new PollsExternal();
 		try {
+			postgre =  new Postgre(context);
 			String pollAction = context.getParameterString("pollAction");
 			
 			if ("vote".equalsIgnoreCase(pollAction)) {
@@ -69,10 +69,10 @@ public class PollSurveyExternal {
                 // logger.info(optionId);
 
                 pollsExt.insertPollResponse(lang, pollId, option, userId, ipAddress,
-                        userAgent, votedFrom);
+                        userAgent, votedFrom, postgre.getConnection());
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
-                Map<String, List<Map<String, String>>> response = pollsExt.getPollResponse(pollId, lang);
+                Map<String, List<Map<String, String>>> response = pollsExt.getPollResponse(pollId, lang, postgre.getConnection());
 
                 doc = pollsExt.createPollResultDoc(pollId, response);
 			}else {
@@ -133,17 +133,17 @@ public class PollSurveyExternal {
 				if(activePollIds != null && !"".equals(activePollIds)) {
 					pollGroupElem = pollSurveyElem.addElement("PollGroupResponse");
 					
-					String votedPollIds = pollsExt.checkResponseData(activePollIds, userId, ipAddress);
+					String votedPollIds = pollsExt.checkResponseData(activePollIds, userId, ipAddress, postgre.getConnection());
 					Map<String, List<Map<String, String>>> response = null;
 					if(votedPollIds != null && !"".equals(votedPollIds)) {
-						response = pollsExt.getPollResponse(votedPollIds, lang);
+						response = pollsExt.getPollResponse(votedPollIds, lang, postgre.getConnection());
 					}
 
-					if(!response.isEmpty()) {
-						pollDoc = pollsExt.addResultToXml(pollsSolrDoc, response);
-						pollGroupElem.add(pollDoc.getRootElement());
-						logger.info("Final Document - Poll Doc : " + doc.asXML());
-					}
+					//if(!response.isEmpty()) {
+					pollDoc = pollsExt.addResultToXml(pollsSolrDoc, response);
+					pollGroupElem.add(pollDoc.getRootElement());
+					logger.info("Final Document - Poll Doc : " + doc.asXML());
+					//}
 				}
 			}
 			

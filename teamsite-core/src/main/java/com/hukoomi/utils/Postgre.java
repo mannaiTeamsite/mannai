@@ -9,6 +9,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.interwoven.cssdk.common.CSClient;
+import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class Postgre {
@@ -22,41 +24,32 @@ public class Postgre {
     static String userName= null;
     static String password = null;
 
-    public Postgre(RequestContext context) {
-        connectionString = getConnectionString(context);
+    public Postgre(final CSClient client, final CSExternalTask task, final String propertyFileName) {
+        connectionString = getConnectionString(client, task, propertyFileName);
     }
+
     
-    @Deprecated
-    private String getConnectionString(final RequestContext context) {
-        logger.info("Postgre : getConnectionString()");
+    private String getConnectionString(final CSClient client, final CSExternalTask task, final String propertyFileName) {
+		 logger.info("Postgre : getConnectionString()");
+		 
+		 TSPropertiesFileReader propFileReader = new TSPropertiesFileReader(client, task, propertyFileName);
+		 Properties properties = propFileReader.getPropertiesFile();
+		 
+		 String connectionStr = null;
+		 String host = properties.getProperty("host");
+		 String port = properties.getProperty("port");
+		 String database = properties.getProperty("database");
+		 String schema = properties.getProperty("schema");
+		 userName = properties.getProperty("username");
+		 password = properties.getProperty("password");
 
-        String connectionStr = null;
-        PropertiesFileReader propertyFileReader = new PropertiesFileReader(
-                context, "dbconfig.properties");
-        Properties properties = propertyFileReader.getPropertiesFile();
+		 // jdbc:postgresql://172.16.167.164:5432/devapps,"tsdev","Motc@1234"
+		 connectionStr = "jdbc:" + database + "://" + host + ":" + port+ "/" + schema;
+		 logger.info("Connection String : " + connectionStr);
 
-        String host = context.getParameterString("host",
-                properties.getProperty("host"));
-        String port = context.getParameterString("port",
-                properties.getProperty("port"));
-        String database = context.getParameterString("database",
-                properties.getProperty("database"));
-        String schema = context.getParameterString("schema",
-                properties.getProperty("schema"));
-        userName = context.getParameterString("username",
-                properties.getProperty("username"));
-        password = context.getParameterString("password",
-                properties.getProperty("password"));
+		 return connectionStr;
+	 }
 
-        // jdbc:postgresql://172.16.167.164:5432/devapps,"tsdev","Motc@1234"
-        connectionStr = "jdbc:" + database + "://" + host + ":" + port
-                + "/" + schema;
-
-        logger.info("Connection String : " + connectionStr);
-
-        return connectionStr;
-    }
-    
     /**
      * method to getConnection.
      */

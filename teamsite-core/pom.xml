@@ -201,6 +201,21 @@
 			</exclusion>
 		</exclusions>
 	</dependency>
+	<dependency>
+		<groupId>com.opentext.teamsite.commons</groupId>
+		<artifactId>cssdk_sci</artifactId>
+		<version>16.6.1.0.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.opentext.teamsite.commons</groupId>
+		<artifactId>cssdkiface</artifactId>
+		<version>16.6.1.0.0</version>
+	</dependency>
+	<dependency>
+		<groupId>com.opentext.teamsite.commons</groupId>
+		<artifactId>cssdkjava</artifactId>
+		<version>16.6.1.0.0</version>
+	</dependency>
   </dependencies>
     <reporting>
         <plugins>

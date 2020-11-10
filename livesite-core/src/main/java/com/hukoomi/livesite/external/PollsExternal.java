@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import java.util.StringJoiner;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -38,6 +39,7 @@ public class PollsExternal {
     public static final String DEFAULT_QUERY = "*:*";
     /** Connection variable. */
     private static Connection connection = null;
+    Postgre postgre =  null;
 
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -51,6 +53,9 @@ public class PollsExternal {
 
     @Deprecated
     public Document performPollAction(final RequestContext context) {
+        
+        postgre =  new Postgre(context);
+        
 
         logger.info("PollsExternal : performPollAction()");
 
@@ -90,11 +95,11 @@ public class PollsExternal {
                 // logger.info(optionId);
 
                 insertPollResponse(lang, pollId, option, userId, ipAddress,
-                        userAgent, votedFrom);
+                        userAgent, votedFrom, postgre.getConnection());
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = getPollResponse(
-                        pollId,lang);
+                        pollId,lang, postgre.getConnection());
 
                 doc = createPollResultDoc(pollId, response);
             } else if ("current".equalsIgnoreCase(pollAction)) {
@@ -116,15 +121,17 @@ public class PollsExternal {
                 // Extract poll_id from doc and check with database any of the poll has been
                 // answered by user_id or ipAddress
                 String votedPollIds = checkResponseData(pollIdSFromDoc,
-                        userId, ipAddress);
+                        userId, ipAddress, postgre.getConnection());
 
-                // Fetch Result from DB for above poll_ids which were voted already by user
-                Map<String, List<Map<String, String>>> response = getPollResponse(
-                        votedPollIds,lang);
-
-                // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
-                // particular poll_id element
-                doc = addResultToXml(doc, response);
+                if(votedPollIds != null && !"".equals(votedPollIds.trim())) {
+	                // Fetch Result from DB for above poll_ids which were voted already by user
+	                Map<String, List<Map<String, String>>> response = getPollResponse(
+	                        votedPollIds,lang, postgre.getConnection());
+	
+	                // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
+	                // particular poll_id element
+	                doc = addResultToXml(doc, response);
+                }
                 logger.info("Final Result::" + doc.asXML());
             } else if ("past".equalsIgnoreCase(pollAction)) {
                 logger.info("PollAction = Past Polls");
@@ -142,7 +149,7 @@ public class PollsExternal {
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = getPollResponse(
-                        pollIdSFromDoc,lang);
+                        pollIdSFromDoc,lang, postgre.getConnection());
 
                 doc = addResultToXml(doc, response);
                 logger.info("Final Doc for Past Polls::" + doc.asXML());
@@ -159,9 +166,9 @@ public class PollsExternal {
                 String activePollIds = getPollExpiryStatus(pollIds);
                 logger.info("Expired Pollds:: " + activePollIds);
                 
-                ArrayList<String> frontEndIds = new ArrayList<String>(Arrays.asList(pollIds.split(",")));
+                ArrayList<String> frontEndIds = new ArrayList<>(Arrays.asList(pollIds.split(",")));
 
-                ArrayList<String> activeIds = new ArrayList<String>(Arrays.asList(activePollIds.split(",")));
+                ArrayList<String> activeIds = new ArrayList<>(Arrays.asList(activePollIds.split(",")));
                 
                 frontEndIds.removeAll(activeIds);
                 
@@ -177,11 +184,11 @@ public class PollsExternal {
                 
 
                 String votedPollIds = checkResponseData(activePollIds,
-                        userId, ipAddress);
+                        userId, ipAddress, postgre.getConnection());
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = getPollResponse(
-                        votedPollIds,lang);
+                        votedPollIds,lang, postgre.getConnection());
 
                 doc = createPollGroupDoc(expiredPollIds, response);
 
@@ -201,15 +208,17 @@ public class PollsExternal {
                 // Extract poll_id from doc and check with database any of the poll has been
                 // answered by user_id or ipAddress
                 String votedPollIds = checkResponseData(pollIdSFromDoc,
-                        userId, ipAddress);
+                        userId, ipAddress, postgre.getConnection());
 
-                // Fetch Result from DB for above poll_ids which were voted already by user
-                Map<String, List<Map<String, String>>> response = getPollResponse(
-                        votedPollIds,lang);
-
-                // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
-                // particular poll_id element
-                doc = addResultToXml(doc, response);
+                if(votedPollIds != null && !"".equals(votedPollIds)) {
+	                // Fetch Result from DB for above poll_ids which were voted already by user
+	                Map<String, List<Map<String, String>>> response = getPollResponse(
+	                        votedPollIds,lang, postgre.getConnection());
+	
+	                // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
+	                // particular poll_id element
+	                doc = addResultToXml(doc, response);
+                }
                 logger.info("Final Result::" + doc.asXML());
 
             }
@@ -278,7 +287,7 @@ public class PollsExternal {
         return document;
     }
 
-    public static String getPollExpiryStatus(String pollIds) {
+    public String getPollExpiryStatus(String pollIds) {
         logger.info("getExpiryStatus()");
         StringJoiner expiredPollIds = new StringJoiner(",");
 
@@ -290,7 +299,7 @@ public class PollsExternal {
         ResultSet rs = null;
 
         try {
-            connection = Postgre.getConnection();
+            connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(expiryCheckQuery);
             prepareStatement.setArray(1, connection
@@ -431,15 +440,15 @@ public class PollsExternal {
         return joiner.toString();
     }
 
-    public static void insertPollResponse(String lang, String pollId,
+    public void insertPollResponse(String lang, String pollId,
             String optionId, String userId, String ipAddress,
-            String userAgent, String votedFrom) {
+            String userAgent, String votedFrom, Connection connection) {
         logger.debug("PollsExternal : insertPollResponse");
         String POLL_RESPONSE_INSERT_QUERY = "INSERT INTO POLL_RESPONSE (POLL_ID, OPTION_ID, USER_ID, IP_ADDRESS, LANG, VOTED_FROM, USER_AGENT, VOTED_ON) VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP)";
         PreparedStatement prepareStatement = null;
 
         try {
-            connection = Postgre.getConnection();
+            //connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(POLL_RESPONSE_INSERT_QUERY);
             prepareStatement.setLong(1, Long.parseLong(pollId));
@@ -466,8 +475,8 @@ public class PollsExternal {
         }
     }
 
-    public static Map<String, List<Map<String, String>>> getPollResponse(
-            String pollIds, String lang) {
+    public Map<String, List<Map<String, String>>> getPollResponse(
+            String pollIds, String lang, Connection connection) {
         logger.info("getPollResponse()");
         /*String pollQuery = "SELECT pm.poll_id, pm.question, ps.option_id,
         ps.option_label, ps.option_value, ps.PollCount, totalresponse,
@@ -499,7 +508,7 @@ public class PollsExternal {
         Map<String, List<Map<String, String>>> pollsResultMap = new LinkedHashMap<String, List<Map<String, String>>>();
 
         try {
-            connection = Postgre.getConnection();
+            //connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(pollQuery.toString());
             prepareStatement.setArray(1, connection
@@ -558,8 +567,8 @@ public class PollsExternal {
 
     }
 
-    public static String checkResponseData(String pollIds, String user_id,
-            String ipAddress) {
+    public String checkResponseData(String pollIds, String user_id,
+            String ipAddress, Connection connection) {
         logger.info("checkResponseData()");
         StringBuffer checkVotedQuery = new StringBuffer(
                 "SELECT POLL_ID FROM POLL_RESPONSE WHERE POLL_ID = ANY (?) ");
@@ -577,7 +586,7 @@ public class PollsExternal {
         ResultSet rs = null;
 
         try {
-            connection = Postgre.getConnection();
+            //connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(checkVotedQuery.toString());
             prepareStatement.setArray(1, connection
@@ -607,7 +616,7 @@ public class PollsExternal {
         return votedPollIds.toString();
     }
 
-    public static int getOptionId(String pollId, String lang,
+    public int getOptionId(String pollId, String lang,
             String option) {
         logger.debug("PollsExternal : getOptionId()");
         Statement st = null;
@@ -617,7 +626,7 @@ public class PollsExternal {
                 + pollId + " AND LANG = '" + lang + "' AND OPTION = '"
                 + option + "'";
         try {
-            connection = Postgre.getConnection();
+            connection = postgre.getConnection();
             st = connection.createStatement();
             rs = st.executeQuery(GET_OPTION_ID);
             if (rs != null) {

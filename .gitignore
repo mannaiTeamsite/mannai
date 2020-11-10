@@ -15,8 +15,12 @@ livesite-core/.checkstyle
 livesite-core/.classpath
 livesite-core/.settings/org.eclipse.wst.validation.prefs
 livesite-core/.settings/org.eclipse.jdt.core.prefs
+livesite-core/.settings/org.eclipse.wst.common.project.facet.core.xml
+
 
 teamsite-core/.checkstyle
 teamsite-core/.classpath
+teamsite-core/.project
 teamsite-core/.settings/org.eclipse.wst.validation.prefs
 teamsite-core/.settings/org.eclipse.jdt.core.prefs
+teamsite-core/.settings/org.eclipse.wst.common.project.facet.core.xml
