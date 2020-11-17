@@ -48,7 +48,7 @@ public class SurveyExternal {
         String lang = locale.getLanguage();
         logger.info("lang : " + lang);
         String userId = context.getParameterString("user_id");
-        userId = "testUser";
+        //userId = "testUser";
         logger.info("userId : " + userId);
         String ipAddress = context.getRequest().getRemoteAddr();
         logger.info("ipAddress : " + ipAddress);
@@ -128,7 +128,7 @@ public class SurveyExternal {
             if (result > 0) {
             	logger.info("Survey Response Inserted");
             	
-            	String surveyAnswerQuery = "INSERT INTO SURVEY_ANSWERS (ANSWER_ID, RESPONSE_ID, SURVEY_ID, LANG, QUESTION_ID, ANSWER) VALUES(?, ?, ?, ?, ?, ?)";
+            	String surveyAnswerQuery = "INSERT INTO SURVEY_ANSWERS (ANSWER_ID, RESPONSE_ID, SURVEY_ID, LANG, QUESTION_NO, ANSWER) VALUES(?, ?, ?, ?, ?, ?)";
             	prepareStatement = connection.prepareStatement(surveyAnswerQuery);
             	for (int i = 1; i <= totalCount; i++) {
             		

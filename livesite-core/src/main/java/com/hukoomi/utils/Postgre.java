@@ -64,6 +64,7 @@ public class Postgre {
         logger.info("Postgre : getConnection()");
         // Creating Connection
         try {
+        	//Class.forName("org.postgresql.Driver");
             con = DriverManager.getConnection(connectionString,userName, password);
         } catch (Exception e) {
             logger.error("Postgre : getConnection()" + e.getMessage());

@@ -18,7 +18,6 @@ import java.util.Map.Entry;
 import java.util.StringJoiner;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -28,6 +27,7 @@ import org.dom4j.Node;
 
 import com.hukoomi.utils.DBConstants;
 import com.hukoomi.utils.Postgre;
+import com.interwoven.livesite.p13n.model.UserProfile;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class PollsExternal {
@@ -81,8 +81,8 @@ public class PollsExternal {
                 pollId = context.getParameterString("pollId");
                 option = context.getParameterString("option");
                 ipAddress = context.getRequest().getRemoteAddr();
-                // userId = context.getParameterString("user_id");
-                userId = "test_user";
+                userId = context.getParameterString("user_id");
+                //userId = "test_user";
                 userAgent = context.getRequest().getHeader("User-Agent");
                 votedFrom = context.getParameterString("votedFrom");
               
@@ -106,7 +106,8 @@ public class PollsExternal {
                 logger.info("PollAction = Current Polls");
 
                 ipAddress = context.getRequest().getRemoteAddr();
-                userId = context.getParameterString("userId");
+                userId = context.getParameterString("user_id");
+                logger.info("user_id:" + userId + "&RemoteAddr:" + ipAddress);
                 String current_poll_row = context
                         .getParameterString("current_poll_rows");
                 context.setParameterString("rows", current_poll_row);
@@ -226,7 +227,7 @@ public class PollsExternal {
         return doc;
 
     }
-
+    
     @SuppressWarnings("deprecation")
     public Document createPollGroupDoc(String expiredPollIds,
             Map<String, List<Map<String, String>>> response) {
@@ -577,11 +578,11 @@ public class PollsExternal {
         String[] pollIdsArr = pollIds.split(",");
 
         if (user_id != null && !"".equals(user_id)) {
-            checkVotedQuery.append("AND USER_ID = ?");
+            checkVotedQuery.append("AND USER_ID = ? ");
         } else if (ipAddress != null && !"".equals(ipAddress)) {
-            checkVotedQuery.append("AND IP_ADDRESS = ?");
+            checkVotedQuery.append("AND IP_ADDRESS = ? ");
         }
-
+        logger.info("checkVotedQuery ::"+checkVotedQuery.toString());
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
 

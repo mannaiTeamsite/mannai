@@ -56,7 +56,7 @@ public class PollSurveyExternal {
 				String option = context.getParameterString("option");
 				String ipAddress = context.getRequest().getRemoteAddr();
 				String userId = context.getParameterString("user_id");
-                userId = "test_user";
+                //userId = "test_user";
                 String userAgent = context.getRequest().getHeader("User-Agent");
                 String votedFrom = context.getParameterString("votedFrom");
                 lang = locale.getLanguage();
