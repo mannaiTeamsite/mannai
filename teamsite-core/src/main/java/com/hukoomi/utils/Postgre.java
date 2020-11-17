@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.workflow.CSExternalTask;
-import com.interwoven.livesite.runtime.RequestContext;
 
 public class Postgre {
     /** Logger object to check the flow of the code. */

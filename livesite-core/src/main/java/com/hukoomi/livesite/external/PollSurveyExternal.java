@@ -95,8 +95,8 @@ public class PollSurveyExternal {
 			Locale locale = request.getLocale();
 			String lang = locale.getLanguage();
 			String ipAddress = context.getRequest().getRemoteAddr();
-			//String  userId = context.getParameterString("user_id");
-			String userId = "test_user";
+			String  userId = context.getParameterString("user_id");
+			//String userId = "test_user";
 			//String userAgent = context.getRequest().getHeader("User-Agent");
 			
 			String pollsGroup = context.getParameterString("PollsGroup");

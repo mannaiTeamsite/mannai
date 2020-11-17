@@ -6,8 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -43,14 +45,25 @@ public class PollSurveyTask  implements CSURLExternalTask{
 	private static final String DB_PROPERTY_FILE = "dbconfig.properties";
 	private static final String OPTION_LABEL = "label";
 	private static final String OPTION_VALUE = "value";
+	private static final String TRANSITION = "TRANSITION";
+	private static final String TRANSITION_COMMENT = "TRANSITION_COMMENT";
+	private static final String POLL_UPDATE_SUCCESS = "Poll master data updated successfully";
+	private static final String POLL_UPDATE_FAILURE = "Failed to updated poll master data";
+	private static final String POLL_INSERT_SUCCESS = "Poll master data inserted successfully";
+	private static final String POLL_INSERT_FAILURE = "Failed to insert poll master data";
+	private static final String POLL_TECHNICAL_ERROR = "Technical Error in poll master data insert";
+	private static final String SURVEY_UPDATE_SUCCESS = "Survey master data updated successfully";
+	private static final String SURVEY_UPDATE_FAILURE = "Failed to updated survey master data";
+	private static final String SURVEY_INSERT_SUCCESS = "Survey master data inserted successfully";
+	private static final String SURVEY_INSERT_FAILURE = "Failed to insert survey master data";
+	private static final String SURVEY_TECHNICAL_ERROR = "Technical Error in survey master data insert";
+	
 	Postgre postgre =  null;
 	
 	@Override
 	 public void execute ( CSClient client, CSExternalTask task, Hashtable params) throws CSException{
 		logger.info("PollSurveyTask - execute");
-		boolean isDBOperationSuccess = false;
-		String transition = "";
-		String transitionComment = "";
+		HashMap<String,String> statusMap = null;
 		CSAreaRelativePath[] taskFileList = task.getFiles();
 		logger.debug("TaskFileList Length : " + taskFileList.length);
 		
@@ -65,69 +78,98 @@ public class PollSurveyTask  implements CSURLExternalTask{
 				
 				if(dcrType != null) {
 					if("Content/Polls".equalsIgnoreCase(dcrType)) {
-						Document document = getTaskDocument(taskSimpleFile);
-						if(isPollMasterDataAvailable(document)) {
-							isDBOperationSuccess = updatePollMasterData(document);
-							logger.debug("isPollDataUpdated : "+isDBOperationSuccess);
-							if(isDBOperationSuccess) {
-								transitionComment = "Poll master data updated successfully";
-								transition = SUCCESS_TRANSITION;
-							}else {
-								transitionComment = "Failed to updated poll master data";
-								transition = FAILURE_TRANSITION;
-							}
-						}else {
-							isDBOperationSuccess = insertPollMasterData(document);
-							logger.debug("isPollDataInserted : "+isDBOperationSuccess);
-							if(isDBOperationSuccess) {
-								transitionComment = "Poll master data inserted successfully";
-								transition = SUCCESS_TRANSITION;
-							}else {
-								transitionComment = "Failed to insert poll master data";
-								transition = FAILURE_TRANSITION;
-							}
-						}
+						statusMap = (HashMap<String,String>) processPollDCR(taskSimpleFile);
 					}else if("Content/Survey".equalsIgnoreCase(dcrType)) {
-						Document document = getTaskDocument(taskSimpleFile);
-						if(isSurveyMasterDataAvailable(document)) {
-							isDBOperationSuccess = updateSurveyMasterData(document);
-							logger.debug("isSurveyDataUpdated : "+isDBOperationSuccess);
-							if(isDBOperationSuccess) {
-								transitionComment = "Survey master data updated successfully";
-								transition = SUCCESS_TRANSITION;
-							}else {
-								transitionComment = "Failed to updated survey master data";
-								transition = FAILURE_TRANSITION;
-							}
-						}else {
-							isDBOperationSuccess = insertSurveyMasterData(document);
-							logger.debug("isSurveyDataInserted : "+isDBOperationSuccess);
-							if(isDBOperationSuccess) {
-								transitionComment = "Survey master data inserted successfully";
-								transition = SUCCESS_TRANSITION;
-							}else {
-								transitionComment = "Failed to insert survey master data";
-								transition = FAILURE_TRANSITION;
-							}
-						}
+						statusMap = (HashMap<String,String>) processSurveyDCR(taskSimpleFile);
 					}else {
 						logger.debug("Master data insert skipped - Not Polls or Survey DCR");
-						transitionComment = "";
-						transition = SUCCESS_TRANSITION;
+						statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+						statusMap.put(TRANSITION_COMMENT, "");
 					}
 				}
 				
 			} catch (Exception e) {
-				transitionComment = "Technical Error in master data insert";
-				transition = FAILURE_TRANSITION;
+				statusMap = new HashMap<String,String>();
+				statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+				statusMap.put(TRANSITION_COMMENT, "");
 				logger.error("Exception in execute: "+ e.getMessage());
 				e.printStackTrace();
 			}
 		}
 		
-		logger.debug("transition : "+transition);
-		logger.debug("transitionComment : "+transitionComment);
-		task.chooseTransition(transition, transitionComment);
+		logger.debug("transition : "+statusMap.get(TRANSITION));
+		logger.debug("transitionComment : "+statusMap.get(TRANSITION_COMMENT));
+		task.chooseTransition(statusMap.get(TRANSITION), statusMap.get(TRANSITION_COMMENT));
+	}
+	
+	public Map<String,String> processPollDCR(CSSimpleFile taskSimpleFile) {
+		boolean isDBOperationSuccess = false;
+		HashMap<String,String> statusMap = new HashMap<String,String>();
+		try {
+			Document document = getTaskDocument(taskSimpleFile);
+			if(isPollMasterDataAvailable(document)) {
+				isDBOperationSuccess = updatePollMasterData(document);
+				logger.debug("isPollDataUpdated : "+isDBOperationSuccess);
+				if(isDBOperationSuccess) {
+					statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, POLL_UPDATE_SUCCESS);
+				}else {
+					statusMap.put(TRANSITION, FAILURE_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, POLL_UPDATE_FAILURE);
+				}
+			}else {
+				isDBOperationSuccess = insertPollMasterData(document);
+				logger.debug("isPollDataInserted : "+isDBOperationSuccess);
+				if(isDBOperationSuccess) {
+					statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, POLL_INSERT_SUCCESS);
+				}else {
+					statusMap.put(TRANSITION, FAILURE_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, POLL_INSERT_FAILURE);
+				}
+			}
+		} catch (Exception e) {
+			statusMap.put(TRANSITION, FAILURE_TRANSITION);
+			statusMap.put(TRANSITION_COMMENT, POLL_TECHNICAL_ERROR);
+			logger.error("Exception in poll master: "+ e.getMessage());
+			e.printStackTrace();
+		}
+		return statusMap;
+	}
+	
+	public Map<String,String> processSurveyDCR(CSSimpleFile taskSimpleFile) {
+		boolean isDBOperationSuccess = false;
+		HashMap<String,String> statusMap = new HashMap<String,String>();
+		try {
+			Document document = getTaskDocument(taskSimpleFile);
+			if(isSurveyMasterDataAvailable(document)) {
+				isDBOperationSuccess = updateSurveyMasterData(document);
+				logger.debug("isSurveyDataUpdated : "+isDBOperationSuccess);
+				if(isDBOperationSuccess) {
+					statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, SURVEY_UPDATE_SUCCESS);
+				}else {
+					statusMap.put(TRANSITION, FAILURE_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, SURVEY_UPDATE_FAILURE);
+				}
+			}else {
+				isDBOperationSuccess = insertSurveyMasterData(document);
+				logger.debug("isSurveyDataInserted : "+isDBOperationSuccess);
+				if(isDBOperationSuccess) {
+					statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, SURVEY_INSERT_SUCCESS);
+				}else {
+					statusMap.put(TRANSITION, FAILURE_TRANSITION);
+					statusMap.put(TRANSITION_COMMENT, SURVEY_INSERT_FAILURE);
+				}
+			}
+		} catch (Exception e) {
+			statusMap.put(TRANSITION, FAILURE_TRANSITION);
+			statusMap.put(TRANSITION_COMMENT, SURVEY_TECHNICAL_ERROR);
+			logger.error("Exception in survey master: "+ e.getMessage());
+			e.printStackTrace();
+		}
+		return statusMap;
 	}
 			
 	public Document getTaskDocument(CSSimpleFile taskSimpleFile) {

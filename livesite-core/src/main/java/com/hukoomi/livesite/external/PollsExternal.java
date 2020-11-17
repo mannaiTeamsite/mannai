@@ -161,7 +161,7 @@ public class PollsExternal {
                 String pollIds = context.getParameterString("pollIds");
                 logger.info("Poll ids::" + pollIds);
 
-                userId = "test_user";
+                //userId = "test_user";
                 
                 // Checking poll is expired or not
                 String activePollIds = getPollExpiryStatus(pollIds);
