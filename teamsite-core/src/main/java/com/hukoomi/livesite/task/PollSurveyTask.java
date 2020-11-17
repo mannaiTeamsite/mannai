@@ -68,6 +68,9 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		logger.debug("TaskFileList Length : " + taskFileList.length);
 		
 		postgre =  new Postgre(client, task, DB_PROPERTY_FILE);
+		statusMap = new HashMap<String,String>();
+		statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+		statusMap.put(TRANSITION_COMMENT, "");
 		
 		for (CSAreaRelativePath taskFile : taskFileList) {
 			try {	
@@ -83,15 +86,10 @@ public class PollSurveyTask  implements CSURLExternalTask{
 						statusMap = (HashMap<String,String>) processSurveyDCR(taskSimpleFile);
 					}else {
 						logger.debug("Master data insert skipped - Not Polls or Survey DCR");
-						statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-						statusMap.put(TRANSITION_COMMENT, "");
 					}
 				}
 				
 			} catch (Exception e) {
-				statusMap = new HashMap<String,String>();
-				statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-				statusMap.put(TRANSITION_COMMENT, "");
 				logger.error("Exception in execute: "+ e.getMessage());
 				e.printStackTrace();
 			}
