@@ -39,6 +39,7 @@ public class PollsExternal {
     public static final String DEFAULT_QUERY = "*:*";
     /** Connection variable. */
     private static Connection connection = null;
+    public static final String MAX_CURRENT_POLLS_FETCH = "1000";
     Postgre postgre =  null;
 
     /**
@@ -62,7 +63,7 @@ public class PollsExternal {
         Document doc = null;
         HukoomiExternal he = new HukoomiExternal();
         HttpServletRequest request = context.getRequest();
-        Locale locale = request.getLocale();
+        //Locale locale = request.getLocale();
 
         /* Variables for Reading Parameter Values */
         String pollAction = context.getParameterString("pollAction");
@@ -72,7 +73,9 @@ public class PollsExternal {
         String userId = null;
         String userAgent = null;
         String votedFrom = null;
-        String lang = locale.getLanguage();
+        //String lang = locale.getLanguage();
+        String lang = context.getParameterString("locale", "en");
+        //String solrCore = context.getParameterString("solrCore", "portal-en");
        
         if (pollAction != null) {
             if ("vote".equalsIgnoreCase(pollAction)) {
@@ -108,9 +111,8 @@ public class PollsExternal {
                 ipAddress = context.getRequest().getRemoteAddr();
                 userId = context.getParameterString("user_id");
                 logger.info("user_id:" + userId + "&RemoteAddr:" + ipAddress);
-                String current_poll_row = context
-                        .getParameterString("current_poll_rows");
-                context.setParameterString("rows", current_poll_row);
+                //String current_poll_row = context.getParameterString("current_poll_rows");
+                context.setParameterString("rows", MAX_CURRENT_POLLS_FETCH);
 
                 doc = he.getLandingContent(context);
 
@@ -154,7 +156,7 @@ public class PollsExternal {
 
                 doc = addResultToXml(doc, response);
                 logger.info("Final Doc for Past Polls::" + doc.asXML());
-            } else if ("pollGroup".equalsIgnoreCase(pollAction)) {
+            /*} else if ("pollGroup".equalsIgnoreCase(pollAction)) {
                 logger.info("PollAction = pollexpirycheck");
                 logger.info("Page Name::"+context.getPageName());
 
@@ -193,7 +195,7 @@ public class PollsExternal {
 
                 doc = createPollGroupDoc(expiredPollIds, response);
 
-                logger.info("Expired Poll Doc:: " + doc.asXML());
+                logger.info("Expired Poll Doc:: " + doc.asXML());*/
 
             } else if ("search".equalsIgnoreCase(pollAction)) {
                 logger.info("PollAction = search");
@@ -214,7 +216,7 @@ public class PollsExternal {
                 if(votedPollIds != null && !"".equals(votedPollIds)) {
 	                // Fetch Result from DB for above poll_ids which were voted already by user
 	                Map<String, List<Map<String, String>>> response = getPollResponse(
-	                        votedPollIds,lang, postgre.getConnection());
+	                        votedPollIds, lang, postgre.getConnection());
 	
 	                // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
 	                // particular poll_id element

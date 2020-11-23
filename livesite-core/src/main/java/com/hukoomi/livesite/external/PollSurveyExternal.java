@@ -49,8 +49,8 @@ public class PollSurveyExternal {
 				//and initialize it in each conditional block where it is required.
 				//doc = pollsExt.performPollAction(context);
 				
-				HttpServletRequest request = context.getRequest();
-		        Locale locale = request.getLocale();
+				//HttpServletRequest request = context.getRequest();
+		        //Locale locale = request.getLocale();
 		        
 				String pollId = context.getParameterString("pollId");
 				String option = context.getParameterString("option");
@@ -59,7 +59,8 @@ public class PollSurveyExternal {
                 //userId = "test_user";
                 String userAgent = context.getRequest().getHeader("User-Agent");
                 String votedFrom = context.getParameterString("votedFrom");
-                lang = locale.getLanguage();
+                //lang = locale.getLanguage();
+                lang = context.getParameterString("locale", "en");
 
                 logger.info("poll_id:" + pollId + "&option:" + option
                         + "&lang:" + lang + "&user_id:" + userId

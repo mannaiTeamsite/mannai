@@ -43,9 +43,10 @@ public class SurveyExternal {
 		DetailExternal detailExt = new DetailExternal();
 		String surveyAction = context.getParameterString("surveyAction");
 	    logger.info("surveyAction : " + surveyAction);
-		HttpServletRequest request = context.getRequest();
+		/*HttpServletRequest request = context.getRequest();
         Locale locale = request.getLocale();
-        String lang = locale.getLanguage();
+        String lang = locale.getLanguage();*/
+        String lang = context.getParameterString("locale", "en");
         logger.info("lang : " + lang);
         String userId = context.getParameterString("user_id");
         //userId = "testUser";
