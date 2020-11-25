@@ -7,6 +7,14 @@ import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.LiveSiteDal;
 import com.interwoven.livesite.runtime.RequestContext;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Locale;
+
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -34,6 +42,12 @@ public class CommonUtils {
     private String fileRoot;
     /** Declare dcr category variable. */
     private String dcrCategory;
+    
+    private static Connection connection;
+    static {
+    	CommonUtils.connection = null;
+	}
+    public static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
      */
     public CommonUtils() {
@@ -184,4 +198,61 @@ public class CommonUtils {
         categoryPath = categoryPath + localeValue + this.separator;
         return categoryPath;
     }
+    
+    /** this method will get config param from table and set to hashmap.
+     * @param context component context passed with param
+     */
+    public void loadConfigparams(RequestContext context) {
+		logger.info("in getmailserverProperty:");
+		Statement st = null;
+		ResultSet rs = null;
+		Postgre objPostgre =  new Postgre(context);
+		final String GET_OPTION_ID = "SELECT CONFIG_PARAM_CODE,CONFIG_PARAM_VALUE FROM CONFIG_PARAM";
+		try {
+			CommonUtils.connection = objPostgre.getConnection();
+			st = CommonUtils.connection.createStatement();
+			rs = st.executeQuery(GET_OPTION_ID);
+			while (rs.next()) {
+				String configParamCode = rs.getString("config_param_code");
+				String configParamValue = rs.getString("config_param_value");
+				logger.debug("configParamCode:" + configParamCode);
+				logger.debug("configParamValue:" + configParamValue);
+				configParamsMap.put(configParamCode, configParamValue);
+			}
+
+		} catch (SQLException e) {
+			logger.error((Object) ("getConfiguration()" + e.getMessage()));
+			e.printStackTrace();
+		} finally {
+			objPostgre.releaseConnection(CommonUtils.connection, st, rs);
+		}
+		objPostgre.releaseConnection(CommonUtils.connection, st, rs);
+
+	}
+    /**This method will take language, and returns Locale.
+     * @param language page language
+     * @return locale
+     */
+    public Locale getLocale(String language) {
+    	if("en".equals(language)) {
+    		return Locale.ENGLISH;
+    	}
+    	else if("ar".equals(language)) {
+    		return new Locale("ar");
+    	}
+    	else {
+    		return Locale.ENGLISH;
+    	}
+    }
+    
+    /** This method will take encode arabic string and returns decode arabic string.
+     * @param encodedArabicString
+     * @return decodedArabicString
+     */
+    public String decodeToArabicString(String encodedArabicString) {
+
+		byte[] charset = encodedArabicString.getBytes(StandardCharsets.UTF_8);
+		String decodedArabicString = new String(charset, StandardCharsets.UTF_8);
+		return decodedArabicString;
+	}
 }
