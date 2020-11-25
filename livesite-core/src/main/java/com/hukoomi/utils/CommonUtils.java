@@ -252,7 +252,7 @@ public class CommonUtils {
     public String decodeToArabicString(String encodedArabicString) {
 
 		byte[] charset = encodedArabicString.getBytes(StandardCharsets.UTF_8);
-		String decodedArabicString = new String(charset, StandardCharsets.UTF_8);
-		return decodedArabicString;
+		return  new String(charset, StandardCharsets.UTF_8);
+		
 	}
 }
