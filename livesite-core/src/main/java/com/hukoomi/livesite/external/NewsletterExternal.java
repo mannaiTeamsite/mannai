@@ -28,20 +28,35 @@ public class NewsletterExternal {
 	/** Logger object to check the flow of the code. */
 	private static final Logger logger = Logger
 			.getLogger(NewsletterExternal.class);
+	/** subscriber Lisid of mailchimp*/
 	private String listId;
+	/** authorizationHeader for authencicate mailchimp*/
 	private String authorizationHeader;
+	/** baseUrl of mailchimp*/
 	private String baseUrl;
+	/** httpConnection for making call to mailchimp services*/
 	private HttpURLConnection httpConnection = null;
+	/** mailchimp response status */
 	private static final String STATUS_SUBSCRIBED = "subscribed";
+	/** mailchimp response status */
 	private static final String STATUS_UNSUBSCRIBED = "unsubscribed";
+	/** mailchimp response status */
 	private static final String STATUS_PENDING = "pending";
+	/** mailchimp response status */
 	private static final String STATUS_NOTFOUND = "404";
+	/** mailchimp response status */
 	private static final String STATUS_ALREADY_SUBSCRIBED = "Already Subscribed";
+	/** mailchimp response status */
 	private static final String STATUS_ALREADY_PENDING = "Already Pending";
+	/** status key in mailchimp response */
 	private static final String KEY_STATUS = "status";
+	/** element for document */
 	private static final String ELEMENT_RESULT = "Result";
+	/** element for document */
 	private static final String ELEMENT_STATUS = "status";
+	/** element for document */
 	private static final String ELEMENT_EMAIL = "email";
+	/** element for document */
 	private static final String ELEMENT_MESSAGE = "message";
 
 	/**
