@@ -3,9 +3,6 @@
  */
 package com.hukoomi.utils;
 
-import com.interwoven.livesite.file.FileDal;
-import com.interwoven.livesite.runtime.LiveSiteDal;
-import com.interwoven.livesite.runtime.RequestContext;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -20,6 +17,10 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+
+import com.interwoven.livesite.file.FileDal;
+import com.interwoven.livesite.runtime.LiveSiteDal;
+import com.interwoven.livesite.runtime.RequestContext;
 
 public class CommonUtils {
     /**
@@ -222,7 +223,7 @@ public class CommonUtils {
 			}
 
 		} catch (SQLException e) {
-			logger.error((Object) ("getConfiguration()" + e.getMessage()));
+			logger.error("getConfiguration()" + e.getMessage());
 			e.printStackTrace();
 		} finally {
 			objPostgre.releaseConnection(CommonUtils.connection, st, rs);
@@ -235,11 +236,11 @@ public class CommonUtils {
      */
     public Locale getLocale(final String language) {
         if ("en".equals(language)) {
-    	    return Locale.ENGLISH; 
+            return Locale.ENGLISH;
     	} else if ("ar".equals(language)) {
-    	    return new Locale("ar"); 
+    	    return new Locale("ar");
     	} else {
-    		return Locale.ENGLISH;
+    	    return Locale.ENGLISH;
     	}
     }
     /** This method will take encode arabic string and returns decode arabic string.
