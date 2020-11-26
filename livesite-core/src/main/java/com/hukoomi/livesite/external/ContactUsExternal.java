@@ -73,7 +73,8 @@ public class ContactUsExternal {
 		language = context.getParameterString("locale");
 		Locale locale = new CommonUtils().getLocale(language);
 		logger.debug("lang:" + locale);
-		ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH, locale);
+		ResourceBundle bundle = ResourceBundle
+		        .getBundle(RESOURCE_BUNDLE_PATH, locale);
 		if (action.equals("sendmail")) {
 			logger.debug("Sendingemail.");
 			senderName = context.getParameterString("senderName");
@@ -86,7 +87,8 @@ public class ContactUsExternal {
 			logger.debug("emailText:" + emailText);
 			logger.debug("emailSubject:" + emailSubject);
 			logger.debug("language:" + language);
-			setValueToContactModel(senderName, senderEmail, emailText, emailSubject, locale);
+			setValueToContactModel(senderName, senderEmail, emailText,
+			        emailSubject, locale);
 			GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
 			verify = captchUtil.validateCaptch(gRecaptchaResponse);
 
@@ -112,9 +114,11 @@ public class ContactUsExternal {
 	 * @param senderName
 	 * @param senderEmail
 	 * @param emailText
+	 * @param emailSubject
 	 * @param lang
 	 */
-	private void setValueToContactModel(final String senderName, final String senderEmail, final String emailText,
+	private void setValueToContactModel(final String senderName,
+	        final String senderEmail, final String emailText,
 	        final String emailSubject, final Locale lang) {
 		if (senderName != null) {
 			email.setSenderName(senderName);
@@ -136,12 +140,14 @@ public class ContactUsExternal {
 	}
 
 	/**
-	 * this method will get the bundle and language returns the inquiry type
+	 * this method will get the bundle and language returns
+	 * the inquiry type.
 	 * @param bundle
 	 * @param language
 	 * @return document document with inquiry type
 	 */
-	private Document getInquiryTypes(final ResourceBundle bundle, final String language) {
+	private Document getInquiryTypes(final ResourceBundle bundle,
+	        final String language) {
 
 		String inquiryTypes = bundle.getString("text.mail_subject");
 		Document document = DocumentHelper.createDocument();
@@ -165,13 +171,14 @@ public class ContactUsExternal {
 	}
 
 	/**
-	 * this method will create and send mail. returns document with status
-	 *
+	 * this method will create and send mail.
+	 * returns document with status
 	 * @param email ContactEmail object
 	 * @param context context component context passed with param
 	 * @return returns document with status
 	 */
-	public Document sendEmailToHukoomi(final ContactEmail email, final RequestContext context) {
+	public Document sendEmailToHukoomi(final ContactEmail email,
+	        final RequestContext context) {
 		logger.debug("sendEmailToHukoomi: Enter");
 		ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
 		String status = "";
@@ -204,36 +211,44 @@ public class ContactUsExternal {
 	 * @return msg returns MimeMessage
 	 * @throws MessagingException
 	 */
-	private MimeMessage createMailMessage(final ContactEmail email, final RequestContext context) throws MessagingException {
+	private MimeMessage createMailMessage(final ContactEmail email,
+	        final RequestContext context) throws MessagingException {
 
 		String from = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
 		String to = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL, context);
+		String host = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST, context);
+        String port = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT, context);
 		Properties props = new Properties();
 		String subject = "";
-		props.put("mail.smtp.host", getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST, context));
+		props.put("mail.smtp.host", host);
 		props.put("mail.smtp.starttls.enable", "false");
-		props.put("mail.smtp.port", getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT, context));
+		props.put("mail.smtp.port", port);
 		Session session = Session.getDefaultInstance(props, null);
 		session.setDebug(true);
 		MimeMessage msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(from));
 		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
 		logger.debug("page:" + context.getParameterString("page"));
-		ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
+		ResourceBundle bundle = ResourceBundle
+		        .getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
 		logger.debug("before setting subject:");
 		if (context.getParameterString("page").equals("errorPage")) {
 			subject = email.getEmailSubject();
 			msg.setSubject(subject);
 		} else {
-			subject = "text.mail_subject." + email.getEmailSubject().toUpperCase().replace(" ", "_");
+		    String sub = email.getEmailSubject().toUpperCase();
+			subject = "text.mail_subject." + sub.replace(" ", "_");
 			msg.setSubject(bundle.getString(subject));
 		}
 		logger.debug("after setting subject:");
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(bundle.getString(EMAIL_START_TEXT));
-		sb.append(email.getSenderName()).append(" ").append(email.getSenderEmail()).append(" ")
-				.append(email.getEmailText());
+		sb.append(email.getSenderName());
+		sb.append(" ");
+		sb.append(email.getSenderEmail());
+		sb.append(" ");
+		sb.append(email.getEmailText());
 		msg.setText(sb.toString());
 		logger.debug("msg:" + msg);
 		return msg;
@@ -241,12 +256,14 @@ public class ContactUsExternal {
 	}
 
 	/**
-	 * this method will take config parameter code and return config parameter value.
+	 * this method will take config parameter code
+	 * and return config parameter value.
 	 * @param paramCode
 	 * @param context
 	 * @return configParamValue return config parameter value
 	 */
-	private static String getmailserverProperties(final String paramCode, final RequestContext context) {
+	private static String getmailserverProperties(final String paramCode,
+	        final RequestContext context) {
 		CommonUtils utils = new CommonUtils();
 		String configParamValue = null;
 		if (paramCode != null && !"".equals(paramCode)) {
