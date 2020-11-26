@@ -24,8 +24,8 @@ import com.interwoven.livesite.runtime.RequestContext;
 
 public class ContactUsExternal {
     /** Logger object to check the flow of the code. */
-    private static final Logger LOGGER = Logger
-            .getLogger(ContactUsExternal.class);
+    private static final Logger LOGGER =
+            Logger.getLogger(ContactUsExternal.class);
     /** initialization of context parameter with captcha. */
     private static final String RECAPTCHA_RESPONSE = "captcha";
     /** initialization of email body text. */
@@ -33,23 +33,30 @@ public class ContactUsExternal {
     /** initialization of email send text. */
     private static final String EMAIL_SENT_TEXT = "text.mail_sent";
     /** initialization of error in email send. */
-    private static final String ERROR_MAIL_SENDING_TEXT = "error.sending.email ";
+    private static final String ERROR_MAIL_SENDING_TEXT =
+            "error.sending.email ";
     /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL = "Hukoomi_Contact_To_Mail";
+    private static final String CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL =
+            "Hukoomi_Contact_To_Mail";
     /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL = "Hukoomi_Contact_From_Mail";
+    private static final String CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL =
+            "Hukoomi_Contact_From_Mail";
     /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST = "Hukoomi_Contact_Mail_Host";
+    private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST =
+            "Hukoomi_Contact_Mail_Host";
     /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT = "Hukoomi_Contact_Mail_Port";
+    private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT =
+            "Hukoomi_Contact_Mail_Port";
     /** initialization of error in recaptha for validation. */
-    private static final String ERROR_RECAPTCHA_TEXT = "error.captcha.feedback";
+    private static final String ERROR_RECAPTCHA_TEXT =
+            "error.captcha.feedback";
     /** initialization of error variable. */
     private static final String STATUS_ERROR = "error";
     /** initialization of success variable. */
     private static final String STATUS_SUCCESS = "success";
     /** initialization of resource bundle path. */
-    private static final String RESOURCE_BUNDLE_PATH = "com.hukoomi.resources.ContactUs";
+    private static final String RESOURCE_BUNDLE_PATH =
+            "com.hukoomi.resources.ContactUs";
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -77,16 +84,16 @@ public class ContactUsExternal {
         language = context.getParameterString("locale");
         Locale locale = new CommonUtils().getLocale(language);
         LOGGER.debug("lang:" + locale);
-        ResourceBundle bundle = ResourceBundle
-                .getBundle(RESOURCE_BUNDLE_PATH, locale);
+        ResourceBundle bundle =
+                ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH, locale);
         if (action.equals("sendmail")) {
             LOGGER.debug("Sendingemail.");
             senderName = context.getParameterString("senderName");
             senderEmail = context.getParameterString("senderEmail");
             emailSubject = context.getParameterString("emailSubject");
             emailText = context.getParameterString("emailText");
-            gRecaptchaResponse = context
-                    .getParameterString(RECAPTCHA_RESPONSE);
+            gRecaptchaResponse =
+                    context.getParameterString(RECAPTCHA_RESPONSE);
             LOGGER.debug("senderName:" + senderName);
             LOGGER.debug("senderEmail:" + senderEmail);
             LOGGER.debug("emailText:" + emailText);
@@ -149,6 +156,7 @@ public class ContactUsExternal {
     /**
      * this method will get the bundle and language returns the inquiry
      * type.
+     *
      * @param bundle
      * @param language
      * @return document document with inquiry type
