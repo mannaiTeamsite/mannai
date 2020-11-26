@@ -43,7 +43,8 @@ public class NewsletterExternal {
     /** mailchimp response status. */
     private static final String STATUS_NOTFOUND = "404";
     /** mailchimp response status. */
-    private static final String STATUS_ALREADY_SUBSCRIBED = "Already Subscribed";
+    private static final String
+    STATUS_ALREADY_SUBSCRIBED = "Already Subscribed";
     /** mailchimp response status. */
     private static final String STATUS_ALREADY_PENDING = "Already Pending";
     /** status key in mailchimp response. */
@@ -98,7 +99,8 @@ public class NewsletterExternal {
      */
 
     public Document createSubscriberinMailChimp(final String email,
-            final String subscriptionLang, final RequestContext context, final Locale lang)
+            final String subscriptionLang,
+            final RequestContext context, final Locale lang)
             throws IOException, NoSuchAlgorithmException {
         // add subscriber
         LOGGER.debug("add subcriber:");
@@ -211,8 +213,8 @@ public class NewsletterExternal {
                 || status.equals(STATUS_ALREADY_SUBSCRIBED)
                 || status.equals(STATUS_ALREADY_PENDING)) {
             if ("ar".equals(lang.toString())) {
-                msgElement.setText(util
-                        .decodeToArabicString(validationMessage) + " : " + email);
+                msgElement.setText(util.decodeToArabicString
+                        (validationMessage) + " : " + email);
             } else {
             msgElement.setText(validationMessage + " : " + email);
             statusElement.setText(status);
