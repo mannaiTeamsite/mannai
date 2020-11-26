@@ -126,9 +126,10 @@ public class NewsletterExternal {
                     response = createsubscriber(email, status,
                             subscriptionLang);
                     validationMessage = bundle.getString("success.msg");
-                    if(response!= null) {
+                    if (response!= null) {
                     document = getDocument(email, response,
-                            validationMessage, lang);}
+                            validationMessage, lang);
+                    }
                 } else if (STATUS_SUBSCRIBED.equals(status)) {
                     status = STATUS_ALREADY_SUBSCRIBED;
                     validationMessage = bundle.getString("subscribed.msg");
@@ -148,7 +149,7 @@ public class NewsletterExternal {
                     String unsubMessage1 = bundle
                             .getString("unsubscribed.msg1");
                     validationMessage = unsubMessage + "," + unsubMessage1;
-                    if(response!= null) {
+                    if (response!= null) {
                     document = getDocument(email, response,
                             validationMessage, lang);
                     }
