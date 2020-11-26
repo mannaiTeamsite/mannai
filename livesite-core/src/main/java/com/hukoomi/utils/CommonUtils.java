@@ -234,10 +234,10 @@ public class CommonUtils {
      * @return locale
      */
     public Locale getLocale(final String language) {
-    	if ("en".equals(language)) {
+        if ("en".equals(language)) {
     	    return Locale.ENGLISH; 
     	} else if ("ar".equals(language)) {
-    		return new Locale("ar"); 
+    	    return new Locale("ar"); 
     	} else {
     		return Locale.ENGLISH;
     	}

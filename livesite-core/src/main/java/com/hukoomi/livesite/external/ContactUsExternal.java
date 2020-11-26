@@ -23,30 +23,40 @@ import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.interwoven.livesite.runtime.RequestContext;
 public class ContactUsExternal {
 	private static final Logger logger = Logger.getLogger(ContactUsExternal.class);
-
-	private static final String RECAPTCHA_RESPONSE_PARAMETER = "captcha";
+	/** initialization of context parameter with captcha. */
+	private static final String RECAPTCHA_RESPONSE = "captcha";
+	/** initialization of email body text. */
 	private static final String EMAIL_START_TEXT = "text.email_start";
+	/** initialization of email send text. */
 	private static final String EMAIL_SENT_TEXT = "text.mail_sent";
+	/** initialization of error in email send. */
 	private static final String ERROR_MAIL_SENDING_TEXT = "error.sending.email ";
+	/** initialization of config code variable. */
 	private static final String CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL = "Hukoomi_Contact_To_Mail";
+	/** initialization of config code variable. */
 	private static final String CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL = "Hukoomi_Contact_From_Mail";
+	/** initialization of config code variable. */
 	private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST = "Hukoomi_Contact_Mail_Host";
+	/** initialization of config code variable. */
 	private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT = "Hukoomi_Contact_Mail_Port";
+	/** initialization of error in recaptha for validation. */
 	private static final String ERROR_RECAPTCHA_TEXT = "error.captcha.feedback";
+	/** initialization of error variable. */
 	private static final String STATUS_ERROR = "error";
+	/** initialization of success variable. */
 	private static final String STATUS_SUCCESS = "success";
+	/** initialization of resource bundle path. */
 	private static final String RESOURCE_BUNDLE_PATH = "com.hukoomi.resources.ContactUs";
-
+	/** object creation of ContactEmail. */
+	ContactEmail email = new ContactEmail();
 	/**
-	 * this method will verify recaptcha and send mail to hukoomi
-	 * 
+	 * this method will verify recaptcha and send mail to hukoomi.
 	 * @param context component context passed with params
 	 * @return document
 	 */
 	@SuppressWarnings("deprecation")
-	public Document sendEmail(RequestContext context) {
+	public Document sendEmail(final RequestContext context) {
 		Document document = DocumentHelper.createDocument();
-		ContactEmail email = new ContactEmail();
 		boolean verify = false;
 		String senderName = null;
 		String senderEmail = null;
@@ -69,14 +79,13 @@ public class ContactUsExternal {
 			senderEmail = context.getParameterString("senderEmail");
 			emailSubject = context.getParameterString("emailSubject");
 			emailText = context.getParameterString("emailText");
-			context.getParameterString("page");
-			gRecaptchaResponse = context.getParameterString(RECAPTCHA_RESPONSE_PARAMETER);
+			gRecaptchaResponse = context.getParameterString(RECAPTCHA_RESPONSE);
 			logger.debug("senderName:" + senderName);
 			logger.debug("senderEmail:" + senderEmail);
 			logger.debug("emailText:" + emailText);
 			logger.debug("emailSubject:" + emailSubject);
 			logger.debug("language:" + language);
-			setValueToContactModel(email, senderName, senderEmail, emailText, emailSubject, locale);
+			setValueToContactModel(senderName, senderEmail, emailText, emailSubject, locale);
 			GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
 			verify = captchUtil.validateCaptch(gRecaptchaResponse);
 
@@ -97,10 +106,8 @@ public class ContactUsExternal {
 
 		return document;
 	}
-
 	/**
-	 * this method will assign value to ContactEmail properties
-	 * 
+	 * this method will assign value to ContactEmail properties.
 	 * @param email
 	 * @param senderName
 	 * @param senderEmail
@@ -108,7 +115,7 @@ public class ContactUsExternal {
 	 * @param emailSubject
 	 * @param lang
 	 */
-	private void setValueToContactModel(ContactEmail email, String senderName, String senderEmail, String emailText,
+	private void setValueToContactModel(final String senderName, final String senderEmail, final String emailText,
 			String emailSubject, Locale lang) {
 		if (senderName != null) {
 			email.setSenderName(senderName);
@@ -131,17 +138,16 @@ public class ContactUsExternal {
 
 	/**
 	 * this method will get the bundle and language returns the inquiry type
-	 * 
 	 * @param bundle
 	 * @param language
 	 * @return document document with inquiry type
 	 */
-	private Document getInquiryTypes(ResourceBundle bundle, String language) {
+	private Document getInquiryTypes(final ResourceBundle bundle, final String language) {
 
-		String validationMessage = bundle.getString("text.mail_subject");
+		String inquiryTypes = bundle.getString("text.mail_subject");
 		Document document = DocumentHelper.createDocument();
 		Element resultElement = document.addElement("Result");
-		String[] arrOfStr = validationMessage.split(",", 5);
+		String[] arrOfStr = inquiryTypes.split(",", 5);
 		for (int i = 0; i < arrOfStr.length; i++) {
 			String value = arrOfStr[i].split("!")[0];
 			String text = arrOfStr[i].split("!")[1];
@@ -161,9 +167,9 @@ public class ContactUsExternal {
 
 	/**
 	 * this method will create and send mail. returns document with status
-	 * 
-	 * @param email.   ContactEmail object
-	 * @param context. context component context passed with param
+	 *
+	 * @param email ContactEmail object
+	 * @param context context component context passed with param
 	 * @return returns document with status
 	 */
 	public Document sendEmailToHukoomi(ContactEmail email, RequestContext context) {
@@ -193,14 +199,13 @@ public class ContactUsExternal {
 	}
 
 	/**
-	 * this method will create mail. returns MimeMessage
-	 * 
+	 * this method will create mail. returns MimeMessage.
 	 * @param email
 	 * @param context
 	 * @return msg returns MimeMessage
 	 * @throws MessagingException
 	 */
-	private MimeMessage createMailMessage(ContactEmail email, RequestContext context) throws MessagingException {
+	private MimeMessage createMailMessage(final ContactEmail email, final RequestContext context) throws MessagingException {
 
 		String from = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
 		String to = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL, context);
@@ -237,13 +242,12 @@ public class ContactUsExternal {
 	}
 
 	/**
-	 * this method will take config parameter code and return config parameter value
-	 * 
+	 * this method will take config parameter code and return config parameter value.
 	 * @param paramCode
 	 * @param context
 	 * @return configParamValue return config parameter value
 	 */
-	private static String getmailserverProperties(final String paramCode,final RequestContext context) {
+	private static String getmailserverProperties(final String paramCode, final RequestContext context) {
 		CommonUtils utils = new CommonUtils();
 		String configParamValue = null;
 		if (paramCode != null && !"".equals(paramCode)) {
