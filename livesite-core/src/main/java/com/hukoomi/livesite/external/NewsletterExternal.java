@@ -125,35 +125,33 @@ public class NewsletterExternal {
                     status = STATUS_SUBSCRIBED;
                     response = createsubscriber(email, status,
                             subscriptionLang);
-                    status = new JSONObject(response)
-                            .getString(KEY_STATUS);
                     validationMessage = bundle.getString("success.msg");
-                    document = getDocument(email, status,
-                            validationMessage, lang, response);
+                    if(response!= null) {
+                    document = getDocument(email, response,
+                            validationMessage, lang);}
                 } else if (STATUS_SUBSCRIBED.equals(status)) {
                     status = STATUS_ALREADY_SUBSCRIBED;
                     validationMessage = bundle.getString("subscribed.msg");
                     document = getDocument(email, status,
-                            validationMessage, lang, response);
+                            validationMessage, lang);
                 } else if (STATUS_PENDING.equals(status)) {
                     status = STATUS_ALREADY_PENDING;
                     validationMessage = bundle.getString("pending.msg");
                     document = getDocument(email, status,
-                            validationMessage, lang, response);
+                            validationMessage, lang);
                 } else if (STATUS_UNSUBSCRIBED.equals(status)) {
                     status = STATUS_PENDING;
                     response = createsubscriber(email, status,
                             subscriptionLang);
-                    status = new JSONObject(response)
-                            .getString(KEY_STATUS);
-                    bundle.getString("success.msg");
                     String unsubMessage = bundle
                             .getString("unsubscribed.msg");
                     String unsubMessage1 = bundle
                             .getString("unsubscribed.msg1");
                     validationMessage = unsubMessage + "," + unsubMessage1;
-                    document = getDocument(email, status,
-                            validationMessage, lang, response);
+                    if(response!= null) {
+                    document = getDocument(email, response,
+                            validationMessage, lang);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -187,26 +185,16 @@ public class NewsletterExternal {
 
     }
 
-    private String getStatus(final String response) {
-        String status = null;
-        if (!response.equals("")) {
-            JSONObject jsonObj = new JSONObject(response);
-            status = (String) jsonObj.get(KEY_STATUS);
-        }
-        return status;
-    }
-
     /**
      * this method takes the email, status, messages and returns xml document.
      * @param email
      * @param status
      * @param validationMessage
      * @param lang
-     * @param response
      * @return document
      */
-    private Document getDocument(final String email, String status,
-            String validationMessage, final Locale lang, final String response) {
+    private Document getDocument(final String email, final String status,
+            final String validationMessage, final Locale lang) {
         CommonUtils util = new CommonUtils();
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement(ELEMENT_RESULT);
@@ -216,26 +204,17 @@ public class NewsletterExternal {
         emailElement.setText(email);
         String pendingMessage = "";
         String pendingMessage1 = "";
-        String tempStatus = null;
         LOGGER.debug(status);
-        if (response != null) {
-            tempStatus = getStatus(response);
-            if (tempStatus != null && (!tempStatus
-                    .equals(STATUS_ALREADY_SUBSCRIBED)
-                    || !tempStatus.equals(STATUS_ALREADY_PENDING))) {
-                status = tempStatus;
-            }
-        }
         if (status.equals(STATUS_SUBSCRIBED)
                 || status.equals(STATUS_ALREADY_SUBSCRIBED)
                 || status.equals(STATUS_ALREADY_PENDING)) {
             if ("ar".equals(lang.toString())) {
-                validationMessage = util
-                        .decodeToArabicString(validationMessage);
-            }
-            validationMessage = validationMessage + " : " + email;
-            msgElement.setText(validationMessage);
+                msgElement.setText(util
+                        .decodeToArabicString(validationMessage) + " : " + email);
+            } else {
+            msgElement.setText(validationMessage + " : " + email);
             statusElement.setText(status);
+            }
         } else if (status.equals(STATUS_PENDING)) {
             if ("ar".equals(lang.toString())) {
 
@@ -247,9 +226,8 @@ public class NewsletterExternal {
                 pendingMessage = validationMessage.split(",")[0];
                 pendingMessage1 = validationMessage.split(",")[1];
             }
-            validationMessage = pendingMessage + " : " + email + " "
-                    + pendingMessage1;
-            msgElement.setText(validationMessage);
+            msgElement.setText(pendingMessage + " : " + email + " "
+                    + pendingMessage1);
             statusElement.setText(status);
         } else {
             statusElement.setText(status);
@@ -307,7 +285,7 @@ public class NewsletterExternal {
                 response.append('\r');
             }
             rd.close();
-            return response.toString();
+            return getStatus(response.toString());
         } catch (IOException ioe) {
             int statusCode;
             try {
@@ -352,11 +330,7 @@ public class NewsletterExternal {
             }
             LOGGER.debug("get response" + sb);
             LOGGER.debug("test:" + httpConnection.getResponseMessage());
-
-            JSONObject jsonObj = new JSONObject(sb.toString());
-            LOGGER.debug("status:" + jsonObj.get(KEY_STATUS));
-
-            return (String) jsonObj.get(KEY_STATUS);
+            return getStatus(sb.toString());
         } catch (IOException ioe) {
             int statusCode = httpConnection.getResponseCode();
             if (statusCode != 200) {
@@ -406,4 +380,12 @@ public class NewsletterExternal {
         return digest;
     }
 
+    private String getStatus(final String response) {
+        String status = null;
+        if (!response.equals("")) {
+            JSONObject jsonObj = new JSONObject(response);
+            status = (String) jsonObj.get(KEY_STATUS);
+        }
+        return status;
+    }
 }
