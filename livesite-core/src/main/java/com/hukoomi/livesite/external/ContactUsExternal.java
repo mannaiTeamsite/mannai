@@ -23,7 +23,7 @@ import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.interwoven.livesite.runtime.RequestContext;
 public class ContactUsExternal {
     /** Logger object to check the flow of the code.*/
-    private static final Logger logger = Logger.getLogger(ContactUsExternal.class);
+    private static final Logger LOGGER = Logger.getLogger(ContactUsExternal.class);
 	/** initialization of context parameter with captcha. */
 	private static final String RECAPTCHA_RESPONSE = "captcha";
 	/** initialization of email body text. */
@@ -69,24 +69,24 @@ public class ContactUsExternal {
 		String msg = "";
 		String language = "";
 		action = context.getParameterString("action");
-		logger.debug("action:" + action);
+		LOGGER.debug("action:" + action);
 		language = context.getParameterString("locale");
 		Locale locale = new CommonUtils().getLocale(language);
-		logger.debug("lang:" + locale);
+		LOGGER.debug("lang:" + locale);
 		ResourceBundle bundle = ResourceBundle
 		        .getBundle(RESOURCE_BUNDLE_PATH, locale);
 		if (action.equals("sendmail")) {
-			logger.debug("Sendingemail.");
+			LOGGER.debug("Sendingemail.");
 			senderName = context.getParameterString("senderName");
 			senderEmail = context.getParameterString("senderEmail");
 			emailSubject = context.getParameterString("emailSubject");
 			emailText = context.getParameterString("emailText");
 			gRecaptchaResponse = context.getParameterString(RECAPTCHA_RESPONSE);
-			logger.debug("senderName:" + senderName);
-			logger.debug("senderEmail:" + senderEmail);
-			logger.debug("emailText:" + emailText);
-			logger.debug("emailSubject:" + emailSubject);
-			logger.debug("language:" + language);
+			LOGGER.debug("senderName:" + senderName);
+			LOGGER.debug("senderEmail:" + senderEmail);
+			LOGGER.debug("emailText:" + emailText);
+			LOGGER.debug("emailSubject:" + emailSubject);
+			LOGGER.debug("language:" + language);
 			setValueToContactModel(senderName, senderEmail, emailText,
 			        emailSubject, locale);
 			GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
@@ -179,7 +179,7 @@ public class ContactUsExternal {
 	 */
 	public Document sendEmailToHukoomi(final ContactEmail email,
 	        final RequestContext context) {
-		logger.debug("sendEmailToHukoomi: Enter");
+		LOGGER.debug("sendEmailToHukoomi: Enter");
 		ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
 		String status = "";
 		String msg = "";
@@ -200,7 +200,7 @@ public class ContactUsExternal {
 		}
 		status = STATUS_SUCCESS;
 		msg = bundle.getString(EMAIL_SENT_TEXT);
-		logger.debug("sendEmailToHukoomi: msg:" + msg);
+		LOGGER.debug("sendEmailToHukoomi: msg:" + msg);
 		return getDocument(status, msg);
 	}
 
@@ -214,10 +214,14 @@ public class ContactUsExternal {
 	private MimeMessage createMailMessage(final ContactEmail email,
 	        final RequestContext context) throws MessagingException {
 
-		String from = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
-		String to = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL, context);
-		String host = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST, context);
-        String port = getmailserverProperties(CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT, context);
+		String from = getmailserverProperties(
+		        CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
+		String to = getmailserverProperties(
+		        CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL, context);
+		String host = getmailserverProperties(
+		        CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST, context);
+        String port = getmailserverProperties(
+                CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT, context);
 		Properties props = new Properties();
 		String subject = "";
 		props.put("mail.smtp.host", host);
@@ -227,11 +231,12 @@ public class ContactUsExternal {
 		session.setDebug(true);
 		MimeMessage msg = new MimeMessage(session);
 		msg.setFrom(new InternetAddress(from));
-		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-		logger.debug("page:" + context.getParameterString("page"));
+		msg.setRecipient(Message.RecipientType.TO,
+		        new InternetAddress(to));
+		LOGGER.debug("page:" + context.getParameterString("page"));
 		ResourceBundle bundle = ResourceBundle
 		        .getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
-		logger.debug("before setting subject:");
+		LOGGER.debug("before setting subject:");
 		if (context.getParameterString("page").equals("errorPage")) {
 			subject = email.getEmailSubject();
 			msg.setSubject(subject);
@@ -240,7 +245,7 @@ public class ContactUsExternal {
 			subject = "text.mail_subject." + sub.replace(" ", "_");
 			msg.setSubject(bundle.getString(subject));
 		}
-		logger.debug("after setting subject:");
+		LOGGER.debug("after setting subject:");
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(bundle.getString(EMAIL_START_TEXT));
@@ -250,7 +255,7 @@ public class ContactUsExternal {
 		sb.append(" ");
 		sb.append(email.getEmailText());
 		msg.setText(sb.toString());
-		logger.debug("msg:" + msg);
+		LOGGER.debug("msg:" + msg);
 		return msg;
 
 	}
@@ -267,11 +272,12 @@ public class ContactUsExternal {
 		CommonUtils utils = new CommonUtils();
 		String configParamValue = null;
 		if (paramCode != null && !"".equals(paramCode)) {
-		    if (utils.configParamsMap == null || utils.configParamsMap.isEmpty()) {
+		    if (utils.configParamsMap == null
+		            || utils.configParamsMap.isEmpty()) {
 				utils.loadConfigparams(context);
 			}
 			configParamValue = utils.configParamsMap.get(paramCode);
-			logger.debug("configParamValue:" + configParamValue);
+			LOGGER.debug("configParamValue:" + configParamValue);
 		}
 		return configParamValue;
 
