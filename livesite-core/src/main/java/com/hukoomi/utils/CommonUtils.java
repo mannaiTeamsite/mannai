@@ -44,9 +44,9 @@ public class CommonUtils {
     /** Declare dcr category variable. */
     private String dcrCategory;
     /** Declare db Connection variable. */
-    private static Connection connection;
-    static {
-        CommonUtils.connection = null;
+	private static Connection connection;
+	static {
+		CommonUtils.connection = null;
 	}
     /** Initialize hashmap for config parameter. */
     public static HashMap<String, String> configParamsMap = new HashMap();
