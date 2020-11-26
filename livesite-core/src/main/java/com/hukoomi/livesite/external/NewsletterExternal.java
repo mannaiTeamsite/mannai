@@ -43,8 +43,7 @@ public class NewsletterExternal {
     /** mailchimp response status. */
     private static final String STATUS_NOTFOUND = "404";
     /** mailchimp response status. */
-    private static final String
-    STATUS_ALREADY_SUBSCRIBED = "Already Subscribed";
+    private static final String STATUS_ALREADY_SUBSCRIBED = "Already Subscribed";
     /** mailchimp response status. */
     private static final String STATUS_ALREADY_PENDING = "Already Pending";
     /** status key in mailchimp response. */
@@ -62,9 +61,10 @@ public class NewsletterExternal {
      * @param context
      * @return memberdetail document
      * @throws IOException
-     * @throws NoSuchAlgorithmException This method internally
-     *  makes call to createSubscriberinMailChimp method
-     *  for user subscription to Mailchimp.
+     * @throws NoSuchAlgorithmException This method internally makes call
+     *                                  to createSubscriberinMailChimp
+     *                                  method for user subscription to
+     *                                  Mailchimp.
      */
     public Document subscribeToNewsletter(final RequestContext context)
             throws IOException, NoSuchAlgorithmException {
@@ -92,15 +92,14 @@ public class NewsletterExternal {
      * @param lang
      * @return document
      * @throws IOException
-     * @throws NoSuchAlgorithmException
-     *  This method is used to make call to
-     *  mailchimp and check if the users is already
-     *  subscribed or not.
+     * @throws NoSuchAlgorithmException This method is used to make call to
+     *                                  mailchimp and check if the users is
+     *                                  already subscribed or not.
      */
 
     public Document createSubscriberinMailChimp(final String email,
-            final String subscriptionLang,
-            final RequestContext context, final Locale lang)
+            final String subscriptionLang, final RequestContext context,
+            final Locale lang)
             throws IOException, NoSuchAlgorithmException {
         // add subscriber
         LOGGER.debug("add subcriber:");
@@ -129,8 +128,8 @@ public class NewsletterExternal {
                             subscriptionLang);
                     validationMessage = bundle.getString("success.msg");
                     if (response != null) {
-                    document = getDocument(email, response,
-                            validationMessage, lang);
+                        document = getDocument(email, response,
+                                validationMessage, lang);
                     }
                 } else if (STATUS_SUBSCRIBED.equals(status)) {
                     status = STATUS_ALREADY_SUBSCRIBED;
@@ -152,8 +151,8 @@ public class NewsletterExternal {
                             .getString("unsubscribed.msg1");
                     validationMessage = unsubMessage + "," + unsubMessage1;
                     if (response != null) {
-                    document = getDocument(email, response,
-                            validationMessage, lang);
+                        document = getDocument(email, response,
+                                validationMessage, lang);
                     }
                 }
             }
@@ -166,8 +165,9 @@ public class NewsletterExternal {
     }
 
     /**
-     * this method will take config parameter code
-     * and return config parameter value.
+     * this method will take config parameter code and return config
+     * parameter value.
+     *
      * @param property
      * @param context
      * @return configParamValue return config parameter value.
@@ -190,7 +190,9 @@ public class NewsletterExternal {
     }
 
     /**
-     * this method takes the email, status, messages and returns xml document.
+     * this method takes the email, status, messages and returns xml
+     * document.
+     *
      * @param email
      * @param status
      * @param validationMessage
@@ -213,11 +215,12 @@ public class NewsletterExternal {
                 || status.equals(STATUS_ALREADY_SUBSCRIBED)
                 || status.equals(STATUS_ALREADY_PENDING)) {
             if ("ar".equals(lang.toString())) {
-                msgElement.setText(util.decodeToArabicString
-                        (validationMessage) + " : " + email);
+                msgElement.setText(
+                        util.decodeToArabicString(validationMessage)
+                                + " : " + email);
             } else {
-            msgElement.setText(validationMessage + " : " + email);
-            statusElement.setText(status);
+                msgElement.setText(validationMessage + " : " + email);
+                statusElement.setText(status);
             }
         } else if (status.equals(STATUS_PENDING)) {
             if ("ar".equals(lang.toString())) {
@@ -241,16 +244,18 @@ public class NewsletterExternal {
     }
 
     /**
-     * this method will take email, status, language
-     * and creates a subscriber in mailchimp.
+     * this method will take email, status, language and creates a
+     * subscriber in mailchimp.
+     *
      * @param email
      * @param status
      * @param lang
      * @return response
      * @throws NoSuchAlgorithmException
      */
-    private String createsubscriber(final String email, final String status,
-            final String lang) throws NoSuchAlgorithmException {
+    private String createsubscriber(final String email,
+            final String status, final String lang)
+            throws NoSuchAlgorithmException {
 
         InputStream is = null;
 
@@ -348,9 +353,9 @@ public class NewsletterExternal {
      * @param email
      * @return httpConnection
      * @throws NoSuchAlgorithmException
-     * @throws IOException
-     * This method is used to get URL Connection to
-     * the Mailchimp service endpoint
+     * @throws IOException              This method is used to get URL
+     *                                  Connection to the Mailchimp service
+     *                                  endpoint
      */
     private HttpURLConnection getConnection(final String email)
             throws NoSuchAlgorithmException, IOException {
@@ -365,10 +370,10 @@ public class NewsletterExternal {
     /**
      * @param message
      * @return digest
-     * @throws NoSuchAlgorithmException
-     * This method is used to apply Message Digest
-     * Algorithm to the email-id while making
-     * Mailchimp Service call.
+     * @throws NoSuchAlgorithmException This method is used to apply
+     *                                  Message Digest Algorithm to the
+     *                                  email-id while making Mailchimp
+     *                                  Service call.
      */
     private String md5Java(final String message)
             throws NoSuchAlgorithmException {
