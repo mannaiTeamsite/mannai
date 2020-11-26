@@ -49,7 +49,7 @@ public class CommonUtils {
     	CommonUtils.connection = null;
 	}
     /** Initialize hashmap for config parameter. */
-    protected static HashMap<String, String> configParamsMap = new HashMap();
+    public static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
      */
     public CommonUtils() {
@@ -200,20 +200,20 @@ public class CommonUtils {
         categoryPath = categoryPath + localeValue + this.separator;
         return categoryPath;
     }
-    
     /** this method will get config param from table and set to hashmap.
      * @param context component context passed with param
      */
-    public void loadConfigparams(RequestContext context) {
+    public void loadConfigparams(final RequestContext context) {
 		logger.info("in getmailserverProperty:");
 		Statement st = null;
 		ResultSet rs = null;
+		String query = null;
 		Postgre objPostgre =  new Postgre(context);
-		final String GET_OPTION_ID = "SELECT CONFIG_PARAM_CODE,CONFIG_PARAM_VALUE FROM CONFIG_PARAM";
+		query = "SELECT * FROM CONFIG_PARAM";
 		try {
 			CommonUtils.connection = objPostgre.getConnection();
 			st = CommonUtils.connection.createStatement();
-			rs = st.executeQuery(GET_OPTION_ID);
+			rs = st.executeQuery(query);
 			while (rs.next()) {
 				String configParamCode = rs.getString("config_param_code");
 				String configParamValue = rs.getString("config_param_value");
@@ -235,26 +235,22 @@ public class CommonUtils {
      * @param language page language
      * @return locale
      */
-    public Locale getLocale(String language) {
+    public Locale getLocale(final String language) {
     	if("en".equals(language)) {
-    		return Locale.ENGLISH;
-    	}
+    		return Locale.ENGLISH; }
     	else if("ar".equals(language)) {
-    		return new Locale("ar");
-    	}
+    		return new Locale("ar"); }
     	else {
     		return Locale.ENGLISH;
     	}
     }
-    
     /** This method will take encode arabic string and returns decode arabic string.
      * @param encodedArabicString
      * @return decodedArabicString
      */
-    public String decodeToArabicString(String encodedArabicString) {
+    public String decodeToArabicString(final String encodedArabicString) {
 
 		byte[] charset = encodedArabicString.getBytes(StandardCharsets.UTF_8);
 		return  new String(charset, StandardCharsets.UTF_8);
-		
 	}
 }
