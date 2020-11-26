@@ -14,7 +14,7 @@ public class ContactEmail {
 	/** email subject. */
 	private String emailSubject;
 	/**
-	 * @return
+	 * @return emailSubject
 	 */
 	public String getEmailSubject() {
 		return emailSubject;
@@ -26,7 +26,7 @@ public class ContactEmail {
 		this.emailSubject = emailSubject;
 	}
 	/**
-	 * @return
+	 * @return senderName
 	 */
 	public String getSenderName() {
 		return senderName;
@@ -38,7 +38,7 @@ public class ContactEmail {
 		this.senderName = senderName;
 	}
 	/**
-	 * @return
+	 * @return senderEmail
 	 */
 	public String getSenderEmail() {
 		return senderEmail;
@@ -50,7 +50,7 @@ public class ContactEmail {
 		this.senderEmail = senderEmail;
 	}
 	/**
-	 * @return
+	 * @return emailText
 	 */
 	public String getEmailText() {
 		return emailText;
@@ -63,7 +63,7 @@ public class ContactEmail {
 		this.emailText = emailText;
 	}
 	/**
-	 * @return
+	 * @return locale
 	 */
 	public Locale getLanguage() {
 		return locale;

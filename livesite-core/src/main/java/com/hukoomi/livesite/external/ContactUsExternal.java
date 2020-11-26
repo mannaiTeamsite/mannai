@@ -22,7 +22,8 @@ import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.interwoven.livesite.runtime.RequestContext;
 public class ContactUsExternal {
-	private static final Logger logger = Logger.getLogger(ContactUsExternal.class);
+    /** Logger object to check the flow of the code.*/
+    private static final Logger logger = Logger.getLogger(ContactUsExternal.class);
 	/** initialization of context parameter with captcha. */
 	private static final String RECAPTCHA_RESPONSE = "captcha";
 	/** initialization of email body text. */
@@ -48,7 +49,7 @@ public class ContactUsExternal {
 	/** initialization of resource bundle path. */
 	private static final String RESOURCE_BUNDLE_PATH = "com.hukoomi.resources.ContactUs";
 	/** object creation of ContactEmail. */
-	ContactEmail email = new ContactEmail();
+	private ContactEmail email = new ContactEmail();
 	/**
 	 * this method will verify recaptcha and send mail to hukoomi.
 	 * @param context component context passed with params
@@ -108,15 +109,13 @@ public class ContactUsExternal {
 	}
 	/**
 	 * this method will assign value to ContactEmail properties.
-	 * @param email
 	 * @param senderName
 	 * @param senderEmail
 	 * @param emailText
-	 * @param emailSubject
 	 * @param lang
 	 */
 	private void setValueToContactModel(final String senderName, final String senderEmail, final String emailText,
-			String emailSubject, Locale lang) {
+	        final String emailSubject, final Locale lang) {
 		if (senderName != null) {
 			email.setSenderName(senderName);
 		}
@@ -172,7 +171,7 @@ public class ContactUsExternal {
 	 * @param context context component context passed with param
 	 * @return returns document with status
 	 */
-	public Document sendEmailToHukoomi(ContactEmail email, RequestContext context) {
+	public Document sendEmailToHukoomi(final ContactEmail email, final RequestContext context) {
 		logger.debug("sendEmailToHukoomi: Enter");
 		ResourceBundle bundle = ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
 		String status = "";
