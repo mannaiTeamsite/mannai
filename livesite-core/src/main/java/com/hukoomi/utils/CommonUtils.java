@@ -44,9 +44,8 @@ public class CommonUtils {
     private String dcrCategory;
     /** Declare db Connection variable. */
     private static Connection connection;
-    /** Initializing  db Connection variable. */
     static {
-    	CommonUtils.connection = null;
+        CommonUtils.connection = null;
 	}
     /** Initialize hashmap for config parameter. */
     public static HashMap<String, String> configParamsMap = new HashMap();
@@ -236,11 +235,11 @@ public class CommonUtils {
      * @return locale
      */
     public Locale getLocale(final String language) {
-    	if("en".equals(language)) {
-    		return Locale.ENGLISH; }
-    	else if("ar".equals(language)) {
-    		return new Locale("ar"); }
-    	else {
+    	if ("en".equals(language)) {
+    	    return Locale.ENGLISH; 
+    	} else if ("ar".equals(language)) {
+    		return new Locale("ar"); 
+    	} else {
     		return Locale.ENGLISH;
     	}
     }
