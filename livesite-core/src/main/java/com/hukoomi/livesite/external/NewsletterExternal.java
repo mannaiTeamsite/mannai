@@ -59,7 +59,7 @@ public class NewsletterExternal {
 
     /**
      * @param context
-     * @return
+     * @return memberdetail document
      * @throws IOException
      * @throws NoSuchAlgorithmException This method internally makes call to
      * createSubscriberinMailChimp method for user
@@ -86,6 +86,8 @@ public class NewsletterExternal {
 
     /**
      * @param email
+     * @param subscriptionLang
+     * @param context
      * @param lang
      * @return document
      * @throws IOException
@@ -198,8 +200,10 @@ public class NewsletterExternal {
      * this method takes the email, status, messages and returns xml document.
      * @param email
      * @param status
+     * @param validationMessage
+     * @param lang
      * @param response
-     * @return
+     * @return document
      */
     private Document getDocument(final String email, String status,
             String validationMessage, final Locale lang, final String response) {
@@ -260,7 +264,7 @@ public class NewsletterExternal {
      * @param email
      * @param status
      * @param lang
-     * @return
+     * @return response
      * @throws NoSuchAlgorithmException
      */
     private String createsubscriber(final String email, final String status,
@@ -321,7 +325,7 @@ public class NewsletterExternal {
 
     /**
      * @param email
-     * @return
+     * @return status
      * @throws IOException
      * @throws NoSuchAlgorithmException This method is used to check if the
      *                                  subscriber exists.
@@ -381,7 +385,7 @@ public class NewsletterExternal {
 
     /**
      * @param message
-     * @return
+     * @return digest
      * @throws NoSuchAlgorithmException This method is used to apply Message Digest
      *                                  Algorithm to the email-id while making
      *                                  Mailchimp Service call.
