@@ -228,7 +228,6 @@ public class CommonUtils {
 			objPostgre.releaseConnection(CommonUtils.connection, st, rs);
 		}
 		objPostgre.releaseConnection(CommonUtils.connection, st, rs);
-
 	}
     /**This method will take language, and returns Locale.
      * @param language page language
@@ -248,7 +247,6 @@ public class CommonUtils {
      * @return decodedArabicString
      */
     public String decodeToArabicString(final String encodedArabicString) {
-
 		byte[] charset = encodedArabicString.getBytes(StandardCharsets.UTF_8);
 		return  new String(charset, StandardCharsets.UTF_8);
 	}

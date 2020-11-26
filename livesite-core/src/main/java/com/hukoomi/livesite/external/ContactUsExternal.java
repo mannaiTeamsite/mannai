@@ -243,29 +243,27 @@ public class ContactUsExternal {
 	 * @param context
 	 * @return configParamValue return config parameter value
 	 */
-	private static String getmailserverProperties(String paramCode, RequestContext context) {
+	private static String getmailserverProperties(final String paramCode,final RequestContext context) {
 		CommonUtils utils = new CommonUtils();
 		String configParamValue = null;
 		if (paramCode != null && !"".equals(paramCode)) {
-			if (utils.configParamsMap == null || utils.configParamsMap.isEmpty()) {
+		    if (utils.configParamsMap == null || utils.configParamsMap.isEmpty()) {
 				utils.loadConfigparams(context);
 			}
 			configParamValue = utils.configParamsMap.get(paramCode);
 			logger.debug("configParamValue:" + configParamValue);
-
 		}
 		return configParamValue;
 
 	}
 
 	/**
-	 * this method get the strings and generate document
-	 * 
+	 * this method get the strings and generate document.
 	 * @param status
 	 * @param msg
 	 * @return document document with elements
 	 */
-	private Document getDocument(String status, String msg) {
+	private Document getDocument(final String status, final String msg) {
 		Document document = DocumentHelper.createDocument();
 		Element resultElement = document.addElement("Result");
 		Element statusElement = resultElement.addElement("status");
