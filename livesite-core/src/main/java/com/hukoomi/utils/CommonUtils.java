@@ -42,12 +42,14 @@ public class CommonUtils {
     private String fileRoot;
     /** Declare dcr category variable. */
     private String dcrCategory;
-    
+    /** Declare db Connection variable. */
     private static Connection connection;
+    /** Initializing  db Connection variable. */
     static {
     	CommonUtils.connection = null;
 	}
-    public static HashMap<String, String> configParamsMap = new HashMap();
+    /** Initialize hashmap for config parameter. */
+    protected static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
      */
     public CommonUtils() {
