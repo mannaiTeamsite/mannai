@@ -15,26 +15,24 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.hukoomi.utils.*;
+import com.hukoomi.utils.CommonUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class NewsletterExternal {
 	/** Logger object to check the flow of the code. */
 	private static final Logger logger = Logger
 			.getLogger(NewsletterExternal.class);
-	/** subscriber Lisid of mailchimp*/
+	/** subscriber Lisid of mailchimp */
 	private String listId;
-	/** authorizationHeader for authencicate mailchimp*/
+	/** authorizationHeader for authencicate mailchimp */
 	private String authorizationHeader;
-	/** baseUrl of mailchimp*/
+	/** baseUrl of mailchimp */
 	private String baseUrl;
-	/** httpConnection for making call to mailchimp services*/
+	/** httpConnection for making call to mailchimp services */
 	private HttpURLConnection httpConnection = null;
 	/** mailchimp response status */
 	private static final String STATUS_SUBSCRIBED = "subscribed";
@@ -58,14 +56,14 @@ public class NewsletterExternal {
 	private static final String ELEMENT_EMAIL = "email";
 	/** element for document */
 	private static final String ELEMENT_MESSAGE = "message";
+	
 
 	/**
 	 * @param context
 	 * @return
 	 * @throws IOException
-	 * @throws DocumentException
 	 * @throws NoSuchAlgorithmException
-	 * @throws JSONException            This method internally makes call to
+	 * This method internally makes call to
 	 *                                  createSubscriberinMailChimp method for user
 	 *                                  subscription to Mailchimp
 	 */
@@ -94,9 +92,7 @@ public class NewsletterExternal {
 	 * @param lang
 	 * @return
 	 * @throws IOException
-	 * @throws DocumentException
 	 * @throws NoSuchAlgorithmException
-	 * @throws JSONException
 	 * 
 	 *                                  This method is used to make call to
 	 *                                  mailchimp and check if the users is already
@@ -210,7 +206,6 @@ public class NewsletterExternal {
 	 * @param status
 	 * @param response
 	 * @return
-	 * @throws JSONException
 	 */
 
 	private Document getDocument(String email, String status,
@@ -337,7 +332,6 @@ public class NewsletterExternal {
 	 * @param email
 	 * @return
 	 * @throws IOException
-	 * @throws JSONException
 	 * @throws NoSuchAlgorithmException This method is used to check if the
 	 *                                  subscriber exists.
 	 */
