@@ -47,7 +47,7 @@ public class ContactUsExternal {
     /** initialization of config code variable. */
     private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT =
             "Hukoomi_Contact_Mail_Port";
-    /** initialization of error in recaptha for validation. */
+    /** initialization of error in recaptcha for validation. */
     private static final String ERROR_RECAPTCHA_TEXT =
             "error.captcha.feedback";
     /** initialization of error variable. */
@@ -167,7 +167,7 @@ public class ContactUsExternal {
         String inquiryTypes = bundle.getString("text.mail_subject");
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement("Result");
-        String[] arrOfStr = inquiryTypes.split(",", 5);
+        String[] arrOfStr = inquiryTypes.split(",");
         for (int i = 0; i < arrOfStr.length; i++) {
             String value = arrOfStr[i].split("!")[0];
             String text = arrOfStr[i].split("!")[1];

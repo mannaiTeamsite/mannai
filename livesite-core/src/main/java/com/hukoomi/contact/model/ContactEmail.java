@@ -20,10 +20,10 @@ public class ContactEmail {
         return emailSubject;
     }
     /**
-     * @param emailSubject
+     * @param subject
      */
-    public void setEmailSubject(final String emailSub) {
-        this.emailSubject = emailSub;
+    public void setEmailSubject(final String subject) {
+        this.emailSubject = subject;
     }
     /**
      * @return senderName
@@ -32,10 +32,10 @@ public class ContactEmail {
         return senderName;
     }
     /**
-     * @param senderName
+     * @param name
      */
-    public void setSenderName(final String senderName) {
-        this.senderName = senderName;
+    public void setSenderName(final String name) {
+        this.senderName = name;
     }
     /**
      * @return senderEmail
@@ -44,10 +44,10 @@ public class ContactEmail {
         return senderEmail;
     }
     /**
-     * @param senderEmail
+     * @param email
      */
-    public void setSenderEmail(final String senderEmail) {
-        this.senderEmail = senderEmail;
+    public void setSenderEmail(final String email) {
+        this.senderEmail = email;
     }
     /**
      * @return emailText
@@ -59,8 +59,8 @@ public class ContactEmail {
     /**
      * @param emailText
      */
-    public void setEmailText(final String emailText) {
-        this.emailText = emailText;
+    public void setEmailText(final String text) {
+        this.emailText = text;
     }
     /**
      * @return locale
@@ -71,8 +71,8 @@ public class ContactEmail {
     /**
      * @param locale
      */
-    public void setLanguage(final Locale locale) {
-        this.locale = locale;
+    public void setLanguage(final Locale siteLocale) {
+        this.locale = siteLocale;
     }
 
 
