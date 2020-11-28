@@ -57,7 +57,7 @@ public class ContactEmail {
     }
 
     /**
-     * @param emailText
+     * @param text
      */
     public void setEmailText(final String text) {
         this.emailText = text;
@@ -69,7 +69,7 @@ public class ContactEmail {
         return locale;
     }
     /**
-     * @param locale
+     * @param siteLocale
      */
     public void setLanguage(final Locale siteLocale) {
         this.locale = siteLocale;
