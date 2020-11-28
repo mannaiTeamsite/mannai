@@ -189,7 +189,6 @@ public class ContactUsExternal {
     /**
      * this method will create and send mail. returns document with status.
      *
-     * @param email   ContactEmail object
      * @param context context component context passed with param
      * @return returns document with status
      */
@@ -223,12 +222,12 @@ public class ContactUsExternal {
     /**
      * this method will create mail. returns MimeMessage.
      *
-     * @param email
      * @param context
      * @return msg returns MimeMessage
      * @throws MessagingException
      */
-    private MimeMessage createMailMessage(final RequestContext context) throws MessagingException {
+    private MimeMessage createMailMessage(final RequestContext context)
+            throws MessagingException {
 
         String from = getmailserverProperties(
                 CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
