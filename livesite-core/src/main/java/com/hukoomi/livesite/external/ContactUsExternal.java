@@ -105,7 +105,7 @@ public class ContactUsExternal {
             verify = captchUtil.validateCaptch(gRecaptchaResponse);
 
             if (verify) {
-                document = sendEmailToHukoomi(email, context);
+                document = sendEmailToHukoomi(context);
             } else {
                 status = STATUS_ERROR;
                 msg = bundle.getString(ERROR_RECAPTCHA_TEXT);
@@ -193,8 +193,7 @@ public class ContactUsExternal {
      * @param context context component context passed with param
      * @return returns document with status
      */
-    public Document sendEmailToHukoomi(final ContactEmail email,
-            final RequestContext context) {
+    public Document sendEmailToHukoomi(final RequestContext context) {
         LOGGER.debug("sendEmailToHukoomi: Enter");
         ResourceBundle bundle = ResourceBundle
                 .getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
@@ -202,7 +201,7 @@ public class ContactUsExternal {
         String msg = "";
         MimeMessage mailMessage;
         try {
-            mailMessage = createMailMessage(email, context);
+            mailMessage = createMailMessage(context);
             Transport.send(mailMessage);
         } catch (MessagingException e) {
             e.printStackTrace();
@@ -229,8 +228,7 @@ public class ContactUsExternal {
      * @return msg returns MimeMessage
      * @throws MessagingException
      */
-    private MimeMessage createMailMessage(final ContactEmail email,
-            final RequestContext context) throws MessagingException {
+    private MimeMessage createMailMessage(final RequestContext context) throws MessagingException {
 
         String from = getmailserverProperties(
                 CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);

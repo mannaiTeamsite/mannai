@@ -43,6 +43,8 @@ public class NewsletterExternal {
     /** mailchimp response status. */
     private static final String STATUS_NOTFOUND = "404";
     /** mailchimp response status. */
+    private static final int STATUS_OK = 200;
+    /** mailchimp response status. */
     private static final String STATUS_ALREADY_SUBSCRIBED =
             "Already Subscribed";
     /** mailchimp response status. */
@@ -343,7 +345,7 @@ public class NewsletterExternal {
             return getStatus(sb.toString());
         } catch (IOException ioe) {
             int statusCode = httpConnection.getResponseCode();
-            if (statusCode != 200) {
+            if (statusCode !=  STATUS_OK) {
                 return String.valueOf(statusCode);
             }
         }
