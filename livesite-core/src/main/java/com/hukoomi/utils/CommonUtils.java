@@ -44,10 +44,7 @@ public class CommonUtils {
     /** Declare dcr category variable. */
     private String dcrCategory;
     /** Declare db Connection variable. */
-	private static Connection connection;
-	static {
-		CommonUtils.connection = null;
-	}
+	private static Connection connection =null;
     /** Initialize hashmap for config parameter. */
     public static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
@@ -206,12 +203,12 @@ public class CommonUtils {
      *
      * @param context component context passed with param
      */
-    public void loadConfigparams(final RequestContext context) {
+    public void loadConfigparams(final RequestContext utilContext) {
         logger.info("in getmailserverProperty:");
         Statement st = null;
         ResultSet rs = null;
         String query = null;
-        Postgre objPostgre = new Postgre(context);
+        Postgre objPostgre = new Postgre(utilContext);
         query = "SELECT * FROM CONFIG_PARAM";
         try {
             CommonUtils.connection = objPostgre.getConnection();
