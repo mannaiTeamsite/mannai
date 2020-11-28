@@ -44,7 +44,7 @@ public class CommonUtils {
     /** Declare dcr category variable. */
     private String dcrCategory;
     /** Declare db Connection variable. */
-	private static Connection connection =null;
+    private static Connection connection = null;
     /** Initialize hashmap for config parameter. */
     public static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
@@ -201,7 +201,7 @@ public class CommonUtils {
     /**
      * this method will get config param from table and set to hashmap.
      *
-     * @param context component context passed with param
+     * @param utilContext component context passed with param
      */
     public void loadConfigparams(final RequestContext utilContext) {
         logger.info("in getmailserverProperty:");
