@@ -22,8 +22,8 @@ public class ContactEmail {
     /**
      * @param emailSubject
      */
-    public void setEmailSubject(final String emailSubject) {
-        this.emailSubject = emailSubject;
+    public void setEmailSubject(final String emailSub) {
+        this.emailSubject = emailSub;
     }
     /**
      * @return senderName
