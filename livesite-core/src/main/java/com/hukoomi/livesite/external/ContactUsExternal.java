@@ -228,14 +228,14 @@ public class ContactUsExternal {
      */
     private MimeMessage createMailMessage(final RequestContext context)
             throws MessagingException {
-
-        String from = getmailserverProperties(
+        CommonUtils util = new CommonUtils();
+        String from = util.getConfiguration(
                 CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
-        String to = getmailserverProperties(
+        String to = util.getConfiguration(
                 CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL, context);
-        String host = getmailserverProperties(
+        String host = util.getConfiguration(
                 CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST, context);
-        String port = getmailserverProperties(
+        String port = util.getConfiguration(
                 CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT, context);
         Properties props = new Properties();
         String subject = "";
@@ -272,30 +272,6 @@ public class ContactUsExternal {
         msg.setText(sb.toString());
         LOGGER.debug("msg:" + msg);
         return msg;
-
-    }
-
-    /**
-     * this method will take config parameter code and return config
-     * parameter value.
-     *
-     * @param paramCode
-     * @param context
-     * @return configParamValue return config parameter value
-     */
-    private static String getmailserverProperties(final String paramCode,
-            final RequestContext context) {
-        CommonUtils utils = new CommonUtils();
-        String configParamValue = null;
-        if (paramCode != null && !"".equals(paramCode)) {
-            if (utils.configParamsMap == null
-                    || utils.configParamsMap.isEmpty()) {
-                utils.loadConfigparams(context);
-            }
-            configParamValue = utils.configParamsMap.get(paramCode);
-            LOGGER.debug("configParamValue:" + configParamValue);
-        }
-        return configParamValue;
 
     }
 

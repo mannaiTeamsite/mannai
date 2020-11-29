@@ -46,7 +46,7 @@ public class CommonUtils {
     /** Declare db Connection variable. */
     private static Connection connection = null;
     /** Initialize hashmap for config parameter. */
-    public static HashMap<String, String> configParamsMap = new HashMap();
+    private static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
      */
     public CommonUtils() {
@@ -232,6 +232,30 @@ public class CommonUtils {
         objPostgre.releaseConnection(CommonUtils.connection, st, rs);
     }
 
+    /**
+     * this method will take config parameter code and return config
+     * parameter value.
+     *
+     * @param property
+     * @param context
+     * @return configParamValue return config parameter value.
+     */
+    public  String getConfiguration(final String property,
+            final RequestContext context) {
+        CommonUtils util = new CommonUtils();
+        String configParamValue = null;
+        if (property != null && !"".equals(property)) {
+            if (CommonUtils.configParamsMap == null
+                    || CommonUtils.configParamsMap.isEmpty()) {
+                util.loadConfigparams(context);
+            }
+            configParamValue = CommonUtils.configParamsMap.get(property);
+            logger.debug("configParamValue:" + configParamValue);
+
+        }
+        return configParamValue;
+
+    }
     /**
      * This method will take language, and returns Locale.
      *

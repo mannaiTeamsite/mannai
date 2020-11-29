@@ -106,16 +106,16 @@ public class NewsletterExternal {
             throws IOException, NoSuchAlgorithmException {
         // add subscriber
         LOGGER.debug("add subcriber:");
-
+        CommonUtils util = new CommonUtils();
         ResourceBundle bundle = ResourceBundle
                 .getBundle("com.hukoomi.resources.Newsletter", lang);
         String validationMessage = "";
         Document document = DocumentHelper.createDocument();
-        listId = getConfiguration("Mailchimp_List_Id", context);
+        listId = util.getConfiguration("Mailchimp_List_Id", context);
         LOGGER.debug("listId:" + listId);
-        authorizationHeader = "Basic " + getConfiguration(
+        authorizationHeader = "Basic " + util.getConfiguration(
                 "Mailchimp_Authorization_Header", context);
-        baseUrl = getConfiguration("Mailchimp_BaseURL", context);
+        baseUrl = util.getConfiguration("Mailchimp_BaseURL", context);
         LOGGER.debug("baseUrl:" + baseUrl);
         try {
 
@@ -167,30 +167,7 @@ public class NewsletterExternal {
         return document;
     }
 
-    /**
-     * this method will take config parameter code and return config
-     * parameter value.
-     *
-     * @param property
-     * @param context
-     * @return configParamValue return config parameter value.
-     */
-    private static String getConfiguration(final String property,
-            final RequestContext context) {
-        CommonUtils util = new CommonUtils();
-        String configParamValue = null;
-        if (property != null && !"".equals(property)) {
-            if (CommonUtils.configParamsMap == null
-                    || CommonUtils.configParamsMap.isEmpty()) {
-                util.loadConfigparams(context);
-            }
-            configParamValue = CommonUtils.configParamsMap.get(property);
-            LOGGER.debug("configParamValue:" + configParamValue);
 
-        }
-        return configParamValue;
-
-    }
 
     /**
      * this method takes the email, status, messages and returns xml
@@ -381,13 +358,13 @@ public class NewsletterExternal {
     private String md5Java(final String message)
             throws NoSuchAlgorithmException {
         String digest = null;
-
+        String arg= "b & 0xff";
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] hash = md.digest(message.getBytes(StandardCharsets.UTF_8));
         // converting byte array to Hexadecimal String
         StringBuilder sb = new StringBuilder(2 * hash.length);
         for (byte b : hash) {
-            sb.append(String.format("%02x", b & 0xff));
+            sb.append(String.format("%02x", arg));
         }
         digest = sb.toString();
         return digest;
