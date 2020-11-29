@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -358,15 +359,15 @@ public class NewsletterExternal {
     private String md5Java(final String message)
             throws NoSuchAlgorithmException {
         String digest = null;
-        String arg = "b & 0xff";
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] hash = md.digest(message.getBytes(StandardCharsets.UTF_8));
-        // converting byte array to Hexadecimal String
-        StringBuilder sb = new StringBuilder(2 * hash.length);
-        for (byte b : hash) {
-            sb.append(String.format("%02x", arg));
-        }
-        digest = sb.toString();
+        // Convert byte array into signum representation
+        BigInteger no = new BigInteger(1, hash);
+        // Convert message digest into hex value
+        digest = no.toString(16);
+        while (digest.length() < 32) {
+            digest = "0" + digest;
+            }
         return digest;
     }
 
