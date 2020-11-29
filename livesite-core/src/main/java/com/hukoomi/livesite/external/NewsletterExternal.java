@@ -33,7 +33,9 @@ public class NewsletterExternal {
     private String authorizationHeader;
     /** baseUrl of mailchimp. */
     private String baseUrl;
+    /** hex value for Convert to hexa. */
     private static final int HEXA = 16;
+    /** digest length. */
     private static final int DIGEST_LENGTH = 32;
     /** httpConnection for making call to mailchimp services. */
     private HttpURLConnection httpConnection = null;
