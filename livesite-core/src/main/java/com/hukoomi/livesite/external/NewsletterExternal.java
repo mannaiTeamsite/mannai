@@ -33,6 +33,8 @@ public class NewsletterExternal {
     private String authorizationHeader;
     /** baseUrl of mailchimp. */
     private String baseUrl;
+    private static final int HEXA = 16;
+    private static final int DIGEST_LENGTH = 32;
     /** httpConnection for making call to mailchimp services. */
     private HttpURLConnection httpConnection = null;
     /** mailchimp response status. */
@@ -360,14 +362,13 @@ public class NewsletterExternal {
             throws NoSuchAlgorithmException {
         String digest = null;
         MessageDigest md = MessageDigest.getInstance("MD5");
-        int hexaValue = 16;
-        int digestLength = 32;
+
         byte[] hash = md.digest(message.getBytes(StandardCharsets.UTF_8));
         // Convert byte array into signum representation
         BigInteger no = new BigInteger(1, hash);
         // Convert message digest into hex value
-        String tempDigest = no.toString(hexaValue);
-        while (tempDigest.length() < digestLength) {
+        String tempDigest = no.toString(HEXA);
+        while (tempDigest.length() < DIGEST_LENGTH) {
             tempDigest = "0" + tempDigest;
             }
         digest = tempDigest;
