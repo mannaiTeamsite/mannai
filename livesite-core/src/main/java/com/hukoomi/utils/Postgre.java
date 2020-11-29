@@ -15,45 +15,61 @@ public class Postgre {
     /** Logger object to check the flow of the code. */
     private final Logger logger = Logger.getLogger(Postgre.class);
     /** Connection variable. */
-    private static Connection con = null;
+    private Connection con = null;
+    private String connectionString = null;    
+    private String userName= null;
+    private String password = null;
+    private static Properties properties = null;
 
-    static String connectionString = null;
-    
-    static String userName= null;
-    static String password = null;
-
+    /**
+     * This constructor will be called for creating Postgres connection.
+     * 
+     * @param context The parameter context object passed from Component.
+     *
+     */
     public Postgre(RequestContext context) {
-        connectionString = getConnectionString(context);
+        logger.info("Postgre : Loading Properties....");
+        Postgre.loadProperties(context);
+        logger.info("Postgre : Properties Loaded");
+        connectionString = getConnectionString();
     }
     
-    @Deprecated
-    private String getConnectionString(final RequestContext context) {
+    /**
+     * This method will be used to load the configuration properties.
+     * 
+     * @param context The parameter context object passed from Component.
+     * 
+     */
+    private static void loadProperties(final RequestContext context) {
+        if(properties == null) {
+            PropertiesFileReader propertyFileReader = new PropertiesFileReader(
+                    context, "dbconfig.properties");
+            Postgre.properties = propertyFileReader.getPropertiesFile();
+        }
+    }
+    
+    /**
+     * This method will be used for creating connection string for Postgres connection.
+     * 
+     * @param context The parameter context object passed from Component.
+     * 
+     * @return connectionStr return the connection string for Postgres connection.
+     *
+     */
+    private String getConnectionString() {
         logger.info("Postgre : getConnectionString()");
-
         String connectionStr = null;
-        PropertiesFileReader propertyFileReader = new PropertiesFileReader(
-                context, "dbconfig.properties");
-        Properties properties = propertyFileReader.getPropertiesFile();
+        String host = properties.getProperty("host");
+        String port = properties.getProperty("port");
+        String database = properties.getProperty("database");
+        String schema = properties.getProperty("schema");
+        userName = properties.getProperty("username");
+        password = properties.getProperty("password");
 
-        String host = context.getParameterString("host",
-                properties.getProperty("host"));
-        String port = context.getParameterString("port",
-                properties.getProperty("port"));
-        String database = context.getParameterString("database",
-                properties.getProperty("database"));
-        String schema = context.getParameterString("schema",
-                properties.getProperty("schema"));
-        userName = context.getParameterString("username",
-                properties.getProperty("username"));
-        password = context.getParameterString("password",
-                properties.getProperty("password"));
-
-        // jdbc:postgresql://172.16.167.164:5432/devapps,"tsdev","Motc@1234"
         connectionStr = "jdbc:" + database + "://" + host + ":" + port
                 + "/" + schema;
 
         logger.info("Connection String : " + connectionStr);
-
         return connectionStr;
     }
     
@@ -64,8 +80,7 @@ public class Postgre {
         logger.info("Postgre : getConnection()");
         // Creating Connection
         try {
-        	//Class.forName("org.postgresql.Driver");
-            con = DriverManager.getConnection(connectionString,userName, password);
+            con = DriverManager.getConnection(connectionString, userName, password);
         } catch (Exception e) {
             logger.error("Postgre : getConnection()" + e.getMessage());
             e.printStackTrace();
@@ -75,7 +90,6 @@ public class Postgre {
 
     public static void releaseConnection(Connection con, Statement stmt,
             ResultSet rs) {
-        //logger.info("Postgre : releaseConnection()");
         // Releasing Connection
         if (con != null) {
             try {

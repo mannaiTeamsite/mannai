@@ -16,6 +16,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 
+import com.hukoomi.bo.PollsBO;
+import com.hukoomi.bo.SurveyBO;
 import com.hukoomi.utils.Postgre;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
@@ -68,7 +70,7 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		logger.debug("TaskFileList Length : " + taskFileList.length);
 		
 		postgre =  new Postgre(client, task, DB_PROPERTY_FILE);
-		statusMap = new HashMap<String,String>();
+		statusMap = new HashMap<>();
 		statusMap.put(TRANSITION, SUCCESS_TRANSITION);
 		statusMap.put(TRANSITION_COMMENT, "");
 		
@@ -102,7 +104,7 @@ public class PollSurveyTask  implements CSURLExternalTask{
 	
 	public Map<String,String> processPollDCR(CSSimpleFile taskSimpleFile) {
 		boolean isDBOperationSuccess = false;
-		HashMap<String,String> statusMap = new HashMap<String,String>();
+		HashMap<String,String> statusMap = new HashMap<>();
 		try {
 			Document document = getTaskDocument(taskSimpleFile);
 			if(isPollMasterDataAvailable(document)) {
@@ -116,7 +118,7 @@ public class PollSurveyTask  implements CSURLExternalTask{
 					statusMap.put(TRANSITION_COMMENT, POLL_UPDATE_FAILURE);
 				}
 			}else {
-				isDBOperationSuccess = insertPollMasterData(document);
+				isDBOperationSuccess = insertPollData(document);
 				logger.debug("isPollDataInserted : "+isDBOperationSuccess);
 				if(isDBOperationSuccess) {
 					statusMap.put(TRANSITION, SUCCESS_TRANSITION);
@@ -137,7 +139,7 @@ public class PollSurveyTask  implements CSURLExternalTask{
 	
 	public Map<String,String> processSurveyDCR(CSSimpleFile taskSimpleFile) {
 		boolean isDBOperationSuccess = false;
-		HashMap<String,String> statusMap = new HashMap<String,String>();
+		HashMap<String,String> statusMap = new HashMap<>();
 		try {
 			Document document = getTaskDocument(taskSimpleFile);
 			if(isSurveyMasterDataAvailable(document)) {
@@ -151,7 +153,7 @@ public class PollSurveyTask  implements CSURLExternalTask{
 					statusMap.put(TRANSITION_COMMENT, SURVEY_UPDATE_FAILURE);
 				}
 			}else {
-				isDBOperationSuccess = insertSurveyMasterData(document);
+				isDBOperationSuccess = insertSurveyData(document);
 				logger.debug("isSurveyDataInserted : "+isDBOperationSuccess);
 				if(isDBOperationSuccess) {
 					statusMap.put(TRANSITION, SUCCESS_TRANSITION);
@@ -223,8 +225,8 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		return isPollDataAvailable;
 	}
 	
-	public boolean insertPollMasterData(Document document) {
-		logger.debug("PollSurveyTask : insertPollMasterData");
+	public boolean insertPollData(Document document) {
+		logger.debug("PollSurveyTask : insertPollData");
 		PreparedStatement prepareStatement = null;
 		PreparedStatement prepareStatementPollOption = null;
 		Connection connection = null;
@@ -232,62 +234,27 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		try {
 			
 			connection = postgre.getConnection();
+			PollsBO pollsBO = new PollsBO();
+			pollsBO.setPollId(getDCRValue(document, ID_PATH));
+			pollsBO.setLang(getDCRValue(document, LANG_PATH));
+			pollsBO.setQuestion(getDCRValue(document, QUESTION_PATH));
+			pollsBO.setStartDate(getDCRValue(document, POLL_START_DATE_PATH));
+			pollsBO.setEndDate(getDCRValue(document, POLL_END_DATE_PATH));
 			
-			Long pollId = Long.parseLong(getDCRValue(document, ID_PATH));
-			String lang = getDCRValue(document, LANG_PATH);
-			String question = getDCRValue(document, QUESTION_PATH);
-			String startDateStr = getDCRValue(document, POLL_START_DATE_PATH);
-			String endDateStr = getDCRValue(document, POLL_END_DATE_PATH);
-			String persona = getDCRValue(document, PERSONA_PATH);
-			
-			Date startDate = getDate(startDateStr);
-			Date endDate = getDate(endDateStr);
-			
-			String pollMasterQuery = "INSERT INTO POLL_MASTER (POLL_ID, LANG, QUESTION, START_DATE, END_DATE, PERSONA) VALUES (?, ?, ?, ?, ?, ?)";
-			logger.info("insertPollMasterData pollMasterQuery : "+pollMasterQuery);
-			connection.setAutoCommit(false);
-			prepareStatement = connection.prepareStatement(pollMasterQuery);
-		    prepareStatement.setLong(1, pollId);
-		    prepareStatement.setString(2, lang);
-		    prepareStatement.setString(3, question);
-		    prepareStatement.setDate(4, startDate);
-		    prepareStatement.setDate(5, endDate);
-		    prepareStatement.setString(6, persona);
-		    int result = prepareStatement.executeUpdate();
+			int result = insertPollMasterData(pollsBO, connection);
 		    logger.info("insertPollMasterData result : "+result);
 		    if (result > 0) {
 		    	logger.info("Poll Master Data Inserted");
 		    	
-		    	String pollOptionQuery = "INSERT INTO POLL_OPTION (OPTION_ID, LANG, POLL_ID, OPTION_LABEL, OPTION_VALUE) VALUES(?, ?, ?, ?, ?)";
-		    	prepareStatementPollOption = connection.prepareStatement(pollOptionQuery);
-		    	logger.info("insertPollMasterData pollOptionQuery : "+pollOptionQuery);
+		    	boolean isPollOptionInserted = insertPollOptionsData(pollsBO, document, connection);
 		    	
-		    	List<Node> nodes = document.selectNodes(OPTION_PATH);
-		    	long optionId = 1l;
-		    	for (Node node : nodes) {
-		    		logger.info("insertPollMasterData optionId : "+optionId);
-		    		String label = node.selectSingleNode(OPTION_LABEL).getText();
-		    		String value = node.selectSingleNode(OPTION_VALUE).getText();
-		    		logger.info("insertPollMasterData label : "+label);
-		    		logger.info("insertPollMasterData value : "+value);
-		    		prepareStatementPollOption.setLong(1, optionId);
-		    		prepareStatementPollOption.setString(2, lang);
-		    		prepareStatementPollOption.setLong(3, pollId);
-		            prepareStatementPollOption.setString(4, label);
-		            prepareStatementPollOption.setString(5, value);
-		            prepareStatementPollOption.addBatch();
-		            optionId++;
-		    	}
-		    	int[] optionBatch = prepareStatementPollOption.executeBatch();
-		    	logger.info("insertPollMasterData optionBatch length : "+optionBatch.length);
-		    	
-		    	if(optionBatch.length == optionId-1) {
+		    	if(isPollOptionInserted) {
 	    			connection.commit();
 		    		logger.info("Poll Option Inserted");
 		    		isPollDataInserted = true;
 		    	}else {
 	    			connection.rollback();
-		    		logger.info("insertPollMasterData Option batch insert failed");
+		    		logger.info("insertPollData Option batch insert failed");
 		    	}
 		    } else {
 	    		connection.rollback();
@@ -299,19 +266,90 @@ public class PollSurveyTask  implements CSURLExternalTask{
 				if(connection != null) {
 					connection.rollback();
 				}
-				logger.error("Exception in insertPollMasterData: "+e.getMessage());
+				logger.error("Exception in insertPollData: "+e.getMessage());
 			    e.printStackTrace();
 			} catch (SQLException ex) {
-				logger.error("Exception in insertPollMasterData rollback catch block : "+ex.getMessage());
+				logger.error("Exception in insertPollData rollback catch block : "+ex.getMessage());
 				ex.printStackTrace();
 			}
 		} finally {
 		    Postgre.releaseConnection(null, prepareStatementPollOption, null);
 		    Postgre.releaseConnection(connection, prepareStatement, null);
-		    logger.info("Released insertPollMasterData connection");
+		    logger.info("Released insertPollData connection");
 		}
 		return isPollDataInserted;
 	}
+	
+	public int insertPollMasterData(PollsBO pollsBO, Connection connection) throws SQLException{
+	    PreparedStatement preparedStatement = null;
+	    int result = 0;
+        try {
+            logger.info("PollSurveyTask : insertPollMasterData");
+            String pollMasterQuery = "INSERT INTO POLL_MASTER (POLL_ID, LANG, QUESTION, START_DATE, END_DATE, PERSONA) VALUES (?, ?, ?, ?, ?, ?)";
+            logger.info("insertPollMasterData pollMasterQuery : "+pollMasterQuery);
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(pollMasterQuery);
+            preparedStatement.setLong(1, Long.parseLong(pollsBO.getPollId()));
+            preparedStatement.setString(2, pollsBO.getLang());
+            preparedStatement.setString(3, pollsBO.getQuestion());
+            preparedStatement.setDate(4, getDate(pollsBO.getStartDate()));
+            preparedStatement.setDate(5, getDate(pollsBO.getEndDate()));
+            preparedStatement.setString(6, pollsBO.getPersona());
+            result = preparedStatement.executeUpdate();
+            logger.info("insertPollMasterData result : "+result);
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertPollMasterData: "+e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertPollMasterData connection");
+        }
+	    return result;
+	}
+	
+	public boolean insertPollOptionsData(PollsBO pollsBO, Document document, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean isPollOptionInserted = false;
+        try {
+            logger.info("PollSurveyTask : insertPollOptionsData");
+            String pollOptionQuery = "INSERT INTO POLL_OPTION (OPTION_ID, LANG, POLL_ID, OPTION_LABEL, OPTION_VALUE) VALUES(?, ?, ?, ?, ?)";
+            preparedStatement = connection.prepareStatement(pollOptionQuery);
+            logger.info("insertPollOptionsData pollOptionQuery : "+pollOptionQuery);
+            
+            List<Node> nodes = document.selectNodes(OPTION_PATH);
+            long optionId = 1l;
+            for (Node node : nodes) {
+                logger.info("insertPollOptionsData optionId : "+optionId);
+                String label = node.selectSingleNode(OPTION_LABEL).getText();
+                String value = node.selectSingleNode(OPTION_VALUE).getText();
+                logger.info("insertPollOptionsData label : "+label);
+                logger.info("insertPollOptionsData value : "+value);
+                preparedStatement.setLong(1, optionId);
+                preparedStatement.setString(2, pollsBO.getLang());
+                preparedStatement.setLong(3, Long.parseLong(pollsBO.getPollId()));
+                preparedStatement.setString(4, label);
+                preparedStatement.setString(5, value);
+                preparedStatement.addBatch();
+                optionId++;
+            }
+            int[] optionBatch = preparedStatement.executeBatch();
+            logger.info("insertPollOptionsData optionBatch length : "+optionBatch.length);
+            Postgre.releaseConnection(null, preparedStatement, null);
+            
+            if(optionBatch.length == optionId-1) {
+                isPollOptionInserted = true;
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertPollOptionsData: "+e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertPollOptionsData connection");
+        }
+        return isPollOptionInserted;
+    }
 	
 	public boolean updatePollMasterData(Document document) {
 		logger.debug("PollSurveyTask : updatePollMasterData");
@@ -436,8 +474,8 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		return isSurveyDataAvailable;
 	}
 	
-	public boolean insertSurveyMasterData(Document document) {
-		logger.debug("PollSurveyTask : insertSurveyMasterData");
+	public boolean insertSurveyData(Document document) {
+		logger.debug("PollSurveyTask : insertSurveyData");
 		PreparedStatement prepareStatement = null;
 		PreparedStatement prepareStatementSurveyQuestion = null;
 		PreparedStatement optionPrepareStatement = null;
@@ -449,7 +487,7 @@ public class PollSurveyTask  implements CSURLExternalTask{
 			
 			connection = postgre.getConnection();
 			
-			Long surveyId = Long.parseLong(getDCRValue(document, ID_PATH));
+			/*Long surveyId = Long.parseLong(getDCRValue(document, ID_PATH));
 			String lang = getDCRValue(document, LANG_PATH);
 			String title = getDCRValue(document, TITLE_PATH);
 			String description = getDCRValue(document, DESCRIPTION_PATH);
@@ -458,19 +496,28 @@ public class PollSurveyTask  implements CSURLExternalTask{
 			String persona = getDCRValue(document, PERSONA_PATH);
 			
 			Date startDate = getDate(startDateStr);
-			Date endDate = getDate(endDateStr);
+			Date endDate = getDate(endDateStr);*/
+			
+			SurveyBO surveyBO = new SurveyBO();
+			surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
+			surveyBO.setLang(getDCRValue(document, LANG_PATH));
+			surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
+			surveyBO.setDescription(getDCRValue(document, SURVEY_START_DATE_PATH));
+			surveyBO.setStartDate(getDCRValue(document, SURVEY_START_DATE_PATH));
+			surveyBO.setEndDate(getDCRValue(document, SURVEY_END_DATE_PATH));
+			surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
 			
 			String surveyMasterQuery = "INSERT INTO SURVEY_MASTER (SURVEY_ID, LANG, SURVEY_TITLE, SURVEY_DESCRIPTION, START_DATE, END_DATE, PERSONA) VALUES (?, ?, ?, ?, ?, ?, ?)";
-			logger.info("insertSurveyMasterData surveyMasterQuery : "+surveyMasterQuery);
+			logger.info("insertSurveyData surveyMasterQuery : "+surveyMasterQuery);
 			connection.setAutoCommit(false);
 			prepareStatement = connection.prepareStatement(surveyMasterQuery);
-		    prepareStatement.setLong(1, surveyId);
-		    prepareStatement.setString(2, lang);
-		    prepareStatement.setString(3, title);
-		    prepareStatement.setString(4, description);
-		    prepareStatement.setDate(5, startDate);
-		    prepareStatement.setDate(6, endDate);
-		    prepareStatement.setString(7, persona);
+		    prepareStatement.setLong(1, Long.parseLong(surveyBO.getSurveyId()));
+		    prepareStatement.setString(2, surveyBO.getLang());
+		    prepareStatement.setString(3, surveyBO.getTitle());
+		    prepareStatement.setString(4, surveyBO.getDescription());
+		    prepareStatement.setDate(5, getDate(surveyBO.getStartDate()));
+		    prepareStatement.setDate(6, getDate(surveyBO.getEndDate()));
+		    prepareStatement.setString(7, surveyBO.getPersona());
 		    int result = prepareStatement.executeUpdate();
 		    logger.info("result : "+result);
 		    if (result > 0) {
@@ -478,33 +525,27 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		    	
 		    	String surveyQuestionQuery = "INSERT INTO SURVEY_QUESTION (QUESTION_ID, SURVEY_ID, LANG, QUESTION_NO, QUESTION_TYPE, QUESTION) VALUES (?, ?, ?, ?, ?, ?)";
 		    	prepareStatementSurveyQuestion = connection.prepareStatement(surveyQuestionQuery);
-		    	logger.info("insertSurveyMasterData surveyQuestionQuery : "+surveyQuestionQuery);
+		    	logger.info("insertSurveyData surveyQuestionQuery : "+surveyQuestionQuery);
 		    	
 		    	List<Node> nodes = document.selectNodes(FIELD_PATH);
 		    	int questionNo = 1;
 		    	for (Node node : nodes) {
-		    		logger.info("insertSurveyMasterData questionNo : "+questionNo);
+		    		logger.info("insertSurveyData questionNo : "+questionNo);
 		    		
 		    		String questionType = node.selectSingleNode(".//field-type").getText();
-		    		logger.info("insertSurveyMasterData questionType : "+questionType);
+		    		logger.info("insertSurveyData questionType : "+questionType);
 		    		
 		    		if(!"button".equalsIgnoreCase(questionType)) {
 		    			
-			    		String questionIdQuery = "SELECT nextval('survey_question_question_id_seq') as questionId";
-		            	questionIdQueryStmt = connection.createStatement();
-		            	rs = questionIdQueryStmt.executeQuery(questionIdQuery);
-		            	Long questionId = 0L;
-		            	while (rs.next()) {
-		            		questionId = rs.getLong("questionId");
-		            	}
-		            	logger.info("insertSurveyMasterData questionId : "+questionId);
+		    		    Long questionId = getNextSequenceValue("survey_question_question_id_seq", postgre.getConnection());
+		            	logger.info("insertSurveyData questionId : "+questionId);
 			    		
 			    		
 			    		String question = node.selectSingleNode(".//question").getText();
 			    		logger.info("question : "+question);
 			    		prepareStatementSurveyQuestion.setLong(1, questionId);
-			    		prepareStatementSurveyQuestion.setLong(2, surveyId);
-			    		prepareStatementSurveyQuestion.setString(3, lang);
+			    		prepareStatementSurveyQuestion.setLong(2, Long.parseLong(surveyBO.getSurveyId()));
+			    		prepareStatementSurveyQuestion.setString(3, surveyBO.getLang());
 			    		prepareStatementSurveyQuestion.setInt(4, questionNo);
 			    		prepareStatementSurveyQuestion.setString(5, questionType);
 			            prepareStatementSurveyQuestion.setString(6, question);
@@ -523,8 +564,8 @@ public class PollSurveyTask  implements CSURLExternalTask{
 					    		String optionLabel = optnode.selectSingleNode(OPTION_LABEL).getText();
 					    		String optionValue = optnode.selectSingleNode(OPTION_VALUE).getText();
 					    		logger.info(optionLabel+" : "+optionValue);
-					    		optionPrepareStatement.setLong(1, surveyId);
-					    		optionPrepareStatement.setString(2, lang);
+					    		optionPrepareStatement.setLong(1, Long.parseLong(surveyBO.getSurveyId()));
+					    		optionPrepareStatement.setString(2, surveyBO.getLang());
 					    		optionPrepareStatement.setLong(3, questionId);
 					    		optionPrepareStatement.setInt(4, questionNo);
 					    		optionPrepareStatement.setInt(5, optionNo);
@@ -534,19 +575,19 @@ public class PollSurveyTask  implements CSURLExternalTask{
 					    		optionNo++;
 					    	}
 				            int[] optionBatch = optionPrepareStatement.executeBatch();
-				            logger.info("insertSurveyMasterData optionBatch length : "+optionBatch.length);
+				            logger.info("insertSurveyData optionBatch length : "+optionBatch.length);
 					    	
 					    	if(optionBatch.length == optionNo-1) {
 					    		logger.info("Survey Option Inserted");
 					    	}else {
 				    			connection.rollback();
-					    		logger.info("insertSurveyMasterData Option batch insert failed");
+					    		logger.info("insertSurveyData Option batch insert failed");
 					    		break;
 					    	}
 					    	questionNo++;
 			            }else {
 		            		connection.rollback();
-				    		logger.info("insertSurveyMasterData Question insert failed");
+				    		logger.info("insertSurveyData Question insert failed");
 				    		break;
 				    	}
 		    		}
@@ -567,10 +608,10 @@ public class PollSurveyTask  implements CSURLExternalTask{
 				if(connection != null) {
 					connection.rollback();
 				}
-				logger.error("Exception in insertSurveyMasterData : "+e.getMessage());
+				logger.error("Exception in insertSurveyData : "+e.getMessage());
 			    e.printStackTrace();
 			} catch (SQLException ex) {
-				logger.error("Exception in insertSurveyMasterData rollback catch block : "+ex.getMessage());
+				logger.error("Exception in insertSurveyData rollback catch block : "+ex.getMessage());
 				ex.printStackTrace();
 			}
 		} finally {
@@ -578,10 +619,38 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		    Postgre.releaseConnection(null, questionIdQueryStmt, rs);
 		    Postgre.releaseConnection(null, optionPrepareStatement, null);
 		    Postgre.releaseConnection(connection, prepareStatement, null);
-		    logger.info("Released insertSurveyMasterData connection");
+		    logger.info("Released insertSurveyData connection");
 		}
 		return isSurveyDataInserted;
 	}
+	
+	public int insertSurveyMasterData(PollsBO pollsBO, Connection connection) throws SQLException{
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        try {
+            logger.info("PollSurveyTask : insertPollMasterData");
+            String pollMasterQuery = "INSERT INTO POLL_MASTER (POLL_ID, LANG, QUESTION, START_DATE, END_DATE, PERSONA) VALUES (?, ?, ?, ?, ?, ?)";
+            logger.info("insertPollMasterData pollMasterQuery : "+pollMasterQuery);
+            connection.setAutoCommit(false);
+            preparedStatement = connection.prepareStatement(pollMasterQuery);
+            preparedStatement.setLong(1, Long.parseLong(pollsBO.getPollId()));
+            preparedStatement.setString(2, pollsBO.getLang());
+            preparedStatement.setString(3, pollsBO.getQuestion());
+            preparedStatement.setDate(4, getDate(pollsBO.getStartDate()));
+            preparedStatement.setDate(5, getDate(pollsBO.getEndDate()));
+            preparedStatement.setString(6, pollsBO.getPersona());
+            result = preparedStatement.executeUpdate();
+            logger.info("insertPollMasterData result : "+result);
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertPollMasterData: "+e.getMessage());
+            e.printStackTrace();
+            throw e;
+        }finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertPollMasterData connection");
+        }
+        return result;
+    }
 	
 	
 	public boolean updateSurveyMasterData(Document document) {
@@ -709,7 +778,7 @@ public class PollSurveyTask  implements CSURLExternalTask{
 				logger.error("Exception in updateSurveyMasterData : "+e.getMessage());
 			    e.printStackTrace();
 			} catch (SQLException ex) {
-				logger.error("Exception in insertSurveyMasterData rollback catch block : "+ex.getMessage());
+				logger.error("Exception in updateSurveyMasterData rollback catch block : "+ex.getMessage());
 				ex.printStackTrace();
 			}
 		} finally {
@@ -735,5 +804,26 @@ public class PollSurveyTask  implements CSURLExternalTask{
 		logger.info(inputDate+" >>> "+outDate);
 		return outDate;
 	}
+	
+    private Long getNextSequenceValue(String sequenceName,
+            Connection connection) {
+        Long seqValue = 0L;
+        Statement queryStmt = null;
+        ResultSet rs = null;
+        try {
+            String query = "SELECT nextval('" + sequenceName
+                    + "') as seqValue";
+            queryStmt = connection.createStatement();
+            rs = queryStmt.executeQuery(query);
+            while (rs.next()) {
+                seqValue = rs.getLong("seqValue");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            Postgre.releaseConnection(connection, queryStmt, rs);
+        }
+        return seqValue;
+    }
 	
 }

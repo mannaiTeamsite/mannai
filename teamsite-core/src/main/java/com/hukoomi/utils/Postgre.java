@@ -68,9 +68,9 @@ public class Postgre {
             ResultSet rs) {
         //logger.info("Postgre : releaseConnection()");
         // Releasing Connection
-        if (con != null) {
+        if (rs != null) {
             try {
-                con.close();
+                rs.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -81,10 +81,10 @@ public class Postgre {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }
-        if (rs != null) {
+        }       
+        if (con != null) {
             try {
-                rs.close();
+                con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
