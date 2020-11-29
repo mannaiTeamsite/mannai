@@ -38,6 +38,8 @@
 			<configuration>
                 <executable>${JAVA_HOME}/bin/javac</executable>
                 <compilerVersion>11.0.7</compilerVersion>
+                <source>11</source>
+                <target>11</target>
 			</configuration>
 		</plugin>
         <plugin>
