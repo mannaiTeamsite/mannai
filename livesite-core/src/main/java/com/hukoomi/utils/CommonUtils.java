@@ -241,13 +241,13 @@ public class CommonUtils {
      * @return configParamValue return config parameter value.
      */
     public  String getConfiguration(final String property,
-            final RequestContext context) {
+            final RequestContext utilContext) {
         CommonUtils util = new CommonUtils();
         String configParamValue = null;
         if (property != null && !"".equals(property)) {
             if (CommonUtils.configParamsMap == null
                     || CommonUtils.configParamsMap.isEmpty()) {
-                util.loadConfigparams(context);
+                util.loadConfigparams(utilContext);
             }
             configParamValue = CommonUtils.configParamsMap.get(property);
             logger.debug("configParamValue:" + configParamValue);

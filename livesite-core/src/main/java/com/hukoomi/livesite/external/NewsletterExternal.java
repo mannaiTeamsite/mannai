@@ -358,7 +358,7 @@ public class NewsletterExternal {
     private String md5Java(final String message)
             throws NoSuchAlgorithmException {
         String digest = null;
-        String arg= "b & 0xff";
+        String arg = "b & 0xff";
         MessageDigest md = MessageDigest.getInstance("MD5");
         byte[] hash = md.digest(message.getBytes(StandardCharsets.UTF_8));
         // converting byte array to Hexadecimal String
