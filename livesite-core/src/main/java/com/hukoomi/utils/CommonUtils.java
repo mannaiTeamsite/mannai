@@ -237,7 +237,7 @@ public class CommonUtils {
      * parameter value.
      *
      * @param property
-     * @param context
+     * @param utilContext
      * @return configParamValue return config parameter value.
      */
     public  String getConfiguration(final String property,
