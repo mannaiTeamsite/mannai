@@ -102,7 +102,7 @@ public class ContactUsExternal {
             setValueToContactModel(senderName, senderEmail, emailText,
                     emailSubject, locale);
             GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-            verify = captchUtil.validateCaptcha(context,gRecaptchaResponse);
+            verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
 
             if (verify) {
                 document = sendEmailToHukoomi(context);
