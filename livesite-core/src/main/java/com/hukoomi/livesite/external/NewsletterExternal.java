@@ -360,14 +360,17 @@ public class NewsletterExternal {
             throws NoSuchAlgorithmException {
         String digest = null;
         MessageDigest md = MessageDigest.getInstance("MD5");
+        int hexaValue = 16;
+        int digestLength = 32;
         byte[] hash = md.digest(message.getBytes(StandardCharsets.UTF_8));
         // Convert byte array into signum representation
         BigInteger no = new BigInteger(1, hash);
         // Convert message digest into hex value
-        digest = no.toString(16);
-        while (digest.length() < 32) {
-            digest = "0" + digest;
+        String tempDigest = no.toString(hexaValue);
+        while (tempDigest.length() < digestLength) {
+            tempDigest = "0" + tempDigest;
             }
+        digest = tempDigest;
         return digest;
     }
 
