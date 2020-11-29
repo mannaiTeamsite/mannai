@@ -157,7 +157,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             Document document = getTaskDocument(taskSimpleFile);
             if (isSurveyMasterDataAvailable(document)) {
-                isDBOperationSuccess = updateSurveyMasterData(document);
+                isDBOperationSuccess = updateSurveyData(document);
                 logger.debug(
                         "isSurveyDataUpdated : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
@@ -254,8 +254,6 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     public boolean insertPollData(Document document) {
         logger.debug("PollSurveyTask : insertPollData");
-        PreparedStatement prepareStatement = null;
-        PreparedStatement prepareStatementPollOption = null;
         Connection connection = null;
         boolean isPollDataInserted = false;
         try {
@@ -306,9 +304,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 ex.printStackTrace();
             }
         } finally {
-            Postgre.releaseConnection(null, prepareStatementPollOption,
-                    null);
-            Postgre.releaseConnection(connection, prepareStatement, null);
+            Postgre.releaseConnection(connection, null, null);
             logger.info("Released insertPollData connection");
         }
         return isPollDataInserted;
@@ -549,12 +545,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     public boolean insertSurveyData(Document document) {
         logger.debug("PollSurveyTask : insertSurveyData");
-        PreparedStatement prepareStatement = null;
-        PreparedStatement prepareStatementSurveyQuestion = null;
-        PreparedStatement optionPrepareStatement = null;
-        Statement questionIdQueryStmt = null;
         Connection connection = null;
-        ResultSet rs = null;
         boolean isSurveyDataInserted = false;
         try {
 
@@ -572,141 +563,12 @@ public class PollSurveyTask implements CSURLExternalTask {
                     getDCRValue(document, SURVEY_END_DATE_PATH));
             surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
 
-            String surveyMasterQuery = "INSERT INTO SURVEY_MASTER ("
-                    + "SURVEY_ID, LANG, SURVEY_TITLE, SURVEY_DESCRIPTION, "
-                    + "START_DATE, END_DATE, PERSONA) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
-            logger.info("insertSurveyData surveyMasterQuery : "
-                    + surveyMasterQuery);
-            connection.setAutoCommit(false);
-            prepareStatement = connection
-                    .prepareStatement(surveyMasterQuery);
-            prepareStatement.setLong(1,
-                    Long.parseLong(surveyBO.getSurveyId()));
-            prepareStatement.setString(2, surveyBO.getLang());
-            prepareStatement.setString(3, surveyBO.getTitle());
-            prepareStatement.setString(4, surveyBO.getDescription());
-            prepareStatement.setDate(5, getDate(surveyBO.getStartDate()));
-            prepareStatement.setDate(6, getDate(surveyBO.getEndDate()));
-            prepareStatement.setString(7, surveyBO.getPersona());
-            int result = prepareStatement.executeUpdate();
+            int result = insertSurveyMasterData(surveyBO, connection);
             logger.info("result : " + result);
             if (result > 0) {
                 logger.info("Survey Master Data Inserted");
-
-                String surveyQuestionQuery = "INSERT INTO SURVEY_QUESTION "
-                        + "(QUESTION_ID, SURVEY_ID, LANG, QUESTION_NO, "
-                        + "QUESTION_TYPE, QUESTION) VALUES (?, ?, ?, ?, ?, ?)";
-                prepareStatementSurveyQuestion = connection
-                        .prepareStatement(surveyQuestionQuery);
-                logger.info("insertSurveyData surveyQuestionQuery : "
-                        + surveyQuestionQuery);
-
-                List<Node> nodes = document.selectNodes(FIELD_PATH);
-                int questionNo = 1;
-                for (Node node : nodes) {
-                    logger.info(
-                            "insertSurveyData questionNo : " + questionNo);
-
-                    String questionType = node
-                            .selectSingleNode(".//field-type").getText();
-                    logger.info("insertSurveyData questionType : "
-                            + questionType);
-
-                    if (!"button".equalsIgnoreCase(questionType)) {
-
-                        Long questionId = getNextSequenceValue(
-                                "survey_question_question_id_seq",
-                                postgre.getConnection());
-                        logger.info("insertSurveyData questionId : "
-                                + questionId);
-
-                        String question = node
-                                .selectSingleNode(".//question").getText();
-                        logger.info("question : " + question);
-                        prepareStatementSurveyQuestion.setLong(1,
-                                questionId);
-                        prepareStatementSurveyQuestion.setLong(2,
-                                Long.parseLong(surveyBO.getSurveyId()));
-                        prepareStatementSurveyQuestion.setString(3,
-                                surveyBO.getLang());
-                        prepareStatementSurveyQuestion.setInt(4,
-                                questionNo);
-                        prepareStatementSurveyQuestion.setString(5,
-                                questionType);
-                        prepareStatementSurveyQuestion.setString(6,
-                                question);
-                        int questionResult = prepareStatementSurveyQuestion
-                                .executeUpdate();
-
-                        if (questionResult > 0) {
-                            logger.info("Survey Question Inserted");
-
-                            String surveyOptionQuery = "INSERT INTO "
-                                    + "SURVERY_OPTION (OPTION_ID, SURVEY_ID, "
-                                    + "LANG, QUESTION_ID, QUESTION_NO, "
-                                    + "OPTION_NO, OPTION_LABEL, OPTION_VALUE) "
-                                    + "VALUES "
-                                    + "(nextval('survery_option_option_id_seq')"
-                                    + ", ?, ?, ?, ?, ?, ?, ?)";
-                            optionPrepareStatement = connection
-                                    .prepareStatement(surveyOptionQuery);
-                            logger.info("surveyOptionQuery : "
-                                    + surveyOptionQuery);
-                            List<Node> optionNodes = node
-                                    .selectNodes(".//option");
-                            int optionNo = 1;
-                            for (Node optnode : optionNodes) {
-                                logger.info("optionNo : " + optionNo);
-                                String optionLabel = optnode
-                                        .selectSingleNode(OPTION_LABEL)
-                                        .getText();
-                                String optionValue = optnode
-                                        .selectSingleNode(OPTION_VALUE)
-                                        .getText();
-                                logger.info(
-                                        optionLabel + " : " + optionValue);
-                                optionPrepareStatement.setLong(1,
-                                        Long.parseLong(
-                                                surveyBO.getSurveyId()));
-                                optionPrepareStatement.setString(2,
-                                        surveyBO.getLang());
-                                optionPrepareStatement.setLong(3,
-                                        questionId);
-                                optionPrepareStatement.setInt(4,
-                                        questionNo);
-                                optionPrepareStatement.setInt(5, optionNo);
-                                optionPrepareStatement.setString(6,
-                                        optionLabel);
-                                optionPrepareStatement.setString(7,
-                                        optionValue);
-                                optionPrepareStatement.addBatch();
-                                optionNo++;
-                            }
-                            int[] optionBatch = optionPrepareStatement
-                                    .executeBatch();
-                            logger.info(
-                                    "insertSurveyData optionBatch length : "
-                                            + optionBatch.length);
-
-                            if (optionBatch.length == optionNo - 1) {
-                                logger.info("Survey Option Inserted");
-                            } else {
-                                connection.rollback();
-                                logger.info(
-                                        "insertSurveyData Option batch insert failed");
-                                break;
-                            }
-                            questionNo++;
-                        } else {
-                            connection.rollback();
-                            logger.info(
-                                    "insertSurveyData Question insert failed");
-                            break;
-                        }
-                    }
-                }
-                isSurveyDataInserted = true;
+                isSurveyDataInserted = insertSurveyQuestionData(surveyBO,
+                        document, connection);
             } else {
                 connection.rollback();
                 logger.info("Survey master insert failed");
@@ -732,53 +594,191 @@ public class PollSurveyTask implements CSURLExternalTask {
                 ex.printStackTrace();
             }
         } finally {
-            Postgre.releaseConnection(null, prepareStatementSurveyQuestion,
-                    null);
-            Postgre.releaseConnection(null, questionIdQueryStmt, rs);
-            Postgre.releaseConnection(null, optionPrepareStatement, null);
-            Postgre.releaseConnection(connection, prepareStatement, null);
+            Postgre.releaseConnection(connection, null, null);
             logger.info("Released insertSurveyData connection");
         }
         return isSurveyDataInserted;
     }
 
-    public int insertSurveyMasterData(PollsBO pollsBO,
-        Connection connection) throws SQLException {
+    public int insertSurveyMasterData(SurveyBO surveyBO,
+            Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
-            logger.info("PollSurveyTask : insertPollMasterData");
-            String pollMasterQuery = "INSERT INTO POLL_MASTER (POLL_ID, "
-                    + "LANG, QUESTION, START_DATE, END_DATE, PERSONA) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
-            logger.info("insertPollMasterData pollMasterQuery : "
-                    + pollMasterQuery);
+            logger.info("PollSurveyTask : insertSurveyMasterData");
+            String surveyMasterQuery = "INSERT INTO SURVEY_MASTER ("
+                    + "SURVEY_ID, LANG, SURVEY_TITLE, SURVEY_DESCRIPTION, "
+                    + "START_DATE, END_DATE, PERSONA) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+            logger.info("insertSurveyMasterData surveyMasterQuery : "
+                    + surveyMasterQuery);
             connection.setAutoCommit(false);
             preparedStatement = connection
-                    .prepareStatement(pollMasterQuery);
+                    .prepareStatement(surveyMasterQuery);
             preparedStatement.setLong(1,
-                    Long.parseLong(pollsBO.getPollId()));
-            preparedStatement.setString(2, pollsBO.getLang());
-            preparedStatement.setString(3, pollsBO.getQuestion());
-            preparedStatement.setDate(4, getDate(pollsBO.getStartDate()));
-            preparedStatement.setDate(5, getDate(pollsBO.getEndDate()));
-            preparedStatement.setString(6, pollsBO.getPersona());
+                    Long.parseLong(surveyBO.getSurveyId()));
+            preparedStatement.setString(2, surveyBO.getLang());
+            preparedStatement.setString(3, surveyBO.getTitle());
+            preparedStatement.setString(4, surveyBO.getDescription());
+            preparedStatement.setDate(5, getDate(surveyBO.getStartDate()));
+            preparedStatement.setDate(6, getDate(surveyBO.getEndDate()));
+            preparedStatement.setString(7, surveyBO.getPersona());
             result = preparedStatement.executeUpdate();
-            logger.info("insertPollMasterData result : " + result);
+            logger.info("insertSurveyMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertPollMasterData: "
+            logger.error("Exception in insertSurveyMasterData: "
                     + e.getMessage());
             e.printStackTrace();
             throw e;
         } finally {
             Postgre.releaseConnection(null, preparedStatement, null);
-            logger.info("Released insertPollMasterData connection");
+            logger.info("Released insertSurveyMasterData connection");
         }
         return result;
     }
 
-    public boolean updateSurveyMasterData(Document document) {
-        logger.debug("PollSurveyTask : updateSurveyMasterData");
+    public boolean insertSurveyQuestionData(SurveyBO surveyBO,
+            Document document, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : insertSurveyQuestionData");
+            String surveyQuestionQuery = "INSERT INTO SURVEY_QUESTION "
+                    + "(QUESTION_ID, SURVEY_ID, LANG, QUESTION_NO, "
+                    + "QUESTION_TYPE, QUESTION) VALUES (?, ?, ?, ?, ?, ?)";
+            preparedStatement = connection
+                    .prepareStatement(surveyQuestionQuery);
+            logger.info("insertSurveyQuestionData surveyQuestionQuery : "
+                    + surveyQuestionQuery);
+
+            List<Node> nodes = document.selectNodes(FIELD_PATH);
+            int questionNo = 1;
+            for (Node node : nodes) {
+                logger.info("insertSurveyQuestionData questionNo : "
+                        + questionNo);
+
+                String questionType = node
+                        .selectSingleNode(".//field-type").getText();
+                logger.info("insertSurveyQuestionData questionType : "
+                        + questionType);
+
+                if (!"button".equalsIgnoreCase(questionType)) {
+
+                    Long questionId = getNextSequenceValue(
+                            "survey_question_question_id_seq",
+                            postgre.getConnection());
+                    logger.info("insertSurveyQuestionData questionId : "
+                            + questionId);
+
+                    String question = node.selectSingleNode(".//question")
+                            .getText();
+                    logger.info("question : " + question);
+                    preparedStatement.setLong(1, questionId);
+                    preparedStatement.setLong(2,
+                            Long.parseLong(surveyBO.getSurveyId()));
+                    preparedStatement.setString(3, surveyBO.getLang());
+                    preparedStatement.setInt(4, questionNo);
+                    preparedStatement.setString(5, questionType);
+                    preparedStatement.setString(6, question);
+                    int questionResult = preparedStatement.executeUpdate();
+
+                    if (questionResult > 0) {
+                        result = true;
+                        logger.info("Survey Question Inserted");
+                        surveyBO.setQuestionId(questionId);
+                        surveyBO.setQuestionNo(questionNo);
+                        boolean isOptionsInserted = insertSurveyOptionData(
+                                surveyBO, node, connection);
+
+                        if (isOptionsInserted) {
+                            result = true;
+                        } else {
+                            result = false;
+                            connection.rollback();
+                            logger.info(
+                                    "insertSurveyQuestionData Option batch insert failed");
+                            break;
+                        }
+                        questionNo++;
+                    } else {
+                        result = false;
+                        connection.rollback();
+                        logger.info(
+                                "insertSurveyQuestionData Question insert failed");
+                        break;
+                    }
+                }
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertSurveyQuestionData: "
+                    + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertSurveyQuestionData connection");
+        }
+        return result;
+    }
+
+    public boolean insertSurveyOptionData(SurveyBO surveyBO, Node node,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : insertSurveyOptionData");
+            String surveyOptionQuery = "INSERT INTO "
+                    + "SURVERY_OPTION (OPTION_ID, SURVEY_ID, "
+                    + "LANG, QUESTION_ID, QUESTION_NO, "
+                    + "OPTION_NO, OPTION_LABEL, OPTION_VALUE) " + "VALUES "
+                    + "(nextval('survery_option_option_id_seq')"
+                    + ", ?, ?, ?, ?, ?, ?, ?)";
+            preparedStatement = connection
+                    .prepareStatement(surveyOptionQuery);
+            logger.info("surveyOptionQuery : " + surveyOptionQuery);
+            List<Node> optionNodes = node.selectNodes(".//option");
+            int optionNo = 1;
+            for (Node optnode : optionNodes) {
+                logger.info("optionNo : " + optionNo);
+                String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
+                        .getText();
+                String optionValue = optnode.selectSingleNode(OPTION_VALUE)
+                        .getText();
+                logger.info(optionLabel + " : " + optionValue);
+                preparedStatement.setLong(1,
+                        Long.parseLong(surveyBO.getSurveyId()));
+                preparedStatement.setString(2, surveyBO.getLang());
+                preparedStatement.setLong(3, surveyBO.getQuestionId());
+                preparedStatement.setInt(4, surveyBO.getQuestionNo());
+                preparedStatement.setInt(5, optionNo);
+                preparedStatement.setString(6, optionLabel);
+                preparedStatement.setString(7, optionValue);
+                preparedStatement.addBatch();
+                optionNo++;
+            }
+            int[] optionBatch = preparedStatement.executeBatch();
+            logger.info("insertSurveyOptionData optionBatch length : "
+                    + optionBatch.length);
+
+            if (optionBatch.length == optionNo - 1) {
+                logger.info("Survey Option Inserted");
+                result = true;
+            }
+
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertSurveyOptionData: "
+                    + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertSurveyOptionData connection");
+        }
+        return result;
+    }
+
+    public boolean updateSurveyData(Document document) {
+        logger.debug("PollSurveyTask : updateSurveyData");
         PreparedStatement prepareStatement = null;
         PreparedStatement prepareStatementSurveyQuestion = null;
         PreparedStatement optionPrepareStatement = null;
@@ -789,139 +789,22 @@ public class PollSurveyTask implements CSURLExternalTask {
 
             connection = postgre.getConnection();
 
-            Long surveyId = Long.parseLong(getDCRValue(document, ID_PATH));
-            String lang = getDCRValue(document, LANG_PATH);
-            String title = getDCRValue(document, TITLE_PATH);
-            String description = getDCRValue(document, DESCRIPTION_PATH);
-            String endDateStr = getDCRValue(document,
-                    SURVEY_END_DATE_PATH);
-            String persona = getDCRValue(document, PERSONA_PATH);
-            Date endDate = getDate(endDateStr);
+            SurveyBO surveyBO = new SurveyBO();
+            surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
+            surveyBO.setLang(getDCRValue(document, LANG_PATH));
+            surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
+            surveyBO.setDescription(
+                    getDCRValue(document, SURVEY_START_DATE_PATH));
+            surveyBO.setEndDate(
+                    getDCRValue(document, SURVEY_END_DATE_PATH));
+            surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
 
-            String surveyMasterQuery = "UPDATE SURVEY_MASTER SET "
-                    + "SURVEY_TITLE = ?, SURVEY_DESCRIPTION = ?, "
-                    + "END_DATE = ?, PERSONA = ? WHERE SURVEY_ID = ? "
-                    + "AND LANG = ?";
-            logger.info("updateSurveyMasterData surveyMasterQuery : "
-                    + surveyMasterQuery);
-            connection.setAutoCommit(false);
-            prepareStatement = connection
-                    .prepareStatement(surveyMasterQuery);
-            prepareStatement.setString(1, title);
-            prepareStatement.setString(2, description);
-            prepareStatement.setDate(3, endDate);
-            prepareStatement.setString(4, persona);
-            prepareStatement.setLong(5, surveyId);
-            prepareStatement.setString(6, lang);
+            int result = updateSurveyMasterData(surveyBO, connection);
 
-            int result = prepareStatement.executeUpdate();
-            logger.info("updateSurveyMasterData result : " + result);
             if (result > 0) {
                 logger.info("Survey Master Data Updated");
-
-                String surveyQuestionQuery = "UPDATE SURVEY_QUESTION SET "
-                        + "QUESTION = ? WHERE SURVEY_ID = ? AND LANG = ? "
-                        + "AND QUESTION_NO = ?";
-                prepareStatementSurveyQuestion = connection
-                        .prepareStatement(surveyQuestionQuery);
-                logger.info(
-                        "surveyQuestionQuery : " + surveyQuestionQuery);
-
-                List<Node> nodes = document.selectNodes(FIELD_PATH);
-                int questionNo = 1;
-                for (Node node : nodes) {
-                    logger.info("updateSurveyMasterData questionNo : "
-                            + questionNo);
-
-                    String questionType = node
-                            .selectSingleNode(".//field-type").getText();
-                    logger.info("updateSurveyMasterData questionType : "
-                            + questionType);
-
-                    if (!"button".equalsIgnoreCase(questionType)) {
-
-                        String question = node
-                                .selectSingleNode(".//question").getText();
-                        logger.info("question : " + question);
-                        prepareStatementSurveyQuestion.setString(1,
-                                question);
-                        prepareStatementSurveyQuestion.setLong(2,
-                                surveyId);
-                        prepareStatementSurveyQuestion.setString(3, lang);
-                        prepareStatementSurveyQuestion.setInt(4,
-                                questionNo);
-                        int questionResult = prepareStatementSurveyQuestion
-                                .executeUpdate();
-
-                        if (questionResult > 0) {
-                            logger.info("Survey Question Inserted");
-
-                            String surveyOptionQuery = "UPDATE "
-                                    + "SURVERY_OPTION SET OPTION_LABEL = ?, "
-                                    + "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
-                                    + "AND LANG = ? AND QUESTION_NO = ? "
-                                    + "AND OPTION_NO = ?";
-                            optionPrepareStatement = connection
-                                    .prepareStatement(surveyOptionQuery);
-                            logger.info(
-                                    "updateSurveyMasterData surveyOptionQuery : "
-                                            + surveyOptionQuery);
-                            List<Node> optionNodes = node
-                                    .selectNodes(".//option");
-                            int optionNo = 1;
-                            for (Node optnode : optionNodes) {
-                                logger.info(
-                                        "updateSurveyMasterData optionNo : "
-                                                + optionNo);
-                                String optionLabel = optnode
-                                        .selectSingleNode(OPTION_LABEL)
-                                        .getText();
-                                String optionValue = optnode
-                                        .selectSingleNode(OPTION_VALUE)
-                                        .getText();
-                                logger.info(
-                                        optionLabel + " : " + optionValue);
-                                optionPrepareStatement.setString(1,
-                                        optionLabel);
-                                optionPrepareStatement.setString(2,
-                                        optionValue);
-                                optionPrepareStatement.setLong(3,
-                                        surveyId);
-                                optionPrepareStatement.setString(4, lang);
-                                optionPrepareStatement.setInt(5,
-                                        questionNo);
-                                optionPrepareStatement.setInt(6, optionNo);
-                                optionPrepareStatement.addBatch();
-                                optionNo++;
-                            }
-                            int[] optionBatch = optionPrepareStatement
-                                    .executeBatch();
-                            logger.info(
-                                    "updateSurveyMasterData optionBatch length : "
-                                            + optionBatch.length);
-
-                            if (optionBatch.length == optionNo - 1) {
-                                logger.info("Survey Option Updated");
-                            } else {
-                                if (connection != null) {
-                                    connection.rollback();
-                                }
-                                logger.info(
-                                        "updateSurveyMasterData Option batch update failed");
-                                break;
-                            }
-                            questionNo++;
-                        } else {
-                            if (connection != null) {
-                                connection.rollback();
-                            }
-                            logger.info(
-                                    "updateSurveyMasterData Question update failed");
-                            break;
-                        }
-                    }
-                }
-                isSurveyDataUpdated = true;
+                isSurveyDataUpdated = updateSurveyQuestionData(surveyBO,
+                        document, connection);
             } else {
                 if (connection != null) {
                     connection.rollback();
@@ -958,6 +841,173 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("Released updateSurveyMasterData connection");
         }
         return isSurveyDataUpdated;
+    }
+
+    public int updateSurveyMasterData(SurveyBO surveyBO,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        try {
+            logger.info("PollSurveyTask : updateSurveyMasterData");
+            String surveyMasterQuery = "UPDATE SURVEY_MASTER SET "
+                    + "SURVEY_TITLE = ?, SURVEY_DESCRIPTION = ?, "
+                    + "END_DATE = ?, PERSONA = ? WHERE SURVEY_ID = ? "
+                    + "AND LANG = ?";
+            logger.info("updateSurveyMasterData surveyMasterQuery : "
+                    + surveyMasterQuery);
+            connection.setAutoCommit(false);
+            preparedStatement = connection
+                    .prepareStatement(surveyMasterQuery);
+            preparedStatement.setString(1, surveyBO.getTitle());
+            preparedStatement.setString(2, surveyBO.getDescription());
+            preparedStatement.setDate(3, getDate(surveyBO.getEndDate()));
+            preparedStatement.setString(4, surveyBO.getPersona());
+            preparedStatement.setLong(5,
+                    Long.parseLong(surveyBO.getSurveyId()));
+            preparedStatement.setString(6, surveyBO.getLang());
+
+            result = preparedStatement.executeUpdate();
+            logger.info("updateSurveyMasterData result : " + result);
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updateSurveyMasterData: "
+                    + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updateSurveyMasterData connection");
+        }
+        return result;
+    }
+
+    public boolean updateSurveyQuestionData(SurveyBO surveyBO,
+            Document document, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : insertSurveyQuestionData");
+            String surveyQuestionQuery = "UPDATE SURVEY_QUESTION SET "
+                    + "QUESTION = ? WHERE SURVEY_ID = ? AND LANG = ? "
+                    + "AND QUESTION_NO = ?";
+            preparedStatement = connection
+                    .prepareStatement(surveyQuestionQuery);
+            logger.info("surveyQuestionQuery : " + surveyQuestionQuery);
+
+            List<Node> nodes = document.selectNodes(FIELD_PATH);
+            int questionNo = 1;
+            for (Node node : nodes) {
+                logger.info("updateSurveyMasterData questionNo : "
+                        + questionNo);
+
+                String questionType = node
+                        .selectSingleNode(".//field-type").getText();
+                logger.info("updateSurveyMasterData questionType : "
+                        + questionType);
+
+                if (!"button".equalsIgnoreCase(questionType)) {
+
+                    String question = node.selectSingleNode(".//question")
+                            .getText();
+                    logger.info("question : " + question);
+                    preparedStatement.setString(1, question);
+                    preparedStatement.setLong(2,
+                            Long.parseLong(surveyBO.getSurveyId()));
+                    preparedStatement.setString(3, surveyBO.getLang());
+                    preparedStatement.setInt(4, questionNo);
+                    int questionResult = preparedStatement.executeUpdate();
+
+                    if (questionResult > 0) {
+                        result = true;
+                        logger.info("Survey Question Inserted");
+                        surveyBO.setQuestionNo(questionNo);
+                        boolean isOptionsUpdated = updateSurveyOptionData(
+                                surveyBO, node, connection);
+
+                        if (isOptionsUpdated) {
+                            result = true;
+                        } else {
+                            result = false;
+                            connection.rollback();
+                            logger.info(
+                                    "updateSurveyMasterData Option batch update failed");
+                            break;
+                        }
+                        questionNo++;
+                    } else {
+                        result = false;
+                        connection.rollback();
+                        logger.info(
+                                "updateSurveyMasterData Question update failed");
+                        break;
+                    }
+                }
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertSurveyQuestionData: "
+                    + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertSurveyQuestionData connection");
+        }
+        return result;
+    }
+
+    public boolean updateSurveyOptionData(SurveyBO surveyBO, Node node,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : insertSurveyOptionData");
+            String surveyOptionQuery = "UPDATE "
+                    + "SURVERY_OPTION SET OPTION_LABEL = ?, "
+                    + "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
+                    + "AND LANG = ? AND QUESTION_NO = ? "
+                    + "AND OPTION_NO = ?";
+            preparedStatement = connection
+                    .prepareStatement(surveyOptionQuery);
+            logger.info("updateSurveyMasterData surveyOptionQuery : "
+                    + surveyOptionQuery);
+            List<Node> optionNodes = node.selectNodes(".//option");
+            int optionNo = 1;
+            for (Node optnode : optionNodes) {
+                logger.info(
+                        "updateSurveyMasterData optionNo : " + optionNo);
+                String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
+                        .getText();
+                String optionValue = optnode.selectSingleNode(OPTION_VALUE)
+                        .getText();
+                logger.info(optionLabel + " : " + optionValue);
+                preparedStatement.setString(1, optionLabel);
+                preparedStatement.setString(2, optionValue);
+                preparedStatement.setLong(3,
+                        Long.parseLong(surveyBO.getSurveyId()));
+                preparedStatement.setString(4, surveyBO.getLang());
+                preparedStatement.setInt(5, surveyBO.getQuestionNo());
+                preparedStatement.setInt(6, optionNo);
+                preparedStatement.addBatch();
+                optionNo++;
+            }
+            int[] optionBatch = preparedStatement.executeBatch();
+            logger.info("updateSurveyMasterData optionBatch length : "
+                    + optionBatch.length);
+
+            if (optionBatch.length == optionNo - 1) {
+                logger.info("Survey Option Inserted");
+                result = true;
+            }
+
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertSurveyOptionData: "
+                    + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertSurveyOptionData connection");
+        }
+        return result;
     }
 
     public String getDCRValue(Document document, String nodeName) {

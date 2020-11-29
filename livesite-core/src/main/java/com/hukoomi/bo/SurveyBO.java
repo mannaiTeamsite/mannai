@@ -17,6 +17,8 @@ public class SurveyBO {
     private String group;
     private String title;
     private String description;
+    private Long questionId;
+    private int questionNo;
     
     public String getCaptchaResponse() {
         return captchaResponse;
@@ -114,16 +116,26 @@ public class SurveyBO {
     public void setDescription(String description) {
         this.description = description;
     }
-    @Override
-    public String toString() {
-        return "SurveyBO [action=" + action + ", surveyId=" + surveyId
-                + ", lang=" + lang + ", userId=" + userId + ", userAgent="
-                + userAgent + ", ipAddress=" + ipAddress + ", startDate="
-                + startDate + ", endDate=" + endDate + ", persona="
-                + persona + ", takenOn=" + takenOn + ", takenFrom="
-                + takenFrom + ", totalQuestions=" + totalQuestions
-                + ", captchaResponse=" + captchaResponse + ", group="
-                + group + ", title=" + title + ", description="
-                + description + "]";
-    }
+    
+	public Long getQuestionId() {
+		return questionId;
+	}
+	public void setQuestionId(Long questionId) {
+		this.questionId = questionId;
+	}
+	public int getQuestionNo() {
+		return questionNo;
+	}
+	public void setQuestionNo(int questionNo) {
+		this.questionNo = questionNo;
+	}
+	@Override
+	public String toString() {
+		return "SurveyBO [action=" + action + ", surveyId=" + surveyId + ", lang=" + lang + ", userId=" + userId
+				+ ", userAgent=" + userAgent + ", ipAddress=" + ipAddress + ", startDate=" + startDate + ", endDate="
+				+ endDate + ", persona=" + persona + ", takenOn=" + takenOn + ", takenFrom=" + takenFrom
+				+ ", totalQuestions=" + totalQuestions + ", captchaResponse=" + captchaResponse + ", group=" + group
+				+ ", title=" + title + ", description=" + description + ", questionId=" + questionId + ", questionNo="
+				+ questionNo + "]";
+	}
 }
