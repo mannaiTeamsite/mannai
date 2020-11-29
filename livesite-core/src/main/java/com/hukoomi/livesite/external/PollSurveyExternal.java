@@ -41,6 +41,7 @@ public class PollSurveyExternal {
 		try {
 			postgre =  new Postgre(context);
 			PollsBO pollsBO = pollsExt.setBO(context);
+			logger.info("PollsBO : "+pollsBO);
 			
 			if ("vote".equalsIgnoreCase(pollsBO.getAction())) {
 
@@ -71,7 +72,9 @@ public class PollSurveyExternal {
 		    PollsExternal pollsExt = new PollsExternal();
 		    SurveyExternal surveyExt = new SurveyExternal();
 		    PollsBO pollsBO = pollsExt.setBO(context);
+		    logger.info("PollsBO : "+pollsBO);
 		    SurveyBO surveyBO = surveyExt.setBO(context);
+		    logger.debug("SurveyBO : "+surveyBO);
 			
 			
 			String solarCore = "portal-en";

@@ -65,7 +65,6 @@ public class PollsExternal {
 
         if (pollsBO.getAction() != null) {
             if ("vote".equalsIgnoreCase(pollsBO.getAction())) {
-                logger.info("PollAction : "+pollsBO.getAction());
 
                 insertPollResponse(pollsBO, postgre.getConnection());
 
@@ -76,7 +75,6 @@ public class PollsExternal {
                 doc = createPollResultDoc(pollsBO, response);
                 logger.info("Final Result - vote :" + doc.asXML());
             } else if ("current".equalsIgnoreCase(pollsBO.getAction())) {
-                logger.info("PollAction : "+pollsBO.getAction());
 
                 context.setParameterString("rows", MAX_CURRENT_POLLS_FETCH);
 
@@ -106,7 +104,6 @@ public class PollsExternal {
                 }
                 
             } else if ("past".equalsIgnoreCase(pollsBO.getAction())) {
-                logger.info("PollAction : "+pollsBO.getAction());
 
                 context.setParameterString("rows", pollsBO.getPastPollsPerPage());
 
@@ -125,7 +122,6 @@ public class PollsExternal {
                 doc = addResultToXml(doc, response);
                 logger.info("Final Result - past :" + doc.asXML());
             } else if ("search".equalsIgnoreCase(pollsBO.getAction())) {
-                logger.info("PollAction : "+pollsBO.getAction());
 
                 doc = he.getLandingContent(context);
 
@@ -487,27 +483,16 @@ public class PollsExternal {
     protected PollsBO setBO(final RequestContext context) {
         PollsBO pollsBO = new PollsBO();
         pollsBO.setAction(context.getParameterString("pollAction"));
-        logger.info("pollAction : " + pollsBO.getAction());
         pollsBO.setLang(context.getParameterString("locale", "en"));
-        logger.info("lang : " + pollsBO.getLang());
         pollsBO.setUserId(context.getParameterString("user_id"));
-        logger.info("userId : " + pollsBO.getUserId());
         pollsBO.setIpAddress(context.getRequest().getRemoteAddr());
-        logger.info("ipAddress : " + pollsBO.getIpAddress());
         pollsBO.setUserAgent(context.getRequest().getHeader("User-Agent"));
-        logger.info("userAgent : " + pollsBO.getUserAgent());
         pollsBO.setVotedFrom(context.getParameterString("votedFrom"));
-        logger.info("votedFrom : " + pollsBO.getVotedFrom());
         pollsBO.setPollId(context.getParameterString("pollId"));
-        logger.info("pollID : " + pollsBO.getPollId());
         pollsBO.setCurrentPollsPerPage(context.getParameterString("current_poll_rows"));
-        logger.info("currentPollsPerPage : " + pollsBO.getCurrentPollsPerPage());
         pollsBO.setPastPollsPerPage(context.getParameterString("past_poll_rows"));
-        logger.info("pastPollsPerPage : " + pollsBO.getPastPollsPerPage());
         pollsBO.setGroup(context.getParameterString("PollsGroup"));
-        logger.info("pollsGroup : " + pollsBO.getGroup());
         pollsBO.setSelectedOption(context.getParameterString("option"));
-        logger.info("selectedOption : " + pollsBO.getSelectedOption());
         return pollsBO;
     }
 

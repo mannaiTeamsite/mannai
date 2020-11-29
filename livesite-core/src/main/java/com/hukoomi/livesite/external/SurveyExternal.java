@@ -34,6 +34,7 @@ public class SurveyExternal {
         postgre = new Postgre(context);
         DetailExternal detailExt = new DetailExternal();
         SurveyBO surveyBO = setBO(context);
+        logger.debug("SurveyBO : "+surveyBO);
 
         Document document = DocumentHelper.createDocument();
         if (surveyBO.getAction() != null
@@ -190,29 +191,19 @@ public class SurveyExternal {
     public SurveyBO setBO(final RequestContext context) {
         SurveyBO surveyBO = new SurveyBO();
         surveyBO.setAction(context.getParameterString("surveyAction"));
-        logger.info("surveyAction : " + surveyBO.getAction());
         surveyBO.setLang(context.getParameterString("locale", "en"));
-        logger.info("lang : " + surveyBO.getLang());
         surveyBO.setUserId(context.getParameterString("user_id"));
-        logger.info("userId : " + surveyBO.getUserId());
         surveyBO.setIpAddress(context.getRequest().getRemoteAddr());
-        logger.info("ipAddress : " + surveyBO.getIpAddress());
         surveyBO.setUserAgent(
                 context.getRequest().getHeader("User-Agent"));
-        logger.info("userAgent : " + surveyBO.getUserAgent());
         surveyBO.setTakenFrom(
                 context.getParameterString("surveyTakenfrom"));
-        logger.info("surveyTakenfrom : " + surveyBO.getTakenFrom());
         surveyBO.setSurveyId(context.getParameterString("surveyId"));
-        logger.info("surveyId : " + surveyBO.getSurveyId());
         surveyBO.setTotalQuestions(
                 context.getParameterString("totalQuestions"));
-        logger.info("totalQuestions : " + surveyBO.getTotalQuestions());
         surveyBO.setCaptchaResponse(
                 context.getParameterString("g-recaptcha-response"));
-        logger.info("captchaResponse : " + surveyBO.getCaptchaResponse());
         surveyBO.setGroup(context.getParameterString("SurveyGroup"));
-        logger.info("surveyGroup : " + surveyBO.getGroup());
         return surveyBO;
     }
 
