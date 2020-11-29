@@ -203,6 +203,7 @@ public class NewsletterExternal {
                 msgElement.setText(
                         util.decodeToArabicString(validationMessage)
                                 + " : " + email);
+                statusElement.setText(status);
             } else {
                 msgElement.setText(validationMessage + " : " + email);
                 statusElement.setText(status);
