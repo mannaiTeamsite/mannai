@@ -119,7 +119,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             Document document = getTaskDocument(taskSimpleFile);
             if (isPollMasterDataAvailable(document)) {
-                isDBOperationSuccess = updatePollMasterData(document);
+                isDBOperationSuccess = updatePollData(document);
                 logger.debug(
                         "isPollDataUpdated : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
@@ -200,9 +200,9 @@ public class PollSurveyTask implements CSURLExternalTask {
             String taskSimpleFileString = new String(
                     taskSimpleFileByteArray);
             logger.debug(
-                    taskSimpleFileString + " = " + taskSimpleFileString);
+                    "taskSimpleFileString : " + taskSimpleFileString);
             document = DocumentHelper.parseText(taskSimpleFileString);
-            logger.debug(document + " = " + document.asXML());
+            logger.debug("document : " + document.asXML());
         } catch (Exception e) {
             logger.error(
                     "Exception in getTaskDocument: " + e.getMessage());
@@ -266,6 +266,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             pollsBO.setStartDate(
                     getDCRValue(document, POLL_START_DATE_PATH));
             pollsBO.setEndDate(getDCRValue(document, POLL_END_DATE_PATH));
+            pollsBO.setPersona(getDCRValue(document, PERSONA_PATH));
 
             int result = insertPollMasterData(pollsBO, connection);
             logger.info("insertPollData result : " + result);
@@ -399,80 +400,36 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isPollOptionInserted;
     }
 
-    public boolean updatePollMasterData(Document document) {
-        logger.debug("PollSurveyTask : updatePollMasterData");
-        PreparedStatement prepareStatement = null;
-        PreparedStatement prepareStatementPollOption = null;
+    public boolean updatePollData(Document document) {
+        logger.debug("PollSurveyTask : updatePollData");
         Connection connection = null;
         boolean isPollDataInserted = false;
         try {
 
             connection = postgre.getConnection();
-            logger.info("updatePollMasterData Connection : " + connection);
+            logger.info("updatePollData Connection : " + connection);
 
-            Long pollId = Long.parseLong(getDCRValue(document, ID_PATH));
-            String lang = getDCRValue(document, LANG_PATH);
-            String question = getDCRValue(document, QUESTION_PATH);
-            String endDateStr = getDCRValue(document, POLL_END_DATE_PATH);
-            String persona = getDCRValue(document, PERSONA_PATH);
+            PollsBO pollsBO = new PollsBO();
+            pollsBO.setPollId(getDCRValue(document, ID_PATH));
+            pollsBO.setLang(getDCRValue(document, LANG_PATH));
+            pollsBO.setQuestion(getDCRValue(document, QUESTION_PATH));
+            pollsBO.setEndDate(getDCRValue(document, POLL_END_DATE_PATH));
+            pollsBO.setPersona(getDCRValue(document, PERSONA_PATH));
 
-            Date endDate = getDate(endDateStr);
-
-            String pollMasterQuery = "UPDATE POLL_MASTER SET QUESTION = ?, "
-                    + "END_DATE = ?, PERSONA = ? "
-                    + "WHERE POLL_ID = ? AND LANG = ?";
-            logger.info("updatePollMasterData pollMasterQuery : "
-                    + pollMasterQuery);
-            connection.setAutoCommit(false);
-            prepareStatement = connection
-                    .prepareStatement(pollMasterQuery);
-            prepareStatement.setString(1, question);
-            prepareStatement.setDate(2, endDate);
-            prepareStatement.setString(3, persona);
-            prepareStatement.setLong(4, pollId);
-            prepareStatement.setString(5, lang);
-
-            int result = prepareStatement.executeUpdate();
-            logger.info("updatePollMasterData result : " + result);
+            int result = updatePollMasterData(pollsBO, connection);
+            
             if (result > 0) {
                 logger.info("Poll Master Data Updated");
 
-                String pollOptionQuery = "UPDATE POLL_OPTION SET "
-                        + "OPTION_LABEL = ? WHERE OPTION_ID = ? AND "
-                        + "POLL_ID = ? AND LANG = ?";
-                prepareStatementPollOption = connection
-                        .prepareStatement(pollOptionQuery);
-                logger.info("updatePollMasterData pollOptionQuery : "
-                        + pollOptionQuery);
-
-                List<Node> nodes = document.selectNodes(OPTION_PATH);
-                long optionId = 1l;
-                for (Node node : nodes) {
-                    logger.info(
-                            "updatePollMasterData optionId : " + optionId);
-                    String label = node.selectSingleNode(OPTION_LABEL)
-                            .getText();
-                    logger.info("updatePollMasterData label : " + label);
-                    prepareStatementPollOption.setString(1, label);
-                    prepareStatementPollOption.setLong(2, optionId);
-                    prepareStatementPollOption.setLong(3, pollId);
-                    prepareStatementPollOption.setString(4, lang);
-                    prepareStatementPollOption.addBatch();
-                    optionId++;
-                }
-                int[] optionBatch = prepareStatementPollOption
-                        .executeBatch();
-                logger.info("updatePollMasterData optionBatch length : "
-                        + optionBatch.length);
-
-                if (optionBatch.length == optionId - 1) {
+                boolean isPollOptionUpdated = updatePollOptionsData(pollsBO, document, connection);
+                if (isPollOptionUpdated) {
                     connection.commit();
                     logger.info("Poll Option Updated");
                     isPollDataInserted = true;
                 } else {
                     connection.rollback();
                     logger.info(
-                            "updatePollMasterData Option batch update failed");
+                            "updatePollData Option batch update failed");
                 }
             } else {
                 connection.rollback();
@@ -484,22 +441,100 @@ public class PollSurveyTask implements CSURLExternalTask {
                 if (connection != null) {
                     connection.rollback();
                 }
-                logger.error("Exception in updatePollMasterData: "
+                logger.error("Exception in updatePollData: "
                         + e.getMessage());
                 e.printStackTrace();
             } catch (SQLException ex) {
                 logger.error(
-                        "Exception in updatePollMasterData rollback catch block : "
+                        "Exception in updatePollData rollback catch block : "
                                 + ex.getMessage());
                 ex.printStackTrace();
             }
         } finally {
-            Postgre.releaseConnection(null, prepareStatementPollOption,
-                    null);
-            Postgre.releaseConnection(connection, prepareStatement, null);
-            logger.info("Released updatePollMasterData connection");
+            Postgre.releaseConnection(connection, null, null);
+            logger.info("Released updatePollData connection");
         }
         return isPollDataInserted;
+    }
+    
+    public int updatePollMasterData(PollsBO pollsBO, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        try {
+            logger.info("PollSurveyTask : updatePollMasterData");
+            String pollMasterQuery = "UPDATE POLL_MASTER SET QUESTION = ?, "
+                    + "END_DATE = ?, PERSONA = ? "
+                    + "WHERE POLL_ID = ? AND LANG = ?";
+            logger.info("updatePollMasterData pollMasterQuery : "
+                    + pollMasterQuery);
+            connection.setAutoCommit(false);
+            preparedStatement = connection
+                    .prepareStatement(pollMasterQuery);
+            preparedStatement.setString(1, pollsBO.getQuestion());
+            preparedStatement.setDate(2, getDate(pollsBO.getEndDate()));
+            preparedStatement.setString(3, pollsBO.getPersona());
+            preparedStatement.setLong(4, Long.parseLong(pollsBO.getPollId()));
+            preparedStatement.setString(5, pollsBO.getLang());
+
+            result = preparedStatement.executeUpdate();
+            logger.info("updatePollMasterData result : " + result);
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updatePollMasterData: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updatePollMasterData connection");
+        }
+        return result;
+    }
+    
+    public boolean updatePollOptionsData(PollsBO pollsBO, Document document, Connection connection)
+            throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean isPollOptionUpdated = false;
+        try {
+            logger.info("PollSurveyTask : updatePollOptionsData");
+            String pollOptionQuery = "UPDATE POLL_OPTION SET "
+                    + "OPTION_LABEL = ? WHERE OPTION_ID = ? AND "
+                    + "POLL_ID = ? AND LANG = ?";
+            preparedStatement = connection
+                    .prepareStatement(pollOptionQuery);
+            logger.info("updatePollMasterData pollOptionQuery : "
+                    + pollOptionQuery);
+
+            List<Node> nodes = document.selectNodes(OPTION_PATH);
+            long optionId = 1l;
+            for (Node node : nodes) {
+                logger.info(
+                        "updatePollMasterData optionId : " + optionId);
+                String label = node.selectSingleNode(OPTION_LABEL)
+                        .getText();
+                logger.info("updatePollMasterData label : " + label);
+                preparedStatement.setString(1, label);
+                preparedStatement.setLong(2, optionId);
+                preparedStatement.setLong(3, Long.parseLong(pollsBO.getPollId()));
+                preparedStatement.setString(4, pollsBO.getLang());
+                preparedStatement.addBatch();
+                optionId++;
+            }
+            int[] optionBatch = preparedStatement
+                    .executeBatch();
+            logger.info("updatePollMasterData optionBatch length : "
+                    + optionBatch.length);
+
+            if (optionBatch.length == optionId - 1) {
+                isPollOptionUpdated = true;
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertPollOptionsData: " + e.getMessage());
+            e.printStackTrace();
+            throw e;
+        } finally {
+            Postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertPollOptionsData connection");
+        }
+        return isPollOptionUpdated;
     }
 
     public boolean isSurveyMasterDataAvailable(Document document) {
@@ -728,10 +763,10 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             logger.info("PollSurveyTask : insertSurveyOptionData");
             String surveyOptionQuery = "INSERT INTO "
-                    + "SURVERY_OPTION (OPTION_ID, SURVEY_ID, "
+                    + "SURVEY_OPTION (OPTION_ID, SURVEY_ID, "
                     + "LANG, QUESTION_ID, QUESTION_NO, "
                     + "OPTION_NO, OPTION_LABEL, OPTION_VALUE) " + "VALUES "
-                    + "(nextval('survery_option_option_id_seq')"
+                    + "(nextval('survey_option_option_id_seq')"
                     + ", ?, ?, ?, ?, ?, ?, ?)";
             preparedStatement = connection
                     .prepareStatement(surveyOptionQuery);
@@ -798,6 +833,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setEndDate(
                     getDCRValue(document, SURVEY_END_DATE_PATH));
             surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
+            logger.debug("SurveyBO : "+surveyBO);
 
             int result = updateSurveyMasterData(surveyBO, connection);
 
@@ -885,7 +921,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         PreparedStatement preparedStatement = null;
         boolean result = false;
         try {
-            logger.info("PollSurveyTask : insertSurveyQuestionData");
+            logger.info("PollSurveyTask : updateSurveyQuestionData");
             String surveyQuestionQuery = "UPDATE SURVEY_QUESTION SET "
                     + "QUESTION = ? WHERE SURVEY_ID = ? AND LANG = ? "
                     + "AND QUESTION_NO = ?";
@@ -896,12 +932,12 @@ public class PollSurveyTask implements CSURLExternalTask {
             List<Node> nodes = document.selectNodes(FIELD_PATH);
             int questionNo = 1;
             for (Node node : nodes) {
-                logger.info("updateSurveyMasterData questionNo : "
+                logger.info("updateSurveyQuestionData questionNo : "
                         + questionNo);
 
                 String questionType = node
                         .selectSingleNode(".//field-type").getText();
-                logger.info("updateSurveyMasterData questionType : "
+                logger.info("updateSurveyQuestionData questionType : "
                         + questionType);
 
                 if (!"button".equalsIgnoreCase(questionType)) {
@@ -929,7 +965,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                             result = false;
                             connection.rollback();
                             logger.info(
-                                    "updateSurveyMasterData Option batch update failed");
+                                    "updateSurveyQuestionData Option batch update failed");
                             break;
                         }
                         questionNo++;
@@ -937,19 +973,19 @@ public class PollSurveyTask implements CSURLExternalTask {
                         result = false;
                         connection.rollback();
                         logger.info(
-                                "updateSurveyMasterData Question update failed");
+                                "updateSurveyQuestionData Question update failed");
                         break;
                     }
                 }
             }
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertSurveyQuestionData: "
+            logger.error("Exception in updateSurveyQuestionData: "
                     + e.getMessage());
             e.printStackTrace();
             throw e;
         } finally {
             Postgre.releaseConnection(null, preparedStatement, null);
-            logger.info("Released insertSurveyQuestionData connection");
+            logger.info("Released updateSurveyQuestionData connection");
         }
         return result;
     }
@@ -959,21 +995,21 @@ public class PollSurveyTask implements CSURLExternalTask {
         PreparedStatement preparedStatement = null;
         boolean result = false;
         try {
-            logger.info("PollSurveyTask : insertSurveyOptionData");
+            logger.info("PollSurveyTask : updateSurveyOptionData");
             String surveyOptionQuery = "UPDATE "
-                    + "SURVERY_OPTION SET OPTION_LABEL = ?, "
+                    + "SURVEY_OPTION SET OPTION_LABEL = ?, "
                     + "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
                     + "AND LANG = ? AND QUESTION_NO = ? "
                     + "AND OPTION_NO = ?";
             preparedStatement = connection
                     .prepareStatement(surveyOptionQuery);
-            logger.info("updateSurveyMasterData surveyOptionQuery : "
+            logger.info("updateSurveyOptionData surveyOptionQuery : "
                     + surveyOptionQuery);
             List<Node> optionNodes = node.selectNodes(".//option");
             int optionNo = 1;
             for (Node optnode : optionNodes) {
                 logger.info(
-                        "updateSurveyMasterData optionNo : " + optionNo);
+                        "updateSurveyOptionData optionNo : " + optionNo);
                 String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
                         .getText();
                 String optionValue = optnode.selectSingleNode(OPTION_VALUE)
@@ -990,7 +1026,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 optionNo++;
             }
             int[] optionBatch = preparedStatement.executeBatch();
-            logger.info("updateSurveyMasterData optionBatch length : "
+            logger.info("updateSurveyOptionData optionBatch length : "
                     + optionBatch.length);
 
             if (optionBatch.length == optionNo - 1) {
@@ -999,13 +1035,13 @@ public class PollSurveyTask implements CSURLExternalTask {
             }
 
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertSurveyOptionData: "
+            logger.error("Exception in updateSurveyOptionData: "
                     + e.getMessage());
             e.printStackTrace();
             throw e;
         } finally {
             Postgre.releaseConnection(null, preparedStatement, null);
-            logger.info("Released insertSurveyOptionData connection");
+            logger.info("Released updateSurveyOptionData connection");
         }
         return result;
     }
