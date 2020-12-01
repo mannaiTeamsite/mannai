@@ -223,8 +223,7 @@ public class CommonUtils {
             }
 
         } catch (SQLException e) {
-            logger.error("getConfiguration()" + e.getMessage());
-            e.printStackTrace();
+            logger.error("exception in getConfiguration()" + e.getMessage());
         } finally {
             objPostgre.releaseConnection(connection, st, rs);
         }
