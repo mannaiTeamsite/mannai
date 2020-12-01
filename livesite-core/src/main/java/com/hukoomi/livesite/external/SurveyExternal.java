@@ -1,12 +1,8 @@
-/**
- * 
- */
 package com.hukoomi.livesite.external;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.log4j.Logger;
@@ -20,14 +16,29 @@ import com.hukoomi.utils.Postgre;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
- * @author vmohandass
+ * SurveyExternal is the components external class.
+ * 
+ * @author Vijayaragavamoorthy
  *
  */
 public class SurveyExternal {
     /** Logger object to check the flow of the code. */
     private final Logger logger = Logger.getLogger(SurveyExternal.class);
+    /**
+     * Postgre Object variable.
+     */
     Postgre postgre = null;
 
+    /**
+     * This method will be called from Component External to insert Survey form data.
+     * 
+     * @param context Request context object.
+     *
+     * @return doc Returns the document by adding status about insert operation in database.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
     public Document submitSurvey(final RequestContext context) {
         logger.debug("SurveyExternal : submitSurvey");
 
@@ -67,6 +78,18 @@ public class SurveyExternal {
         return document;
     }
 
+    
+    /**
+     * This method is used to insert Survey form data in database.
+     * 
+     * @param surveyBO SurveyBO object.
+     * @param context Request Context object.
+     * 
+     * @return Returns boolean status about data insert operation.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
     private boolean insertSurveyResponse(SurveyBO surveyBO,
             RequestContext context) {
         logger.debug("SurveyExternal : insertSurveyResponse");
@@ -156,6 +179,14 @@ public class SurveyExternal {
         return isSurveyInserted;
     }
 
+    
+    /**
+     * This method is used to get int value.
+     * 
+     * @param inputStringValue Input String value.
+     * 
+     * @return Returns int.
+     */
     private int getIntValue(String inputStringValue) {
         int intValue = 0;
         if (inputStringValue != null && !"".equals(inputStringValue)) {
@@ -164,6 +195,14 @@ public class SurveyExternal {
         return intValue;
     }
 
+    /**
+     * This methods is used to get sequence value.
+     * 
+     * @param sequenceName Sequence name.
+     * @param connection Connection object.
+     * 
+     * @return Returns sequence value.
+     */
     private Long getNextSequenceValue(String sequenceName,
             Connection connection) {
         Long seqValue = 0L;
@@ -186,6 +225,16 @@ public class SurveyExternal {
         return seqValue;
     }
     
+    /**
+     * This method is used to set value to SurveyBO object.
+     * 
+     * @param context Request Context Object.
+     * 
+     * @return Returns SurveyBO Object.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
     public SurveyBO setBO(final RequestContext context) {
         SurveyBO surveyBO = new SurveyBO();
         surveyBO.setAction(context.getParameterString("surveyAction"));

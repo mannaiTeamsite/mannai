@@ -12,19 +12,29 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.interwoven.livesite.runtime.RequestContext;
-
+/**
+ * GoogleRecaptchaUtil is the Google Recaptcha util class.
+ * 
+ * @author Vijayaragavamoorthy
+ *
+ */
 public class GoogleRecaptchaUtil {
     /** Logger object to check the flow of the code. */
     private final Logger logger = Logger
             .getLogger(GoogleRecaptchaUtil.class);
+    
+    /**
+     * Properties object that holds the property values
+     */
     private static Properties properties = null;
 
     /**
-     * Validates Google reCAPTCHA.
+     * This method validates Google reCAPTCHA.
      *
-     * @param SECRET_KEY
-     * @param captchaResponse
-     * @return true if validation successful, false otherwise.
+     * @param context Request Context object. 
+     * @param captchaResponse Captcha response.
+     * 
+     * @return Returns true if validation successful, false otherwise.
      */
     public boolean validateCaptcha(final RequestContext context, String captchaResponse) {
         logger.debug("GoogleRecaptchaUtil : validateCaptch");
