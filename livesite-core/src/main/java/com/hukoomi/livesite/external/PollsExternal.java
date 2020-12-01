@@ -30,6 +30,9 @@ public class PollsExternal {
             .getLogger(PollsExternal.class);
     /** Default query to fetch all solr content. */
     public static final String DEFAULT_QUERY = "*:*";
+    /**
+     * Maximum current polls to be fethced.
+     */
     public static final String MAX_CURRENT_POLLS_FETCH = "1000";
     public static final String RESULT = "Result";
     public static final String POLL_ID = "POLL_ID";
