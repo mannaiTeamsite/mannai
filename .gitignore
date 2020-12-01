@@ -5,3 +5,23 @@
 /Hukoomi/target-teamsite/
 **/*.iml
 **.DS_Store
+
+#Files from eclipse
+/.project
+
+Hukoomi/.project
+Hukoomi/.settings/
+
+Resources/.project
+Resources/.settings/
+
+livesite-core/.checkstyle
+livesite-core/.classpath
+teamsite-core/.project
+livesite-core/.settings/
+
+
+teamsite-core/.checkstyle
+teamsite-core/.classpath
+teamsite-core/.project
+teamsite-core/.settings/
