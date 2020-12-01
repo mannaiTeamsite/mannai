@@ -206,13 +206,13 @@ public class ContactUsExternal {
             LOGGER.debug(msg);
             status = STATUS_ERROR;
             msg = bundle.getString(ERROR_MAIL_SENDING_TEXT);
-            LOGGER.debug("sendEmailToHukoomi: "+msg);
+            LOGGER.debug("sendEmailToHukoomi: " + msg);
             return getDocument(status, msg);
 
         } catch (MailException e) {
             status = STATUS_ERROR;
             msg = bundle.getString(ERROR_MAIL_SENDING_TEXT);
-            LOGGER.debug("sendEmailToHukoomi: "+msg);
+            LOGGER.debug("sendEmailToHukoomi: " + msg);
             return getDocument(status, msg);
         }
         status = STATUS_SUCCESS;
