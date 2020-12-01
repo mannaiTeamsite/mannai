@@ -165,8 +165,7 @@ public class NewsletterExternal {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("error:" + e);
-            e.printStackTrace();
+            LOGGER.error("exception:" + e);
         }
 
         return document;
@@ -287,10 +286,10 @@ public class NewsletterExternal {
                 statusCode = httpConnection.getResponseCode();
                 return String.valueOf(statusCode);
             } catch (IOException e) {
-                e.printStackTrace();
+                LOGGER.debug("exception:" + e);
             }
             httpConnection.disconnect();
-            ioe.printStackTrace();
+            LOGGER.debug("Exception:" + ioe);
             return null;
         }
 
@@ -372,9 +371,9 @@ public class NewsletterExternal {
         // Convert message digest into hex value
         String tempDigest = no.toString(HEXA);
         while (tempDigest.length() < DIGEST_LENGTH) {
-            tempDigest = "0" + tempDigest;
+            tempDigest = "0" + digest;
+            digest = tempDigest;
             }
-        digest = tempDigest;
         return digest;
     }
 

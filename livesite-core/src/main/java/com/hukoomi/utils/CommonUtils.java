@@ -43,8 +43,6 @@ public class CommonUtils {
     private String fileRoot;
     /** Declare dcr category variable. */
     private String dcrCategory;
-    /** Declare db Connection variable. */
-    private static Connection connection = null;
     /** Initialize hashmap for config parameter. */
     private static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
@@ -208,11 +206,12 @@ public class CommonUtils {
         Statement st = null;
         ResultSet rs = null;
         String query = null;
+        Connection connection = null;
         Postgre objPostgre = new Postgre(utilContext);
         query = "SELECT * FROM CONFIG_PARAM";
         try {
-            CommonUtils.connection = objPostgre.getConnection();
-            st = CommonUtils.connection.createStatement();
+            connection = objPostgre.getConnection();
+            st = connection.createStatement();
             rs = st.executeQuery(query);
             while (rs.next()) {
                 String configParamCode = rs.getString("config_param_code");
@@ -227,9 +226,9 @@ public class CommonUtils {
             logger.error("getConfiguration()" + e.getMessage());
             e.printStackTrace();
         } finally {
-            objPostgre.releaseConnection(CommonUtils.connection, st, rs);
+            objPostgre.releaseConnection(connection, st, rs);
         }
-        objPostgre.releaseConnection(CommonUtils.connection, st, rs);
+        objPostgre.releaseConnection(connection, st, rs);
     }
 
     /**
