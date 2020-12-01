@@ -493,6 +493,9 @@ public class PollsExternal {
         pollsBO.setPastPollsPerPage(context.getParameterString("past_poll_rows"));
         pollsBO.setGroup(context.getParameterString("PollsGroup"));
         pollsBO.setSelectedOption(context.getParameterString("option"));
+        pollsBO.setGroupCategory(context.getParameterString("pollGroupCategory"));
+        pollsBO.setCategory(context.getParameterString("pollCategory"));
+        pollsBO.setSolrCategory(context.getParameterString("solrPollCategory"));
         return pollsBO;
     }
 

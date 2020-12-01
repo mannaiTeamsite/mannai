@@ -24,6 +24,9 @@ public class PollsBO {
     private String currentPollsPerPage;
     private String pastPollsPerPage;
     private String group;
+    private String groupCategory;
+    private String category;
+    private String solrCategory;
     
     public String getAction() {
         return action;
@@ -121,6 +124,24 @@ public class PollsBO {
     public void setGroup(String group) {
         this.group = group;
     }
+    public String getGroupCategory() {
+        return groupCategory;
+    }
+    public void setGroupCategory(String groupCategory) {
+        this.groupCategory = groupCategory;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    public String getSolrCategory() {
+        return solrCategory;
+    }
+    public void setSolrCategory(String solrCategory) {
+        this.solrCategory = solrCategory;
+    }
     @Override
     public String toString() {
         return "PollsBO [action=" + action + ", pollId=" + pollId
@@ -132,9 +153,8 @@ public class PollsBO {
                 + ", selectedOption=" + selectedOption
                 + ", currentPollsPerPage=" + currentPollsPerPage
                 + ", pastPollsPerPage=" + pastPollsPerPage + ", group="
-                + group + "]";
+                + group + ", groupCategory=" + groupCategory
+                + ", category=" + category + ", solrCategory="
+                + solrCategory + "]";
     }
-    
-    
-
 }

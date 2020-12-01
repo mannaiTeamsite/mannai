@@ -21,17 +21,9 @@ public class PollSurveyExternal {
 	/** Logger object to check the flow of the code.*/
 	private final Logger logger = Logger.getLogger(PollSurveyExternal.class);
 	private static final String CONTENT = "Content";
-	private static final String POLL_GROUP_CATEGORY = "Polls-Groups";
-	private static final String SURVEY_GROUP_CATEGORY = "Survey-Group";
-	private static final String POLL_CATEGORY = "Polls";
-	private static final String SURVEY_CATEGORY = "Survey";
-	private static final String SOLR_POLL_CATEGORY = "polls";
-	private static final String SOLR_SURVEY_CATEGORY = "survey";
 	private static final String POLL_NODE = "/content/root/detail/polls";
 	private static final String SURVEY_NODE = "/content/root/details/survey";
 	private static final String ID_NODE = "/content/root/information/id";
-	private static final String START = "0";
-	private static final String ROW = "100";
 	Postgre postgre =  null;
 
 	public Document getContent(final RequestContext context) {
@@ -95,14 +87,14 @@ public class PollSurveyExternal {
 			//PollGroup Processing
 			String pollGroupName = getContentName(pollsBO.getGroup());
 			logger.info("pollGroupName : " + pollGroupName);
-			Document document =  fetchGroupDoc(context, CONTENT, POLL_GROUP_CATEGORY, pollsBO.getLang(), pollGroupName);
+			Document document =  fetchGroupDoc(context, CONTENT, pollsBO.getGroupCategory(), pollsBO.getLang(), pollGroupName);
 			logger.info("Polls Group Doc :"+document.asXML());
 			
-			String pollIds = fetchIds(document, POLL_NODE, context, POLL_CATEGORY, pollsBO.getLang());
+			String pollIds = fetchIds(document, POLL_NODE, context, pollsBO.getCategory(), pollsBO.getLang());
 			logger.info("pollIds : " + pollIds);
 			if(pollIds != null && !"".equals(pollIds)) {
 				
-				Document pollsSolrDoc = fetchDocument(context, pollIds, SOLR_POLL_CATEGORY, START, ROW, solarCore);
+				Document pollsSolrDoc = fetchDocument(context, pollIds, pollsBO.getSolrCategory(), solarCore);
 				logger.info("pollsSolrDoc : " + pollsSolrDoc.asXML());
 			
 				String activePollIds = pollsExt.getPollIdSFromDoc(pollsSolrDoc);
@@ -128,13 +120,13 @@ public class PollSurveyExternal {
 			//SurveyGroup Processing
 			String surveyGroupName =  getContentName(surveyBO.getGroup());
 			logger.info("surveyGroupName : " + surveyGroupName);
-			document =  fetchGroupDoc(context, CONTENT, SURVEY_GROUP_CATEGORY, surveyBO.getLang(), surveyGroupName);
+			document =  fetchGroupDoc(context, CONTENT, surveyBO.getGroupCategory(), surveyBO.getLang(), surveyGroupName);
 			logger.info("Survey Group Doc :"+document.asXML());
   
-			String surveyIds = fetchIds(document, SURVEY_NODE, context, SURVEY_CATEGORY, surveyBO.getLang());
+			String surveyIds = fetchIds(document, SURVEY_NODE, context, surveyBO.getCategory(), surveyBO.getLang());
 			logger.info("surveyIds : " + surveyIds);
 			if(surveyIds != null && !"".equals(surveyIds)) {
-				Document surveySolrDoc = fetchDocument(context, surveyIds, SOLR_SURVEY_CATEGORY, START, ROW, solarCore);
+				Document surveySolrDoc = fetchDocument(context, surveyIds, surveyBO.getSolrCategory(), solarCore);
 				logger.info("surveySolrDoc : " + surveySolrDoc.asXML());
 				surveyGroupElem = pollSurveyElem.addElement("SurveyGroupResponse");
 				surveyGroupElem.add(surveySolrDoc.getRootElement());
@@ -150,18 +142,14 @@ public class PollSurveyExternal {
 	}
 	
 	public Document fetchDocument(RequestContext context, String ids, 
-	        String solrcategory, String start, 
-	        String rows, String solrCore ) {
+	        String solrcategory, String solrCore ) {
 		logger.info("PollSurveyExternal : fetchDocument");
 		Document doc = null;
 		SolrQueryUtil squ = new SolrQueryUtil();
 		logger.info("\nids : " + ids+"\nsolrcategory : " + solrcategory
-		        +"\nstart : "+start+"\nrows : "+rows
 		        +"\nsolrCore : "+solrCore);
 		
 		context.setParameterString("fieldQuery", "");
-		context.setParameterString("start", start);
-		context.setParameterString("rows", rows);
 		context.setParameterString("solrCore", solrCore);
 		
 		SolrQueryBuilder sqb = new SolrQueryBuilder(context);

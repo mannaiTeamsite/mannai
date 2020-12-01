@@ -144,12 +144,9 @@ public class SurveyExternal {
             } else {
                 connection.rollback();
             }
-        } catch (SQLException e) {
-            String errorMsg = "SQLException :";
-            if (null != e.getMessage()) {
-                errorMsg += e.getMessage();
-            }
-            logger.error(errorMsg);
+        } catch (Exception e) {
+            logger.error("Exception in insertSurveyResponse : "+e.getMessage());
+            e.printStackTrace();
         } finally {
             Postgre.releaseConnection(null, answersprepareStatement, null);
             Postgre.releaseConnection(connection, surveyprepareStatement,
@@ -180,7 +177,8 @@ public class SurveyExternal {
             while (rs.next()) {
                 seqValue = rs.getLong("seqValue");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            logger.error("Exception in getNextSequenceValue : "+e.getMessage());
             e.printStackTrace();
         } finally {
             Postgre.releaseConnection(connection, queryStmt, rs);
@@ -204,6 +202,9 @@ public class SurveyExternal {
         surveyBO.setCaptchaResponse(
                 context.getParameterString("g-recaptcha-response"));
         surveyBO.setGroup(context.getParameterString("SurveyGroup"));
+        surveyBO.setGroupCategory(context.getParameterString("surveyGroupCategory"));
+        surveyBO.setCategory(context.getParameterString("surveyCategory"));
+        surveyBO.setSolrCategory(context.getParameterString("solrSurveyCategory"));
         return surveyBO;
     }
 

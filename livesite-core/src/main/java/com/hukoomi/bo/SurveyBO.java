@@ -19,6 +19,9 @@ public class SurveyBO {
     private String description;
     private Long questionId;
     private int questionNo;
+    private String groupCategory;
+    private String category;
+    private String solrCategory;
     
     public String getCaptchaResponse() {
         return captchaResponse;
@@ -129,13 +132,37 @@ public class SurveyBO {
 	public void setQuestionNo(int questionNo) {
 		this.questionNo = questionNo;
 	}
-	@Override
-	public String toString() {
-		return "SurveyBO [action=" + action + ", surveyId=" + surveyId + ", lang=" + lang + ", userId=" + userId
-				+ ", userAgent=" + userAgent + ", ipAddress=" + ipAddress + ", startDate=" + startDate + ", endDate="
-				+ endDate + ", persona=" + persona + ", takenOn=" + takenOn + ", takenFrom=" + takenFrom
-				+ ", totalQuestions=" + totalQuestions + ", captchaResponse=" + captchaResponse + ", group=" + group
-				+ ", title=" + title + ", description=" + description + ", questionId=" + questionId + ", questionNo="
-				+ questionNo + "]";
-	}
+	public String getGroupCategory() {
+        return groupCategory;
+    }
+    public void setGroupCategory(String groupCategory) {
+        this.groupCategory = groupCategory;
+    }
+    public String getCategory() {
+        return category;
+    }
+    public void setCategory(String category) {
+        this.category = category;
+    }
+    public String getSolrCategory() {
+        return solrCategory;
+    }
+    public void setSolrCategory(String solrCategory) {
+        this.solrCategory = solrCategory;
+    }
+    @Override
+    public String toString() {
+        return "SurveyBO [action=" + action + ", surveyId=" + surveyId
+                + ", lang=" + lang + ", userId=" + userId + ", userAgent="
+                + userAgent + ", ipAddress=" + ipAddress + ", startDate="
+                + startDate + ", endDate=" + endDate + ", persona="
+                + persona + ", takenOn=" + takenOn + ", takenFrom="
+                + takenFrom + ", totalQuestions=" + totalQuestions
+                + ", captchaResponse=" + captchaResponse + ", group="
+                + group + ", title=" + title + ", description="
+                + description + ", questionId=" + questionId
+                + ", questionNo=" + questionNo + ", groupCategory="
+                + groupCategory + ", category=" + category
+                + ", solrCategory=" + solrCategory + "]";
+    }
 }
