@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <title>Hukoomi</title>
+
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/media.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
+</head>
+
+<body>
+    <!--App_wrapper-->
+    <div class="app_wrapper">
+ <!--header-->
+ <header>
+    <div class="header_inner">
+       <div class="innner_wrapper">
+          <div class="nav_brand">
+            <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+          </div>
+          <div class="nav_col">
+             <div class="header_row">
+                 <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                    <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                    </a>
+                 </figure>
+
+                <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                   <ul>
+                      <li><a href="#" class="link">Life in Qatar</a></li>
+                     <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                      <li><a href="#" class="link">Open Data</a></li>
+                      <li><a href="#" class="link">E-Participation</a></li>
+                   </ul>
+                </div>
+                <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                   <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                      href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                   <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                   <span>Listen</span></span></span>
+                   <span class="rsbtn_right rsimg rsplay rspart"></span>
+                   <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                   </a>
+                </div>
+                <div class="auth_nav">
+                   <ul>
+                      <li class="mob_hide">
+                         <a href="#" class="link">
+                         <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                         <div class="access_submenu">
+                            <span class="title">Accessbility Options</span>
+                            <ul>
+                               <li>
+                                  <span class="option">Text Size</span>
+                                  <div class="size_wrap">
+                                     <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                     <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                  </div>
+                               </li>
+                               <li>
+                                  <span class="option">Listen Content</span>
+                                  <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                  <img src="assets/images/volume.png" alt="speaker" />
+                                  <span>Listen</span>
+                                  </button>
+                               </li>
+                               <li>
+                                  <span class="option">Contrast</span>
+                                  <button id="themechange">
+                                  <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                  </button>
+                               </li>
+                            </ul>
+                         </div>
+                      </li>
+                      <li>
+                         <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                         </a>
+                      </li>
+                      <li><a href="#" class="link">Login / Signup</a></li>
+                      <li class="mob_menu_nav">
+                        <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                      </li>
+                   </ul>
+                </div>
+             </div>
+             <div class="header_row b-top desktop_view_head" id="head2_top">
+                <div class="nav_menu">
+                   <ul>
+                      <li><a href="#" class="link">Explore Services</a></li>
+                      <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                      <li><a href="#" class="link">Media</a></li>
+                      <li class="">
+                         <a href="#" class="link about_qatar_nav">About Qatar</a>
+                         <div class="about_submenu">
+
+                            <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                            <div class="f_row">
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                     </figure>
+                                     <h3 class="line-1">Qatar Government</h3>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                     </figure>
+                                     <h3 class="line-1">Hukoomi</h3>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                     </figure>
+                                     <h3 class="line-1">Qatar</h3>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                     </figure>
+                                     <h3 class="line-1">Qatar National Vision 2030</h3>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                     </figure>
+                                     <h3 class="line-1">Government & Legislatives</h3>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/amir.png" alt="thumb-img" />
+                                     </figure>
+                                     <h3 class="line-1">The Amir</h3>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                            </div>
+                         </div>
+                      </li>
+                      <li>
+                         <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                   </li>
+                   </ul>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </header>
+ <!--header close-->
+
+        <a href="#" class="helpline">
+            <img src="assets/images/helpdesk.png" class="" title="Helpline" alt="Helpline">
+        </a>
+
+        <div class="find_help_contact">
+            <div class="custom_container">
+                <div class="inner_wrapr">
+                    <div class="f_row">
+                        <div class="f_col">
+                            <h1>Find help</h1>
+                            <p class="note">It seems you are facing an issue. Select if your problem is listed below to
+                                learn
+                                about steps on how to solve it:</p>
+                            <div class="">
+                                <label for="search_category" class="none">Search</label>
+                                <div class="category_search_input">
+                                    <input type="text" id="search_category" name="search"
+                                        placeholder="Search by keyword..">
+                                    <button class="detect-icon" title="Search">
+                                        <img src="assets/images/ic_explore_search.png" alt="search-img">
+                                    </button>
+                                </div>
+                            </div>
+
+
+                            <!-- FAQ’s on 404 error codes -->
+                            <div class="faq_section">
+
+                                <!-- item repeat -->
+                                <div class="accordian-block">
+                                    <div class="ac-title" data-in="#tab1">
+                                        <span class="plus-icon"></span>
+                                        <p class="question">I have only the option to ‘Save’ but no option for ‘Edit’
+                                        </p>
+                                    </div>
+                                    <div class="accordian-para acc-show" id="tab1">
+                                        <p class="answer">Try deleting your browsing history and try again.
+                                            <a href="#" class="link">Go to browsing history</a>
+                                        </p>
+                                        <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Nullam molestie
+                                            ipsum quam
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- item repeat close -->
+
+                                <!-- item repeat -->
+                                <div class="accordian-block">
+                                    <div class="ac-title" data-in="#tab2">
+                                        <span class="plus-icon"></span>
+                                        <p class="question">I have to enter CP# and CR# but I do not have these</p>
+                                    </div>
+                                    <div class="accordian-para acc-show" id="tab2">
+                                        <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Nullam molestie
+                                            ipsum quam, et iaculis nibh
+                                            pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in
+                                            faucibus.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- item repeat close -->
+
+                                <!-- item repeat -->
+                                <div class="accordian-block">
+                                    <div class="ac-title" data-in="#tab3">
+                                        <span class="plus-icon"></span>
+                                        <p class="question">What should I do when I see such error?</p>
+                                    </div>
+                                    <div class="accordian-para acc-show" id="tab3">
+                                        <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Nullam molestie
+                                            ipsum quam, et iaculis nibh
+                                            pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in
+                                            faucibus.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- item repeat close -->
+
+                                <!-- item repeat -->
+                                <div class="accordian-block">
+                                    <div class="ac-title" data-in="#tab4">
+                                        <span class="plus-icon"></span>
+                                        <p class="question">No data found for this application number.</p>
+                                    </div>
+                                    <div class="accordian-para acc-show" id="tab4">
+                                        <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Nullam molestie
+                                            ipsum quam, et iaculis nibh
+                                            pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in
+                                            faucibus.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- item repeat close -->
+
+                                <!-- item repeat -->
+                                <div class="accordian-block">
+                                    <div class="ac-title" data-in="#tab5">
+                                        <span class="plus-icon"></span>
+                                        <p class="question">Entered CR# does not match the CP#</p>
+                                    </div>
+                                    <div class="accordian-para acc-show" id="tab5">
+                                        <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Nullam molestie
+                                            ipsum quam, et iaculis nibh
+                                            pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in
+                                            faucibus.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- item repeat close -->
+
+                                <!-- item repeat -->
+                                <div class="accordian-block">
+                                    <div class="ac-title" data-in="#tab6">
+                                        <span class="plus-icon"></span>
+                                        <p class="question">Entered CR# is expired</p>
+                                    </div>
+                                    <div class="accordian-para acc-show" id="tab6">
+                                        <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Nullam molestie
+                                            ipsum quam, et iaculis nibh
+                                            pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in
+                                            faucibus.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- item repeat close -->
+
+                                <!-- item repeat -->
+                                <div class="accordian-block">
+                                    <div class="ac-title" data-in="#tab7">
+                                        <span class="plus-icon"></span>
+                                        <p class="question">No data found for this application number.</p>
+                                    </div>
+                                    <div class="accordian-para acc-show" id="tab7">
+                                        <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                            Nullam molestie
+                                            ipsum quam, et iaculis nibh
+                                            pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in
+                                            faucibus.
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- item repeat close -->
+
+                                <a href="#" tabindex="0" class="more_link link">Show 5 more
+                                    <img src="assets/images/ic_explore_back_arrow.png" alt="down-arrow" />
+                                </a>
+                            </div>
+                            <!-- FAQ’s on 404 error codes close -->
+
+                        </div>
+                        <div class="f_col">
+                            <div class="reach_out_col">
+                                <figure class="query_img">
+                                    <img src="assets/images/ic-find-help-reach-out.png" alt="send-query" />
+                                </figure>
+                                <p class="note" tabindex="0">Couldn’t find what you were looking for? Send us your query
+                                    or reach out to us.</p>
+                                <a href="#" tabindex="0" class="more_link link" data-toggle="modal"
+                                    data-target="#reach-out-modal">Reach out to us</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!--footer-->
+        <footer>
+            <div class="footer_inner">
+                <div class="foot_row">
+                    <div class="copy_right" tabindex="0">
+                        Copyright © 2019 MOTC. All rights reserved.
+                    </div>
+                    <div class="foot_nav">
+                        <nav>
+                            <ul>
+                                <li><a href="#">Entity Services’ Statistics</a></li>
+                                <li><a href="#">Useful Links</a></li>
+                                <li><a href="#">Customer Service</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Polls & Surveys</a></li>
+                                <li><a href="#">Mobile Apps</a></li>
+                                <li><a href="#">Site Map</a></li>
+                                <li><a href="#">Privacy & Legal</a></li>
+                                <li><a href="#">Find Help</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--footer close-->
+
+
+
+    </div>
+    <!--App_wrapper close-->
+
+
+
+    <!--Reach out Modal-->
+    <div id="reach-out-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="custom_modal reachout_modal">
+                    <span class="modal_heading" tabindex="0">Couldn’t find what you were looking for?</span>
+                    <span class="close_btn" data-dismiss="modal"><img src="assets/images/reach-out-cross.png"
+                            alt="close"></span>
+                    <div class="modal-body">
+                        <div class="f_row">
+                            <div class="f_col">
+                                <div class="form_field">
+                                    <label tabindex="0" for="fname">First Name</label>
+                                    <div class="txt_wrapper">
+                                        <input type="text" placeholder="Mohamed Ibrahim" id="fname" tabindex="0" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="f_col">
+                                <div class="form_field">
+                                    <label tabindex="0" for="email">Email ID</label>
+                                    <div class="txt_wrapper">
+                                        <input type="text" placeholder="mohammed12@gmail.com" id="email" tabindex="0" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="f_col">
+                                <div class="form_field">
+                                    <label tabindex="0" for="query">Type your query</label>
+                                    <div class="txt_wrapper">
+                                        <textarea id="query"  placeholder="Describe what were you trying to do."
+                                            tabindex="0"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="f_col text-left">
+                            <button class="rouge_btn" tabindex="0">Submit</button>
+                        </div>
+                        <hr>
+                        <span class="modal_heading" tabindex="0">Reach us</span>
+                        <div class="f_row">
+                            <div class="f_col">
+
+                            <div>
+                                <div class="reachout_details call">
+                                    <span class="title" tabindex="0">Call us</span>
+                                   
+                                    <a href="tel:97440069999" tabindex="0">
+                                        +974-40069999</a>
+                                </div>
+
+                                <div class="reachout_details email">
+                                    <span class="title" tabindex="0">Email us</span>
+                                   
+                                    <a href="mailto:contact@hukoomi.qa" tabindex="0" target="_blank">
+                                        contact@hukoomi.qa</a>
+                                </div>
+                            </div>
+
+                            </div>
+                            <div class="f_col">
+                                <div class="reachout_details visit">
+                                    <span class="title" tabindex="0">Visit us</span>
+                                    <span tabindex="0"> PO Box 232624,
+                                        Ministry of Transport & Communications,
+                                        Doha, Qatar
+                                    </span>
+                                    <a href="#" title="View Map" class="link view_map">View Map</a>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Reach out Modal close-->
+
+
+          <!--Js-->
+          <script src="assets/js/jquery.js"></script>
+          <script>
+             window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+          </script>
+          <script src="assets/js/popper.min.js"></script>
+          <script src="assets/js/bootstrap.min.js"></script>
+          <script src="assets/js/bootstrap-select.js"></script>
+          <script src="assets/js//moment.min.js"></script>
+          <script src="assets/js/daterangepicker.min.js"></script>
+          <script src="assets/js/owl.carousel.min.js"></script>
+          <script src="assets/js/app-slider.js"></script>
+          <script src="assets/js/custom.js"></script>
+          <script src="assets/js/daterangepicker.js"></script>
+          <!--Js Close-->
+</body>
+
+</html>

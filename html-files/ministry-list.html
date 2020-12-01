@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="icon" href="assets/images/favicon.ico" />
+   <title>Hukoomi</title>
+   <link rel="stylesheet" href="assets/css/bootstrap.css">
+   <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+   <link rel="stylesheet" href="assets/css/style.css">
+   <link rel="stylesheet" href="assets/css/main.css">
+   <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
+</head>
+
+<body>
+
+   <!--App_wrapper-->
+   <div class="app_wrapper">
+
+     <!--header-->
+     <header>
+      <div class="header_inner">
+         <div class="innner_wrapper">
+            <div class="nav_brand">
+            <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+            </div>
+            <div class="nav_col">
+               <div class="header_row">
+                  <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                     <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                     </a>
+                  </figure>
+
+                  <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                     <ul>
+                        <li><a href="#" class="link">Life in Qatar</a></li>
+                     <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                        <li><a href="#" class="link">Open Data</a></li>
+                        <li><a href="#" class="link">E-Participation</a></li>
+                     </ul>
+                  </div>
+                  <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                     <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                        href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                     <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                     <span>Listen</span></span></span>
+                     <span class="rsbtn_right rsimg rsplay rspart"></span>
+                     <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                     </a>
+                  </div>
+                  <div class="auth_nav">
+                     <ul>
+                        <li class="mob_hide">
+                           <a href="#" class="link">
+                           <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                           <div class="access_submenu">
+                              <span class="title">Accessbility Options</span>
+                              <ul>
+                                 <li>
+                                    <span class="option">Text Size</span>
+                                    <div class="size_wrap">
+                                       <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                       <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <span class="option">Listen Content</span>
+                                    <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                    <img src="assets/images/volume.png" alt="speaker" />
+                                    <span>Listen</span>
+                                    </button>
+                                 </li>
+                                 <li>
+                                    <span class="option">Contrast</span>
+                                    <button id="themechange">
+                                    <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                    </button>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                           </a>
+                        </li>
+                        <li><a href="#" class="link">Login / Signup</a></li>
+                        <li class="mob_menu_nav">
+                        <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="header_row b-top desktop_view_head" id="head2_top">
+                  <div class="nav_menu">
+                     <ul>
+                        <li><a href="#" class="link">Explore Services</a></li>
+                        <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                        <li><a href="#" class="link">Media</a></li>
+                        <li class="">
+                           <a href="#" class="link about_qatar_nav">About Qatar</a>
+                           <div class="about_submenu">
+
+                              <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                              <div class="f_row">
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                       </figure>
+                                       <div class="line-1">Qatar Government</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                       </figure>
+                                       <div class="line-1">Hukoomi</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                       </figure>
+                                       <div class="line-1">Qatar</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                       </figure>
+                                       <div class="line-1">Qatar National Vision 2030</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                       </figure>
+                                       <div class="line-1">Government & Legislatives</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/amir.png" alt="The Amir" />
+                                       </figure>
+                                       <div class="line-1">The Amir</div>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                              </div>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#"  title="Search" tabindex="0" >
+                               <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
+                     </li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </header>
+   <!--header close-->
+
+      <!--Breadcrumb-->
+      <div class="breadcrumbs_wrapper">
+         <ul>
+            <li><a href="#" tabindex="0">Home</a></li>
+            <li><a href="#" tabindex="0">Directory</a></li>
+            <li><a href="#" tabindex="0">Ministries</a></li>
+         </ul>
+      </div>
+      <!--Breadcrumb-->
+
+      <section class="category_block_wrapper">
+
+         <!--category heading-->
+         <div class="custom_container">
+            <h1 class="category_heading" tabindex="0">Ministries</h1>
+         </div>
+         <!--category heading-->
+
+
+         <!--Category Search and Category view tab-->
+         <div class="custom_container">
+            <div class="f_row f_flow_col">
+               <div class="f_col">
+                  <label for="search_category" class="none">Search</label>
+                  <div class="category_search_input">
+
+                     <input type="text" id="search_category" name="search" tabindex="0" placeholder="Search">
+                     <button class="detect-icon" tabindex="0">
+                        <img src="assets/images/search-line-white.png" alt="search-img">
+                     </button>
+                  </div>
+               </div>
+               <div class="f_col text-right">
+                  <ul class="category_view_menu_wrap">
+                     <li>
+                        <a href="#" tabindex="0" class="grid active">Grid</a>
+                     </li>
+                     <li>
+                        <a href="#" tabindex="0" class="list">List</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <!--Category Search and Category view tab close-->
+
+
+         <!--category sort and filter-->
+         <div class="custom_container">
+            <div class="f_row">
+               <div class="f_col">
+                  <ul class="categor_filter_wrap">
+                     <li>
+                        <a href="#" tabindex="0" class="sort">SORT</a>
+                     </li>
+                     <li>
+                        <a href="#" tabindex="0" class="filter">Filter</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+         <!--category sort and filter close-->
+
+          <!--Category Sort Modal -->
+          <div class="category_sort_wrapper_layer">
+            <div class="sort_wrapr">
+               <span class="filter_close">
+               <img src="assets/images/ic-popup-cross.png" alt="close sort" />
+               </span>
+               <div class="custom_modal_heading">Sort</div>
+               <fieldset>
+                  <legend class="hide">Sort</legend>
+                  <ul>
+                     <li>
+                        <input type="radio" id="Alphabet" name="category_sort" value="By Latest">
+                        <label for="Alphabet" class="radio_wrap"> By Name(A-Z)</label>
+                     </li>
+                     <li>
+                        <input type="radio" id="oldest" name="category_sort" value="By Oldest">
+                        <label for="oldest" class="radio_wrap">By Name(Z-A)</label>
+                     </li>
+                     
+                  </ul>
+               </fieldset>
+            </div>
+         </div>
+         <!-- Category Sort Modal close -->
+
+
+
+
+   <!--category filter Modal -->
+   <div class="category_filter_wrapper_layer">
+      <div class="category_filter_wrapr">
+         <div class="custom_modal_heading">Filter</div>
+         <span class="filter_close">
+         <img src="assets/images/ic-popup-cross.png" alt="close" />
+         </span>
+        
+            <div class="form_field">
+               <div class="flex_row">
+                  <div class="flex_col_sm_6">
+                     <label for="month">Month</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker"  name="month" id="month">
+                              <option>Month</option>
+                              <option>Jan</option>
+                              <option>Feb</option>
+                              <option>Mar</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="flex_col_sm_6">
+                     <label for="year">Year</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="year"  id="year">
+                              <option>Year</option>
+                              <option>2019</option>
+                              <option>2020</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="location"> Location</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker" id="location"  name="location">
+                        <option  value="sasa">Select</option>
+                        <option value="sasaasas">New Delhi</option>
+                        <option>NW</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="intended">Intended Audience</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker"   name="intended" id="intended">
+                        <option>Select</option>
+                        <option>2019</option>
+                        <option>2020</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="organizers">Organizers</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker"   name="organizers" id="organizers">
+                        <option>Select</option>
+                        <option>2019</option>
+                        <option>2020</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="form_field">
+               <label for="category">Category</label>
+               <div class="txt_wrapper">
+                  <div class="select-picker-wrap">
+                     <select class="selectpicker"   name="organizers" id="category">
+                        <option>Select</option>
+                        <option>Category1</option>
+                        <option>Category2</option>
+                     </select>
+                  </div>
+               </div>
+            </div>
+            <div class="btn_wrap">
+               <input type="reset" class="outline_btn cancel"  value="Reset" />
+               <button type="button" class="rouge_btn apply_filter m-l-20">Apply</button>
+            </div>
+         
+      </div>
+   </div>
+   <!--category filter modal close-->
+
+
+         <!--category card row  wrapper-->
+         <div class="custom_container">
+            <div class="list_row_wrapper">
+               <div class="grid_view">
+                  <div class="f_row">
+                     <!-- card repeat -->
+                     <div class="category_card category_ministry_card">
+                        <div tabindex="0" class="list_card">
+                           <ul class="more_info_links">
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/web-link.png"
+                                       alt="wikipedia" /></a>
+                              </li>
+                           </ul>
+                           <div class="details">
+                              <h2 class="card_title" tabindex="0">Government Website and e-Services Framework</h2>
+                           
+                              
+                              <span class="show_label icon mob insurance_mob" tabindex="0">
+                                 <a href="tel:+9747973278927">+974 7973278927</a> <a href="tel:+9747973278927">+974 7973278927</a>  
+                                 <a href="tel:+9747973278927">+974 7973278927</a>
+                              </span>
+                              <div class="card_modal_wrapper">
+                                    <img src="assets/images/close-white.svg"  class="close_card_modal" alt="close"/>
+                                    <div class="tags_wrap">
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                    </div>
+                               </div>
+
+                              
+
+                              <span class="show_label icon fax">44111195</span>
+                              <span class="show_label icon email">info@adlsa.gov.qa</span>
+                              <span class="show_label icon location">Villa 25, Street 605, Zone 51, Al Gharaffa,
+                                 Qatar</span>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- card repeat close -->
+
+
+                       <!-- card repeat -->
+                       <div class="category_card category_ministry_card">
+                        <div tabindex="0" class="list_card">
+                           <ul class="more_info_links">
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/web-link.png"
+                                       alt="wikipedia" /></a>
+                              </li>
+                           </ul>
+                           <div class="details">
+                              <h2 class="card_title" tabindex="0">Government Website and e-Services Framework</h2>
+                           
+                              
+                              <span class="show_label icon mob insurance_mob" tabindex="0">
+                                 <a href="tel:+9747973278927">+974 7973278927</a> <a href="tel:+9747973278927">+974 7973278927</a>  
+                                 <a href="tel:+9747973278927">+974 7973278927</a>
+                              </span>
+                              <div class="card_modal_wrapper">
+                                    <img src="assets/images/close-white.svg"  class="close_card_modal" alt="close"/>
+                                    <div class="tags_wrap">
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                    </div>
+                               </div>
+
+                              
+
+                              <span class="show_label icon fax">44111195</span>
+                              <span class="show_label icon email">info@adlsa.gov.qa</span>
+                              <span class="show_label icon location">Villa 25, Street 605, Zone 51, Al Gharaffa,
+                                 Qatar</span>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- card repeat close -->
+
+
+
+                       <!-- card repeat -->
+                       <div class="category_card category_ministry_card">
+                        <div tabindex="0" class="list_card">
+                           <ul class="more_info_links">
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                              <li>
+                                 <a href="#" target="_blank"><img src="assets/images/web-link.png"
+                                       alt="wikipedia" /></a>
+                              </li>
+                           </ul>
+                           <div class="details">
+                              <h2 class="card_title" tabindex="0">Government Website and e-Services Framework</h2>
+                           
+                              
+                              <span class="show_label icon mob insurance_mob" tabindex="0">
+                                 <a href="tel:+9747973278927">+974 7973278927</a> <a href="tel:+9747973278927">+974 7973278927</a>  
+                                 <a href="tel:+9747973278927">+974 7973278927</a>
+                              </span>
+                              <div class="card_modal_wrapper">
+                                    <img src="assets/images/close-white.svg"  class="close_card_modal" alt="close"/>
+                                    <div class="tags_wrap">
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                       <span class="tag_g tag_l">999 999  9999</span>
+                                    </div>
+                               </div>
+
+                              
+
+                              <span class="show_label icon fax">44111195</span>
+                              <span class="show_label icon email">info@adlsa.gov.qa</span>
+                              <span class="show_label icon location">Villa 25, Street 605, Zone 51, Al Gharaffa,
+                                 Qatar</span>
+                           </div>
+                        </div>
+                     </div>
+                     <!-- card repeat close -->
+                
+
+                  </div>
+               </div>
+               <div id="pagination-here" class="pagination_wrapper"></div>
+            </div>
+
+         </div>
+         <!--category card row  wrapper close-->
+
+      </section>
+
+
+      <!--footer-->
+      <footer>
+         <div class="footer_inner">
+            <div class="foot_row">
+               <div class="copy_right" tabindex="0">
+                  Copyright © 2019 MOTC. All rights reserved.
+               </div>
+               <div class="foot_nav">
+                  <nav>
+                     <ul>
+                        <li><a href="#">Entity Services’ Statistics</a></li>
+                        <li><a href="#">Useful Links</a></li>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Polls & Surveys</a></li>
+                        <li><a href="#">Mobile Apps</a></li>
+                        <li><a href="#">Site Map</a></li>
+                        <li><a href="#">Privacy & Legal</a></li>
+                        <li><a href="#">Find Help</a></li>
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!--footer close-->
+
+   </div>
+   <!--App_wrapper close-->
+
+
+
+   <!--Js-->
+   <script src="assets/js/jquery.js"></script>
+   <script>
+      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+   </script>
+   <script src="assets/js/popper.min.js"></script>
+   <script src="assets/js/bootstrap.min.js"></script>
+   <script src="assets/js/bootstrap-select.js"></script>
+   <script src="assets/js//moment.min.js"></script>
+   <script src="assets/js/daterangepicker.min.js"></script>
+   <script src="assets/js/owl.carousel.min.js"></script>
+   <script src="assets/js/app-slider.js"></script>
+   <script src="assets/js/jquery.bootpag.min.js"></script>
+   <script src="assets/js/custom.js"></script>
+   <script src="assets/js/daterangepicker.js"></script>
+   <!--Js Close-->
+
+</body>
+
+</html>

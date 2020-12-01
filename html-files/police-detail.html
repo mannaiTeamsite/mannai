@@ -15,6 +15,7 @@
    <link rel="stylesheet" href="assets/css/style.css">
    <link rel="stylesheet" href="assets/css/main.css">
    <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
 </head>
 
 <body>
@@ -22,73 +23,179 @@
    <!--App_wrapper-->
    <div class="app_wrapper">
 
-      <!--header-->
-   <header>
-    <div class="header_inner">
-       <div class="innner_wrapper">
-          <div class="nav_brand">
-             <a href="#"  tabindex="0"> <img src="assets/images/logo.svg" alt="Hukoomi"> </a>
-          </div>
-          <div class="nav_col">
-             <div class="header_row">
-                <div class="abt_qtr_nav desktop_view_head">
-                   <ul>
-                      <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
-                      <li> <a href="#"  tabindex="0" class="link">Innovation</a></li>
-                      <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
-                      <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
-                   </ul>
-                </div>
-                <div class="auth_nav">
-                   <ul>
-                      <li class="mob_hide">
-                          <a href="#"  tabindex="0"  class="link" >
-                         <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                      </li>
-                      <li>
-                          <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                         </a>
-                      </li>
-                      <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
-                      <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
-                         <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                         </a>
-                      </li>
-                   </ul>
-                </div>
-             </div>
-             <div class="header_row b-top desktop_view_head">
-                <div class="nav_menu">
-                   <ul>
-                      <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
-                      <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
-                      <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
-                      <li> <a href="#"  tabindex="0"  class="link">About Qatar</a></li>
-                      <li>
-                          <a href="#"  tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+ <!--header-->
+ <header>
+   <div class="header_inner">
+      <div class="innner_wrapper">
+         <div class="nav_brand">
+         <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+         </div>
+         <div class="nav_col">
+            <div class="header_row">
+               <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                  <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                  </a>
+               </figure>
+
+               <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                  <ul>
+                     <li><a href="#" class="link">Life in Qatar</a></li>
+                  <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                     <li><a href="#" class="link">Open Data</a></li>
+                     <li><a href="#" class="link">E-Participation</a></li>
+                  </ul>
+               </div>
+               <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                  <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                     href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                  <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                  <span>Listen</span></span></span>
+                  <span class="rsbtn_right rsimg rsplay rspart"></span>
+                  <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                  </a>
+               </div>
+               <div class="auth_nav">
+                  <ul>
+                     <li class="mob_hide">
+                        <a href="#" class="link">
+                        <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                        <div class="access_submenu">
+                           <span class="title">Accessbility Options</span>
+                           <ul>
+                              <li>
+                                 <span class="option">Text Size</span>
+                                 <div class="size_wrap">
+                                    <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                    <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                 </div>
+                              </li>
+                              <li>
+                                 <span class="option">Listen Content</span>
+                                 <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                 <img src="assets/images/volume.png" alt="speaker" />
+                                 <span>Listen</span>
+                                 </button>
+                              </li>
+                              <li>
+                                 <span class="option">Contrast</span>
+                                 <button id="themechange">
+                                 <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                 </button>
+                              </li>
+                           </ul>
+                        </div>
                      </li>
-                   </ul>
-                </div>
-             </div>
-          </div>
-       </div>
-    </div>
-    <!-- Mobile Menu-->
-    <div class="mob_nav">
-       <ul>
-          <li tabindex="0"> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-          <li> <a href="#"  tabindex="0" >Innovation</a></li>
-          <li> <a href="#"  tabindex="0" >Open Data</a></li>
-          <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-          <li> <a href="#"  tabindex="0" >Explore Services</a></li>
-          <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
-          <li> <a href="#"  tabindex="0" >Media</a></li>
-          <li> <a href="#"  tabindex="0" >About Qatar</a></li>
-       </ul>
-    </div>
-    <!-- Mobile Menu-->
-   </header>
- <!--header close--> 
+                     <li>
+                        <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                        </a>
+                     </li>
+                     <li><a href="#" class="link">Login / Signup</a></li>
+                     <li class="mob_menu_nav">
+                     <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                     </li>
+                  </ul>
+               </div>
+            </div>
+            <div class="header_row b-top desktop_view_head" id="head2_top">
+               <div class="nav_menu">
+                  <ul>
+                     <li><a href="#" class="link">Explore Services</a></li>
+                     <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                     <li><a href="#" class="link">Media</a></li>
+                     <li class="">
+                        <a href="#" class="link about_qatar_nav">About Qatar</a>
+                        <div class="about_submenu">
+
+                           <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                           <div class="f_row">
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                    </figure>
+                                    <div class="line-1">Qatar Government</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                    </figure>
+                                    <div class="line-1">Hukoomi</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                    </figure>
+                                    <div class="line-1">Qatar</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                    </figure>
+                                    <div class="line-1">Qatar National Vision 2030</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                    </figure>
+                                    <div class="line-1">Government & Legislatives</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                              <!-- card repeat -->
+                              <div class="card_col">
+                                 <a href="#" class="card_wrapper">
+                                    <figure class="card_img">
+                                       <img src="assets/images/amir.png" alt="The Amir" />
+                                    </figure>
+                                    <div class="line-1">The Amir</div>
+                                    <span class="descr line-2">Small description about Qatar Government
+                                    page.</span>
+                                 </a>
+                              </div>
+                              <!-- card repeat close-->
+                           </div>
+                        </div>
+                     </li>
+                     <li>
+                        <a href="#"  title="Search" tabindex="0" >
+                           <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
+                  </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</header>
+<!--header close-->
 
       <!--Breadcrumb-->
       <div class="breadcrumbs_wrapper">
@@ -118,7 +225,9 @@
                                <a href="#" tabindex="0"><img src="assets/images/ic-facebook.png" alt="Facebook" /></a>
                             </li>
                             <li>
-                               <a href="#" tabindex="0"><img src="assets/images/ic-twitter.png" alt="Twitter" /></a>
+                               <a href="#" tabindex="0">
+                                  <img src="assets/images/ic-twitter.png" alt="Twitter" />
+                               </a>
                             </li>
                          </ul>
                          <span class="custom_label" tabindex="0">Hashtags</span>
@@ -145,15 +254,15 @@
                            <!--Owl Slider-->
                            <div id="detail_tab_owl" class="tab_owl owl-carousel owl-loaded owl-drag">
                               <!-- item repeat -->
-                              <div class="item"><a href="#tab1"  tabindex="0"  class="active">About Station</a></div>
+                              <div class="item"><a href="#tab1"  title="About" class="active">About Station</a></div>
                               <!-- item repeat close -->
       
                               <!-- item repeat -->
-                              <div class="item"><a href="#tab2"  tabindex="0" class="">FAQ’s</a></div>
+                              <div class="item"><a href="#tab2"  title="FAQ">FAQ’s</a></div>
                               <!-- item repeat close -->
       
                               <!-- item repeat -->
-                              <div class="item"><a href="#tab3"  tabindex="0" class="">Feedback & Complaints</a></div>
+                              <div class="item"><a href="#tab3"  title="Feedback">Feedback & Complaints</a></div>
                               <!-- item repeat close -->
                            </div>
                            <!-- Owl Slider close-->
@@ -173,7 +282,7 @@
 
                   <!-- tab1 -->
                   <div id="tab1">
-                     <h3 tabindex="0">About</h3>
+                     <h3 tabindex="0">About Station</h3>
                      <p  tabindex="0" class="commn_para">A police station (sometimes called a "station house") is a building which
                         serves to policeand other
                         members of staff. These buildings often contain offices and accom modation for personnel and
@@ -186,8 +295,40 @@
 
 
                   <!-- tab2 -->
-                  <div id="ta2">
+                  <div id="tab2">
                      <h3 tabindex="0">FAQ</h3>
+                     <ul class="facilities_wrap digit_wrap">
+                        <li tabindex="0">
+                           <p class="commn_para">Question - What is the procedure to file a complaint?
+                              <span class="answer">Answer - Lorem ipsum dolor sit amet, id eam sale adhuc dolor, has
+                                 iudico abhorreant constituto at,
+                                 soleat timeam inciderint cu est.
+                              </span>
+                           </p>
+                        </li>
+                        <li tabindex="0">
+                           <p class="commn_para">Question - What is the procedure to file a complaint?
+                              <span class="answer">Answer - Lorem ipsum dolor sit amet, id eam sale adhuc dolor, has
+                                 iudico abhorreant constituto at,
+                                 soleat timeam inciderint cu est.
+                              </span>
+                           </p>
+                        </li>
+                        <li tabindex="0">
+                           <p class="commn_para">Question - What is the procedure to file a complaint?
+                              <span class="answer">Answer - Lorem ipsum dolor sit amet, id eam sale adhuc dolor, has
+                                 iudico abhorreant constituto at,
+                                 soleat timeam inciderint cu est.
+                              </span>
+                           </p>
+                        </li>
+                     </ul>
+                  </div>
+                  <!-- tab2 close-->
+
+                    <!-- tab2 -->
+                    <div id="tab3">
+                     <h3 tabindex="0">Feedback</h3>
                      <ul class="facilities_wrap digit_wrap">
                         <li tabindex="0">
                            <p class="commn_para">Question - What is the procedure to file a complaint?
@@ -249,48 +390,50 @@
          </div>
          <!--Category details block close-->
 
-         <!--other-->
-         <div class="custom_container">
-            <div class="more_wrap grid_view">
-               <h1 tabindex="0">Other Police Station near you</h1>
-               <div class="flex_row">
-                  <!--Owl Slider-->
-                  <div id="other_list_owl" class="owl-nav-top owl-carousel owl-loaded owl-drag">
-                     <!-- Item repeat -->
-                     <div class="item">
-                        <div class="category_card category_police_card">
-                           <a href="#" class="list_card">
-                              <figure class="card_img">
-                                 <img src="assets/images/acadmic-logo2.png" alt="police-station-img" />
-                              </figure>
+       
+      </div>
 
-                              <div class="details">
-                                 <h2 class="card_title">Madina Khalifa Police Station</h2>
-                                 <span class="tag_g tag_l">Police Station</span>
-                                 <span class="show_label icon location">The Pearl, Pier I, Doha, Qatar</span>
-                                 <span class="show_label icon mob">+974 7973278927</span>
-                              </div>
+        <!--other-->
+        <div class="custom_container">
+         <div class="more_wrap grid_view">
+            <h1 tabindex="0">Other Police Station near you</h1>
+            <div class="flex_row">
+               <!--Owl Slider-->
+               <div id="other_list_owl" class="owl-nav-top owl-carousel owl-loaded owl-drag">
+                  <!-- Item repeat -->
+                  <div class="item">
+                     <div class="category_card category_police_card">
+                        <a href="#" class="list_card">
+                           <figure class="card_img">
+                              <img src="assets/images/acadmic-logo2.png" alt="police-station-img" />
+                           </figure>
 
-                              <span class="share_g share_l"></span>
-                              <span class="bookmark_g bookmark_l category_bookmark"></span>
-                           </a>
-                        </div>
+                           <div class="details">
+                              <h2 class="card_title">Madina Khalifa Police Station</h2>
+                              <span class="tag_g tag_l">Police Station</span>
+                              <span class="show_label icon location">The Pearl, Pier I, Doha, Qatar</span>
+                              <span class="show_label icon mob">+974 7973278927</span>
+                           </div>
+
+                           <span class="share_g share_l"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark"></span>
+                        </a>
                      </div>
-                     <!-- Item repeat close -->
                   </div>
-                  <!--Owl Slider close-->
+                  <!-- Item repeat close -->
                </div>
+               <!--Owl Slider close-->
             </div>
          </div>
-         <!--other close-->
-      </div>
+        </div>
+       <!--other close-->
 
       <!--footer-->
       <footer>
          <div class="footer_inner">
             <div class="foot_row">
                <div class="copy_right" tabindex="0">
-                  Copyrigt © 2019 MOTC. All rights reserved.
+                  Copyright © 2019 MOTC. All rights reserved.
                </div>
                <div class="foot_nav">
                   <nav>

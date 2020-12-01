@@ -30,9 +30,7 @@ $(document).ready(function(){
     });
 
     // ======= for lang change =======
-    $('#lang_toggle').click(function(){
-        $('body').toggleClass('ar')
-    });
+   
     $('.del_fav').click(function(){
         console.log("favourite")
         $('.hku_alert, .alert_backdrop').css("display", "block")
@@ -77,9 +75,41 @@ function getSelValue(e){
         selected.push(e.value)
         var selectedSre = selected.toString();
         selectedSre = selectedSre.replace(/,/g, ", ");
+        console.log(selectedSre);
         $(e).parents('.dropdown').find('input[type=text]').val(selectedSre);
-
-        applied_filters_arr.push(e.value)
+// console.log(e.value, applied_filters)
+        applied_filters_arr.push(e.value);
+        // console.log(e.value, applied_filters_arr);
+        
+        if(e.value == 'All'){
+            selected = $.grep(selected, function(value) {
+                return value != "Yes" && value != 'No';
+              });
+              applied_filters_arr = $.grep(applied_filters_arr, function(value) {
+                return value != "Yes" && value != 'No';
+            });
+            $(e).parents('.dropdown').find('input[type=text]').val('All');
+        }
+        if(e.value == 'Yes'){
+            selected = $.grep(selected, function(value) {
+                return value != "All" && value != 'No';
+              });
+              applied_filters_arr = $.grep(applied_filters_arr, function(value) {
+                return value != "All" && value != 'No';
+            });
+            $(e).parents('.dropdown').find('input[type=text]').val('Yes');
+        }
+        if(e.value == 'No'){
+            console.log("all----");
+            selected = $.grep(selected, function(value) {
+                return value != "All" && value != 'Yes';
+              });
+              applied_filters_arr = $.grep(applied_filters_arr, function(value) {
+                return value != "All" && value != 'Yes';
+            });
+            $(e).parents('.dropdown').find('input[type=text]').val('No');
+        }
+        
     }
     else{
         selected = $.grep(selected, function(value) {
@@ -103,7 +133,7 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
   function applied_filters(){
     var filter_tags = [];
     for(i = 0; i < applied_filters_arr.length; i++) {
-        filter_tags.push("<li class='tag' title='"+applied_filters_arr[i]+"' onclick='remove_filter(this)'><p>"+applied_filters_arr[i]+"</p><span></span></li>")
+        filter_tags.push("<li class='tag' title='"+applied_filters_arr[i]+"' onclick='remove_filter(this); updateFilter(this)'><p>"+applied_filters_arr[i]+"</p><span></span></li>")
     }
     $('.applied_option').html(filter_tags.join(""))
   }
@@ -116,7 +146,7 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
     });
     e.remove();
 // console.log(applied_filters_arr)
-    $('.check_input').prop('checked', false);
+    $('.check_input, .radio_input').prop('checked', false);
     var uncheck = document.getElementsByClassName('check_input');
     var thisTextbox;
     for (var i = 0; i < uncheck.length; i++){
@@ -139,6 +169,7 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
 
   function uncheckAll(e){
     $(e).parents('.dropdown-menu').find('.check_input').prop('checked', false);
+    $(e).parents('.dropdown-menu').find('.radio_input').prop('checked', false);
     $(e).parents('.filter_col').find('input[type=text]').val('');
 
     var toRemoveAry = [];
@@ -151,8 +182,71 @@ $('.dropdown').on('hidden.bs.dropdown', function () {
     });
     console.log(applied_filters_arr);
     applied_filters()
+  };
+
+  function uncheckAllRadio(e){
+    $(e).parents('.dropdown-menu').find('.radio_input').prop('checked', false);
+    $(e).parents('.filter_col').find('input[type=text]').val('');
+
+    var toRemoveAry = [];
+    var chk = $(e).parents('.dropdown-menu').find('.radio_input');
+    for(i = 0; i<chk.length; i++){
+        toRemoveAry.push(chk[i].value)
+    }
+    applied_filters_arr = applied_filters_arr.filter(function(el){
+        return toRemoveAry.indexOf(el) < 0;
+    });
+    console.log(applied_filters_arr);
+    applied_filters()
+  };
+  
+
+  function updateFilter(e){
+    //   console.log(e.title);
+     var filterToBeUpdate = $('input').filter(function(){
+         return this.value == e.title;
+     });
+     inFilter = [];
+     $(filterToBeUpdate).parents('.dropdown').find('input').each(function(){
+         if($(this).is(':checked')){
+            inFilter.push($(this).val())
+         }
+     });
+     console.log("--return--", inFilter)
+     $(filterToBeUpdate).parents('.dropdown').find('input[type=text]').val(inFilter);
   }
 
+$('.dropdown-menu .chech_lbl').click(function (e) {
+    e.stopPropagation();
+});
+$(' .radio_lbl, .uncheck_all').click(function (e) {
+    e.stopPropagation();
+});
 
+
+// ======= feedback form validation =======
+(function() {
+    'use strict';
+    window.addEventListener('load', function() {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function(form) {
+        form.addEventListener('submit', function(event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          else{
+            event.preventDefault();
+            event.stopPropagation();
+            $('#feedback').modal('hide');
+            $('#thankyou').modal('show')
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
 
   

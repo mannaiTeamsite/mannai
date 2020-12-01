@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hukoomi | Dashboard</title>
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
+    <link rel="stylesheet" href="assets/css/explore-services.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
+    <!-- ================== bootstrap css ========================= -->
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <!-- ================== bootstrap css ========================= -->
+</head>
+
+<body class="">
+    <div class="app_wrapper">
+        <header>
+            <div class="header_inner">
+               <div class="innner_wrapper">
+                  <div class="nav_brand">
+                    <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+                  </div>
+                  <div class="nav_col">
+                     <div class="header_row">
+                         <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                            <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                            </a>
+                         </figure>
+
+                        <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                           <ul>
+                              <li><a href="#" class="link">Life in Qatar</a></li>
+                             <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                              <li><a href="#" class="link">Open Data</a></li>
+                              <li><a href="#" class="link">E-Participation</a></li>
+                           </ul>
+                        </div>
+                        <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                           <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                              href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                           <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                           <span>Listen</span></span></span>
+                           <span class="rsbtn_right rsimg rsplay rspart"></span>
+                           <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                           </a>
+                        </div>
+                        <div class="auth_nav">
+                           <ul>
+                              <li class="mob_hide">
+                                 <a href="#" class="link">
+                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                                 <div class="access_submenu">
+                                    <span class="title">Accessbility Options</span>
+                                    <ul>
+                                       <li>
+                                          <span class="option">Text Size</span>
+                                          <div class="size_wrap">
+                                             <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                             <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                          </div>
+                                       </li>
+                                       <li>
+                                          <span class="option">Listen Content</span>
+                                          <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                          <img src="assets/images/volume.png" alt="speaker" />
+                                          <span>Listen</span>
+                                          </button>
+                                       </li>
+                                       <li>
+                                          <span class="option">Contrast</span>
+                                          <button id="themechange">
+                                          <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                          </button>
+                                       </li>
+                                    </ul>
+                                 </div>
+                              </li>
+                              <li>
+                                 <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                                 </a>
+                              </li>
+                              <li><a href="#" class="link">Login / Signup</a></li>
+                              <li class="mob_menu_nav">
+                                <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="header_row b-top desktop_view_head" id="head2_top">
+                        <div class="nav_menu">
+                           <ul>
+                              <li><a href="#" class="link view_explore">Explore Services</a></li>
+                              <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                              <li><a href="#" class="link">Media</a></li>
+                              <li class="">
+                                 <a href="#" class="link about_qatar_nav">About Qatar</a>
+                                 <div class="about_submenu">
+
+                                    <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                                    <div class="f_row">
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar Government</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Hukoomi</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Qatar National Vision 2030</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">Government & Legislatives</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                       <!-- card repeat -->
+                                       <div class="card_col">
+                                          <a href="#" class="card_wrapper">
+                                             <figure class="card_img">
+                                                <img src="assets/images/amir.png" alt="thumb-img" />
+                                             </figure>
+                                             <h3 class="line-1">The Amir</h3>
+                                             <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                          </a>
+                                       </div>
+                                       <!-- card repeat close-->
+                                    </div>
+                                 </div>
+                              </li>
+                              <li>
+                                 <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                           </li>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </header>
+    <!-- ======= header ======= -->
+    
+    <div class="dashboard_wrapper">
+        <div class="dashboard_left_nav">
+            <nav class="dashboard_main_nav">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)" class="active">
+                            <img src="assets/images/ic_menu_dashboard_active.png" alt="Dashboard">
+                            <span class="nav_text">Overview</span>
+                    </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_my_data_active.png" alt="My daya">
+                            <span class="nav_text">My Data</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_settings_active.png" alt="Settings">
+                            <span class="nav_text">Settings & Preferences</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <nav class="dashboard_sub_nav">
+                <ul>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_question_active.png" alt="Questions">
+                            <span class="nav_text">Find Help</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:void(0)">
+                            <img src="assets/images/ic_menu_logout_active.png" alt="Logout">
+                            <span class="nav_text">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <div class="dashboard_inner">
+            <!-- =========== user info header start ====== -->
+            <div class="user_info_wrapper">
+                <div class="user_info">
+                    <figure>
+                        <img src="assets/images/user.jpg" alt="User" title="User">
+                    </figure>
+                    <div class="user_name">
+                        <p>Welcome,</p>
+                        <h3>Mohammed</h3>
+                    </div>
+                </div>
+            <div class="switch_profile">
+                <p>Switch Profile</p>
+                <div class="switch_group">
+                    <div class="switch_btn">
+                        <input type="radio" id="personal" name="switch_group" checked>
+                        <label for="personal" title="Personal Profile"> 
+                            <span><img src="assets/images/tick_red.svg" alt="Personal"></span>
+                            Personal
+                            </label>
+                    </div>
+                   <div class="switch_btn">
+                    <input type="radio" id="business_profile" name="switch_group" >
+                    <label for="business_profile" title="Business Profile">
+                        <span><img src="assets/images/tick_red.svg" alt="Business"></span>
+                        Business
+                    </label>
+                   </div>
+                   
+                </div>
+            </div>
+            <div class="dash_menu">
+                <img src="assets/images/open-menu.png" title="Menu" alt="Menu">
+            </div>
+        </div>
+            <!-- =========== user info header end ====== -->
+    
+            <div class="inner_container">
+                <div class="container_left">
+                    <!-- ======= profile details ======= -->
+                    <div class="personal_details">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/ic_dashboard_personal_details.png" alt="Personal Details">
+                                <h3>Personal Details</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                <ul>
+                                    <li><h4><span>Qatar ID</span>27612405934</h4></li>
+                                    <li><h4><span>Nationality</span>India</h4></li>
+                                    <li><h4><span>Mobile No.</span>982345671</h4></li>
+                                    <li><h4><span>Email</span>mohammed@gmail.com</h4></li>
+                                    <li><h4><span>Passport No.</span>27612405934</h4></li>
+                                </ul>
+                                
+                            </div>
+                            <div class="hku_card_footer">
+                                <a href="javascript:void(0)" class="link arrow_link_red">View All
+                                    <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                                </a>
+                                <!-- <a href="javascript:void(0)" class="link dark_link">Complete Profile</a> -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= profile details ======= -->
+
+                    <!-- ======= quick links ======= -->
+                    <div class="quick_links">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/link.png" alt="Personal Details">
+                                <h3>Quick Links</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                <ul>
+                                    <li><a href="javascript:void(0)">Labor Law</a></li>
+                                    <li><a href="javascript:void(0)" class="active">Hukoomi mobile app</a></li>
+                                    <li><a href="javascript:void(0)">Civil service law</a></li>
+                                    <li><a href="javascript:void(0)">Hukoomi mobile app</a></li>
+                                    <li><a href="javascript:void(0)"> Civil service law</a></li>
+                                </ul>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= quick links ======= -->
+
+                     <!-- ======= polls ======= -->
+                     <div class="polls">
+                        <div class="hku_card">
+                            <div class="hku_card_header">
+                                <img src="assets/images/dash-polls.png" alt="Polls">
+                                <h3>Polls</h3>
+                            </div>
+                            <div class="hku_card_body">
+                                
+                                    <div class="slider">
+                                        <div id="polls" class="carousel slide" data-ride="carousel" data-interval="false">
+                                            
+                                            <div class="carousel-inner">
+                                              <div class="carousel-item active">
+                                                <fieldset>
+                                                    <legend class="card_heading">How would you rate COVID-19 Self-Assessment Service?</legend>
+                                                <ul>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="excellent" value="excellent">
+                                                            <label for="excellent" class="inp_radio" tabindex="0"><span></span> Excellent</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="very_good" value="very_good">
+                                                            <label for="very_good" class="inp_radio" tabindex="0"><span></span> Very Good</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="good" value="good">
+                                                            <label for="good" class="inp_radio" tabindex="0"><span></span> Good</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="acceptable" value="acceptable">
+                                                            <label for="acceptable" class="inp_radio" tabindex="0"><span></span> Acceptable</label>
+                                                        </div>
+                                                    </li>
+                                                    <li>
+                                                        <div class="options">
+                                                            <input type="radio" name="receipt_voucher" id="not_acceptable" value="not_acceptable">
+                                                            <label for="not_acceptable" class="inp_radio" tabindex="0"><span></span> Not Acceptable</label>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </fieldset>
+                                              </div>
+                                              <div class="carousel-item">
+                                                <fieldset>
+                                                    <legend class="card_heading">next question comes here</legend>
+                                                    <ul>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="excellent_1" value="excellent_1">
+                                                                <label for="excellent_1" class="inp_radio" tabindex="0"><span></span> Excellent</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="very_good_1" value="very_good_1">
+                                                                <label for="very_good_1" class="inp_radio" tabindex="0"><span></span> Very Good</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="good_1" value="good_1">
+                                                                <label for="good_1" class="inp_radio" tabindex="0"><span></span> Good</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="acceptable_1" value="acceptable_1">
+                                                                <label for="acceptable_1" class="inp_radio" tabindex="0"><span></span> Acceptable</label>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="options">
+                                                                <input type="radio" name="receipt_voucher" id="not_acceptable_1" value="not_acceptable_1">
+                                                                <label for="not_acceptable_1" class="inp_radio" tabindex="0"><span></span> Not Acceptable</label>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                            </fieldset>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="hku_card_footer">
+                               
+                                <button class="btn_rouge">Vote</button>
+                                <a href="javascript:void(0)" class="link arrow_link_red">View All
+                                    <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                                </a>
+                            </div>
+                            <div class="slider_nav">
+                                <div class="slide_indicator">
+                                    <ol class="carousel-indicators">
+                                        <li data-target="#polls" data-slide-to="0" class="active"></li>
+                                        <li data-target="#polls" data-slide-to="1"></li>
+                                        <li data-target="#polls" data-slide-to="2"></li>
+                                      </ol>
+                                </div>
+                                <div class="slide_buttons">
+                                    <a class="carousel-control-prev" href="#polls" role="button" data-slide="prev">
+                                        <img src="assets/images/slide_prev.png" alt="Previous">
+                                      </a>
+                                      <a class="carousel-control-next" href="#polls" role="button" data-slide="next">
+                                        <img src="assets/images/slide_next.png" alt="Next">
+                                      </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= polls ======= -->
+                </div>
+                <div class="container_middle">
+                    <!-- ======= explore services blank ======= -->
+                    <div class="dashboard_card_wrapper">
+                        <div class="hku_card">
+                            <div class="dashboard_card">
+                                <figure>
+                                    <img src="assets/images/blank_dashboard.png" alt="Exlpore Services">
+                                </figure>
+                                <h3>This is your dashboard.</h3>
+                                <p>You can come here to look at information like: <br>
+                                    bill payments, requests status and your bookmarked or saved items. </p>
+                                    <div class="explore_url">
+                                        <img src="assets/images/arrow-right.png" alt="">
+                                        <a href="javascript:void(0)" class="link">
+                                            Explore Services 
+                                        </a>
+                                    </div>
+                            </div>
+                            <div class="hku_card_footer">
+                                <img src="assets/images/blank_card_bottom.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= explore services blank end ======= -->
+
+                    <!-- ======= bills card blank ======= -->
+                    <div class="bills_card_wrapper">
+                        <div class="hku_card">
+                            <div class="hku_card_header no_border">
+                                <ul class="nav nav-tabs mt__20" role="tablist">
+                                    <li class="nav-item">
+                                      <a class="nav-link active" id="bills-due" >Bills Due (04)</a>
+                                    </li>
+                                  </ul>
+                            </div>
+                            <div class="bills_card no_data">
+                                <!-- ******* this code initially when no data ******* -->
+                                <figure>
+                                    <img src="assets/images/bills.png" alt="Your Bills">
+                                </figure>
+                                <h3>Your Bills</h3>
+                                <p>All your pending dues for subscribed services like electricity<br>and water will be displayed here</p>
+                                <p class="para_lg">Visit here to pay all dues on one click. </p>
+                                <!-- ******* this code initially when no data ******* -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= bills card blank end ======= -->
+
+                    <!-- ======= Favorites ======= -->
+                    <div class="bills_card_wrapper">
+                        <div class="hku_card">
+                            <div class="hku_card_header no_border">
+                                <ul class="nav nav-tabs mt__20" id="myTab" role="tablist">
+                                    <li class="nav-item">
+                                      <a class="nav-link active" id="fav-services-tab" >Services (06)</a>
+                                    </li>
+                                    <li class="nav-item">
+                                      <a class="nav-link" id="fav-utilities-tab">Utilities (04)</a>
+                                    </li>
+                                    <!-- <li class="nav-item">
+                                        <a class="nav-link" id="fav-topics-tab" data-toggle="tab" href="#topics" role="tab" aria-controls="topics" aria-selected="false">Topics (03)</a>
+                                      </li> -->
+                                  </ul>
+                            </div>
+                            <div class="bills_card no_data">
+                                <!-- ******* this code initially when no data ******* -->
+                                <figure>
+                                    <img src="assets/images/favorite.png" alt="Your Favorites">
+                                </figure>
+                                <h3>Your Favorites</h3>
+                                <p>All items you favorite will be displayed here.</p>
+                                <!-- ******* this code initially when no data ******* -->
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= Favoritesends  ======= -->
+                </div>
+                <div class="container_right">
+                    <!-- ======= pending tasks ======= -->
+                    <div class="pending_tasks">
+                       <div class="hku_card">
+                           <div class="hku_card_header">
+                               <img src="assets/images/ic_dashboard_pending_task.png" alt="Personal Details">
+                               <h3>Pending Tasks (02)</h3>
+                           </div>
+                           <div class="hku_card_body">
+                               <div class="hku_card_grey">
+                                   <h3>Welcome to GOV.QA dashboard experience. Read guide how to use it.</h3>
+                                   <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                               </div>
+
+                               <div class="hku_card_grey">
+                                   <h3>Read what is new on Hukoomi 3.0</h3>
+                                   <a href="javascript:void(0)" class="link link_orange">View Information</a>
+                               </div>
+                               
+                           </div>
+                           <div class="hku_card_footer">
+                               <a href="javascript:void(0)" class="link arrow_link_red">View All
+                                   <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                               </a>
+                               
+                           </div>
+                       </div>
+                   </div>
+                   <!-- ======= pending tasks ======= -->
+
+                    <!-- ======= directory_information ======= -->
+                    <div class="directory_information">
+                       <div class="hku_card">
+                           <div class="hku_card_header">
+                               <img src="assets/images/ic_dashboard_directory.png" alt="Personal Details">
+                               <h3>Directory information</h3>
+                           </div>
+                           <div class="hku_card_body">
+                               <div class="hku_card_grey">
+                                   <h3>Al-Ahli Hospital</h3>
+                               </div>
+                               <div class="directory_info">
+                                   <div class="row">
+                                       <div class="col-sm-6">
+                                           <div class="form-group">
+                                               <p class="para_ocean">Phone</p>
+                                               <p class="para_light">44898888</p>
+                                           </div>
+                                       </div>
+                                       <div class="col-sm-6">
+                                           <div class="form-group">
+                                               <p class="para_ocean">Phone</p>
+                                               <p class="para_light">44898888</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="form-group">
+                                       <p class="para_ocean">Phone</p>
+                                       <p class="para_light">44898888</p>
+                                   </div>
+                               </div>
+                              <div class="directory_social">
+                                  <ul>
+                                      <li>
+                                          <a href="avascript:void(0)">
+                                              <img src="assets/images/ic_fb_sm.png" alt="Face Book"></a></li>
+                                      <li>
+
+                                          <a href="avascript:void(0)">
+                                           <img src="assets/images/ic_twitter_sm.png" alt="Twitter">
+                                          </a>
+                                       </li>
+                                      <li>
+                                          <a href="avascript:void(0)">
+                                           <img src="assets/images/ic_linkedin_sm.png" alt="LinkedIn">
+                                          </a>
+                                       </li>
+                                      <li>
+                                          <a href="avascript:void(0)">
+                                           <img src="assets/images/ic_gmap_sm.png" alt="Map">
+                                          </a>
+                                       </li>
+                                  </ul>
+                              </div>
+                               
+                           </div>
+                           <div class="hku_card_footer">
+                               <a href="javascript:void(0)" class="link arrow_link_red">View All Directories
+                                   <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                               </a>
+                               
+                           </div>
+                       </div>
+                   </div>
+                   <!-- ======= directory_information ======= -->
+
+                    <!-- ======= survey ======= -->
+                    <div class="survey">
+                       <div class="hku_card">
+                           <div class="hku_card_header">
+                               <img src="assets/images/ic_dashboard_survey.png" alt="Polls">
+                               <h3>Survey</h3>
+                           </div>
+                           <div class="hku_card_body">
+                               
+                                   <div class="slider">
+                                       <div id="survey" class="carousel slide" data-ride="carousel" data-interval="false">
+                                           
+                                           <div class="carousel-inner">
+                                             <div class="carousel-item active">
+                                               <fieldset>
+                                                   <legend class="card_heading">Take part in Qatar foreign Investment survey.</legend>
+                                              
+                                           </fieldset>
+                                             </div>
+                                             <div class="carousel-item">
+                                               <fieldset>
+                                                   <legend class="card_heading">the next question comes here</legend>
+                                              
+                                           </fieldset>
+                                             </div>
+                                           </div>
+                                       </div>
+                                   </div>
+                           </div>
+                           <div class="hku_card_footer">
+                               <button class="btn_rouge">Start Survey</button>
+                               <a href="javascript:void(0)" class="link arrow_link_red">View All
+                                   <img src="assets/images/ic_explore_see_all_arrow.png" alt="View All">
+                               </a>
+                               
+                           </div>
+                           <div class="slider_nav">
+                               <div class="slide_indicator">
+                                   <ol class="carousel-indicators">
+                                       <li data-target="#survey" data-slide-to="0" class="active"></li>
+                                       <li data-target="#survey" data-slide-to="1"></li>
+                                       <li data-target="#survey" data-slide-to="2"></li>
+                                     </ol>
+                               </div>
+                               <div class="slide_buttons">
+                                   <a class="carousel-control-prev" href="#survey" role="button" data-slide="prev">
+                                       <img src="assets/images/slide_prev.png" alt="Previous">
+                                     </a>
+                                     <a class="carousel-control-next" href="#survey" role="button" data-slide="next">
+                                       <img src="assets/images/slide_next.png" alt="Next">
+                                     </a>
+                               </div>
+                           </div>
+                       </div>
+                   </div>
+                   <!-- ======= survey ======= -->
+               </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======= explore services starts here======= -->
+    <div id="expore_services_container">
+        <div class="explore_services_wrapper" tabindex="-1">
+            <div class="close_exp_services">
+                <img src="assets/images/ic_exps_close_white.png" alt="">
+            </div>
+            <div class="services_inner" id="services_inner" tabindex="-1">
+                <div class="serv_tabs">
+                    <!-- Nav tabs -->
+                    <ul class="nav nav-tabs" id="main_tab" role="group">
+                        <li class="nav-item">
+                            <div class="new_bedge">New</div>
+                            <a class="nav-link active" id="explore-tab" data-toggle="tab" href="#explore" role="button"
+                                aria-controls="explore" tabindex="0" aria-label="Explore" title="Explore">Explore</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="favourites-tab" data-toggle="tab" href="#favourites" role="button"
+                                aria-controls="favourites" tabindex="0" aria-label="Bookmarked Services">Bookmarked Services (11)</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="last-viewed-tab" data-toggle="tab" href="#last-viewed" role="button"
+                                aria-controls="last-viewed" tabindex="0" aria-label="Last Viewed">Last Viewed (1)</a>
+                        </li>
+                    </ul>
+    
+                    <!-- ======= explore home ======= -->
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="explore" role="tabpanel" aria-labelledby="explore-tab">
+                            <div class="explore_inner_wrap">
+                                <div class="search_wrap">
+                                    <div class="search_box">
+                                        <div class="search_ico">
+                                            <img src="assets/images/ic-explore-light-bolt.png" alt="Search Icon">
+                                        </div>
+                                        <label for="explore_search" class="explore_search">
+                                            <input type="text" id="explore_search" class="explore_search_inp"
+                                                placeholder="" tabindex="0" required>
+                                            <span class="placeholder">Now explore services <span>10x</span>
+                                                faster.</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="expl_headin">ألديك استفسار عن فيروس كورونا (كوفيد-19)؟</div>
+    
+                                <div class="multi_select_service">
+                                    <div class="check_options">
+                                        <h2>Citizen</h2>
+                                        <ul>
+                                            <li>
+                                                <label class="chech_lbl" for="parent">
+                                                    <input id="parent" class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
+                                                    <span></span>
+                                                    <span class="chk_text">Parent</span>
+                                                </label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="employee">
+                                                    <input id="employee" class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
+                                                    <span></span>
+                                                    <span class="chk_text">Employee</span>
+                                                    </label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="businessman"><input id="businessman"
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
+                                                    <span></span>
+                                                    <span class="chk_text">Businessman</span>
+                                                    </label>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="check_options">
+                                        <h3>Rresident</h3>
+                                        <ul>
+                                            <li>
+                                                <fieldset>
+                                                    <legend>a</legend>
+                                                    <label class="chech_lbl" for="parent1"><input id="parent1"
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Parent">
+                                                        <span></span>
+                                                        <span class="chk_text">Parent</span>
+                                                        </label>
+                                                </fieldset>
+                                            </li>
+                                            <li>
+                                                <fieldset>
+                                                    <legend>b</legend>
+                                                    <label class="chech_lbl" for="employee1"><input id="employee1"
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Employee">
+                                                        <span></span>
+                                                        <span class="chk_text">Employee</span>
+                                                        </label>
+                                                </fieldset>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="check_options">
+                                        <h4>Visitor</h4>
+                                        <ul>
+                                            <li>
+                                                <label class="chech_lbl" for="tourist"><input id="tourist"
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Tourist">
+                                                    <span></span>
+                                                    <span class="chk_text">Tourist</span>
+                                                    </label>
+                                            </li>
+                                            <li>
+                                                <label class="chech_lbl" for="student"><input id="student"
+                                                        class="check_input" type="checkbox" tabindex="0" aria-label="Student">
+                                                    <span></span>
+                                                    <span class="chk_text">Student</span>
+                                                    </label>
+                                            </li>
+                                            <li>
+                                                <fieldset>
+                                                    <legend>c</legend>
+                                                    <label class="chech_lbl" for="businessman1"><input id="businessman1"
+                                                            class="check_input" type="checkbox" tabindex="0" aria-label="Businessman">
+                                                        <span></span>
+                                                        <span class="chk_text">Businessman</span>
+                                                        </label>
+                                                </fieldset>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+    
+                                <div class="explore_btn_wrap">
+                                    <button class="explore_btn" id="view_explore">Start exploring
+                                        <img src="assets/images/ic-start-exploring.png"
+                                            alt="Start exploring"></button>
+                                </div>
+                            </div>
+    
+    
+                            <div class="bottom_understand">
+                                <!-- <div class="bg_image"></div> -->
+                                <div class="understand">
+                                    <p>Is this easy to understand?</p>
+                                    <div class="like">
+                                        <div class="like_btn" tabindex="0">
+                                            <input type="radio" name="like" id="yes" aria-label="Yes" data-toggle="modal" data-target="#thankyou">
+                                            <label for="yes">Yes</label>
+                                        </div>
+                                        <div class="like_btn" tabindex="0">
+                                            <input type="radio" name="like" id="no" aria-label="No" data-toggle="modal" data-target="#feedback">
+                                            <label for="no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="explore_inner_bottom">
+                                <a href="" tabindex="0">Just see all (300) <img
+                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just See All"></a>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="favourites" role="tabpanel" aria-labelledby="favourites-tab">
+                            <div class="sercive_section">
+                                <div class="service_row">
+                                    <div class="service_col">
+    
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">
+                                                    Apply for Agricultural Consignment Import License
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                                    
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Query Beneficiary Information
+                                                    for Agent
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span></a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                            </li>
+                                            <li><a href="javascript:void(0)" tabindex="0" class="del_fav">Farm Affairs Service
+                                                <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                            </a></li>
+                                        </ul>
+                                    </div>
+    
+                                    <div class="service_col">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Consignment Import
+                                                    License
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span></a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Farm Affairs Service
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <a href="javascript:void(0)" tabindex="0" class="more_opt" title="+7 more">+7 more</a>
+                                    </div>
+    
+                                    <div class="service_col">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Consignment Import
+                                                    License
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span></a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                                    <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="explore_inner_bottom">
+                                <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
+                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just See All"></a>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="last-viewed" role="tabpanel" aria-labelledby="last-viewed-tab">
+                            <div class="sercive_section">
+                                <div class="service_row">
+                                    <div class="service_col">
+    
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0">Apply for Agricultural Consignment Import
+                                                    License</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0">Apply for Agricultural Services</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+    
+                                    <div class="service_col">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0">Apply for Agricultural Consignment Import
+                                                    License</a>
+                                            </li>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0">Apply for Agricultural Services</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+    
+                                    <div class="service_col">
+                                        <ul>
+                                            <li>
+                                                <a href="javascript:void(0)" tabindex="0">Apply for Agricultural Consignment Import
+                                                    License</a>
+                                            </li>
+                                            <li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="explore_inner_bottom">
+                                <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
+                                        src="assets/images/ic_explore_see_all_arrow.png" alt="Just See All"></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= explore home end ======= -->
+    
+                    <!-- ======= explore result ======= -->
+                    <div class="explore_result_wrap">
+                        <div class="explore_result_inner">
+                            <div class="result_tab_header">
+                                <div class="back_btn">
+                                    <button class="back" id="back_to_main">
+                                        <span class="back_arrow">
+                                            <img src="assets/images/ic_explore_back_arrow.png" alt="Back">
+                                        </span>
+                                        <span>Back</span>
+                                    </button>
+                                </div>
+                                <!-- <div class="tutorial_backdrop"></div> -->
+                                <ul class="nav nav-tabs" id="explore_tabs" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="resident_qatari_tab" data-toggle="tab"
+                                            href="#for_resident_qatari" role="tab" aria-controls="for_resident_qatari"
+                                            aria-selected="true">For Resident Qatari</a>
+                                            <!-- <div class="circle-ripple" id="t_point_one" data-toggle="dropdown">
+                                                <div class="dropdown_ttr arrow_top" aria-labelledby="dropdownMenuButton">
+                                                   <div class="dropdown_ttr_body">
+                                                       <h3>Your choices are here!</h3>
+                                                       <p>All your selections are showcased here. You can switch between them and see all services personalised or your needs.</p>
+                                                   </div>
+                                                   <div class="dropdown_ttr_toolbar">
+                                                       <div class="step">1/3</div>
+                                                       <div class="skip">skip</div>
+                                                       <div class="tuto_pagination">
+                                                           <div class="tuto_prev">p</div>
+                                                           <div class="tuto_next">n</div>
+                                                       </div>
+                                                   </div>
+                                                   </div>
+                                            </div> -->
+                                           
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="for_students-tab" data-toggle="tab" href="#for_students"
+                                            role="tab" aria-controls="for_students" aria-selected="false">For
+                                            Students</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="for-parent-tab" data-toggle="tab" href="#for_parent"
+                                            role="tab" aria-controls="for_parent" aria-selected="false">For Parent</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="for_businessman-tab" data-toggle="tab"
+                                            href="#for_businessman" role="tab" aria-controls="for_businessman"
+                                            aria-selected="false">For Businessman</a>
+                                    </li>
+                                </ul>
+                            </div>
+    
+                            <div class="explore_result_content">
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="for_resident_qatari" role="tabpanel"
+                                        aria-labelledby="resident_qatari_tab">
+                                        <div class="explore_inner_content">
+                                            <div class="filter_backdrop"></div>
+                                            <div class="explore_filter">
+                                                <div class="filter_col">
+                                                    <h3>Service Types</h3>
+                                                    <div class="dropdown show">
+                                                        <div class="dropdown-toggle sel_filter" id="dropdownMenuTypes"
+                                                            data-toggle="dropdown" role="group" aria-haspopup="true"
+                                                            aria-expanded="false" tabindex="0" data-filter="types">
+                                                            <input type="text" id="service_type"
+                                                                placeholder="Select Service Types" readonly
+                                                                tabindex="-1">
+                                                            <label for="service_type">Select Service Types</label>
+                                                            <span class="plus_more">+1 more</span>
+                                                        </div>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuTypes">
+                                                            <div class="dropdown-item">
+                                                                <label for="e-service" class="chech_lbl">
+                                                                    <input type="checkbox" id="e-service"
+                                                                        class="check_input" value="e-service"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="E-service">
+                                                                    <span></span>
+                                                                    E-service
+                                                                </label>
+                                                            </div>
+
+                                                            <div class="dropdown-item">
+                                                                <label for="ofs" class="chech_lbl">
+                                                                    <input type="checkbox" id="ofs" class="check_input"
+                                                                        value="Offline Service"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Offline Service">
+                                                                    <span></span>
+                                                                    Offline Service
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="is" class="chech_lbl">
+                                                                    <input type="checkbox" id="is" class="check_input"
+                                                                        value="Information services"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Information services">
+                                                                    <span></span>
+                                                                    Information services
+                                                                </label>
+                                                            </div>
+                                                            <a href="javascript:void(0)" class="uncheck_all"
+                                                                onclick="uncheckAll(this)">Uncheck All</a>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="filter_col">
+                                                    <h3>Topics</h3>
+                                                    <div class="dropdown show">
+                                                        <div class="dropdown-toggle sel_filter" id="dropdownTopics"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false" tabindex="0" role="group">
+                                                            <input type="text" id="topics" placeholder="Select Topics"
+                                                                readonly tabindex="-1">
+                                                            <label for="topics">Select Topics</label>
+                                                            <span class="plus_more">+1 more</span>
+                                                        </div>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownTopics">
+                                                            <div class="dropdown-item">
+                                                                <label for="a" class="chech_lbl">
+                                                                    <input type="checkbox" id="a" class="check_input"
+                                                                        value="Visas & Official documents"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Visas & Official documents">
+                                                                    <span></span>
+                                                                    Visas & Official documents
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="b" class="chech_lbl">
+                                                                    <input type="checkbox" id="b" class="check_input"
+                                                                        value="Business & Finance"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Business & Finance">
+                                                                    <span></span>
+                                                                    Business & Finance
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="c" class="chech_lbl">
+                                                                    <input type="checkbox" id="c" class="check_input"
+                                                                        value="Employment & Workplace"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Employment & Workplace">
+                                                                    <span></span>
+                                                                    Employment & Workplace
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="d" class="chech_lbl">
+                                                                    <input type="checkbox" id="d" class="check_input"
+                                                                        value="Education & Training"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Education & Training">
+                                                                    <span></span>
+                                                                    Education & Training
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="e" class="chech_lbl">
+                                                                    <input type="checkbox" id="e" class="check_input"
+                                                                        value="Health" onclick="getSelValue(this)"
+                                                                        onkeypress="" aria-label="Health">
+                                                                    <span></span>
+                                                                    Health
+                                                                </label>
+                                                            </div>
+                                                            <a href="javascript:void(0)" class="uncheck_all"
+                                                                onclick="uncheckAll(this)">Uncheck All</a>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="filter_col">
+                                                    <h3>Entities</h3>
+                                                    <div class="dropdown show">
+                                                        <div class="dropdown-toggle sel_filter" id="dropdownEntities"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false" tabindex="0" role="group">
+                                                            <input type="text" id="entities"
+                                                                placeholder="Select Entities" readonly tabindex="-1">
+                                                            <label for="entities">Select Entities</label>
+                                                            <span class="plus_more">+1 more</span>
+                                                        </div>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownEntities">
+                                                            <div class="dropdown-item">
+                                                                <label for="abq" class="chech_lbl">
+                                                                    <input type="checkbox" id="abq" class="check_input"
+                                                                        value="Audit Bureau Qatar"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Audit Bureau Qatar">
+                                                                    <span></span>
+                                                                    Audit Bureau Qatar
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="control_authority" class="chech_lbl">
+                                                                    <input type="checkbox" id="control_authority"
+                                                                        class="check_input"
+                                                                        value="Administrative and control authority"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Administrative and control authority">
+                                                                    <span></span>
+                                                                    Administrative and control authority
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="aspire_zone" class="chech_lbl">
+                                                                    <input type="checkbox" id="aspire_zone"
+                                                                        class="check_input"
+                                                                        value="Aspire Zone Foundation"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Aspire Zone Foundation">
+                                                                    <span></span>
+                                                                    Aspire Zone Foundation
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="civil_aviation" class="chech_lbl">
+                                                                    <input type="checkbox" id="civil_aviation"
+                                                                        class="check_input"
+                                                                        value="Civil Aviation authority"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Civil Aviation authority">
+                                                                    <span></span>
+                                                                    Civil Aviation authority
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="communications_regulatory"
+                                                                    class="chech_lbl">
+                                                                    <input type="checkbox"
+                                                                        id="communications_regulatory"
+                                                                        class="check_input"
+                                                                        value="Communications Regulatory Authority"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Communications Regulatory Authority">
+                                                                    <span></span>
+                                                                    Communications Regulatory Authority
+                                                                </label>
+                                                            </div>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="filter_col">
+                                                    <div class="new_bedge">New</div>
+                                                    <h3>Life Stage </h3>
+                                                    <div class="dropdown show">
+                                                        <div class="dropdown-toggle sel_filter" id="dropdownLifeStage"
+                                                            data-toggle="dropdown" role="group" aria-haspopup="true"
+                                                            aria-expanded="false" tabindex="0">
+                                                            <input type="text" id="life_stage"
+                                                                placeholder="Select Life Stage" readonly tabindex="-1">
+                                                            <label for="life_stage">Select Life Stage</label>
+                                                            <span class="plus_more">+1 more</span>
+                                                        </div>
+                                                        <div class="dropdown-menu life_stage"
+                                                            aria-labelledby="dropdownLifeStage">
+                                                            <h4 class="dropdown-header">Birth</h4>
+                                                            <div class="dropdown-item">
+                                                                <label for="birth" class="chech_lbl">
+                                                                    <input type="checkbox" id="birth"
+                                                                        class="check_input" value="Birth"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Birth">
+                                                                    <span></span>
+                                                                    Birth
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-divider"></div>
+                                                            <h5 class="dropdown-header">Education</h5>
+                                                            <div class="dropdown-item">
+                                                                <label for="school" class="chech_lbl">
+                                                                    <input type="checkbox" id="school"
+                                                                        class="check_input" value="School"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="School">
+                                                                    <span></span>
+                                                                    School
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="university" class="chech_lbl">
+                                                                    <input type="checkbox" id="university"
+                                                                        class="check_input" value="University"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="University">
+                                                                    <span></span>
+                                                                    University
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-divider"></div>
+                                                            <h5 class="dropdown-header">Work</h5>
+                                                            <div class="dropdown-item">
+                                                                <label for="employment" class="chech_lbl">
+                                                                    <input type="checkbox" id="employment"
+                                                                        class="check_input" value="Employment"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Employment">
+                                                                    <span></span>
+                                                                    Employment
+                                                                </label>
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <label for="business" class="chech_lbl">
+                                                                    <input type="checkbox" id="business"
+                                                                        class="check_input" value="Business"
+                                                                        onclick="getSelValue(this)" onkeypress="" aria-label="Business">
+                                                                    <span></span>
+                                                                    Business
+                                                                </label>
+                                                            </div>
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAll(this)">Uncheck All</a>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="filter_col">
+                                                    <h3>Services with fees</h3>
+                                                    <div class="dropdown show">
+                                                        <div class="dropdown-toggle sel_filter" role="group"
+                                                            id="dropdownFees" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false" tabindex="0">
+                                                            <input type="text" id="fees_filter"
+                                                                placeholder="Select Services" readonly tabindex="-1">
+                                                            <label for="fees_filter">Select Services</label>
+                                                            <span class="plus_more">+1 more</span>
+                                                        </div>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownFees">
+                                                            <div class="dropdown-item">
+                                                                <fieldset>
+                                                                    <legend>abs</legend>
+                                                                    <label for="all" class="radio_lbl">
+                                                                        <input class="radio_input" type="radio" id="all"
+                                                                            name="fees" value="All"
+                                                                            onclick="getSelValue(this)" onkeypress="" aria-label="All">
+                                                                        <span></span>
+                                                                        All
+                                                                    </label>
+                                                                </fieldset>
+
+                                                            </div>
+
+                                                            <div class="dropdown-item">
+                                                                <fieldset>
+                                                                    <legend>cat</legend>
+                                                                    <label for="fees_yes" class="radio_lbl">
+                                                                        <input class="radio_input" type="radio"
+                                                                            id="fees_yes" name="fees" value="Yes"
+                                                                            onclick="getSelValue(this)" onkeypress="" aria-label="Yes">
+                                                                        <span></span>
+                                                                        Yes
+                                                                    </label>
+                                                                </fieldset>
+
+                                                            </div>
+                                                            <div class="dropdown-item">
+                                                                <fieldset>
+                                                                    <legend>tiger</legend>
+                                                                    <label for="fees_no" class="radio_lbl">
+                                                                        <input class="radio_input" type="radio"
+                                                                            id="fees_no" name="fees" value="No"
+                                                                            onclick="getSelValue(this)" onkeypress="" aria-label="No">
+                                                                        <span></span>
+                                                                        No
+                                                                    </label>
+                                                                </fieldset>
+
+                                                            </div>
+
+
+                                                            <a href="javascript:void(0)" tabindex="0" class="uncheck_all" onclick="uncheckAllRadio(this)">Uncheck All</a>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+    
+                                            <div class="sec_right">
+                                                <div class="applied_filters">
+                                                    <h4>Filters:</h4>
+                                                    <ul class="applied_option">
+                                                    </ul>
+                                                    <div class="mobile_filter">
+                                                        <img src="assets/images/filter.png" alt="Filter">
+                                                    </div>
+                                                </div>
+                                                <div class="explore_inner_search">
+                                                    <label for="inner-search" class="inner_search">
+                                                        <input id="inner-search" type="text" class="inner_search_inp"
+                                                            placeholder="Type service name.."
+                                                            onkeyup="clear_search(this)" tabindex="0">
+                                                        <a href="javascript:void(0)" class="clear_search"
+                                                            onclick="clear_text(this)" tabindex="0">
+                                                            <img src="assets/images/ic_exps_close.png" alt="Clear Search">
+                                                        </a>
+                                                        <a href="javascript:void(0)" class="inner_srch_icon"
+                                                            tabindex="0"><img
+                                                                src="assets/images/ic_header_search.png"
+                                                                alt="Search"></a>
+                                                    </label>
+                                                </div>
+    
+                                                <div class="sercive_section">
+                                                    <div class="service_heading">
+                                                        <figure><img src="assets/images/visa_document.png"
+                                                                alt="Visa & Official documents"></figure>
+                                                        <h3>Visa & Official documents</h3>
+                                                    </div>
+    
+                                                    <div class="service_row">
+                                                        <div class="service_col">
+                                                            <h4>Agent Services (05)</h4>
+    
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Agents’ Profile
+                                                                        Management</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Agents’ Request
+                                                                        Follow-up</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Query Beneficiary
+                                                                        Information
+                                                                        for Agent</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Query Pensioner Information
+                                                                        for Agent</a>
+                                                                </li>
+                                                                <li><a href="" tabindex="0">Request Agent
+                                                                        Certificate</a></li>
+                                                            </ul>
+                                                        </div>
+    
+                                                        <div class="service_col">
+                                                            <h4>Agriculture Affair services (13)</h4>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Apply for Agricultural
+                                                                        Consignment Import License</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Apply for Agricultural
+                                                                        Services</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Apply to Combat Agricultural
+                                                                        Pests</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Farm Affairs Service</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Pay Agricultural Consignment
+                                                                        Inspection Fees</a>
+                                                                </li>
+                                                            </ul>
+                                                            <a href="" tabindex="0" class="more_opt" title="+7 more">+7
+                                                                more</a>
+                                                        </div>
+    
+                                                        <div class="service_col">
+                                                            <h4>Airport Entry Permit (01)</h4>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Request Airport Entry
+                                                                        Permit</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <div class="service_row">
+                                                        <div class="service_col">
+                                                            <h4>Agent Services (05)</h4>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Agents’ Profile
+                                                                        Management</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Agents’ Request
+                                                                        Follow-up</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Query Beneficiary
+                                                                        Information
+                                                                        for Agent</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Query Beneficiary
+                                                                        Information
+                                                                        for Agent</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Request Agent
+                                                                        Certificate</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+    
+                                                        <div class="service_col">
+                                                            <h4>Agriculture Affair services (13)</h4>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Apply for Agricultural
+                                                                        Consignment Import License</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Apply for Agricultural
+                                                                        Services</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Apply to Combat Agricultural
+                                                                        Pests</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="" tabindex="0">Farm Affairs Service</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="service_sec_seprator"></div>
+                                                <div class="sercive_section">
+                                                    <div class="service_heading">
+                                                        <figure><img src="assets/images/housing.png"
+                                                                alt="Housing"></figure>
+                                                        <h3>Housing</h3>
+                                                    </div>
+    
+                                                    <div class="service_row">
+                                                        <div class="service_col">
+                                                            <h4>Housing Services (15)</h4>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Query for
+                                                                        Housing Request based on Housing Law 2007</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Request
+                                                                        Demolition and
+                                                                        Reconstruction of Council Housing for People
+                                                                        with Limited Income</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Query
+                                                                        Beneficiary Information
+                                                                        Request for Disbursement of
+                                                                        Loans’ Variation for Senior Staff</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Request
+                                                                        for Engineering Inspection on the Housing of
+                                                                        People in Need</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Request
+                                                                        Granting a Plot’s Purchase Amount and Housing
+                                                                        Loan</a>
+                                                                </li>
+                                                            </ul>
+                                                            <a href="javascript:void(0)" tabindex="0" class="more_opt"
+                                                                title="+7 more">+7 more</a>
+                                                        </div>
+    
+                                                        <div class="service_col">
+                                                            <h4>Real Estate Property (01)</h4>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Inquire
+                                                                        about Housing Applications as per Housing Law of
+                                                                        2007Import License</a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+    
+                                                        <div class="service_col">
+                                                            <h4>Social Services (07)</h4>
+                                                            <ul>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Add
+                                                                        Additional Attachments for Previous Housing
+                                                                        Requests</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Building
+                                                                        License Request</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Housing
+                                                                        Installments Exemption Request</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Inquire
+                                                                        About House Addition</a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="javascript:void(0)" tabindex="0">Request
+                                                                        Demolition and Reconstruction of Composed
+                                                                        Houses</a>
+                                                                </li>
+                                                            </ul>
+                                                            <a href="javascript:void(0)" tabindex="0" class="more_opt"
+                                                                title="+02 more">+02 more</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+    
+                                            </div>
+                                        </div>
+                                        <div class="explore_inner_bottom">
+                                            <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
+                                                    src="assets/images/ic_explore_see_all_arrow.png"
+                                                    alt="Just See All"></a>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="for_students" role="tabpanel"
+                                        aria-labelledby="for_students-tab">
+                                        <div class="explore_inner_content">for_students</div>
+                                        <div class="explore_inner_bottom">
+                                            <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
+                                                    src="assets/images/ic_explore_see_all_arrow.png"
+                                                    alt="Just See All"></a>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="for_parent" role="tabpanel"
+                                        aria-labelledby="for-parent-tab">
+                                        <div class="explore_inner_content">for-parent-tab</div>
+                                        <div class="explore_inner_bottom">
+                                            <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
+                                                    src="assets/images/ic_explore_see_all_arrow.png"
+                                                    alt="Just See All"></a>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="for_businessman" role="tabpanel"
+                                        aria-labelledby="for_businessman-tab">
+                                        <div class="explore_inner_content">for_businessman</div>
+                                        <div class="explore_inner_bottom">
+                                            <a href="javascript:void(0)" tabindex="0">Just see all (300) <img
+                                                    src="assets/images/ic_explore_see_all_arrow.png"
+                                                    alt="Just See All"></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ======= explore result end ======= -->
+                </div>
+            </div>
+        </div>
+        <div class="explore_services_overlay" tabindex="-1"></div>
+    
+        <!-- ======= remove favourite alert ======= -->
+        <div class="alert_backdrop"></div>
+            <div class="hku_alert">
+                <div class="remove_favourite animate__animated animate__zoomIn">
+                    <div class="close_hku_alert ">
+                        <img src="assets/images/close_alert.png" alt="Close Alert">
+                    </div>
+                    <div class="sucess_icon">
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2" width="32px" height="32px">
+                            <circle class="path circle" fill="#22c993" stroke="#22c993" stroke-width="6" stroke-miterlimit="10" cx="65.1" cy="65.1" r="62.1"/>
+                            <polyline class="path check" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 "/>
+                          </svg>
+                    </div>
+                    <div class="sucess_text">
+                        <p>Item successfully removed from favourites.</p>
+                    </div>
+                    <div class="undo_button">
+                        <a href="javascript:void(0)" class="link">Undo</a>
+                    </div>
+                </div>
+               
+            </div>
+        <!-- ======= remove favourite alert ======= -->
+        <!-- ======= explore services ======= -->
+    </div>
+
+<!-- footer -->
+<footer>
+    <div class="footer_inner">
+       <div class="foot_row">
+          <div class="copy_right" tabindex="0">
+             Copyright © 2019 MOTC. All rights reserved.
+          </div>
+          <div class="foot_nav">
+             <nav>
+                <ul>
+                   <li> <a href="#" tabindex="0">Entity  Services’ Statistics</a></li>
+                   <li> <a href="#" tabindex="0">Useful Links</a></li>
+                   <li> <a href="#" tabindex="0">Customer Service</a></li>
+                   <li> <a href="#" tabindex="0">Contact Us</a></li>
+                   <li> <a href="#" tabindex="0">FAQ</a></li>
+                   <li> <a href="#" tabindex="0">Polls &amp; Surveys</a></li>
+                   <li> <a href="#" tabindex="0">Mobile Apps</a></li>
+                   <li> <a href="#" tabindex="0">Site Map</a></li>
+                   <li> <a href="#" tabindex="0">Privacy &amp; Legal</a></li>
+                   <li> <a href="#" tabindex="0">Find Help</a></li>
+                </ul>
+             </nav>
+          </div>
+       </div>
+    </div>
+ </footer>
+<!-- footer -->
+
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="feedback" tabindex="-1" role="dialog" aria-labelledby="feedback" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="feedback_form">
+                <div class="close_feedback" data-dismiss="modal"><span></span> Close</div>
+                <fieldset>
+                    <legend>Help us improve Hukoomi</legend>
+                    <form class="needs-validation" novalidate>
+                        <div class="form-group">
+                            <textarea cols="3" placeholder="What went wrong?" required></textarea>
+                            <div class="invalid-feedback">
+                                Please field is required.
+                              </div>
+                        </div>
+                        <button type="submit" class="send_feedback_btn">Send</button>
+                    </form>
+                </fieldset>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
+
+<!-- ======= feedback popup ======= -->
+<div class="modal fade" id="thankyou" tabindex="-1" role="dialog" aria-labelledby="thankyou" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+      
+        <div class="modal-body">
+            <div class="thankyou_form">
+                <div class="form-group">
+                    <p> Thank you for the feedback.</p>
+                </div>
+                <button type="submit" class="send_feedback_btn" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+<!-- ======= feedback popup ======= -->
+</div>
+    <!-- =============== bootstrap js=============== -->
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    
+    <script>
+    window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+    </script>
+      <script src="assets/js/dashboard.js"></script>
+      <script src="assets/js/explore-services.js"></script>
+      <script src="assets/js/daterangepicker.js"></script>
+      <script src="assets/js/custom.js"></script>
+   <script>
+     
+   </script>
+    </body>
+
+

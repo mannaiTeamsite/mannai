@@ -14,6 +14,7 @@
    <link rel="stylesheet" href="assets/css/style.css">
    <link rel="stylesheet" href="assets/css/main.css">
    <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
 </head>
 
 <body>
@@ -21,76 +22,178 @@
    <!--App_wrapper-->
    <div class="app_wrapper">
 
-      <!--header-->
-      <header>
-         <div class="header_inner">
-            <div class="innner_wrapper">
-               <div class="nav_brand">
-                  <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
-               </div>
-               <div class="nav_col">
-                  <div class="header_row">
-                     <div class="abt_qtr_nav desktop_view_head">
-                        <ul>
-                           <li><a href="#" class="link">Life in Qatar</a></li>
-                           <li><a href="#" class="link">Innovation</a></li>
-                           <li><a href="#" class="link">Open Data</a></li>
-                           <li><a href="#" class="link">E-Participation</a></li>
-                        </ul>
-                     </div>
-                     <div class="auth_nav">
-                        <ul>
-                           <li class="mob_hide">
-                              <a href="#" class="link">
-                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" />
-                                 Accessibility</a>
-                           </li>
-                           <li>
-                              <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png"
-                                    class="flag_oval_icon" alt="language-icon" />
-                              </a>
-                           </li>
-                           <li><a href="#" class="link">Login / Signup</a></li>
-                           <li class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
-                                 <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                              </a>
-                           </li>
-                        </ul>
-                     </div>
+     <!--header-->
+     <header>
+      <div class="header_inner">
+         <div class="innner_wrapper">
+            <div class="nav_brand">
+              <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+            </div>
+            <div class="nav_col">
+               <div class="header_row">
+                   <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                      <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                      </a>
+                   </figure>
+
+                  <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                     <ul>
+                        <li><a href="#" class="link">Life in Qatar</a></li>
+                       <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                        <li><a href="#" class="link">Open Data</a></li>
+                        <li><a href="#" class="link">E-Participation</a></li>
+                     </ul>
                   </div>
-                  <div class="header_row b-top desktop_view_head">
-                     <div class="nav_menu">
-                        <ul>
-                           <li><a href="#" class="link">Explore Services</a></li>
-                           <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
-                           <li><a href="#" class="link">Media</a></li>
-                           <li><a href="#" class="link">About Qatar</a></li>
-                           <li>
-                              <a href="#"> <img src="assets/images/ic_header_search.png" title="Search"
-                                    class="search_icon" alt="Search" /></a>
-                           </li>
-                        </ul>
-                     </div>
+                  <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                     <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                        href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                     <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                     <span>Listen</span></span></span>
+                     <span class="rsbtn_right rsimg rsplay rspart"></span>
+                     <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                     </a>
+                  </div>
+                  <div class="auth_nav">
+                     <ul>
+                        <li class="mob_hide">
+                           <a href="#" class="link">
+                           <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                           <div class="access_submenu">
+                              <span class="title">Accessbility Options</span>
+                              <ul>
+                                 <li>
+                                    <span class="option">Text Size</span>
+                                    <div class="size_wrap">
+                                       <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                       <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <span class="option">Listen Content</span>
+                                    <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                    <img src="assets/images/volume.png" alt="speaker" />
+                                    <span>Listen</span>
+                                    </button>
+                                 </li>
+                                 <li>
+                                    <span class="option">Contrast</span>
+                                    <button id="themechange">
+                                    <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                    </button>
+                                 </li>
+                              </ul>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                           </a>
+                        </li>
+                        <li><a href="#" class="link">Login / Signup</a></li>
+                        <li class="mob_menu_nav">
+                          <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                        </li>
+                     </ul>
+                  </div>
+               </div>
+               <div class="header_row b-top desktop_view_head" id="head2_top">
+                  <div class="nav_menu">
+                     <ul>
+                        <li><a href="#" class="link">Explore Services</a></li>
+                        <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                        <li><a href="#" class="link">Media</a></li>
+                        <li class="">
+                           <a href="#" class="link about_qatar_nav">About Qatar</a>
+                           <div class="about_submenu">
+
+                              <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                              <div class="f_row">
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Qatar Government</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Hukoomi</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Qatar</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Qatar National Vision 2030</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Government & Legislatives</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/amir.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">The Amir</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                              </div>
+                           </div>
+                        </li>
+                        <li>
+                           <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                     </li>
+                     </ul>
                   </div>
                </div>
             </div>
          </div>
-         <!-- Mobile Menu-->
-         <!-- <div class="mob_nav">
-           <ul>
-              <li><a href="#">Life in Qatar</a></li>
-              <li><a href="#">Innovation</a></li>
-              <li><a href="#">Open Data</a></li>
-              <li><a href="#">Life in Qatar</a></li>
-              <li><a href="#">Explore Services</a></li>
-              <li><a href="#">Downloads, Utilities & Directory</a></li>
-              <li><a href="#">Media</a></li>
-              <li><a href="#">About Qatar</a></li>
-           </ul>
-        </div> -->
-         <!-- Mobile Menu-->
-      </header>
-      <!--header close-->
+      </div>
+   </header>
+   <!--header close-->
 
       <!--Breadcrumb-->
       <div class="breadcrumbs_wrapper">
@@ -102,201 +205,205 @@
       </div>
       <!--Breadcrumb-->
 
-      <div class="category_detail_wrapper law_detail">
+         <div class="category_detail_wrapper law_detail">
 
-         <div class="custom_container">
-            <div class="video_img_wrapper list_view">            
-               <div class="flex_row">
-                  <div class="flex_col_sm_7">
-                     <figure class="video_img_thumb">
-                        <img src="assets/images/national-animal.png" alt="law-thumb" />
-                     </figure>
-   
-                  </div>
-   
-                  <div class="flex_col_sm_5">
-                     <div class="detail_card category_law_card">
-                        <span class="share_g share_l"></span>
-                        <span class="bookmark_g bookmark_l"></span>
-                        <span class="tag_g tag_l">Agriculture</span>
-                        <h2 class="card_title">Agriculture and fishing</h2>
-   
-                        <span class="show_label icon calendar">27 Apr, 2020</span>
-                        <div class="content_wrap">
-                           <span class="show_label_grey">Subcategory:</span>
-                           <span class="show_label">Travel & Trades</span>
+            <div class="custom_container">
+               <div class="video_img_wrapper list_view">            
+                  <div class="flex_row">
+                     <div class="flex_col_sm_7">
+                        <figure class="video_img_thumb">
+                           <img src="assets/images/national-animal.png" alt="law-thumb" />
+                        </figure>
+      
+                     </div>
+      
+                     <div class="flex_col_sm_5">
+                        <div class="detail_card category_law_card">
+                           <span class="share_g share_l"></span>
+                           <span class="bookmark_g bookmark_l"></span>
+                           <span class="tag_g tag_l">Agriculture</span>
+                           <h2 class="card_title">Agriculture and fishing</h2>
+      
+                           <span class="show_label icon calendar">27 Apr, 2020</span>
+                           <div class="content_wrap">
+                              <span class="show_label_grey">Subcategory:</span>
+                              <span class="show_label">Travel & Trades</span>
+                           </div>
+      
+                           <ul class="share_wrap">
+                              <li>
+                                 <a href="#"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                           </ul>
+                           <span class="custom_label">Intended Audience</span>
+                           <span class="custom_show_label">Student & Visitor</span>
+      
+      
                         </div>
-   
-                        <ul class="share_wrap">
+                     </div>
+      
+                  </div>
+                  <div class="flex_row reverse">
+                        <div class="flex_col_sm_7">
+                           <div class="tab_wrapper detail_tab">
+
+                              <!--Owl Slider-->
+                              <div id="detail_tab_owl" class="tab_owl owl-carousel owl-loaded owl-drag">
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="#tab1" class="active">Description</a></div>
+                                 <!-- item repeat close -->
+         
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="#tab2" class="">Eligibility</a></div>
+                                 <!-- item repeat close -->
+         
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="#tab3" class="">FAQ</a></div>
+                                 <!-- item repeat close -->
+         
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="tab4" class="">Download Forms</a></div>
+                                 <!-- item repeat close -->
+         
+                              </div>
+                              <!-- Owl Slider close-->
+         
+                           </div>
+                           <!-- tabs close -->
+                        </div>
+                        <div class="flex_col_sm_5">
+                              <div class="btn_wrap">
+                                 <button class="rouge_btn">Apply</button>
+                              </div>
+                        </div>
+                  </div>
+               </div>  
+            </div>
+
+
+            <!--Category details block-->
+            <div class="custom_container">
+               <div class="flex_row">
+                  <!--Left Col-->
+                  <div class="flex_col_sm_7">
+
+
+                     <!-- tab1 -->
+                     <div id="tab1">
+                        <h3>Description</h3>
+                        <p class="commn_para">This service enables the travelers of 33 approved countries to obtain a joint
+                           tourist visa to enter Qatar first then head to Oman upon their desire. This service enables the
+                           travelers of 33 approved countries to obtain a joint tourist visa to enter Qatar first then head
+                           to Oman upon their desire. This service enables the travelers of 33 approved countries to obtain
+                           a joint tourist visa to enter Qatar first then head to Oman upon their desire. This service
+                           enables the travelers of 33 approved countries to obtain a joint tourist visa to enter Qatar
+                           first then head to Oman upon their desire.
+
+                        </p>
+                        <p class="commn_para"> This service enables the travelers of 33 approved countries to obtain a
+                           joint tourist visa to enter Qatar first then head to Oman upon their desire.
+                        </p>
+                     </div>
+                     <!-- tab1 close -->
+
+                     <!-- tab2 -->
+                     <div id="tab2">
+
+                        <h3>Eligibility</h3>
+                        <ul class="facilities_wrap">
+                           <li><span>Aside from its immense contributions in leading private sector growth in the
+                                 country, Qatar Chamber has capped 2018 with three milestones that would factor in
+                                 enhancing its
+                                 position in the global community.</span></li>
+                           <li><span>Aside from its immense contributions in leading private sector growth in the
+                                 country, Qatar Chamber has capped 2018 with three milestones that would factor in
+                                 enhancing its
+                                 position in the global community.</span></li>
+                        </ul>
+                     </div>
+                     <!-- tab2 close -->
+
+                     <!-- tab3 -->
+                     <div id="tab3">
+                        <h3>FAQ</h3>
+                        <ul class="facilities_wrap digit_wrap">
                            <li>
-                              <a href="#"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              <p class="commn_para">Question - How to open a Children Savings account?
+                                 <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
+                                    their child’s financial
+                                    future
+                                    as soon as possible – which is why our Children’s Savings Account, based on the
+                                    Mudarabah
+                                    concept, ensures that you benefit from our world-class banking service.</span>
+                              </p>
                            </li>
                            <li>
-                              <a href="#"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              <p class="commn_para">
+                                 Question - How are the education saving plans?
+                                 <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
+                                    their child’s financial
+                                    future as
+                                    soon as possible – which is why our Children’s Savings Account, based on the Mudarabah
+                                    concept,
+                                    ensures that you benefit from our world-class banking service.</span>
+                              </p>
                            </li>
                         </ul>
-                        <span class="custom_label">Intended Audience</span>
-                        <span class="custom_show_label">Student & Visitor</span>
-   
-   
                      </div>
+                     <!-- tab3 close-->
                   </div>
-   
-               </div>
-                <div class="flex_row reverse">
-                     <div class="flex_col_sm_7">
-                        <div class="tab_wrapper detail_tab">
+                  <!--Left Col Close-->
+                  <!--Right Col-->
+                  <div class="flex_col_sm_5">
+                     <div class="detail_card">
 
-                           <!--Owl Slider-->
-                           <div id="detail_tab_owl" class="tab_owl owl-carousel owl-loaded owl-drag">
-                              <!-- item repeat -->
-                              <div class="item"><a href="#tab1" class="active">Description</a></div>
-                              <!-- item repeat close -->
-      
-                              <!-- item repeat -->
-                              <div class="item"><a href="#tab2" class="">Eligibility</a></div>
-                              <!-- item repeat close -->
-      
-                              <!-- item repeat -->
-                              <div class="item"><a href="#tab3" class="">FAQ</a></div>
-                              <!-- item repeat close -->
-      
-                              <!-- item repeat -->
-                              <div class="item"><a href="tab4" class="">Download Forms</a></div>
-                              <!-- item repeat close -->
-      
+                        <div class="similar_services">
+                           <h3>Related Services</h3>
+                           <!-- E-payment card -->
+                           <div class="ev_card">
+                              <figure class="card_img">
+                                 <img src="assets/images/tourist-banner.png" alt="e-payments-img" />
+                              </figure>
+                              <a href="#" class="txt_booking">e-Payment for Customs Declaration</a>
+                              <span class="subtext">E-payment now mandatory customs duty</span>
                            </div>
-                           <!-- Owl Slider close-->
-      
-                        </div>
-                        <!-- tabs close -->
-                     </div>
-                     <div class="flex_col_sm_5">
-                           <div class="btn_wrap">
-                              <button class="rouge_btn">Apply</button>
+                           <!-- E-payment card close -->
+
+                           <!-- Certificate card -->
+                           <div class="ev_card">
+                              <figure class="card_img">
+                                 <img src="assets/images/tourist-banner.png" alt="certificate-img" />
+                              </figure>
+                              <a href="#" class="txt_booking">Request Certificate from Authenticate</a>
+                              <span class="subtext">This is actually a three-step process combined</span>
                            </div>
+                           <!-- Certificate card close -->
+
+                           <!-- Tax card -->
+                           <div class="ev_card">
+                              <figure class="card_img">
+                                 <img src="assets/images/tourist-banner.png" alt="tax-img" />
+                              </figure>
+                              <a href="#" class="txt_booking">Submit Tax Return Report</a>
+                              <span class="subtext">E-filing of Income Tax Returns</span>
+                           </div>
+                           <!-- Tax card close -->
+
+                        </div>
                      </div>
+
+                  </div>
+                  <!--Right Col Close-->
                </div>
-            </div>  
-         </div>
-
-
-         <!--Category details block-->
-         <div class="custom_container">
-            <div class="flex_row">
-               <!--Left Col-->
-               <div class="flex_col_sm_7">
-
-
-                  <!-- tab1 -->
-                  <div id="tab1">
-                     <h3>Description</h3>
-                     <p class="commn_para">This service enables the travelers of 33 approved countries to obtain a joint
-                        tourist visa to enter Qatar first then head to Oman upon their desire. This service enables the
-                        travelers of 33 approved countries to obtain a joint tourist visa to enter Qatar first then head
-                        to Oman upon their desire. This service enables the travelers of 33 approved countries to obtain
-                        a joint tourist visa to enter Qatar first then head to Oman upon their desire. This service
-                        enables the travelers of 33 approved countries to obtain a joint tourist visa to enter Qatar
-                        first then head to Oman upon their desire.
-
-                     </p>
-                     <p class="commn_para"> This service enables the travelers of 33 approved countries to obtain a
-                        joint tourist visa to enter Qatar first then head to Oman upon their desire.
-                     </p>
-                  </div>
-                  <!-- tab1 close -->
-
-                  <!-- tab2 -->
-                  <div id="tab2">
-
-                     <h3>Eligibility</h3>
-                     <ul class="facilities_wrap">
-                        <li><span>Aside from its immense contributions in leading private sector growth in the
-                              country, Qatar Chamber has capped 2018 with three milestones that would factor in
-                              enhancing its
-                              position in the global community.</span></li>
-                        <li><span>Aside from its immense contributions in leading private sector growth in the
-                              country, Qatar Chamber has capped 2018 with three milestones that would factor in
-                              enhancing its
-                              position in the global community.</span></li>
-                     </ul>
-                  </div>
-                  <!-- tab2 close -->
-
-                  <!-- tab3 -->
-                  <div id="tab3">
-                     <h3>FAQ</h3>
-                     <ul class="facilities_wrap digit_wrap">
-                        <li>
-                           <p class="commn_para">Question - How to open a Children Savings account?
-                              <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
-                                 their child’s financial
-                                 future
-                                 as soon as possible – which is why our Children’s Savings Account, based on the
-                                 Mudarabah
-                                 concept, ensures that you benefit from our world-class banking service.</span>
-                           </p>
-                        </li>
-                        <li>
-                           <p class="commn_para">
-                              Question - How are the education saving plans?
-                              <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
-                                 their child’s financial
-                                 future as
-                                 soon as possible – which is why our Children’s Savings Account, based on the Mudarabah
-                                 concept,
-                                 ensures that you benefit from our world-class banking service.</span>
-                           </p>
-                        </li>
-                     </ul>
-                  </div>
-                  <!-- tab3 close-->
-               </div>
-               <!--Left Col Close-->
-               <!--Right Col-->
-               <div class="flex_col_sm_5">
-                  <div class="detail_card">
-
-                     <div class="similar_services">
-                        <h3>Related Services</h3>
-                        <!-- E-payment card -->
-                        <div class="ev_card">
-                           <figure class="card_img">
-                              <img src="assets/images/tourist-banner.png" alt="e-payments-img" />
-                           </figure>
-                           <a href="#" class="txt_booking">e-Payment for Customs Declaration</a>
-                           <span class="subtext">E-payment now mandatory customs duty</span>
-                        </div>
-                        <!-- E-payment card close -->
-
-                        <!-- Certificate card -->
-                        <div class="ev_card">
-                           <figure class="card_img">
-                              <img src="assets/images/tourist-banner.png" alt="certificate-img" />
-                           </figure>
-                           <a href="#" class="txt_booking">Request Certificate from Authenticate</a>
-                           <span class="subtext">This is actually a three-step process combined</span>
-                        </div>
-                        <!-- Certificate card close -->
-
-                        <!-- Tax card -->
-                        <div class="ev_card">
-                           <figure class="card_img">
-                              <img src="assets/images/tourist-banner.png" alt="tax-img" />
-                           </figure>
-                           <a href="#" class="txt_booking">Submit Tax Return Report</a>
-                           <span class="subtext">E-filing of Income Tax Returns</span>
-                        </div>
-                        <!-- Tax card close -->
-
-                     </div>
-                  </div>
-
-               </div>
-               <!--Right Col Close-->
             </div>
+            <!--Category details block close-->
+         
          </div>
-         <!--Category details block close-->
+
+
          <!-- Gallery -->
          <div class="custom_container">
             <div class="gallry_wrap">
@@ -473,14 +580,14 @@
             </div>
          </div>
          <!--other close-->
-      </div>
+
 
       <!--footer-->
       <footer>
          <div class="footer_inner">
             <div class="foot_row">
                <div class="copy_right" tabindex="0">
-                  Copyrigt © 2019 MOTC. All rights reserved.
+                  Copyright © 2019 MOTC. All rights reserved.
                </div>
                <div class="foot_nav">
                   <nav>

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="icon" href="assets/images/favicon.ico" />
+   <title>Hukoomi</title>
+   <link rel="stylesheet" href="assets/css/bootstrap.css">
+   <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+   <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="assets/css/style.css">
+   <link rel="stylesheet" href="assets/css/main.css">
+   <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
+</head>
+
+<body>
+
+   <!--App_wrapper-->
+   <div class="app_wrapper">
+
+      <!--header-->
+      <header>
+         <div class="header_inner">
+            <div class="innner_wrapper">
+               <div class="nav_brand">
+                  <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" class="head_logo" /> </a>
+               </div>
+               <div class="nav_col">
+                  <div class="header_row">
+                     <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                           <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                        </a>
+                     </figure>
+
+                     <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                        <ul>
+                           <li><a href="#" class="link">Life in Qatar</a></li>
+                           <li> <a href="#" tabindex="0" class="link">Digital Projects</a></li>
+                           <li><a href="#" class="link">Open Data</a></li>
+                           <li><a href="#" class="link">E-Participation</a></li>
+                        </ul>
+                     </div>
+                     <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">
+                        <a rel="nofollow" class="rsbtn_play" title="Listen"
+                           href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                           <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                                 <span>Listen</span></span></span>
+                           <span class="rsbtn_right rsimg rsplay rspart"></span>
+                           <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png"
+                              alt="Read Speaker" style="display:none" />
+                        </a>
+                     </div>
+                     <div class="auth_nav">
+                        <ul>
+                           <li class="mob_hide">
+                              <a href="#" class="link">
+                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" />
+                                 Accessibility</a>
+                              <div class="access_submenu">
+                                 <span class="title">Accessbility Options</span>
+                                 <ul>
+                                    <li>
+                                       <span class="option">Text Size</span>
+                                       <div class="size_wrap">
+                                          <button class="text_size_minus font_minus"
+                                             title="Decrease font size">-</button>
+                                          <button class="text_size_plus  font_plus"
+                                             title="Increase font size">+</button>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <span class="option">Listen Content</span>
+                                       <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer" class="lisitin">
+                                          <img src="assets/images/volume.png" alt="speaker" />
+                                          <span>Listen</span>
+                                       </button>
+                                    </li>
+                                    <li>
+                                       <span class="option">Contrast</span>
+                                       <button id="themechange">
+                                          <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                       </button>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                           <li>
+                              <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png"
+                                    class="flag_oval_icon" alt="language-icon" />
+                              </a>
+                           </li>
+                           <li><a href="#" class="link">Login / Signup</a></li>
+                           <li class="mob_menu_nav">
+                              <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="header_row b-top desktop_view_head" id="head2_top">
+                     <div class="nav_menu">
+                        <ul>
+                           <li><a href="#" class="link">Explore Services</a></li>
+                           <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                           <li><a href="#" class="link">Media</a></li>
+                           <li class="">
+                              <a href="#" class="link about_qatar_nav">About Qatar</a>
+                              <div class="about_submenu">
+
+                                 <img src="assets/images/close-line.png" alt="close" class="reomve_about_menu" />
+
+                                 <div class="f_row">
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar Government</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Hukoomi</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar National Vision 2030</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Government & Legislatives</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/amir.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">The Amir</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                 </div>
+                              </div>
+                           </li>
+                           <li>
+                              <a href="#" title="Search" tabindex="0"> <img src="assets/images/ic_header_search.png"
+                                    title="Search" class="search_icon" alt="Search" /></a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </header>
+      <!--header close-->
+
+
+
+      <div class="directory_wrapper">
+         <div class="download_utility_directory">
+
+            <!--Directory Tab-->
+            <div class="custom_container">
+               <div class="category_tab_wrapper directory_tab">
+                  <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+
+
+                     <li class="nav-item">
+                        <a class="nav-link  link active" id="Explorenews-tab" data-toggle="pill" href="#Explorenews"
+                           role="tab" aria-controls="Explorenews" aria-selected="true">
+                           Explore<sup class="tag">New</sup></a>
+                     </li>
+
+
+
+                     <li class="nav-item">
+                        <a class="nav-link link" id="your-favourtite-tab" data-toggle="pill" href="#your-favourtite"
+                           role="tab" aria-controls="your-favourtite" aria-selected="false">Your Favourites (3)
+                        </a>
+                     </li>
+
+                     <li class="nav-item">
+                        <a class="nav-link link" id="last-viewed-tab" data-toggle="pill" href="#last-viewed" role="tab"
+                           aria-controls="last-viewed" aria-selected="false">Last viewed (2)</a>
+                     </li>
+
+
+                  </ul>
+               </div>
+
+
+               <div class="tab-content">
+
+               <div class="tab-pane fade show active" id="Explorenews" role="tabpanel"
+                  aria-labelledby="Explorenews-tab">
+                  <div class="custom_container">
+                     <h2 class="title" tabindex="0">All you need. Now 10x faster.</h2>
+                     <h1 class="directory_title" tabindex="0">Select one to proceed.</h1>
+
+
+                     <div>
+                        <div class="f_row heading_wrap">
+                           <div class="f_col"></div>
+                           <div class="f_col text-right">
+                              <!-- <a href="#" tabindex="0" class="view_all link">View All</a> -->
+                           </div>
+                        </div>
+                        <!-- Directory cards -->
+                        <div class="directory_card_row">
+                           <!--Owl Slider-->
+                           <div id="media_card_owl" class="owl-nav-top owl-carousel owl-loaded owl-drag">
+                              <!-- Item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="directory_card">
+                                    <figure class="icon">
+                                       <img src="assets/images/ic-events.png" alt="ic-events">
+                                    </figure>
+                                    <span class="card_title">Events</span>
+                                    <span class="card_brief line-3">Lorem ipsum dolor sit amet, consectetur</span>
+                                 </a>
+                              </div>
+                              <!-- Item repeat close -->
+                              <!-- Item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="directory_card">
+                                    <figure class="icon">
+                                       <img src="assets/images/ic-news.png" alt="ic-news">
+                                    </figure>
+                                    <span class="card_title">News</span>
+                                    <span class="card_brief line-3">Lorem ipsum dolor sit amet, consectetur</span>
+                                 </a>
+                              </div>
+                              <!-- Item repeat close -->
+                              <!-- Item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="directory_card">
+                                    <figure class="icon">
+                                       <img src="assets/images/ic-articles.png" alt="ic-articles">
+                                    </figure>
+                                    <span class="card_title">Articles</span>
+                                    <span class="card_brief line-3">Lorem ipsum dolor sit amet, consectetur</span>
+                                 </a>
+                              </div>
+                              <!-- Item repeat close -->
+                              <!-- Item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="directory_card">
+                                    <figure class="icon">
+                                       <img src="assets/images/ic-newsletter.png" alt="ic-newsletter">
+                                    </figure>
+                                    <span class="card_title">Newsletter</span>
+                                    <span class="card_brief line-3">Lorem ipsum dolorsit amet, consectetur</span>
+                                 </a>
+                              </div>
+                              <!-- Item repeat close -->
+                              <!-- Item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="directory_card">
+                                    <figure class="icon">
+                                       <img src="assets/images/ic-webinar-webcast.png" alt="ic-webinar-webcast">
+                                    </figure>
+                                    <span class="card_title">Webinar & Webcast</span>
+                                    <span class="card_brief line-3">Lorem ipsum dolorsit amet, consectetur</span>
+                                 </a>
+                              </div>
+                              <!-- Item repeat close -->
+                              <!-- Item repeat -->
+                              <div class="item">
+                                 <a href="#" tabindex="0" class="directory_card">
+                                    <figure class="icon">
+                                       <img src="assets/images/ic-webinar-webcast.png" alt="ic-webinar-webcast">
+                                    </figure>
+                                    <span class="card_title">Webinar & Webcast</span>
+                                    <span class="card_brief line-3">Lorem ipsum dolorsit amet, consectetur</span>
+                                 </a>
+                              </div>
+                              <!-- Item repeat close -->
+                           </div>
+                           <!--Owl Slider close-->
+
+
+                        </div>
+                        <!-- Directory cards close-->
+                     </div>
+
+                     <div class="feedback_link">
+                        <p tabindex="0">Is this step easy to understand?</p>
+                        <div class="like">
+                           <label for="yes" tabindex="0"><input type="radio" name="like" id="yes">Yes</label>
+                           <label for="no" tabindex="0"><input type="radio" name="like" id="no">No</label>
+                        </div>
+                     </div>
+
+                  </div>
+               </div>
+
+               <div class="tab-pane fade" id="your-favourtite" role="tabpanel" aria-labelledby="your-favourtite-tab">
+                  
+
+                  <div class="sercive_section">
+                     <div class="service_row">
+                         <div class="service_col">
+
+                             <ul>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">
+                                         Apply for Agricultural Consignment Import License
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                         
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Query Beneficiary Information
+                                         for Agent
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span></a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                 </li>
+                                 <li><a href="javascript:void(0)" tabindex="0" class="del_fav">Farm Affairs Service
+                                     <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                 </a></li>
+                             </ul>
+                         </div>
+
+                         <div class="service_col">
+                             <ul>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Consignment Import
+                                         License
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span></a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Farm Affairs Service
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                 </li>
+                             </ul>
+                             <a href="javascript:void(0)" tabindex="0" class="more_opt" title="+7 more">+7 more</a>
+                         </div>
+
+                         <div class="service_col">
+                             <ul>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Consignment Import
+                                         License
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span></a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                         <span class="remove_fav"><img src="assets/images/bookmark.png" alt="Remove favourite"></span>
+                                     </a>
+                                 </li>
+                             </ul>
+                         </div>
+                     </div>
+                 </div>
+
+
+               </div>
+
+               <div class="tab-pane fade" id="last-viewed" role="tabpanel" aria-labelledby="last-viewed-tab">
+
+                  <div class="sercive_section">
+                     <div class="service_row">
+                         <div class="service_col">
+
+                             <ul>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">
+                                         Apply for Agricultural Consignment Import License
+                                        
+                                     </a>
+                                         
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                        
+                                     </a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Query Beneficiary Information
+                                         for Agent
+                                        </a>
+                                 </li>
+                                 <li>
+                                     <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                        
+                                     </a>
+                                 </li>
+                                 <li><a href="javascript:void(0)" tabindex="0" class="del_fav">Farm Affairs Service
+                                    
+                                 </a></li>
+                             </ul>
+                         </div>
+
+
+                         <div class="service_col">
+
+                           <ul>
+                               <li>
+                                   <a href="javascript:void(0)" tabindex="0" class="del_fav">
+                                       Apply for Agricultural Consignment Import License
+                                      
+                                   </a>
+                                       
+                               </li>
+                               <li>
+                                   <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                      
+                                   </a>
+                               </li>
+                               <li>
+                                   <a href="javascript:void(0)" tabindex="0" class="del_fav">Query Beneficiary Information
+                                       for Agent
+                                      </a>
+                               </li>
+                               <li>
+                                   <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                      
+                                   </a>
+                               </li>
+                               <li><a href="javascript:void(0)" tabindex="0" class="del_fav">Farm Affairs Service
+                                  
+                               </a></li>
+                           </ul>
+                       </div>
+
+
+
+                       <div class="service_col">
+
+                        <ul>
+                            <li>
+                                <a href="javascript:void(0)" tabindex="0" class="del_fav">
+                                    Apply for Agricultural Consignment Import License
+                                   
+                                </a>
+                                    
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply for Agricultural Services
+                                   
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Query Beneficiary Information
+                                    for Agent
+                                   </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)" tabindex="0" class="del_fav">Apply to Combat Agricultural Pests
+                                   
+                                </a>
+                            </li>
+                            <li><a href="javascript:void(0)" tabindex="0" class="del_fav">Farm Affairs Service
+                               
+                            </a></li>
+                        </ul>
+                    </div>
+
+
+                       
+
+                       
+
+
+                     </div>
+                 </div>
+
+
+               </div>
+
+
+            </div>
+
+
+            </div>
+
+         </div>
+
+
+      </div>
+
+
+      <!--footer-->
+      <footer>
+         <div class="footer_inner">
+            <div class="foot_row">
+               <div class="copy_right" tabindex="0">
+                  Copyright © 2019 MOTC. All rights reserved.
+               </div>
+               <div class="foot_nav">
+                  <nav>
+                     <ul>
+                        <li><a href="#">Entity Services’ Statistics</a></li>
+                        <li><a href="#">Useful Links</a></li>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Polls & Surveys</a></li>
+                        <li><a href="#">Mobile Apps</a></li>
+                        <li><a href="#">Site Map</a></li>
+                        <li><a href="#">Privacy & Legal</a></li>
+                        <li><a href="#">Find Help</a></li>
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!--footer close-->
+
+   </div>
+   <!--App_wrapper close-->
+
+
+
+   <!--Js-->
+   <script src="assets/js/jquery.js"></script>
+ <script>
+    window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+ </script>
+ 
+ <script src="assets/js/bootstrap.min.js"></script>
+ <script src="assets/js/bootstrap-select.js"></script>
+ <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+ <script src="assets/js/owl.carousel.min.js"></script>
+ <script src="assets/js/app-slider.js"></script>
+ <script src="assets/js/daterangepicker.js"></script>
+ <script src="assets/js/custom.js"></script>
+   <!--Js Close-->
+
+</body>
+
+</html>

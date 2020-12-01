@@ -13,80 +13,187 @@
       <link rel="stylesheet" href="assets/css/main.css">
       <link rel="stylesheet" href="assets/css/media.css">
       <link rel="stylesheet" href="assets/css/component_bg.css">
-      <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+      <link rel="stylesheet" type="text/css" href="assets/css/daterangepicker.css" />
       <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+      <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
    </head>
 
 <body>
    <!--App_wrapper-->
    <div class="app_wrapper">
-   <!--header-->
-    <header>
-        <div class="header_inner">
-        <div class="innner_wrapper">
-            <div class="nav_brand">
-                <a href="#"  tabindex="0" > <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
-            </div>
-            <div class="nav_col">
-                <div class="header_row">
-                    <div class="abt_qtr_nav desktop_view_head">
-                    <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Digital Products</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
-                    </ul>
-                    </div>
-                    <div class="auth_nav">
-                    <ul>
-                        <li class="mob_hide">
-                            <a href="#"  tabindex="0"  class="link" >
-                            <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
-                        </li>
-                        <li>
-                            <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
-                            </a>
-                        </li>
-                        <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
-                        <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
-                            <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                            </a>
-                        </li>
-                    </ul>
-                    </div>
+  <!--header-->
+  <header>
+    <div class="header_inner">
+       <div class="innner_wrapper">
+          <div class="nav_brand">
+          <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
+          </div>
+          <div class="nav_col">
+             <div class="header_row">
+                <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                   <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                   </a>
+                </figure>
+
+                <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                   <ul>
+                      <li><a href="#" class="link">Life in Qatar</a></li>
+                   <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                      <li><a href="#" class="link">Open Data</a></li>
+                      <li><a href="#" class="link">E-Participation</a></li>
+                   </ul>
                 </div>
-                <div class="header_row b-top desktop_view_head">
-                    <div class="nav_menu">
-                    <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">About Qatar</a></li>
-                        <li>
-                            <a href="#"  tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                        </li>
-                    </ul>
-                    </div>
+                <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                   <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                      href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                   <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                   <span>Listen</span></span></span>
+                   <span class="rsbtn_right rsimg rsplay rspart"></span>
+                   <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                   </a>
                 </div>
-            </div>
-        </div>
-        </div>
-        <!-- Mobile Menu-->
-        <div class="mob_nav">
-        <ul>
-            <li tabindex="0" > <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Innovation</a></li>
-            <li> <a href="#"  tabindex="0" >Open Data</a></li>
-            <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Explore Services</a></li>
-            <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
-            <li> <a href="#"  tabindex="0" >Media</a></li>
-            <li> <a href="#"  tabindex="0" >About Qatar</a></li>
-        </ul>
-        </div>
-        <!-- Mobile Menu-->
-    </header>
-    <!--header close--> 
+                <div class="auth_nav">
+                   <ul>
+                      <li class="mob_hide">
+                         <a href="#" class="link">
+                         <img src="assets/images/accessibility.png" alt="Accessibility Menu" class="access_icon" /> Accessibility</a>
+                         <div class="access_submenu">
+                            <span class="title">Accessbility Options</span>
+                            <ul>
+                               <li>
+                                  <span class="option">Text Size</span>
+                                  <div class="size_wrap">
+                                     <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                     <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                  </div>
+                               </li>
+                               <li>
+                                  <span class="option">Listen Content</span>
+                                  <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                  <img src="assets/images/volume.png" alt="speaker" />
+                                  <span>Listen</span>
+                                  </button>
+                               </li>
+                               <li>
+                                  <span class="option">Contrast</span>
+                                  <button id="themechange">
+                                  <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                  </button>
+                               </li>
+                            </ul>
+                         </div>
+                      </li>
+                      <li>
+                         <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                         </a>
+                      </li>
+                      <li><a href="#" class="link">Login / Signup</a></li>
+                      <li class="mob_menu_nav">
+                      <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                      </li>
+                   </ul>
+                </div>
+             </div>
+             <div class="header_row b-top desktop_view_head" id="head2_top">
+                <div class="nav_menu">
+                   <ul>
+                      <li><a href="#" class="link">Explore Services</a></li>
+                      <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                      <li><a href="#" class="link">Media</a></li>
+                      <li class="">
+                         <a href="#" class="link about_qatar_nav">About Qatar</a>
+                         <div class="about_submenu">
+
+                            <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                            <div class="f_row">
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/rectangle-2.png" alt="Qatar Government" />
+                                     </figure>
+                                     <div class="line-1">Qatar Government</div>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/new-flag.jpg" alt="Hukoomi" />
+                                     </figure>
+                                     <div class="line-1">Hukoomi</div>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/rectangle-4.png" alt="Qatar" />
+                                     </figure>
+                                     <div class="line-1">Qatar</div>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/rectangle-2-copy-3.png" alt="Qatar National Vision 2030" />
+                                     </figure>
+                                     <div class="line-1">Qatar National Vision 2030</div>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/govt_banner.jpg" alt="Government & Legislatives" />
+                                     </figure>
+                                     <div class="line-1">Government & Legislatives</div>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                               <!-- card repeat -->
+                               <div class="card_col">
+                                  <a href="#" class="card_wrapper">
+                                     <figure class="card_img">
+                                        <img src="assets/images/amir.png" alt="The Amir" />
+                                     </figure>
+                                     <div class="line-1">The Amir</div>
+                                     <span class="descr line-2">Small description about Qatar Government
+                                     page.</span>
+                                  </a>
+                               </div>
+                               <!-- card repeat close-->
+                            </div>
+                         </div>
+                      </li>
+                      <li>
+                         <a href="#"  title="Search" tabindex="0" >
+                             <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search icon" /></a>
+                   </li>
+                   </ul>
+                </div>
+             </div>
+          </div>
+       </div>
+    </div>
+ </header>
+ <!--header close-->
 
         <!--Jump Link header-->
         <div class="jump_link_header solid_white_five">
@@ -108,13 +215,13 @@
                </div>
                <div class="nav_menu">
                   <ul>
-                     <li><a href="#fact_figure"  tabindex="0" class="link">Facts & Figures</a></li>
-                     <li><a href="#life_qatar" tabindex="0" class="link">Life in Qatar</a></li>
-                     <li><a href="#travel" tabindex="0" class="link">Travel</a></li>
-                     <li><a href="#business" tabindex="0" class="link">Business</a></li>
-                     <li><a href="#future" tabindex="0" class="link">Future</a></li>
-                     <li><a href="#media" tabindex="0" class="link">Media</a></li>
-                     <li><a href="#contact" tabindex="0" class="link">Contact</a></li>
+                     <li><a href="#"  tabindex="0" class="link">Facts & Figures</a></li>
+                     <li><a href="#" tabindex="0" class="link">Life in Qatar</a></li>
+                     <li><a href="#" tabindex="0" class="link">Travel</a></li>
+                     <li><a href="#" tabindex="0" class="link">Business</a></li>
+                     <li><a href="#" tabindex="0" class="link">Future</a></li>
+                     <li><a href="#" tabindex="0" class="link">Media</a></li>
+                     <li><a href="#" tabindex="0" class="link">Contact</a></li>
                   </ul>
                </div>
             </div>
@@ -137,7 +244,7 @@
         <div class="section_wrapper">
             <div class="left_sec">
                 <h1 tabindex="0">Government & Legislatives</h1>
-                <p class="para_18 grey" tabindex="0">Everything about Qatar’s government structure, its history, institutional development & more…</p>
+                <p  tabindex="0">Everything about Qatar’s government structure, its history, institutional development & more…</p>
             </div>
             <div class="right_sec">
                 <figure>
@@ -154,7 +261,7 @@
       <div class="section_wrapper">
             <div class="left_sec">
                 <div class="heading">
-                    <h3 class="heading_28 purple_brown" tabindex="0">Structure of the Qatar Government</h3>
+                    <h2 class="heading_28 purple_brown" tabindex="0">Structure of the Qatar Government</h2>
                 </div>
                 <div class="links">
                     <p class="para_13 grey" tabindex="0">The head of the state</p>
@@ -175,19 +282,19 @@
                 <div class="bullet_sec">
                     <div class="para_sec"  id="theamir">
                         <h3 class="heading_23 purple_brown" tabindex="0">The Amir</h3>
-                        <p class="para_18 greyish_brown" tabindex="0">The Amir is the Head of State and represents the country internally, externally and in all
+                        <p  tabindex="0">The Amir is the Head of State and represents the country internally, externally and in all
                             international relations. He is also the Commander-in-Chief of the armed forces, which he
                             supervises with the assistance of Defense Council, set under his direct authority. The
                             judicial authority is vested in courts of law; and court judgments are proclaimed in the
                             name of the Amir.</p>
-                        <p class="para_18 greyish_brown" tabindex="0">The Amir appoints the prime minister and ministers, accepts their resignations and relieves
+                        <p  tabindex="0">The Amir appoints the prime minister and ministers, accepts their resignations and relieves
                             them from their posts by Amiri Decrees. He entrusts the tasks of each ministry to a minister
                             or the Prime Minister in accordance with the Amiri Decree designating the appointment.</p>
                     </div>
 
                     <div class="para_sec"  id="council">
                         <h3 class="heading_23 purple_brown" tabindex="0">Council of Ministers (The Cabinet)</h3>
-                        <p class="para_18 greyish_brown" tabindex="0">The cabinet is formed by an Amiri Decree based on the proposal of the Prime Minister. The
+                        <p  tabindex="0">The cabinet is formed by an Amiri Decree based on the proposal of the Prime Minister. The
                             responsibilities and authorities of the ministers and government departments are specified
                             according to the law. The Council of Ministers – being the supreme executive authority in
                             the country – is mandated to monitor all internal and external affairs within its
@@ -197,7 +304,7 @@
 
                     <div class="para_sec" id="primeminster">
                         <h3 class="heading_23 purple_brown"   tabindex="0">Prime Minister</h3>
-                        <p class="para_18 greyish_brown" tabindex="0">The Prime Minister chairs the sessions of the Council of Ministers and supervises work
+                        <p  tabindex="0">The Prime Minister chairs the sessions of the Council of Ministers and supervises work
                             coordination between different ministries with the vision of achieving unity and integration
                             among all government branches. He also signs the resolutions issued by the Council
                         </p>
@@ -205,7 +312,7 @@
 
                     <div class="para_sec" id="supremecouncil">
                         <h3 class="heading_23 purple_brown" tabindex="0">6 Supreme Councils</h3>
-                        <p class="para_18 greyish_brown" tabindex="0">The Prime Minister chairs the sessions of the Council of Ministers and supervises work
+                        <p  tabindex="0">The Prime Minister chairs the sessions of the Council of Ministers and supervises work
                             coordination between different ministries with the vision of achieving unity and integration
                             among all government branches. He also signs the resolutions issued by the Council</p>
                     </div>
@@ -226,7 +333,7 @@
             <div class="flex_col">
                 <div class="col_6">
                     <div class="para_sec">
-                        <p class="para_16 white" tabindex="0">Constitutional development in Qatar generally keeps pace with the country’s economic growth.
+                        <p tabindex="0">Constitutional development in Qatar generally keeps pace with the country’s economic growth.
                             The first provisional constitution was issued in 1970 before independence, and was amended
                             in 1972 after independence, to cope with the requirements of the new phase. In 1999, free
                             elections were held to form the Central Municipal Council for the first time in the history
@@ -235,7 +342,7 @@
                 </div>
                 <div class="col_6">
                     <div class="para_sec">
-                        <p class="para_16 white" tabindex="0">In 2008, the government underwent restructuring and moved toward a ministry portfolio-based
+                        <p  tabindex="0">In 2008, the government underwent restructuring and moved toward a ministry portfolio-based
                             approach, which made ministries accountable for specific policies. This approach put the
                             focus on outcomes, increased cross-ministry cooperation and reduced fragmentation in
                             decision-making.</p>
@@ -262,7 +369,7 @@
                 <div class="col_6">
                     <div class="para_sec">
                         <h3 class="heading_22 purple_brown" tabindex="0">Why does Qatar need strong Public Sector institutions?</h3>
-                        <p class="para_16 greyish_brown" tabindex="0">To reach the goals of <span class="rouge_two">Qatar National Vision 2030 (QNV 2030)</span>
+                        <p  tabindex="0">To reach the goals of <span class="rouge_two">Qatar National Vision 2030 (QNV 2030)</span>
                             for social progress, human development, a sound and diversified economy and a sustainable
                             environment.</p>
                     </div>
@@ -280,7 +387,7 @@
                 <div class="col_6">
                     <div class="para_sec">
                         <h3 class="heading_22 purple_brown" tabindex="0">What will be the immediate focus for Qatar’s Public Sector development & modernisation?</h3>
-                        <p class="para_16 greyish_brown" tabindex="0">To ensure the fulfillment of Qatar’s requirements, the government must ensure:</p>
+                        <p  tabindex="0">To ensure the fulfillment of Qatar’s requirements, the government must ensure:</p>
                     </div>
                     <div class="para_sec">
                         <ul class="bullets orange">
@@ -307,7 +414,7 @@
                 <div class="para_sec">
                     <h2 class="heading_36 rouge_two" tabindex="0">Exemplary characteristics 
                         of Public sector institutions</h2>
-                        <p class="para_16 greyish_brown" tabindex="0">Qatar has been studying the best practices in other countries that have successfully modernized their public sectors. Countries with modern institutions and excellent public sector performance exhibit similar characteristics such as: </p>
+                        <p  tabindex="0">Qatar has been studying the best practices in other countries that have successfully modernized their public sectors. Countries with modern institutions and excellent public sector performance exhibit similar characteristics such as: </p>
                 </div>
                 <div class="flex_col">
                     <div class="col_6">
@@ -342,7 +449,7 @@
                         <div class="card">
                             <div class="card_header">
                                 <figure><img src="assets/images/processes.svg" alt=""></figure>
-                                <h3 class="para_18 rouge" tabindex="0">Processes</h3>
+                                <h3 class="para_18 rouge_color" tabindex="0">Processes</h3>
                             </div>
                             <div class="card_body">
                                 <div class="title">
@@ -364,7 +471,7 @@
                         <div class="card">
                             <div class="card_header">
                                 <figure><img src="assets/images/factors.svg" alt=""></figure>
-                                <h3 class="para_18" tabindex="0">Factors</h3>
+                                <h3 class="para_18  greyish-brown-three" tabindex="0">Factors</h3>
                             </div>
                             <div class="card_body">
                                 <div class="title">
@@ -425,26 +532,27 @@
                             <h3 class="heading_20 purple_brown" tabindex="0">What has worked in other parts of the world may not be applicable to Qatar. </h3>
                         </div>
                         <div class="para_sec">
-                            <p class="para_16 greyish_brown" tabindex="0">This is why Qatar has created a situation analysis to paint an overview of the public sector and identify Qatar-specific opportunities for modernization along the levers and linked to the benchmarking outcomes.</p>
-                            <p class="para_16 greyish_brown" tabindex="0">It drew on a review of documents on institutional development from previous work of the General Secretariat of Development Planning (Now: Planning and Statistics Authority) and Cabinet departments; responses to a public sector performance questionnaire sent to all ministries, agencies and supreme councils; and a public sector employee survey that assessed employees’ engagement with their work and willingness and readiness to change.</p>
+                            <p  tabindex="0">This is why Qatar has created a situation analysis to paint an overview of the public sector and identify Qatar-specific opportunities for modernization along the levers and linked to the benchmarking outcomes.</p>
+                            <p  tabindex="0">It drew on a review of documents on institutional development from previous work of the General Secretariat of Development Planning (Now: Planning and Statistics Authority) and Cabinet departments; responses to a public sector performance questionnaire sent to all ministries, agencies and supreme councils; and a public sector employee survey that assessed employees’ engagement with their work and willingness and readiness to change.</p>
                         </div>
                         <div class="card">
                             <h3 class="heading_32 purple_brown" tabindex="0">National Development Strategy</h3>
-                            <p class="para_16 greyish_brown" tabindex="0">National Development Strategy Is now available to the public</p>
-                            <a href="" class="arrow_link" tabindex="0">
+                            <p  tabindex="0">National Development Strategy Is now available to the public</p>
+                            <a href="#" class="arrow_link" tabindex="0">
                                 Download Here
                                 <span><img src="assets/images/download_berry.svg" alt=""></span>
                             </a>
+                            <span class="card_fill"></span>
                         </div>
                     </div>
                     <div class="col_7">
                         <div class="para_sec">
                             <h3 class="heading_20 purple_brown" tabindex="0">What followed next?</h3>
-                            <p class="para_16 greyish_brown" tabindex="0">This was followed by a diagnostic analysis to examine the gap between best practices and Qatar’s current state. It analyzed internal and external factors for modernization and defined maturity stages over the next few years.</p>
+                            <p  tabindex="0">This was followed by a diagnostic analysis to examine the gap between best practices and Qatar’s current state. It analyzed internal and external factors for modernization and defined maturity stages over the next few years.</p>
 
-                            <p class="para_16 greyish_brown" tabindex="0">Institutional development and modernization of Qatar’s public sector will require a phased, prolonged effort to achieve well-planned structural change. To measure public sector institutional performance, a model has been constructed using the QNV 2030 pillars. Desired outcomes serve as the starting point in developing a set of indicators for measuring how the country is affected by changes in public sector performance.</p>
+                            <p  tabindex="0">Institutional development and modernization of Qatar’s public sector will require a phased, prolonged effort to achieve well-planned structural change. To measure public sector institutional performance, a model has been constructed using the QNV 2030 pillars. Desired outcomes serve as the starting point in developing a set of indicators for measuring how the country is affected by changes in public sector performance.</p>
                                 
-                            <p class="para_16 greyish_brown" tabindex="0">Improved service delivery in Qatar depends on credible, client-focused and capable institutions that deliver timely and accountable services to citizens and respond to their concerns. Continuously searching for ways to make institutions more efficient will strengthen Qatar in prosperous times and buffer it against shocks in recessionary times.</p>
+                            <p  tabindex="0">Improved service delivery in Qatar depends on credible, client-focused and capable institutions that deliver timely and accountable services to citizens and respond to their concerns. Continuously searching for ways to make institutions more efficient will strengthen Qatar in prosperous times and buffer it against shocks in recessionary times.</p>
                         </div>
                     </div>
                 </div>
@@ -476,15 +584,20 @@
        <li>
           
           <p tabindex="0">Like this page?</p>
-          <div class="like">
-            <div class="like_btn">
-                <input type="radio" checked name="like" id="yes">
-            <label for="yes">Yes</label>
-            </div>
-            <div class="like_btn"><input type="radio" name="like" id="no">
-                <label for="no">No</label>
-            </div>
-        </div>
+
+          <fieldset>  
+            <legend class="hide">like</legend>
+        <div class="like">
+           <div class="like_btn">
+               <input type="radio" checked name="like" id="yes">
+           <label for="yes">Yes</label>
+           </div>
+           <div class="like_btn"><input type="radio" name="like" id="no">
+               <label for="no">No</label>
+           </div>
+       </div>
+     </fieldset>
+          
          
        </li>
     </ul>
@@ -522,7 +635,7 @@
     <div class="footer_inner">
        <div class="foot_row">
           <div class="copy_right" tabindex="0">
-             Copyrigt © 2019 MOTC. All rights reserved.
+             Copyright © 2019 MOTC. All rights reserved.
           </div>
           <div class="foot_nav">
              <nav>
@@ -541,7 +654,7 @@
              </nav>
           </div>
        </div>
-    </div>
+    </div> 
  </footer>
  <!--footer close-->
 
@@ -554,13 +667,16 @@
   <script>
      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
   </script>
-  <script src="assets/js/bootstrap.min.js"></script>
-  <script src="assets/js/bootstrap-select.js"></script>
-  <script src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-  <script src="assets/js/owl.carousel.min.js"></script>
-  <script src="assets/js/app-slider.js"></script>
-  <script src="assets/js/custom.js"></script>
+   <script src="assets/js/popper.min.js"></script>
+   <script src="assets/js/bootstrap.min.js"></script>
+   <script src="assets/js/bootstrap-select.js"></script>
+   <script src="assets/js/moment.min.js"></script>
+   <script src="assets/js/daterangepicker.min.js"></script>
+   <script src="assets/js/moment.min.js"></script>
+   <script src="assets/js/daterangepicker.min.js"></script>
+   <script src="assets/js/owl.carousel.min.js"></script>
+   <script src="assets/js/app-slider.js"></script>
+   <script src="assets/js/custom.js"></script>
   <!--Js Close-->
 </body>
 

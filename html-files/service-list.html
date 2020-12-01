@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <link rel="icon" href="assets/images/favicon.ico" />
+   <title>Hukoomi</title>
+   <link rel="stylesheet" href="assets/css/bootstrap.css">
+   <link rel="stylesheet" href="assets/css/bootstrap-select.min.css">
+   <link rel="stylesheet" href="assets/css/style.css">
+   <link rel="stylesheet" href="assets/css/main.css">
+   <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+   <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+   <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
+</head>
+
+<body>
+
+   <!--App_wrapper-->
+   <div class="app_wrapper">
+
+      <!--header-->
+      <header>
+         <div class="header_inner">
+            <div class="innner_wrapper">
+               <div class="nav_brand">
+                  <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" class="head_logo" /> </a>
+               </div>
+               <div class="nav_col">
+                  <div class="header_row">
+                     <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                           <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                        </a>
+                     </figure>
+
+                     <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                        <ul>
+                           <li><a href="#" class="link">Life in Qatar</a></li>
+                           <li> <a href="#" tabindex="0" class="link">Digital Projects</a></li>
+                           <li><a href="#" class="link">Open Data</a></li>
+                           <li><a href="#" class="link">E-Participation</a></li>
+                        </ul>
+                     </div>
+                     <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">
+                        <a rel="nofollow" class="rsbtn_play" title="Listen"
+                           href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                           <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                                 <span>Listen</span></span></span>
+                           <span class="rsbtn_right rsimg rsplay rspart"></span>
+                           <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png"
+                              alt="Read Speaker" style="display:none" />
+                        </a>
+                     </div>
+                     <div class="auth_nav">
+                        <ul>
+                           <li class="mob_hide">
+                              <a href="#" class="link">
+                                 <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" />
+                                 Accessibility</a>
+                              <div class="access_submenu">
+                                 <span class="title">Accessbility Options</span>
+                                 <ul>
+                                    <li>
+                                       <span class="option">Text Size</span>
+                                       <div class="size_wrap">
+                                          <button class="text_size_minus font_minus"
+                                             title="Decrease font size">-</button>
+                                          <button class="text_size_plus  font_plus"
+                                             title="Increase font size">+</button>
+                                       </div>
+                                    </li>
+                                    <li>
+                                       <span class="option">Listen Content</span>
+                                       <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer" class="lisitin">
+                                          <img src="assets/images/volume.png" alt="speaker" />
+                                          <span>Listen</span>
+                                       </button>
+                                    </li>
+                                    <li>
+                                       <span class="option">Contrast</span>
+                                       <button id="themechange">
+                                          <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                       </button>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </li>
+                           <li>
+                              <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png"
+                                    class="flag_oval_icon" alt="language-icon" />
+                              </a>
+                           </li>
+                           <li><a href="#" class="link">Login / Signup</a></li>
+                           <li class="mob_menu_nav">
+                              <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+                  <div class="header_row b-top desktop_view_head" id="head2_top">
+                     <div class="nav_menu">
+                        <ul>
+                           <li><a href="#" class="link">Explore Services</a></li>
+                           <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                           <li><a href="#" class="link">Media</a></li>
+                           <li class="">
+                              <a href="#" class="link about_qatar_nav">About Qatar</a>
+                              <div class="about_submenu">
+
+                                 <img src="assets/images/close-line.png" alt="close" class="reomve_about_menu" />
+
+                                 <div class="f_row">
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar Government</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Hukoomi</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Qatar National Vision 2030</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">Government & Legislatives</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                    <!-- card repeat -->
+                                    <div class="card_col">
+                                       <a href="#" class="card_wrapper">
+                                          <figure class="card_img">
+                                             <img src="assets/images/amir.png" alt="thumb-img" />
+                                          </figure>
+                                          <h3 class="line-1">The Amir</h3>
+                                          <span class="descr line-2">Small description about Qatar Government
+                                             page.</span>
+                                       </a>
+                                    </div>
+                                    <!-- card repeat close-->
+                                 </div>
+                              </div>
+                           </li>
+                           <li>
+                              <a href="#" title="Search" tabindex="0"> <img src="assets/images/ic_header_search.png"
+                                    title="Search" class="search_icon" alt="Search" /></a>
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </header>
+      <!--header close-->
+
+      <!--Breadcrumb-->
+      <div class="breadcrumbs_wrapper">
+         <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Services</a></li>
+         </ul>
+      </div>
+      <!--Breadcrumb-->
+
+      <section class="category_block_wrapper">
+
+
+         <!--category heading-->
+         <div class="custom_container">
+            <h1 class="category_heading" tabindex="0">Services</h1>
+         </div>
+         <!--category heading-->
+
+
+         <!--Category Search and Category view tab-->
+         <div class="custom_container">
+            <div class="f_row f_flow_col">
+               <div class="f_col">
+                  <div class="category_search_input">
+                     <label for="search" class="hide">search</label>
+                     <input type="text" id="search" placeholder="Search by Services" />
+                     <button class="detect-icon" tabindex="0">
+                        <img src="assets/images/search-line-white.png" alt="search-img" />
+                     </button>
+                  </div>
+               </div>
+               <div class="f_col text-right">
+               </div>
+            </div>
+         </div>
+         <!--Category Search and Category view tab close-->
+
+
+         <!-- Services Types -->
+         <div class="custom_container">
+            <div class="service_type">
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card all">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-all-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">All Services</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-business-industry-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Business &
+                     Industry</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-communication-it-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Communication
+                     & IT</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-culture-arts-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Culture, Arts &
+                     Media</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-education-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Education</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-employment-workspace-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Employment &
+                     Workspace</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-evironment-agriculture-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Environment &
+                     Agriculture</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-family-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Family</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-healthcare-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Healthcare</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-media-events-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Media, Events &
+                     Festivals</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-money-taxes-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Money & Taxes</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-property-housing-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Property &
+                     Housing</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-public-safety-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Public Safety &
+                     Law</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-religion-community-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Religion &
+                     Community</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-senior-citizen-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Senior Citizens &
+                     Specially Abled</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-sports-recreation-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Sports &
+                     Recreation</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-tourism-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Tourism</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-transport-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Transport</span>
+               </a>
+               <!-- card repeat close -->
+
+               <!-- card repeat -->
+               <a href="#" tabindex="0" class="service_card">
+                  <figure class="topic_icon">
+                     <img src="assets/images/ic-topics-visas-immigration-inactive.png" alt="service_img">
+                  </figure>
+                  <span class="topic_name line-2">Visas &
+                     Immigration</span>
+               </a>
+               <!-- card repeat close -->
+
+
+            </div>
+         </div>
+
+         <!-- Services Types close-->
+
+
+         <!--category sort and filter-->
+         <div class="custom_container">
+            <div class="f_row">
+               <div class="f_col"></div>
+               <div class="f_col">
+                  <ul class="categor_filter_wrap">
+                     <li>
+                        <a href="#" tabindex="0" class="sort">SORT</a>
+                     </li>
+                     <li>
+                        <a href="#" tabindex="0" class="filter">Filter</a>
+                     </li>
+                  </ul>
+               </div>
+            </div>
+         </div>
+
+         <!--category sort and filter close-->
+
+
+         <!--Category Sort Modal -->
+         <div class="category_sort_wrapper_layer">
+            <div class="sort_wrapr">
+               <h3>Sort</h3>
+               <ul>
+
+                  <li>
+                     <input type="radio" id="Alphabet" name="category_sort" value="By Latest">
+                     <label for="Alphabet" class="radio_wrap"> By Name(A-Z)</label>
+                  </li>
+                  <li>
+                     <input type="radio" id="oldest" name="category_sort" value="By Oldest">
+                     <label for="oldest" class="radio_wrap">By Name(Z-A)</label>
+
+                  </li>
+                  <li>
+
+               </ul>
+            </div>
+         </div>
+         <!-- Category Sort Modal close -->
+
+         <!--category filter Modal -->
+         <div class="category_filter_wrapper_layer">
+            <div class="category_filter_wrapr">
+               <h3>Filter</h3>
+               <span class="filter_close">
+                  <img src="assets/images/ic-popup-cross.png" alt="close" />
+               </span>
+
+               <div>
+                  <div class="form_field">
+                     <label for="service-type">Service Types</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="service-type" id="service-type">
+                              <option>Select</option>
+                              <option>Option</option>
+                              <option>Option</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form_field">
+                     <label for="topic">Topic</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="year" id="topic" style="display: none;">
+                              <option>Select</option>
+                              <option>option</option>
+                              <option>option</option>
+                              <option>option</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form_field">
+                     <label for="entities">Entities</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="year" id="entities" style="display: none;">
+                              <option>Select</option>
+                              <option>option</option>
+                              <option>option</option>
+                              <option>option</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="form_field">
+                     <label for="Intended">Intended Audience</label>
+                     <div class="txt_wrapper">
+                        <div class="select-picker-wrap">
+                           <select class="selectpicker" name="month" id="Intended" style="display: none;">
+                              <option>Select</option>
+                              <option>Individuals</option>
+                              <option>Tourist</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="flex_row">
+                  <div class="flex_col_sm_6">
+                     <div class="form_field">
+                        <label for="life-stage">Life Stage</label>
+                        <div class="txt_wrapper">
+                           <div class="select-picker-wrap">
+                               <select title="Choose game" class="selectpicker" multiple>
+                                 <optgroup label="Classics">
+                                   <option>Asteroids</option>
+                                   <option>Donkey Kong</option>
+                                   <option>Pac-Man</option>
+                                 </optgroup>
+                                 <optgroup label="Fighting">
+                                   <option>Mortal Kombat</option>
+                                   <option>Street Fighter</option>
+                                   <option>Tekken</option>
+                                 </optgroup>
+                               </select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="flex_col_sm_6">
+                     <div class="form_field">
+                        <label for="with-fees">Services with Fees</label>
+                        <div class="txt_wrapper">
+                           <div class="select-picker-wrap">
+                              <select class="selectpicker" name="month" id="with-fees" style="display: none;">
+                                 <option>Select</option>
+                                 <option>option</option>
+                                 <option>option</option>
+                                 <option>option</option>
+                              </select>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+
+               <div class="btn_wrap">
+                  <button class="outline_btn cancel">Reset</button>
+                  <button class="rouge_btn m-l-20">Apply</button>
+               </div>
+            </div>
+
+         </div>
+         <!--category filter modal close-->
+         <!--category card row  wrapper-->
+         <div class="custom_container">
+            <div class="list_row_wrapper">
+               <div class="grid_view">
+                  <div class="f_row">
+                     <!-- card repeat -->
+                     <div class="category_card category_services_card">
+                        <a href="#" class="list_card">
+                           <div class="details">
+                              <span class="tag_g tag_l">Residence and Work Permits</span>
+                              <h2 class="card_title">Request to Extend Exempted Visa</h2>
+                              <span class="show_label icon job-exp">Service Mode: <span
+                                    class="online">Online</span></span>
+                              <span class="show_label icon calendar">12:30PM - 3:30PM AST</span>
+                              <div class="content_list_wrap">
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Service Provider : </span>
+                                    <span class="show_label">Qatar National Library</span>
+                                 </div>
+                              </div>
+                              <span class="custom_label">Intended Audience</span>
+                              <span class="custom_show_label">Individuals & Tourists</span>
+                           </div>
+
+                           <span class="share_g share_l" tabindex="0" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                        </a>
+                     </div>
+                     <!-- card repeat close -->
+
+
+                     <!-- card repeat -->
+                     <div class="category_card category_services_card">
+                        <a href="#" class="list_card">
+                           <div class="details">
+                              <span class="tag_g tag_l">Charity Work</span>
+                              <h2 class="card_title">Calculate Zakat</h2>
+                              <span class="show_label icon job-exp">Service Mode: <span
+                                    class="offline">Offline</span></span>
+                              <div class="content_list_wrap">
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Service Provider : </span>
+                                    <span class="show_label">Qatar National Library</span>
+                                 </div>
+                              </div>
+                              <span class="custom_label">Intended Audience</span>
+                              <span class="custom_show_label">Individuals & Tourists</span>
+                           </div>
+
+                           <span class="share_g share_l" tabindex="0" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                        </a>
+                     </div>
+                     <!-- card repeat close -->
+
+                     <!-- card repeat -->
+                     <div class="category_card category_services_card">
+                        <a href="#" class="list_card">
+                           <div class="details">
+                              <span class="tag_g tag_l">Business Sector</span>
+                              <h2 class="card_title">Apply to Write Off Commercial</h2>
+                              <span class="show_label icon job-exp">Service Mode: <span
+                                    class="offline">Offline</span></span>
+                              <span class="show_label icon calendar">12:30PM - 3:30PM AST</span>
+                              <div class="content_list_wrap">
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Service Provider : </span>
+                                    <span class="show_label">Ministry of Commerce and Industry</span>
+                                 </div>
+                              </div>
+                              <span class="custom_label">Intended Audience</span>
+                              <span class="custom_show_label">Individuals & Tourists</span>
+                           </div>
+
+                           <span class="share_g share_l" tabindex="0" title="Share"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark" tabindex="0" title="Bookmark"></span>
+                        </a>
+                     </div>
+                     <!-- card repeat close -->
+
+
+
+
+                  </div>
+               </div>
+
+               <div id="pagination-here" class="pagination_wrapper"></div>
+
+            </div>
+         </div>
+         <!--category card row  wrapper close-->
+      </section>
+      <!--footer-->
+      <footer>
+         <div class="footer_inner">
+            <div class="foot_row">
+               <div class="copy_right" tabindex="0">
+                  Copyright © 2019 MOTC. All rights reserved.
+               </div>
+               <div class="foot_nav">
+                  <nav>
+                     <ul>
+                        <li><a href="#">Entity Services’ Statistics</a></li>
+                        <li><a href="#">Useful Links</a></li>
+                        <li><a href="#">Customer Service</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Polls & Surveys</a></li>
+                        <li><a href="#">Mobile Apps</a></li>
+                        <li><a href="#">Site Map</a></li>
+                        <li><a href="#">Privacy & Legal</a></li>
+                        <li><a href="#">Find Help</a></li>
+                     </ul>
+                  </nav>
+               </div>
+            </div>
+         </div>
+      </footer>
+      <!--footer close-->
+   </div>
+   <!--App_wrapper close-->
+
+
+   <!--Js-->
+   <script src="assets/js/jquery.js"></script>
+   <script>
+      window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+   </script>
+   <script src="assets/js/popper.min.js"></script>
+   <script src="assets/js/bootstrap.min.js"></script>
+   <script src="assets/js/bootstrap-select.js"></script>
+   <script src="assets/js//moment.min.js"></script>
+   <script src="assets/js/daterangepicker.min.js"></script>
+   <script src="assets/js/owl.carousel.min.js"></script>
+   <script src="assets/js/app-slider.js"></script>
+   <script src="assets/js/jquery.bootpag.min.js"></script>
+   <script src="assets/js/custom.js"></script>
+   <script src="assets/js/daterangepicker.js"></script>
+
+   <!--Js Close-->
+
+</body>
+
+</html>

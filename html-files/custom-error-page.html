@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="assets/images/favicon.ico" />
+    <title>Hukoomi</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/media.css">
+    <link rel="stylesheet" href="assets/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
+</head>
+
+<body>
+    <!--App_wrapper-->
+    <div class="app_wrapper">
+        <!--header-->
+        <header>
+            <div class="header_inner">
+                <div class="innner_wrapper">
+                    <div class="nav_brand">
+                        <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi" class="head_logo" /> </a>
+                    </div>
+                    <div class="nav_col">
+                        <div class="header_row">
+                            <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                                    <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                                </a>
+                            </figure>
+
+                            <div class="abt_qtr_nav desktop_view_head" id="head1_top">
+                                <ul>
+                                    <li><a href="#" class="link">Life in Qatar</a></li>
+                                    <li> <a href="#" tabindex="0" class="link">Digital Projects</a></li>
+                                    <li><a href="#" class="link">Open Data</a></li>
+                                    <li><a href="#" class="link">E-Participation</a></li>
+                                </ul>
+                            </div>
+                            <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">
+                                <a rel="nofollow" class="rsbtn_play" title="Listen"
+                                    href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                                    <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                                            <span>Listen</span></span></span>
+                                    <span class="rsbtn_right rsimg rsplay rspart"></span>
+                                    <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png"
+                                        alt="Read Speaker" style="display:none" />
+                                </a>
+                            </div>
+                            <div class="auth_nav">
+                                <ul>
+                                    <li class="mob_hide">
+                                        <a href="#" class="link">
+                                            <img src="assets/images/accessibility.png" alt="Accessibility"
+                                                class="access_icon" /> Accessibility</a>
+                                        <div class="access_submenu">
+                                            <span class="title">Accessbility Options</span>
+                                            <ul>
+                                                <li>
+                                                    <span class="option">Text Size</span>
+                                                    <div class="size_wrap">
+                                                        <button class="text_size_minus font_minus"
+                                                            title="Decrease font size">-</button>
+                                                        <button class="text_size_plus  font_plus"
+                                                            title="Increase font size">+</button>
+                                                    </div>
+                                                </li>
+                                                <li>
+                                                    <span class="option">Listen Content</span>
+                                                    <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"
+                                                        class="lisitin">
+                                                        <img src="assets/images/volume.png" alt="speaker" />
+                                                        <span>Listen</span>
+                                                    </button>
+                                                </li>
+                                                <li>
+                                                    <span class="option">Contrast</span>
+                                                    <button id="themechange">
+                                                        <img src="assets/images/ic_accessibility_contrast.png"
+                                                            alt="contrast" />
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="#" id="lang_toggle" class="link"> عربى <img
+                                                src="assets/images/flag-oval.png" class="flag_oval_icon"
+                                                alt="language-icon" />
+                                        </a>
+                                    </li>
+                                    <li><a href="#" class="link">Login / Signup</a></li>
+                                    <li class="mob_menu_nav">
+                                        <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="header_row b-top desktop_view_head" id="head2_top">
+                            <div class="nav_menu">
+                                <ul>
+                                    <li><a href="#" class="link">Explore Services</a></li>
+                                    <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                                    <li><a href="#" class="link">Media</a></li>
+                                    <li class="">
+                                        <a href="#" class="link about_qatar_nav">About Qatar</a>
+                                        <div class="about_submenu">
+
+                                            <img src="assets/images/close-line.png" alt="close"
+                                                class="reomve_about_menu" />
+
+                                            <div class="f_row">
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Qatar Government</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Hukoomi</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Qatar</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/rectangle-2-copy-3.png"
+                                                                alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Qatar National Vision 2030</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">Government & Legislatives</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                                <!-- card repeat -->
+                                                <div class="card_col">
+                                                    <a href="#" class="card_wrapper">
+                                                        <figure class="card_img">
+                                                            <img src="assets/images/amir.png" alt="thumb-img" />
+                                                        </figure>
+                                                        <h3 class="line-1">The Amir</h3>
+                                                        <span class="descr line-2">Small description about Qatar
+                                                            Government
+                                                            page.</span>
+                                                    </a>
+                                                </div>
+                                                <!-- card repeat close-->
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <a href="#" title="Search" tabindex="0"> <img
+                                                src="assets/images/ic_header_search.png" title="Search"
+                                                class="search_icon" alt="Search" /></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!--header close-->
+
+        <a href="#" class="helpline">
+            <img src="assets/images/helpdesk.png" class="" title="Helpline" alt="Helpline">
+        </a>
+
+        <div class="custom_error">
+
+            <!--Banner-->
+            <section class="custom_error_banner">
+                <div class="custom_container">
+                    <div class="flex_row">
+                        <div class="flex_col_sm_5">
+                            <a href="#" tabindex="0" class="go_back">Go back</a>
+                            <h1 tabindex="0">Whoops!<span>We have looked everywhere.</span></h1>
+                            <p tabindex="0" class="error_msg">We cannot find the page you’re looking for
+                                <span>Error code: 404</span>
+                            </p>
+                            <div class="solution_block">
+                                <span class="title" tabindex="0">How to resolve this?</span>
+                                <ul class="steps_to_follow">
+                                    <li>
+                                        <p tabindex="0">Electricity number must not be blank, No spaces, No letters,
+                                            must be numbers only.
+                                            <a href="#" tabindex="0" class="link"> Enter details again!</a>
+                                        </p>
+                                    </li>
+                                    <li>
+                                        <p tabindex="0">Use any other number and attach Kahramaa bill or contract in the
+                                            attachment field.
+                                            <a href="#" tabindex="0" class="link"> Attach again</a>
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                            <button class="rouge_btn" tabindex="0">Take me home</button>
+                        </div>
+                        <div class="flex_col_sm_7">
+                            <figure class="banner_img">
+                                <img src="assets/images/404-error.png" alt="404-error">
+                            </figure>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <!--Banner close-->
+
+            <!--Explore-->
+            <section class="custom_error_explore">
+                <div class="custom_container">
+                    <h2 tabindex="0">Still feeling lost? You’re not alone.</h2>
+                    <div class="f_row">
+                        <div class="f_col">
+                            <a href="#" tabindex="0" class="explore_card">
+                                <figure>
+                                    <img src="assets/images/ic_leaving_qatar.svg" alt="explore-img" />
+                                </figure>
+                                <span>Explore services for you on Hukoomi</span>
+                            </a>
+                        </div>
+                        <div class="f_col">
+                            <a href="#" tabindex="0" class="explore_card">
+                                <figure>
+                                    <img src="assets/images/ic_leaving_qatar.svg" alt="explore-img" />
+                                </figure>
+                                <span>Explore downloads utilities & directories</span>
+                            </a>
+                        </div>
+                        <div class="f_col">
+                            <a href="#" tabindex="0" class="explore_card">
+                                <figure>
+                                    <img src="assets/images/ic_leaving_qatar.svg" alt="explore-img" />
+                                </figure>
+                                <span>Explore news, events, blogs & more...</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Explore close -->
+
+            <!--Search-->
+
+            <!-- <section class="custom_search">
+                <div class="custom_container">
+                    <h2 tabindex="0">Search again. It’s always worth a try!</h2>
+                    <div class="search_input">
+                        <div class="input_wrap">
+                            <input type="text" class="search"
+                                placeholder="Search here eg. how to get a driving license…" />
+                            <div class="adv_search_wrapper">
+                                <a href="#" tabindex="0" class="adv_search">
+                                    <span class="text">Advanced Search</span>
+                                    <span class="adv_caret"></span>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="search_btn">
+                            <button id="search_btn" tabindex="0">
+                                <span><img src="assets/images/search.svg" alt="Search Button"></span>Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section> -->
+
+            <!--Search close-->
+
+            <!--Tags-->
+            <section class="tag_section">
+                <div class="custom_container">
+                    <h3 class="title" tabindex="0">Related searches</h3>
+                    <div class="inner_custom_container">
+                        <ul class="tags_wrapper">
+                            <li> <a href="#" tabindex="0" class="btn_effect">Coming to Qatar</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">Living in Qatar</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">Tourism in Qatar</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">Getting a driving license in Qatar</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">Fifa World Cup 2022</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">Qatar embassy near me</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">Emergency contacts</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">List of services</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">Ministries &amp; ministers</a></li>
+                            <li> <a href="#" tabindex="0" class="btn_effect">How Qatar government works</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <!--Tags Close-->
+
+            <!--Report-->
+            <section class="report_section">
+                <div class="custom_container">
+                    <h2 tabindex="0">What were you trying to do?</h2>
+                    <div class="f_row">
+                        <div class="flex_col_sm_8">
+                            <div class="f_row report_form">
+                                <div class="flex_col_sm_6">
+                                    <div class="form_field">
+                                        <label for="name" tabindex="0">First Name</label>
+                                        <div class="txt_wrapper">
+                                            <input type="text" id="name" tabindex="0" placeholder="Mohamed Ibrahim" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex_col_sm_6">
+                                    <div class="form_field">
+                                        <label for="email" tabindex="0">Email ID</label>
+                                        <div class="txt_wrapper">
+                                            <input type="text" id="email" tabindex="0"
+                                                placeholder="mohammed12@gmail.com" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex_col_sm_12">
+                                    <div class="form_field">
+                                        <label for="query">Query</label>
+                                        <div class="txt_wrapper">
+                                            <textarea id="query" placeholder="Report this 404 error code"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex_col_sm_12">
+                                    <button class="report_btn" tabindex="0">Report this error</button>
+                                    <a href="#" tabindex="0" class="cancel link">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex_col_sm_4">
+                            <ul class="contact_us">
+                                <li class="phone" tabindex="0">
+                                    <span>Call us</span>
+                                    <a href="tel:+974-40069999">+974-40069999</a>
+                                </li>
+                                <li class="email" tabindex="0">
+                                    <span>Email us</span>
+                                    <a href="mailto:contact@hukoomi.gov.qa">contact@hukoomi.gov.qa</a>
+                                </li>
+                                <li class="location" tabindex="0">
+                                    <span>Visit us</span>
+                                    <span class="address">
+                                        PO Box 232624,
+                                        Ministry of Transport & Communications,
+                                        Doha, Qatar
+                                    </span>
+                                    <a href="#" tabindex="0" class="view_on_map link">View Map</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Report close -->
+
+
+            <!-- Contact Numbers -->
+            <div class="contact_section">
+                <div class="custom_container">
+                    <div class="f_row">
+                        <!--Owl Slider-->
+                        <div id="contact_card_owl" class="owl-carousel owl-loaded owl-drag">
+                            <!-- item -->
+                            <div class="item">
+                                <a href="tel:999" tabindex="0" class="contact_card">
+                                    <div class="contact_detail">
+                                        <span class="contact_person">Police</span>
+                                        <span class="num">999</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- item close -->
+                            <!-- item -->
+                            <div class="item">
+                                <a href="tel:998" tabindex="0" class="contact_card">
+                                    <div class="contact_detail">
+                                        <span class="contact_person">Ambulance</span>
+                                        <span class="num">998</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- item close -->
+                            <!-- item -->
+                            <div class="item">
+                                <a href="tel:997" tabindex="0" class="contact_card">
+                                    <div class="contact_detail">
+                                        <span class="contact_person">Civil Defence</span>
+                                        <span class="num">997</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- item close -->
+                            <!-- item -->
+                            <div class="item">
+                                <a href="tel:996" tabindex="0" class="contact_card">
+                                    <div class="contact_detail">
+                                        <span class="contact_person">Electricity Authority</span>
+                                        <span class="num">996</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- item close -->
+                            <!-- item -->
+                            <div class="item">
+                                <a href="tel:996" tabindex="0" class="contact_card">
+                                    <div class="contact_detail">
+                                        <span class="contact_person">Electricity Authority</span>
+                                        <span class="num">996</span>
+                                    </div>
+                                </a>
+                            </div>
+                            <!-- item close -->
+                        </div>
+                        <!-- Owl Slider close -->
+                    </div>
+                </div>
+            </div>
+            <!-- Contact Numbers close -->
+
+
+
+            <!-- FAQ’s on 404 error codes -->
+            <section class="faq_section">
+                <div class="custom_container">
+                    <h2 tabindex="0">FAQ’s on 404 error codes</h2>
+                    <div class="flex_row">
+                        <div class="flex_col_sm_10">
+
+                            <!-- item repeat -->
+                            <div class="accordian-block">
+                                <div class="ac-title" data-in="#tab1">
+                                    <span class="plus-icon"></span>
+                                    <p class="question">What is a 404 error code?</p>
+                                </div>
+                                <div class="accordian-para acc-show" id="tab1">
+                                    <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                                        molestie
+                                        ipsum quam, et iaculis nibh
+                                        pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- item repeat close -->
+
+                            <!-- item repeat -->
+                            <div class="accordian-block">
+                                <div class="ac-title" data-in="#tab2">
+                                    <span class="plus-icon"></span>
+                                    <p class="question">Why do i see 404 error code?</p>
+                                </div>
+                                <div class="accordian-para acc-show" id="tab2">
+                                    <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                                        molestie
+                                        ipsum quam, et iaculis nibh
+                                        pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- item repeat close -->
+
+                            <!-- item repeat -->
+                            <div class="accordian-block">
+                                <div class="ac-title" data-in="#tab3">
+                                    <span class="plus-icon"></span>
+                                    <p class="question">What should I do when I see such error?</p>
+                                </div>
+                                <div class="accordian-para acc-show" id="tab3">
+                                    <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                                        molestie
+                                        ipsum quam, et iaculis nibh
+                                        pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- item repeat close -->
+
+                            <!-- item repeat -->
+                            <div class="accordian-block">
+                                <div class="ac-title" data-in="#tab4">
+                                    <span class="plus-icon"></span>
+                                    <p class="question">How can we report such errors?</p>
+                                </div>
+                                <div class="accordian-para acc-show" id="tab4">
+                                    <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                                        molestie
+                                        ipsum quam, et iaculis nibh
+                                        pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- item repeat close -->
+
+                            <!-- item repeat -->
+                            <div class="accordian-block">
+                                <div class="ac-title" data-in="#tab5">
+                                    <span class="plus-icon"></span>
+                                    <p class="question">What are other similar errors?</p>
+                                </div>
+                                <div class="accordian-para acc-show" id="tab5">
+                                    <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                                        molestie
+                                        ipsum quam, et iaculis nibh
+                                        pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- item repeat close -->
+
+                            <!-- item repeat -->
+                            <div class="accordian-block">
+                                <div class="ac-title" data-in="#tab6">
+                                    <span class="plus-icon"></span>
+                                    <p class="question">What is a 404 error code?</p>
+                                </div>
+                                <div class="accordian-para acc-show" id="tab6">
+                                    <p class="answer">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
+                                        molestie
+                                        ipsum quam, et iaculis nibh
+                                        pellentesque vel. Interdum et malesuada fames ac ante ipsum primis in faucibus.
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- item repeat close -->
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+            <!-- FAQ’s on 404 error codes close -->
+
+
+
+            <!-- Custom Footer -->
+            <section class="footer_section">
+                <div class="custom_container">
+                    <div class="foot_wrapper">
+
+                        <div>
+                            <a href="#" tabindex="0" class="go_back">Go back</a>
+                            <button class="rouge_btn" tabindex="0">Take me home</button>
+                        </div>
+
+                        <div>
+                            <h3>We love being social</h3>
+                            <div class="social">
+                                <ul>
+                                    <li><a href="#"><img src="assets/images/facebook.png" alt="Facebook"></a></li>
+                                    <li><a href="#"><img src="assets/images/twitter.png" alt="Twitter"></a></li>
+                                    <li><a href="#"><img src="assets/images/linkedin.png" alt="Linkedin"></a></li>
+                                    <li><a href="#"><img src="assets/images/youtube.png" alt="Youtube"></a></li>
+                                    <li><a href="#"><img src="assets/images/instagram.png" alt="Instagram"></a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div>
+                            <h3>Take Hukoomi with you</h3>
+                            <ul class="store_links">
+                                <li><a href="#"><img src="assets/images/play-store.png" alt="play-store"></a></li>
+                                <li><a href="#"><img src="assets/images/app-store.png" alt="app-store"></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!--  Custom Footer close-->
+
+        </div>
+
+        <!--footer-->
+        <footer>
+            <div class="footer_inner">
+                <div class="foot_row">
+                    <div class="copy_right" tabindex="0">
+                        Copyright © 2019 MOTC. All rights reserved.
+                    </div>
+                    <div class="foot_nav">
+                        <nav>
+                            <ul>
+                                <li><a href="#">Entity Services’ Statistics</a></li>
+                                <li><a href="#">Useful Links</a></li>
+                                <li><a href="#">Customer Service</a></li>
+                                <li><a href="#">Contact Us</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Polls & Surveys</a></li>
+                                <li><a href="#">Mobile Apps</a></li>
+                                <li><a href="#">Site Map</a></li>
+                                <li><a href="#">Privacy & Legal</a></li>
+                                <li><a href="#">Find Help</a></li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!--footer close-->
+
+
+
+    </div>
+    <!--App_wrapper close-->
+
+
+    <!--Js-->
+    <script src="assets/js/jquery.js"></script>
+    <script>
+        window.MSInputMethodContext && document.documentMode && document.write('<script src="https://cdn.jsdelivr.net/gh/nuxodin/ie11CustomProperties@4.1.0/ie11CustomProperties.min.js"><\x2fscript>');
+    </script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/bootstrap-select.js"></script>
+    <script src="assets/js//moment.min.js"></script>
+    <script src="assets/js/daterangepicker.min.js"></script>
+    <script src="assets/js/owl.carousel.min.js"></script>
+    <script src="assets/js/app-slider.js"></script>
+    <script src="assets/js/custom.js"></script>
+    <script src="assets/js/daterangepicker.js"></script>
+    <!--Js Close-->
+</body>
+
+</html>

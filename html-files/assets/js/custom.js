@@ -1,7 +1,7 @@
 
 /**********************language Switch function ********************************/
 $("#lang_toggle").click(function(){
-    $("body").toggleClass("ar");
+    $("body").toggleClass("ar").trigger('classChange');
 });
 
 /**********************language Switch function close********************************/
@@ -21,12 +21,7 @@ $(window).scroll(function () {
 /**********************Onscroll Header Fixed close********************************/
 
 
-/********Select Js***************/
-$(function () {
-    $('.selectpicker').selectpicker({});
-    });
 
-/********Select Js close***************/
 
 
 /********************Search Select Persona and  its persona value Js******************************/
@@ -56,27 +51,39 @@ $(function () {
 
 /*********************Mobile Menu Toggle***********************************************************/
 $("#mob_menu_toggle").click(function(){
-    $(".mob_nav").toggleClass("active");
+    $("#head1_top").toggleClass("head1_top");
+    $("#head2_top").removeClass("head2_top");
 });
+
+$("#mob_menu_toggle2").click(function(){
+   $("#head2_top").toggleClass("head2_top");
+   $("#head1_top").removeClass("head1_top");
+});
+
+$(".nav_menu ul li a").click(function(){
+   $("#head2_top").removeClass("head2_top");
+});
+
+$(".abt_qtr_nav ul li a").click(function(){
+   $("#head1_top").removeClass("head1_top");
+});
+
+
+$(".about_qatar_nav").click(function(e){
+   e.stopPropagation()
+   $(".about_submenu").toggleClass("active");
+});
+
+$("body").click(function(){
+   $(".about_submenu").removeClass("active");
+});
+
+
+$(".reomve_about_menu").click(function(){
+   $(".about_submenu").removeClass("active");
+});
+
 /*********************Mobile Menu Toggle close***********************************************************/
-
-
-
-
-
-/*************************Date Range Calendar*****************************************/
-$(function () {
-    $('input[name="daterange"]').daterangepicker({
-       opens: 'left'
-    }, function (start, end, label) {
-       console.log("A new date selection was made: " + start.format('DD-MM-YYYY') + ' to ' + end.format('DD-MM-YYYY'));
-    });
- });
- /*************************Date Range Calendar*****************************************/
-
-
-
-
 
  /**************************Category  Filter Modal Js*************************************************/
  $(".filter").click(function (e) {
@@ -104,6 +111,19 @@ function resetClass() {
     resetClass();
     $(this).addClass("active");
  });
+
+
+
+
+
+var c =$(".category_view_menu_wrap  li a").eq(0).html()
+
+ if ( $('.category_view_menu_wrap li').length == 2 && $(".category_view_menu_wrap  li a").eq(1).html()=='List'){
+    
+   $(".category_view_menu_wrap").addClass("mobhide")
+ }
+
+
 /**************************Category (List,grid,map,calendar) tab Js close*************************************************/
 
 
@@ -113,6 +133,10 @@ function resetClass() {
     $(".map_col").removeClass("active");
     $(".calendar_wrapper").removeClass("active");
     $(".map_list_button").removeClass("active");
+    $(".category_search_input").removeClass("hide-element");
+    $(".category_tab_wrapper").removeClass("hide-element");
+    $(".categor_filter_wrap").removeClass("hide-element");
+    $(".date_event").removeClass("show-element")
 
  });
 
@@ -122,6 +146,10 @@ function resetClass() {
     $(".map_col").removeClass("active");
     $(".calendar_wrapper").removeClass("active");
     $(".map_list_button").removeClass("active");
+    $(".category_search_input").removeClass("hide-element");
+    $(".category_tab_wrapper").removeClass("hide-element");
+    $(".categor_filter_wrap").removeClass("hide-element");
+    $(".date_event").removeClass("show-element")
  });
  $(".map").click(function () {
     $(".list_row_wrapper").addClass("map_view");
@@ -129,6 +157,15 @@ function resetClass() {
     $(".map_col").addClass("active");
     $(".calendar_wrapper").removeClass("active");
     $(".map_list_button").addClass("active");
+
+   
+    $(".category_search_input").removeClass("hide-element");
+    $(".category_tab_wrapper").removeClass("hide-element");
+    $(".categor_filter_wrap").removeClass("hide-element");
+    $(".date_event").removeClass("show-element")
+
+
+
    });
 
    
@@ -137,9 +174,22 @@ $(".calendar_view").click(function(){
    $(".list_row_wrapper").removeClass("map_view");
    $(".map_col").removeClass("active");
    $(".map_list_button").removeClass("active");
+
+   $(".category_search_input").addClass("hide-element");
+   $(".category_tab_wrapper").addClass("hide-element");
+   $(".categor_filter_wrap").addClass("hide-element");
+   $(".date_event").addClass("show-element")
 });
 
 
+
+$(".map_list_button").click(function(){
+   $(".map_view .f_row").toggleClass("responsive_map_view");
+});
+
+$(".close_map_img").click(function(){
+   $(".map_view .f_row").removeClass("responsive_map_view");
+});
 
 
 
@@ -209,7 +259,9 @@ $(".calendar_view").click(function(){
    /*********************************Share Kit Icon Js*******************************************************/
     $(".share_g").click(function(e){
        e.stopPropagation();
-       $(".share_kit_wrapper").toggleClass("active");
+      $(this).parent().siblings().toggleClass("active")
+
+      //  $(".share_kit_wrapper").addClass("active");
        $(".share_g").removeClass("active");
        $(this).toggleClass("active");
     })
@@ -234,8 +286,8 @@ $(".calendar_view").click(function(){
          $(this).text("Collapse All");
    });
 
-/****************Articles**********************/
-$(".article_card").click(function () {
+/****************Articles & Service**********************/
+$(".article_card, .service_card").click(function () {
    $(this).toggleClass("active");
    if (!$(this).hasClass('active')) {
       $(".all").removeClass("active");
@@ -246,11 +298,10 @@ $(".all").click(function (e) {
  
    $(this).nextAll().toggleClass("active");
    if ($(this).hasClass('active')) {
-      $(".article_card").addClass("active");
+      $(".article_card, .service_card").addClass("active");
    }
 })
-/****************Articles Close**********************/
-
+/****************Articles & Service Close**********************/
 
 
 
@@ -266,7 +317,8 @@ $(".show_more_fact").click(function(){
        } else {
            $(".show_more_fact").text('Less More Facts');
        }
-   $(".fact_figure_card_wrap").toggleClass("active");   
+   $(".fact_figure_card_wrap").toggleClass("active");  
+   $(".show_more").toggleClass("active");  
 });
 
 });
@@ -316,27 +368,16 @@ $(".apply_filter_tag_wrapper ul li").remove()
 /******************************Filter JS Close**********************************************/
 
 
-
-
-
-
-
-
-
-
-
-
+/************************************Face Page Side Link js***************************************************/
 $(".links ul li a").click(function(){
-   $(".links ul li a").removeClass("active")   
-   
+   $(".links ul li a").removeClass("active");   
    $(this).addClass("active");
-})
+});
+/************************************Face Page Side Link js close***************************************************/
 
 
-
-
+/************************************Face Page video play and pause js close***************************************************/
 var myVideo = document.getElementById("video"); 
-
 function playPause() { 
   if (myVideo.paused) {
     myVideo.play(); 
@@ -349,3 +390,444 @@ function playPause() {
     $('.play img').attr('src', 'assets/images/play.png')
   }
 } 
+/************************************Face Page video play and pause js close***************************************************/
+
+
+/**************************************readspeakar UI Js*******************************************************/
+$(".lisitin").click(function(){
+   $(".reader_ui").toggleClass("active")
+});
+/**************************************readspeakar UI Js close*******************************************************/
+
+
+/**************************************Contrast Js*******************************************************/
+$(document).ready(function(){
+$('#themechange').click(function(){
+if($('link#styles').attr('href')=="assets/css/Day.css"){
+$('link#styles').attr('href','assets/css/blind.css');
+$(".head_logo").attr("src", "assets/images/h-logo.png");
+}
+else
+{
+$('link#styles').attr('href','assets/css/Day.css');
+ $(".head_logo").attr("src", "assets/images/logo.svg");
+}
+})
+});
+/**************************************Contrast Js close*******************************************************/
+
+
+/**************************************Font plus and minus JS*******************************************/
+var fontCount = 0;
+$(document).ready(function(){
+    $('.font_plus').click(function(){
+        if(fontCount < 2){
+            console.log(fontCount)
+            font_plus();
+            fontCount ++;
+        }
+        
+    });
+    $('.font_minus').click(function(){
+        if(fontCount > 0 ){
+            console.log(fontCount)
+            font_minus()
+            fontCount --;
+        }
+        
+    });
+
+})
+
+function font_plus(){
+    var a = document.querySelectorAll(" h1, h2, h3, h4, h5, h6, p, li, a, b, th, tr, td");
+var fs;
+    for(i = 0; i<a.length; i++){
+        var fs = window.getComputedStyle(a[i]).fontSize.replace('px', '');
+        fs ++;
+        // if(a[i].style.fontSize){
+            a[i].style.fontSize = fs + 'px' 
+        // }
+        
+    }
+}
+
+function font_minus(){
+    var a = document.querySelectorAll(" h1, h2, h3, h4, h5, h6, p, li, a, b, th, tr, td");
+var fs;
+    for(i = 0; i<a.length; i++){
+        var fs = window.getComputedStyle(a[i]).fontSize.replace('px', '');
+        fs --;
+        a[i].style.fontSize = fs + 'px' 
+    }
+}
+/**************************************Font plus and minus JS close*******************************************/
+
+
+
+
+
+/*************************************Calendar js******************************************************************/
+$(document).ready(function(){
+
+  
+   $('#demo').click();
+   $(document).find('.today').parent().siblings().hide();
+   $(document).find('td').css('pointer-events', 'none');
+   $('.view_all').click(function(){
+       console.log('click');
+       if(!$(this).hasClass('min_view')){
+           $(this).addClass('min_view');
+           $(this).parent().addClass('full_view');
+           $(document).find('.today').parent().siblings().show();
+           $(document).find('td').css('pointer-events', 'auto');
+       }
+       else{
+           $(this).removeClass('min_view');
+           $(this).parent().removeClass('full_view');
+           $(document).find('.today').parent().siblings().hide();
+           $(document).find('td').css('pointer-events', 'none');
+       }
+   });
+   
+   
+   
+   });
+   // ======= show current week only =======
+   $(document).find('td').on('click', function(e){
+      console.log('hello')
+      e.preventDefault();
+      e.stopPropagation();
+   
+   })
+   // ======= show current week only =======
+   //   ======= get current date =======
+   var today = new Date();
+   var dd = String(today.getDate()).slice(-2);
+   var mm = String(today.getMonth() + 1).slice(-2); //January is 0!
+   var yyyy = today.getFullYear();
+   
+   today = mm + '/' + dd + '/' + yyyy;
+   //   ======= get current date =======
+   if (window.matchMedia("(max-width: 600px)").matches) {
+   $('#demo').daterangepicker({
+   "parentEl": ".events",
+   "singleDatePicker": true,
+   "showDropdowns": true,
+   "autoApply": true,
+   "locale": {
+       "format": "MM/DD/YYYY",
+       "separator": " - ",
+       "applyLabel": "Apply",
+       "cancelLabel": "Cancel",
+       "fromLabel": "From",
+       "toLabel": "To",
+       "customRangeLabel": "Custom",
+       "weekLabel": "W",
+       "daysOfWeek": [
+           "Su",
+           "Mo",
+           "Tu",
+           "We",
+           "Th",
+           "Fr",
+           "Sa"
+       ],
+       "monthNames": [
+           "January",
+           "February",
+           "March",
+           "April",
+           "May",
+           "June",
+           "July",
+           "August",
+           "September",
+           "October",
+           "November",
+           "December"
+       ],
+       "firstDay": 1
+   },
+   "linkedCalendars": false,
+   "showCustomRangeLabel": false,
+   "alwaysShowCalendars": true,
+   "startDate": today,
+   //  "endDate": "09/16/2020",
+   isInvalidDate: function(ele) {
+     // console.log(ele);
+   var currDate = moment(ele._d).format('YY-MM-DD');
+   
+   return ["20-09-09", "20-09-25", "20-09-20", "20-09-21"].indexOf(currDate) != -1;
+   },
+   isCustomDate: function(e){
+   // console.log(e);
+   var dataCell = moment(e._d).format("YYYY-MM-DD");
+       if ( dataCell == '2020-09-05' || dataCell == '2020-09-15' || dataCell == '2020-09-01' || dataCell == '2020-09-12' ) {
+          console.log(dataCell)
+           return 'isEvent';
+       }
+   }
+   }, function(start, end, label) {
+   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+   });
+   } else {
+   $('#demo').daterangepicker({
+   "parentEl": ".events",
+   "singleDatePicker": true,
+   "showDropdowns": true,
+   "autoApply": true,
+   "locale": {
+       "format": "MM/DD/YYYY",
+       "separator": " - ",
+       "applyLabel": "Apply",
+       "cancelLabel": "Cancel",
+       "fromLabel": "From",
+       "toLabel": "To",
+       "customRangeLabel": "Custom",
+       "weekLabel": "W",
+       "daysOfWeek": [
+           "Sunday",
+           "Monday",
+           "Tuesday",
+           "Wednesday",
+           "Thursday",
+           "Friday",
+           "Saturday"
+       ],
+       "monthNames": [
+           "January",
+           "February",
+           "March",
+           "April",
+           "May",
+           "June",
+           "July",
+           "August",
+           "September",
+           "October",
+           "November",
+           "December"
+       ],
+       "firstDay": 1
+   },
+   "linkedCalendars": false,
+   "showCustomRangeLabel": false,
+   "alwaysShowCalendars": true,
+   "startDate": today,
+   //  "endDate": "09/16/2020",
+   isInvalidDate: function(ele) {
+     // console.log(ele);
+   var currDate = moment(ele._d).format('YY-MM-DD');
+   
+   return ["20-09-09", "20-09-25", "20-09-20", "20-09-21"].indexOf(currDate) != -1;
+   },
+   isCustomDate: function(e){
+   // console.log(e);
+   var dataCell = moment(e._d).format("YYYY-MM-DD");
+       if ( dataCell == '2020-09-05' || dataCell == '2020-09-15' || dataCell == '2020-09-01' || dataCell == '2020-09-12' ) {
+          console.log(dataCell)
+           return 'isEvent';
+       }
+   }
+   }, function(start, end, label) {
+   console.log('New date range selected: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ')');
+   });
+   }
+
+
+   /*************************************Calendar js close******************************************************************/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   $(".polls_btn").click(function(){
+
+
+      $(this).hide();
+      $(this).parent().parent().parent().parent().parent().removeClass("polls_start");
+      $(this).parent().parent().parent().parent().parent().addClass("polls_inactive");
+
+      $("input[type='radio']:checked").parent().parent().addClass("active");
+
+     
+   });
+
+   // function resetRadio(){
+   //    $(".row_wrap").removeClass("active");   
+   // }
+
+   // $("input[type='radio']").click(function(){
+   //   resetRadio()
+   //   var b = $(this).attr('id');
+
+   //    console.log(b);
+      
+   //    $('#'+ b ).parent().parent().addClass("active");
+
+   // });
+   /*************************Date Range Calendar*****************************************/
+$(function () {
+   $('input[name="daterange"]').daterangepicker({
+      opens: 'left',
+      format:'MM-YYYY',
+   }, function (start, end, label) {
+      console.log("A new date selection was made: " + start.format('MM-YYYY') + ' to ' + end.format('MM-YYYY'));
+   });
+});
+/*************************Date Range Calendar*****************************************/
+/********Select Js***************/
+$(function () {
+  $('.selectpicker').selectpicker({});
+  });
+
+/********Select Js close***************/
+
+
+
+
+/*************Uplaod File Path******************/
+$('#upload_img').on('change', function () {
+   var xVal = $(this).val();
+   $('#attach_file').val(xVal);
+});
+/*************Uplaod File Path******************/
+
+
+
+$('#pagination-here').bootpag({
+   total: 10,          
+   page: 1,            
+   maxVisible: 5,     
+   leaps: true,
+   href: "#result-page-{{number}}",
+})
+
+//page click action
+$('#pagination-here').on("page", function(event, num){
+//show / hide content or pull via ajax etc
+$("#content").html("Page " + num); 
+});
+
+
+
+
+
+
+// var a= $(".tags_wrap").attr('id');
+// console.log(a)
+// var  b=   $('#'+a).children().length;
+
+// console.log(b);
+// if(b>=2){
+//    $('#'+a).append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
+// }
+
+
+
+
+// $(document).ready(function(){
+// var a= $(".tags_wrap").attr('id');
+// console.log(a)
+// var  b=   $('#'+a).children().length;
+
+// console.log(b);
+// if(b>=2){
+//    $('#'+a).append("<span class='tag_g tag_l' tabindex='0'>+2 more</span>")
+// }
+// });
+
+
+// for(i=1;i<=$(".category_card").length[0];i++){
+//    console.log(i)
+// }
+
+
+// var a = $(".tags_wrap").attr('id');
+// console.log(a)
+// var  b =   $('#'+a).children().length;
+
+
+// var  b=   $('#'+a ).children().length;
+// console.log(b);
+// if(b>=2){
+//    $('#'+a ).append("<li class='tag_g  tag_l' tabindex='0'>+2 more</li>")
+// }
+
+
+// var i= $(".category_card  .tags_wrap").find('li').size();
+// console.log(i)
+
+// if(i>=2){
+//    $('.tags_wrap' ).append("<li class='tag_g  tag_l' tabindex='0'>+2 more</li>")
+// }
+
+
+
+
+// var lengths = $(".tags_wrap").map(function(){
+//    return $(this).find('li').length;
+// }).get();
+
+
+// console.log(lengths)
+
+/**************************+2more category card*******************************************************/
+// $(".tags_wrap").map(function(){
+//       var d = $(this).find('li').length;
+
+//       console.log(d)
+
+//       if(d>=2){
+//          $(this).append("<li class='tag_g  tag_l' tabindex='0' data-toggle='modal' data-target='#more-modal'>+2 more</li>")
+//       }
+// })
+
+
+
+
+$(".insurance_mob").map(function(){
+   var d = $(this).find('a').length;
+
+   if(d>=2){
+     $('a:nth-child(2)').nextAll('a').addClass("hide")
+       $(this).append("<span class='more  more_data_modal' tabindex='0'>more</span>")
+   }
+
+   console.log(d)
+
+
+   // if(d>=2){
+   //  //  $('.insurance_mob').append("<span class='more' tabindex='0' data-toggle='modal' data-target='#more-modal'>more</span>")
+   // }
+
+})
+
+
+
+
+$(".more_data_modal").click(function(){
+   $(this).parent().next().addClass("active");
+})
+$(".close_card_modal").click(function(){
+   $(".card_modal_wrapper").removeClass("active");
+});
+
+
+
+/**************************Like/Unlike Js***********************************************/
+$(".like").click(function(){
+   $(".like").toggleClass("active");
+});
+/******************************Like/Unlike Js Close***********************************/

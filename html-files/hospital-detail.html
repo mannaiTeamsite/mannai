@@ -14,6 +14,8 @@
    <link rel="stylesheet" href="assets/css/style.css">
    <link rel="stylesheet" href="assets/css/main.css">
    <link rel="stylesheet" href="assets/css/media.css">
+   <link rel="stylesheet" href="assets/css/social-share-kit.css" type="text/css">
+   <link rel="stylesheet" href="assets/css/Day.css" id="styles" />
 </head>
 
 <body>
@@ -21,73 +23,178 @@
    <!--App_wrapper-->
    <div class="app_wrapper">
 
-    <!--header-->
-    <header>
+   <!--header-->
+   <header>
       <div class="header_inner">
          <div class="innner_wrapper">
             <div class="nav_brand">
-               <a href="#"  tabindex="0" > <img src="assets/images/logo.svg" alt="Hukoomi" /> </a>
+              <a href="#"> <img src="assets/images/logo.svg" alt="Hukoomi"  class="head_logo" /> </a>
             </div>
             <div class="nav_col">
                <div class="header_row">
-                  <div class="abt_qtr_nav desktop_view_head">
+                   <figure class="mob_menu_nav"><a href="#" id="mob_menu_toggle">
+                      <img src="assets/images/menu-2-line.png" alt="toggle_menu">
+                      </a>
+                   </figure>
+
+                  <div class="abt_qtr_nav desktop_view_head" id="head1_top">
                      <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Life in Qatar</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Innovation</a></li>
-                        <li> <a href="#"  tabindex="0" class="link">Open Data</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">E-Participation</a></li>
+                        <li><a href="#" class="link">Life in Qatar</a></li>
+                       <li> <a href="#"  tabindex="0" class="link">Digital Projects</a></li>
+                        <li><a href="#" class="link">Open Data</a></li>
+                        <li><a href="#" class="link">E-Participation</a></li>
                      </ul>
+                  </div>
+                  <div id="readSpeakerButton" class="rs_skip rsbtn rs_preserve   reader_ui">											        				
+                     <a rel="nofollow" class="rsbtn_play"  title="Listen"
+                        href="//app-as.readspeaker.com/cgi-bin/rsent?customerid=9256&lang=en_uk&readid=readMe&url=">
+                     <span class="rsbtn_left rsimg rspart"><span class="rsbtn_text">
+                     <span>Listen</span></span></span>
+                     <span class="rsbtn_right rsimg rsplay rspart"></span>
+                     <img src="/h3portalTheme/themes/html/Hukoomi/hukoomi-assetsV1/en/images/h-logo.png" alt="Read Speaker" style="display:none"/>
+                     </a>
                   </div>
                   <div class="auth_nav">
                      <ul>
                         <li class="mob_hide">
-                            <a href="#"  tabindex="0"  class="link" >
+                           <a href="#" class="link">
                            <img src="assets/images/accessibility.png" alt="Accessibility" class="access_icon" /> Accessibility</a>
+                           <div class="access_submenu">
+                              <span class="title">Accessbility Options</span>
+                              <ul>
+                                 <li>
+                                    <span class="option">Text Size</span>
+                                    <div class="size_wrap">
+                                       <button class="text_size_minus font_minus" title="Decrease font size">-</button>
+                                       <button class="text_size_plus  font_plus"  title="Increase font size">+</button>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <span class="option">Listen Content</span>
+                                    <button onclick="toggleReadSpeaker()" id="readSpeakerPlayer"  class="lisitin">
+                                    <img src="assets/images/volume.png" alt="speaker" />
+                                    <span>Listen</span>
+                                    </button>
+                                 </li>
+                                 <li>
+                                    <span class="option">Contrast</span>
+                                    <button id="themechange">
+                                    <img src="assets/images/ic_accessibility_contrast.png" alt="contrast" />
+                                    </button>
+                                 </li>
+                              </ul>
+                           </div>
                         </li>
                         <li>
-                            <a href="#"  tabindex="0"  id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
+                           <a href="#" id="lang_toggle" class="link"> عربى <img src="assets/images/flag-oval.png" class="flag_oval_icon"  alt="language-icon"/>
                            </a>
                         </li>
-                        <li> <a href="#"  tabindex="0"  class="link">Login / Signup</a></li>
-                        <li class="mob_menu_nav"> <a href="#"  tabindex="0"  id="mob_menu_toggle">
-                           <img src="assets/images/menu-line.svg" alt="toggle_menu">
-                           </a>
+                        <li><a href="#" class="link">Login / Signup</a></li>
+                        <li class="mob_menu_nav">
+                          <img src="assets/images/menu-line.svg" alt="toggle_menu" id="mob_menu_toggle2">
                         </li>
                      </ul>
                   </div>
                </div>
-               <div class="header_row b-top desktop_view_head">
+               <div class="header_row b-top desktop_view_head" id="head2_top">
                   <div class="nav_menu">
                      <ul>
-                        <li> <a href="#"  tabindex="0"  class="link">Explore Services</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Downloads, Utilities & Directory</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">Media</a></li>
-                        <li> <a href="#"  tabindex="0"  class="link">About Qatar</a></li>
+                        <li><a href="#" class="link">Explore Services</a></li>
+                        <li><a href="#" class="link">Downloads, Utilities & Directory</a></li>
+                        <li><a href="#" class="link">Media</a></li>
+                        <li class="">
+                           <a href="#" class="link about_qatar_nav">About Qatar</a>
+                           <div class="about_submenu">
+
+                              <img src="assets/images/close-line.png" alt="close"  class="reomve_about_menu"/>
+
+                              <div class="f_row">
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Qatar Government</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/new-flag.jpg" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Hukoomi</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-4.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Qatar</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/rectangle-2-copy-3.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Qatar National Vision 2030</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/govt_banner.jpg" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">Government & Legislatives</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                                 <!-- card repeat -->
+                                 <div class="card_col">
+                                    <a href="#" class="card_wrapper">
+                                       <figure class="card_img">
+                                          <img src="assets/images/amir.png" alt="thumb-img" />
+                                       </figure>
+                                       <h3 class="line-1">The Amir</h3>
+                                       <span class="descr line-2">Small description about Qatar Government
+                                       page.</span>
+                                    </a>
+                                 </div>
+                                 <!-- card repeat close-->
+                              </div>
+                           </div>
+                        </li>
                         <li>
-                            <a href="#"  tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
-                       </li>
+                           <a href="#"  title="Search" tabindex="0" > <img src="assets/images/ic_header_search.png"  title="Search" class="search_icon" alt="Search" /></a>
+                     </li>
                      </ul>
                   </div>
                </div>
             </div>
          </div>
       </div>
-      <!-- Mobile Menu-->
-      <div class="mob_nav">
-         <ul>
-            <li tabindex="0" > <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Innovation</a></li>
-            <li> <a href="#"  tabindex="0" >Open Data</a></li>
-            <li> <a href="#"  tabindex="0" >Life in Qatar</a></li>
-            <li> <a href="#"  tabindex="0" >Explore Services</a></li>
-            <li> <a href="#"  tabindex="0" >Downloads, Utilities & Directory</a></li>
-            <li> <a href="#"  tabindex="0" >Media</a></li>
-            <li> <a href="#"  tabindex="0" >About Qatar</a></li>
-         </ul>
-      </div>
-      <!-- Mobile Menu-->
    </header>
-   <!--header close--> 
+   <!--header close-->
 
       <!--Breadcrumb-->
       <div class="breadcrumbs_wrapper">
@@ -99,287 +206,299 @@
       </div>
       <!--Breadcrumb-->
 
-      <div class="category_detail_wrapper hospital_detail">
+         <div class="category_detail_wrapper hospital_detail">
 
-         <div class="custom_container">
-            <div class="video_img_wrapper list_view">            
-               <div class="flex_row">
-                  <div class="flex_col_sm_7 category_hospital_card">
+            <div class="custom_container">
+               <div class="video_img_wrapper list_view">            
+                  <div class="flex_row">
+                     <div class="flex_col_sm_12 category_hospital_card">
 
-                     <div class="detail_card details">
-                        <h2 class="card_title" tabindex="0">Hamad General Hospital</h2>
-                        <div class="author_wrap">
-                           <figure>
-                              <img src="assets/images/new-flag.jpg" alt="author-logo" />
-                           </figure>
-                           <span class="by" tabindex="0">Doha Healthcare Group</span>
+                         <!--Share Kit Facebook,Twitter and Gmail-->
+                    <div class="share_kit_wrapper">
+                     <div class="ssk-sticky ssk-left ssk-center ssk-lg">
+                        <a href="https://www.facebook.com/"  title="Facebook"  class="ssk ssk-facebook"  target="_blank"></a>
+                        <a href="https://twitter.com/LOGIN" title="Twitter" class="ssk ssk-twitter" target="_blank"></a>
+                        <a href="https://www.google.com/intl/en-GB/gmail/about/" title="Gmail" class="ssk ssk-google-plus" target="_blank"></a>
+                     </div>
+                  </div>
+                  <!--Share Kit Facebook,Twitter and Gmail close-->
+
+                        <div class="detail_card details">
+                           <span class="share_g share_l"></span>
+                           <span class="bookmark_g bookmark_l"></span>
+                           <h2 class="card_title" tabindex="0">Hamad General Hospital</h2>
+                           <div class="author_wrap">
+                              <figure>
+                                 <img src="assets/images/new-flag.jpg" alt="author-logo" />
+                              </figure>
+                              <span class="by" tabindex="0">Doha Healthcare Group</span>
+                           </div>
+                           <span class="show_label icon mob" tabindex="0">+974 7973278927</span>
+                           <span class="show_label icon time" tabindex="0"><span class="show_label_grey">24*7</span>Yes</span>
+                           <span class="show_label icon location" tabindex="0"> B Ring Rd, Doha, Qatar</span>
+                           <span class="distance" tabindex="0">1.2 Km</span>
+                           <ul class="share_wrap">
+                              <li>
+                                 <a href="#"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              </li>
+                              <li>
+                                 <a href="#"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              </li>
+                           </ul>
+                           <div class="content_list_wrap">
+                              <div class="content_wrap">
+                                 <span class="show_label_grey" tabindex="0">Vaccination Center :</span>
+                                 <span class="show_label" tabindex="0">Yes</span>
+                              </div>
+                              <div class="content_wrap">
+                                 <span class="show_label_grey" tabindex="0"> Insurance : </span>
+                                 <span class="show_label" tabindex="0">Yes</span>
+                              </div>
+                           </div>
+                           <div class="content_wrap">
+                              <span class="show_label_grey" tabindex="0">Out Patient Contact Number : </span>
+                              <span class="show_label" tabindex="0">+974 7973278927</span>
+                           </div>
+                        
+                           <div class="content_wrap speciality_wrap">
+                              <span class="show_label_grey" tabindex="0">Speciality</span>
+                              <span class="show_label" tabindex="0">General Surgery, Ophthalmology, Obstetrics & Gynecology</span>
+                           </div>
+                           <span class="custom_label" tabindex="0">Hashtags</span>
+                           <span class="custom_show_label" tabindex="0">#ministryofpublichealthqatar #qatarization
+                              #quatar#healthcare</span>
                         </div>
-                        <span class="show_label icon mob" tabindex="0">+974 7973278927</span>
-                        <span class="show_label icon time" tabindex="0"><span class="show_label_grey">24*7</span>Yes</span>
-                        <span class="show_label icon location" tabindex="0"> B Ring Rd, Doha, Qatar</span>
-                        <span class="distance" tabindex="0">1.2 Km</span>
-                         <ul class="share_wrap">
+      
+                  
+         
+      
+                  
+      
+                     </div>
+      
+      
+                  </div>
+                  <div class="flex_row reverse">
+                        <div class="flex_col_sm_7">
+                           <div class="tab_wrapper detail_tab">
+
+                              <!--Owl Slider-->
+                              <div id="detail_tab_owl" class="tab_owl owl-carousel owl-loaded owl-drag">
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="#tab1" tabindex="0" class="active">Facilities</a></div>
+                                 <!-- item repeat close -->
+         
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="#tab2"  tabindex="0" class="">Key Contacts</a></div>
+                                 <!-- item repeat close -->
+         
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="#tab3" tabindex="0" class="">FAQ</a></div>
+                                 <!-- item repeat close -->
+         
+                                 <!-- item repeat -->
+                                 <div class="item"><a href="#tab4"  tabindex="0" class="">Feedback</a></div>
+                                 <!-- item repeat close -->
+                              </div>
+                              <!-- Owl Slider close-->
+                           </div>
+                        </div>
+                        <div class="flex_col_sm_5">
+                           <div class="btn_wrap">
+                              <button class="rouge_btn" tabindex="0"> Book Appointment</button>
+
+                              
+                           </div>
+                        </div>
+                  </div>
+               </div>  
+            </div>
+
+
+
+         
+            <!--Category details block-->
+            <div class="custom_container">
+               <div class="flex_row">
+                  <!--Left Col-->
+                  <div class="flex_col_sm_7">
+
+                     <!-- tab1 -->
+                     <div id="tab1">
+                        <h3 tabindex="0">Facilities</h3>
+                        <ul class="facilities_wrap">
+                           <li tabindex="0"><span>Washroom</span></li>
+                           <li tabindex="0"><span>Wheelchari Assistance</span></li>
+                           <li tabindex="0"><span>On-Site Parking</span></li>
+                           <li tabindex="0"><span>Food & Beverages</span></li>
+                           <li tabindex="0"><span>Public Transport</span></li>
+                           <li tabindex="0"><span>Waste & Recycling facilities</span></li>
+                        </ul>
+                     </div>
+                     <!-- tab1 close-->
+
+                     <!-- tab2 -->
+                     <div id="tab2">
+                        <h3 tabindex="0">Key Contacts</h3>
+                        <ul class="facilities_wrap digit_wrap key_contacts">
                            <li>
-                              <a href="#"><img src="assets/images/ic-facebook.png" alt="fb" /></a>
+                              <span tabindex="0">Mr. Chapman Taylor (Administrator)</span>
+                              <a href="tel:+9747973278927" tabindex="0"><span>+974 4483 9990</span></a>
+                              <a href="mailto:info@mallofqatar.qa" tabindex="0" target="_blank"><span>info@mallofqatar.qa</span></a>
                            </li>
                            <li>
-                              <a href="#"><img src="assets/images/ic-twitter.png" alt="tw" /></a>
+                              <span tabindex="0">Mr. Chapman Taylor (Administrator)</span>
+                              <a href="tel:+9747973278927" tabindex="0"><span>+974 4483 9990</span></a>
+                              <a href="mailto:info@mallofqatar.qa" tabindex="0" target="_blank"><span>info@mallofqatar.qa</span></a>
                            </li>
                         </ul>
-                        <div class="content_list_wrap">
-                           <div class="content_wrap">
-                              <span class="show_label_grey" tabindex="0">Vaccination Center :</span>
-                              <span class="show_label" tabindex="0">Yes</span>
-                           </div>
-                           <div class="content_wrap">
-                              <span class="show_label_grey" tabindex="0"> Insurance : </span>
-                              <span class="show_label" tabindex="0">Yes</span>
-                           </div>
-                        </div>
-                        <div class="content_wrap">
-                           <span class="show_label_grey" tabindex="0">Out Patient Contact Number : </span>
-                           <span class="show_label" tabindex="0">+974 7973278927</span>
-                        </div>
-                       
-                        <div class="content_wrap speciality_wrap">
-                           <span class="show_label_grey" tabindex="0">Speciality</span>
-                           <span class="show_label" tabindex="0">General Surgery, Ophthalmology, Obstetrics & Gynecology</span>
-                        </div>
-                        <span class="custom_label" tabindex="0">Hashtags</span>
-                        <span class="custom_show_label" tabindex="0">#ministryofpublichealthqatar #qatarization
-                           #quatar#healthcare</span>
                      </div>
-   
-                
-        
-   
-               
-   
+                     <!-- tab2 close-->
+
+                     <!-- tab3 -->
+                     <div id="tab3">
+                        <h3 tabindex="0">FAQ</h3>
+                        <ul class="facilities_wrap digit_wrap">
+                           <li tabindex="0">
+                              <p class="commn_para">Question - How to open a Children Savings account?
+                                 <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
+                                    their child’s financial
+                                    future
+                                    as soon as possible – which is why our Children’s Savings Account, based on the
+                                    Mudarabah
+                                    concept, ensures that you benefit from our world-class banking service.</span>
+                              </p>
+                           </li>
+                           <li tabindex="0">
+                              <p class="commn_para">
+                                 Question - How are the education saving plans?
+                                 <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
+                                    their child’s financial
+                                    future as
+                                    soon as possible – which is why our Children’s Savings Account, based on the Mudarabah
+                                    concept,
+                                    ensures that you benefit from our world-class banking service.</span>
+                              </p>
+                           </li>
+                        </ul>
+                     </div>
+                     <!-- tab3 close-->
+
                   </div>
-   
+                  <!--Left Col Close-->
+                  <!--Right Col-->
                   <div class="flex_col_sm_5">
-                     <span class="share_g share_l"></span>
-                     <span class="bookmark_g bookmark_l"></span>
-                  </div>
-   
-               </div>
-                <div class="flex_row reverse">
-                     <div class="flex_col_sm_7">
-                        <div class="tab_wrapper detail_tab">
-
-                           <!--Owl Slider-->
-                           <div id="detail_tab_owl" class="tab_owl owl-carousel owl-loaded owl-drag">
-                              <!-- item repeat -->
-                              <div class="item"><a href="#tab1" tabindex="0" class="active">Facilities</a></div>
-                              <!-- item repeat close -->
-      
-                              <!-- item repeat -->
-                              <div class="item"><a href="#tab2"  tabindex="0" class="">Key Contacts</a></div>
-                              <!-- item repeat close -->
-      
-                              <!-- item repeat -->
-                              <div class="item"><a href="#tab3" tabindex="0" class="">FAQ</a></div>
-                              <!-- item repeat close -->
-      
-                              <!-- item repeat -->
-                              <div class="item"><a href="#tab4"  tabindex="0" class="">Feedback</a></div>
-                              <!-- item repeat close -->
-                           </div>
-                           <!-- Owl Slider close-->
+                     <div class="detail_card">
+                        <div class="title_wrap">
+                           <h3 tabindex="0">Reception</h3>
+                           <a href="https://web.whatsapp.com/" target="_blank" class="icon whatsap" tabindex="0">Connect to Whatsapp</a>
                         </div>
-                     </div>
-                     <div class="flex_col_sm_5">
-                        <div class="btn_wrap">
-                           <button class="rouge_btn" tabindex="0"> Book Appointment</button>
+                        <div class="ev_card">
+                           <span class="show_label icon name" tabindex="0">Mr. Hamad Khan</span>
+                           <a href="tel:+9747973278927" class="show_label icon mob" tabindex="0">+974 7973278927</a>
+                           <a href="mailto:hamad.khan@hamad.com" tabindex="0" target="_blank" class="show_label icon email">
+                              hamad.khan@hamad.com</a>
+
                         </div>
-                     </div>
-               </div>
-            </div>  
-         </div>
-
-
-
-        
-         <!--Category details block-->
-         <div class="custom_container">
-            <div class="flex_row">
-               <!--Left Col-->
-               <div class="flex_col_sm_7">
-
-                  <!-- tab1 -->
-                  <div id="tab1">
-                     <h3 tabindex="0">Facilities</h3>
-                     <ul class="facilities_wrap">
-                        <li tabindex="0"><span>Washroom</span></li>
-                        <li tabindex="0"><span>Wheelchari Assistance</span></li>
-                        <li tabindex="0"><span>On-Site Parking</span></li>
-                        <li tabindex="0"><span>Food & Beverages</span></li>
-                        <li tabindex="0"><span>Public Transport</span></li>
-                        <li tabindex="0"><span>Waste & Recycling facilities</span></li>
-                     </ul>
-                  </div>
-                  <!-- tab1 close-->
-
-                  <!-- tab2 -->
-                  <div id="tab2">
-                     <h3 tabindex="0">Key Contacts</h3>
-                     <ul class="facilities_wrap digit_wrap key_contacts">
-                        <li>
-                           <span tabindex="0">Mr. Chapman Taylor (Administrator)</span>
-                           <a href="tel:+9747973278927" tabindex="0"><span>+974 4483 9990</span></a>
-                           <a href="mailto:info@mallofqatar.qa" tabindex="0" target="_blank"><span>info@mallofqatar.qa</span></a>
-                        </li>
-                        <li>
-                           <span tabindex="0">Mr. Chapman Taylor (Administrator)</span>
-                           <a href="tel:+9747973278927" tabindex="0"><span>+974 4483 9990</span></a>
-                           <a href="mailto:info@mallofqatar.qa" tabindex="0" target="_blank"><span>info@mallofqatar.qa</span></a>
-                        </li>
-                     </ul>
-                  </div>
-                  <!-- tab2 close-->
-
-                  <!-- tab3 -->
-                  <div id="tab3">
-                     <h3 tabindex="0">FAQ</h3>
-                     <ul class="facilities_wrap digit_wrap">
-                        <li tabindex="0">
-                           <p class="commn_para">Question - How to open a Children Savings account?
-                              <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
-                                 their child’s financial
-                                 future
-                                 as soon as possible – which is why our Children’s Savings Account, based on the
-                                 Mudarabah
-                                 concept, ensures that you benefit from our world-class banking service.</span>
-                           </p>
-                        </li>
-                        <li tabindex="0">
-                           <p class="commn_para">
-                              Question - How are the education saving plans?
-                              <span class="answer">Answer - At QIB we understand the need of parents wanting to secure
-                                 their child’s financial
-                                 future as
-                                 soon as possible – which is why our Children’s Savings Account, based on the Mudarabah
-                                 concept,
-                                 ensures that you benefit from our world-class banking service.</span>
-                           </p>
-                        </li>
-                     </ul>
-                  </div>
-                  <!-- tab3 close-->
-
-               </div>
-               <!--Left Col Close-->
-               <!--Right Col-->
-               <div class="flex_col_sm_5">
-                  <div class="detail_card">
-                     <div class="title_wrap">
-                        <h3 tabindex="0">Reception</h3>
-                        <a href="https://web.whatsapp.com/" target="_blank" class="icon whatsap" tabindex="0">Add to Whatsapp</a>
-                     </div>
-                     <div class="ev_card">
-                        <span class="show_label icon name" tabindex="0">Mr. Hamad Khan</span>
-                        <a href="tel:+9747973278927" class="show_label icon mob" tabindex="0">+974 7973278927</a>
-                        <a href="mailto:hamad.khan@hamad.com" tabindex="0" target="_blank" class="show_label icon email">
-                           hamad.khan@hamad.com</a>
-
-                     </div>
-                     <div class="ev_card">
-                        <figure class="card_img">
-                           <img src="assets/images/map.jpg" alt="map" />
-                           <span class="address" tabindex="0">Sheraton Grand Doha Resort &
-                              Conventional hotel</span>
-                        </figure>
-                        <a href="#" class="view_map" tabindex="0">View on maps</a>
-                     </div>
-                     <div class="similar_services">
-                        <h3 tabindex="0">Related Services</h3>
-                        <!-- Order medicine card -->
                         <div class="ev_card">
                            <figure class="card_img">
-                              <img src="assets/images/health_care.jpg" alt="medicine" />
+                              <img src="assets/images/map.jpg" alt="map" />
+                              <span class="address" tabindex="0">Sheraton Grand Doha Resort &
+                                 Conventional hotel</span>
                            </figure>
-                           <a href="#"  tabindex="0" class="txt_booking">Order medicine</a>
-                           <span class="subtext" tabindex="0">Purchase at best price on Prescription</span>
+                           <a href="#" class="view_map" tabindex="0">View on maps</a>
                         </div>
-                        <!-- Order medicine card close -->
-
-                        <!-- Cabs card -->
-                        <div class="ev_card cab">
-                           <figure class="card_img">
-                              <img src="assets/images/tourist-banner.png" alt="cab-img" />
-                           </figure>
-                           <a href="#" class="txt_booking" tabindex="0">Book a Cab</a>
-                           <span class="subtext" tabindex="0">Drive, Ride, Order and Pay with Careem</span>
-                        </div>
-                        <!-- Cabs card close-->
-
-                     </div>
-                  </div>
-
-               </div>
-               <!--Right Col Close-->
-            </div>
-         </div>
-         <!--Category details block close-->
-
-         <!--other-->
-         <div class="custom_container">
-            <div class="more_wrap grid_view">
-               <h1>Other Hospitals Around You</h1>
-               <div class="flex_row">
-                  <!--Owl Slider-->
-                  <div id="other_list_owl" class="owl-nav-top owl-carousel owl-loaded owl-drag">
-                     <!-- Item repeat -->
-                     <div class="item">
-                        <div class="category_card category_hospital_card">
-                           <a href="#" class="list_card">
+                        <div class="similar_services">
+                           <h3 tabindex="0">Related Services</h3>
+                           <!-- Order medicine card -->
+                           <div class="ev_card">
                               <figure class="card_img">
-                                 <img src="assets/images/Lusail.png" alt="hospital-img" />
+                                 <img src="assets/images/health_care.jpg" alt="medicine" />
                               </figure>
+                              <a href="#"  tabindex="0" class="txt_booking">Order medicine</a>
+                              <span class="subtext" tabindex="0">Purchase at best price on Prescription</span>
+                           </div>
+                           <!-- Order medicine card close -->
 
-                              <div class="details">
-                                 <h2 class="card_title">Hamad General Hospital</h2>
-                                 <span class="distance">1.2 Km</span>
-                                 <span class="show_label icon time"><span class="show_label_grey">24*7</span>Yes</span>
-                                 <span class="show_label icon location">The Pearl, Pier I, Doha, Qatar</span>
-                                 <span class="show_label icon mob">+974 7973278927</span>
-                                 <div class="content_list_wrap">
-                                    <div class="content_wrap">
-                                       <span class="show_label_grey">Vaccination Center</span>
-                                       <span class="show_label">Yes</span>
-                                    </div>
-                                    <div class="content_wrap">
-                                       <span class="show_label_grey">Insurance</span>
-                                       <span class="show_label">Yes</span>
-                                    </div>
+                           <!-- Cabs card -->
+                           <div class="ev_card cab">
+                              <figure class="card_img">
+                                 <img src="assets/images/tourist-banner.png" alt="cab-img" />
+                              </figure>
+                              <a href="#" class="txt_booking" tabindex="0">Book a Cab</a>
+                              <span class="subtext" tabindex="0">Drive, Ride, Order and Pay with Careem</span>
+                           </div>
+                           <!-- Cabs card close-->
+
+                        </div>
+                     </div>
+
+                  </div>
+                  <!--Right Col Close-->
+               </div>
+            </div>
+            <!--Category details block close-->
+
+         
+         </div>
+
+       <!--other-->
+       <div class="custom_container">
+         <div class="more_wrap grid_view">
+            <h1>Other Hospitals Around You</h1>
+            <div class="flex_row">
+               <!--Owl Slider-->
+               <div id="other_list_owl" class="owl-nav-top owl-carousel owl-loaded owl-drag">
+                  <!-- Item repeat -->
+                  <div class="item">
+                     <div class="category_card category_hospital_card">
+                        <a href="#" class="list_card">
+                           <figure class="card_img">
+                              <img src="assets/images/Lusail.png" alt="hospital-img" />
+                           </figure>
+
+                           <div class="details">
+                              <h2 class="card_title">Hamad General Hospital</h2>
+                              <span class="distance">1.2 Km</span>
+                              <span class="show_label icon time"><span class="show_label_grey">24*7</span>Yes</span>
+                              <span class="show_label icon location">The Pearl, Pier I, Doha, Qatar</span>
+                              <span class="show_label icon mob">+974 7973278927</span>
+                              <div class="content_list_wrap">
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Vaccination Center</span>
+                                    <span class="show_label">Yes</span>
                                  </div>
-                                 <div class="content_wrap speciality_wrap">
-                                    <span class="show_label_grey">Speciality</span>
-                                    <span class="show_label">General Surgery, Ophthalmology, Obstetrics &
-                                       Gynecology<span class="more">+2 MORE</span></span>
+                                 <div class="content_wrap">
+                                    <span class="show_label_grey">Insurance</span>
+                                    <span class="show_label">Yes</span>
                                  </div>
                               </div>
+                              <div class="content_wrap speciality_wrap">
+                                 <span class="show_label_grey">Speciality</span>
+                                 <span class="show_label">General Surgery, Ophthalmology, Obstetrics &
+                                    Gynecology<span class="more">+2 MORE</span></span>
+                              </div>
+                           </div>
 
-                              <span class="share_g share_l"></span>
-                              <span class="bookmark_g bookmark_l category_bookmark"></span>
-                           </a>
-                        </div>
+                           <span class="share_g share_l"></span>
+                           <span class="bookmark_g bookmark_l category_bookmark"></span>
+                        </a>
                      </div>
-                     <!-- Item repeat close -->
                   </div>
-                  <!--Owl Slider close-->
+                  <!-- Item repeat close -->
                </div>
+               <!--Owl Slider close-->
             </div>
          </div>
-         <!--other close-->
       </div>
+      <!--other close-->
 
       <!--footer-->
       <footer>
          <div class="footer_inner">
             <div class="foot_row">
                <div class="copy_right" tabindex="0">
-                  Copyrigt © 2019 MOTC. All rights reserved.
+                  Copyright © 2019 MOTC. All rights reserved.
                </div>
                <div class="foot_nav">
                   <nav>
