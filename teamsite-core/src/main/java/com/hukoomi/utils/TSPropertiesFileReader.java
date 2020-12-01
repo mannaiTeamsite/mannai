@@ -11,6 +11,12 @@ import com.interwoven.cssdk.filesys.CSSimpleFile;
 import com.interwoven.cssdk.filesys.CSVPath;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 
+/**
+ * TSPropertiesFileReader is the teamsite property file reader, used for reading
+ * the property file configuration using the CSClient and CSExternalTask.
+ * 
+ * @author Vijayaragavamoorthy
+ */
 public class TSPropertiesFileReader {
     /**
      * Properties object that holds the property values

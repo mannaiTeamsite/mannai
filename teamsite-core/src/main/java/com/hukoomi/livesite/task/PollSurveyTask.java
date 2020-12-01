@@ -26,42 +26,150 @@ import com.interwoven.cssdk.filesys.CSSimpleFile;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
 
+/**
+ * PollSurveyTask is the workflow task class for polls and survey master data
+ * insert URL task. It contains methods to insert / update polls and survey
+ * master date to its corresponding tables.
+ * 
+ * @author Vijayaragavamoorthy
+ */
 public class PollSurveyTask implements CSURLExternalTask {
-    /** Logger object to check the flow of the code. */
+    /**
+     * Logger object to check the flow of the code.
+     */
     private final Logger logger = Logger.getLogger(PollSurveyTask.class);
+    /**
+     * DCR Type Meta data name
+     */
     public static final String META_DATA_NAME_DCR_TYPE = "TeamSite/Templating/DCR/Type";
+    /**
+     * XPath to the poll /sruvey id
+     */
     public static final String ID_PATH = "/root/information/id";
+    /**
+     * XPath to the language selection
+     */
     public static final String LANG_PATH = "/root/information/language/value";
+    /**
+     * XPath to the poll question
+     */
     public static final String QUESTION_PATH = "/root/detail/question";
+    /**
+     * XPath to the poll start date
+     */
     public static final String POLL_START_DATE_PATH = "/root/detail/start-date";
+    /**
+     * XPath to the poll end date
+     */
     public static final String POLL_END_DATE_PATH = "/root/detail/end-date";
+    /**
+     * XPath to the persona selection
+     */
     public static final String PERSONA_PATH = "/root/settings/persona/value";
+    /**
+     * XPath to the option
+     */
     public static final String OPTION_PATH = "/root/detail/option";
+    /**
+     * XPath to the survey title
+     */
     public static final String TITLE_PATH = "/root/details/survey-title";
+    /**
+     * XPath to the survey description
+     */
     public static final String DESCRIPTION_PATH = "/root/details/description";
+    /**
+     * XPath to the survey start date
+     */
     public static final String SURVEY_START_DATE_PATH = "/root/details/start-date";
+    /**
+     * XPath to the survey end date
+     */
     public static final String SURVEY_END_DATE_PATH = "/root/details/end-date";
+    /**
+     * XPath to the survey form field
+     */
     public static final String FIELD_PATH = "/root/form-field";
+    /**
+     * Success transition message
+     */
     public static final String SUCCESS_TRANSITION = "Insert Master Data Success";
+    /**
+     * Failure transition message
+     */
     public static final String FAILURE_TRANSITION = "Insert Master Data Failure";
+    /**
+     * Database property file name
+     */
     private static final String DB_PROPERTY_FILE = "dbconfig.properties";
+    /**
+     * XPath for the poll option label
+     */
     private static final String OPTION_LABEL = "label";
+    /**
+     * XPath for the poll option value
+     */
     private static final String OPTION_VALUE = "value";
+    /**
+     * Transition hashmap key
+     */
     private static final String TRANSITION = "TRANSITION";
+    /**
+     * Transition comment hashmap key
+     */
     private static final String TRANSITION_COMMENT = "TRANSITION_COMMENT";
+    /**
+     * Poll update transition success message
+     */
     private static final String POLL_UPDATE_SUCCESS = "Poll master data updated successfully";
+    /**
+     * Poll update transition failure message
+     */
     private static final String POLL_UPDATE_FAILURE = "Failed to updated poll master data";
+    /**
+     * Poll insert transition success message
+     */
     private static final String POLL_INSERT_SUCCESS = "Poll master data inserted successfully";
+    /**
+     * Poll insert transition failure message
+     */
     private static final String POLL_INSERT_FAILURE = "Failed to insert poll master data";
+    /**
+     * Poll transition technical error message
+     */
     private static final String POLL_TECHNICAL_ERROR = "Technical Error in poll master data insert";
+    /**
+     * Survey update transition success message
+     */
     private static final String SURVEY_UPDATE_SUCCESS = "Survey master data updated successfully";
+    /**
+     * Survey update transition failure message
+     */
     private static final String SURVEY_UPDATE_FAILURE = "Failed to updated survey master data";
+    /**
+     * Survey insert transition success message
+     */
     private static final String SURVEY_INSERT_SUCCESS = "Survey master data inserted successfully";
+    /**
+     * Survey insert transition failure message
+     */
     private static final String SURVEY_INSERT_FAILURE = "Failed to insert survey master data";
+    /**
+     * Survey transition technical error message
+     */
     private static final String SURVEY_TECHNICAL_ERROR = "Technical Error in survey master data insert";
-
+    /**
+     * Postgre class instance variable
+     */
     Postgre postgre = null;
 
+    /**
+     * Overridden method from CSSDK
+     * 
+     * @param client CSClient object
+     * @param task   CSExternalTask object
+     * @param params Hashtable object
+     */
     @Override
     public void execute(CSClient client, CSExternalTask task,
             Hashtable params) throws CSException {
@@ -112,6 +220,13 @@ public class PollSurveyTask implements CSURLExternalTask {
                 statusMap.get(TRANSITION_COMMENT));
     }
 
+    /**
+     * Method process the poll dcr from the workflow task and insert poll master
+     * data
+     * 
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns map contains the transition status and transition comment.
+     */
     public Map<String, String> processPollDCR(
             CSSimpleFile taskSimpleFile) {
         boolean isDBOperationSuccess = false;
@@ -150,6 +265,13 @@ public class PollSurveyTask implements CSURLExternalTask {
         return statusMap;
     }
 
+    /**
+     * Method process the survey dcr from the workflow task and insert survey master
+     * data
+     * 
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns map contains the transition status and transition comment.
+     */
     public Map<String, String> processSurveyDCR(
             CSSimpleFile taskSimpleFile) {
         boolean isDBOperationSuccess = false;
@@ -192,6 +314,12 @@ public class PollSurveyTask implements CSURLExternalTask {
         return statusMap;
     }
 
+    /**
+     * Method to get the task file as a xml document.
+     * 
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns xml document of the task file.
+     */
     public Document getTaskDocument(CSSimpleFile taskSimpleFile) {
         logger.debug("PollSurveyTask : getTaskDocument");
         Document document = null;
@@ -199,8 +327,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             byte[] taskSimpleFileByteArray = taskSimpleFile.read(0, -1);
             String taskSimpleFileString = new String(
                     taskSimpleFileByteArray);
-            logger.debug(
-                    "taskSimpleFileString : " + taskSimpleFileString);
+            logger.debug("taskSimpleFileString : " + taskSimpleFileString);
             document = DocumentHelper.parseText(taskSimpleFileString);
             logger.debug("document : " + document.asXML());
         } catch (Exception e) {
@@ -211,6 +338,13 @@ public class PollSurveyTask implements CSURLExternalTask {
         return document;
     }
 
+    /**
+     * Checks for poll master data already exists
+     * 
+     * @param document Document object of the polls DCR
+     * @return Returns true if the poll data is already available in the database
+     *         else returns false
+     */
     public boolean isPollMasterDataAvailable(Document document) {
         logger.debug("PollSurveyTask : isPollMasterDataAvailable");
         PreparedStatement prepareStatement = null;
@@ -252,6 +386,12 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isPollDataAvailable;
     }
 
+    /**
+     * Method creates the business object, calls insert master and option data
+     * 
+     * @param document Document object of the polls DCR
+     * @return Returns status of the insert poll data as boolean
+     */
     public boolean insertPollData(Document document) {
         logger.debug("PollSurveyTask : insertPollData");
         Connection connection = null;
@@ -311,6 +451,14 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isPollDataInserted;
     }
 
+    /**
+     * Method inserts the polls master data
+     * 
+     * @param pollsBO    Polls business object
+     * @param connection Database connection object
+     * @return Returns number of rows affected by query execution
+     * @throws SQLException
+     */
     public int insertPollMasterData(PollsBO pollsBO, Connection connection)
             throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -346,6 +494,15 @@ public class PollSurveyTask implements CSURLExternalTask {
         return result;
     }
 
+    /**
+     * Method inserts the polls option data
+     * 
+     * @param pollsBO    Polls business object
+     * @param document   Document object of the polls DCR
+     * @param connection Database connection object
+     * @return Returns true for successful insert else false for failure.
+     * @throws SQLException
+     */
     public boolean insertPollOptionsData(PollsBO pollsBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -400,6 +557,12 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isPollOptionInserted;
     }
 
+    /**
+     * Method creates the business object, calls update master and option data
+     * 
+     * @param document Document object of the polls DCR
+     * @return Returns status of the update poll data as boolean
+     */
     public boolean updatePollData(Document document) {
         logger.debug("PollSurveyTask : updatePollData");
         Connection connection = null;
@@ -417,11 +580,12 @@ public class PollSurveyTask implements CSURLExternalTask {
             pollsBO.setPersona(getDCRValue(document, PERSONA_PATH));
 
             int result = updatePollMasterData(pollsBO, connection);
-            
+
             if (result > 0) {
                 logger.info("Poll Master Data Updated");
 
-                boolean isPollOptionUpdated = updatePollOptionsData(pollsBO, document, connection);
+                boolean isPollOptionUpdated = updatePollOptionsData(
+                        pollsBO, document, connection);
                 if (isPollOptionUpdated) {
                     connection.commit();
                     logger.info("Poll Option Updated");
@@ -441,8 +605,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                 if (connection != null) {
                     connection.rollback();
                 }
-                logger.error("Exception in updatePollData: "
-                        + e.getMessage());
+                logger.error(
+                        "Exception in updatePollData: " + e.getMessage());
                 e.printStackTrace();
             } catch (SQLException ex) {
                 logger.error(
@@ -456,8 +620,17 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return isPollDataInserted;
     }
-    
-    public int updatePollMasterData(PollsBO pollsBO, Connection connection) throws SQLException {
+
+    /**
+     * Method updates the polls master data
+     * 
+     * @param pollsBO    Polls business object
+     * @param connection Database connection object
+     * @return Returns number of rows affected by query execution
+     * @throws SQLException
+     */
+    public int updatePollMasterData(PollsBO pollsBO, Connection connection)
+            throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
@@ -473,13 +646,15 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(1, pollsBO.getQuestion());
             preparedStatement.setDate(2, getDate(pollsBO.getEndDate()));
             preparedStatement.setString(3, pollsBO.getPersona());
-            preparedStatement.setLong(4, Long.parseLong(pollsBO.getPollId()));
+            preparedStatement.setLong(4,
+                    Long.parseLong(pollsBO.getPollId()));
             preparedStatement.setString(5, pollsBO.getLang());
 
             result = preparedStatement.executeUpdate();
             logger.info("updatePollMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in updatePollMasterData: " + e.getMessage());
+            logger.error("Exception in updatePollMasterData: "
+                    + e.getMessage());
             e.printStackTrace();
             throw e;
         } finally {
@@ -488,9 +663,18 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return result;
     }
-    
-    public boolean updatePollOptionsData(PollsBO pollsBO, Document document, Connection connection)
-            throws SQLException {
+
+    /**
+     * Method updates the polls option data
+     * 
+     * @param pollsBO    Polls business object
+     * @param document   Document object of the polls DCR
+     * @param connection Database connection object
+     * @return Returns true for successful update else false for failure.
+     * @throws SQLException
+     */
+    public boolean updatePollOptionsData(PollsBO pollsBO,
+            Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean isPollOptionUpdated = false;
         try {
@@ -506,20 +690,19 @@ public class PollSurveyTask implements CSURLExternalTask {
             List<Node> nodes = document.selectNodes(OPTION_PATH);
             long optionId = 1l;
             for (Node node : nodes) {
-                logger.info(
-                        "updatePollMasterData optionId : " + optionId);
+                logger.info("updatePollMasterData optionId : " + optionId);
                 String label = node.selectSingleNode(OPTION_LABEL)
                         .getText();
                 logger.info("updatePollMasterData label : " + label);
                 preparedStatement.setString(1, label);
                 preparedStatement.setLong(2, optionId);
-                preparedStatement.setLong(3, Long.parseLong(pollsBO.getPollId()));
+                preparedStatement.setLong(3,
+                        Long.parseLong(pollsBO.getPollId()));
                 preparedStatement.setString(4, pollsBO.getLang());
                 preparedStatement.addBatch();
                 optionId++;
             }
-            int[] optionBatch = preparedStatement
-                    .executeBatch();
+            int[] optionBatch = preparedStatement.executeBatch();
             logger.info("updatePollMasterData optionBatch length : "
                     + optionBatch.length);
 
@@ -527,7 +710,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                 isPollOptionUpdated = true;
             }
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertPollOptionsData: " + e.getMessage());
+            logger.error("Exception in insertPollOptionsData: "
+                    + e.getMessage());
             e.printStackTrace();
             throw e;
         } finally {
@@ -537,6 +721,13 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isPollOptionUpdated;
     }
 
+    /**
+     * Checks for survey master data already exists
+     * 
+     * @param document Document object of the survey DCR
+     * @return Returns true if the survey data is already available in the database
+     *         else returns false
+     */
     public boolean isSurveyMasterDataAvailable(Document document) {
         logger.debug("PollSurveyTask : isSurveyMasterDataAvailable");
         PreparedStatement prepareStatement = null;
@@ -578,6 +769,13 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isSurveyDataAvailable;
     }
 
+    /**
+     * Method creates the business object, calls insert master, question and option
+     * data
+     * 
+     * @param document Document object of the survey DCR
+     * @return Returns status of the insert survey data as boolean
+     */
     public boolean insertSurveyData(Document document) {
         logger.debug("PollSurveyTask : insertSurveyData");
         Connection connection = null;
@@ -635,6 +833,14 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isSurveyDataInserted;
     }
 
+    /**
+     * Method inserts the survey master data
+     * 
+     * @param surveyBO   Survey business object
+     * @param connection Database connection object
+     * @return Returns number of rows affected by query execution
+     * @throws SQLException
+     */
     public int insertSurveyMasterData(SurveyBO surveyBO,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -672,6 +878,15 @@ public class PollSurveyTask implements CSURLExternalTask {
         return result;
     }
 
+    /**
+     * Method inserts the survey question data
+     * 
+     * @param surveyBO   Survey business object
+     * @param document   Document object of the survey DCR
+     * @param connection Database connection object
+     * @return Returns true for successful insert else false for failure.
+     * @throws SQLException
+     */
     public boolean insertSurveyQuestionData(SurveyBO surveyBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -756,6 +971,15 @@ public class PollSurveyTask implements CSURLExternalTask {
         return result;
     }
 
+    /**
+     * Method inserts the survey option data
+     * 
+     * @param surveyBO   Survey business object
+     * @param node       Node object of the survey option node
+     * @param connection Database connection object
+     * @return Returns true for successful insert else false for failure.
+     * @throws SQLException
+     */
     public boolean insertSurveyOptionData(SurveyBO surveyBO, Node node,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -812,6 +1036,12 @@ public class PollSurveyTask implements CSURLExternalTask {
         return result;
     }
 
+    /**
+     * Method creates the business object, calls update master and option data
+     * 
+     * @param document Document object of the survey DCR
+     * @return Returns status of the update survey data as boolean
+     */
     public boolean updateSurveyData(Document document) {
         logger.debug("PollSurveyTask : updateSurveyData");
         PreparedStatement prepareStatement = null;
@@ -833,7 +1063,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setEndDate(
                     getDCRValue(document, SURVEY_END_DATE_PATH));
             surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
-            logger.debug("SurveyBO : "+surveyBO);
+            logger.debug("SurveyBO : " + surveyBO);
 
             int result = updateSurveyMasterData(surveyBO, connection);
 
@@ -879,6 +1109,14 @@ public class PollSurveyTask implements CSURLExternalTask {
         return isSurveyDataUpdated;
     }
 
+    /**
+     * Method updates the survey master data
+     * 
+     * @param surveyBO   Survey business object
+     * @param connection Database connection object
+     * @return Returns number of rows affected by query execution
+     * @throws SQLException
+     */
     public int updateSurveyMasterData(SurveyBO surveyBO,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -916,6 +1154,15 @@ public class PollSurveyTask implements CSURLExternalTask {
         return result;
     }
 
+    /**
+     * Method updates the survey question data
+     * 
+     * @param surveyBO   Survey business object
+     * @param document   Document object of the survey DCR
+     * @param connection Database connection object
+     * @return Returns true for successful update else false for failure.
+     * @throws SQLException
+     */
     public boolean updateSurveyQuestionData(SurveyBO surveyBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -990,6 +1237,15 @@ public class PollSurveyTask implements CSURLExternalTask {
         return result;
     }
 
+    /**
+     * Method updates the survey option data
+     * 
+     * @param surveyBO   Survey business object
+     * @param node       Node object of the survey option node
+     * @param connection Database connection object
+     * @return Returns true for successful update else false for failure.
+     * @throws SQLException
+     */
     public boolean updateSurveyOptionData(SurveyBO surveyBO, Node node,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
@@ -1046,6 +1302,13 @@ public class PollSurveyTask implements CSURLExternalTask {
         return result;
     }
 
+    /**
+     * Method to get the DCR value for the input node name
+     * 
+     * @param document Document object of the DCR
+     * @param nodeName Name of the value node
+     * @return
+     */
     public String getDCRValue(Document document, String nodeName) {
         logger.debug("PollSurveyTask : getDCRValue");
         String dcrValue = document.selectSingleNode(nodeName).getText();
@@ -1053,6 +1316,13 @@ public class PollSurveyTask implements CSURLExternalTask {
         return dcrValue;
     }
 
+    /**
+     * Method to get only the date object without time for the input date time
+     * string.
+     * 
+     * @param inputDate Input date string.
+     * @return Returns Date object created from the input date string.
+     */
     public Date getDate(String inputDate) {
         logger.debug("PollSurveyTask : getDate");
         String[] dateArr = inputDate.split(" ");
@@ -1061,6 +1331,14 @@ public class PollSurveyTask implements CSURLExternalTask {
         return outDate;
     }
 
+    /**
+     * Method to get the next sequence value from the database from the input
+     * sequence name
+     * 
+     * @param sequenceName Name of the database sequence to get the next value
+     * @param connection   Database connection object
+     * @return Returns next sequence value
+     */
     private Long getNextSequenceValue(String sequenceName,
             Connection connection) {
         Long seqValue = 0L;
