@@ -35,7 +35,6 @@ public Document getLandingContent(final RequestContext context) {
         fieldQuery = URLDecoder.decode(
                 fq, "UTF-8");
         logger.debug("fieldQuery Query : " + fieldQuery);
-        logger.info("fieldQuery Query : " + fieldQuery);
     } catch (UnsupportedEncodingException e) {
         logger.warn("Unable to decode fieldQuery="
                 + fq, e);
@@ -43,7 +42,6 @@ public Document getLandingContent(final RequestContext context) {
     String category = context
             .getParameterString("solrcategory", "");
     logger.debug("category : " + category);
-    logger.info("category : " + category);
     if (StringUtils.isNotBlank(category)) {
         if (StringUtils.isNotBlank(fieldQuery)) {
             fieldQuery += " AND category:" + category;
@@ -52,27 +50,20 @@ public Document getLandingContent(final RequestContext context) {
         }
         logger.debug("fieldQuery : " + fieldQuery);
         sqb.addFieldQuery(fieldQuery);
-    }
-    String subCategory = context.getParameterString(
-            "subCategory", "");
-    logger.debug("subCategory : " + subCategory);
-    logger.info("subCategory : " + subCategory);
-    if (StringUtils.isNotBlank(subCategory)) {
-        if (StringUtils.isNotBlank(fieldQuery)) {
-            fieldQuery += " AND subCategory:" + category;
-        } else {
-            fieldQuery = "subCategory:" + category;
         }
+
+    String fields = context.getParameterString(
+            "fields", "");
+    logger.debug("fields : " + fields);
+    if (StringUtils.isNotBlank(fields)) {
         logger.debug("fieldQuery : " + fieldQuery);
-        sqb.addFieldQuery(fieldQuery);
+        sqb.addFields(fields);
     }
     String query = sqb.build();
     logger.debug("Landing Query : " + query);
-    logger.info("Landing Query : " + query);
     Document doc = squ.doJsonQuery(query, "SolrResponse");
     Element root = doc.getRootElement();
     root.addElement("category").addText(category);
-    root.addElement("subCategory").addText(subCategory);
     return doc;
 }
 

@@ -90,12 +90,12 @@ public class LabelListGenerator {
                 }
                 String finalLabel = setLabel(nodeEnLabel, nodeArLabel);
 
-                LOGGER.info("Option Tag : " + "<Option><Value>" + finalLabel
-                        + "</Value><Display>" + nodeKey
-                        + "</Display></Option>");
+                LOGGER.info("Option Tag : " + "<Option><Display>" + finalLabel
+                        + "</Display><Value>" + nodeKey
+                        + "</Value></Option>");
                 Element eleOption = eleList.addElement("Option");
-                eleOption.addElement(value).addText(finalLabel);
-                eleOption.addElement(label).addText(nodeKey);
+                eleOption.addElement(label).addText(finalLabel);
+                eleOption.addElement(value).addText(nodeKey);
             }
         } catch (Exception ex) {
             LOGGER.error(ex.getClass().getCanonicalName()
