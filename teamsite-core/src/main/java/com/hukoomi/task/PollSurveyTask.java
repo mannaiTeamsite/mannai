@@ -1,4 +1,4 @@
-package com.hukoomi.livesite.task;
+package com.hukoomi.task;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -379,7 +379,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + e.getMessage());
             e.printStackTrace();
         } finally {
-            Postgre.releaseConnection(connection, prepareStatement, rs);
+            postgre.releaseConnection(connection, prepareStatement, rs);
             logger.info(
                     "Released connection in isPollMasterDataAvailable");
         }
@@ -445,7 +445,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 ex.printStackTrace();
             }
         } finally {
-            Postgre.releaseConnection(connection, null, null);
+            postgre.releaseConnection(connection, null, null);
             logger.info("Released insertPollData connection");
         }
         return isPollDataInserted;
@@ -488,7 +488,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertPollMasterData connection");
         }
         return result;
@@ -540,7 +540,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             int[] optionBatch = preparedStatement.executeBatch();
             logger.info("insertPollOptionsData optionBatch length : "
                     + optionBatch.length);
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
 
             if (optionBatch.length == optionId - 1) {
                 isPollOptionInserted = true;
@@ -551,7 +551,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertPollOptionsData connection");
         }
         return isPollOptionInserted;
@@ -615,7 +615,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 ex.printStackTrace();
             }
         } finally {
-            Postgre.releaseConnection(connection, null, null);
+            postgre.releaseConnection(connection, null, null);
             logger.info("Released updatePollData connection");
         }
         return isPollDataInserted;
@@ -658,7 +658,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released updatePollMasterData connection");
         }
         return result;
@@ -715,7 +715,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertPollOptionsData connection");
         }
         return isPollOptionUpdated;
@@ -763,7 +763,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + e.getMessage());
             e.printStackTrace();
         } finally {
-            Postgre.releaseConnection(connection, prepareStatement, rs);
+            postgre.releaseConnection(connection, prepareStatement, rs);
             logger.info("isSurveyMasterDataAvailable Released connection");
         }
         return isSurveyDataAvailable;
@@ -827,7 +827,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 ex.printStackTrace();
             }
         } finally {
-            Postgre.releaseConnection(connection, null, null);
+            postgre.releaseConnection(connection, null, null);
             logger.info("Released insertSurveyData connection");
         }
         return isSurveyDataInserted;
@@ -872,7 +872,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertSurveyMasterData connection");
         }
         return result;
@@ -965,7 +965,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertSurveyQuestionData connection");
         }
         return result;
@@ -1030,7 +1030,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertSurveyOptionData connection");
         }
         return result;
@@ -1100,10 +1100,10 @@ public class PollSurveyTask implements CSURLExternalTask {
                 ex.printStackTrace();
             }
         } finally {
-            Postgre.releaseConnection(null, prepareStatementSurveyQuestion,
+            postgre.releaseConnection(null, prepareStatementSurveyQuestion,
                     null);
-            Postgre.releaseConnection(null, optionPrepareStatement, null);
-            Postgre.releaseConnection(connection, prepareStatement, rs);
+            postgre.releaseConnection(null, optionPrepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
             logger.info("Released updateSurveyMasterData connection");
         }
         return isSurveyDataUpdated;
@@ -1148,7 +1148,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released updateSurveyMasterData connection");
         }
         return result;
@@ -1231,7 +1231,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released updateSurveyQuestionData connection");
         }
         return result;
@@ -1296,7 +1296,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             e.printStackTrace();
             throw e;
         } finally {
-            Postgre.releaseConnection(null, preparedStatement, null);
+            postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released updateSurveyOptionData connection");
         }
         return result;
@@ -1352,10 +1352,11 @@ public class PollSurveyTask implements CSURLExternalTask {
             while (rs.next()) {
                 seqValue = rs.getLong("seqValue");
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
+            logger.error("Exception  : " + e.getMessage());
             e.printStackTrace();
         } finally {
-            Postgre.releaseConnection(connection, queryStmt, rs);
+            postgre.releaseConnection(connection, queryStmt, rs);
         }
         return seqValue;
     }

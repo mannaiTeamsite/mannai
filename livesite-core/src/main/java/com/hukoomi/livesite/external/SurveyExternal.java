@@ -171,8 +171,8 @@ public class SurveyExternal {
             logger.error("Exception in insertSurveyResponse : "+e.getMessage());
             e.printStackTrace();
         } finally {
-            Postgre.releaseConnection(null, answersprepareStatement, null);
-            Postgre.releaseConnection(connection, surveyprepareStatement,
+            postgre.releaseConnection(null, answersprepareStatement, null);
+            postgre.releaseConnection(connection, surveyprepareStatement,
                     rs);
         }
 
@@ -220,7 +220,7 @@ public class SurveyExternal {
             logger.error("Exception in getNextSequenceValue : "+e.getMessage());
             e.printStackTrace();
         } finally {
-            Postgre.releaseConnection(connection, queryStmt, rs);
+            postgre.releaseConnection(connection, queryStmt, rs);
         }
         return seqValue;
     }

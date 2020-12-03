@@ -24,10 +24,6 @@ public class Postgre {
      * Logger object to log information 
      */
     private final Logger logger = Logger.getLogger(Postgre.class);
-    /** 
-     * Static Logger object to log information 
-     */
-    private static final Logger loggerStatic = Logger.getLogger(Postgre.class);
     /**
      * Connection object variable. 
      */
@@ -126,14 +122,14 @@ public class Postgre {
      * @param rs ResultSet to be closed
      * 
      */
-    public static void releaseConnection(Connection con, Statement stmt,
+    public void releaseConnection(Connection con, Statement stmt,
             ResultSet rs) {        
-        loggerStatic.info("Postgre : releaseConnection()");
+        logger.info("Postgre : releaseConnection()");
         if (con != null) {
             try {
                 con.close();
             } catch (SQLException e) {
-                loggerStatic.error("Postgre : releaseConnection() : connection : " + e.getMessage());
+                logger.error("Postgre : releaseConnection() : connection : " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -141,7 +137,7 @@ public class Postgre {
             try {
                 stmt.close();
             } catch (SQLException e) {
-                loggerStatic.error("Postgre : releaseConnection() : statement : " + e.getMessage());
+                logger.error("Postgre : releaseConnection() : statement : " + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -149,7 +145,7 @@ public class Postgre {
             try {
                 rs.close();
             } catch (SQLException e) {
-                loggerStatic.error("Postgre : releaseConnection() : resultset : " + e.getMessage());
+                logger.error("Postgre : releaseConnection() : resultset : " + e.getMessage());
                 e.printStackTrace();
             }
         }

@@ -253,6 +253,7 @@ public class PollsExternal {
             expiredPolls.setText(expiredPollIds);
 
         } catch (Exception e) {
+            logger.error("Exception  : " + e.getMessage());
             e.printStackTrace();
         }
 
@@ -430,7 +431,7 @@ public class PollsExternal {
             }
             logger.error(errorMsg);
         } finally {
-            Postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, null);
         }
     }
 
@@ -498,7 +499,7 @@ public class PollsExternal {
             }
             logger.error(errorMsg);
         } finally {
-            Postgre.releaseConnection(connection, prepareStatement, rs);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         logger.info("Poll Result Map :: " + pollsResultMap.toString());
@@ -559,7 +560,7 @@ public class PollsExternal {
             }
             logger.error(errorMsg);
         } finally {
-            Postgre.releaseConnection(connection, prepareStatement, rs);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
         return votedPollIds.toString();
     }
