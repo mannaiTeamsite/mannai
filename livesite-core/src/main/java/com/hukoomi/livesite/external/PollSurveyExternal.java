@@ -82,8 +82,7 @@ public class PollSurveyExternal {
             }
             logger.info("Final Document :" + doc.asXML());
         } catch (Exception e) {
-            logger.error("Exception  : " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception  in  getContent", e);
         }
 
         return doc;
@@ -192,8 +191,7 @@ public class PollSurveyExternal {
 
             logger.info("Final Document  : " + doc.asXML());
         } catch (Exception e) {
-            logger.error("Exception  : " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in getGroupData",  e);
         }
 
         return doc;
@@ -298,7 +296,7 @@ public class PollSurveyExternal {
                 contentIds.add(id);
             }
         } catch (Exception e) {
-            logger.info("Exception : " + e.getMessage());
+            logger.error("Exception in fetchIds", e);
         }
         return contentIds.toString();
 

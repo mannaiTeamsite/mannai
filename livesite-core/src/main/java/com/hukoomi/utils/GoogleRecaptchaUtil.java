@@ -70,8 +70,8 @@ public class GoogleRecaptchaUtil {
             logger.debug("isValid : " + json.getBoolean("success"));
             isCaptchaValid = json.getBoolean("success");
         } catch (Exception e) {
-            logger.debug(
-                    "Exception in GoogleRecaptchaUtil " + e.getMessage());
+            logger.error(
+                    "Exception in GoogleRecaptchaUtil", e);
         }
         return isCaptchaValid;
     }

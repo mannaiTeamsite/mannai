@@ -208,8 +208,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 }
 
             } catch (Exception e) {
-                logger.error("Exception in execute: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Exception in execute: ", e);
             }
         }
 
@@ -259,8 +258,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         } catch (Exception e) {
             statusMap.put(TRANSITION, FAILURE_TRANSITION);
             statusMap.put(TRANSITION_COMMENT, POLL_TECHNICAL_ERROR);
-            logger.error("Exception in poll master: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in poll master: ", e);
         }
         return statusMap;
     }
@@ -308,8 +306,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         } catch (Exception e) {
             statusMap.put(TRANSITION, FAILURE_TRANSITION);
             statusMap.put(TRANSITION_COMMENT, SURVEY_TECHNICAL_ERROR);
-            logger.error("Exception in survey master: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in survey master: ", e);
         }
         return statusMap;
     }
@@ -331,9 +328,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             document = DocumentHelper.parseText(taskSimpleFileString);
             logger.debug("document : " + document.asXML());
         } catch (Exception e) {
-            logger.error(
-                    "Exception in getTaskDocument: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in getTaskDocument: ", e);
         }
         return document;
     }
@@ -375,9 +370,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("isPollDataAvailable : " + isPollDataAvailable);
 
         } catch (Exception e) {
-            logger.error("Exception in isPollMasterDataAvailable : "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in isPollMasterDataAvailable : ", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
             logger.info(
@@ -435,14 +428,11 @@ public class PollSurveyTask implements CSURLExternalTask {
                 if (connection != null) {
                     connection.rollback();
                 }
-                logger.error(
-                        "Exception in insertPollData: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Exception in insertPollData: ", e);
             } catch (SQLException ex) {
                 logger.error(
-                        "Exception in insertPollData rollback catch block : "
-                                + ex.getMessage());
-                ex.printStackTrace();
+                        "Exception in insertPollData rollback catch block : ",
+                        ex);
             }
         } finally {
             postgre.releaseConnection(connection, null, null);
@@ -483,9 +473,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             result = preparedStatement.executeUpdate();
             logger.info("insertPollMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertPollMasterData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in insertPollMasterData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -546,9 +534,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 isPollOptionInserted = true;
             }
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertPollOptionsData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in insertPollOptionsData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -605,14 +591,11 @@ public class PollSurveyTask implements CSURLExternalTask {
                 if (connection != null) {
                     connection.rollback();
                 }
-                logger.error(
-                        "Exception in updatePollData: " + e.getMessage());
-                e.printStackTrace();
+                logger.error("Exception in updatePollData: ", e);
             } catch (SQLException ex) {
                 logger.error(
-                        "Exception in updatePollData rollback catch block : "
-                                + ex.getMessage());
-                ex.printStackTrace();
+                        "Exception in updatePollData rollback catch block : ",
+                        ex);
             }
         } finally {
             postgre.releaseConnection(connection, null, null);
@@ -653,9 +636,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             result = preparedStatement.executeUpdate();
             logger.info("updatePollMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in updatePollMasterData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in updatePollMasterData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -710,9 +691,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 isPollOptionUpdated = true;
             }
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertPollOptionsData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in insertPollOptionsData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -759,9 +738,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                     "isSurveyDataAvailable : " + isSurveyDataAvailable);
 
         } catch (Exception e) {
-            logger.error("Exception in isSurveyMasterDataAvailable: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in isSurveyMasterDataAvailable: ", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
             logger.info("isSurveyMasterDataAvailable Released connection");
@@ -817,14 +794,11 @@ public class PollSurveyTask implements CSURLExternalTask {
                 if (connection != null) {
                     connection.rollback();
                 }
-                logger.error("Exception in insertSurveyData : "
-                        + e.getMessage());
-                e.printStackTrace();
+                logger.error("Exception in insertSurveyData : ", e);
             } catch (SQLException ex) {
                 logger.error(
-                        "Exception in insertSurveyData rollback catch block : "
-                                + ex.getMessage());
-                ex.printStackTrace();
+                        "Exception in insertSurveyData rollback catch block : ",
+                        ex);
             }
         } finally {
             postgre.releaseConnection(connection, null, null);
@@ -867,9 +841,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             result = preparedStatement.executeUpdate();
             logger.info("insertSurveyMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertSurveyMasterData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in insertSurveyMasterData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -960,9 +932,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 }
             }
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertSurveyQuestionData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in insertSurveyQuestionData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -1025,9 +995,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             }
 
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in insertSurveyOptionData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in insertSurveyOptionData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -1090,14 +1058,11 @@ public class PollSurveyTask implements CSURLExternalTask {
                 if (connection != null) {
                     connection.rollback();
                 }
-                logger.error("Exception in updateSurveyMasterData : "
-                        + e.getMessage());
-                e.printStackTrace();
+                logger.error("Exception in updateSurveyMasterData : ", e);
             } catch (SQLException ex) {
                 logger.error(
-                        "Exception in updateSurveyMasterData rollback catch block : "
-                                + ex.getMessage());
-                ex.printStackTrace();
+                        "Exception in updateSurveyMasterData rollback catch block : ",
+                        ex);
             }
         } finally {
             postgre.releaseConnection(null, prepareStatementSurveyQuestion,
@@ -1143,9 +1108,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             result = preparedStatement.executeUpdate();
             logger.info("updateSurveyMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in updateSurveyMasterData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in updateSurveyMasterData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -1226,9 +1189,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 }
             }
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in updateSurveyQuestionData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in updateSurveyQuestionData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -1291,9 +1252,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             }
 
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in updateSurveyOptionData: "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in updateSurveyOptionData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
@@ -1353,8 +1312,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 seqValue = rs.getLong("seqValue");
             }
         } catch (Exception e) {
-            logger.error("Exception  : " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in  getNextSequenceValue", e);
         } finally {
             postgre.releaseConnection(connection, queryStmt, rs);
         }

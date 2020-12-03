@@ -91,9 +91,7 @@ public class TSPropertiesFileReader {
             }
             logger.info("Finish Loading Properties File.");
         } catch (Exception e) {
-            logger.error("Exception in loading property file : "
-                    + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in loading property file : ", e);
         }
         return propFile;
     }

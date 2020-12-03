@@ -3,7 +3,6 @@ package com.hukoomi.utils;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
@@ -107,8 +106,7 @@ public class Postgre {
         try {
             con = DriverManager.getConnection(connectionString, userName, password);
         } catch (Exception e) {
-            logger.error("Postgre : getConnection()" + e.getMessage());
-            e.printStackTrace();
+            logger.error("Postgre : getConnection()", e);
         }
         return con;
     }
@@ -128,25 +126,22 @@ public class Postgre {
         if (con != null) {
             try {
                 con.close();
-            } catch (SQLException e) {
-                logger.error("Postgre : releaseConnection() : connection : " + e.getMessage());
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error("Postgre : releaseConnection() : connection : ", e);
             }
         }
         if (stmt != null) {
             try {
                 stmt.close();
-            } catch (SQLException e) {
-                logger.error("Postgre : releaseConnection() : statement : " + e.getMessage());
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error("Postgre : releaseConnection() : statement : ", e);
             }
         }
         if (rs != null) {
             try {
                 rs.close();
-            } catch (SQLException e) {
-                logger.error("Postgre : releaseConnection() : resultset : " + e.getMessage());
-                e.printStackTrace();
+            } catch (Exception e) {
+                logger.error("Postgre : releaseConnection() : resultset : ", e);
             }
         }
     }

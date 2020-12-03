@@ -3,7 +3,6 @@ package com.hukoomi.livesite.external;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -253,8 +252,7 @@ public class PollsExternal {
             expiredPolls.setText(expiredPollIds);
 
         } catch (Exception e) {
-            logger.error("Exception  : " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in createPollGroupDoc", e);
         }
 
         return document;
@@ -314,8 +312,7 @@ public class PollsExternal {
                 }
             }
         } catch (Exception e) {
-            logger.info("addResponseToXml:::::" + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in addResponseToXml", e);
         }
         return doc;
 
@@ -364,8 +361,7 @@ public class PollsExternal {
                 pollPercentElem.setText(optMap.get(POLLPCT));
             }
         } catch (Exception e) {
-            logger.info("createPollResultDoc:::::" + e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in createPollResultDoc", e);
         }
         return document;
 
@@ -424,12 +420,8 @@ public class PollsExternal {
             } else {
                 logger.info("Vote Recorded !");
             }
-        } catch (SQLException e) {
-            String errorMsg = "SQLException in insertPollResponse:";
-            if (null != e.getMessage()) {
-                errorMsg += e.getMessage();
-            }
-            logger.error(errorMsg);
+        } catch (Exception e) {
+            logger.error("Exception in insertPollResponse", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
@@ -492,12 +484,8 @@ public class PollsExternal {
 
             }
 
-        } catch (SQLException e) {
-            String errorMsg = "SQLException :";
-            if (null != e.getMessage()) {
-                errorMsg += e.getMessage();
-            }
-            logger.error(errorMsg);
+        } catch (Exception e) {
+            logger.error("Exception in getPollResponse", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
@@ -553,12 +541,8 @@ public class PollsExternal {
             }
             logger.info("Voteed Polls : " + votedPollIds.toString());
 
-        } catch (SQLException e) {
-            String errorMsg = "SQLException :";
-            if (null != e.getMessage()) {
-                errorMsg += e.getMessage();
-            }
-            logger.error(errorMsg);
+        } catch (Exception e) {
+            logger.error("Exception in checkResponseData", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }

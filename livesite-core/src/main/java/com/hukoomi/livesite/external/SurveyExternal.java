@@ -168,8 +168,7 @@ public class SurveyExternal {
                 connection.rollback();
             }
         } catch (Exception e) {
-            logger.error("Exception in insertSurveyResponse : "+e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in insertSurveyResponse", e);
         } finally {
             postgre.releaseConnection(null, answersprepareStatement, null);
             postgre.releaseConnection(connection, surveyprepareStatement,
@@ -217,8 +216,7 @@ public class SurveyExternal {
                 seqValue = rs.getLong("seqValue");
             }
         } catch (Exception e) {
-            logger.error("Exception in getNextSequenceValue : "+e.getMessage());
-            e.printStackTrace();
+            logger.error("Exception in getNextSequenceValue", e);
         } finally {
             postgre.releaseConnection(connection, queryStmt, rs);
         }
