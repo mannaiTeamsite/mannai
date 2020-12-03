@@ -21,6 +21,10 @@ public class HukoomiCuratedExternal {
             Logger.getLogger(HukoomiCuratedExternal.class);
     /** Default query to fetch all solr content. */
     public static final String DEFAULT_QUERY = "*:*";
+    /** category solr field name. */
+    private String category = "";
+    /** cateory value dcr field name. */
+    private String xnode = "";
 
     /** This method will be called from Component
      * External for solr Content fetching.
@@ -34,6 +38,10 @@ public class HukoomiCuratedExternal {
         String fieldQuery = "";
         String fq = context.getParameterString(
                 "fieldQuery", "");
+        xnode = context.getParameterString(
+                "curatedNode", "ContentType");
+        category = context.getParameterString(
+                "solrField", "category");
         try {
             fieldQuery = URLDecoder.decode(
                     fq, "UTF-8");
@@ -42,8 +50,14 @@ public class HukoomiCuratedExternal {
             logger.warn("Unable to decode fieldQuery="
                     + fq, e);
         }
-        String curatedContent = context
-                .getParameterString("curated-content", "");
+        String curatedContentPath = context
+                .getParameterString("curated-content-path",
+                "templatedata/Home-Page/Curated-Content/data");
+        String curatedContentDCR = context
+                .getParameterString("curated-content-dcr",
+                "curated-content");
+        String curatedContent = curatedContentPath
+                + "/" + curatedContentDCR;
         logger.debug("curated content : " + curatedContent);
         return getCuratedContent(context,
                 document, curatedContent, fieldQuery);
@@ -62,20 +76,23 @@ public class HukoomiCuratedExternal {
                                   final Node node, final String city,
                                   final String date) {
         String fieldQuery = fq;
+        String and = " AND ";
         String curatedCategory = node
-                .selectSingleNode("ContentType").getText();
+                .selectSingleNode(xnode).getText();
         if (StringUtils.isNotBlank(fieldQuery)) {
-            fieldQuery += " AND category:" + curatedCategory;
+            fieldQuery += and + category + ":" + curatedCategory;
         } else {
-            fieldQuery = "category:" + curatedCategory;
+            fieldQuery = category + ":" + curatedCategory;
         }
-        if (node.selectSingleNode("is-location-filter-required")
-                .getText().equals("yes") && StringUtils.isNotBlank(city)) {
-            fieldQuery += " AND " + city;
+        if (node.selectSingleNode("is-location-filter-required") != null
+        && node.selectSingleNode("is-location-filter-required")
+        .getText().equals("yes") && StringUtils.isNotBlank(city)) {
+                fieldQuery += and + city;
         }
-        if (node.selectSingleNode("is-date-filter-required")
-                .getText().equals("yes") && StringUtils.isNotBlank(date)) {
-            fieldQuery += " AND " + date;
+        if (node.selectSingleNode("is-date-filter-required") != null
+        && node.selectSingleNode("is-date-filter-required")
+        .getText().equals("yes") && StringUtils.isNotBlank(date)) {
+                fieldQuery += and + date;
         }
         return fieldQuery;
     }
@@ -132,29 +149,39 @@ public class HukoomiCuratedExternal {
                 curDoc = squ.doJsonQuery(
                         query, "CuratedContent");
                 root = curDoc.getRootElement();
-                if (null != curDoc && null != eleNode
-                        && null != root) {
-                    logger.debug("curDoc : " + curDoc);
-                    logger.debug("Content Type : "
-                            + eleNode.selectSingleNode("ContentType")
-                            .getText());
+                logger.debug("curDoc : " + curDoc);
+                logger.debug("Content Type : "
+            + eleNode.selectSingleNode(xnode).getText());
+                addElementDetails(root, eleNode);
+                docRoot.add(root);
 
-                    root.addElement("content-type")
-                            .addText(
-                                    eleNode.selectSingleNode("ContentType")
-                                            .getText());
-                    root.addElement("title")
-                            .addText(
-                                    eleNode.selectSingleNode("title")
-                                            .getText());
-                    root.addElement("image")
-                            .addText(
-                                    eleNode.selectSingleNode("image")
-                                            .getText());
-                    docRoot.add(root);
-                }
             }
         }
         return document;
+    }
+    /** This method will set the curated
+     * element details to the result doc.
+     * @param root curated doc root element.
+     * @param eleNode curated node in the curated
+     * DCR.
+     */
+    public void addElementDetails(
+        final Element root, final Node eleNode) {
+        String image = "image";
+        String title = "title";
+        root.addElement("content-type")
+                .addText(
+                        eleNode.selectSingleNode(xnode)
+                                .getText());
+        if (eleNode.selectSingleNode(title) != null) {
+            root.addElement(title)
+    .addText(eleNode.selectSingleNode(title).getText());
+        }
+        if (eleNode.selectSingleNode(image)
+                != null) {
+            root.addElement(image)
+    .addText(eleNode.selectSingleNode(image).getText());
+        }
+
     }
 }
