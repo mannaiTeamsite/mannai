@@ -3,4 +3,4 @@
  * data, get the query response and
  * to pass it to the component as a Document.
  */
-package src.main.java.com.hukoomi.livesite.weather;
+package com.hukoomi.livesite.weather;

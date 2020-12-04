@@ -7,6 +7,7 @@
   <version>0.0.1</version>
   <build>
 	<finalName>${project.artifactId}</finalName>
+	<pluginManagement>
     <plugins>
 		<plugin>
 			<groupId>org.apache.maven.plugins</groupId>
@@ -37,8 +38,8 @@
             <configuration>
                 <executable>${JAVA_HOME}/bin/javac</executable>
                 <compilerVersion>11.0.7</compilerVersion>
-                <source>6</source>
-                <target>6</target>
+                <source>11</source>
+                <target>11</target>
             </configuration>
         </plugin>
         <plugin>
@@ -140,6 +141,7 @@
 			</executions>
       </plugin>
     </plugins>
+    </pluginManagement>
   </build>
   <dependencies>
       <dependency>
