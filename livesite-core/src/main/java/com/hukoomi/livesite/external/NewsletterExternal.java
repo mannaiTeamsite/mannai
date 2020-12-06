@@ -77,7 +77,6 @@ public class NewsletterExternal {
         LOGGER.info("Newsletter Subscribtion");
         Document memberdetail = null;
         String email = context.getParameterString("email");
-        LOGGER.debug("email:" + email);
         String language = context.getParameterString("locale", "en");
         String subscriptionLang =
                 context.getParameterString("subscriptionLang");
