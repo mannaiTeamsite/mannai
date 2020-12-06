@@ -11,8 +11,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -51,9 +49,9 @@ public class NewsletterExternal {
     private static final int STATUS_OK = 200;
     /** mailchimp response status. */
     private static final String STATUS_ALREADY_SUBSCRIBED =
-            "Already Subscribed";
+            "alreadySubscribed";
     /** mailchimp response status. */
-    private static final String STATUS_ALREADY_PENDING = "Already Pending";
+    private static final String STATUS_ALREADY_PENDING = "alreadyPending";
     /** status key in mailchimp response. */
     private static final String KEY_STATUS = "status";
     /** element for document. */
@@ -76,19 +74,16 @@ public class NewsletterExternal {
      */
     public Document subscribeToNewsletter(final RequestContext context)
             throws IOException, NoSuchAlgorithmException {
-
+        LOGGER.info("Newsletter Subscribtion");
         Document memberdetail = null;
-        LOGGER.debug("Newsletter Subscribtion");
         String email = context.getParameterString("email");
         LOGGER.debug("email:" + email);
         String language = context.getParameterString("locale", "en");
-        Locale locale = new CommonUtils().getLocale(language);
-        LOGGER.debug("locale:" + locale);
         String subscriptionLang =
                 context.getParameterString("subscriptionLang");
         if (!email.equals("") && !subscriptionLang.equals("")) {
             memberdetail = createSubscriberinMailChimp(email,
-                    subscriptionLang, context, locale);
+                    subscriptionLang, context);
         }
         return memberdetail;
     }
@@ -106,72 +101,51 @@ public class NewsletterExternal {
      */
 
     public Document createSubscriberinMailChimp(final String email,
-            final String subscriptionLang, final RequestContext context,
-            final Locale lang)
+            final String subscriptionLang, final RequestContext context)
             throws IOException, NoSuchAlgorithmException {
-        // add subscriber
-        LOGGER.debug("add subcriber:");
+        LOGGER.info("createSubscriberinMailChimp:Enter");
         CommonUtils util = new CommonUtils();
-        ResourceBundle bundle = ResourceBundle
-                .getBundle("com.hukoomi.resources.Newsletter", lang);
-        String validationMessage = "";
         Document document = DocumentHelper.createDocument();
         listId = util.getConfiguration("Mailchimp_List_Id", context);
-        LOGGER.debug("listId:" + listId);
         authorizationHeader = "Basic " + util.getConfiguration(
                 "Mailchimp_Authorization_Header", context);
         baseUrl = util.getConfiguration("Mailchimp_BaseURL", context);
-        LOGGER.debug("baseUrl:" + baseUrl);
         try {
 
             String status = null;
             status = isSubscriberexist(email);
             String response = null;
-            LOGGER.debug("info: " + status);
+            LOGGER.debug("status: " + status);
 
             if (status != null) {
                 if (STATUS_NOTFOUND.equals(status)) {
                     status = STATUS_SUBSCRIBED;
                     response = createsubscriber(email, status,
                             subscriptionLang);
-                    validationMessage = bundle.getString("success.msg");
                     if (response != null) {
-                        document = getDocument(email, response,
-                                validationMessage, lang);
+                        document = getDocument(email, response);
                     }
                 } else if (STATUS_SUBSCRIBED.equals(status)) {
                     status = STATUS_ALREADY_SUBSCRIBED;
-                    validationMessage = bundle.getString("subscribed.msg");
-                    document = getDocument(email, status,
-                            validationMessage, lang);
+                    document = getDocument(email, status);
                 } else if (STATUS_PENDING.equals(status)) {
                     status = STATUS_ALREADY_PENDING;
-                    validationMessage = bundle.getString("pending.msg");
-                    document = getDocument(email, status,
-                            validationMessage, lang);
+                    document = getDocument(email, status);
                 } else if (STATUS_UNSUBSCRIBED.equals(status)) {
                     status = STATUS_PENDING;
                     response = createsubscriber(email, status,
                             subscriptionLang);
-                    String unsubMessage =
-                            bundle.getString("unsubscribed.msg");
-                    String unsubMessage1 =
-                            bundle.getString("unsubscribed.msg1");
-                    validationMessage = unsubMessage + "," + unsubMessage1;
                     if (response != null) {
-                        document = getDocument(email, response,
-                                validationMessage, lang);
+                        document = getDocument(email, response);
                     }
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("exception:" + e);
+            LOGGER.error("exception:" , e);
         }
 
         return document;
     }
-
-
 
     /**
      * this method takes the email, status, messages and returns xml
@@ -183,48 +157,14 @@ public class NewsletterExternal {
      * @param lang
      * @return document
      */
-    private Document getDocument(final String email, final String status,
-            final String validationMessage, final Locale lang) {
-        CommonUtils util = new CommonUtils();
+    private Document getDocument(final String email, final String status) {
+        LOGGER.info("getDocument:Enter");
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement(ELEMENT_RESULT);
         Element statusElement = resultElement.addElement(ELEMENT_STATUS);
-        Element msgElement = resultElement.addElement(ELEMENT_MESSAGE);
+        statusElement.setText(status);
         Element emailElement = resultElement.addElement(ELEMENT_EMAIL);
         emailElement.setText(email);
-        String pendingMessage = "";
-        String pendingMessage1 = "";
-        LOGGER.debug(status);
-        if (status.equals(STATUS_SUBSCRIBED)
-                || status.equals(STATUS_ALREADY_SUBSCRIBED)
-                || status.equals(STATUS_ALREADY_PENDING)) {
-            if ("ar".equals(lang.toString())) {
-                msgElement.setText(
-                        util.decodeToArabicString(validationMessage)
-                                + " : " + email);
-                statusElement.setText(status);
-            } else {
-                msgElement.setText(validationMessage + " : " + email);
-                statusElement.setText(status);
-            }
-        } else if (status.equals(STATUS_PENDING)) {
-            if ("ar".equals(lang.toString())) {
-
-                pendingMessage = util.decodeToArabicString(
-                        validationMessage.split(",")[0]);
-                pendingMessage1 = util.decodeToArabicString(
-                        validationMessage.split(",")[1]);
-            } else {
-                pendingMessage = validationMessage.split(",")[0];
-                pendingMessage1 = validationMessage.split(",")[1];
-            }
-            msgElement.setText(pendingMessage + " : " + email + " "
-                    + pendingMessage1);
-            statusElement.setText(status);
-        } else {
-            statusElement.setText(status);
-        }
-
         return document;
     }
 
@@ -241,9 +181,8 @@ public class NewsletterExternal {
     private String createsubscriber(final String email,
             final String status, final String lang)
             throws NoSuchAlgorithmException {
-
+        LOGGER.info("createsubscriber:Enter");
         InputStream is = null;
-
         try {
             // Create connection
             httpConnection = getConnection(email);
@@ -262,7 +201,6 @@ public class NewsletterExternal {
             httpConnection.setDoOutput(true);
 
             // Send request
-            LOGGER.debug(requestJSON);
             DataOutputStream wr =
                     new DataOutputStream(httpConnection.getOutputStream());
             wr.writeBytes(requestJSON);
@@ -284,12 +222,13 @@ public class NewsletterExternal {
             int statusCode;
             try {
                 statusCode = httpConnection.getResponseCode();
+                LOGGER.debug("statusCode: " +statusCode);
                 return String.valueOf(statusCode);
             } catch (IOException e) {
-                LOGGER.debug("exception:" + e);
+                LOGGER.error("Exception in subscriber creation: " , e);
             }
             httpConnection.disconnect();
-            LOGGER.debug("Exception:" + ioe);
+            LOGGER.error("Exception in subscriber creation: " , ioe);
             return null;
         }
 
@@ -304,7 +243,7 @@ public class NewsletterExternal {
      */
     private String isSubscriberexist(final String email)
             throws IOException, NoSuchAlgorithmException {
-
+        LOGGER.info("isSubscriberexist:Enter");
         InputStream content = null;
         try {
             httpConnection = getConnection(email);
@@ -322,12 +261,12 @@ public class NewsletterExternal {
             while ((line = rd.readLine()) != null) {
                 sb.append(line);
             }
-            LOGGER.debug("get response" + sb);
-            LOGGER.debug("test:" + httpConnection.getResponseMessage());
+            LOGGER.debug("response" + sb);
             return getStatus(sb.toString());
         } catch (IOException ioe) {
             int statusCode = httpConnection.getResponseCode();
-            if (statusCode !=  STATUS_OK) {
+            LOGGER.error("Exception:", ioe);
+            if (statusCode != STATUS_OK) {
                 return String.valueOf(statusCode);
             }
         }
@@ -344,6 +283,7 @@ public class NewsletterExternal {
      */
     private HttpURLConnection getConnection(final String email)
             throws NoSuchAlgorithmException, IOException {
+        LOGGER.info("getConnection:Enter");
         String emailHash = md5Java(email);
         String endpoint =
                 baseUrl + "/lists/" + listId + "/members/" + emailHash;
@@ -362,22 +302,22 @@ public class NewsletterExternal {
      */
     private String md5Java(final String message)
             throws NoSuchAlgorithmException {
-        String digest = null;
+        LOGGER.info("md5Java:Enter");
         MessageDigest md = MessageDigest.getInstance("MD5");
 
         byte[] hash = md.digest(message.getBytes(StandardCharsets.UTF_8));
         // Convert byte array into signum representation
         BigInteger no = new BigInteger(1, hash);
         // Convert message digest into hex value
-        String tempDigest = no.toString(HEXA);
-        while (tempDigest.length() < DIGEST_LENGTH) {
-            tempDigest = "0" + digest;
-            digest = tempDigest;
-            }
+        String digest = no.toString(HEXA);
+        while (digest.length() < DIGEST_LENGTH) {
+            digest = "0" + digest;
+        }
         return digest;
     }
 
     private String getStatus(final String response) {
+        LOGGER.info("getStatus:Enter");
         String status = null;
         if (!response.equals("")) {
             JSONObject jsonObj = new JSONObject(response);

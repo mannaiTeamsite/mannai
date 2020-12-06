@@ -1,8 +1,6 @@
 package com.hukoomi.livesite.external;
 
-import java.util.Locale;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -26,15 +24,6 @@ public class ContactUsExternal {
     /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(ContactUsExternal.class);
-    /** initialization of context parameter with captcha. */
-    private static final String RECAPTCHA_RESPONSE = "captcha";
-    /** initialization of email body text. */
-    private static final String EMAIL_START_TEXT = "text.email_start";
-    /** initialization of email send text. */
-    private static final String EMAIL_SENT_TEXT = "text.mail_sent";
-    /** initialization of error in email send. */
-    private static final String ERROR_MAIL_SENDING_TEXT =
-            "error.sending.email ";
     /** initialization of config code variable. */
     private static final String CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL =
             "Hukoomi_Contact_To_Mail";
@@ -47,16 +36,13 @@ public class ContactUsExternal {
     /** initialization of config code variable. */
     private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT =
             "Hukoomi_Contact_Mail_Port";
-    /** initialization of error in recaptcha for validation. */
-    private static final String ERROR_RECAPTCHA_TEXT =
-            "error.captcha.feedback";
     /** initialization of error variable. */
-    private static final String STATUS_ERROR = "error";
+    private static final String STATUS_ERROR_RECAPTHCHA =
+            "errorInRecaptcha";
+    /** initialization of error variable. */
+    private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
     /** initialization of success variable. */
     private static final String STATUS_SUCCESS = "success";
-    /** initialization of resource bundle path. */
-    private static final String RESOURCE_BUNDLE_PATH =
-            "com.hukoomi.resources.ContactUs";
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -77,48 +63,30 @@ public class ContactUsExternal {
         String action = null;
         String gRecaptchaResponse = null;
         String status = "";
-        String msg = "";
-        String language = "";
         action = context.getParameterString("action");
         LOGGER.debug("action:" + action);
-        language = context.getParameterString("locale");
-        Locale locale = new CommonUtils().getLocale(language);
-        LOGGER.debug("lang:" + locale);
-        ResourceBundle bundle =
-                ResourceBundle.getBundle(RESOURCE_BUNDLE_PATH, locale);
         if (action.equals("sendmail")) {
-            LOGGER.debug("Sendingemail.");
+            LOGGER.info("Sendingemail.");
+            LOGGER.debug("page:" + context.getParameterString("page"));
             senderName = context.getParameterString("senderName");
             senderEmail = context.getParameterString("senderEmail");
             emailSubject = context.getParameterString("emailSubject");
             emailText = context.getParameterString("emailText");
-            gRecaptchaResponse =
-                    context.getParameterString(RECAPTCHA_RESPONSE);
-            LOGGER.debug("senderName:" + senderName);
-            LOGGER.debug("senderEmail:" + senderEmail);
-            LOGGER.debug("emailText:" + emailText);
-            LOGGER.debug("emailSubject:" + emailSubject);
-            LOGGER.debug("language:" + language);
+            gRecaptchaResponse = context.getParameterString("captcha");
             setValueToContactModel(senderName, senderEmail, emailText,
-                    emailSubject, locale);
+                    emailSubject);
             GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-            verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
-
+            verify = captchUtil.validateCaptcha(context,
+                    gRecaptchaResponse);
+            LOGGER.debug("Recapcha verification status:" + verify);
             if (verify) {
                 document = sendEmailToHukoomi(context);
             } else {
-                status = STATUS_ERROR;
-                msg = bundle.getString(ERROR_RECAPTCHA_TEXT);
-                return getDocument(status, msg);
+                status = STATUS_ERROR_RECAPTHCHA;
+                return getDocument(status);
             }
-
-            return document;
-        } else if (action.equals("inquiryTypes")) {
-            document = getInquiryTypes(bundle, language);
-
             return document;
         }
-
         return document;
     }
 
@@ -133,7 +101,8 @@ public class ContactUsExternal {
      */
     private void setValueToContactModel(final String senderName,
             final String senderEmail, final String emailText,
-            final String emailSubject, final Locale lang) {
+            final String emailSubject) {
+        LOGGER.info("setValueToContactModel: Enter");
         if (senderName != null) {
             email.setSenderName(senderName);
         }
@@ -144,46 +113,9 @@ public class ContactUsExternal {
             email.setEmailText(emailText);
         }
         if (emailSubject != null) {
-
             email.setEmailSubject(emailSubject);
         }
-        if (lang != null) {
-            email.setLanguage(lang);
-        }
 
-    }
-
-    /**
-     * this method will get the bundle and language returns the inquiry
-     * type.
-     *
-     * @param bundle
-     * @param language
-     * @return document document with inquiry type
-     */
-    private Document getInquiryTypes(final ResourceBundle bundle,
-            final String language) {
-
-        String inquiryTypes = bundle.getString("text.mail_subject");
-        Document document = DocumentHelper.createDocument();
-        Element resultElement = document.addElement("Result");
-        String[] arrOfStr = inquiryTypes.split(",");
-        for (int i = 0; i < arrOfStr.length; i++) {
-            String value = arrOfStr[i].split("!")[0];
-            String text = arrOfStr[i].split("!")[1];
-            Element optionElement = resultElement.addElement("Option");
-            Element valueele = optionElement.addElement("value");
-            valueele.setText(value);
-            Element textele = optionElement.addElement("text");
-            if (language.equals("ar")) {
-                textele.setText(
-                        new CommonUtils().decodeToArabicString(text));
-            } else {
-                textele.setText(text);
-            }
-
-        }
-        return document;
     }
 
     /**
@@ -193,32 +125,19 @@ public class ContactUsExternal {
      * @return returns document with status
      */
     public Document sendEmailToHukoomi(final RequestContext context) {
-        LOGGER.debug("sendEmailToHukoomi: Enter");
-        ResourceBundle bundle = ResourceBundle
-                .getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
+        LOGGER.info("sendEmailToHukoomi: Enter");
         String status = "";
-        String msg = "";
         MimeMessage mailMessage;
         try {
             mailMessage = createMailMessage(context);
             Transport.send(mailMessage);
-        } catch (MessagingException e) {
-            LOGGER.debug(msg);
-            status = STATUS_ERROR;
-            msg = bundle.getString(ERROR_MAIL_SENDING_TEXT);
-            LOGGER.debug("sendEmailToHukoomi: " + msg);
-            return getDocument(status, msg);
-
-        } catch (MailException e) {
-            status = STATUS_ERROR;
-            msg = bundle.getString(ERROR_MAIL_SENDING_TEXT);
-            LOGGER.debug("sendEmailToHukoomi: " + msg);
-            return getDocument(status, msg);
+        } catch (MessagingException | MailException e) {
+            status = STATUS_FAIL_MAIL_SENT;
+            LOGGER.error("Exception in sendEmailToHukoomi: ", e);
+            return getDocument(status);
         }
         status = STATUS_SUCCESS;
-        msg = bundle.getString(EMAIL_SENT_TEXT);
-        LOGGER.debug("sendEmailToHukoomi: msg:" + msg);
-        return getDocument(status, msg);
+        return getDocument(status);
     }
 
     /**
@@ -230,6 +149,7 @@ public class ContactUsExternal {
      */
     private MimeMessage createMailMessage(final RequestContext context)
             throws MessagingException {
+        LOGGER.info("createMailMessage: Enter");
         CommonUtils util = new CommonUtils();
         String from = util.getConfiguration(
                 CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
@@ -250,22 +170,10 @@ public class ContactUsExternal {
         msg.setFrom(new InternetAddress(from));
         msg.setRecipient(Message.RecipientType.TO,
                 new InternetAddress(to));
-        LOGGER.debug("page:" + context.getParameterString("page"));
-        ResourceBundle bundle = ResourceBundle
-                .getBundle(RESOURCE_BUNDLE_PATH, email.getLanguage());
-        LOGGER.debug("before setting subject:");
-        if (context.getParameterString("page").equals("errorPage")) {
-            subject = email.getEmailSubject();
-            msg.setSubject(subject);
-        } else {
-            String sub = email.getEmailSubject().toUpperCase();
-            subject = "text.mail_subject." + sub.replace(" ", "_");
-            msg.setSubject(bundle.getString(subject));
-        }
-        LOGGER.debug("after setting subject:");
-
+        subject = email.getEmailSubject();
+        msg.setSubject(subject);
         StringBuilder sb = new StringBuilder();
-        sb.append(bundle.getString(EMAIL_START_TEXT));
+        sb.append(context.getParameterString("emailStartText"));
         sb.append(email.getSenderName());
         sb.append(" ");
         sb.append(email.getSenderEmail());
@@ -284,13 +192,12 @@ public class ContactUsExternal {
      * @param msg
      * @return document document with elements
      */
-    private Document getDocument(final String status, final String msg) {
+    private Document getDocument(final String status) {
+        LOGGER.info("getDocument: Enter");
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement("Result");
         Element statusElement = resultElement.addElement("status");
         statusElement.setText(status);
-        Element msgElement = resultElement.addElement("message");
-        msgElement.setText(msg);
         return document;
     }
 

@@ -202,7 +202,7 @@ public class CommonUtils {
      * @param utilContext component context passed with param
      */
     public void loadConfigparams(final RequestContext utilContext) {
-        logger.info("in getmailserverProperty:");
+        logger.info("loadConfigparams: Enter");
         Statement st = null;
         ResultSet rs = null;
         String query = null;
@@ -215,15 +215,16 @@ public class CommonUtils {
             rs = st.executeQuery(query);
             while (rs.next()) {
                 String configParamCode = rs.getString("config_param_code");
-                String configParamValue = rs
-                        .getString("config_param_value");
+                String configParamValue =
+                        rs.getString("config_param_value");
                 logger.debug("configParamCode:" + configParamCode);
                 logger.debug("configParamValue:" + configParamValue);
                 configParamsMap.put(configParamCode, configParamValue);
             }
 
         } catch (SQLException e) {
-            logger.error("exception in getConfiguration()" + e.getMessage());
+            logger.error(
+                    "exception in getConfiguration()" + e.getMessage());
         } finally {
             objPostgre.releaseConnection(connection, st, rs);
         }
@@ -238,8 +239,9 @@ public class CommonUtils {
      * @param utilContext
      * @return configParamValue return config parameter value.
      */
-    public  String getConfiguration(final String property,
+    public String getConfiguration(final String property,
             final RequestContext utilContext) {
+        logger.info("getConfiguration: Enter");
         CommonUtils util = new CommonUtils();
         String configParamValue = null;
         if (property != null && !"".equals(property)) {
@@ -248,12 +250,12 @@ public class CommonUtils {
                 util.loadConfigparams(utilContext);
             }
             configParamValue = CommonUtils.configParamsMap.get(property);
-            logger.debug("configParamValue:" + configParamValue);
+            // logger.debug("configParamValue:" + configParamValue);
 
         }
         return configParamValue;
-
     }
+
     /**
      * This method will take language, and returns Locale.
      *
@@ -261,6 +263,7 @@ public class CommonUtils {
      * @return locale
      */
     public Locale getLocale(final String language) {
+        logger.info("getLocale: Enter");
         if ("en".equals(language)) {
             return Locale.ENGLISH;
         } else if ("ar".equals(language)) {
@@ -278,8 +281,9 @@ public class CommonUtils {
      * @return decodedArabicString
      */
     public String decodeToArabicString(final String encodedArabicString) {
-        byte[] charset = encodedArabicString
-                .getBytes(StandardCharsets.UTF_8);
+        logger.info("decodeToArabicString: Enter");
+        byte[] charset =
+                encodedArabicString.getBytes(StandardCharsets.UTF_8);
         return new String(charset, StandardCharsets.UTF_8);
     }
 }
