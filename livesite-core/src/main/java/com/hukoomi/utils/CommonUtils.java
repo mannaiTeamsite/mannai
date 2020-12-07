@@ -3,15 +3,24 @@
  */
 package com.hukoomi.utils;
 
-import com.interwoven.livesite.file.FileDal;
-import com.interwoven.livesite.runtime.LiveSiteDal;
-import com.interwoven.livesite.runtime.RequestContext;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Locale;
+
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+
+import com.interwoven.livesite.file.FileDal;
+import com.interwoven.livesite.runtime.LiveSiteDal;
+import com.interwoven.livesite.runtime.RequestContext;
 
 public class CommonUtils {
     /**
@@ -34,6 +43,8 @@ public class CommonUtils {
     private String fileRoot;
     /** Declare dcr category variable. */
     private String dcrCategory;
+    /** Initialize hashmap for config parameter. */
+    private static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
      */
     public CommonUtils() {
@@ -183,5 +194,94 @@ public class CommonUtils {
         String categoryPath = getCategoryPath(dct);
         categoryPath = categoryPath + localeValue + this.separator;
         return categoryPath;
+    }
+
+    /**
+     * this method will get config param from table and set to hashmap.
+     *
+     * @param utilContext component context passed with param
+     */
+    public void loadConfigparams(final RequestContext utilContext) {
+        logger.info("loadConfigparams: Enter");
+        Statement st = null;
+        ResultSet rs = null;
+        String query = null;
+        Connection connection = null;
+        Postgre objPostgre = new Postgre(utilContext);
+        query = "SELECT * FROM CONFIG_PARAM";
+        try {
+            connection = objPostgre.getConnection();
+            st = connection.createStatement();
+            rs = st.executeQuery(query);
+            while (rs.next()) {
+                String configParamCode = rs.getString("config_param_code");
+                String configParamValue =
+                        rs.getString("config_param_value");
+                logger.debug("configParamCode:" + configParamCode);
+                logger.debug("configParamValue:" + configParamValue);
+                configParamsMap.put(configParamCode, configParamValue);
+            }
+
+        } catch (SQLException e) {
+            logger.error(
+                    "exception in getConfiguration()" + e.getMessage());
+        } finally {
+            objPostgre.releaseConnection(connection, st, rs);
+        }
+        objPostgre.releaseConnection(connection, st, rs);
+    }
+
+    /**
+     * this method will take config parameter code and return config
+     * parameter value.
+     *
+     * @param property
+     * @param utilContext
+     * @return configParamValue return config parameter value.
+     */
+    public String getConfiguration(final String property,
+            final RequestContext utilContext) {
+        logger.info("getConfiguration: Enter");
+        CommonUtils util = new CommonUtils();
+        String configParamValue = null;
+        if (property != null && !"".equals(property)) {
+            if (CommonUtils.configParamsMap == null
+                    || CommonUtils.configParamsMap.isEmpty()) {
+                util.loadConfigparams(utilContext);
+            }
+            configParamValue = CommonUtils.configParamsMap.get(property);
+        }
+        return configParamValue;
+    }
+
+    /**
+     * This method will take language, and returns Locale.
+     *
+     * @param language page language
+     * @return locale
+     */
+    public Locale getLocale(final String language) {
+        logger.info("getLocale: Enter");
+        if ("en".equals(language)) {
+            return Locale.ENGLISH;
+        } else if ("ar".equals(language)) {
+            return new Locale("ar");
+        } else {
+            return Locale.ENGLISH;
+        }
+    }
+
+    /**
+     * This method will take encode arabic string and returns decode arabic
+     * string.
+     *
+     * @param encodedArabicString
+     * @return decodedArabicString
+     */
+    public String decodeToArabicString(final String encodedArabicString) {
+        logger.info("decodeToArabicString: Enter");
+        byte[] charset =
+                encodedArabicString.getBytes(StandardCharsets.UTF_8);
+        return new String(charset, StandardCharsets.UTF_8);
     }
 }
