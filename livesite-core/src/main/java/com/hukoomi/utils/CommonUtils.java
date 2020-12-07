@@ -250,8 +250,6 @@ public class CommonUtils {
                 util.loadConfigparams(utilContext);
             }
             configParamValue = CommonUtils.configParamsMap.get(property);
-            // logger.debug("configParamValue:" + configParamValue);
-
         }
         return configParamValue;
     }
