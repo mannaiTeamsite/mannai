@@ -74,7 +74,7 @@ public class PollSurveyExternal {
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = pollsExt
-                        .getPollResponse(pollsBO, postgre.getConnection());
+                        .getPollResponse(pollsBO, postgre);
 
                 doc = pollsExt.createPollResultDoc(pollsBO, response);
             } else {
@@ -153,12 +153,12 @@ public class PollSurveyExternal {
                     pollsBO.setPollId(activePollIds);
 
                     String votedPollIds = pollsExt.checkResponseData(
-                            pollsBO, postgre.getConnection());
+                            pollsBO, postgre);
                     Map<String, List<Map<String, String>>> response = null;
                     if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
                         pollsBO.setPollId(votedPollIds);
                         response = pollsExt.getPollResponse(pollsBO,
-                                postgre.getConnection());
+                                postgre);
                     }
 
                     pollDoc = pollsExt.addResultToXml(pollsSolrDoc,
