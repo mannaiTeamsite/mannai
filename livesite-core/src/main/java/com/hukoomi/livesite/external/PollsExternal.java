@@ -103,7 +103,7 @@ public class PollsExternal {
         if (pollsBO.getAction() != null) {
             if ("vote".equalsIgnoreCase(pollsBO.getAction())) {
 
-                insertPollResponse(pollsBO, postgre.getConnection());
+                insertPollResponse(pollsBO, postgre);
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = getPollResponse(
@@ -373,15 +373,17 @@ public class PollsExternal {
      *
      * @param connection Connection Object.
      */
-    public void insertPollResponse(PollsBO pollsBO,
-            Connection connection) {
+    public void insertPollResponse(PollsBO pollsBO, Postgre postgre
+            ) {
         logger.debug("PollsExternal : insertPollResponse");
         String pollResponseQuery = "INSERT INTO POLL_RESPONSE (POLL_ID, "
                 + "OPTION_ID, USER_ID, IP_ADDRESS, LANG, VOTED_FROM, "
                 + "USER_AGENT, VOTED_ON) VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP)";
+        Connection connection = null;
         PreparedStatement prepareStatement = null;
 
         try {
+            connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(pollResponseQuery);
             prepareStatement.setLong(1,

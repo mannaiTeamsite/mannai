@@ -70,7 +70,7 @@ public class PollSurveyExternal {
             if ("vote".equalsIgnoreCase(pollsBO.getAction())) {
 
                 pollsExt.insertPollResponse(pollsBO,
-                        postgre.getConnection());
+                        postgre);
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = pollsExt
