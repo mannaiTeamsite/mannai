@@ -153,39 +153,18 @@ public class PollsExternal {
 
                 String pollIdSFromDoc = getPollIdSFromDoc(doc);
                 logger.info("past pollIdSFromDoc : " + pollIdSFromDoc);
-                pollsBO.setPollId(pollIdSFromDoc);
+                
+                if (pollIdSFromDoc != null && !"".equals(pollIdSFromDoc.trim())) {
+                    pollsBO.setPollId(pollIdSFromDoc);
 
-                // Fetch Result from DB for above poll_ids which were voted already by user
-                Map<String, List<Map<String, String>>> response = getPollResponse(
-                        pollsBO, postgre.getConnection());
-
-                doc = addResultToXml(doc, response);
-                logger.info("Final Result - past :" + doc.asXML());
-            } else if ("search".equalsIgnoreCase(pollsBO.getAction())) {
-
-                doc = he.getLandingContent(context);
-
-                String pollIdSFromDoc = getPollIdSFromDoc(doc);
-                logger.info("pollIdSFromDoc : " + pollIdSFromDoc);
-                pollsBO.setPastPollsPerPage(pollIdSFromDoc);
-
-                // Extract poll_id from doc and check with database any of the poll has been
-                // answered by user_id or ipAddress
-                String votedPollIds = checkResponseData(pollsBO,
-                        postgre.getConnection());
-                pollsBO.setPollId(votedPollIds);
-
-                if (votedPollIds != null && !"".equals(votedPollIds)) {
                     // Fetch Result from DB for above poll_ids which were voted already by user
                     Map<String, List<Map<String, String>>> response = getPollResponse(
-                            pollsBO, postgre.getConnection());
+                        pollsBO, postgre.getConnection());
 
-                    // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
-                    // particular poll_id element
                     doc = addResultToXml(doc, response);
-                    logger.info("Final Result - search :" + doc.asXML());
                 }
-            }
+                logger.info("Final Result - past :" + doc.asXML());
+            } 
         }
         return doc;
 

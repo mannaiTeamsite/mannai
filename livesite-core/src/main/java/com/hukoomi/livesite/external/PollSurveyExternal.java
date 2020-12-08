@@ -137,7 +137,7 @@ public class PollSurveyExternal {
             String pollIds = fetchIds(document, POLL_NODE, context,
                     pollsBO.getCategory(), pollsBO.getLang());
             logger.info("pollIds : " + pollIds);
-            if (pollIds != null && !"".equals(pollIds)) {
+            if (pollIds != null && !"".equals(pollIds.trim())) {
 
                 Document pollsSolrDoc = fetchDocument(context, pollIds,
                         pollsBO.getSolrCategory(), solarCore);
@@ -147,7 +147,7 @@ public class PollSurveyExternal {
                         .getPollIdSFromDoc(pollsSolrDoc);
                 logger.info("activePollIds : " + activePollIds);
 
-                if (activePollIds != null && !"".equals(activePollIds)) {
+                if (activePollIds != null && !"".equals(activePollIds.trim())) {
                     pollGroupElem = pollSurveyElem
                             .addElement("PollGroupResponse");
                     pollsBO.setPollId(activePollIds);
@@ -155,7 +155,7 @@ public class PollSurveyExternal {
                     String votedPollIds = pollsExt.checkResponseData(
                             pollsBO, postgre.getConnection());
                     Map<String, List<Map<String, String>>> response = null;
-                    if (votedPollIds != null && !"".equals(votedPollIds)) {
+                    if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
                         pollsBO.setPollId(votedPollIds);
                         response = pollsExt.getPollResponse(pollsBO,
                                 postgre.getConnection());
@@ -180,7 +180,7 @@ public class PollSurveyExternal {
             String surveyIds = fetchIds(document, SURVEY_NODE, context,
                     surveyBO.getCategory(), surveyBO.getLang());
             logger.info("surveyIds : " + surveyIds);
-            if (surveyIds != null && !"".equals(surveyIds)) {
+            if (surveyIds != null && !"".equals(surveyIds.trim())) {
                 Document surveySolrDoc = fetchDocument(context, surveyIds,
                         surveyBO.getSolrCategory(), solarCore);
                 logger.info("surveySolrDoc : " + surveySolrDoc.asXML());
