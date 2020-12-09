@@ -257,38 +257,38 @@ public class PollsExternal {
             for (Node node : nodes) {
                 String sPollId = node.selectSingleNode("id").getText();
                 logger.info("sPollId" + sPollId);
-                if (response.containsKey(sPollId)) {
-                    List<Map<String, String>> responseMap = response
-                            .get(sPollId);
-                    Element element = (Element) node;
-                    Element resultElement = element.addElement(RESULT);
-
-                    for (Map<String, String> optMap : responseMap) {
-                        Element optionElement = resultElement
-                                .addElement("Option");
-                        Element pollIDElem = optionElement
-                                .addElement(POLL_ID);
-                        pollIDElem.setText(optMap.get(POLL_ID));
-                        Element questionElem = optionElement
-                                .addElement(QUESTION);
-                        questionElem.setText(optMap.get(QUESTION));
-                        Element optLabelElem = optionElement
-                                .addElement(OPTION_LABEL);
-                        optLabelElem.setText(optMap.get(OPTION_LABEL));
-                        Element optValueElem = optionElement
-                                .addElement(OPTION_VALUE);
-                        optValueElem.setText(optMap.get(OPTION_VALUE));
-                        Element pollCountElem = optionElement
-                                .addElement(POLLCOUNT);
-                        pollCountElem.setText(optMap.get(POLLCOUNT));
-                        Element totRespElem = optionElement
-                                .addElement(TOTALRESPONSE);
-                        totRespElem.setText(optMap.get(TOTALRESPONSE));
-                        Element pollPercentElem = optionElement
-                                .addElement(POLLPCT);
-                        pollPercentElem.setText(optMap.get(POLLPCT));
+                    if (response != null && response.containsKey(sPollId)) {
+                        List<Map<String, String>> responseMap = response
+                                .get(sPollId);
+                        Element element = (Element) node;
+                        Element resultElement = element.addElement(RESULT);
+    
+                        for (Map<String, String> optMap : responseMap) {
+                            Element optionElement = resultElement
+                                    .addElement("Option");
+                            Element pollIDElem = optionElement
+                                    .addElement(POLL_ID);
+                            pollIDElem.setText(optMap.get(POLL_ID));
+                            Element questionElem = optionElement
+                                    .addElement(QUESTION);
+                            questionElem.setText(optMap.get(QUESTION));
+                            Element optLabelElem = optionElement
+                                    .addElement(OPTION_LABEL);
+                            optLabelElem.setText(optMap.get(OPTION_LABEL));
+                            Element optValueElem = optionElement
+                                    .addElement(OPTION_VALUE);
+                            optValueElem.setText(optMap.get(OPTION_VALUE));
+                            Element pollCountElem = optionElement
+                                    .addElement(POLLCOUNT);
+                            pollCountElem.setText(optMap.get(POLLCOUNT));
+                            Element totRespElem = optionElement
+                                    .addElement(TOTALRESPONSE);
+                            totRespElem.setText(optMap.get(TOTALRESPONSE));
+                            Element pollPercentElem = optionElement
+                                    .addElement(POLLPCT);
+                            pollPercentElem.setText(optMap.get(POLLPCT));
+                        }
                     }
-                }
             }
         } catch (Exception e) {
             logger.error("Exception in addResponseToXml", e);
