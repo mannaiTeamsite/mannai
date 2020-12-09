@@ -103,11 +103,11 @@ public class PollsExternal {
         if (pollsBO.getAction() != null) {
             if ("vote".equalsIgnoreCase(pollsBO.getAction())) {
 
-                insertPollResponse(pollsBO, postgre.getConnection());
+                insertPollResponse(pollsBO, postgre);
 
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = getPollResponse(
-                        pollsBO, postgre.getConnection());
+                        pollsBO, postgre);
 
                 doc = createPollResultDoc(pollsBO, response);
                 logger.info("Final Result - vote :" + doc.asXML());
@@ -127,14 +127,14 @@ public class PollsExternal {
                 // Extract poll_id from doc and check with database any of the poll has been
                 // answered by user_id or ipAddress
                 String votedPollIds = checkResponseData(pollsBO,
-                        postgre.getConnection());
+                        postgre);
                 pollsBO.setPollId(votedPollIds);
 
                 if (votedPollIds != null
                         && !"".equals(votedPollIds.trim())) {
                     // Fetch Result from DB for above poll_ids which were voted already by user
                     Map<String, List<Map<String, String>>> response = getPollResponse(
-                            pollsBO, postgre.getConnection());
+                            pollsBO, postgre);
 
                     // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
                     // particular poll_id element
@@ -153,39 +153,18 @@ public class PollsExternal {
 
                 String pollIdSFromDoc = getPollIdSFromDoc(doc);
                 logger.info("past pollIdSFromDoc : " + pollIdSFromDoc);
-                pollsBO.setPollId(pollIdSFromDoc);
+                
+                if (pollIdSFromDoc != null && !"".equals(pollIdSFromDoc.trim())) {
+                    pollsBO.setPollId(pollIdSFromDoc);
 
-                // Fetch Result from DB for above poll_ids which were voted already by user
-                Map<String, List<Map<String, String>>> response = getPollResponse(
-                        pollsBO, postgre.getConnection());
-
-                doc = addResultToXml(doc, response);
-                logger.info("Final Result - past :" + doc.asXML());
-            } else if ("search".equalsIgnoreCase(pollsBO.getAction())) {
-
-                doc = he.getLandingContent(context);
-
-                String pollIdSFromDoc = getPollIdSFromDoc(doc);
-                logger.info("pollIdSFromDoc : " + pollIdSFromDoc);
-                pollsBO.setPastPollsPerPage(pollIdSFromDoc);
-
-                // Extract poll_id from doc and check with database any of the poll has been
-                // answered by user_id or ipAddress
-                String votedPollIds = checkResponseData(pollsBO,
-                        postgre.getConnection());
-                pollsBO.setPollId(votedPollIds);
-
-                if (votedPollIds != null && !"".equals(votedPollIds)) {
                     // Fetch Result from DB for above poll_ids which were voted already by user
                     Map<String, List<Map<String, String>>> response = getPollResponse(
-                            pollsBO, postgre.getConnection());
+                        pollsBO, postgre);
 
-                    // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
-                    // particular poll_id element
                     doc = addResultToXml(doc, response);
-                    logger.info("Final Result - search :" + doc.asXML());
                 }
-            }
+                logger.info("Final Result - past :" + doc.asXML());
+            } 
         }
         return doc;
 
@@ -278,38 +257,38 @@ public class PollsExternal {
             for (Node node : nodes) {
                 String sPollId = node.selectSingleNode("id").getText();
                 logger.info("sPollId" + sPollId);
-                if (response.containsKey(sPollId)) {
-                    List<Map<String, String>> responseMap = response
-                            .get(sPollId);
-                    Element element = (Element) node;
-                    Element resultElement = element.addElement(RESULT);
-
-                    for (Map<String, String> optMap : responseMap) {
-                        Element optionElement = resultElement
-                                .addElement("Option");
-                        Element pollIDElem = optionElement
-                                .addElement(POLL_ID);
-                        pollIDElem.setText(optMap.get(POLL_ID));
-                        Element questionElem = optionElement
-                                .addElement(QUESTION);
-                        questionElem.setText(optMap.get(QUESTION));
-                        Element optLabelElem = optionElement
-                                .addElement(OPTION_LABEL);
-                        optLabelElem.setText(optMap.get(OPTION_LABEL));
-                        Element optValueElem = optionElement
-                                .addElement(OPTION_VALUE);
-                        optValueElem.setText(optMap.get(OPTION_VALUE));
-                        Element pollCountElem = optionElement
-                                .addElement(POLLCOUNT);
-                        pollCountElem.setText(optMap.get(POLLCOUNT));
-                        Element totRespElem = optionElement
-                                .addElement(TOTALRESPONSE);
-                        totRespElem.setText(optMap.get(TOTALRESPONSE));
-                        Element pollPercentElem = optionElement
-                                .addElement(POLLPCT);
-                        pollPercentElem.setText(optMap.get(POLLPCT));
+                    if (response != null && response.containsKey(sPollId)) {
+                        List<Map<String, String>> responseMap = response
+                                .get(sPollId);
+                        Element element = (Element) node;
+                        Element resultElement = element.addElement(RESULT);
+    
+                        for (Map<String, String> optMap : responseMap) {
+                            Element optionElement = resultElement
+                                    .addElement("Option");
+                            Element pollIDElem = optionElement
+                                    .addElement(POLL_ID);
+                            pollIDElem.setText(optMap.get(POLL_ID));
+                            Element questionElem = optionElement
+                                    .addElement(QUESTION);
+                            questionElem.setText(optMap.get(QUESTION));
+                            Element optLabelElem = optionElement
+                                    .addElement(OPTION_LABEL);
+                            optLabelElem.setText(optMap.get(OPTION_LABEL));
+                            Element optValueElem = optionElement
+                                    .addElement(OPTION_VALUE);
+                            optValueElem.setText(optMap.get(OPTION_VALUE));
+                            Element pollCountElem = optionElement
+                                    .addElement(POLLCOUNT);
+                            pollCountElem.setText(optMap.get(POLLCOUNT));
+                            Element totRespElem = optionElement
+                                    .addElement(TOTALRESPONSE);
+                            totRespElem.setText(optMap.get(TOTALRESPONSE));
+                            Element pollPercentElem = optionElement
+                                    .addElement(POLLPCT);
+                            pollPercentElem.setText(optMap.get(POLLPCT));
+                        }
                     }
-                }
             }
         } catch (Exception e) {
             logger.error("Exception in addResponseToXml", e);
@@ -394,15 +373,17 @@ public class PollsExternal {
      *
      * @param connection Connection Object.
      */
-    public void insertPollResponse(PollsBO pollsBO,
-            Connection connection) {
+    public void insertPollResponse(PollsBO pollsBO, Postgre postgre
+            ) {
         logger.debug("PollsExternal : insertPollResponse");
         String pollResponseQuery = "INSERT INTO POLL_RESPONSE (POLL_ID, "
                 + "OPTION_ID, USER_ID, IP_ADDRESS, LANG, VOTED_FROM, "
                 + "USER_AGENT, VOTED_ON) VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP)";
+        Connection connection = null;
         PreparedStatement prepareStatement = null;
 
         try {
+            connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(pollResponseQuery);
             prepareStatement.setLong(1,
@@ -436,7 +417,7 @@ public class PollsExternal {
      * @return
      */
     public Map<String, List<Map<String, String>>> getPollResponse(
-            PollsBO pollsBO, Connection connection) {
+            PollsBO pollsBO, Postgre postgre) {
         logger.info("getPollResponse()");
 
         String pollQuery = null;
@@ -447,6 +428,7 @@ public class PollsExternal {
             pollQuery = "SELECT * FROM vw_poll_stats_ar WHERE poll_id = ANY(?)";
         }
         logger.info("Poll Query ::" + pollQuery);
+        Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
 
@@ -455,6 +437,7 @@ public class PollsExternal {
         Map<String, List<Map<String, String>>> pollsResultMap = new LinkedHashMap<>();
 
         try {
+            connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(pollQuery);
             prepareStatement.setArray(1,
                     connection.createArrayOf(BIGINT, pollIdsArr));
@@ -504,7 +487,7 @@ public class PollsExternal {
      * @return Returns comma seperated string containing voted poll ids.
      */
     public String checkResponseData(PollsBO pollsBO,
-            Connection connection) {
+            Postgre postgre ) {
         logger.info("checkResponseData()");
         StringBuilder checkVotedQuery = new StringBuilder(
                 "SELECT POLL_ID FROM POLL_RESPONSE WHERE POLL_ID = ANY (?) ");
@@ -520,10 +503,12 @@ public class PollsExternal {
             checkVotedQuery.append("AND IP_ADDRESS = ? ");
         }
         logger.info("checkVotedQuery ::" + checkVotedQuery.toString());
+        Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
 
         try {
+            connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(checkVotedQuery.toString());
             prepareStatement.setArray(1,
