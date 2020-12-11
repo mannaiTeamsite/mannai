@@ -127,6 +127,9 @@ public class CommonUtils {
         logger.info("Locale: " + locale);
         String dcr = reqcontext.getParameterString("record");
         logger.info("DCR: " + dcr);
+        if(dcr.equals("")){
+            return doc;
+        }
         CommonUtils commonUtils = new CommonUtils(reqcontext);
         String dcrPath = commonUtils.getCategoryPath(dct, locale, dcr);
         logger.info("DCR Path: " + dcrPath);
