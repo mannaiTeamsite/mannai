@@ -3,6 +3,8 @@
  */
 package com.hukoomi.utils;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -11,6 +13,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -21,6 +24,8 @@ import org.dom4j.Node;
 import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.LiveSiteDal;
 import com.interwoven.livesite.runtime.RequestContext;
+
+import javax.imageio.ImageIO;
 
 public class CommonUtils {
     /**
@@ -103,7 +108,7 @@ public class CommonUtils {
     public String getCompletePath(final String path) {
         String root = this.fileRoot;
         String completePath = root + this.separator + path;
-        logger.info("Complete Path of File: " + path);
+        logger.info("Complete Path of File: " + completePath);
         return completePath;
     }
     /** This method will get various component context param
@@ -284,4 +289,76 @@ public class CommonUtils {
                 encodedArabicString.getBytes(StandardCharsets.UTF_8);
         return new String(charset, StandardCharsets.UTF_8);
     }
+
+    /** Get String Value for node from an XML Document Object
+     *
+     * @param xPath xPath for the Node.
+     * @param document Document from which node needs to be retrieved.
+     *
+     * @return String value of the XML Node if it is available in Document. Blank String otherwise.
+     */
+    public String getValueFromXML(String xPath, Document document){
+        String value = "";
+        if(xPath.equals("")){
+            return value;
+        }
+        Node node = document.selectSingleNode(xPath);
+        logger.info("Retrieved Node Value for : " + xPath);
+        if(node != null){
+            value = node.getStringValue().trim();
+        }
+        return value;
+    }
+
+    /*
+     * Get Dimensions of the Image in form of width and height.
+     *
+     * @param String imageSourcePath Path of the Image file.
+     *
+     * @return Map<String, Integer> Map with values as "width" and "height".
+     */
+    public Map<String, Integer> getImageDimensions(String imageSourcePath){
+        Map<String, Integer> dimensions = new HashMap<>();
+        if(imageSourcePath.equals("")){
+            return dimensions;
+        }
+        File imageFile = new File(imageSourcePath);
+        if(imageFile.exists()){
+            BufferedImage image = null;
+            try {
+                image = ImageIO.read(new File(imageSourcePath));
+            } catch (IOException ex) {
+                logger.error("Error while Retrieving Image File.",ex);
+            }
+            if(image != null) {
+                dimensions.put("width", image.getWidth());
+                dimensions.put("height", image.getHeight());
+            }
+        }
+        return dimensions;
+    }
+
+    /*
+     * Get pretty URL from the Page Link items.
+     *
+     * @param url URL to convert as a pretty print.
+     * @param locale String representing the locale for which URL to be generated while pretty print.
+     * @param dcrName String DCR Name if the URL is required for any Detail pages.
+     *
+     * @return String prettyURL Converted Pretty URL.
+     */
+    public String getPrettyURLForPage(String url, String locale, String dcrName) {
+        String prettyURL = "";
+        if (url.equals("")){
+            return prettyURL;
+        }
+        prettyURL = url.replaceAll("/sites|/portal-|-details.page","/");
+        prettyURL = prettyURL.replaceFirst("/en/|/ar/","/"+locale+"/");
+        if(!dcrName.equals("")){
+            prettyURL = prettyURL + "/" + dcrName;
+        }
+        prettyURL = prettyURL.endsWith("/") ? prettyURL.substring(0,prettyURL.length()-1) : prettyURL;
+        return prettyURL;
+    }
+
 }
