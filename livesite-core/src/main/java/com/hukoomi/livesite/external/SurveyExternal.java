@@ -3,6 +3,7 @@ package com.hukoomi.livesite.external;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.apache.log4j.Logger;
@@ -30,22 +31,25 @@ public class SurveyExternal {
     Postgre postgre = null;
 
     /**
-     * This method will be called from Component External to insert Survey form data.
+     * This method will be called from Component External to insert Survey form
+     * data.
      * 
      * @param context Request context object.
      *
-     * @return doc Returns the document by adding status about insert operation in database.
+     * @return doc Returns the document by adding status about insert operation in
+     *         database.
      * 
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
     public Document submitSurvey(final RequestContext context) {
-        logger.debug("SurveyExternal : submitSurvey");
+        logger.info("SurveyExternal : submitSurvey");
+        printRC(context);
 
         postgre = new Postgre(context);
         DetailExternal detailExt = new DetailExternal();
         SurveyBO surveyBO = setBO(context);
-        logger.debug("SurveyBO : "+surveyBO);
+        logger.info("SurveyBO : " + surveyBO);
 
         Document document = DocumentHelper.createDocument();
         if (surveyBO.getAction() != null
@@ -56,34 +60,41 @@ public class SurveyExternal {
                 Element surveyStatusElem = surveyResponseElem
                         .addElement("Status");
                 GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-                if (captchUtil
-                        .validateCaptcha(context, surveyBO.getCaptchaResponse())) {
+                if (captchUtil.validateCaptcha(context,
+                        surveyBO.getCaptchaResponse())) {
+                    logger.info("Google Recaptcha is valid");
                     boolean insertSurveyResponse = insertSurveyResponse(
                             surveyBO, context);
+                    logger.info("insertSurveyResponse : "
+                            + insertSurveyResponse);
                     if (insertSurveyResponse) {
                         surveyStatusElem.setText("Success");
                     } else {
                         surveyStatusElem.setText("Failed");
                     }
                 } else {
-                    surveyStatusElem.setText("Failed");
+                    logger.info("Google Recaptcha is not valid");
                 }
             } else if ("detail".equalsIgnoreCase(surveyBO.getAction())) {
                 document = detailExt.getContentDetail(context);
             }
-
+            logger.info("Final Result :" + document.asXML());
         } else {
-            logger.debug("Error : Survey Action not available");
+            logger.info("Error : Survey Action not available");
         }
         return document;
     }
 
-    
+    public void printRC(RequestContext context) {
+        logger.info("RequestContext>>>>>>>>>>>>>>>>>>");
+        logger.info(context.toElement().asXML());
+    }
+
     /**
      * This method is used to insert Survey form data in database.
      * 
      * @param surveyBO SurveyBO object.
-     * @param context Request Context object.
+     * @param context  Request Context object.
      * 
      * @return Returns boolean status about data insert operation.
      * 
@@ -92,7 +103,7 @@ public class SurveyExternal {
     @Deprecated(since = "", forRemoval = false)
     private boolean insertSurveyResponse(SurveyBO surveyBO,
             RequestContext context) {
-        logger.debug("SurveyExternal : insertSurveyResponse");
+        logger.info("SurveyExternal : insertSurveyResponse");
 
         PreparedStatement surveyprepareStatement = null;
         PreparedStatement answersprepareStatement = null;
@@ -104,6 +115,7 @@ public class SurveyExternal {
         try {
 
             totalCount = getIntValue(surveyBO.getTotalQuestions());
+            logger.info("totalCount : " + totalCount);
 
             Long responseId = getNextSequenceValue(
                     "survey_response_response_id_seq",
@@ -130,41 +142,31 @@ public class SurveyExternal {
             surveyprepareStatement.setString(7, surveyBO.getTakenFrom());
             int result = surveyprepareStatement.executeUpdate();
             if (result > 0) {
-                logger.info("Survey Response Inserted");
+                logger.info("Survey Response Inserted : " + result);
 
                 String surveyAnswerQuery = "INSERT INTO SURVEY_ANSWERS "
                         + "(ANSWER_ID, RESPONSE_ID, SURVEY_ID, LANG, "
                         + "QUESTION_NO, ANSWER) VALUES(?, ?, ?, ?, ?, ?)";
                 answersprepareStatement = connection
                         .prepareStatement(surveyAnswerQuery);
-                for (int i = 1; i <= totalCount; i++) {
+                int addedToBatch = addAnswerstoBatch(totalCount, context,
+                        answersprepareStatement, responseId, surveyBO);
+                logger.info("responseId : " + responseId);
 
-                    Long answerId = getNextSequenceValue(
-                            "survey_answers_answer_id_seq",
-                            postgre.getConnection());
-                    logger.info("answerId : " + answerId);
-
-                    answersprepareStatement.setLong(1, answerId);
-                    answersprepareStatement.setLong(2, responseId);
-                    answersprepareStatement.setLong(3,
-                            Long.parseLong(surveyBO.getSurveyId()));
-                    answersprepareStatement.setString(4,
-                            surveyBO.getLang());
-                    answersprepareStatement.setInt(5, i);
-                    answersprepareStatement.setString(6,
-                            context.getParameterString(String.valueOf(i)));
-                    answersprepareStatement.addBatch();
-                }
                 int[] answerBatch = answersprepareStatement.executeBatch();
+                logger.info(
+                        "Total answers inserted : " + answerBatch.length);
 
-                if (answerBatch.length == totalCount) {
+                if (answerBatch.length == addedToBatch) {
                     connection.commit();
                     logger.info("Survey Answer Inserted");
                     isSurveyInserted = true;
                 } else {
+                    logger.info("Failed to insert Survey Answer");
                     connection.rollback();
                 }
             } else {
+                logger.info("Survey Response not Inserted : ");
                 connection.rollback();
             }
         } catch (Exception e) {
@@ -178,7 +180,74 @@ public class SurveyExternal {
         return isSurveyInserted;
     }
 
-    
+    /**
+     * This method is used to add the answers to the batch for database batch
+     * execution for inserting the survey answers.
+     * 
+     * @param totalCount              Total number of answers.
+     * @param context                 Request Context object.
+     * @param answersprepareStatement Answer query prepared statement.
+     * @param responseId              Response Id from the survey resposne table.
+     * @param surveyBO                SurveyBO object.
+     * 
+     * @return Returns number of answers added the batch.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
+    private int addAnswerstoBatch(int totalCount,
+            final RequestContext context,
+            PreparedStatement answersprepareStatement, Long responseId,
+            SurveyBO surveyBO) throws SQLException {
+        logger.info("SurveyExternal : addAnswerstoBatch");
+        int numOfAnswersAdded = 0;
+        for (int i = 1; i <= totalCount; i++) {
+            String value = context.getParameterString(String.valueOf(i));
+            logger.info("Answer for question " + i + " : " + value);
+
+            if (value != null && value.contains("#$#")) {
+                String[] multipleOption = value.split("#\\$#");
+                logger.info(
+                        "Multiple Option Answer" + multipleOption.length);
+                for (String mutiOptValue : multipleOption) {
+                    Long answerId = getNextSequenceValue(
+                            "survey_answers_answer_id_seq",
+                            postgre.getConnection());
+                    logger.info("answerId : " + answerId);
+                    logger.info("mutiOptValue : " + mutiOptValue);
+
+                    answersprepareStatement.setLong(1, answerId);
+                    answersprepareStatement.setLong(2, responseId);
+                    answersprepareStatement.setLong(3,
+                            Long.parseLong(surveyBO.getSurveyId()));
+                    answersprepareStatement.setString(4,
+                            surveyBO.getLang());
+                    answersprepareStatement.setInt(5, i);
+                    answersprepareStatement.setString(6, mutiOptValue);
+                    answersprepareStatement.addBatch();
+                    numOfAnswersAdded++;
+                }
+
+            } else {
+                Long answerId = getNextSequenceValue(
+                        "survey_answers_answer_id_seq",
+                        postgre.getConnection());
+                logger.info("answerId : " + answerId);
+
+                answersprepareStatement.setLong(1, answerId);
+                answersprepareStatement.setLong(2, responseId);
+                answersprepareStatement.setLong(3,
+                        Long.parseLong(surveyBO.getSurveyId()));
+                answersprepareStatement.setString(4, surveyBO.getLang());
+                answersprepareStatement.setInt(5, i);
+                answersprepareStatement.setString(6, value);
+                answersprepareStatement.addBatch();
+                numOfAnswersAdded++;
+            }
+        }
+        return numOfAnswersAdded;
+    }
+
     /**
      * This method is used to get int value.
      * 
@@ -198,7 +267,7 @@ public class SurveyExternal {
      * This methods is used to get sequence value.
      * 
      * @param sequenceName Sequence name.
-     * @param connection Connection object.
+     * @param connection   Connection object.
      * 
      * @return Returns sequence value.
      */
@@ -222,7 +291,7 @@ public class SurveyExternal {
         }
         return seqValue;
     }
-    
+
     /**
      * This method is used to set value to SurveyBO object.
      * 
@@ -249,9 +318,11 @@ public class SurveyExternal {
         surveyBO.setCaptchaResponse(
                 context.getParameterString("g-recaptcha-response"));
         surveyBO.setGroup(context.getParameterString("SurveyGroup"));
-        surveyBO.setGroupCategory(context.getParameterString("surveyGroupCategory"));
+        surveyBO.setGroupCategory(
+                context.getParameterString("surveyGroupCategory"));
         surveyBO.setCategory(context.getParameterString("surveyCategory"));
-        surveyBO.setSolrCategory(context.getParameterString("solrSurveyCategory"));
+        surveyBO.setSolrCategory(
+                context.getParameterString("solrSurveyCategory"));
         return surveyBO;
     }
 
