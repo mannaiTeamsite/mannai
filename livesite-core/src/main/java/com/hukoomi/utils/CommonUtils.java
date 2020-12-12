@@ -358,7 +358,7 @@ public class CommonUtils {
         prettyURL = url.replaceAll("/sites|/portal-|-details.page","/");
         prettyURL = prettyURL.replaceFirst("/en/|/ar/","/"+locale+"/");
         if(!dcrName.equals("")){
-            prettyURL = prettyURL + "/" + dcrName;
+            prettyURL = prettyURL + dcrName;
         }
         prettyURL = prettyURL.endsWith("/") ? prettyURL.substring(0,prettyURL.length()-1) : prettyURL;
         return prettyURL;
