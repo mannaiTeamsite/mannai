@@ -18,11 +18,11 @@ import com.interwoven.cssdk.workflow.CSExternalTask;
  * 
  * @author Vijayaragavamoorthy
  */
-public class Postgre {
+public class PostgreTSConnection {
     /** 
      * Logger object to log information 
      */
-    private final Logger logger = Logger.getLogger(Postgre.class);
+    private final Logger logger = Logger.getLogger(PostgreTSConnection.class);
     /**
      * Connection object variable. 
      */
@@ -53,9 +53,9 @@ public class Postgre {
      * @param propertyFileName Name of the property file.
      *
      */
-    public Postgre(final CSClient client, final CSExternalTask task, final String propertyFileName) {
+    public PostgreTSConnection(final CSClient client, final CSExternalTask task, final String propertyFileName) {
         logger.info("Postgre : Loading Properties....");
-        Postgre.loadProperties(client, task, propertyFileName);
+        PostgreTSConnection.loadProperties(client, task, propertyFileName);
         logger.info("Postgre : Properties Loaded");
         connectionString = getConnectionString();
     }
@@ -72,7 +72,7 @@ public class Postgre {
             final CSExternalTask task, final String propertyFileName) {
         if(properties == null) {
             TSPropertiesFileReader propFileReader = new TSPropertiesFileReader(client, task, propertyFileName);
-            Postgre.properties = propFileReader.getPropertiesFile();
+            PostgreTSConnection.properties = propFileReader.getPropertiesFile();
         }
     }
 

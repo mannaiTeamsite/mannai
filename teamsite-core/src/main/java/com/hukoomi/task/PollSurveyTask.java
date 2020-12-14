@@ -18,7 +18,7 @@ import org.dom4j.Node;
 
 import com.hukoomi.bo.PollsBO;
 import com.hukoomi.bo.SurveyBO;
-import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.PostgreTSConnection;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
@@ -161,7 +161,7 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * Postgre class instance variable
      */
-    Postgre postgre = null;
+    PostgreTSConnection postgre = null;
 
     /**
      * Overridden method from CSSDK
@@ -178,7 +178,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         CSAreaRelativePath[] taskFileList = task.getFiles();
         logger.debug("TaskFileList Length : " + taskFileList.length);
 
-        postgre = new Postgre(client, task, DB_PROPERTY_FILE);
+        postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
         statusMap = new HashMap<>();
         statusMap.put(TRANSITION, SUCCESS_TRANSITION);
         statusMap.put(TRANSITION_COMMENT, "");
