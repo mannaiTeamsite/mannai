@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -14,6 +15,7 @@ import org.dom4j.Element;
 import com.hukoomi.bo.SurveyBO;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.PropertiesFileReader;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -44,7 +46,6 @@ public class SurveyExternal {
     @Deprecated(since = "", forRemoval = false)
     public Document submitSurvey(final RequestContext context) {
         logger.info("SurveyExternal : submitSurvey");
-        printRC(context);
 
         postgre = new Postgre(context);
         DetailExternal detailExt = new DetailExternal();
@@ -54,12 +55,12 @@ public class SurveyExternal {
         Document document = DocumentHelper.createDocument();
         if (surveyBO.getAction() != null
                 && !"".equals(surveyBO.getAction())) {
+            GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
             if ("submit".equalsIgnoreCase(surveyBO.getAction())) {
                 Element surveyResponseElem = document
                         .addElement("SurveyResponse");
                 Element surveyStatusElem = surveyResponseElem
                         .addElement("Status");
-                GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
                 if (captchUtil.validateCaptcha(context,
                         surveyBO.getCaptchaResponse())) {
                     logger.info("Google Recaptcha is valid");
@@ -76,18 +77,21 @@ public class SurveyExternal {
                     logger.info("Google Recaptcha is not valid");
                 }
             } else if ("detail".equalsIgnoreCase(surveyBO.getAction())) {
+                logger.info("SurveyExternal : Loading Properties....");
+                PropertiesFileReader propertyFileReader = new PropertiesFileReader(
+                        context, "captchaconfig.properties");
+                Properties properties = propertyFileReader.getPropertiesFile();
+                logger.info("SurveyExternal : Properties Loaded");
+                String siteKey = properties.getProperty("siteKey");
+                logger.info("siteKey : " + siteKey);
                 document = detailExt.getContentDetail(context);
+                document.getRootElement().addAttribute("Sitekey", siteKey);
             }
             logger.info("Final Result :" + document.asXML());
         } else {
             logger.info("Error : Survey Action not available");
         }
         return document;
-    }
-
-    public void printRC(RequestContext context) {
-        logger.info("RequestContext>>>>>>>>>>>>>>>>>>");
-        logger.info(context.toElement().asXML());
     }
 
     /**
