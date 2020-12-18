@@ -31,7 +31,7 @@ public Document getContentDetail(final RequestContext context) {
     logger.info("paramLocale : " + paramLocale);
     try {
         detailDocument = commonUtils.getDCRContent(context);
-        if(context.getParameterString("detail-page","true").equals("false")){
+        if(!context.getParameterString("detail-page","true").equals("true")){
             logger.info("The Component is not present on a detail page. Skipping the Dynamic metadata values.");
             return detailDocument;
         }
