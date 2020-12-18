@@ -43,7 +43,6 @@ public class TopSearchExternal {
         table = context.getParameterString("topSearchTable").trim();
         topSearchLimit = Integer.parseInt(context.getParameterString("topSearchLimit").trim());
         searchOrder = context.getParameterString("searchOrder").trim();
-        logger.info("ipAddress:" + ipAddress);
         logger.info("baseQuery:" + baseQuery);
         logger.info("locale:" + locale);
         logger.info("queryType:" + queryType);
@@ -92,7 +91,7 @@ public class TopSearchExternal {
                 }
             }
         } catch (SQLException ex) {
-            logger.error(ex);
+            logger.error("Exception on Select Query:",ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
@@ -126,10 +125,10 @@ public class TopSearchExternal {
                 }
 
             }else{
-                logger.info("Connection is null !");
+                logger.debug("Connection is null !");
             }
         }catch(SQLException ex){
-           logger.error(ex);
+           logger.error("Exception on insert Query:", ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
@@ -161,7 +160,7 @@ public class TopSearchExternal {
             }
 
         }catch (SQLException ex){
-            logger.error(ex);
+            logger.error("Exception on Select Query:",ex);
         }finally {
             postgre.releaseConnection(null, prepareStatement, resultSet);
         }
