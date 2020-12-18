@@ -31,6 +31,10 @@ public Document getContentDetail(final RequestContext context) {
     logger.info("paramLocale : " + paramLocale);
     try {
         detailDocument = commonUtils.getDCRContent(context);
+        if(context.getParameterString("detail-page","true").equals("false")){
+            logger.info("The Component is not present on a detail page. Skipping the Dynamic metadata values.");
+            return detailDocument;
+        }
         String title = commonUtils.getValueFromXML("/content/root/information/title", detailDocument);
         if(title.equals("")){
             logger.debug("No DCR found to add the PageScope Data");
@@ -56,12 +60,9 @@ public Document getContentDetail(final RequestContext context) {
         context.getPageScopeData().put("article-tag", keywords);
         logger.info("Set PageScope article-tag to : " + keywords);
         String imageValue = commonUtils.getValueFromXML("/content/root/information/image", detailDocument);
-        HttpServletRequest contextRequest = context.getRequest();
-        String hostPath = contextRequest.getScheme() + "://" + contextRequest.getServerName();
         if(!imageValue.equals("")){
-            String imagePath = hostPath + imageValue;
-            context.getPageScopeData().put("image", imagePath);
-            logger.info("Image added to the PageScope: " + imagePath);
+            context.getPageScopeData().put("image", imageValue);
+            logger.info("Image added to the PageScope: " + imageValue);
             Map<String, Integer> imageDimensions = commonUtils.getImageDimensions(context.getFileDal().getRoot() + context.getFileDal().getSeparator() + imageValue);
             if(!imageDimensions.isEmpty()){
                 int imageWidth = imageDimensions.containsKey("width") ? imageDimensions.get("width") : 0;
@@ -75,7 +76,7 @@ public Document getContentDetail(final RequestContext context) {
         String dcrName = context.getParameterString("record");
         logger.info("Current Page Link " + currentPageLink);
         String prettyURLforCurrentPage = commonUtils.getPrettyURLForPage(currentPageLink, paramLocale, dcrName);
-        context.getPageScopeData().put("current-url", hostPath + prettyURLforCurrentPage);
+        context.getPageScopeData().put("current-url", prettyURLforCurrentPage);
         context.getPageScopeData().put("href-lang-default", prettyURLforCurrentPage);
         logger.info("Set PageScope href-lang-default as: " + prettyURLforCurrentPage);
         context.getPageScopeData().put("href-lang-en", commonUtils.getPrettyURLForPage(currentPageLink, paramLocale, dcrName));
