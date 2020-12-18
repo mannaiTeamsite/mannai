@@ -3,14 +3,13 @@
  */
 package com.hukoomi.livesite.external;
 
-import com.interwoven.livesite.runtime.RequestContext;
 import com.hukoomi.utils.CommonUtils;
+import com.interwoven.livesite.runtime.RequestContext;
 import com.interwoven.livesite.runtime.model.page.RuntimePage;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 public class DetailExternal {
