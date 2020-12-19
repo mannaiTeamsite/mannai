@@ -2,6 +2,7 @@ package com.hukoomi.livesite.external;
 
 import com.hukoomi.utils.Postgre;
 import com.interwoven.livesite.runtime.RequestContext;
+import org.apache.commons.lang.WordUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -38,7 +39,7 @@ public class TopSearchExternal {
         } catch (UnsupportedEncodingException e) {
             logger.error(e);
         }
-        locale = context.getParameterString("locale").trim();
+        locale = context.getParameterString("locale").trim().toLowerCase();
         String queryType = context.getParameterString("queryType").trim();
         table = context.getParameterString("topSearchTable").trim();
         topSearchLimit = Integer.parseInt(context.getParameterString("topSearchLimit").trim());
@@ -72,9 +73,9 @@ public class TopSearchExternal {
         Connection connection = getConnection();
 
         PreparedStatement prepareStatement = null;
-        String searchQuery = "select keyword, count(keyword) from" + " " +
-                table + " " + "where" + " " + "locale='"+ locale +"' " + "group by keyword having count(keyword) > 1 " +
-                "order by count(keyword)" + " " + searchOrder + " " + "limit" + " " + topSearchLimit ;
+        String searchQuery = "select lower(keyword), count(lower(keyword)) from" + " " +
+                table + " " + "where" + " " + "locale='"+ locale +"' " + "group by lower(keyword) having count(lower(keyword)) > 1 " +
+                "order by count(lower(keyword))" + " " + searchOrder + " " + "limit" + " " + topSearchLimit ;
         logger.info("searchQuery:" + searchQuery);
         ResultSet resultSet = null;
         try {
@@ -86,7 +87,7 @@ public class TopSearchExternal {
                     keyWord = resultSet.getString(1);
                     if(!"".equals(keyWord)){
                         Element topSearchEle = topSearchResultEle.addElement("keyword");
-                        topSearchEle.setText(keyWord);
+                        topSearchEle.setText(WordUtils.capitalize(keyWord.toLowerCase()));
                     }
                 }
             }
@@ -128,7 +129,7 @@ public class TopSearchExternal {
                 logger.debug("Connection is null !");
             }
         }catch(SQLException ex){
-           logger.error("Exception on insert Query:", ex);
+            logger.error("Exception on insert Query:", ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
@@ -144,7 +145,8 @@ public class TopSearchExternal {
         logger.info("isKeywordExist()====> Starts");
         String searchQuery = "select * from " + table + " where" +
                 " keyword='" + baseQuery + "'" +
-                " and ip='" + ipAddress + "'";
+                " and ip='" + ipAddress + "'" +
+                " and locale='" + locale + "'";
         logger.info("searchQuery:" + searchQuery);
         ResultSet resultSet = null;
         boolean isKeyword = false;
