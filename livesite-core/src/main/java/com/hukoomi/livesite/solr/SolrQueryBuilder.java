@@ -97,8 +97,14 @@ public class SolrQueryBuilder {
         PropertiesFileReader propertyFileReader = new PropertiesFileReader(
                 context, "solrconfig.properties");
         Properties properties = propertyFileReader.getPropertiesFile();
-        final String solrHost = context.getParameterString("solrHost",
-                properties.getProperty("solrHost"));
+        String solrHost = "";
+		if (context.isRuntime()) {
+			solrHost = context.getParameterString("solrHost",
+                properties.getProperty("solrRuntimeHost"));
+		} else {
+			solrHost = context.getParameterString("solrHost",
+                properties.getProperty("solrAuthHost"));
+		}
         logger.debug("Solr Host: " + solrHost);
         final String solrCore = context.getParameterString("solrCore");
         logger.debug("Solr Core: " + solrCore);
