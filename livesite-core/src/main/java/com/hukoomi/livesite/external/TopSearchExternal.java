@@ -33,6 +33,8 @@ public class TopSearchExternal {
         Element topSearchResultEle = topSearchDoc.addElement("topSearchResult");
         postgre = new Postgre(context);
         ipAddress = context.getRequest().getRemoteAddr();
+        String clientIpAddress = context.getRequest().getHeader("x-forwarded-for");
+        logger.info("clientIpAddress:" + clientIpAddress);
         baseQuery = context.getParameterString("baseQuery").trim();
         try {
             baseQuery = URLDecoder.decode(baseQuery, "UTF-8");
@@ -71,7 +73,6 @@ public class TopSearchExternal {
     private void getTopSearch(Element topSearchResultEle) {
         logger.info("getTopSearch()====> Starts");
         Connection connection = getConnection();
-
         PreparedStatement prepareStatement = null;
         String searchQuery = "select lower(keyword), count(lower(keyword)) from" + " " +
                 table + " " + "where" + " " + "locale='"+ locale +"' " + "group by lower(keyword) having count(lower(keyword)) > 1 " +
@@ -105,7 +106,6 @@ public class TopSearchExternal {
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
         String topSearchInsertQuery = "INSERT INTO" + " "
                 + table + "(keyword,ip, user_id, " +
                 "persona, locale, date)" +
@@ -115,16 +115,15 @@ public class TopSearchExternal {
         try{
             connection = getConnection();
             if(connection != null){
-                if (!isKeywordExist(connection)){
-                    prepareStatement =  connection.prepareStatement(topSearchInsertQuery);
-                    prepareStatement.setString(1, baseQuery);
-                    prepareStatement.setString(2, ipAddress);
-                    prepareStatement.setString(3, userId);
-                    prepareStatement.setString(4, persona);
-                    prepareStatement.setString(5, locale);
-                    result = prepareStatement.executeUpdate();
-                }
-
+                    if(!isKeywordExist(connection)){
+                        prepareStatement =  connection.prepareStatement(topSearchInsertQuery);
+                        prepareStatement.setString(1, baseQuery);
+                        prepareStatement.setString(2, ipAddress);
+                        prepareStatement.setString(3, userId);
+                        prepareStatement.setString(4, persona);
+                        prepareStatement.setString(5, locale);
+                        result = prepareStatement.executeUpdate();
+                    }
             }else{
                 logger.debug("Connection is null !");
             }
