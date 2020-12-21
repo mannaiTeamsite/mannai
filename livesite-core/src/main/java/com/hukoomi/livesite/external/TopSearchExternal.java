@@ -46,6 +46,7 @@ public class TopSearchExternal {
         table = context.getParameterString("topSearchTable").trim();
         topSearchLimit = Integer.parseInt(context.getParameterString("topSearchLimit").trim());
         searchOrder = context.getParameterString("searchOrder").trim();
+        persona = context.getParameterString("persona").trim();
         logger.info("baseQuery:" + baseQuery);
         logger.info("locale:" + locale);
         logger.info("queryType:" + queryType);
