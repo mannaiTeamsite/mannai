@@ -28,13 +28,13 @@ public class TopSearchExternal {
     Postgre postgre = null;
 
     public Document topSearch(final RequestContext context) {
-        logger.info("topSearch()====> Starts");
+        logger.debug("topSearch()====> Starts");
         Document topSearchDoc = DocumentHelper.createDocument();
         Element topSearchResultEle = topSearchDoc.addElement("topSearchResult");
         postgre = new Postgre(context);
         ipAddress = context.getRequest().getRemoteAddr();
         String clientIpAddress = context.getRequest().getHeader("x-forwarded-for");
-        logger.info("clientIpAddress:" + clientIpAddress);
+        logger.debug("clientIpAddress:" + clientIpAddress);
         baseQuery = context.getParameterString("baseQuery").trim();
         try {
             baseQuery = URLDecoder.decode(baseQuery, "UTF-8");
@@ -47,38 +47,38 @@ public class TopSearchExternal {
         topSearchLimit = Integer.parseInt(context.getParameterString("topSearchLimit").trim());
         searchOrder = context.getParameterString("searchOrder").trim();
         persona = context.getParameterString("persona").trim();
-        logger.info("baseQuery:" + baseQuery);
-        logger.info("locale:" + locale);
-        logger.info("queryType:" + queryType);
-        logger.info("table:" + table);
-        logger.info("topSearchLimit:" + topSearchLimit);
-        logger.info("searchOrder:" + searchOrder);
+        logger.debug("baseQuery:" + baseQuery);
+        logger.debug("locale:" + locale);
+        logger.debug("queryType:" + queryType);
+        logger.debug("table:" + table);
+        logger.debug("topSearchLimit:" + topSearchLimit);
+        logger.debug("searchOrder:" + searchOrder);
 
         if(!"".equals(table)){
             if(!"".equals(baseQuery) && "insert".equalsIgnoreCase(queryType)){
                 int insertStatus = insertTopSearch();
                 if(insertStatus == 1){
-                    logger.info("Keyword inserted");
+                    logger.debug("Keyword inserted");
                 }else{
-                    logger.info("Keyword not inserted");
+                    logger.debug("Keyword not inserted");
                 }
             }else {
                 getTopSearch(topSearchResultEle);
             }
         }
 
-        logger.info("topSearch()====> ends");
+        logger.debug("topSearch()====> ends");
         return topSearchDoc;
     }
 
     private void getTopSearch(Element topSearchResultEle) {
-        logger.info("getTopSearch()====> Starts");
+        logger.debug("getTopSearch()====> Starts");
         Connection connection = getConnection();
         PreparedStatement prepareStatement = null;
         String searchQuery = "select lower(keyword), count(lower(keyword)) from" + " " +
                 table + " " + "where" + " " + "locale='"+ locale +"' " + "group by lower(keyword) having count(lower(keyword)) > 1 " +
                 "order by count(lower(keyword))" + " " + searchOrder + " " + "limit" + " " + topSearchLimit ;
-        logger.info("searchQuery:" + searchQuery);
+        logger.debug("searchQuery:" + searchQuery);
         ResultSet resultSet = null;
         try {
             if(connection != null){
@@ -98,12 +98,12 @@ public class TopSearchExternal {
         }finally {
             postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
-        logger.info("getTopSearch()====> ends");
+        logger.debug("getTopSearch()====> ends");
 
     }
 
     private int insertTopSearch() {
-        logger.info("insertTopSearch()====> Starts");
+        logger.debug("insertTopSearch()====> Starts");
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -111,20 +111,20 @@ public class TopSearchExternal {
                 + table + "(keyword,ip, user_id, " +
                 "persona, locale, date)" +
                 "VALUES(?,?,?,?,?, LOCALTIMESTAMP)";
-        logger.info("topSearchInsertQuery:" +topSearchInsertQuery);
+        logger.debug("topSearchInsertQuery:" +topSearchInsertQuery);
 
         try{
             connection = getConnection();
             if(connection != null){
-                    if(!isKeywordExist(connection)){
-                        prepareStatement =  connection.prepareStatement(topSearchInsertQuery);
-                        prepareStatement.setString(1, baseQuery);
-                        prepareStatement.setString(2, ipAddress);
-                        prepareStatement.setString(3, userId);
-                        prepareStatement.setString(4, persona);
-                        prepareStatement.setString(5, locale);
-                        result = prepareStatement.executeUpdate();
-                    }
+                if(!isKeywordExist(connection)){
+                    prepareStatement =  connection.prepareStatement(topSearchInsertQuery);
+                    prepareStatement.setString(1, baseQuery);
+                    prepareStatement.setString(2, ipAddress);
+                    prepareStatement.setString(3, userId);
+                    prepareStatement.setString(4, persona);
+                    prepareStatement.setString(5, locale);
+                    result = prepareStatement.executeUpdate();
+                }
             }else{
                 logger.debug("Connection is null !");
             }
@@ -133,7 +133,7 @@ public class TopSearchExternal {
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
-        logger.info("insertTopSearch()====> ends");
+        logger.debug("insertTopSearch()====> ends");
         return result;
     }
 
@@ -142,12 +142,12 @@ public class TopSearchExternal {
     }
 
     private boolean isKeywordExist(Connection connection){
-        logger.info("isKeywordExist()====> Starts");
+        logger.debug("isKeywordExist()====> Starts");
         String searchQuery = "select * from " + table + " where" +
                 " keyword='" + baseQuery + "'" +
                 " and ip='" + ipAddress + "'" +
                 " and locale='" + locale + "'";
-        logger.info("searchQuery:" + searchQuery);
+        logger.debug("searchQuery:" + searchQuery);
         ResultSet resultSet = null;
         boolean isKeyword = false;
         PreparedStatement prepareStatement = null;
@@ -166,7 +166,7 @@ public class TopSearchExternal {
         }finally {
             postgre.releaseConnection(null, prepareStatement, resultSet);
         }
-        logger.info("isKeywordExist()====> ends");
+        logger.debug("isKeywordExist()====> ends");
         return isKeyword;
     }
 }
