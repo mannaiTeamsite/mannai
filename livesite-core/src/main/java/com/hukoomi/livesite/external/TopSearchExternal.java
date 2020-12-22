@@ -14,6 +14,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TopSearchExternal {
     private String ipAddress = "";
@@ -41,6 +44,22 @@ public class TopSearchExternal {
         } catch (UnsupportedEncodingException e) {
             logger.error(e);
         }
+
+        Map<String, String> result = new HashMap<>();
+
+        Enumeration headerNames = context.getRequest().getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = context.getRequest().getHeader(key);
+            result.put(key, value);
+        }
+
+        for (Map.Entry<String, String> entry : result.entrySet()) {
+            logger.info(entry.getKey() + "/" + entry.getValue());
+        }
+
+
+
         locale = context.getParameterString("locale").trim().toLowerCase();
         String queryType = context.getParameterString("queryType").trim();
         table = context.getParameterString("topSearchTable").trim();
