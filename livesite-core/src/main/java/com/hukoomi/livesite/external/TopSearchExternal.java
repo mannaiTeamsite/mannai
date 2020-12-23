@@ -145,7 +145,7 @@ public class TopSearchExternal {
     private boolean isKeywordExist(Connection connection){
         logger.debug("isKeywordExist()====> Starts");
         String searchQuery = "select * from " + table + " where" +
-                " keyword='" + baseQuery + "'" +
+                " lower(keyword)='" + baseQuery.toLowerCase() + "'" +
                 " and ip='" + ipAddress + "'" +
                 " and locale='" + locale + "'";
         logger.debug("searchQuery:" + searchQuery);
