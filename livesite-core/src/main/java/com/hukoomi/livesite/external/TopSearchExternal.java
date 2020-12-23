@@ -47,7 +47,8 @@ public class TopSearchExternal {
         table = context.getParameterString("topSearchTable").trim();
         topSearchLimit = Integer.parseInt(context.getParameterString("topSearchLimit").trim());
         searchOrder = context.getParameterString("searchOrder").trim();
-        persona = requestHeaderUtils.getCookie("persona");
+        String cookieName = context.getParameterString("cookieName");
+        persona = requestHeaderUtils.getCookie(cookieName);
         logger.debug("baseQuery:" + baseQuery);
         logger.debug("locale:" + locale);
         logger.debug("queryType:" + queryType);
