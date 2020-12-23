@@ -1,6 +1,7 @@
 package com.hukoomi.livesite.external;
 
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.WordUtils;
 import org.apache.log4j.Logger;
@@ -14,9 +15,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Map;
 
 public class TopSearchExternal {
     private String ipAddress = "";
@@ -32,40 +30,24 @@ public class TopSearchExternal {
 
     public Document topSearch(final RequestContext context) {
         logger.debug("topSearch()====> Starts");
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         Document topSearchDoc = DocumentHelper.createDocument();
         Element topSearchResultEle = topSearchDoc.addElement("topSearchResult");
         postgre = new Postgre(context);
-        ipAddress = context.getRequest().getRemoteAddr();
-        String clientIpAddress = context.getRequest().getHeader("x-forwarded-for");
-        logger.debug("clientIpAddress:" + clientIpAddress);
+        ipAddress = requestHeaderUtils.getClientIpAddress();
         baseQuery = context.getParameterString("baseQuery").trim();
         try {
             baseQuery = URLDecoder.decode(baseQuery, "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            logger.error(e);
+            logger.error("UnsupportedEncodingException", e);
         }
-
-        Map<String, String> result = new HashMap<>();
-
-        Enumeration headerNames = context.getRequest().getHeaderNames();
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = context.getRequest().getHeader(key);
-            result.put(key, value);
-        }
-
-        for (Map.Entry<String, String> entry : result.entrySet()) {
-            logger.info(entry.getKey() + "/" + entry.getValue());
-        }
-
-
 
         locale = context.getParameterString("locale").trim().toLowerCase();
         String queryType = context.getParameterString("queryType").trim();
         table = context.getParameterString("topSearchTable").trim();
         topSearchLimit = Integer.parseInt(context.getParameterString("topSearchLimit").trim());
         searchOrder = context.getParameterString("searchOrder").trim();
-        persona = context.getParameterString("persona").trim();
+        persona = requestHeaderUtils.getCookie("persona");
         logger.debug("baseQuery:" + baseQuery);
         logger.debug("locale:" + locale);
         logger.debug("queryType:" + queryType);
@@ -74,7 +56,7 @@ public class TopSearchExternal {
         logger.debug("searchOrder:" + searchOrder);
 
         if(!"".equals(table)){
-            if(!"".equals(baseQuery) && "insert".equalsIgnoreCase(queryType)){
+            if(!"".equals(baseQuery) && "insert".equalsIgnoreCase(queryType) && !"".equals(ipAddress)){
                 int insertStatus = insertTopSearch();
                 if(insertStatus == 1){
                     logger.debug("Keyword inserted");
@@ -188,4 +170,5 @@ public class TopSearchExternal {
         logger.debug("isKeywordExist()====> ends");
         return isKeyword;
     }
+
 }
