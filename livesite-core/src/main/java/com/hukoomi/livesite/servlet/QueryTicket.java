@@ -28,7 +28,7 @@ public class QueryTicket extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException {
         LOGGER.info("Customer Service Query Ticket: Start");
         StringBuilder resp = null;
         try {
@@ -54,14 +54,18 @@ public class QueryTicket extends HttpServlet {
             while ((responseLine = br.readLine()) != null) {
                 resp.append(responseLine.trim());
             }
+
         } catch (Exception e) {
             LOGGER.error("Customer Service Query Ticket: Exception ", e);
         } finally {
             LOGGER.info("End of Query Ticket");
         }
-
         response.setContentType("text/html;charset=UTF-8");
-        response.getWriter().write(resp.toString());
+        try {
+            response.getWriter().write(resp.toString());
+        } catch (IOException e) {
+            LOGGER.error("Customer Service Query Ticket: Exception ", e);
+        }
     }
 
 }
