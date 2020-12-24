@@ -31,9 +31,6 @@ public class SubmitTicket extends HttpServlet {
      * Properties object that holds the property values
      */
     private static Properties properties = null;
-    /** Initialising the filepath for Properties file inside WorkArea. */
-    private static final String PROPERTY_PATH = "/iw/config/properties/";
-
     /**
      * @see HttpServlet#doPost(HttpServletRequest request,
      *      HttpServletResponse response)
@@ -176,7 +173,7 @@ public class SubmitTicket extends HttpServlet {
                 }
             } catch (MalformedURLException e) {
                 LOGGER.error(
-                        "IO Exception while loading Properties file : ",
+                        "Malformed URL Exception while loading Properties file : ",
                         e);
             } catch (IOException e) {
                 LOGGER.error(
