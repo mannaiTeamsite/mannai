@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -279,13 +278,13 @@ public class SurveyExternal {
     private Long getNextSequenceValue(String sequenceName,
             Connection connection) {
         Long seqValue = 0L;
-        Statement queryStmt = null;
+        PreparedStatement queryStmt = null;
         ResultSet rs = null;
         try {
             String query = "SELECT nextval('" + sequenceName
                     + "') as seqValue";
-            queryStmt = connection.createStatement();
-            rs = queryStmt.executeQuery(query);
+            queryStmt = connection.prepareStatement(query);
+            rs = queryStmt.executeQuery();
             while (rs.next()) {
                 seqValue = rs.getLong("seqValue");
             }
