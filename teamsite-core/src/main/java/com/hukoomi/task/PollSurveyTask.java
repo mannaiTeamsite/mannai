@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -1301,13 +1300,13 @@ public class PollSurveyTask implements CSURLExternalTask {
     private Long getNextSequenceValue(String sequenceName,
             Connection connection) {
         Long seqValue = 0L;
-        Statement queryStmt = null;
+        PreparedStatement queryStmt = null;
         ResultSet rs = null;
         try {
             String query = "SELECT nextval('" + sequenceName
                     + "') as seqValue";
-            queryStmt = connection.createStatement();
-            rs = queryStmt.executeQuery(query);
+            queryStmt = connection.prepareStatement(query);
+            rs = queryStmt.executeQuery();
             while (rs.next()) {
                 seqValue = rs.getLong("seqValue");
             }
