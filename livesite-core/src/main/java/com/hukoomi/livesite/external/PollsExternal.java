@@ -20,6 +20,7 @@ import org.dom4j.Node;
 
 import com.hukoomi.bo.PollsBO;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 /**
  * PollsExternal is the components external class.
@@ -546,10 +547,12 @@ public class PollsExternal {
     @Deprecated(since = "", forRemoval = false)
     public PollsBO setBO(final RequestContext context) {
         PollsBO pollsBO = new PollsBO();
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(
+                context);
         pollsBO.setAction(context.getParameterString("pollAction"));
         pollsBO.setLang(context.getParameterString("locale", "en"));
         pollsBO.setUserId(context.getParameterString("user_id"));
-        pollsBO.setIpAddress(context.getRequest().getRemoteAddr());
+        pollsBO.setIpAddress(requestHeaderUtils.getClientIpAddress());
         pollsBO.setUserAgent(context.getRequest().getHeader("User-Agent"));
         pollsBO.setVotedFrom(context.getParameterString("votedFrom"));
         pollsBO.setPollId(context.getParameterString("pollId"));

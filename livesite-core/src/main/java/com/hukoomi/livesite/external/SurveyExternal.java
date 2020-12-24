@@ -16,6 +16,7 @@ import com.hukoomi.bo.SurveyBO;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
+import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -308,10 +309,11 @@ public class SurveyExternal {
     @Deprecated(since = "", forRemoval = false)
     public SurveyBO setBO(final RequestContext context) {
         SurveyBO surveyBO = new SurveyBO();
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         surveyBO.setAction(context.getParameterString("surveyAction"));
         surveyBO.setLang(context.getParameterString("locale", "en"));
         surveyBO.setUserId(context.getParameterString("user_id"));
-        surveyBO.setIpAddress(context.getRequest().getRemoteAddr());
+        surveyBO.setIpAddress(requestHeaderUtils.getClientIpAddress());
         surveyBO.setUserAgent(
                 context.getRequest().getHeader("User-Agent"));
         surveyBO.setTakenFrom(
