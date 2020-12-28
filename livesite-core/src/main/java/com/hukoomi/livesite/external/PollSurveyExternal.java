@@ -292,8 +292,11 @@ public class PollSurveyExternal {
                 Document document = fetchGroupDoc(context, CONTENT,
                         category, locale, contentName);
 
-                String id = document.selectSingleNode(ID_NODE).getText();
-                contentIds.add(id);
+                if (document != null) {
+                    String id = document.selectSingleNode(ID_NODE)
+                            .getText();
+                    contentIds.add(id);
+                }
             }
         } catch (Exception e) {
             logger.error("Exception in fetchIds", e);
