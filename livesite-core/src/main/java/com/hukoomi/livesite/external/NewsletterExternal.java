@@ -11,6 +11,11 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -19,12 +24,14 @@ import org.dom4j.Element;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.Postgre;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class NewsletterExternal {
     /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(NewsletterExternal.class);
+    private static Connection connection;
     /** subscriber Lisid of mailchimp. */
     private String listId;
     /** authorizationHeader for authencicate mailchimp. */
@@ -80,11 +87,45 @@ public class NewsletterExternal {
         String language = context.getParameterString("locale", "en");
         String subscriptionLang =
                 context.getParameterString("subscriptionLang");
+        String flagToInvokeMailchimpService =
+                context.getParameterString("flag");
         if (!email.equals("") && !subscriptionLang.equals("")) {
-            memberdetail = createSubscriberinMailChimp(email,
-                    subscriptionLang, context);
+            memberdetail = createSubscriber(email, subscriptionLang,
+                    flagToInvokeMailchimpService, context);
         }
         return memberdetail;
+    }
+
+    /**
+     * @param email
+     * @param subscriptionLang
+     * @param flag
+     * @param context
+     * @return document
+     * @throws NoSuchAlgorithmException
+     * @throws IOException              this method will verify the flag,
+     *                                  based on flag it makes call to
+     *                                  mailchimp
+     */
+    public Document createSubscriber(final String email,
+            final String subscriptionLang, final String flag,
+            final RequestContext context)
+            throws NoSuchAlgorithmException, IOException {
+        LOGGER.info("Newsletter Subscribtion: createSubscriber");
+        Document document = DocumentHelper.createDocument();
+        if (flag.equals("true")) {
+            document = insertSubscriber(email, subscriptionLang,
+                    STATUS_SUBSCRIBED, context);
+            if (document != null) {
+                document = createSubscriberinMailChimp(email,
+                        subscriptionLang, context);
+            }
+        } else {
+            document = insertSubscriber(email, subscriptionLang,
+                    STATUS_SUBSCRIBED, context);
+
+        }
+        return document;
     }
 
     /**
@@ -140,7 +181,7 @@ public class NewsletterExternal {
                 }
             }
         } catch (IOException e) {
-            LOGGER.error("exception:" , e);
+            LOGGER.error("exception:", e);
         }
 
         return document;
@@ -221,13 +262,13 @@ public class NewsletterExternal {
             int statusCode;
             try {
                 statusCode = httpConnection.getResponseCode();
-                LOGGER.debug("statusCode: " +statusCode);
+                LOGGER.debug("statusCode: " + statusCode);
                 return String.valueOf(statusCode);
             } catch (IOException e) {
-                LOGGER.error("Exception in subscriber creation: " , e);
+                LOGGER.error("Exception in subscriber creation: ", e);
             }
             httpConnection.disconnect();
-            LOGGER.error("Exception in subscriber creation: " , ioe);
+            LOGGER.error("Exception in subscriber creation: ", ioe);
             return null;
         }
 
@@ -270,6 +311,92 @@ public class NewsletterExternal {
             }
         }
         return null;
+    }
+
+    /**
+     * @param email
+     * @param lang
+     * @param context
+     * @param status  This method is used to insert the subscriber details
+     *                in backend (DB)
+     */
+    public Document insertSubscriber(String email, String lang,
+            String status, RequestContext context) {
+        LOGGER.info("NewsletterExternal : insertSubscriber");
+        Postgre objPostgre = new Postgre(context);
+        Document document = DocumentHelper.createDocument();
+        PreparedStatement prepareStatement = null;
+        String insertQuery = "";
+        if (isscubscriberExist(email, context) > 0) {
+            LOGGER.info("NewsletterExternal : already exist in db");
+            document = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
+
+        } else {
+            LOGGER.info("NewsletterExternal : insert");
+            insertQuery =
+                    "INSERT INTO NEWSLETTER_SUBSCRIBERS (LANGUAGE,STATUS,EMAIL,SUBSCRIBED_DATE) VALUES(?,?,?,LOCALTIMESTAMP)";
+            try {
+                NewsletterExternal.connection = objPostgre.getConnection();
+                prepareStatement = NewsletterExternal.connection
+                        .prepareStatement(insertQuery);
+                prepareStatement.setString(1, lang);
+                prepareStatement.setString(2, status);
+                prepareStatement.setString(3, email);
+                final int result = prepareStatement.executeUpdate();
+                if (result == 0) {
+                    LOGGER.info(
+                            "failed to insert/update subscriber's data!");
+                } else {
+                    LOGGER.info(
+                            " subscribers data insert/update successfully!");
+                    document = getDocument(email, STATUS_SUBSCRIBED);
+                }
+            } catch (SQLException e) {
+                LOGGER.error("SQLException :", e);
+                return document = null;
+
+            } finally {
+                objPostgre.releaseConnection(NewsletterExternal.connection,
+                        prepareStatement, null);
+            }
+        }
+        return document;
+    }
+
+    /**
+     * @param email
+     * @param context
+     * @return This method is used to check if the subscriber exits in the
+     *         Database Tool
+     */
+    private static int isscubscriberExist(String email,
+            RequestContext context) {
+        LOGGER.info("Newsletter Subscribtion:isscubscriberExist ");
+        Statement st = null;
+        ResultSet rs = null;
+        Postgre objPostgre = new Postgre(context);
+        final String getcount =
+                "SELECT COUNT(*) as total FROM NEWSLETTER_SUBSCRIBERS WHERE EMAIL = '"
+                        + email + "'";
+        try {
+            NewsletterExternal.connection = objPostgre.getConnection();
+            st = NewsletterExternal.connection.createStatement();
+            rs = st.executeQuery(getcount);
+            while (rs.next()) {
+                return rs.getInt("total");
+            }
+        } catch (SQLException e) {
+            LOGGER.error("isscubscriberExist()", e);
+            e.printStackTrace();
+
+        } finally {
+            objPostgre.releaseConnection(NewsletterExternal.connection, st,
+                    rs);
+        }
+        objPostgre.releaseConnection(NewsletterExternal.connection, st,
+                rs);
+        return 0;
+
     }
 
     /**
