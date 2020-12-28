@@ -8,12 +8,15 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -24,8 +27,6 @@ import org.dom4j.Node;
 import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.LiveSiteDal;
 import com.interwoven.livesite.runtime.RequestContext;
-
-import javax.imageio.ImageIO;
 
 public class CommonUtils {
     /**
@@ -214,13 +215,14 @@ public class CommonUtils {
         Statement st = null;
         ResultSet rs = null;
         String query = null;
+        PreparedStatement preparedStatement = null;
         Connection connection = null;
         Postgre objPostgre = new Postgre(utilContext);
         query = "SELECT * FROM CONFIG_PARAM";
         try {
             connection = objPostgre.getConnection();
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
+            preparedStatement = connection.prepareStatement(query);
+            rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 String configParamCode = rs.getString("config_param_code");
                 String configParamValue =

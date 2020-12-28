@@ -15,7 +15,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -31,7 +30,6 @@ public class NewsletterExternal {
     /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(NewsletterExternal.class);
-    private static Connection connection;
     /** subscriber Lisid of mailchimp. */
     private String listId;
     /** authorizationHeader for authencicate mailchimp. */
@@ -325,6 +323,7 @@ public class NewsletterExternal {
         LOGGER.info("NewsletterExternal : insertSubscriber");
         Postgre objPostgre = new Postgre(context);
         Document document = DocumentHelper.createDocument();
+        Connection connection = null;
         PreparedStatement prepareStatement = null;
         String insertQuery = "";
         if (isscubscriberExist(email, context) > 0) {
@@ -336,8 +335,8 @@ public class NewsletterExternal {
             insertQuery =
                     "INSERT INTO NEWSLETTER_SUBSCRIBERS (LANGUAGE,STATUS,EMAIL,SUBSCRIBED_DATE) VALUES(?,?,?,LOCALTIMESTAMP)";
             try {
-                NewsletterExternal.connection = objPostgre.getConnection();
-                prepareStatement = NewsletterExternal.connection
+                connection = objPostgre.getConnection();
+                prepareStatement = connection
                         .prepareStatement(insertQuery);
                 prepareStatement.setString(1, lang);
                 prepareStatement.setString(2, status);
@@ -356,7 +355,7 @@ public class NewsletterExternal {
                 return document = null;
 
             } finally {
-                objPostgre.releaseConnection(NewsletterExternal.connection,
+                objPostgre.releaseConnection(connection,
                         prepareStatement, null);
             }
         }
@@ -372,30 +371,34 @@ public class NewsletterExternal {
     private static int isscubscriberExist(String email,
             RequestContext context) {
         LOGGER.info("Newsletter Subscribtion:isscubscriberExist ");
-        Statement st = null;
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         Postgre objPostgre = new Postgre(context);
+        int count = 0;
         final String getcount =
-                "SELECT COUNT(*) as total FROM NEWSLETTER_SUBSCRIBERS WHERE EMAIL = '"
-                        + email + "'";
+                "SELECT COUNT(*) as total FROM NEWSLETTER_SUBSCRIBERS WHERE EMAIL = ?";
         try {
-            NewsletterExternal.connection = objPostgre.getConnection();
-            st = NewsletterExternal.connection.createStatement();
-            rs = st.executeQuery(getcount);
+            connection = objPostgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(getcount);
+            prepareStatement.setString(1, email);
+            rs = prepareStatement.executeQuery();
             while (rs.next()) {
-                return rs.getInt("total");
+                LOGGER.debug("Count: " + rs.getInt("total"));
+                count = rs.getInt("total");
             }
         } catch (SQLException e) {
             LOGGER.error("isscubscriberExist()", e);
             e.printStackTrace();
 
         } finally {
-            objPostgre.releaseConnection(NewsletterExternal.connection, st,
+            objPostgre.releaseConnection(connection, prepareStatement,
                     rs);
         }
-        objPostgre.releaseConnection(NewsletterExternal.connection, st,
+        objPostgre.releaseConnection(connection, prepareStatement,
                 rs);
-        return 0;
+        return count;
 
     }
 
