@@ -104,17 +104,16 @@ public Document getContentDetail(final RequestContext context) {
      * @param context The parameter context object passed from Component.
      * @param detailDocument The final content document to be returned.
      *
-     * @return no return type.
+     * @return Document return type.
      */
     public Document getRelatedContent(
             final RequestContext context,
             final Document detailDocument) {
-        SolrQueryUtil squ = new SolrQueryUtil();
+        CommonUtils commonUtils = new CommonUtils();
         PropertiesFileReader propertyFileReader = new PropertiesFileReader(
                 context, "solrconfig.properties");
         Properties properties = propertyFileReader.getPropertiesFile();
         String fieldQuery = "";
-        String baseQuery = "";
         String solrHost = "";
         if (context.isRuntime()) {
             solrHost = context.getParameterString("solrHost",
@@ -125,46 +124,78 @@ public Document getContentDetail(final RequestContext context) {
         }
         final String solrCore = context.getParameterString("solrCore");
         final String baseUrl = solrHost + "/" + solrCore ;
-        String rows = context.getParameterString("rows", "9");
         final String requestHandler = context.getParameterString("requestHandler",
                 properties.getProperty("requestHandler"));
+        String ID = commonUtils.getValueFromXML("/content/root/information/id", detailDocument);
+        String bq = "";
+        if (StringUtils.isNotBlank(ID)) {
+            bq = "-id:" + ID;
+        } else {
+            bq = DEFAULT_QUERY;
+        }
         StringBuilder sb = new StringBuilder(baseUrl);
-        sb.append("/" + requestHandler);
-        String fq = context.getParameterString(
-                "relatedQuery", "");
-        try {
-            fieldQuery = URLDecoder.decode(
-                    fq, UTF);
-            logger.debug("fieldQuery Query : " + fieldQuery);
-        } catch (UnsupportedEncodingException e) {
-            logger.warn("Unable to decode fieldQuery="
-                    + fq, e);
+        sb.append("/" + requestHandler + "?q=" + bq);
+        String category = commonUtils
+                .getValueFromXML("/content/root/category",
+                 detailDocument);
+        if (StringUtils.isNotBlank(category)) {
+            sb.append("&fq=category:" + category);
         }
-        try {
-            baseQuery = URLDecoder.decode(context
-                    .getParameterString("baseQuery", DEFAULT_QUERY), UTF);
-            logger.debug("Solr Base Query: " + baseQuery);
-        } catch (UnsupportedEncodingException e) {
-            logger.error("Unable to decode baseQuery="
-                    + context.getParameterString("baseQuery",
-                    DEFAULT_QUERY), e);
+        String relatedContent = context.getParameterString(
+                "relatedContent", "");
+        if (StringUtils.isNotBlank(relatedContent)) {
+            addContent(context, sb.toString(), relatedContent, "relatedContent",
+                    detailDocument);
         }
-        sb.append("?q=" + (StringUtils.isNotBlank(baseQuery)
-                ? baseQuery : DEFAULT_QUERY));
-        if (StringUtils.isNotBlank(fieldQuery)) {
-            sb.append("&fq=" + fieldQuery);
-        }
-        Document relatedDoc = squ.doJsonQuery(sb.toString(),
-                "relatedContent");
-        detailDocument.getRootElement().add(relatedDoc.getRootElement());
-        String otherQuery = context
-                .getParameterString("otherQuery", "");
-        logger.debug("otherQuery : " + otherQuery);
-        if (StringUtils.isNotBlank(otherQuery)) {
-            Document otherContDoc = squ.doJsonQuery(sb.toString() +
-                            "&" + otherQuery, "otherContent");
-            detailDocument.getRootElement().add(otherContDoc.getRootElement());
+        String trendContent = context.getParameterString(
+                "trendContent", "");
+        if (StringUtils.isNotBlank(trendContent)) {
+            addContent(context, sb.toString(), trendContent, "trendingContent",
+                    detailDocument);
         }
         return detailDocument;
+    }
+
+    /** This method will be called from Component
+     * External for related solr Content fetching.
+     * @param nodeList The parameter context object passed from Component.
+     * @param context The parameter context object passed from Component.
+     * @param detailDocument The final content document to be returned.
+     * @param fielQuery Solr field query.
+     * @param root xml node name.
+     *
+     * @return no return type.
+     */
+    public void addContent(
+            final RequestContext context,
+            final String fielQuery,
+            final String nodeList,
+            final String root,
+            final Document detailDocument) {
+        SolrQueryUtil squ = new SolrQueryUtil();
+        CommonUtils commonUtils = new CommonUtils();
+        String rows = context.getParameterString("rows", "9");
+        String[] values = nodeList.split(",");
+        String fq = fielQuery;
+        String dcrValue = "";
+        for (int i=0;i<values.length;i++) {
+            dcrValue = commonUtils
+                    .getValueFromXML(values[i].split(":")[1],
+                    detailDocument);
+            if (values[i].split(":")[2].equals("Single")){
+                dcrValue = "(" + dcrValue.replace(","," ")
+                + ")";
+            } else {
+                dcrValue = "(*" + dcrValue.replace(",","* *")
+                + "*)";
+            }
+            if (StringUtils.isNotBlank(dcrValue)) {
+                fq = fq + " AND " + values[i].split(":")[0]
+                        + ":" + dcrValue;
+            }
+        }
+        Document relatedDoc = squ.doJsonQuery(fq + "&rows=" + rows,
+                root);
+        detailDocument.getRootElement().add(relatedDoc.getRootElement());
     }
 }
