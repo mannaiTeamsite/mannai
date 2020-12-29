@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -22,8 +23,8 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.json.JSONObject;
 
-import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.PropertiesFileReader;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class NewsletterExternal {
@@ -65,8 +66,14 @@ public class NewsletterExternal {
     private static final String ELEMENT_STATUS = "status";
     /** element for document. */
     private static final String ELEMENT_EMAIL = "email";
-    /** element for document. */
-    private static final String ELEMENT_MESSAGE = "message";
+    /** Mailchimp properties key. */
+    private static final String LIST_ID = "listId";
+    /** Mailchimp properties key. */
+    private static final String BASE_URL = "baseUrl";
+    /** Mailchimp properties key. */
+    private static final String AUTHORIZATION_HEADER = "authorizationHeader";
+    /** Properties object that holds the property values */
+    private static Properties properties = null;
 
     /**
      * @param context
@@ -142,12 +149,12 @@ public class NewsletterExternal {
             final String subscriptionLang, final RequestContext context)
             throws IOException, NoSuchAlgorithmException {
         LOGGER.info("createSubscriberinMailChimp:Enter");
-        CommonUtils util = new CommonUtils();
         Document document = DocumentHelper.createDocument();
-        listId = util.getConfiguration("Mailchimp_List_Id", context);
-        authorizationHeader = "Basic " + util.getConfiguration(
-                "Mailchimp_Authorization_Header", context);
-        baseUrl = util.getConfiguration("Mailchimp_BaseURL", context);
+        NewsletterExternal.loadProperties(context);
+        listId = properties.getProperty(LIST_ID);
+        authorizationHeader =
+                "Basic " + properties.getProperty(AUTHORIZATION_HEADER);
+        baseUrl = properties.getProperty(BASE_URL);
         try {
 
             String status = null;
@@ -336,8 +343,8 @@ public class NewsletterExternal {
                     "INSERT INTO NEWSLETTER_SUBSCRIBERS (LANGUAGE,STATUS,EMAIL,SUBSCRIBED_DATE) VALUES(?,?,?,LOCALTIMESTAMP)";
             try {
                 connection = objPostgre.getConnection();
-                prepareStatement = connection
-                        .prepareStatement(insertQuery);
+                prepareStatement =
+                        connection.prepareStatement(insertQuery);
                 prepareStatement.setString(1, lang);
                 prepareStatement.setString(2, status);
                 prepareStatement.setString(3, email);
@@ -355,8 +362,8 @@ public class NewsletterExternal {
                 return document = null;
 
             } finally {
-                objPostgre.releaseConnection(connection,
-                        prepareStatement, null);
+                objPostgre.releaseConnection(connection, prepareStatement,
+                        null);
             }
         }
         return document;
@@ -380,8 +387,7 @@ public class NewsletterExternal {
                 "SELECT COUNT(*) as total FROM NEWSLETTER_SUBSCRIBERS WHERE EMAIL = ?";
         try {
             connection = objPostgre.getConnection();
-            prepareStatement = connection
-                    .prepareStatement(getcount);
+            prepareStatement = connection.prepareStatement(getcount);
             prepareStatement.setString(1, email);
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
@@ -393,11 +399,9 @@ public class NewsletterExternal {
             e.printStackTrace();
 
         } finally {
-            objPostgre.releaseConnection(connection, prepareStatement,
-                    rs);
+            objPostgre.releaseConnection(connection, prepareStatement, rs);
         }
-        objPostgre.releaseConnection(connection, prepareStatement,
-                rs);
+        objPostgre.releaseConnection(connection, prepareStatement, rs);
         return count;
 
     }
@@ -419,6 +423,22 @@ public class NewsletterExternal {
         URL url = new URL(endpoint);
         httpConnection = (HttpURLConnection) url.openConnection();
         return httpConnection;
+    }
+
+    /**
+     * This method will be used to load the configuration properties.
+     *
+     * @param context The parameter context object passed from Component.
+     *
+     */
+    private static void loadProperties(final RequestContext context) {
+        if (properties == null) {
+            PropertiesFileReader propertyFileReader =
+                    new PropertiesFileReader(context,
+                            "mailchimp.properties");
+            NewsletterExternal.properties =
+                    propertyFileReader.getPropertiesFile();
+        }
     }
 
     /**
