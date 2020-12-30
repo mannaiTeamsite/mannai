@@ -12,6 +12,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -28,8 +29,6 @@ public class CommonUtils {
      * Logger object to check the flow of the code.
      */
     private final Logger logger = Logger.getLogger(CommonUtils.class);
-    /** Set content error code value. */
-    private static final int CONTEXT_ERROR_CODE = 490;
     /** Initialize context to null. */
     private RequestContext context = null;
     /** Initialize file dal to null. */
@@ -44,8 +43,6 @@ public class CommonUtils {
     private String fileRoot;
     /** Declare dcr category variable. */
     private String dcrCategory;
-    /** Initialize hashmap for config parameter. */
-    private static HashMap<String, String> configParamsMap = new HashMap();
     /** Null method.
      */
     public CommonUtils() {
@@ -132,7 +129,11 @@ public class CommonUtils {
         Document data = commonUtils.readDCR(dcrPath);
         if (data == null) {
             try {
-                reqcontext.getResponse().sendError(CONTEXT_ERROR_CODE);
+                reqcontext.getResponse()
+                        .setStatus(HttpServletResponse
+                                .SC_MOVED_PERMANENTLY);
+                reqcontext.getResponse()
+                        .sendRedirect("/" + locale + "/error-page");
             } catch (IOException ex) {
                 logger.error("Error while setting response", ex);
             }
