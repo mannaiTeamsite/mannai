@@ -45,21 +45,19 @@ public class UserPersonaController {
                                  + ":: sitePath : "
                                  + context.getSite().getPath());
                          String pagePath = context.getSite().getPath()
-                                 .concat("/").concat(personaCookieValue)
-                                 .concat(".page");
+                                 .concat("/").concat(personaCookieValue);
 
                          LOGGER.debug("[UserPersonaController]"
                                  + ".[personaRedirect] "
                                  + ":: pagePath : " + pagePath);
 
 
-                         if (context.getFileDAL().isFile(pagePath)) {
+                         if (context.getFileDAL().isFile(pagePath + ".page")) {
                              context.getResponse()
                                      .setStatus(HttpServletResponse
                                              .SC_MOVED_PERMANENTLY);
                              context.getResponse()
-                                     .sendRedirect(personaCookieValue
-                                             .concat(".page"));
+                                     .sendRedirect(personaCookieValue);
                          } else {
                              LOGGER.debug("[UserPersonaController]"
                                      + ".[personaRedirect]"
