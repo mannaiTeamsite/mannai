@@ -7,13 +7,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -24,8 +22,6 @@ import org.dom4j.Node;
 import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.LiveSiteDal;
 import com.interwoven.livesite.runtime.RequestContext;
-
-import javax.imageio.ImageIO;
 
 public class CommonUtils {
     /**
@@ -202,64 +198,6 @@ public class CommonUtils {
         String categoryPath = getCategoryPath(dct);
         categoryPath = categoryPath + localeValue + this.separator;
         return categoryPath;
-    }
-
-    /**
-     * this method will get config param from table and set to hashmap.
-     *
-     * @param utilContext component context passed with param
-     */
-    public void loadConfigparams(final RequestContext utilContext) {
-        logger.info("loadConfigparams: Enter");
-        Statement st = null;
-        ResultSet rs = null;
-        String query = null;
-        Connection connection = null;
-        Postgre objPostgre = new Postgre(utilContext);
-        query = "SELECT * FROM CONFIG_PARAM";
-        try {
-            connection = objPostgre.getConnection();
-            st = connection.createStatement();
-            rs = st.executeQuery(query);
-            while (rs.next()) {
-                String configParamCode = rs.getString("config_param_code");
-                String configParamValue =
-                        rs.getString("config_param_value");
-                logger.debug("configParamCode:" + configParamCode);
-                logger.debug("configParamValue:" + configParamValue);
-                configParamsMap.put(configParamCode, configParamValue);
-            }
-
-        } catch (SQLException e) {
-            logger.error(
-                    "exception in getConfiguration()" + e.getMessage());
-        } finally {
-            objPostgre.releaseConnection(connection, st, rs);
-        }
-        objPostgre.releaseConnection(connection, st, rs);
-    }
-
-    /**
-     * this method will take config parameter code and return config
-     * parameter value.
-     *
-     * @param property
-     * @param utilContext
-     * @return configParamValue return config parameter value.
-     */
-    public String getConfiguration(final String property,
-            final RequestContext utilContext) {
-        logger.info("getConfiguration: Enter");
-        CommonUtils util = new CommonUtils();
-        String configParamValue = null;
-        if (property != null && !"".equals(property)) {
-            if (CommonUtils.configParamsMap == null
-                    || CommonUtils.configParamsMap.isEmpty()) {
-                util.loadConfigparams(utilContext);
-            }
-            configParamValue = CommonUtils.configParamsMap.get(property);
-        }
-        return configParamValue;
     }
 
     /**

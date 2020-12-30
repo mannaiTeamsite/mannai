@@ -16,26 +16,22 @@ import org.dom4j.Element;
 import org.springframework.mail.MailException;
 
 import com.hukoomi.contact.model.ContactEmail;
-import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
+import com.hukoomi.utils.PropertiesFileReader;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class ContactUsExternal {
     /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(ContactUsExternal.class);
-    /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL =
-            "Hukoomi_Contact_To_Mail";
-    /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL =
-            "Hukoomi_Contact_From_Mail";
-    /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST =
-            "Hukoomi_Contact_Mail_Host";
-    /** initialization of config code variable. */
-    private static final String CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT =
-            "Hukoomi_Contact_Mail_Port";
+    /** Contact us properties key. */
+    private static final String CONTACT_TO_MAIL = "sentTo";
+    /** Contact us properties key. */
+    private static final String CONTACT_FROM_MAIL = "sentFrom";
+    /** Contact us properties key. */
+    private static final String CONTACT_MAIL_HOST = "host";
+    /** Contact us properties key. */
+    private static final String CONTACT_MAIL_PORT = "port";
     /** initialization of error variable. */
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
@@ -43,6 +39,10 @@ public class ContactUsExternal {
     private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
     /** initialization of success variable. */
     private static final String STATUS_SUCCESS = "success";
+    /**
+     * Properties object that holds the property values
+     */
+    private static Properties properties = null;
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -150,15 +150,11 @@ public class ContactUsExternal {
     private MimeMessage createMailMessage(final RequestContext context)
             throws MessagingException {
         LOGGER.info("createMailMessage: Enter");
-        CommonUtils util = new CommonUtils();
-        String from = util.getConfiguration(
-                CONFIG_CODE_HUKOOMI_CONTACT_FROM_MAIL, context);
-        String to = util.getConfiguration(
-                CONFIG_CODE_HUKOOMI_CONTACT_TO_MAIL, context);
-        String host = util.getConfiguration(
-                CONFIG_CODE_HUKOOMI_CONTACT_MAIL_HOST, context);
-        String port = util.getConfiguration(
-                CONFIG_CODE_HUKOOMI_CONTACT_MAIL_PORT, context);
+        ContactUsExternal.loadProperties(context);
+        String from = properties.getProperty(CONTACT_FROM_MAIL);
+        String to = properties.getProperty(CONTACT_TO_MAIL);
+        String host = properties.getProperty(CONTACT_MAIL_HOST);
+        String port = properties.getProperty(CONTACT_MAIL_PORT);
         Properties props = new Properties();
         String subject = "";
         props.put("mail.smtp.host", host);
@@ -199,6 +195,22 @@ public class ContactUsExternal {
         Element statusElement = resultElement.addElement("status");
         statusElement.setText(status);
         return document;
+    }
+
+    /**
+     * This method will be used to load the configuration properties.
+     *
+     * @param context The parameter context object passed from Component.
+     *
+     */
+    private static void loadProperties(final RequestContext context) {
+        if (properties == null) {
+            PropertiesFileReader propertyFileReader =
+                    new PropertiesFileReader(context,
+                            "contactus.properties");
+            ContactUsExternal.properties =
+                    propertyFileReader.getPropertiesFile();
+        }
     }
 
 }
