@@ -86,8 +86,8 @@ public Document getContentDetail(final RequestContext context) {
         context.getPageScopeData().put("current-url", urlPrefix + prettyURLforCurrentPage);
         context.getPageScopeData().put("href-lang-default", urlPrefix + prettyURLforCurrentPage);
         logger.info("Set PageScope href-lang-default as: " + urlPrefix + prettyURLforCurrentPage);
-        context.getPageScopeData().put("href-lang-en", urlPrefix + commonUtils.getPrettyURLForPage(currentPageLink, paramLocale, dcrName));
-        context.getPageScopeData().put("href-lang-ar", urlPrefix + commonUtils.getPrettyURLForPage(currentPageLink, paramLocale, dcrName));
+        context.getPageScopeData().put("href-lang-en", urlPrefix + commonUtils.getPrettyURLForPage(currentPageLink, "en", dcrName));
+        context.getPageScopeData().put("href-lang-ar", urlPrefix + commonUtils.getPrettyURLForPage(currentPageLink, "ar", dcrName));
         logger.info("Set PageScope href-lang attributes for Alternate Language");
     } catch (Exception e) {
         logger.error("Error fetching detail content for record "
