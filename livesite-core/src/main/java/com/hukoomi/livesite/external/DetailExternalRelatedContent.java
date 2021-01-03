@@ -179,10 +179,14 @@ public Document getContentDetail(final RequestContext context) {
         String fq = fielQuery;
         String dcrValue = "";
         for (int i=0;i<values.length;i++) {
-            dcrValue = commonUtils
-                    .getValueFromXML(values[i].split(":")[1],
-                    detailDocument);
-            if (values[i].split(":")[2].equals("Single")){
+            if (values[i].split(":")[2].equals("Node")) {
+                dcrValue = commonUtils
+                        .getValueFromXML(values[i].split(":")[1],
+                                detailDocument);
+            } else {
+                dcrValue = values[i].split(":")[1];
+            }
+            if (values[i].split(":")[3].equals("Single")){
                 dcrValue = "(" + dcrValue.replace(","," ")
                 + ")";
             } else {
