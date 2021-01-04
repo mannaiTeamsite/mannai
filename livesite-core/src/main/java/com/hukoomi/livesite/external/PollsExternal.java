@@ -1,5 +1,6 @@
 package com.hukoomi.livesite.external;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -124,15 +125,76 @@ public class PollsExternal {
     }
 
     private Document processVotePoll(PollsBO pollsBO) {
-        Document doc;
-        insertPollResponse(pollsBO, postgre);
-
+        Document doc = null;
+        
+        if(!isPollVoted(pollsBO)) {
+            insertPollResponse(pollsBO, postgre);
+        }
         // Fetch Result from DB for above poll_ids which were voted already by user
         Map<String, List<Map<String, String>>> response = getPollResponse(
                 pollsBO, postgre);
 
         doc = createPollResultDoc(pollsBO, response);
+       
         return doc;
+    }
+    
+    /*private boolean isPollVoted(PollsBO pollsBO) {
+        boolean isPollVoted = false;
+        String votedPoll = checkResponseData(pollsBO, postgre);
+        logger.info("isPollVoted - votedPoll : "+votedPoll);
+        String[] votedPollArr = votedPoll.split(",");
+        logger.info("isPollVoted - No of voted polls : "+votedPollArr.length);
+        if(votedPollArr != null && votedPollArr.length > 0) {
+            isPollVoted = true;
+        }
+        logger.info("isPollVoted - isPollVoted : "+isPollVoted);
+        return isPollVoted;
+    }*/
+    
+    private boolean isPollVoted(PollsBO pollsBO) {
+        boolean isPollVoted = false;
+        
+        logger.info("isPollVoted()");
+        logger.info("isPollVoted - PollId : "+pollsBO.getPollId()+"\nUserId : "+pollsBO.getUserId()+"\nIpAddress : "+pollsBO.getIpAddress());
+        StringBuilder checkVotedQuery = new StringBuilder(
+                "SELECT POLL_ID FROM POLL_RESPONSE WHERE POLL_ID = ? ");
+
+        if (pollsBO.getUserId() != null
+                && !"".equals(pollsBO.getUserId())) {
+            checkVotedQuery.append("AND USER_ID = ? ");
+        } else if (pollsBO.getIpAddress() != null
+                && !"".equals(pollsBO.getIpAddress())) {
+            checkVotedQuery.append("AND IP_ADDRESS = ? ");
+        }
+        logger.info("checkVotedQuery ::" + checkVotedQuery.toString());
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(checkVotedQuery.toString());
+            prepareStatement.setBigDecimal(1, new BigDecimal(pollsBO.getPollId()));
+            if (pollsBO.getUserId() != null
+                    && !"".equals(pollsBO.getUserId())) {
+                prepareStatement.setString(2, pollsBO.getUserId());
+            } else if (pollsBO.getIpAddress() != null
+                    && !"".equals(pollsBO.getIpAddress())) {
+                prepareStatement.setString(2, pollsBO.getIpAddress());
+            }
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                isPollVoted = true;
+            }
+        } catch (Exception e) {
+            logger.error("Exception in isPollVoted", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        logger.info("isPollVoted - isPollVoted : "+isPollVoted);
+        return isPollVoted;
     }
 
     private Document processPastPolls(final RequestContext context,
