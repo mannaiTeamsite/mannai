@@ -139,20 +139,7 @@ public class PollsExternal {
         return doc;
     }
     
-    /*private boolean isPollVoted(PollsBO pollsBO) {
-        boolean isPollVoted = false;
-        String votedPoll = checkResponseData(pollsBO, postgre);
-        logger.info("isPollVoted - votedPoll : "+votedPoll);
-        String[] votedPollArr = votedPoll.split(",");
-        logger.info("isPollVoted - No of voted polls : "+votedPollArr.length);
-        if(votedPollArr != null && votedPollArr.length > 0) {
-            isPollVoted = true;
-        }
-        logger.info("isPollVoted - isPollVoted : "+isPollVoted);
-        return isPollVoted;
-    }*/
-    
-    private boolean isPollVoted(PollsBO pollsBO) {
+   private boolean isPollVoted(PollsBO pollsBO) {
         boolean isPollVoted = false;
         
         logger.info("isPollVoted()");
