@@ -4,6 +4,7 @@
 package com.hukoomi.livesite.external;
 
 import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 import com.interwoven.livesite.runtime.model.page.RuntimePage;
 import org.apache.log4j.Logger;
@@ -26,6 +27,13 @@ private final Logger logger = Logger.getLogger(DetailExternal.class);
 public Document getContentDetail(final RequestContext context) {
     Document detailDocument = DocumentHelper.createDocument();
     CommonUtils commonUtils = new CommonUtils();
+    RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+    String hostname = requestHeaderUtils.getForwardedHost();
+    String urlScheme = "https";
+    if(context.getRequest().getScheme()!=null){
+        urlScheme = context.getRequest().getScheme();
+    }
+    String urlPrefix = urlScheme + "://" + hostname;
     String paramLocale = context.getParameterString("locale", "en");
     logger.info("paramLocale : " + paramLocale);
     try {
@@ -58,7 +66,7 @@ public Document getContentDetail(final RequestContext context) {
         logger.info("Set PageScope article-published-time / article-modified-time to : " + articlePublishDate);
         context.getPageScopeData().put("article-tag", keywords);
         logger.info("Set PageScope article-tag to : " + keywords);
-        String imageValue = commonUtils.getValueFromXML("/content/root/information/image", detailDocument);
+        String imageValue = urlPrefix + commonUtils.getValueFromXML("/content/root/information/image", detailDocument);
         if(!imageValue.equals("")){
             context.getPageScopeData().put("image", imageValue);
             logger.info("Image added to the PageScope: " + imageValue);
@@ -75,11 +83,11 @@ public Document getContentDetail(final RequestContext context) {
         String dcrName = context.getParameterString("record");
         logger.info("Current Page Link " + currentPageLink);
         String prettyURLforCurrentPage = commonUtils.getPrettyURLForPage(currentPageLink, paramLocale, dcrName);
-        context.getPageScopeData().put("current-url", prettyURLforCurrentPage);
-        context.getPageScopeData().put("href-lang-default", prettyURLforCurrentPage);
-        logger.info("Set PageScope href-lang-default as: " + prettyURLforCurrentPage);
-        context.getPageScopeData().put("href-lang-en", commonUtils.getPrettyURLForPage(currentPageLink, paramLocale, dcrName));
-        context.getPageScopeData().put("href-lang-ar", commonUtils.getPrettyURLForPage(currentPageLink, paramLocale, dcrName));
+        context.getPageScopeData().put("current-url", urlPrefix + prettyURLforCurrentPage);
+        context.getPageScopeData().put("href-lang-default", urlPrefix + prettyURLforCurrentPage);
+        logger.info("Set PageScope href-lang-default as: " + urlPrefix + prettyURLforCurrentPage);
+        context.getPageScopeData().put("href-lang-en", urlPrefix + commonUtils.getPrettyURLForPage(currentPageLink, "en", dcrName));
+        context.getPageScopeData().put("href-lang-ar", urlPrefix + commonUtils.getPrettyURLForPage(currentPageLink, "ar", dcrName));
         logger.info("Set PageScope href-lang attributes for Alternate Language");
     } catch (Exception e) {
         logger.error("Error fetching detail content for record "

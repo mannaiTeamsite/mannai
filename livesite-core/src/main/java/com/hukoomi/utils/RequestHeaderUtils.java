@@ -9,6 +9,7 @@ public class RequestHeaderUtils {
     private final Logger logger = Logger.getLogger(RequestHeaderUtils.class);
     private RequestContext context;
     private static final String X_FORWARDED_FOR = "x-forwarded-for";
+    private static final String X_FORWARDED_HOST = "x-forwarded-host";
 
     public RequestHeaderUtils(RequestContext context) {
          this.context = context;
@@ -39,4 +40,15 @@ public class RequestHeaderUtils {
         logger.debug("getClientIpAddress()====> ends");
         return clientIpAddress;
     }
+
+    public String getForwardedHost(){
+        logger.debug("getForwardedHost()====> Start");
+        String hostname = "hukoomi.gov.qa";
+        if(context.getRequest().getHeader(X_FORWARDED_HOST) != null && !context.getRequest().getHeader(X_FORWARDED_HOST).isBlank()) {
+            hostname = context.getRequest().getHeader(X_FORWARDED_HOST);
+        }
+        logger.debug("getForwardedHost()====> End");
+        return hostname;
+    }
+
 }

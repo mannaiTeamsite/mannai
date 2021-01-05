@@ -75,6 +75,7 @@ public class SurveyExternal {
                     }
                 } else {
                     logger.info("Google Recaptcha is not valid");
+                    surveyStatusElem.setText("Failed");
                 }
             } else if ("detail".equalsIgnoreCase(surveyBO.getAction())) {
                 logger.info("SurveyExternal : Loading Properties....");
