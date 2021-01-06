@@ -1,5 +1,6 @@
 package com.hukoomi.livesite.external;
 
+import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -31,11 +32,12 @@ public class TopSearchExternal {
     public Document topSearch(final RequestContext context) {
         logger.debug("topSearch()====> Starts");
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+        CommonUtils commonUtils = new CommonUtils();
         Document topSearchDoc = DocumentHelper.createDocument();
         Element topSearchResultEle = topSearchDoc.addElement("topSearchResult");
         postgre = new Postgre(context);
         ipAddress = requestHeaderUtils.getClientIpAddress();
-        baseQuery = context.getParameterString("baseQuery").trim();
+        baseQuery = commonUtils.sanitizeSolrQuery(context.getParameterString("baseQuery").trim());
         try {
             baseQuery = URLDecoder.decode(baseQuery, "UTF-8");
         } catch (UnsupportedEncodingException e) {

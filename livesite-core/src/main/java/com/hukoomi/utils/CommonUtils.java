@@ -10,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;
@@ -301,6 +302,22 @@ public class CommonUtils {
         }
         prettyURL = prettyURL.endsWith("/") ? prettyURL.substring(0,prettyURL.length()-1) : prettyURL;
         return prettyURL;
+    }
+
+    /*
+     * Get Sanitized Solr Query String.
+     *
+     * @param parameter String
+     *
+     * @return String sanitized solr query.
+     */
+    public String sanitizeSolrQuery(String parameter) {
+        if(parameter == null || parameter.isBlank()){
+            return "";
+        }
+        String sanitizedQuery = "";
+        sanitizedQuery = parameter.replaceAll("[^a-zA-Z0-9- \\\"*:!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
+        return sanitizedQuery;
     }
 
 }
