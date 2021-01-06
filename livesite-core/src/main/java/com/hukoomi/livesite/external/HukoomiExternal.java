@@ -1,6 +1,7 @@
 package com.hukoomi.livesite.external;
 
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
+import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.SolrQueryUtil;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
@@ -28,9 +29,10 @@ public static final String DEFAULT_QUERY = "*:*";
 public Document getLandingContent(final RequestContext context) {
     SolrQueryUtil squ = new SolrQueryUtil();
     SolrQueryBuilder sqb = new SolrQueryBuilder(context);
+    CommonUtils commonUtils = new CommonUtils();
     String fieldQuery = "";
-    String fq = context.getParameterString(
-            "fieldQuery", "");
+    String fq = commonUtils.sanitizeSolrQuery(context.getParameterString(
+            "fieldQuery", ""));
     try {
         fieldQuery = URLDecoder.decode(
                 fq, "UTF-8");
@@ -39,8 +41,8 @@ public Document getLandingContent(final RequestContext context) {
         logger.warn("Unable to decode fieldQuery="
                 + fq, e);
     }
-    String category = context
-            .getParameterString("solrcategory", "");
+    String category = commonUtils.sanitizeSolrQuery(context
+            .getParameterString("solrcategory", ""));
     logger.debug("category : " + category);
     if (StringUtils.isNotBlank(category)) {
         if (StringUtils.isNotBlank(fieldQuery)) {
@@ -52,8 +54,8 @@ public Document getLandingContent(final RequestContext context) {
         sqb.addFieldQuery(fieldQuery);
         }
 
-    String fields = context.getParameterString(
-            "fields", "");
+    String fields = commonUtils.sanitizeSolrQuery(context.getParameterString(
+            "fields", ""));
     logger.debug("fields : " + fields);
     if (StringUtils.isNotBlank(fields)) {
         logger.debug("fieldQuery : " + fieldQuery);

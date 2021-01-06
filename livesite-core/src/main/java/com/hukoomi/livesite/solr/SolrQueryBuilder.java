@@ -1,7 +1,8 @@
 package com.hukoomi.livesite.solr;
 
-import com.interwoven.livesite.runtime.RequestContext;
+import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.PropertiesFileReader;
+import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
@@ -97,6 +98,7 @@ public class SolrQueryBuilder {
         PropertiesFileReader propertyFileReader = new PropertiesFileReader(
                 context, "solrconfig.properties");
         Properties properties = propertyFileReader.getPropertiesFile();
+        CommonUtils commonUtils = new CommonUtils();
         String solrHost = "";
 		if (context.isRuntime()) {
 			solrHost = context.getParameterString("solrHost",
@@ -114,9 +116,10 @@ public class SolrQueryBuilder {
                 properties.getProperty("requestHandler"));
         logger.debug("Solr Request Handler: " + requestHandler);
         try {
-            this.baseQuery = URLDecoder.decode(context
-                    .getParameterString("baseQuery", DEFAULT_QUERY), UTF);
-            logger.debug("Solr Base Query: " + baseQuery);
+            this.baseQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
+                    .getParameterString("baseQuery", DEFAULT_QUERY), UTF));
+            logger.info("Solr Base Query: " + baseQuery);
+
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode baseQuery="
                     + context.getParameterString("baseQuery",
@@ -124,8 +127,8 @@ public class SolrQueryBuilder {
         }
 
         try {
-            this.fieldQuery = URLDecoder.decode(context
-                    .getParameterString("fieldQuery", ""), UTF);
+            this.fieldQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
+                    .getParameterString("fieldQuery", ""), UTF));
             logger.debug("Solr Field Query: " + fieldQuery);
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode fieldQuery="
@@ -133,18 +136,18 @@ public class SolrQueryBuilder {
         }
 
         try {
-            this.groupingField = URLDecoder.decode(context
-                    .getParameterString("groupingField", ""), UTF);
-            logger.debug("Solr Grouping Field: " + fieldQuery);
+            this.groupingField = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
+                    .getParameterString("groupingField", ""), UTF));
+            logger.debug("Solr Grouping Field: " + groupingField);
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode groupingField="
                     + context.getParameterString("groupingField"), e);
         }
 
         try {
-            this.facetField = URLDecoder.decode(context
-                    .getParameterString("facet", ""), UTF);
-            logger.debug("Solr Facet Fields: " + fieldQuery);
+            this.facetField = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
+                    .getParameterString("facet", ""), UTF));
+            logger.debug("Solr Facet Fields: " + facetField);
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode facet Field="
                     + context.getParameterString("facet"), e);
@@ -185,8 +188,8 @@ public class SolrQueryBuilder {
         this.sort = context.getParameterString("sort",
                 properties.getProperty("sort"));
         logger.info("Solr Result Sort: " + this.sort);
-        this.mltFl = context.getParameterString("mlt_fl",
-                properties.getProperty("mlt_fl"));
+        this.mltFl = commonUtils.sanitizeSolrQuery(context.getParameterString("mlt_fl",
+                properties.getProperty("mlt_fl")));
         logger.info("Solr Result mltFl: " + this.mltFl);
     }
 
