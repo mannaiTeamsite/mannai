@@ -15,6 +15,7 @@ import com.hukoomi.bo.SurveyBO;
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.SolrQueryUtil;
+import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
 /**
  * PollsSurveyExternal is the components external class.
@@ -46,7 +47,10 @@ public class PollSurveyExternal {
      * Postgre object variable.
      */
     Postgre postgre = null;
-
+    /**
+     * Validator object.
+     */
+    Validator validate = new Validator();
     
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -60,23 +64,24 @@ public class PollSurveyExternal {
     @Deprecated(since = "", forRemoval = false)
     public Document getContent(final RequestContext context) {
         logger.debug("PollSurveyExternal : getContent");
-        Document doc = null;
+        Document doc = DocumentHelper.createDocument();
         PollsExternal pollsExt = new PollsExternal();
         try {
             postgre = new Postgre(context);
-            PollsBO pollsBO = pollsExt.setBO(context);
-            logger.info("PollsBO : " + pollsBO);
+            String inputAction = "";
+            if(validate.isValidPattern(context.getParameterString("pollAction"), Validator.ALPHABET)) {
+                inputAction = context.getParameterString("pollAction");
+            }
 
-            if ("vote".equalsIgnoreCase(pollsBO.getAction())) {
-
-                pollsExt.insertPollResponse(pollsBO,
-                        postgre);
-
-                // Fetch Result from DB for above poll_ids which were voted already by user
-                Map<String, List<Map<String, String>>> response = pollsExt
-                        .getPollResponse(pollsBO, postgre);
-
-                doc = pollsExt.createPollResultDoc(pollsBO, response);
+            if ("vote".equalsIgnoreCase(inputAction)) {
+                PollsBO pollsBO = new PollsBO();
+                boolean isInputValid = pollsExt.setBO(context, pollsBO);
+                if(isInputValid) {
+                    logger.info("PollsBO : " + pollsBO);
+                    doc = pollsExt.processVotePoll(pollsBO, postgre);
+                }else {
+                    doc.addElement("PollResult").addElement(PollsExternal.RESULT);
+                }
             } else {
                 doc = getGroupData(context);
             }
@@ -105,9 +110,12 @@ public class PollSurveyExternal {
         try {
             PollsExternal pollsExt = new PollsExternal();
             SurveyExternal surveyExt = new SurveyExternal();
-            PollsBO pollsBO = pollsExt.setBO(context);
+            PollsBO pollsBO = new PollsBO();
+            boolean isPollInputValid = pollsExt.setBO(context, pollsBO);
             logger.info("PollsBO : " + pollsBO);
-            SurveyBO surveyBO = surveyExt.setBO(context);
+            
+            SurveyBO surveyBO = new SurveyBO();
+            boolean isSurveyInputValid = surveyExt.setBO(context, surveyBO);
             logger.debug("SurveyBO : " + surveyBO);
 
             String solarCore = "portal-en";
@@ -115,78 +123,74 @@ public class PollSurveyExternal {
                 solarCore = "portal-ar";
             }
 
-            logger.info("\nlang : " + pollsBO.getLang() + "\nipAddress : "
-                    + pollsBO.getIpAddress() + "\nuserId : "
-                    + pollsBO.getUserId() + "\npollsGroup : "
-                    + pollsBO.getGroup() + "\nsurveyGroup : "
-                    + surveyBO.getGroup());
-
             doc = DocumentHelper.createDocument();
             Element pollSurveyElem = doc.addElement("PollSurveyesponse");
             Element pollGroupElem = null;
             Element surveyGroupElem = null;
 
-            // PollGroup Processing
-            String pollGroupName = getContentName(pollsBO.getGroup());
-            logger.info("pollGroupName : " + pollGroupName);
-            Document document = fetchGroupDoc(context, CONTENT,
-                    pollsBO.getGroupCategory(), pollsBO.getLang(),
-                    pollGroupName);
-            logger.info("Polls Group Doc :" + document.asXML());
-
-            String pollIds = fetchIds(document, POLL_NODE, context,
-                    pollsBO.getCategory(), pollsBO.getLang());
-            logger.info("pollIds : " + pollIds);
-            if (pollIds != null && !"".equals(pollIds.trim())) {
-
-                Document pollsSolrDoc = fetchDocument(context, pollIds,
-                        pollsBO.getSolrCategory(), solarCore);
-                logger.info("pollsSolrDoc : " + pollsSolrDoc.asXML());
-
-                String activePollIds = pollsExt
-                        .getPollIdSFromDoc(pollsSolrDoc);
-                logger.info("activePollIds : " + activePollIds);
-
-                if (activePollIds != null && !"".equals(activePollIds.trim())) {
-                    pollGroupElem = pollSurveyElem
-                            .addElement("PollGroupResponse");
-                    pollsBO.setPollId(activePollIds);
-
-                    String votedPollIds = pollsExt.checkResponseData(
-                            pollsBO, postgre);
-                    Map<String, List<Map<String, String>>> response = null;
-                    if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
-                        pollsBO.setPollId(votedPollIds);
-                        response = pollsExt.getPollResponse(pollsBO,
-                                postgre);
+            if(isPollInputValid) {
+                // PollGroup Processing
+                String pollGroupName = pollsBO.getGroup();
+                logger.info("pollGroupName : " + pollGroupName);
+                Document document = fetchGroupDoc(context, CONTENT,
+                        pollsBO.getGroupCategory(), pollsBO.getLang(),
+                        pollGroupName);
+                logger.info("Polls Group Doc :" + document.asXML());
+    
+                String pollIds = fetchIds(document, POLL_NODE, context,
+                        pollsBO.getCategory(), pollsBO.getLang());
+                logger.info("pollIds : " + pollIds);
+                if (pollIds != null && !"".equals(pollIds.trim())) {
+    
+                    Document pollsSolrDoc = fetchDocument(context, pollIds,
+                            pollsBO.getSolrCategory(), solarCore);
+                    logger.info("pollsSolrDoc : " + pollsSolrDoc.asXML());
+    
+                    String activePollIds = pollsExt
+                            .getPollIdSFromDoc(pollsSolrDoc);
+                    logger.info("activePollIds : " + activePollIds);
+    
+                    if (activePollIds != null && !"".equals(activePollIds.trim())) {
+                        pollGroupElem = pollSurveyElem
+                                .addElement("PollGroupResponse");
+                        pollsBO.setPollId(activePollIds);
+    
+                        String votedPollIds = pollsExt.checkResponseData(
+                                pollsBO, postgre);
+                        Map<String, List<Map<String, String>>> response = null;
+                        if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
+                            pollsBO.setPollId(votedPollIds);
+                            response = pollsExt.getPollResponse(pollsBO,
+                                    postgre);
+                        }
+    
+                        pollDoc = pollsExt.addResultToXml(pollsSolrDoc,
+                                response);
+                        pollGroupElem.add(pollDoc.getRootElement());
                     }
-
-                    pollDoc = pollsExt.addResultToXml(pollsSolrDoc,
-                            response);
-                    pollGroupElem.add(pollDoc.getRootElement());
-                    logger.info(
-                            "Final Document - Poll Doc : " + doc.asXML());
                 }
             }
 
-            // SurveyGroup Processing
-            String surveyGroupName = getContentName(surveyBO.getGroup());
-            logger.info("surveyGroupName : " + surveyGroupName);
-            document = fetchGroupDoc(context, CONTENT,
-                    surveyBO.getGroupCategory(), surveyBO.getLang(),
-                    surveyGroupName);
-            logger.info("Survey Group Doc :" + document.asXML());
-
-            String surveyIds = fetchIds(document, SURVEY_NODE, context,
-                    surveyBO.getCategory(), surveyBO.getLang());
-            logger.info("surveyIds : " + surveyIds);
-            if (surveyIds != null && !"".equals(surveyIds.trim())) {
-                Document surveySolrDoc = fetchDocument(context, surveyIds,
-                        surveyBO.getSolrCategory(), solarCore);
-                logger.info("surveySolrDoc : " + surveySolrDoc.asXML());
-                surveyGroupElem = pollSurveyElem
-                        .addElement("SurveyGroupResponse");
-                surveyGroupElem.add(surveySolrDoc.getRootElement());
+            if(isSurveyInputValid) {
+                // SurveyGroup Processing
+                String surveyGroupName = surveyBO.getGroup();
+                logger.info("surveyGroupName : " + surveyGroupName);
+                Document document = fetchGroupDoc(context, CONTENT,
+                        surveyBO.getGroupCategory(), surveyBO.getLang(),
+                        surveyGroupName);
+                logger.info("Survey Group Doc :" + document.asXML());
+    
+                String surveyIds = fetchIds(document, SURVEY_NODE, context,
+                        surveyBO.getCategory(), surveyBO.getLang());
+                logger.info("surveyIds : " + surveyIds);
+                if (surveyIds != null && !"".equals(surveyIds.trim())) {
+                    Document surveySolrDoc = fetchDocument(context, surveyIds,
+                            surveyBO.getSolrCategory(), solarCore);
+                    logger.info("surveySolrDoc : " + surveySolrDoc.asXML());
+                    surveyGroupElem = pollSurveyElem
+                            .addElement("SurveyGroupResponse");
+                    surveyGroupElem.add(surveySolrDoc.getRootElement());
+                }
             }
 
             logger.info("Final Document  : " + doc.asXML());
@@ -201,6 +205,9 @@ public class PollSurveyExternal {
      * This method is used to fetch solr document.
      * 
      * @param context Request Context object.
+     * @param ids Poll ids.
+     * @param solrcategory Solar category.
+     * @param solrCore Solar Core.
      * 
      * @return doc Returns solr document.
      */
