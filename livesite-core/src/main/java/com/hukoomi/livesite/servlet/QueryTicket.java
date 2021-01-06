@@ -29,8 +29,7 @@ public class QueryTicket extends HttpServlet {
      *      HttpServletResponse response)
      */
     protected void doPost(HttpServletRequest request,
-            HttpServletResponse response)
-            throws ServletException {
+            HttpServletResponse response) throws ServletException {
         LOGGER.info("Customer Service Query Ticket: Start");
         StringBuilder resp = null;
         JSONObject data = null;
@@ -45,29 +44,29 @@ public class QueryTicket extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             ValidationUtils util = new ValidationUtils();
-            if(util.validateAlphaNumeric(ticketNo)) {
+            if (ticketNo.length() <= 20
+                    && util.validateAlphaNumeric(ticketNo)) {
                 String httpServletAddress = request.getLocalAddr();
                 URL url = null;
-                url = new URL(
-                        "http://"+httpServletAddress + ":8082/api/contact/center/ticket/" + ticketNo);
+                url = new URL("http://" + httpServletAddress
+                        + ":8082/api/contact/center/ticket/" + ticketNo);
                 HttpURLConnection con =
                         (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
                 con.setDoOutput(true);
-                BufferedReader br = new BufferedReader(new InputStreamReader(
-                        con.getInputStream(), StandardCharsets.UTF_8));
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(con.getInputStream(),
+                                StandardCharsets.UTF_8));
                 resp = new StringBuilder();
                 String responseLine = null;
                 while ((responseLine = br.readLine()) != null) {
                     resp.append(responseLine.trim());
                 }
-            }
-            else {
+            } else {
                 data.put("success", "false");
                 data.put("errorMessage", "validationFailed");
                 response.getWriter().write(data.toString());
             }
-
 
         } catch (IOException e) {
             response.setContentType("application/json");
@@ -77,7 +76,8 @@ public class QueryTicket extends HttpServlet {
                 data.put("errorMessage", e.getMessage());
                 response.getWriter().write(data.toString());
             } catch (IOException e1) {
-                LOGGER.error("Customer Service Query Ticket: Exception ", e);
+                LOGGER.error("Customer Service Query Ticket: Exception ",
+                        e);
             }
 
         } finally {

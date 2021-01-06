@@ -79,9 +79,9 @@ public class ContactUsExternal {
             emailSubject = context.getParameterString("emailSubject");
             emailText = context.getParameterString("emailText");
             gRecaptchaResponse = context.getParameterString("captcha");
-            boolean validation = setValueToContactModel(senderName, senderEmail, emailText,
-                    emailSubject);
-            if(validation) {
+            boolean validation = setValueToContactModel(senderName,
+                    senderEmail, emailText, emailSubject);
+            if (validation) {
                 GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
                 verify = captchUtil.validateCaptcha(context,
                         gRecaptchaResponse);
@@ -93,8 +93,7 @@ public class ContactUsExternal {
                     return getDocument(status);
                 }
                 return document;
-            }
-            else {
+            } else {
                 status = STATUS_FIELD_VALIDATION;
                 return getDocument(status);
             }
@@ -118,19 +117,20 @@ public class ContactUsExternal {
         LOGGER.info("setValueToContactModel: Enter");
         if (senderName != null && senderEmail != null && emailText != null
                 && emailSubject != null) {
-            if (senderName.length() <=100 && util.validateField(senderName)) {
+            if (senderName.length() <= 100
+                    && util.validateField(senderName)) {
                 email.setSenderName(senderName);
             } else {
                 return false;
             }
-
-            if (senderEmail.length() <= 50 && util.validateEmailId(senderEmail)) {
+            if (senderEmail.length() <= 50
+                    && util.validateEmailId(senderEmail)) {
                 email.setSenderEmail(senderEmail);
             } else {
                 return false;
             }
-
-            if (emailText.length() <=1000 && util.validateComments(emailText)) {
+            if (emailText.length() <= 2500
+                    && util.validateComments(emailText)) {
                 email.setEmailText(emailText);
             } else {
                 return false;

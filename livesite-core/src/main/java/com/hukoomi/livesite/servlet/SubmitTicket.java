@@ -116,6 +116,7 @@ public class SubmitTicket extends HttpServlet {
 
     /**
      * this method validates form fields
+     *
      * @param data
      * @return
      */
@@ -229,7 +230,7 @@ public class SubmitTicket extends HttpServlet {
             LOGGER.info("Validate comments : ");
             if (comments != null || !"".equals(comments.trim())) {
                 if (!util.validateComments(comments)
-                        || comments.trim().length() > 1000) {
+                        || comments.trim().length() > 2500) {
                     return false;
                 }
             }

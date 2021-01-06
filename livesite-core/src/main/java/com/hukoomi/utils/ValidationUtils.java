@@ -11,21 +11,21 @@ public class ValidationUtils {
      */
     private final Logger logger = Logger.getLogger(ValidationUtils.class);
     /** regex for emailId. */
-    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\." +
-            "[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*" +
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\p{IsArabic}]+(\\." +
+            "[_A-Za-z0-9-\\p{IsArabic}]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*" +
             "(\\.[A-Za-z]{2,})$";
     /** regex for alphanumeric with space. */
-    private static final String ALPHANUMERIC_SPACE_PATTERN =  "^[ 0-9A-Za-z]+$";
+    private static final String ALPHANUMERIC_SPACE_PATTERN =  "^[ 0-9A-Za-z\\p{IsArabic}]+$";
     /** regex for numeric space. */
-    private static final String NUMERIC_PATTERN =  "^(0|[1-9][0-9]*)$";
+    private static final String NUMERIC_PATTERN =  "^[[0-9]\\p{IsArabic}]+$";
     /** regex for alphanumeric. */
-    private static final String ALPHANUMERIC_PATTERN =  "^[0-9A-Za-z]+$";
+    private static final String ALPHANUMERIC_PATTERN =  "^[0-9A-Za-z\\p{IsArabic}]+$";
     /** regex for alphabet. */
-    private static final String ALPHABET_SPACE_PATTERN =  "^[ A-Za-z]+$";
+    private static final String ALPHABET_SPACE_PATTERN =  "^[ A-Za-z\\p{IsArabic}]+$";
     /** regex for comments. */
-    private static final String COMMENTS_PATTERN  =  "^[a-zA-Z0-9-_().,:@&\n\t ]+$";
+    private static final String COMMENTS_PATTERN  =  "^[a-zA-Z0-9-_().,:@&\n\t \\p{IsArabic}]+$";
     /** regex for alphanumeric with some special character. */
-    private static final String  ALPHANUMERIC_ADDITIONAL_PATTERN=  "^[a-zA-Z0-9-_().,:@& ]+$";
+    private static final String  ALPHANUMERIC_ADDITIONAL_PATTERN=  "^[a-zA-Z0-9-_().,:@& \\p{IsArabic}]+$";
     /**
      * this method validates alphanumeric with space
      * @param str
