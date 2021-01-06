@@ -16,6 +16,7 @@ import org.dom4j.Element;
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
+import com.hukoomi.utils.ValidationUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class CustomerServiceExternal {
@@ -33,9 +34,15 @@ public class CustomerServiceExternal {
     private static final String ELEMENT_OPTION = "Option";
     /**/
     private static Properties properties = null;
+    /** field validation status. */
+    private static final String STATUS_FIELD_VALIDATION =
+            "FieldValidationFailed";
+    /** element for xml document. */
+    private static final String ELEMENT_STATUS = "status";
 
     /**
      * This method internally makes call to get eservices/ services.
+     *
      * @param context
      * @return result
      */
@@ -43,6 +50,7 @@ public class CustomerServiceExternal {
         String action = "";
         String eService = "";
         Document result = null;
+
         LOGGER.info("CustomerService");
         action = context.getParameterString("action");
         if (!action.equals("")) {
@@ -50,7 +58,18 @@ public class CustomerServiceExternal {
                 result = getEServices(context);
             } else if (action.equals(ACTION_SERVICE)) {
                 eService = context.getParameterString("eService");
-                result = getServices(eService, context);
+                ValidationUtils util = new ValidationUtils();
+                if (util.validateNumeric(eService)) {
+                    result = getServices(eService, context);
+                } else {
+                    result = DocumentHelper.createDocument();
+                    Element resultElement =
+                            result.addElement(ELEMENT_RESULT);
+                    Element element =
+                            resultElement.addElement(ELEMENT_STATUS);
+                    element.setText(STATUS_FIELD_VALIDATION);
+                    return result;
+                }
             }
         }
         return result;
@@ -58,6 +77,7 @@ public class CustomerServiceExternal {
 
     /**
      * This method will be used to get the services from db.
+     *
      * @param context
      * @return document
      */
@@ -73,7 +93,8 @@ public class CustomerServiceExternal {
         Element resultElement = document.addElement(ELEMENT_RESULT);
         CustomerServiceExternal.loadProperties(context);
         String blockService = properties.getProperty("blockService");
-        builder.append("SELECT S.ESERVICEID as ESERVICEID,S.SERVICEID as SERVICEID,S.SERVICEEDESC as SERVICEEDESC,S.SERVICEADESC as SERVICEADESC ");
+        builder.append(
+                "SELECT S.ESERVICEID as ESERVICEID,S.SERVICEID as SERVICEID,S.SERVICEEDESC as SERVICEEDESC,S.SERVICEADESC as SERVICEADESC ");
         builder.append("FROM SERVICES S ");
         builder.append("WHERE S.ESERVICEID=");
         builder.append(eService);
@@ -83,7 +104,8 @@ public class CustomerServiceExternal {
         try {
             LOGGER.info("getServices:After builder");
             if (null != connection) {
-                preparedStatement = connection.prepareStatement(builder.toString());
+                preparedStatement =
+                        connection.prepareStatement(builder.toString());
                 resultSet = preparedStatement.executeQuery();
                 while (resultSet.next()) {
                     Element optionElement =
@@ -106,7 +128,8 @@ public class CustomerServiceExternal {
         } catch (SQLException e) {
             LOGGER.error("Exception in getServices: ", e);
         } finally {
-            postgre.releaseConnection(connection, preparedStatement, resultSet);
+            postgre.releaseConnection(connection, preparedStatement,
+                    resultSet);
         }
 
         return document;
@@ -114,6 +137,7 @@ public class CustomerServiceExternal {
 
     /**
      * This method will be used to get the eservices from db.
+     *
      * @param context
      * @return document
      */
@@ -128,14 +152,17 @@ public class CustomerServiceExternal {
         List<Map<String, String>> resultList = null;
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement(ELEMENT_RESULT);
-        builder.append("SELECT E.ESERVICEID, E.ESERVICEADESC, E.ESERVICEEDESC, E.MINISTRYID ");
+        builder.append(
+                "SELECT E.ESERVICEID, E.ESERVICEADESC, E.ESERVICEEDESC, E.MINISTRYID ");
         builder.append("FROM ESERVICES E, INCIDENT_ESERVICE_MAPPING IEM ");
-        builder.append("WHERE E.ESERVICEID=IEM.ESERVICEID AND E.ESERVICEADESC!='' AND E.ESERVICEEDESC!='' AND E.ESERVICEADESC IS NOT NULL and E.ESERVICEEDESC IS NOT NULL ");
+        builder.append(
+                "WHERE E.ESERVICEID=IEM.ESERVICEID AND E.ESERVICEADESC!='' AND E.ESERVICEEDESC!='' AND E.ESERVICEADESC IS NOT NULL and E.ESERVICEEDESC IS NOT NULL ");
         builder.append("ORDER BY E.ESERVICEID ");
         try {
             LOGGER.info("getServices:After builder");
             if (null != connection) {
-                preparedStatement = connection.prepareStatement(builder.toString());
+                preparedStatement =
+                        connection.prepareStatement(builder.toString());
                 resultSet = preparedStatement.executeQuery();
 
                 while (resultSet.next()) {
@@ -160,7 +187,8 @@ public class CustomerServiceExternal {
         } catch (SQLException e) {
             LOGGER.error("Exception in getEServices: ", e);
         } finally {
-            postgre.releaseConnection(connection, preparedStatement, resultSet);
+            postgre.releaseConnection(connection, preparedStatement,
+                    resultSet);
         }
         return document;
     }
