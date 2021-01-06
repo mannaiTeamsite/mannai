@@ -25,6 +25,7 @@ import org.json.JSONObject;
 
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
+import com.hukoomi.utils.ValidationUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class NewsletterExternal {
@@ -58,6 +59,9 @@ public class NewsletterExternal {
             "alreadySubscribed";
     /** mailchimp response status. */
     private static final String STATUS_ALREADY_PENDING = "alreadyPending";
+    /** field validation status. */
+    private static final String STATUS_FIELD_VALIDATION =
+            "FieldValidationFailed";
     /** status key in mailchimp response. */
     private static final String KEY_STATUS = "status";
     /** element for document. */
@@ -71,7 +75,8 @@ public class NewsletterExternal {
     /** Mailchimp properties key. */
     private static final String BASE_URL = "baseUrl";
     /** Mailchimp properties key. */
-    private static final String AUTHORIZATION_HEADER = "authorizationHeader";
+    private static final String AUTHORIZATION_HEADER =
+            "authorizationHeader";
     /** Properties object that holds the property values */
     private static Properties properties = null;
 
@@ -88,6 +93,7 @@ public class NewsletterExternal {
             throws IOException, NoSuchAlgorithmException {
         LOGGER.info("Newsletter Subscribtion");
         Document memberdetail = null;
+        ValidationUtils util = new ValidationUtils();
         String email = context.getParameterString("email");
         String language = context.getParameterString("locale", "en");
         String subscriptionLang =
@@ -95,8 +101,15 @@ public class NewsletterExternal {
         String flagToInvokeMailchimpService =
                 context.getParameterString("flag");
         if (!email.equals("") && !subscriptionLang.equals("")) {
-            memberdetail = createSubscriber(email, subscriptionLang,
-                    flagToInvokeMailchimpService, context);
+            if ((subscriptionLang.equals("ar")
+                    || subscriptionLang.equals("en"))
+                    && (email.length() <= 50 && util.validateEmailId(email) )) {
+                memberdetail = createSubscriber(email, subscriptionLang,
+                        flagToInvokeMailchimpService, context);
+            } else {
+                memberdetail = getDocument(email, STATUS_FIELD_VALIDATION);
+            }
+
         }
         return memberdetail;
     }

@@ -15,6 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import com.hukoomi.utils.ValidationUtils;
+
 public class QueryTicket extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -31,36 +33,57 @@ public class QueryTicket extends HttpServlet {
             throws ServletException {
         LOGGER.info("Customer Service Query Ticket: Start");
         StringBuilder resp = null;
+        JSONObject data = null;
         try {
 
             BufferedReader inbr = new BufferedReader(
                     new InputStreamReader(request.getInputStream()));
             String json = "";
             json = inbr.readLine();
-            JSONObject data = new JSONObject(json);
+            data = new JSONObject(json);
             String ticketNo = data.getString("ticketNumber");
-            String httpServletAddress = request.getLocalAddr();
-            URL url = null;
-            url = new URL(
-                    "http://"+httpServletAddress + ":8082/api/contact/center/ticket/" + ticketNo);
-            HttpURLConnection con =
-                    (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            con.setDoOutput(true);
-            BufferedReader br = new BufferedReader(new InputStreamReader(
-                    con.getInputStream(), StandardCharsets.UTF_8));
-            resp = new StringBuilder();
-            String responseLine = null;
-            while ((responseLine = br.readLine()) != null) {
-                resp.append(responseLine.trim());
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            ValidationUtils util = new ValidationUtils();
+            if(util.validateAlphaNumeric(ticketNo)) {
+                String httpServletAddress = request.getLocalAddr();
+                URL url = null;
+                url = new URL(
+                        "http://"+httpServletAddress + ":8082/api/contact/center/ticket/" + ticketNo);
+                HttpURLConnection con =
+                        (HttpURLConnection) url.openConnection();
+                con.setRequestMethod("GET");
+                con.setDoOutput(true);
+                BufferedReader br = new BufferedReader(new InputStreamReader(
+                        con.getInputStream(), StandardCharsets.UTF_8));
+                resp = new StringBuilder();
+                String responseLine = null;
+                while ((responseLine = br.readLine()) != null) {
+                    resp.append(responseLine.trim());
+                }
+            }
+            else {
+                data.put("success", "false");
+                data.put("errorMessage", "validationFailed");
+                response.getWriter().write(data.toString());
             }
 
-        } catch (Exception e) {
-            LOGGER.error("Customer Service Query Ticket: Exception ", e);
+
+        } catch (IOException e) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                data.put("success", "false");
+                data.put("errorMessage", e.getMessage());
+                response.getWriter().write(data.toString());
+            } catch (IOException e1) {
+                LOGGER.error("Customer Service Query Ticket: Exception ", e);
+            }
+
         } finally {
             LOGGER.info("End of Query Ticket");
         }
-        response.setContentType("text/html;charset=UTF-8");
+
         try {
             response.getWriter().write(resp.toString());
         } catch (IOException e) {
