@@ -23,6 +23,7 @@ import org.dom4j.Node;
 import com.hukoomi.bo.PollsBO;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -82,6 +83,10 @@ public class PollsExternal {
      * Postgre Object variable.
      */
     Postgre postgre = null;
+    /**
+     * Validator object.
+     */
+    Validator validate = new Validator();
 
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -99,51 +104,80 @@ public class PollsExternal {
 
         Document doc = DocumentHelper.createDocument();
 
-        HukoomiExternal he = new HukoomiExternal();
+        PollsBO pollsBO = new PollsBO();
+        boolean isValidInput = setBO(context, pollsBO);
+        logger.info("isValidInput : " + isValidInput);
+        if (isValidInput) {
 
-        PollsBO pollsBO = setBO(context);
-        logger.info("PollsBO : " + pollsBO);
-        postgre = new Postgre(context);
+            logger.info("PollsBO : " + pollsBO);
+            postgre = new Postgre(context);
+            HukoomiExternal he = new HukoomiExternal();
 
-        if (pollsBO.getAction() != null) {
-            if ("vote".equalsIgnoreCase(pollsBO.getAction())) {
-
-                doc = processVotePoll(pollsBO);
-
-            } else if ("current".equalsIgnoreCase(pollsBO.getAction())) {
-
+            if (pollsBO.getAction() != null
+                    && "vote".equalsIgnoreCase(pollsBO.getAction())) {
+                doc = processVotePoll(pollsBO, postgre);
+            } else if (pollsBO.getAction() != null
+                    && "current".equalsIgnoreCase(pollsBO.getAction())) {
                 doc = processCurrentPolls(context, he, pollsBO);
-
-            } else if ("past".equalsIgnoreCase(pollsBO.getAction())) {
-
+            } else if (pollsBO.getAction() != null
+                    && "past".equalsIgnoreCase(pollsBO.getAction())) {
                 doc = processPastPolls(context, he, pollsBO);
             }
-            logger.info("Final Result :" + doc.asXML());
+        } else {
+            logger.info("Invalid input parameter");
+            if (pollsBO.getAction() != null && ("current"
+                    .equalsIgnoreCase(pollsBO.getAction())
+                    || "past".equalsIgnoreCase(pollsBO.getAction()))) {
+                Element pollResponseElem = doc.addElement("SolrResponse")
+                        .addElement("response").addElement("numFound");
+                pollResponseElem.setText("0");
+            } else if (pollsBO.getAction() != null
+                    && "vote".equalsIgnoreCase(pollsBO.getAction())) {
+                doc.addElement("PollResult").addElement(RESULT);
+            }
         }
+        logger.info("Final Result :" + doc.asXML());
         return doc;
 
     }
 
-    private Document processVotePoll(PollsBO pollsBO) {
-        Document doc = null;
-        
-        if(!isPollVoted(pollsBO)) {
+    /**
+     * This method is used to process the vote for a poll.
+     * 
+     * @param pollsBO PollsBO object.
+     * @param postgre Postgre object.
+     * 
+     * @return Returns document which contains the result of the voted poll.
+     * 
+     */
+    public Document processVotePoll(PollsBO pollsBO, Postgre postgre) {
+        if (!isPollVoted(pollsBO, postgre)) {
             insertPollResponse(pollsBO, postgre);
         }
         // Fetch Result from DB for above poll_ids which were voted already by user
         Map<String, List<Map<String, String>>> response = getPollResponse(
                 pollsBO, postgre);
 
-        doc = createPollResultDoc(pollsBO, response);
-       
-        return doc;
+        return createPollResultDoc(pollsBO, response);
     }
-    
-   private boolean isPollVoted(PollsBO pollsBO) {
+
+    /**
+     * This method is used to check if a poll is voted or not.
+     * 
+     * @param pollsBO PollsBO object.
+     * @param postgre Postgre object.
+     * 
+     * @return Returns true if the poll is voted by the user or from the ip address
+     *         else returns false.
+     * 
+     */
+    public boolean isPollVoted(PollsBO pollsBO, Postgre postgre) {
         boolean isPollVoted = false;
-        
+
         logger.info("isPollVoted()");
-        logger.info("isPollVoted - PollId : "+pollsBO.getPollId()+"\nUserId : "+pollsBO.getUserId()+"\nIpAddress : "+pollsBO.getIpAddress());
+        logger.info("isPollVoted - PollId : " + pollsBO.getPollId()
+                + "\nUserId : " + pollsBO.getUserId() + "\nIpAddress : "
+                + pollsBO.getIpAddress());
         StringBuilder checkVotedQuery = new StringBuilder(
                 "SELECT POLL_ID FROM POLL_RESPONSE WHERE POLL_ID = ? ");
 
@@ -163,7 +197,8 @@ public class PollsExternal {
             connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(checkVotedQuery.toString());
-            prepareStatement.setBigDecimal(1, new BigDecimal(pollsBO.getPollId()));
+            prepareStatement.setBigDecimal(1,
+                    new BigDecimal(pollsBO.getPollId()));
             if (pollsBO.getUserId() != null
                     && !"".equals(pollsBO.getUserId())) {
                 prepareStatement.setString(2, pollsBO.getUserId());
@@ -180,10 +215,20 @@ public class PollsExternal {
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
-        logger.info("isPollVoted - isPollVoted : "+isPollVoted);
+        logger.info("isPollVoted - isPollVoted : " + isPollVoted);
         return isPollVoted;
     }
 
+    /**
+     * This method is used to process the past poll.
+     * 
+     * @param context Request context object.
+     * @param he      HukoomiExternal object.
+     * @param postgre Postgre object.
+     * 
+     * @return Returns document which contains the past polls.
+     * 
+     */
     private Document processPastPolls(final RequestContext context,
             HukoomiExternal he, PollsBO pollsBO) {
         Document doc;
@@ -208,6 +253,16 @@ public class PollsExternal {
         return doc;
     }
 
+    /**
+     * This method is used to process the past poll.
+     * 
+     * @param context Request context object.
+     * @param he      HukoomiExternal object.
+     * @param postgre Postgre object.
+     * 
+     * @return Returns document which contains the current polls.
+     * 
+     */
     private Document processCurrentPolls(final RequestContext context,
             HukoomiExternal he, PollsBO pollsBO) {
         Document doc;
@@ -613,29 +668,200 @@ public class PollsExternal {
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
-    public PollsBO setBO(final RequestContext context) {
-        PollsBO pollsBO = new PollsBO();
+    public boolean setBO(final RequestContext context, PollsBO pollsBO) {
+
+        final String POLL_ACTION = "pollAction";
+        final String LOCALE = "locale";
+        final String USER_ID = "user_id";
+        final String USER_AGENT = "User-Agent";
+        final String VOTED_FROM = "votedFrom";
+        final String POLLID = "pollId";
+        final String CURRENT_POLL_ROWS = "current_poll_rows";
+        final String PAST_POLL_ROWS = "past_poll_rows";
+        final String POLLS_GROUP = "PollsGroup";
+        final String OPTION = "option";
+        final String POLL_GROUP_CATEGORY = "pollGroupCategory";
+        final String POLL_CATEGORY = "pollCategory";
+        final String SOLR_POLL_CATEGORY = "solrPollCategory";
+
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(
                 context);
-        pollsBO.setAction(context.getParameterString("pollAction"));
-        pollsBO.setLang(context.getParameterString("locale", "en"));
-        pollsBO.setUserId(context.getParameterString("user_id"));
-        pollsBO.setIpAddress(requestHeaderUtils.getClientIpAddress());
-        pollsBO.setUserAgent(context.getRequest().getHeader("User-Agent"));
-        pollsBO.setVotedFrom(context.getParameterString("votedFrom"));
-        pollsBO.setPollId(context.getParameterString("pollId"));
-        pollsBO.setCurrentPollsPerPage(
-                context.getParameterString("current_poll_rows"));
-        pollsBO.setPastPollsPerPage(
-                context.getParameterString("past_poll_rows"));
-        pollsBO.setGroup(context.getParameterString("PollsGroup"));
-        pollsBO.setSelectedOption(context.getParameterString("option"));
-        pollsBO.setGroupCategory(
-                context.getParameterString("pollGroupCategory"));
-        pollsBO.setCategory(context.getParameterString("pollCategory"));
-        pollsBO.setSolrCategory(
-                context.getParameterString("solrPollCategory"));
-        return pollsBO;
+        logger.info(POLL_ACTION + " >>>"
+                + context.getParameterString(POLL_ACTION) + "<<<");
+        if (!validate.checkNull(context.getParameterString(POLL_ACTION))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(POLL_ACTION),
+                    Validator.ALPHABET)) {
+                pollsBO.setAction(context.getParameterString(POLL_ACTION));
+            } else {
+                return false;
+            }
+        }
+
+        logger.info(LOCALE + " >>>" + context.getParameterString(LOCALE)
+                + "<<<");
+        if (!validate.checkNull(context.getParameterString(LOCALE))) {
+            if (validate.isValidPattern(context.getParameterString(LOCALE),
+                    Validator.ALPHABET)) {
+                pollsBO.setLang(context.getParameterString(LOCALE, "en"));
+            } else {
+                return false;
+            }
+        }
+
+        logger.info(USER_ID + " >>>" + context.getParameterString(USER_ID)
+                + "<<<");
+        if (!validate.checkNull(context.getParameterString(USER_ID))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(USER_ID),
+                    Validator.USER_ID)) {
+                logger.info("user_id 1");
+                pollsBO.setUserId(context.getParameterString(USER_ID));
+                logger.info("user_id 2");
+            } else {
+                logger.info("user_id else");
+                return false;
+            }
+        }
+
+        logger.info("ipaddress >>>"
+                + requestHeaderUtils.getClientIpAddress() + "<<<");
+        if (!validate.checkNull(requestHeaderUtils.getClientIpAddress())) {
+            if (validate.isValidPattern(
+                    requestHeaderUtils.getClientIpAddress(),
+                    Validator.IP_ADDRESS)) {
+                pollsBO.setIpAddress(
+                        requestHeaderUtils.getClientIpAddress());
+            } else {
+                return false;
+            }
+        }
+
+        pollsBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
+
+        logger.info(VOTED_FROM + " >>>"
+                + context.getParameterString(VOTED_FROM) + "<<<");
+        if (!validate.checkNull(context.getParameterString(VOTED_FROM))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(VOTED_FROM),
+                    Validator.ALPHABET)) {
+                pollsBO.setVotedFrom(
+                        context.getParameterString(VOTED_FROM));
+            } else {
+                return false;
+            }
+        }
+
+        logger.info(POLLID + " >>>" + context.getParameterString(POLLID)
+                + "<<<");
+        if (!validate.checkNull(context.getParameterString(POLLID))) {
+            if (validate.isValidPattern(context.getParameterString(POLLID),
+                    Validator.NUMERIC)) {
+                pollsBO.setPollId(context.getParameterString(POLLID));
+            } else {
+                return false;
+            }
+        }
+        logger.info(CURRENT_POLL_ROWS + " >>>"
+                + context.getParameterString(CURRENT_POLL_ROWS) + "<<<");
+        if (!validate.checkNull(
+                context.getParameterString(CURRENT_POLL_ROWS))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(CURRENT_POLL_ROWS),
+                    Validator.NUMERIC)) {
+                pollsBO.setCurrentPollsPerPage(
+                        context.getParameterString(CURRENT_POLL_ROWS));
+            } else {
+                return false;
+            }
+        }
+
+        logger.info(PAST_POLL_ROWS + " >>>"
+                + context.getParameterString(PAST_POLL_ROWS) + "<<<");
+        if (!validate
+                .checkNull(context.getParameterString(PAST_POLL_ROWS))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(PAST_POLL_ROWS),
+                    Validator.NUMERIC)) {
+                pollsBO.setPastPollsPerPage(
+                        context.getParameterString(PAST_POLL_ROWS));
+            } else {
+                return false;
+            }
+        }
+
+        if (!validate
+                .checkNull(context.getParameterString(POLLS_GROUP))) {
+            pollsBO.setGroup(
+                getContentName(context.getParameterString(POLLS_GROUP)));
+        }
+
+        logger.info(OPTION + " >>>" + context.getParameterString(OPTION)
+                + "<<<");
+        if (!validate.checkNull(context.getParameterString(OPTION))) {
+            if (validate.isValidPattern(context.getParameterString(OPTION),
+                    Validator.NUMERIC)) {
+                pollsBO.setSelectedOption(
+                        context.getParameterString(OPTION));
+            } else {
+                return false;
+            }
+        }
+
+        logger.info(POLL_GROUP_CATEGORY + " >>>"
+                + context.getParameterString(POLL_GROUP_CATEGORY) + "<<<");
+        if (!validate.checkNull(
+                context.getParameterString(POLL_GROUP_CATEGORY))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(POLL_GROUP_CATEGORY),
+                    Validator.ALPHABET_HYPEN)) {
+                pollsBO.setGroupCategory(
+                        context.getParameterString(POLL_GROUP_CATEGORY));
+            } else {
+                return false;
+            }
+        }
+
+        logger.info(POLL_CATEGORY + " >>>"
+                + context.getParameterString(POLL_CATEGORY) + "<<<");
+        if (!validate
+                .checkNull(context.getParameterString(POLL_CATEGORY))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(POLL_CATEGORY),
+                    Validator.ALPHABET)) {
+                pollsBO.setCategory(
+                        context.getParameterString(POLL_CATEGORY));
+            } else {
+                return false;
+            }
+        }
+
+        logger.info(SOLR_POLL_CATEGORY + " >>>"
+                + context.getParameterString(SOLR_POLL_CATEGORY) + "<<<");
+        if (!validate.checkNull(
+                context.getParameterString(SOLR_POLL_CATEGORY))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(SOLR_POLL_CATEGORY),
+                    Validator.ALPHABET)) {
+                pollsBO.setSolrCategory(
+                        context.getParameterString(SOLR_POLL_CATEGORY));
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * This method is used to get Content name.
+     * 
+     * @param context Request Context object.
+     * 
+     * @return Returns Content name.
+     */
+    public String getContentName(String contentPath) {
+        String[] contentPathArr = contentPath.split("/");
+        return contentPathArr[contentPathArr.length - 1];
     }
 
 }

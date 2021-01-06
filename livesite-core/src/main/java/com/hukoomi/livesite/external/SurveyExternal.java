@@ -16,6 +16,7 @@ import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -31,6 +32,21 @@ public class SurveyExternal {
      * Postgre Object variable.
      */
     Postgre postgre = null;
+
+    /**
+     * ValidationUtils object.
+     */
+    Validator validate = new Validator();
+
+    /**
+     * Success Status variable.
+     */
+    private static final String SUCCESS = "Success";
+
+    /**
+     * Failed Status variable.
+     */
+    private static final String FAILED = "Failed";
 
     /**
      * This method will be called from Component External to insert Survey form
@@ -49,49 +65,57 @@ public class SurveyExternal {
 
         postgre = new Postgre(context);
         DetailExternal detailExt = new DetailExternal();
-        SurveyBO surveyBO = setBO(context);
+        SurveyBO surveyBO =  new SurveyBO();
+        boolean isInputValid = setBO(context, surveyBO);
         logger.info("SurveyBO : " + surveyBO);
 
         Document document = DocumentHelper.createDocument();
-        if (surveyBO.getAction() != null
-                && !"".equals(surveyBO.getAction())) {
-            GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-            if ("submit".equalsIgnoreCase(surveyBO.getAction())) {
-                Element surveyResponseElem = document
-                        .addElement("SurveyResponse");
-                Element surveyStatusElem = surveyResponseElem
-                        .addElement("Status");
-                if (captchUtil.validateCaptcha(context,
-                        surveyBO.getCaptchaResponse())) {
-                    logger.info("Google Recaptcha is valid");
-                    boolean insertSurveyResponse = insertSurveyResponse(
-                            surveyBO, context);
-                    logger.info("insertSurveyResponse : "
-                            + insertSurveyResponse);
-                    if (insertSurveyResponse) {
-                        surveyStatusElem.setText("Success");
+        Element surveyResponseElem = document
+                .addElement("SurveyResponse");
+        Element surveyStatusElem = surveyResponseElem
+                .addElement("Status");
+        if (isInputValid) {
+            if (surveyBO.getAction() != null
+                    && !"".equals(surveyBO.getAction())) {
+                GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+                if ("submit".equalsIgnoreCase(surveyBO.getAction())) {
+                    
+                    if (captchUtil.validateCaptcha(context,
+                            surveyBO.getCaptchaResponse())) {
+                        logger.info("Google Recaptcha is valid");
+                        boolean insertSurveyResponse = insertSurveyResponse(
+                                surveyBO, context);
+                        logger.info("insertSurveyResponse : "
+                                + insertSurveyResponse);
+                        if (insertSurveyResponse) {
+                            surveyStatusElem.setText(SUCCESS);
+                        } else {
+                            surveyStatusElem.setText(FAILED);
+                        }
                     } else {
-                        surveyStatusElem.setText("Failed");
+                        logger.info("Google Recaptcha is not valid");
+                        surveyStatusElem.setText(FAILED);
                     }
-                } else {
-                    logger.info("Google Recaptcha is not valid");
-                    surveyStatusElem.setText("Failed");
+                } else if ("detail".equalsIgnoreCase(surveyBO.getAction())) {
+                    logger.info("SurveyExternal : Loading Properties....");
+                    PropertiesFileReader propertyFileReader = new PropertiesFileReader(
+                            context, "captchaconfig.properties");
+                    Properties properties = propertyFileReader.getPropertiesFile();
+                    logger.info("SurveyExternal : Properties Loaded");
+                    String siteKey = properties.getProperty("siteKey");
+                    logger.info("siteKey : " + siteKey);
+                    document = detailExt.getContentDetail(context);
+                    document.getRootElement().addAttribute("Sitekey", siteKey);
                 }
-            } else if ("detail".equalsIgnoreCase(surveyBO.getAction())) {
-                logger.info("SurveyExternal : Loading Properties....");
-                PropertiesFileReader propertyFileReader = new PropertiesFileReader(
-                        context, "captchaconfig.properties");
-                Properties properties = propertyFileReader.getPropertiesFile();
-                logger.info("SurveyExternal : Properties Loaded");
-                String siteKey = properties.getProperty("siteKey");
-                logger.info("siteKey : " + siteKey);
-                document = detailExt.getContentDetail(context);
-                document.getRootElement().addAttribute("Sitekey", siteKey);
-            }
+
             logger.info("Final Result :" + document.asXML());
         } else {
             logger.info("Error : Survey Action not available");
         }
+    } else {
+        logger.info("Input is not valid");
+        surveyStatusElem.setText(FAILED);
+    }
         return document;
     }
 
@@ -154,24 +178,35 @@ public class SurveyExternal {
                         + "QUESTION_NO, ANSWER) VALUES(?, ?, ?, ?, ?, ?)";
                 answersprepareStatement = connection
                         .prepareStatement(surveyAnswerQuery);
-                int addedToBatch = addAnswerstoBatch(totalCount, context,
+
+                boolean isAdded = addAnswerstoBatch(totalCount, context,
                         answersprepareStatement, responseId, surveyBO);
-                logger.info("responseId : " + responseId);
-
-                int[] answerBatch = answersprepareStatement.executeBatch();
-                logger.info(
-                        "Total answers inserted : " + answerBatch.length);
-
-                if (answerBatch.length == addedToBatch) {
-                    connection.commit();
-                    logger.info("Survey Answer Inserted");
-                    isSurveyInserted = true;
-                } else {
-                    logger.info("Failed to insert Survey Answer");
+                logger.info("isAdded : " + isAdded);
+                if(isAdded) {
+                    logger.info("responseId : " + responseId);
+                    
+                    //Number of items added to the answers batch is set to the un-used qustionNo field.
+                    int addedToBatch = surveyBO.getQuestionNo();
+                    logger.info("addedToBatch : " + addedToBatch);
+    
+                    int[] answerBatch = answersprepareStatement.executeBatch();
+                    logger.info(
+                            "Total answers inserted : " + answerBatch.length);
+    
+                    if (answerBatch.length == addedToBatch) {
+                        connection.commit();
+                        logger.info("Survey Answer Inserted");
+                        isSurveyInserted = true;
+                    } else {
+                        logger.info("Failed to insert Survey Answer");
+                        connection.rollback();
+                    }
+                }else {
+                    logger.info("Survey answer is not created.");
                     connection.rollback();
                 }
             } else {
-                logger.info("Survey Response not Inserted : ");
+                logger.info("Survey Response not Inserted.");
                 connection.rollback();
             }
         } catch (Exception e) {
@@ -195,62 +230,87 @@ public class SurveyExternal {
      * @param responseId              Response Id from the survey resposne table.
      * @param surveyBO                SurveyBO object.
      * 
-     * @return Returns number of answers added the batch.
+     * @return Returns true if all the answers are added to the batch else returns false
      * 
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
-    private int addAnswerstoBatch(int totalCount,
+    private boolean addAnswerstoBatch(int totalCount,
             final RequestContext context,
             PreparedStatement answersprepareStatement, Long responseId,
             SurveyBO surveyBO) throws SQLException {
         logger.info("SurveyExternal : addAnswerstoBatch");
         int numOfAnswersAdded = 0;
+        boolean isAdded = true;
         for (int i = 1; i <= totalCount; i++) {
             String value = context.getParameterString(String.valueOf(i));
-            logger.info("Answer for question " + i + " : " + value);
-
-            if (value != null && value.contains("#$#")) {
-                String[] multipleOption = value.split("#\\$#");
-                logger.info(
-                        "Multiple Option Answer" + multipleOption.length);
-                for (String mutiOptValue : multipleOption) {
+            logger.info("value >>>"+value+"<<<" );
+            if (validateAnswer(value)) {
+                logger.info("Answer for question " + i + " : " + value);
+    
+                if (value != null && value.contains("#$#")) {
+                    String[] multipleOption = value.split("#\\$#");
+                    logger.info(
+                            "Multiple Option Answer" + multipleOption.length);
+                    for (String mutiOptValue : multipleOption) {
+                        Long answerId = getNextSequenceValue(
+                                "survey_answers_answer_id_seq",
+                                postgre.getConnection());
+                        logger.info("answerId : " + answerId);
+                        logger.info("mutiOptValue : " + mutiOptValue);
+    
+                        answersprepareStatement.setLong(1, answerId);
+                        answersprepareStatement.setLong(2, responseId);
+                        answersprepareStatement.setLong(3,
+                                Long.parseLong(surveyBO.getSurveyId()));
+                        answersprepareStatement.setString(4,
+                                surveyBO.getLang());
+                        answersprepareStatement.setInt(5, i);
+                        answersprepareStatement.setString(6, mutiOptValue);
+                        answersprepareStatement.addBatch();
+                        numOfAnswersAdded++;
+                    }
+    
+                } else {
                     Long answerId = getNextSequenceValue(
                             "survey_answers_answer_id_seq",
                             postgre.getConnection());
                     logger.info("answerId : " + answerId);
-                    logger.info("mutiOptValue : " + mutiOptValue);
-
+    
                     answersprepareStatement.setLong(1, answerId);
                     answersprepareStatement.setLong(2, responseId);
                     answersprepareStatement.setLong(3,
                             Long.parseLong(surveyBO.getSurveyId()));
-                    answersprepareStatement.setString(4,
-                            surveyBO.getLang());
+                    answersprepareStatement.setString(4, surveyBO.getLang());
                     answersprepareStatement.setInt(5, i);
-                    answersprepareStatement.setString(6, mutiOptValue);
+                    answersprepareStatement.setString(6, value);
                     answersprepareStatement.addBatch();
                     numOfAnswersAdded++;
                 }
-
-            } else {
-                Long answerId = getNextSequenceValue(
-                        "survey_answers_answer_id_seq",
-                        postgre.getConnection());
-                logger.info("answerId : " + answerId);
-
-                answersprepareStatement.setLong(1, answerId);
-                answersprepareStatement.setLong(2, responseId);
-                answersprepareStatement.setLong(3,
-                        Long.parseLong(surveyBO.getSurveyId()));
-                answersprepareStatement.setString(4, surveyBO.getLang());
-                answersprepareStatement.setInt(5, i);
-                answersprepareStatement.setString(6, value);
-                answersprepareStatement.addBatch();
-                numOfAnswersAdded++;
+                surveyBO.setQuestionNo(numOfAnswersAdded);
+            }else {
+                logger.info("Survey answer is not valid.");
+                isAdded = false;
+                break;
             }
         }
-        return numOfAnswersAdded;
+        return isAdded;
+    }
+    
+    
+    private boolean validateAnswer(String value) {
+        boolean isValid = false;
+        
+        if (value != null && value.contains("#$#")) {
+            String[] multipleOption = value.split("#\\$#");
+            for (String mutiOptValue : multipleOption) {
+                isValid = validate.isValidPattern(mutiOptValue, Validator.TEXT);
+                if(!isValid) break;
+            }
+        }else {
+            isValid = validate.isValidPattern(value, Validator.TEXT);
+        }
+        return isValid;
     }
 
     /**
@@ -307,29 +367,174 @@ public class SurveyExternal {
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
-    public SurveyBO setBO(final RequestContext context) {
-        SurveyBO surveyBO = new SurveyBO();
+    public boolean setBO(final RequestContext context, SurveyBO surveyBO) {
+
+        final String SURVEY_ACTION = "surveyAction";
+        final String LOCALE = "locale";
+        final String USER_ID = "user_id";
+        final String USER_AGENT = "User-Agent";
+        final String SURVEY_TAKEN_FROM = "surveyTakenfrom";
+        final String SURVEY_ID = "surveyId";
+        final String TOTAL_QUESTIONS = "totalQuestions";
+        final String SURVEY_GROUP = "SurveyGroup";
+        final String SURVEY_CATEGORY = "surveyCategory";
+        final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
+        final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
+
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
-        surveyBO.setAction(context.getParameterString("surveyAction"));
-        surveyBO.setLang(context.getParameterString("locale", "en"));
-        surveyBO.setUserId(context.getParameterString("user_id"));
-        surveyBO.setIpAddress(requestHeaderUtils.getClientIpAddress());
-        surveyBO.setUserAgent(
-                context.getRequest().getHeader("User-Agent"));
-        surveyBO.setTakenFrom(
-                context.getParameterString("surveyTakenfrom"));
-        surveyBO.setSurveyId(context.getParameterString("surveyId"));
-        surveyBO.setTotalQuestions(
-                context.getParameterString("totalQuestions"));
+        logger.info("surveyAction >>>"
+                + context.getParameterString(SURVEY_ACTION) + "<<<");
+        if (!validate
+                .checkNull(context.getParameterString(SURVEY_ACTION))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(SURVEY_ACTION),
+                    Validator.ALPHABET)) {
+                surveyBO.setAction(
+                        context.getParameterString(SURVEY_ACTION));
+            }else {
+                return false;
+            }
+        }
+        
+        logger.info(
+                "locale >>>" + context.getParameterString(LOCALE) + "<<<");
+        if (!validate.checkNull(context.getParameterString(LOCALE))) {
+            if (validate.isValidPattern(context.getParameterString(LOCALE),
+                    Validator.ALPHABET)) {
+                surveyBO.setLang(context.getParameterString(LOCALE, "en"));
+            }else {
+                return false;
+            }
+        }
+        
+        logger.info("user_id >>>" + context.getParameterString(USER_ID)
+                + "<<<");
+        if (!validate.checkNull(context.getParameterString(USER_ID))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(USER_ID),
+                    Validator.USER_ID)) {
+                surveyBO.setUserId(context.getParameterString(USER_ID));
+            }else {
+                return false;
+            }
+        }
+        
+        logger.info("ipaddress >>>" +requestHeaderUtils.getClientIpAddress()+"<<<" );
+        if(!validate.checkNull(requestHeaderUtils.getClientIpAddress())) {
+            if(validate.isValidPattern(requestHeaderUtils.getClientIpAddress(), Validator.IP_ADDRESS)) {
+                surveyBO.setIpAddress(requestHeaderUtils.getClientIpAddress());
+            }else {
+                return false;
+            }
+        }
+        
+        surveyBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
+        
+        logger.info("surveyTakenfrom >>>"
+                + context.getParameterString(SURVEY_TAKEN_FROM) + "<<<");
+        if (!validate.checkNull(
+                context.getParameterString(SURVEY_TAKEN_FROM))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(SURVEY_TAKEN_FROM),
+                    Validator.ALPHABET)) {
+                surveyBO.setTakenFrom(
+                        context.getParameterString(SURVEY_TAKEN_FROM));
+            }else {
+                return false;
+            }
+        }
+
+        logger.info("surveyId >>>" + context.getParameterString(SURVEY_ID)
+                + "<<<");
+        if (!validate.checkNull(context.getParameterString(SURVEY_ID))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(SURVEY_ID),
+                    Validator.NUMERIC)) {
+                surveyBO.setSurveyId(
+                        context.getParameterString(SURVEY_ID));
+            }else {
+                return false;
+            }
+        }
+        
+        logger.info("totalQuestions >>>"
+                + context.getParameterString(TOTAL_QUESTIONS) + "<<<");
+        if (!validate
+                .checkNull(context.getParameterString(TOTAL_QUESTIONS))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(TOTAL_QUESTIONS),
+                    Validator.NUMERIC)) {
+                surveyBO.setTotalQuestions(
+                        context.getParameterString(TOTAL_QUESTIONS));
+            }else {
+                return false;
+            }
+        }
+
         surveyBO.setCaptchaResponse(
                 context.getParameterString("g-recaptcha-response"));
-        surveyBO.setGroup(context.getParameterString("SurveyGroup"));
-        surveyBO.setGroupCategory(
-                context.getParameterString("surveyGroupCategory"));
-        surveyBO.setCategory(context.getParameterString("surveyCategory"));
-        surveyBO.setSolrCategory(
-                context.getParameterString("solrSurveyCategory"));
-        return surveyBO;
-    }
+        
+        if (!validate
+                .checkNull(context.getParameterString(SURVEY_GROUP))) {
+            surveyBO.setGroup(getContentName(
+                    context.getParameterString(SURVEY_GROUP)));
+        }
 
+        logger.info("surveyGroupCategory >>>"
+                + context.getParameterString(SURVEY_GROUP_CATEGORY)
+                + "<<<");
+        if (!validate.checkNull(
+                context.getParameterString(SURVEY_GROUP_CATEGORY))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(SURVEY_GROUP_CATEGORY),
+                    Validator.ALPHABET_HYPEN)) {
+                surveyBO.setGroupCategory(
+                        context.getParameterString(SURVEY_GROUP_CATEGORY));
+            }else {
+                return false;
+            }
+        }
+        
+        logger.info("surveyCategory >>>"
+                + context.getParameterString(SURVEY_CATEGORY) + "<<<");
+        if (!validate
+                .checkNull(context.getParameterString(SURVEY_CATEGORY))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(SURVEY_CATEGORY),
+                    Validator.ALPHABET)) {
+                surveyBO.setCategory(
+                        context.getParameterString(SURVEY_CATEGORY));
+            }else {
+                return false;
+            }
+        }
+        
+        logger.info("solrSurveyCategory >>>"
+                + context.getParameterString(SOLR_SURVEY_CATEGORY)
+                + "<<<");
+        if (!validate.checkNull(
+                context.getParameterString(SOLR_SURVEY_CATEGORY))) {
+            if (validate.isValidPattern(
+                    context.getParameterString(SOLR_SURVEY_CATEGORY),
+                    Validator.ALPHABET)) {
+                surveyBO.setSolrCategory(
+                        context.getParameterString(SOLR_SURVEY_CATEGORY));
+            }else {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * This method is used to get Content name.
+     * 
+     * @param context Request Context object.
+     * 
+     * @return Returns Content name.
+     */
+    public String getContentName(String contentPath) {
+        String[] contentPathArr = contentPath.split("/");
+        return contentPathArr[contentPathArr.length - 1];
+    }
 }
