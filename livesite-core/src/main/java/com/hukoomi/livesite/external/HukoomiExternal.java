@@ -65,7 +65,9 @@ public Document getLandingContent(final RequestContext context) {
     logger.debug("Landing Query : " + query);
     Document doc = squ.doJsonQuery(query, "SolrResponse");
     Element root = doc.getRootElement();
-    root.addElement("category").addText(category);
+    if(root!=null && root.isRootElement()) {
+        root.addElement("category").addText(category);
+    }
     return doc;
 }
 
