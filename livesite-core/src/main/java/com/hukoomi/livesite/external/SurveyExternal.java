@@ -17,6 +17,7 @@ import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.hukoomi.utils.Validator;
+import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -240,59 +241,54 @@ public class SurveyExternal {
             PreparedStatement answersprepareStatement, Long responseId,
             SurveyBO surveyBO) throws SQLException {
         logger.info("SurveyExternal : addAnswerstoBatch");
+        XssUtils xssUtils = new XssUtils();
         int numOfAnswersAdded = 0;
         boolean isAdded = true;
         for (int i = 1; i <= totalCount; i++) {
             String value = context.getParameterString(String.valueOf(i));
             logger.info("value >>>"+value+"<<<" );
-            if (validateAnswer(value)) {
-                logger.info("Answer for question " + i + " : " + value);
-    
-                if (value != null && value.contains("#$#")) {
-                    String[] multipleOption = value.split("#\\$#");
-                    logger.info(
-                            "Multiple Option Answer" + multipleOption.length);
-                    for (String mutiOptValue : multipleOption) {
-                        Long answerId = getNextSequenceValue(
-                                "survey_answers_answer_id_seq",
-                                postgre.getConnection());
-                        logger.info("answerId : " + answerId);
-                        logger.info("mutiOptValue : " + mutiOptValue);
-    
-                        answersprepareStatement.setLong(1, answerId);
-                        answersprepareStatement.setLong(2, responseId);
-                        answersprepareStatement.setLong(3,
-                                Long.parseLong(surveyBO.getSurveyId()));
-                        answersprepareStatement.setString(4,
-                                surveyBO.getLang());
-                        answersprepareStatement.setInt(5, i);
-                        answersprepareStatement.setString(6, mutiOptValue);
-                        answersprepareStatement.addBatch();
-                        numOfAnswersAdded++;
-                    }
-    
-                } else {
+            logger.info("Answer for question " + i + " : " + value);
+
+            if (value != null && value.contains("#$#")) {
+                String[] multipleOption = value.split("#\\$#");
+                logger.info(
+                        "Multiple Option Answer" + multipleOption.length);
+                for (String mutiOptValue : multipleOption) {
                     Long answerId = getNextSequenceValue(
                             "survey_answers_answer_id_seq",
                             postgre.getConnection());
                     logger.info("answerId : " + answerId);
-    
+                    logger.info("mutiOptValue : " + mutiOptValue);
+
                     answersprepareStatement.setLong(1, answerId);
                     answersprepareStatement.setLong(2, responseId);
                     answersprepareStatement.setLong(3,
                             Long.parseLong(surveyBO.getSurveyId()));
-                    answersprepareStatement.setString(4, surveyBO.getLang());
+                    answersprepareStatement.setString(4,
+                            surveyBO.getLang());
                     answersprepareStatement.setInt(5, i);
-                    answersprepareStatement.setString(6, value);
+                    answersprepareStatement.setString(6, xssUtils.stripXSS(mutiOptValue));
                     answersprepareStatement.addBatch();
                     numOfAnswersAdded++;
                 }
-                surveyBO.setQuestionNo(numOfAnswersAdded);
-            }else {
-                logger.info("Survey answer is not valid.");
-                isAdded = false;
-                break;
+
+            } else {
+                Long answerId = getNextSequenceValue(
+                        "survey_answers_answer_id_seq",
+                        postgre.getConnection());
+                logger.info("answerId : " + answerId);
+
+                answersprepareStatement.setLong(1, answerId);
+                answersprepareStatement.setLong(2, responseId);
+                answersprepareStatement.setLong(3,
+                        Long.parseLong(surveyBO.getSurveyId()));
+                answersprepareStatement.setString(4, surveyBO.getLang());
+                answersprepareStatement.setInt(5, i);
+                answersprepareStatement.setString(6, xssUtils.stripXSS(value));
+                answersprepareStatement.addBatch();
+                numOfAnswersAdded++;
             }
+            surveyBO.setQuestionNo(numOfAnswersAdded);
         }
         return isAdded;
     }
@@ -312,6 +308,7 @@ public class SurveyExternal {
         }
         return isValid;
     }
+    
 
     /**
      * This method is used to get int value.
