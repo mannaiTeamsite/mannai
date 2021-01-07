@@ -169,6 +169,7 @@ public class HukoomiCuratedExternal {
         final Element root, final Node eleNode) {
         String image = "image";
         String title = "title";
+        String detail = "detailSearch";
         root.addElement("content-type")
                 .addText(
                         eleNode.selectSingleNode(xnode)
@@ -181,6 +182,11 @@ public class HukoomiCuratedExternal {
                 != null) {
             root.addElement(image)
     .addText(eleNode.selectSingleNode(image).getText());
+        }
+        if (eleNode.selectSingleNode(detail)
+                != null) {
+            root.addElement(detail)
+                    .addText(eleNode.selectSingleNode(detail).getText());
         }
 
     }
