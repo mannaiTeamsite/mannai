@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.ValidationUtils;
+import com.hukoomi.utils.XssUtils;
 
 public class QueryTicket extends HttpServlet {
 
@@ -33,6 +34,7 @@ public class QueryTicket extends HttpServlet {
         LOGGER.info("Customer Service Query Ticket: Start");
         StringBuilder resp = null;
         JSONObject data = null;
+        XssUtils xssUtils = new XssUtils();
         try {
 
             BufferedReader inbr = new BufferedReader(
@@ -40,12 +42,11 @@ public class QueryTicket extends HttpServlet {
             String json = "";
             json = inbr.readLine();
             data = new JSONObject(json);
-            String ticketNo = data.getString("ticketNumber");
+            String ticketNo = xssUtils.stripXSS(data.getString("ticketNumber"));
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             ValidationUtils util = new ValidationUtils();
-            if (ticketNo.length() <= 20
-                    && util.validateAlphaNumeric(ticketNo)) {
+            if (ticketNo.length() <= 20) {
                 String httpServletAddress = request.getLocalAddr();
                 URL url = null;
                 url = new URL("http://" + httpServletAddress

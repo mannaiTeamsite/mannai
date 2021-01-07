@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.ValidationUtils;
+import com.hukoomi.utils.XssUtils;
 
 @MultipartConfig
 public class SubmitTicket extends HttpServlet {
@@ -53,8 +54,8 @@ public class SubmitTicket extends HttpServlet {
             data = new JSONObject(json);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            boolean validateFields = validateFields(data);
-            if (validateFields) {
+            JSONObject validateFields = validateFields(data);
+            if (validateFields != null) {
                 String gRecaptchaResponse =
                         data.getString("recaptchaResponseField");
                 verify = validateCaptcha(gRecaptchaResponse);
@@ -72,7 +73,8 @@ public class SubmitTicket extends HttpServlet {
                             "application/json");
                     con.setRequestProperty("Accept", "application/json");
                     OutputStream os = con.getOutputStream();
-                    byte[] input = json.getBytes(StandardCharsets.UTF_8);
+                    byte[] input = validateFields.toString()
+                            .getBytes(StandardCharsets.UTF_8);
                     os.write(input, 0, input.length);
 
                     BufferedReader respbr = new BufferedReader(
@@ -84,14 +86,14 @@ public class SubmitTicket extends HttpServlet {
                         resp.append(responseLine.trim());
                     }
                 } else {
-                    data.put("success", "false");
-                    data.put("errorMessage", "InvalidRecapcha");
-                    response.getWriter().write(data.toString());
+                    validateFields.put("success", "false");
+                    validateFields.put("errorMessage", "InvalidRecapcha");
+                    response.getWriter().write(validateFields.toString());
                 }
             } else {
-                data.put("success", "false");
-                data.put("errorMessage", "validationFailed");
-                response.getWriter().write(data.toString());
+                validateFields.put("success", "false");
+                validateFields.put("errorMessage", "validationFailed");
+                response.getWriter().write(validateFields.toString());
             }
 
         } catch (IOException e) {
@@ -120,123 +122,136 @@ public class SubmitTicket extends HttpServlet {
      * @param data
      * @return
      */
-    private boolean validateFields(JSONObject data) {
+    private JSONObject validateFields(JSONObject data) {
         ValidationUtils util = new ValidationUtils();
         String idType = data.getString("idType");
+        XssUtils xssUtils = new XssUtils();
         if (idType.equals("QID") || idType.equals("Passport")) {
-            String qid = data.getString("qid");
-            String eid = data.getString("eid");
-            String passport = data.getString("passport");
-            String nationality = data.getString("nationality");
-            String fullName = data.getString("fullName");
-            String companyName = data.getString("companyName");
-            String phoneNo = data.getString("phoneNo");
-            String emailId = data.getString("emailId");
-            String eservice = data.getString("eservice");
-            String service = data.getString("service");
-            String eServiceName = data.getString("eServiceName");
-            String serviceName = data.getString("serviceName");
-            String subject = data.getString("subject");
-            String comments = data.getString("comments");
+            String qid = xssUtils.stripXSS(data.getString("qid"));
+            String eid = xssUtils.stripXSS(data.getString("eid"));
+            String passport =
+                    xssUtils.stripXSS(data.getString("passport"));
+            String nationality =
+                    xssUtils.stripXSS(data.getString("nationality"));
+            String fullName =
+                    xssUtils.stripXSS(data.getString("fullName"));
+            String companyName =
+                    xssUtils.stripXSS(data.getString("companyName"));
+            String phoneNo = xssUtils.stripXSS(data.getString("phoneNo"));
+            String emailId = xssUtils.stripXSS(data.getString("emailId"));
+            String eservice =
+                    xssUtils.stripXSS(data.getString("eservice"));
+            String service = xssUtils.stripXSS(data.getString("service"));
+            String eServiceName =
+                    xssUtils.stripXSS(data.getString("eServiceName"));
+            String serviceName =
+                    xssUtils.stripXSS(data.getString("serviceName"));
+            String subject = xssUtils.stripXSS(data.getString("subject"));
+            String comments =
+                    xssUtils.stripXSS(data.getString("comments"));
             if (idType.equals("QID")) {
                 LOGGER.info("Validate QID : ");
                 if (qid == null || "".equals(qid.trim())) {
-                    return false;
+                    return null;
                 } else if (!util.validateNumeric(qid)
                         || qid.trim().length() != 11) {
-                    return false;
+                    return null;
                 }
                 LOGGER.info("Validate eid : ");
                 if (eid != null && !"".equals(eid.trim())) {
                     if (!util.validateNumeric(eid)
                             || eid.trim().length() != 8) {
-                        return false;
+                        return null;
                     }
                 }
             } else if (idType.equals("Passport")) {
                 LOGGER.info("Validate passport : ");
                 if (passport == null || "".equals(passport.trim())) {
-                    return false;
-                } else if (!util.validateAlphaNumeric(passport)) {
-                    return false;
+                    return null;
+                } else if (passport.trim().length() != 8) {
+                    return null;
                 }
                 LOGGER.info("Validate nationality : ");
-                if (nationality != null
-                        && !"".equals(nationality.trim())) {
-                    if (!util.validateAlphabet(nationality)) {
-                        return false;
+                if (nationality != null || !"".equals(passport.trim())) {
+                    if (nationality.length() > 50) {
+                        return null;
                     }
                 }
             }
             LOGGER.info("Validate fullName : ");
             if (fullName == null || "".equals(fullName.trim())) {
-                return false;
-            } else if (!util.validateAlphabet(fullName)) {
-                return false;
+                return null;
             }
             LOGGER.info("Validate phoneNo : ");
             if (phoneNo == null || "".equals(phoneNo.trim())) {
-                return false;
+                return null;
             } else if (!util.validateNumeric(phoneNo)
                     || !(phoneNo.trim().length() > 7
                             && phoneNo.trim().length() < 15)) {
-                return false;
+                return null;
             }
             LOGGER.info("Validate emailId : ");
             if (emailId == null || "".equals(emailId.trim())) {
-                return false;
+                return null;
             } else if (!util.validateEmailId(emailId)
                     || emailId.trim().length() > 50) {
-                return false;
+                return null;
             }
             LOGGER.info("Validate eservice : ");
             if (eservice == null || "".equals(eservice.trim())) {
-                return false;
+                return null;
             } else if (!util.validateNumeric(eservice)) {
-                return false;
+                return null;
             }
             LOGGER.info("Validate service :");
             if (service == null || "".equals(service.trim())) {
-                return false;
+                return null;
             } else if (!util.validateNumeric(service)) {
-                return false;
+                return null;
             }
             LOGGER.info("Validate eServiceName : ");
             if (eServiceName == null || "".equals(eServiceName.trim())) {
-                return false;
-            } else if (!util.validateAlphabet(eServiceName)) {
-                return false;
+                return null;
             }
             LOGGER.info("Validate serviceName : ");
             if (serviceName == null || "".equals(serviceName.trim())) {
-                return false;
-            } else if (!util.validateAlphabet(serviceName)) {
-                return false;
+                return null;
             }
             LOGGER.info("Validate companyName : ");
             if (companyName != null && !"".equals(companyName.trim())) {
-                if (!util.validateAdditionalPattern(companyName)
-                        || companyName.trim().length() > 30) {
-                    return false;
+                if (companyName.trim().length() > 30) {
+                    return null;
                 }
             }
             LOGGER.info("Validate subject : ");
             if (subject == null || "".equals(subject.trim())) {
-                return false;
-            } else if (!util.validateAdditionalPattern(subject)
-                    || subject.trim().length() > 30) {
-                return false;
+                return null;
+            } else if (subject.trim().length() > 30) {
+                return null;
             }
             LOGGER.info("Validate comments : ");
             if (comments != null || !"".equals(comments.trim())) {
-                if (!util.validateComments(comments)
-                        || comments.trim().length() > 2500) {
-                    return false;
+                if (comments.trim().length() > 2500) {
+                    return null;
                 }
             }
-            return true;
+            data.put(qid, qid);
+            data.put(eid, eid);
+            data.put(passport, passport);
+            data.put(nationality, nationality);
+            data.put(fullName, fullName);
+            data.put(companyName, companyName);
+            data.put(phoneNo, phoneNo);
+            data.put(emailId, emailId);
+            data.put(eservice, eservice);
+            data.put(service, service);
+            data.put(eServiceName, eServiceName);
+            data.put(serviceName, serviceName);
+            data.put(subject, subject);
+            data.put(comments, comments);
+            return data;
         } else {
-            return false;
+            return null;
         }
 
     }
