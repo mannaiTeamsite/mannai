@@ -235,20 +235,21 @@ public class SubmitTicket extends HttpServlet {
                     return null;
                 }
             }
-            data.put(qid, qid);
-            data.put(eid, eid);
-            data.put(passport, passport);
-            data.put(nationality, nationality);
-            data.put(fullName, fullName);
-            data.put(companyName, companyName);
-            data.put(phoneNo, phoneNo);
-            data.put(emailId, emailId);
-            data.put(eservice, eservice);
-            data.put(service, service);
-            data.put(eServiceName, eServiceName);
-            data.put(serviceName, serviceName);
-            data.put(subject, subject);
-            data.put(comments, comments);
+            // update
+            data.put("qid", qid);
+            data.put("eid", eid);
+            data.put("passport", passport);
+            data.put("nationality", nationality);
+            data.put("fullName", fullName);
+            data.put("companyName", companyName);
+            data.put("phoneNo", phoneNo);
+            data.put("emailId", emailId);
+            data.put("eservice", eservice);
+            data.put("service", service);
+            data.put("eServiceName", eServiceName);
+            data.put("serviceName", serviceName);
+            data.put("subject", subject);
+            data.put("comments", comments);
             return data;
         } else {
             return null;
