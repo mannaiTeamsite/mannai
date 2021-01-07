@@ -54,13 +54,4 @@ public class XssUtils {
         }
         return value;
     }
-
-     /*public static void main(String[] args) {
-         XssUtils xssUtil = new XssUtils();
-         String[] inputArr = {"--></style></scRipt><scRipt>netsparker(0x029511)</scRipt>", 
-                 "N3tsp4rk3rRef", "hTTp://r87.com/n", "http://r87.com/n?.page", "-1 OR 1=1", "-1 OR 1=1", "-1 OR 1=1", "-1 OR 1=1", "'", "NSportalNO", "r87.com/n", "portal AND 'NS='ss", "portal' OR 1=1 OR 'ns'='ns",  "-1 OR 17-7=10", "'& ping -n 25 127.0.0.1 &", "portal OR X='ss", "portal' OR 1=1 OR '1'='1", "portal' OR 1=1 OR '1'='1", "& ping -n 25 127.0.0.1 &", "portal' OR 1=1 OR '1'='1", "ping -n 25 127.0.0.1 &", "%27"};
-         for(int i = 0; i < inputArr.length; i++) {
-             xssUtil.stripXSS(inputArr[i]);
-         }     
-     }*/
 }
