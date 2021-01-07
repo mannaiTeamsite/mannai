@@ -19,6 +19,7 @@ import com.hukoomi.contact.model.ContactEmail;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.ValidationUtils;
+import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class ContactUsExternal {
@@ -114,33 +115,28 @@ public class ContactUsExternal {
             final String senderEmail, final String emailText,
             final String emailSubject) {
         ValidationUtils util = new ValidationUtils();
+        XssUtils xssUtils = new XssUtils();
         LOGGER.info("setValueToContactModel: Enter");
         if (senderName != null && senderEmail != null && emailText != null
                 && emailSubject != null) {
-            if (senderName.length() <= 100
-                    && util.validateField(senderName)) {
-                email.setSenderName(senderName);
+            if (senderName.length() <= 100) {
+                email.setSenderName(xssUtils.stripXSS(senderName));
             } else {
                 return false;
             }
-            if (senderEmail.length() <= 50
-                    && util.validateEmailId(senderEmail)) {
+            if (senderEmail.length() <= 50 && util
+                    .validateEmailId(xssUtils.stripXSS(senderEmail))) {
                 email.setSenderEmail(senderEmail);
             } else {
                 return false;
             }
-            if (emailText.length() <= 2500
-                    && util.validateComments(emailText)) {
-                email.setEmailText(emailText);
+            if (emailText.length() <= 2500) {
+                email.setEmailText(xssUtils.stripXSS(emailText));
             } else {
                 return false;
             }
+            email.setEmailSubject(xssUtils.stripXSS(emailSubject));
 
-            if (util.validateAlphabet(emailSubject)) {
-                email.setEmailSubject(emailSubject);
-            } else {
-                return false;
-            }
             return true;
         }
 

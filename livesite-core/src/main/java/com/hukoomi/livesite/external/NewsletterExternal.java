@@ -26,6 +26,7 @@ import org.json.JSONObject;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.ValidationUtils;
+import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class NewsletterExternal {
@@ -94,6 +95,7 @@ public class NewsletterExternal {
         LOGGER.info("Newsletter Subscribtion");
         Document memberdetail = null;
         ValidationUtils util = new ValidationUtils();
+        XssUtils xssUtils = new XssUtils();
         String email = context.getParameterString("email");
         String language = context.getParameterString("locale", "en");
         String subscriptionLang =
@@ -103,7 +105,7 @@ public class NewsletterExternal {
         if (!email.equals("") && !subscriptionLang.equals("")) {
             if ((subscriptionLang.equals("ar")
                     || subscriptionLang.equals("en"))
-                    && (email.length() <= 50 && util.validateEmailId(email) )) {
+                    && (email.length() <= 50 && util.validateEmailId(xssUtils.stripXSS(email))   )) {
                 memberdetail = createSubscriber(email, subscriptionLang,
                         flagToInvokeMailchimpService, context);
             } else {
