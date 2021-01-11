@@ -91,9 +91,9 @@ public class SubmitTicket extends HttpServlet {
                     response.getWriter().write(validateFields.toString());
                 }
             } else {
-                validateFields.put("success", "false");
-                validateFields.put("errorMessage", "validationFailed");
-                response.getWriter().write(validateFields.toString());
+                data.put("success", "false");
+                data.put("errorMessage", "validationFailed");
+                response.getWriter().write(data.toString());
             }
 
         } catch (IOException e) {
@@ -168,7 +168,7 @@ public class SubmitTicket extends HttpServlet {
                 LOGGER.info("Validate passport : ");
                 if (passport == null || "".equals(passport.trim())) {
                     return null;
-                } else if (passport.trim().length() != 8) {
+                } else if (passport.trim().length() > 8) {
                     return null;
                 }
                 LOGGER.info("Validate nationality : ");
@@ -181,13 +181,14 @@ public class SubmitTicket extends HttpServlet {
             LOGGER.info("Validate fullName : ");
             if (fullName == null || "".equals(fullName.trim())) {
                 return null;
+            } else if (fullName.length() > 30) {
+                return null;
             }
             LOGGER.info("Validate phoneNo : ");
             if (phoneNo == null || "".equals(phoneNo.trim())) {
                 return null;
             } else if (!util.validateNumeric(phoneNo)
-                    || !(phoneNo.trim().length() > 7
-                            && phoneNo.trim().length() < 15)) {
+                    || (phoneNo.trim().length() != 8)) {
                 return null;
             }
             LOGGER.info("Validate emailId : ");
