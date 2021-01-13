@@ -145,13 +145,13 @@ public Document getContentDetail(final RequestContext context) {
                 "relatedContent", "");
         if (StringUtils.isNotBlank(relatedContent)) {
             addContent(context, sb.toString(), relatedContent, "relatedContent",
-                    detailDocument);
+                    detailDocument, properties);
         }
         String trendContent = context.getParameterString(
                 "trendContent", "");
         if (StringUtils.isNotBlank(trendContent)) {
             addContent(context, sb.toString(), trendContent, "trendingContent",
-                    detailDocument);
+                    detailDocument, properties);
         }
         return detailDocument;
     }
@@ -163,7 +163,7 @@ public Document getContentDetail(final RequestContext context) {
      * @param detailDocument The final content document to be returned.
      * @param fielQuery Solr field query.
      * @param root xml node name.
-     *
+     * @param properties solr properties file.
      * @return no return type.
      */
     public void addContent(
@@ -171,13 +171,34 @@ public Document getContentDetail(final RequestContext context) {
             final String fielQuery,
             final String nodeList,
             final String root,
-            final Document detailDocument) {
+            final Document detailDocument,
+            final Properties properties) {
         SolrQueryUtil squ = new SolrQueryUtil();
         CommonUtils commonUtils = new CommonUtils();
         String rows = context.getParameterString("rows", "9");
         String[] values = nodeList.split(",");
         String fq = fielQuery;
         String dcrValue = "";
+        String sortVal = "";
+        String sort = context.getParameterString(
+                "relatedSort", "");
+        logger.info("Content Sort: " + sort);
+        if (sort.split(":")[1].equals("distance")) {
+            logger.info("Sort Type: Distance");
+            if (detailDocument.selectSingleNode(sort.split(":")[0]) != null &&
+                StringUtils.isNotBlank(sort)) {
+                    sortVal = properties.getProperty("distance-prefix");
+                    sortVal = sortVal +
+                            commonUtils.getValueFromXML(sort.split(":")[0],
+                                    detailDocument) + properties.getProperty("distance-suffix");
+                    logger.info("Sort Query: " + sortVal +
+                            commonUtils.getValueFromXML(sort.split(":")[0],
+                            detailDocument) + properties.getProperty("distance-suffix"));
+            }
+        } else {
+            logger.info("Sort Type: Value");
+            sortVal = sort.split(":")[0];
+        }
         for (int i=0;i<values.length;i++) {
             if (values[i].split(":")[2].equals("Node")) {
                 dcrValue = commonUtils
@@ -198,8 +219,8 @@ public Document getContentDetail(final RequestContext context) {
                         + ":" + dcrValue;
             }
         }
-        Document relatedDoc = squ.doJsonQuery(fq + "&rows=" + rows,
-                root);
+        Document relatedDoc = squ.doJsonQuery(fq + "&rows=" + rows
+                        + "&sort=" + sortVal, root);
         detailDocument.getRootElement().add(relatedDoc.getRootElement());
     }
 }
