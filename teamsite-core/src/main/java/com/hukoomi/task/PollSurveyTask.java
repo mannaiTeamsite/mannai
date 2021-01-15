@@ -110,6 +110,10 @@ public class PollSurveyTask implements CSURLExternalTask {
      */
     private static final String OPTION_VALUE = "value";
     /**
+     * XPath for the poll option is open respnse
+     */
+    private static final String IS_OPEN_RESPONSE = "isOpenResponse";
+    /**
      * Transition hashmap key
      */
     private static final String TRANSITION = "TRANSITION";
@@ -958,9 +962,9 @@ public class PollSurveyTask implements CSURLExternalTask {
             String surveyOptionQuery = "INSERT INTO "
                     + "SURVEY_OPTION (OPTION_ID, SURVEY_ID, "
                     + "LANG, QUESTION_ID, QUESTION_NO, "
-                    + "OPTION_NO, OPTION_LABEL, OPTION_VALUE) " + "VALUES "
+                    + "OPTION_NO, OPTION_LABEL, IS_USER_INPUT, OPTION_VALUE) " + "VALUES "
                     + "(nextval('survey_option_option_id_seq')"
-                    + ", ?, ?, ?, ?, ?, ?, ?)";
+                    + ", ?, ?, ?, ?, ?, ?, ?, ?)";
             preparedStatement = connection
                     .prepareStatement(surveyOptionQuery);
             logger.info("surveyOptionQuery : " + surveyOptionQuery);
@@ -972,6 +976,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                         .getText();
                 String optionValue = optnode.selectSingleNode(OPTION_VALUE)
                         .getText();
+                String isOpenResponse = optnode.selectSingleNode(IS_OPEN_RESPONSE)
+                        .getText();
                 logger.info(optionLabel + " : " + optionValue);
                 preparedStatement.setLong(1,
                         Long.parseLong(surveyBO.getSurveyId()));
@@ -980,7 +986,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                 preparedStatement.setInt(4, surveyBO.getQuestionNo());
                 preparedStatement.setInt(5, optionNo);
                 preparedStatement.setString(6, optionLabel);
-                preparedStatement.setString(7, optionValue);
+                preparedStatement.setString(7, isOpenResponse);
+                preparedStatement.setString(8, optionValue);
                 preparedStatement.addBatch();
                 optionNo++;
             }
@@ -1213,7 +1220,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             logger.info("PollSurveyTask : updateSurveyOptionData");
             String surveyOptionQuery = "UPDATE "
-                    + "SURVEY_OPTION SET OPTION_LABEL = ?, "
+                    + "SURVEY_OPTION SET OPTION_LABEL = ?, IS_USER_INPUT = ?, "
                     + "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
                     + "AND LANG = ? AND QUESTION_NO = ? "
                     + "AND OPTION_NO = ?";
@@ -1228,16 +1235,19 @@ public class PollSurveyTask implements CSURLExternalTask {
                         "updateSurveyOptionData optionNo : " + optionNo);
                 String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
                         .getText();
+                String isOpenResponse = optnode.selectSingleNode(IS_OPEN_RESPONSE)
+                        .getText();
                 String optionValue = optnode.selectSingleNode(OPTION_VALUE)
                         .getText();
                 logger.info(optionLabel + " : " + optionValue);
                 preparedStatement.setString(1, optionLabel);
-                preparedStatement.setString(2, optionValue);
-                preparedStatement.setLong(3,
+                preparedStatement.setString(2, isOpenResponse);
+                preparedStatement.setString(3, optionValue);
+                preparedStatement.setLong(4,
                         Long.parseLong(surveyBO.getSurveyId()));
-                preparedStatement.setString(4, surveyBO.getLang());
-                preparedStatement.setInt(5, surveyBO.getQuestionNo());
-                preparedStatement.setInt(6, optionNo);
+                preparedStatement.setString(5, surveyBO.getLang());
+                preparedStatement.setInt(6, surveyBO.getQuestionNo());
+                preparedStatement.setInt(7, optionNo);
                 preparedStatement.addBatch();
                 optionNo++;
             }
