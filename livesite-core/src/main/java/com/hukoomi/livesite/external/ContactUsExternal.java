@@ -1,5 +1,8 @@
 package com.hukoomi.livesite.external;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -17,6 +20,7 @@ import org.springframework.mail.MailException;
 
 import com.hukoomi.contact.model.ContactEmail;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
+import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.ValidationUtils;
 import com.hukoomi.utils.XssUtils;
@@ -47,7 +51,7 @@ public class ContactUsExternal {
     /**
      * Properties object that holds the property values
      */
-    private static Properties properties = null;
+    private Properties properties = null;
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -154,8 +158,15 @@ public class ContactUsExternal {
         String status = "";
         MimeMessage mailMessage;
         try {
-            mailMessage = createMailMessage(context);
-            Transport.send(mailMessage);
+            int result = insertContactUsMailData(context);
+            if (result > 0) {
+                mailMessage = createMailMessage(context);
+                Transport.send(mailMessage);
+            } else {
+                status = STATUS_FAIL_MAIL_SENT;
+                LOGGER.info("Exception in insert to table ");
+                return getDocument(status);
+            }
         } catch (MessagingException | MailException e) {
             status = STATUS_FAIL_MAIL_SENT;
             LOGGER.error("Exception in sendEmailToHukoomi: ", e);
@@ -175,11 +186,11 @@ public class ContactUsExternal {
     private MimeMessage createMailMessage(final RequestContext context)
             throws MessagingException {
         LOGGER.info("createMailMessage: Enter");
-        ContactUsExternal.loadProperties(context);
-        String from = properties.getProperty(CONTACT_FROM_MAIL);
-        String to = properties.getProperty(CONTACT_TO_MAIL);
-        String host = properties.getProperty(CONTACT_MAIL_HOST);
-        String port = properties.getProperty(CONTACT_MAIL_PORT);
+        Properties propertiesFile = ContactUsExternal.loadProperties(context);
+        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
+        String to = propertiesFile.getProperty(CONTACT_TO_MAIL);
+        String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
+        String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
         Properties props = new Properties();
         String subject = "";
         props.put("mail.smtp.host", host);
@@ -206,6 +217,40 @@ public class ContactUsExternal {
 
     }
 
+    public int insertContactUsMailData(RequestContext context) {
+        LOGGER.info("NewsletterExternal : insertSubscriber");
+        Postgre objPostgre = new Postgre(context);
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        String query = "";
+        LOGGER.info("NewsletterExternal : insert");
+        query = "INSERT INTO CONTACT_US_SERVICE (NAME,EMAIL_ADDRESS,QUESTIONS_AND_FEEDBACK,INQUIRY_TYPE,SEND_DATE) VALUES(?,?,?,?,LOCALTIMESTAMP)";
+        try {
+            connection = objPostgre.getConnection();
+            prepareStatement = connection.prepareStatement(query);
+            prepareStatement.setString(1, email.getSenderName());
+            prepareStatement.setString(2, email.getSenderEmail());
+            prepareStatement.setString(3, email.getEmailText());
+            prepareStatement.setString(4, email.getEmailSubject());
+            final int result = prepareStatement.executeUpdate();
+            if (result == 0) {
+                LOGGER.info("failed to insert/update subscriber's data!");
+            } else {
+                LOGGER.info(
+                        " subscribers data insert/update successfully!");
+            }
+            return result;
+        } catch (SQLException e) {
+            LOGGER.error("SQLException :", e);
+            return 0;
+
+        } finally {
+            objPostgre.releaseConnection(connection, prepareStatement,
+                    null);
+        }
+
+    }
+
     /**
      * this method get the strings and generate document.
      *
@@ -226,16 +271,13 @@ public class ContactUsExternal {
      * This method will be used to load the configuration properties.
      *
      * @param context The parameter context object passed from Component.
+     * @return
      *
      */
-    private static void loadProperties(final RequestContext context) {
-        if (properties == null) {
-            PropertiesFileReader propertyFileReader =
-                    new PropertiesFileReader(context,
-                            "contactus.properties");
-            ContactUsExternal.properties =
-                    propertyFileReader.getPropertiesFile();
-        }
+    private static Properties loadProperties(final RequestContext context) {
+        PropertiesFileReader propertyFileReader =
+                new PropertiesFileReader(context, "contactus.properties");
+        return propertyFileReader.getPropertiesFile();
     }
 
 }

@@ -32,8 +32,6 @@ public class CustomerServiceExternal {
     private static final String ELEMENT_RESULT = "Result";
     /** element for xml document. */
     private static final String ELEMENT_OPTION = "Option";
-    /**/
-    private static Properties properties = null;
     /** field validation status. */
     private static final String STATUS_FIELD_VALIDATION =
             "FieldValidationFailed";
@@ -91,7 +89,7 @@ public class CustomerServiceExternal {
         Connection connection = postgre.getConnection();
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement(ELEMENT_RESULT);
-        CustomerServiceExternal.loadProperties(context);
+        Properties properties = CustomerServiceExternal.loadProperties(context);
         String blockService = properties.getProperty("blockService");
         builder.append(
                 "SELECT S.ESERVICEID as ESERVICEID,S.SERVICEID as SERVICEID,S.SERVICEEDESC as SERVICEEDESC,S.SERVICEADESC as SERVICEADESC ");
@@ -199,14 +197,10 @@ public class CustomerServiceExternal {
      * @param context The parameter context object passed from Component.
      *
      */
-    private static void loadProperties(final RequestContext context) {
-        if (properties == null) {
-            PropertiesFileReader propertyFileReader =
-                    new PropertiesFileReader(context,
-                            "customerserviceconfig.properties");
-            CustomerServiceExternal.properties =
-                    propertyFileReader.getPropertiesFile();
-        }
+    private static Properties loadProperties(final RequestContext context) {
+        PropertiesFileReader propertyFileReader = new PropertiesFileReader(
+                context, "customerserviceconfig.properties");
+        return propertyFileReader.getPropertiesFile();
     }
 
 }
