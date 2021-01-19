@@ -44,10 +44,7 @@ public class ContactUsExternal {
     private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
     /** initialization of success variable. */
     private static final String STATUS_SUCCESS = "success";
-    /**
-     * Properties object that holds the property values
-     */
-    private static Properties properties = null;
+
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -226,7 +223,7 @@ public class ContactUsExternal {
      * This method will be used to load the configuration properties.
      *
      * @param context The parameter context object passed from Component.
-     * @return
+     * @return properties
      *
      */
     private static Properties loadProperties(final RequestContext context) {

@@ -195,7 +195,7 @@ public class CustomerServiceExternal {
      * This method will be used to load the configuration properties.
      *
      * @param context The parameter context object passed from Component.
-     *
+     * @return properties
      */
     private static Properties loadProperties(final RequestContext context) {
         PropertiesFileReader propertyFileReader = new PropertiesFileReader(
