@@ -447,7 +447,7 @@ public class NewsletterExternal {
      */
     private static Properties
             loadProperties(final RequestContext context) {
-
+        LOGGER.info("loadProperties:Begin");
         PropertiesFileReader propertyFileReader =
                 new PropertiesFileReader(context, "mailchimp.properties");
         return propertyFileReader.getPropertiesFile();

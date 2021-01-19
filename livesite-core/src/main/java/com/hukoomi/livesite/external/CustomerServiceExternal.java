@@ -89,7 +89,8 @@ public class CustomerServiceExternal {
         Connection connection = postgre.getConnection();
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement(ELEMENT_RESULT);
-        Properties properties = CustomerServiceExternal.loadProperties(context);
+        Properties properties =
+                CustomerServiceExternal.loadProperties(context);
         String blockService = properties.getProperty("blockService");
         builder.append(
                 "SELECT S.ESERVICEID as ESERVICEID,S.SERVICEID as SERVICEID,S.SERVICEEDESC as SERVICEEDESC,S.SERVICEADESC as SERVICEADESC ");
@@ -197,7 +198,9 @@ public class CustomerServiceExternal {
      * @param context The parameter context object passed from Component.
      * @return properties
      */
-    private static Properties loadProperties(final RequestContext context) {
+    private static Properties
+            loadProperties(final RequestContext context) {
+        LOGGER.info("loadProperties:Begin");
         PropertiesFileReader propertyFileReader = new PropertiesFileReader(
                 context, "customerserviceconfig.properties");
         return propertyFileReader.getPropertiesFile();

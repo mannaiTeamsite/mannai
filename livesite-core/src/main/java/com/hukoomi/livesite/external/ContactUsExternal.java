@@ -172,10 +172,13 @@ public class ContactUsExternal {
     private MimeMessage createMailMessage(final RequestContext context)
             throws MessagingException {
         LOGGER.info("createMailMessage: Enter");
-        Properties propertiesFile = ContactUsExternal.loadProperties(context);
+        Properties propertiesFile =
+                ContactUsExternal.loadProperties(context);
         String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
         String to = propertiesFile.getProperty(CONTACT_TO_MAIL);
+        LOGGER.debug("sent To :" + to);
         String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
+        LOGGER.debug("relay IP :" + host);
         String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
         Properties props = new Properties();
         String subject = "";
@@ -226,7 +229,9 @@ public class ContactUsExternal {
      * @return properties
      *
      */
-    private static Properties loadProperties(final RequestContext context) {
+    private static Properties
+            loadProperties(final RequestContext context) {
+        LOGGER.info("loadProperties:Begin");
         PropertiesFileReader propertyFileReader =
                 new PropertiesFileReader(context, "contactus.properties");
         return propertyFileReader.getPropertiesFile();
