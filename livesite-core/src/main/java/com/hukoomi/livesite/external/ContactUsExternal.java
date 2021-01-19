@@ -1,8 +1,5 @@
 package com.hukoomi.livesite.external;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -20,7 +17,6 @@ import org.springframework.mail.MailException;
 
 import com.hukoomi.contact.model.ContactEmail;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
-import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.ValidationUtils;
 import com.hukoomi.utils.XssUtils;
@@ -51,7 +47,7 @@ public class ContactUsExternal {
     /**
      * Properties object that holds the property values
      */
-    private Properties properties = null;
+    private static Properties properties = null;
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -158,15 +154,8 @@ public class ContactUsExternal {
         String status = "";
         MimeMessage mailMessage;
         try {
-            int result = insertContactUsMailData(context);
-            if (result > 0) {
-                mailMessage = createMailMessage(context);
-                Transport.send(mailMessage);
-            } else {
-                status = STATUS_FAIL_MAIL_SENT;
-                LOGGER.info("Exception in insert to table ");
-                return getDocument(status);
-            }
+            mailMessage = createMailMessage(context);
+            Transport.send(mailMessage);
         } catch (MessagingException | MailException e) {
             status = STATUS_FAIL_MAIL_SENT;
             LOGGER.error("Exception in sendEmailToHukoomi: ", e);
@@ -214,40 +203,6 @@ public class ContactUsExternal {
         msg.setText(sb.toString());
         LOGGER.debug("msg:" + msg);
         return msg;
-
-    }
-
-    public int insertContactUsMailData(RequestContext context) {
-        LOGGER.info("NewsletterExternal : insertSubscriber");
-        Postgre objPostgre = new Postgre(context);
-        Connection connection = null;
-        PreparedStatement prepareStatement = null;
-        String query = "";
-        LOGGER.info("NewsletterExternal : insert");
-        query = "INSERT INTO CONTACT_US_SERVICE (NAME,EMAIL_ADDRESS,QUESTIONS_AND_FEEDBACK,INQUIRY_TYPE,SEND_DATE) VALUES(?,?,?,?,LOCALTIMESTAMP)";
-        try {
-            connection = objPostgre.getConnection();
-            prepareStatement = connection.prepareStatement(query);
-            prepareStatement.setString(1, email.getSenderName());
-            prepareStatement.setString(2, email.getSenderEmail());
-            prepareStatement.setString(3, email.getEmailText());
-            prepareStatement.setString(4, email.getEmailSubject());
-            final int result = prepareStatement.executeUpdate();
-            if (result == 0) {
-                LOGGER.info("failed to insert/update subscriber's data!");
-            } else {
-                LOGGER.info(
-                        " subscribers data insert/update successfully!");
-            }
-            return result;
-        } catch (SQLException e) {
-            LOGGER.error("SQLException :", e);
-            return 0;
-
-        } finally {
-            objPostgre.releaseConnection(connection, prepareStatement,
-                    null);
-        }
 
     }
 
