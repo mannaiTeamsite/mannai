@@ -44,10 +44,7 @@ public class ContactUsExternal {
     private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
     /** initialization of success variable. */
     private static final String STATUS_SUCCESS = "success";
-    /**
-     * Properties object that holds the property values
-     */
-    private static Properties properties = null;
+
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -175,11 +172,14 @@ public class ContactUsExternal {
     private MimeMessage createMailMessage(final RequestContext context)
             throws MessagingException {
         LOGGER.info("createMailMessage: Enter");
-        ContactUsExternal.loadProperties(context);
-        String from = properties.getProperty(CONTACT_FROM_MAIL);
-        String to = properties.getProperty(CONTACT_TO_MAIL);
-        String host = properties.getProperty(CONTACT_MAIL_HOST);
-        String port = properties.getProperty(CONTACT_MAIL_PORT);
+        Properties propertiesFile =
+                ContactUsExternal.loadProperties(context);
+        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
+        String to = propertiesFile.getProperty(CONTACT_TO_MAIL);
+        LOGGER.debug("sent To :" + to);
+        String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
+        LOGGER.debug("relay IP :" + host);
+        String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
         Properties props = new Properties();
         String subject = "";
         props.put("mail.smtp.host", host);
@@ -226,16 +226,15 @@ public class ContactUsExternal {
      * This method will be used to load the configuration properties.
      *
      * @param context The parameter context object passed from Component.
+     * @return properties
      *
      */
-    private static void loadProperties(final RequestContext context) {
-        if (properties == null) {
-            PropertiesFileReader propertyFileReader =
-                    new PropertiesFileReader(context,
-                            "contactus.properties");
-            ContactUsExternal.properties =
-                    propertyFileReader.getPropertiesFile();
-        }
+    private static Properties
+            loadProperties(final RequestContext context) {
+        LOGGER.info("loadProperties:Begin");
+        PropertiesFileReader propertyFileReader =
+                new PropertiesFileReader(context, "contactus.properties");
+        return propertyFileReader.getPropertiesFile();
     }
 
 }

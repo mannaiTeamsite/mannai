@@ -78,8 +78,6 @@ public class NewsletterExternal {
     /** Mailchimp properties key. */
     private static final String AUTHORIZATION_HEADER =
             "authorizationHeader";
-    /** Properties object that holds the property values */
-    private static Properties properties = null;
 
     /**
      * @param context
@@ -105,7 +103,8 @@ public class NewsletterExternal {
         if (!email.equals("") && !subscriptionLang.equals("")) {
             if ((subscriptionLang.equals("ar")
                     || subscriptionLang.equals("en"))
-                    && (email.length() <= 50 && util.validateEmailId(xssUtils.stripXSS(email))   )) {
+                    && (email.length() <= 50 && util
+                            .validateEmailId(xssUtils.stripXSS(email)))) {
                 memberdetail = createSubscriber(email, subscriptionLang,
                         flagToInvokeMailchimpService, context);
             } else {
@@ -165,7 +164,7 @@ public class NewsletterExternal {
             throws IOException, NoSuchAlgorithmException {
         LOGGER.info("createSubscriberinMailChimp:Enter");
         Document document = DocumentHelper.createDocument();
-        NewsletterExternal.loadProperties(context);
+        Properties properties = NewsletterExternal.loadProperties(context);
         listId = properties.getProperty(LIST_ID);
         authorizationHeader =
                 "Basic " + properties.getProperty(AUTHORIZATION_HEADER);
@@ -444,16 +443,15 @@ public class NewsletterExternal {
      * This method will be used to load the configuration properties.
      *
      * @param context The parameter context object passed from Component.
-     *
+     * @return properties
      */
-    private static void loadProperties(final RequestContext context) {
-        if (properties == null) {
-            PropertiesFileReader propertyFileReader =
-                    new PropertiesFileReader(context,
-                            "mailchimp.properties");
-            NewsletterExternal.properties =
-                    propertyFileReader.getPropertiesFile();
-        }
+    private static Properties
+            loadProperties(final RequestContext context) {
+        LOGGER.info("loadProperties:Begin");
+        PropertiesFileReader propertyFileReader =
+                new PropertiesFileReader(context, "mailchimp.properties");
+        return propertyFileReader.getPropertiesFile();
+
     }
 
     /**
