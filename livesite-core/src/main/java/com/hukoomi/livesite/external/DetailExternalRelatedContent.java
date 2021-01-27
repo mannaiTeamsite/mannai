@@ -179,26 +179,7 @@ public Document getContentDetail(final RequestContext context) {
         String[] values = nodeList.split(",");
         String fq = fielQuery;
         String dcrValue = "";
-        String sortVal = "";
-        String sort = context.getParameterString(
-                "relatedSort", "");
-        logger.info("Content Sort: " + sort);
-        if (sort.split(":")[1].equals("distance")) {
-            logger.info("Sort Type: Distance");
-            if (detailDocument.selectSingleNode(sort.split(":")[0]) != null &&
-                StringUtils.isNotBlank(sort)) {
-                    sortVal = properties.getProperty("distance-prefix");
-                    sortVal = sortVal +
-                            commonUtils.getValueFromXML(sort.split(":")[0],
-                                    detailDocument) + properties.getProperty("distance-suffix");
-                    logger.info("Sort Query: " + sortVal +
-                            commonUtils.getValueFromXML(sort.split(":")[0],
-                            detailDocument) + properties.getProperty("distance-suffix"));
-            }
-        } else {
-            logger.info("Sort Type: Value");
-            sortVal = sort.split(":")[0];
-        }
+        String sortVal = getSortContent(context, detailDocument, properties);
         for (int i=0;i<values.length;i++) {
             if (values[i].split(":")[2].equals("Node")) {
                 dcrValue = commonUtils
@@ -222,5 +203,53 @@ public Document getContentDetail(final RequestContext context) {
         Document relatedDoc = squ.doJsonQuery(fq + "&rows=" + rows
                         + "&sort=" + sortVal, root);
         detailDocument.getRootElement().add(relatedDoc.getRootElement());
+    }
+
+    /** This method will be called to set the
+     * solr sort param content.
+     * @param context The parameter context object passed from Component.
+     * @param detailDocument The final content document to be returned.
+     * @return String sort content.
+     */
+    public String getSortContent(
+            final RequestContext context,
+            final Document detailDocument,
+            final Properties properties) {
+        CommonUtils commonUtils = new CommonUtils();
+        String locationPrefix = "distance-prefix";
+        String locationSuffix = "distance-suffix";
+        String sortVal = "";
+        String sort = context.getParameterString(
+                "relatedSort", "");
+        logger.info("Content Sort: " + sort);
+        if (StringUtils.isNotBlank(sort)) {
+            if (sort.split(":")[1].equals("distance")) {
+                logger.info("Sort Type: Distance");
+                if (detailDocument.selectSingleNode(sort.split(":")[0]) != null) {
+                    String location = commonUtils
+                            .getValueFromXML(sort.split(":")[0],
+                                    detailDocument);
+                    if (StringUtils.isNotBlank(location)) {
+                        sortVal = properties.getProperty(locationPrefix);
+                        sortVal = sortVal + location
+                                + properties.getProperty(locationSuffix);
+                        logger.info("Sort Query: " + sortVal +
+                                location + properties.getProperty(locationSuffix));
+                    } else {
+                        sortVal = properties.getProperty(locationPrefix);
+                        sortVal = sortVal
+                                + properties.getProperty("distance-default")
+                                + properties.getProperty(locationSuffix);
+                        logger.info("Sort Query: " + sortVal +
+                                properties.getProperty("distance-default")
+                                + properties.getProperty(locationSuffix));
+                    }
+                }
+            } else {
+                logger.info("Sort Type: Value");
+                sortVal = sort.split(":")[0];
+            }
+        }
+        return sortVal;
     }
 }
