@@ -3,6 +3,16 @@
  */
 package com.hukoomi.utils;
 
+import com.interwoven.livesite.common.text.StringUtil;
+import com.interwoven.livesite.file.FileDal;
+import com.interwoven.livesite.runtime.LiveSiteDal;
+import com.interwoven.livesite.runtime.RequestContext;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -10,21 +20,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Element;
-import org.dom4j.Node;
-
-import com.interwoven.livesite.file.FileDal;
-import com.interwoven.livesite.runtime.LiveSiteDal;
-import com.interwoven.livesite.runtime.RequestContext;
-
+/*
+ * Since the Context.getParameterString method is deprecated by Product,
+ * Suppress Sonarlint warnings about deprecation,
+ */
+@SuppressWarnings("deprecation")
 public class CommonUtils {
     /**
      * Logger object to check the flow of the code.
@@ -44,6 +45,8 @@ public class CommonUtils {
     private String fileRoot;
     /** Declare dcr category variable. */
     private String dcrCategory;
+    /** Declare Constant Variable name for Locale. */
+    private static final String PARAM_LOCALE = "locale";
     /** Null method.
      */
     public CommonUtils() {
@@ -57,7 +60,7 @@ public class CommonUtils {
         this.fileDal = requestContext.getFileDal();
         this.fileRoot = this.fileDal.getRoot();
         this.separator = this.fileDal.getSeparator();
-        this.locale = requestContext.getParameterString("locale", "en");
+        this.locale = requestContext.getParameterString(PARAM_LOCALE, "en");
         if (context.getParameterString("dcrcategory") != null) {
             this.dcrCategory = context.getParameterString("dcrcategory");
         } else {
@@ -117,7 +120,7 @@ public class CommonUtils {
         Element root = doc.addElement("content");
         String dct = reqcontext.getParameterString("category");
         logger.info("Type of DCT: " + dct);
-        locale = reqcontext.getParameterString("locale", "en");
+        locale = reqcontext.getParameterString(PARAM_LOCALE, "en");
         logger.info("Locale: " + locale);
         String dcr = reqcontext.getParameterString("record");
         logger.info("DCR: " + dcr);
@@ -129,15 +132,6 @@ public class CommonUtils {
         logger.info("DCR Path: " + dcrPath);
         Document data = commonUtils.readDCR(dcrPath);
         if (data == null) {
-            try {
-                reqcontext.getResponse()
-                        .setStatus(HttpServletResponse
-                                .SC_MOVED_PERMANENTLY);
-                reqcontext.getResponse()
-                        .sendRedirect("/" + locale + "/error-page");
-            } catch (IOException ex) {
-                logger.error("Error while setting response", ex);
-            }
             return null;
         }
         Element detailedElement = data.getRootElement();
@@ -262,6 +256,7 @@ public class CommonUtils {
      */
     public Map<String, Integer> getImageDimensions(String imageSourcePath){
         Map<String, Integer> dimensions = new HashMap<>();
+        logger.info("Retrieving Dimensions for: " + imageSourcePath);
         if(imageSourcePath.equals("")){
             return dimensions;
         }
@@ -301,6 +296,7 @@ public class CommonUtils {
             prettyURL = prettyURL + dcrName;
         }
         prettyURL = prettyURL.endsWith("/") ? prettyURL.substring(0,prettyURL.length()-1) : prettyURL;
+        prettyURL = prettyURL.endsWith(".page") ? prettyURL.substring(0,prettyURL.indexOf(".page")) : prettyURL;
         return prettyURL;
     }
 
@@ -315,9 +311,66 @@ public class CommonUtils {
         if(parameter == null || parameter.isBlank()){
             return "";
         }
-        String sanitizedQuery = "";
-        sanitizedQuery = parameter.replaceAll("[^a-zA-Z0-9- \\\"*:!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
-        return sanitizedQuery;
+        return parameter.replaceAll("[^a-zA-Z0-9- \\\"*:!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
     }
 
+    /*
+     * Get URL Prefix based on the Request Header forwarded host.
+     * This helps create the URL with FQDN values.
+     *
+     * @param RequestContext context
+     * @return String urlprefix value. For example: "https://hukoomi.gov.qa"
+     */
+    public String getURLPrefix(RequestContext context){
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+        String hostname = requestHeaderUtils.getForwardedHost();
+        if(hostname.equals("")){
+            hostname = "hukoomi.gov.qa";
+        }
+        String urlScheme = "https";
+        if(context.getRequest().getScheme()!=null){
+            urlScheme = context.getRequest().getScheme();
+        }
+        return urlScheme + "://" + hostname;
+    }
+
+    /*
+     * Generate Image SEO Metadata.
+     * For Example, og:image, twitter:image, etc.
+     *
+     * @param RequestContext context
+     * @param String imageValue Image path.
+     * @param String urlPrefix Prefix of URL.
+     */
+    public void generateImageMetadata(RequestContext context, String imageValue, String urlPrefix){
+        if(imageValue.isBlank()){
+            return;
+        }
+        context.getPageScopeData().put("image", urlPrefix + imageValue);
+        logger.info("Image added to the PageScope: " + urlPrefix + imageValue);
+        Map<String, Integer> imageDimensions = getImageDimensions(context.getFileDal().getRoot() + context.getFileDal().getSeparator() + imageValue);
+        if(!imageDimensions.isEmpty()){
+            int imageWidth = imageDimensions.getOrDefault("width", 0);
+            int imageHeight = imageDimensions.getOrDefault("height", 0);
+            context.getPageScopeData().put("image-width", imageWidth);
+            context.getPageScopeData().put("image-height", imageHeight);
+            logger.info("Set PageScope image dimensions as: " + imageWidth + " * " + imageHeight);
+        }
+    }
+
+    /*
+     * Sanitize Values to be used for HTML metadata.
+     * This prevents breaking HTML meta tags for special characters.
+     * Uses LiveSite StringUtil methods.
+     *
+     * @param String metadata
+     *
+     * @return String sanitized metadata
+     */
+    public String sanitizeMetadataField(String metadata) {
+        if(!metadata.isBlank()){
+            metadata = StringUtil.toHTMLEntity(metadata);
+        }
+        return metadata;
+    }
 }
