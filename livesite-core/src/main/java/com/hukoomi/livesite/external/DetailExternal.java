@@ -57,10 +57,10 @@ public class DetailExternal {
         context.getPageScopeData().put("locale",locale);
         logger.info("PageScope Locale : " + locale);
         logger.info("Current PageScopeData: "+context.getPageScopeData().toString());
-        String description = commonUtils.getValueFromXML("/content/root/page-details/description", detailDocument);
+        String description = commonUtils.sanitizeMetadataField(commonUtils.getValueFromXML("/content/root/page-details/description", detailDocument));
         context.getPageScopeData().putIfAbsent(RuntimePage.PAGESCOPE_DESCRIPTION, description);
         logger.info("Set PageScope Meta Description to : " + description);
-        String keywords = commonUtils.getValueFromXML("/content/root/page-details/keywords", detailDocument);
+        String keywords = commonUtils.sanitizeMetadataField(commonUtils.getValueFromXML("/content/root/page-details/keywords", detailDocument));
         context.getPageScopeData().putIfAbsent(RuntimePage.PAGESCOPE_KEYWORDS, keywords);
         logger.info("Set PageScope Meta Keywords to : " + keywords);
         String contentCategory = commonUtils.getValueFromXML("/content/root/category", detailDocument);
