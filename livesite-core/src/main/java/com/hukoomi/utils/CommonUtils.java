@@ -3,16 +3,20 @@
  */
 package com.hukoomi.utils;
 
+import com.hukoomi.exception.DCRNotFoundException;
+import com.hukoomi.livesite.controller.SEOController;
 import com.interwoven.livesite.common.text.StringUtil;
 import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.LiveSiteDal;
 import com.interwoven.livesite.runtime.RequestContext;
+import com.interwoven.livesite.runtime.model.page.RuntimePage;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -324,11 +328,11 @@ public class CommonUtils {
     public String getURLPrefix(RequestContext context){
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         String hostname = requestHeaderUtils.getForwardedHost();
-        if(hostname.equals("")){
+        if(hostname.isBlank() || hostname.equals("")){
             hostname = "hukoomi.gov.qa";
         }
         String urlScheme = "https";
-        if(context.getRequest().getScheme()!=null){
+        if(context.getRequest().getScheme()!=null && !context.getRequest().getScheme().isBlank()){
             urlScheme = context.getRequest().getScheme();
         }
         return urlScheme + "://" + hostname;
@@ -372,5 +376,77 @@ public class CommonUtils {
             metadata = StringUtil.toHTMLEntity(metadata);
         }
         return metadata;
+    }
+
+    /*
+     * Generate SEO Metatags in PageScope for Dynamic Content.
+     *
+     * @param Document DCR XML Dom4j Document
+     * @param RequestContext context
+     */
+    public void generateSEOMetaTagsForDynamicContent(Document dcr, RequestContext context) {
+        String urlPrefix = getURLPrefix(context);
+        String paramLocale = context.getParameterString("locale", "en");
+        logger.info("paramLocale : " + paramLocale);
+        String title = sanitizeMetadataField(getValueFromXML("/content/root/information/title", dcr));
+        if(title.equals("")){
+            logger.debug("No DCR found to add the PageScope Data");
+            return;
+        }
+        context.getPageScopeData().put(RuntimePage.PAGESCOPE_TITLE, title);
+        logger.info("Set PageScope Title : " + title);
+        String locale = paramLocale.equals("ar") ? "ar_QA" :"en_US";
+        context.getPageScopeData().put("locale",locale);
+        logger.info("PageScope Locale : " + locale);
+        logger.info("Current PageScopeData: "+context.getPageScopeData().toString());
+        String description = sanitizeMetadataField(getValueFromXML("/content/root/page-details/description", dcr));
+        context.getPageScopeData().put(RuntimePage.PAGESCOPE_DESCRIPTION, description);
+        logger.info("Set PageScope Meta Description to : " + description);
+        String keywords = sanitizeMetadataField(getValueFromXML("/content/root/page-details/keywords", dcr));
+        context.getPageScopeData().put(RuntimePage.PAGESCOPE_KEYWORDS, keywords);
+        logger.info("Set PageScope Meta Keywords to : " + keywords);
+        String contentCategory = getValueFromXML("/content/root/category", dcr);
+        String ogType = contentCategory.equals("Articles") ? "article" : "website";
+        context.getPageScopeData().put("ogType", ogType);
+        logger.info("Set PageScope ogType to : " + ogType);
+        String articlePublishDate = getValueFromXML("/content/root/date", dcr);
+        context.getPageScopeData().put("article-published-time", articlePublishDate);
+        context.getPageScopeData().put("article-modified-time", getValueFromXML("/content/root/date", dcr));
+        logger.info("Set PageScope article-published-time / article-modified-time to : " + articlePublishDate);
+        context.getPageScopeData().put("article-tag", keywords);
+        logger.info("Set PageScope article-tag to : " + keywords);
+        String imageValue = getValueFromXML("/content/root/information/image", dcr);
+        if(imageValue.equals("")){
+            imageValue = paramLocale.equals("ar") ? SEOController.DEFAULT_SOCIAL_IMAGE_AR : SEOController.DEFAULT_SOCIAL_IMAGE_EN;
+        }
+        generateImageMetadata(context, imageValue, urlPrefix);
+        String currentPageLink = context.getPageLink(".");
+        String dcrName = context.getParameterString("record");
+        logger.info("Current Page Link " + currentPageLink);
+        String prettyURLforCurrentPage = getPrettyURLForPage(currentPageLink, paramLocale, dcrName);
+        context.getPageScopeData().put("current-url", urlPrefix + prettyURLforCurrentPage);
+        context.getPageScopeData().put("href-lang-default", urlPrefix + prettyURLforCurrentPage);
+        logger.info("Set PageScope href-lang-default as: " + urlPrefix + prettyURLforCurrentPage);
+        context.getPageScopeData().put("href-lang-en", urlPrefix + getPrettyURLForPage(currentPageLink, "en", dcrName));
+        context.getPageScopeData().put("href-lang-ar", urlPrefix + getPrettyURLForPage(currentPageLink, "ar", dcrName));
+        logger.info("Set PageScope href-lang attributes for Alternate Language");
+    }
+
+    /*
+     * Throw DCR Not Found Exception.
+     * Redirect user to the custom error page with 404 status code.
+     *
+     * @param RequestContext context
+     * @param String message to throw as part of HTTP status/exception.
+     */
+    public void throwDCRNotFoundError(RequestContext context, String message){
+        logger.debug("DCR Not Found Responding with 404");
+        try {
+            context.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
+            context.getResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
+        } catch (IOException ex) {
+            logger.error(message, ex);
+        }
+        throw new DCRNotFoundException(message);
     }
 }
