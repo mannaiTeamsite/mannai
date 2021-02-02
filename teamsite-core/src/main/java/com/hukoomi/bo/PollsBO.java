@@ -453,6 +453,11 @@ public class PollsBO {
         this.topics = topics;
     }
 
+    /**
+     * Overrides the toString method to print the business objects values
+     * 
+     * @return Returns string of all business objects values
+     */
     @Override
     public String toString() {
         return "PollsBO [action=" + action + ", pollId=" + pollId

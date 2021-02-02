@@ -64,7 +64,7 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * XPath to the submit type
      */
-    public static final String SUBMIT_TYPE = "/root/detail/submitType";
+    public static final String SUBMIT_TYPE = "/root/details/submitType";
     /**
      * XPath to the persona selection
      */
