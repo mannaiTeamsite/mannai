@@ -91,6 +91,18 @@ public class SurveyBO {
      * Survey solr category name
      */
     private String solrCategory;
+    /**
+     * Service Entities
+     */
+    private String serviceEntities;
+    /**
+     * Survey Topics
+     */
+    private String topics;
+    /**
+     * Submit Type
+     */
+    private String submitType;
 
     /**
      * Getter method to get survey action
@@ -470,11 +482,30 @@ public class SurveyBO {
         this.solrCategory = solrCategory;
     }
 
-    /**
-     * Overrides the toString method to print the business objects values
-     * 
-     * @return Returns string of all business objects values
-     */
+    public String getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(String serviceEntities) {
+        this.serviceEntities = serviceEntities;
+    }
+
+    public String getTopics() {
+        return topics;
+    }
+
+    public void setTopics(String topics) {
+        this.topics = topics;
+    }
+
+    public String getSubmitType() {
+        return submitType;
+    }
+
+    public void setSubmitType(String submitType) {
+        this.submitType = submitType;
+    }
+
     @Override
     public String toString() {
         return "SurveyBO [action=" + action + ", surveyId=" + surveyId
@@ -488,6 +519,8 @@ public class SurveyBO {
                 + description + ", questionId=" + questionId
                 + ", questionNo=" + questionNo + ", groupCategory="
                 + groupCategory + ", category=" + category
-                + ", solrCategory=" + solrCategory + "]";
+                + ", solrCategory=" + solrCategory + ", serviceEntities="
+                + serviceEntities + ", topics=" + topics + ", submitType="
+                + submitType + "]";
     }
 }

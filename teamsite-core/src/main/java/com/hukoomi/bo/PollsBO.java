@@ -86,6 +86,14 @@ public class PollsBO {
      * Poll solr category name
      */
     private String solrCategory;
+    /**
+     * Service Entities
+     */
+    private String serviceEntities;
+    /**
+     * Poll Topics
+     */
+    private String topics;
 
     /**
      * Getter method to get poll action
@@ -429,11 +437,22 @@ public class PollsBO {
         this.solrCategory = solrCategory;
     }
 
-    /**
-     * Overrides the toString method to print the business objects values
-     * 
-     * @return Returns string of all business objects values
-     */
+    public String getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(String serviceEntities) {
+        this.serviceEntities = serviceEntities;
+    }
+
+    public String getTopics() {
+        return topics;
+    }
+
+    public void setTopics(String topics) {
+        this.topics = topics;
+    }
+
     @Override
     public String toString() {
         return "PollsBO [action=" + action + ", pollId=" + pollId
@@ -447,6 +466,7 @@ public class PollsBO {
                 + ", pastPollsPerPage=" + pastPollsPerPage + ", group="
                 + group + ", groupCategory=" + groupCategory
                 + ", category=" + category + ", solrCategory="
-                + solrCategory + "]";
+                + solrCategory + ", serviceEntities=" + serviceEntities
+                + ", topics=" + topics + "]";
     }
 }
