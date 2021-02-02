@@ -4,13 +4,23 @@
 package com.hukoomi.livesite.external;
 
 import com.hukoomi.utils.CommonUtils;
-import com.hukoomi.utils.PropertiesFileReader;
-import com.hukoomi.utils.SolrQueryUtil;
 import com.interwoven.livesite.runtime.RequestContext;
+import com.interwoven.livesite.file.FileDal;
+import com.interwoven.livesite.runtime.LiveSiteDal;
+import com.interwoven.livesite.runtime.model.page.RuntimePage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.Node;
+import org.dom4j.DocumentHelper;
+import com.hukoomi.utils.SolrQueryUtil;
+import com.hukoomi.utils.PropertiesFileReader;
+import org.dom4j.Element;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.util.Map;
+import java.util.List;
 import java.util.Properties;
 
 public class DetailExternalRelatedContent {
@@ -29,34 +39,58 @@ private final Logger logger = Logger.getLogger(DetailExternalRelatedContent.clas
  */
 @SuppressWarnings("deprecation")
 public Document getContentDetail(final RequestContext context) {
-    CommonUtils commonUtils = new CommonUtils();
+    CommonUtils commonUtils = new CommonUtils(context);
+    PropertiesFileReader propertyFileReader = new PropertiesFileReader(
+            context, "solrconfig.properties");
+    Properties properties = propertyFileReader.getPropertiesFile();
     Document detailDocument = commonUtils.getDCRContent(context);
     if(detailDocument == null) {
         commonUtils.throwDCRNotFoundError(context, "No Content Record found");
     }
     detailDocument = commonUtils.getDCRContent(context);
+    String relDCRContent = properties.getProperty("relDCRContent");
+    String relDCRNode = properties.getProperty("relDCRNode");
+    logger.info("relDCRContent: " + relDCRContent);
+    logger.info("relDCRNode: " + relDCRNode);
+    if (detailDocument.selectSingleNode(relDCRContent) != null) {
+        Document detailDoc = DocumentHelper.createDocument();
+        Element docRoot = detailDoc.addElement("relatedDCRContent");
+        Element rootEle = null;
+        Document docDcr = null;
+        List<Node> nodes = detailDocument.selectNodes(relDCRContent);
+        for(Node node:nodes) {
+            String dcr = node.selectSingleNode(relDCRNode).getText();
+            if(dcr.startsWith("/")){
+                dcr = dcr.substring(1);
+            }
+            docDcr = commonUtils.readDCR(dcr);
+            rootEle = docDcr.getRootElement();
+            docRoot.add(rootEle);
+        }
+        detailDocument.getRootElement().add(
+                detailDoc.getRootElement());
+    }
     if(!context.getParameterString("detail-page","true").equals("true")){
         logger.info("The Component is not present on a detail page. Skipping the Dynamic metadata values.");
         return detailDocument;
     }
     commonUtils.generateSEOMetaTagsForDynamicContent(detailDocument, context);
-    return getRelatedContent(context, detailDocument);
+    return getRelatedContent(context, detailDocument, properties);
 }
 
     /** This method will be called from Component
      * External for related solr Content fetching.
      * @param context The parameter context object passed from Component.
      * @param detailDocument The final content document to be returned.
+     * @param properties solr properties file.
      *
      * @return Document return type.
      */
     public Document getRelatedContent(
             final RequestContext context,
-            final Document detailDocument) {
+            final Document detailDocument,
+            final Properties properties) {
         CommonUtils commonUtils = new CommonUtils();
-        PropertiesFileReader propertyFileReader = new PropertiesFileReader(
-                context, "solrconfig.properties");
-        Properties properties = propertyFileReader.getPropertiesFile();
         String fieldQuery = "";
         String solrHost = "";
         if (context.isRuntime()) {
