@@ -294,7 +294,7 @@ public class CommonUtils {
         if (url.equals("")){
             return prettyURL;
         }
-        prettyURL = url.replaceAll("/sites|/portal-|-details.page","/");
+        prettyURL = url.replaceAll("/sites|/portal-|-details.page|home.page","/");
         prettyURL = prettyURL.replaceFirst("/en/|/ar/","/"+locale+"/");
         if(!dcrName.equals("")){
             prettyURL = prettyURL + dcrName;
