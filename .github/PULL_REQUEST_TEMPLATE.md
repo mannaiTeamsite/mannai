@@ -1,4 +1,4 @@
-###If the Pull Request is intended for Production deployment, please create using [this link](https://github.com/hayagreeva/Hukoomi-Revamp/compare/production...staging?expand=1&template=production_deployment.md&title=Production+Deployment+YYYY-MM-DD&labels=Production+Deployment&assignees=j-saraiya)
+###If the Pull Request is intended for Production deployment, please create using [this link](https://github.com/hayagreeva/Hukoomi-Revamp/compare/production...staging?expand=1&template=production_deployment.md&title=Production+Deployment+YYYY-MM-DD&labels=Production+Deployment&assignees=j-saraiya,indyabhushan)
 
 
 **Which issue/bug/feature does this pull request relate to?**

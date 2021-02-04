@@ -21,4 +21,4 @@ _If there are tasks required after deployment, list those here_
 - [ ] #
 - [ ] #
 
-###To create a new Production Deployment PR use [this link](https://github.com/hayagreeva/Hukoomi-Revamp/compare/production...staging?expand=1&template=production_deployment.md&title=Production+Deployment+YYYY-MM-DD&labels=Production+Deployment&assignees=j-saraiya)
+###To create a new Production Deployment PR use [this link](https://github.com/hayagreeva/Hukoomi-Revamp/compare/production...staging?expand=1&template=production_deployment.md&title=Production+Deployment+YYYY-MM-DD&labels=Production+Deployment&assignees=j-saraiya,indyabhushan)
