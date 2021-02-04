@@ -12,7 +12,7 @@
 
 **Screenshots of changes (if applicable)**
 
-## Development Test Steps (If the PR is for Staging)**
+## Development Test Steps (If the PR is for Staging)
 
 {{Screenshots of changes, written test instructions, or link to testing instructions in the original issue}}
 
