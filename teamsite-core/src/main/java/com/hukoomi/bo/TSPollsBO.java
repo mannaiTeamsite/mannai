@@ -9,7 +9,7 @@ package com.hukoomi.bo;
  * @author Vijayaragavamoorthy
  *
  */
-public class PollsBO {
+public class TSPollsBO {
     /**
      * Poll action performed by the user
      */

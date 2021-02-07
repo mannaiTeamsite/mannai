@@ -6,7 +6,7 @@ package com.hukoomi.bo;
  * @author Vijayaragavamoorthy
  *
  */
-public class SurveyBO {
+public class TSSurveyBO {
     /**
      * Survey action performed by the user
      */

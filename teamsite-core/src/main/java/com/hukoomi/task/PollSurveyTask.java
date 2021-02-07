@@ -15,8 +15,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 
-import com.hukoomi.bo.PollsBO;
-import com.hukoomi.bo.SurveyBO;
+import com.hukoomi.bo.TSPollsBO;
+import com.hukoomi.bo.TSSurveyBO;
 import com.hukoomi.utils.PostgreTSConnection;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
@@ -407,7 +407,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
 
             connection = postgre.getConnection();
-            PollsBO pollsBO = new PollsBO();
+            TSPollsBO pollsBO = new TSPollsBO();
             pollsBO.setPollId(getDCRValue(document, ID_PATH));
             pollsBO.setLang(getDCRValue(document, LANG_PATH));
             pollsBO.setQuestion(getDCRValue(document, QUESTION_PATH));
@@ -467,7 +467,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int insertPollMasterData(PollsBO pollsBO, Connection connection)
+    public int insertPollMasterData(TSPollsBO pollsBO, Connection connection)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -511,7 +511,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful insert else false for failure.
      * @throws SQLException
      */
-    public boolean insertPollOptionsData(PollsBO pollsBO,
+    public boolean insertPollOptionsData(TSPollsBO pollsBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean isPollOptionInserted = false;
@@ -578,7 +578,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             connection = postgre.getConnection();
             logger.info("updatePollData Connection : " + connection);
 
-            PollsBO pollsBO = new PollsBO();
+            TSPollsBO pollsBO = new TSPollsBO();
             pollsBO.setPollId(getDCRValue(document, ID_PATH));
             pollsBO.setLang(getDCRValue(document, LANG_PATH));
             pollsBO.setQuestion(getDCRValue(document, QUESTION_PATH));
@@ -637,7 +637,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int updatePollMasterData(PollsBO pollsBO, Connection connection)
+    public int updatePollMasterData(TSPollsBO pollsBO, Connection connection)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -681,7 +681,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful update else false for failure.
      * @throws SQLException
      */
-    public boolean updatePollOptionsData(PollsBO pollsBO,
+    public boolean updatePollOptionsData(TSPollsBO pollsBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean isPollOptionUpdated = false;
@@ -788,7 +788,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
             connection = postgre.getConnection();
 
-            SurveyBO surveyBO = new SurveyBO();
+            TSSurveyBO surveyBO = new TSSurveyBO();
             surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
             surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
@@ -846,7 +846,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int insertSurveyMasterData(SurveyBO surveyBO,
+    public int insertSurveyMasterData(TSSurveyBO surveyBO,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -893,7 +893,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful insert else false for failure.
      * @throws SQLException
      */
-    public boolean insertSurveyQuestionData(SurveyBO surveyBO,
+    public boolean insertSurveyQuestionData(TSSurveyBO surveyBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
@@ -984,7 +984,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful insert else false for failure.
      * @throws SQLException
      */
-    public boolean insertSurveyOptionData(SurveyBO surveyBO, Node node,
+    public boolean insertSurveyOptionData(TSSurveyBO surveyBO, Node node,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
@@ -1059,7 +1059,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
             connection = postgre.getConnection();
 
-            SurveyBO surveyBO = new SurveyBO();
+            TSSurveyBO surveyBO = new TSSurveyBO();
             surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
             surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
@@ -1122,7 +1122,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int updateSurveyMasterData(SurveyBO surveyBO,
+    public int updateSurveyMasterData(TSSurveyBO surveyBO,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -1169,7 +1169,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful update else false for failure.
      * @throws SQLException
      */
-    public boolean updateSurveyQuestionData(SurveyBO surveyBO,
+    public boolean updateSurveyQuestionData(TSSurveyBO surveyBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
@@ -1250,7 +1250,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful update else false for failure.
      * @throws SQLException
      */
-    public boolean updateSurveyOptionData(SurveyBO surveyBO, Node node,
+    public boolean updateSurveyOptionData(TSSurveyBO surveyBO, Node node,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
