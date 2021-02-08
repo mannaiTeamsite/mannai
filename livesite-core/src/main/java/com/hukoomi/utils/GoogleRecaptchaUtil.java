@@ -26,7 +26,7 @@ public class GoogleRecaptchaUtil {
     /**
      * Properties object that holds the property values
      */
-    private static Properties properties = null;
+    private Properties properties = null;
 
     /**
      * This method validates Google reCAPTCHA.
@@ -40,7 +40,7 @@ public class GoogleRecaptchaUtil {
         logger.debug("GoogleRecaptchaUtil : validateCaptch");
         boolean isCaptchaValid = false;
         try {
-            GoogleRecaptchaUtil.loadProperties(context);
+            loadProperties(context);
             String params = "secret=" + properties.getProperty("secretKey") + "&response="
                     + captchaResponse;
 
@@ -82,11 +82,9 @@ public class GoogleRecaptchaUtil {
      * @param context The parameter context object passed from Component.
      * 
      */
-    private static void loadProperties(final RequestContext context) {
-        if(properties == null) {
-            PropertiesFileReader propertyFileReader = new PropertiesFileReader(
-                    context, "captchaconfig.properties");
-            GoogleRecaptchaUtil.properties = propertyFileReader.getPropertiesFile();
-        }
+    private void loadProperties(final RequestContext context) {
+        PropertiesFileReader propertyFileReader = new PropertiesFileReader(
+                context, "captchaconfig.properties");
+        properties = propertyFileReader.getPropertiesFile();
     }
 }

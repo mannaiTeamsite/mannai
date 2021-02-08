@@ -43,7 +43,7 @@ public class PostgreTSConnection {
      * Properties object variable to load the 
      * properties from property file configuration. 
      */
-    private static Properties properties = null;
+    private Properties properties = null;
 
     /**
      * This constructor will be called for creating database connection.
@@ -55,7 +55,7 @@ public class PostgreTSConnection {
      */
     public PostgreTSConnection(final CSClient client, final CSExternalTask task, final String propertyFileName) {
         logger.info("Postgre : Loading Properties....");
-        PostgreTSConnection.loadProperties(client, task, propertyFileName);
+        loadProperties(client, task, propertyFileName);
         logger.info("Postgre : Properties Loaded");
         connectionString = getConnectionString();
     }
@@ -68,12 +68,10 @@ public class PostgreTSConnection {
      * @param propertyFileName Name of the property file.
      * 
      */
-    private static void loadProperties(final CSClient client, 
+    private void loadProperties(final CSClient client, 
             final CSExternalTask task, final String propertyFileName) {
-        if(properties == null) {
-            TSPropertiesFileReader propFileReader = new TSPropertiesFileReader(client, task, propertyFileName);
-            PostgreTSConnection.properties = propFileReader.getPropertiesFile();
-        }
+        TSPropertiesFileReader propFileReader = new TSPropertiesFileReader(client, task, propertyFileName);
+        properties = propFileReader.getPropertiesFile();
     }
 
     /**

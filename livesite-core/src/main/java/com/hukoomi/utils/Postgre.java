@@ -43,7 +43,7 @@ public class Postgre {
      * Properties object variable to load the 
      * properties from property file configuration. 
      */
-    private static Properties properties = null;
+    private Properties properties = null;
 
     /**
      * This constructor will be called for creating database connection.
@@ -53,7 +53,7 @@ public class Postgre {
      */
     public Postgre(RequestContext context) {
         logger.info("Postgre : Loading Properties....");
-        Postgre.loadProperties(context);
+        loadProperties(context);
         logger.info("Postgre : Properties Loaded");
         connectionString = getConnectionString();
     }
@@ -64,12 +64,10 @@ public class Postgre {
      * @param context Request context object.
      * 
      */
-    private static void loadProperties(final RequestContext context) {
-        if(properties == null) {
-            PropertiesFileReader propertyFileReader = new PropertiesFileReader(
-                    context, "dbconfig.properties");
-            Postgre.properties = propertyFileReader.getPropertiesFile();
-        }
+    private void loadProperties(final RequestContext context) {
+        PropertiesFileReader propertyFileReader = new PropertiesFileReader(
+                context, "dbconfig.properties");
+        properties = propertyFileReader.getPropertiesFile();
     }
     
     /**
