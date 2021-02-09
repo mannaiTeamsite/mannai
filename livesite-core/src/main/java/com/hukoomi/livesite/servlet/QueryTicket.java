@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.hukoomi.utils.ValidationUtils;
 import com.hukoomi.utils.XssUtils;
 
 public class QueryTicket extends HttpServlet {
@@ -29,11 +29,12 @@ public class QueryTicket extends HttpServlet {
      * @see HttpServlet#doPost(HttpServletRequest request,
      *      HttpServletResponse response)
      */
+    @Override
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
         LOGGER.info("Customer Service Query Ticket: Start");
         StringBuilder resp = null;
-        JSONObject data = null;
+        JSONObject data = new JSONObject();
         XssUtils xssUtils = new XssUtils();
         try {
 
@@ -45,7 +46,6 @@ public class QueryTicket extends HttpServlet {
             String ticketNo = xssUtils.stripXSS(data.getString("ticketNumber"));
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            ValidationUtils util = new ValidationUtils();
             if (ticketNo.length() <= 20) {
                 String httpServletAddress = request.getLocalAddr();
                 URL url = null;
@@ -63,33 +63,29 @@ public class QueryTicket extends HttpServlet {
                 while ((responseLine = br.readLine()) != null) {
                     resp.append(responseLine.trim());
                 }
+                response.getWriter().write(resp.toString());
             } else {
                 data.put("success", "false");
                 data.put("errorMessage", "validationFailed");
                 response.getWriter().write(data.toString());
             }
+            LOGGER.info("End of Query Ticket");
 
-        } catch (IOException e) {
+        } catch (JSONException | IOException  e) {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             try {
                 data.put("success", "false");
                 data.put("errorMessage", e.getMessage());
                 response.getWriter().write(data.toString());
-            } catch (IOException e1) {
+            } catch (NullPointerException |JSONException | IOException exp) {
                 LOGGER.error("Customer Service Query Ticket: Exception ",
-                        e);
+                        exp);
             }
 
-        } finally {
-            LOGGER.info("End of Query Ticket");
         }
 
-        try {
-            response.getWriter().write(resp.toString());
-        } catch (IOException e) {
-            LOGGER.error("Customer Service Query Ticket: Exception ", e);
-        }
+
     }
 
 }

@@ -10,15 +10,24 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import javax.servlet.ServletException;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.ValidationUtils;
@@ -30,21 +39,65 @@ public class SubmitTicket extends HttpServlet {
     /** logger.debug object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(SubmitTicket.class);
-    /**
-     * Properties object that holds the property values
-     */
-    private static Properties properties = null;
+    /** attachment key. */
+    private static final String ATTACHMENT_KEY = "attachment";
+    /** Content type */
+    private static final String CONTENTTYPE_JSON = "application/json";
+    /** success of hpsm */
+    private static final String SUCCESS_KEY = "success";
+    /** failure of hpsm */
+    private static final String SUCCESS_FALSE_VALUE = "false";
+    /** errorMessage key */
+    private static final String ERRORMESSAGE_KEY = "errorMessage";
+    /** status for validationFailed */
+    private static final String VALIDATION_FAILED_MSG = "validationFailed";
+    /** passport key */
+    private static final String PASSPORT_KEY = "passport";
+    /** nationality key */
+    private static final String NATIONALITY_KEY = "nationality";
+    /** fullName key */
+    private static final String FULLNAME_KEY = "fullName";
+    /** companyName key */
+    private static final String COMPANYNAME_KEY = "companyName";
+    /** phoneNo key */
+    private static final String PHONENUMBER_KEY = "phoneNo";
+    /** emailId key */
+    private static final String EMAIL_KEY = "emailId";
+    /** eservice key */
+    private static final String ESERVICE_KEY = "eservice";
+    /** service key */
+    private static final String SERVICE_KEY = "service";
+    /** eServiceName key */
+    private static final String ESERVICENAME_KEY = "eServiceName";
+    /** serviceName key */
+    private static final String SERVICENAME_KEY = "serviceName";
+    /** subject key */
+    private static final String SUBJECT_KEY = "subject";
+    /** comments key */
+    private static final String COMMENTS_KEY = "comments";
+    /** fileSize key */
+    private static final String FILESIZE_KEY = "fileSize";
+    /** mail properties key. */
+    private static final String CONTACT_FROM_MAIL = "sentFrom";
+    /** mail properties key. */
+    private static final String CONTACT_MAIL_HOST = "host";
+    /** mail properties key. */
+    private static final String CONTACT_MAIL_PORT = "port";
+    /** mail properties key. */
+    private static final String STARTTLS_ENABLE = "false";
+    /** character set Constant */
+    private static final String CHAR_SET = "UTF-8";
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request,
      *      HttpServletResponse response)
      */
+    @Override
     protected void doPost(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException {
+            HttpServletResponse response) {
         LOGGER.info("Customer Service Submit Ticket: Start");
-        StringBuilder resp = null;
         boolean verify = true;
-        JSONObject data = null;
+        JSONObject data = new JSONObject();
         try {
             BufferedReader br = new BufferedReader(
                     new InputStreamReader(request.getInputStream()));
@@ -52,68 +105,246 @@ public class SubmitTicket extends HttpServlet {
             json = br.readLine();
             String httpServletAddress = request.getLocalAddr();
             data = new JSONObject(json);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            response.setContentType(CONTENTTYPE_JSON);
+            response.setCharacterEncoding(CHAR_SET);
             JSONObject validateFields = validateFields(data);
             if (validateFields != null) {
+
                 String gRecaptchaResponse =
-                        data.getString("recaptchaResponseField");
+                        validateFields.getString("recaptchaResponseField");
                 verify = validateCaptcha(gRecaptchaResponse);
                 LOGGER.debug(" verifycaptcha::" + verify);
                 if (verify) {
-                    URL url = null;
-                    url = new URL("http://" + httpServletAddress + ":"
-                            + "8082/api/contact/center/ticket");
-                    LOGGER.debug(" url::" + url);
-                    HttpURLConnection con =
-                            (HttpURLConnection) url.openConnection();
-                    con.setRequestMethod("POST");
-                    con.setDoOutput(true);
-                    con.setRequestProperty("Content-Type",
-                            "application/json");
-                    con.setRequestProperty("Accept", "application/json");
-                    OutputStream os = con.getOutputStream();
-                    byte[] input = validateFields.toString()
-                            .getBytes(StandardCharsets.UTF_8);
-                    os.write(input, 0, input.length);
+                    String resp = createTicket(validateFields.toString(),
+                            httpServletAddress).toString();
+                    JSONObject respJson = new JSONObject(resp);
+                    String ticketNumber =
+                            respJson.getString("ticketNumber");
+                    String email = respJson.getString(EMAIL_KEY);
+                    String lang = validateFields.getString("lang");
+                    sentMailNotification(ticketNumber, email, lang);
+                    response.getWriter().write(resp);
 
-                    BufferedReader respbr = new BufferedReader(
-                            new InputStreamReader(con.getInputStream(),
-                                    StandardCharsets.UTF_8));
-                    resp = new StringBuilder();
-                    String responseLine = null;
-                    while ((responseLine = respbr.readLine()) != null) {
-                        resp.append(responseLine.trim());
-                    }
                 } else {
-                    validateFields.put("success", "false");
-                    validateFields.put("errorMessage", "InvalidRecapcha");
+                    validateFields.put(SUCCESS_KEY, SUCCESS_FALSE_VALUE);
+                    validateFields.put(ERRORMESSAGE_KEY,
+                            "InvalidRecapcha");
                     response.getWriter().write(validateFields.toString());
                 }
             } else {
-                data.put("success", "false");
-                data.put("errorMessage", "validationFailed");
+                data.put(SUCCESS_KEY, SUCCESS_FALSE_VALUE);
+                data.put(ERRORMESSAGE_KEY, VALIDATION_FAILED_MSG);
                 response.getWriter().write(data.toString());
             }
-
-        } catch (IOException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            try {
-                data.put("success", "false");
-                data.put("errorMessage", e.getMessage());
-                response.getWriter().write(data.toString());
-            } catch (IOException e1) {
-                LOGGER.error(" Exception Submit Service call ", e);
-            }
-        } finally {
             LOGGER.info("End of Submit Ticket");
+        } catch (JSONException | IOException e) {
+            response.setContentType(CONTENTTYPE_JSON);
+            response.setCharacterEncoding(CHAR_SET);
+            try {
+                data.put(SUCCESS_KEY, SUCCESS_FALSE_VALUE);
+                data.put(ERRORMESSAGE_KEY, e.getMessage());
+                response.getWriter().write(data.toString());
+            } catch (NullPointerException | JSONException
+                | IOException ex) {
+                LOGGER.error(" Exception Submit Service call ", ex);
+            }
         }
+
+    }
+
+    private void sentMailNotification(String ticketNumber, String email,
+            String lang) {
+        if (ticketNumber != null && !ticketNumber.equals("")) {
+            MimeMessage mailMessage;
+            LOGGER.debug(" lang::" + lang);
+            try {
+                mailMessage = createMailMessage(ticketNumber, email, lang);
+                Transport.send(mailMessage);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    private MimeMessage createMailMessage(String ticketNumber,
+            String email, String lang) throws MessagingException {
+        LOGGER.info("createMailMessage: Enter");
+
+        String strTicketNumber = "<ticketnumber>";
+        Properties propertiesFile =
+                loadProperties("customerserviceconfig.properties");
+        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
+        String to = email;
+        LOGGER.debug("sent To :" + to);
+        String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
+        LOGGER.debug("relay IP :" + host);
+        String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
+        Properties props = new Properties();
+        String subject = "";
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.starttls.enable", STARTTLS_ENABLE);
+        props.put("mail.smtp.port", port);
+        Session session = Session.getDefaultInstance(props, null);
+        session.setDebug(true);
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(from));
+        msg.setRecipient(Message.RecipientType.TO,
+                new InternetAddress(to));
+        subject = propertiesFile.getProperty("messageSubject_" + lang);
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(propertiesFile
+                .getProperty("successMessageGreeting_" + lang));
+        sb.append("\n");
+        sb.append(propertiesFile.getProperty("successMessageBody_" + lang)
+                .replaceAll("[$]", "\n"));
+        sb.append("\n");
+        sb.append(propertiesFile
+                .getProperty("successMessageTicketNumber_" + lang)
+                .replace(strTicketNumber, ticketNumber));
+        sb.append("\n");
+        sb.append(propertiesFile
+                .getProperty("successMessageSignature_" + lang)
+                .replaceAll("[$]", "\n"));
+        if (lang.equals("ar")) {
+            msg.setSubject(subject.replace(strTicketNumber, ticketNumber),
+                    CHAR_SET);
+            msg.setText(sb.toString(), CHAR_SET);
+        } else {
+            msg.setSubject(subject.replace(strTicketNumber, ticketNumber));
+            msg.setText(sb.toString());
+        }
+
+        LOGGER.debug("msg:" + sb.toString());
+        return msg;
+    }
+
+    public StringBuilder createTicket(String json,
+            String httpServletAddress) throws IOException {
+        StringBuilder resp = new StringBuilder();
+        String responseLine = null;
+        URL url = null;
+        url = new URL("http://" + httpServletAddress + ":"
+                + "8082/api/contact/center/ticket");
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
         try {
-            response.getWriter().write(resp.toString());
-        } catch (IOException e) {
-            LOGGER.error("Customer Service Query Ticket: Exception ", e);
+
+            LOGGER.debug(" url::" + url);
+            con.setRequestMethod("POST");
+            con.setDoOutput(true);
+            con.setRequestProperty("Content-Type", CONTENTTYPE_JSON);
+            con.setRequestProperty("Accept", CONTENTTYPE_JSON);
+            OutputStream os = con.getOutputStream();
+            byte[] input = json.getBytes(StandardCharsets.UTF_8);
+            os.write(input, 0, input.length);
+
+            BufferedReader respbr =
+                    new BufferedReader(new InputStreamReader(
+                            con.getInputStream(), StandardCharsets.UTF_8));
+            resp = new StringBuilder();
+
+            while ((responseLine = respbr.readLine()) != null) {
+                resp.append(responseLine.trim());
+            }
+        } catch (NullPointerException | IOException e) {
+            BufferedReader resper =
+                    new BufferedReader(new InputStreamReader(
+                            con.getInputStream(), StandardCharsets.UTF_8));
+            while ((responseLine = resper.readLine()) != null) {
+                resp.append(responseLine.trim());
+            }
         }
+        return resp;
+
+    }
+
+    public JSONObject stripXSS(JSONObject data) {
+        XssUtils xssUtils = new XssUtils();
+        String qid = xssUtils.stripXSS(data.getString("qid"));
+        String eid = xssUtils.stripXSS(data.getString("eid"));
+        String passport = xssUtils.stripXSS(data.getString(PASSPORT_KEY));
+        String nationality =
+                xssUtils.stripXSS(data.getString(NATIONALITY_KEY));
+        String fullName = xssUtils.stripXSS(data.getString(FULLNAME_KEY));
+        String companyName =
+                xssUtils.stripXSS(data.getString(COMPANYNAME_KEY));
+        String phoneNo =
+                xssUtils.stripXSS(data.getString(PHONENUMBER_KEY));
+        String emailId = xssUtils.stripXSS(data.getString(EMAIL_KEY));
+        String eservice = xssUtils.stripXSS(data.getString(ESERVICE_KEY));
+        String service = xssUtils.stripXSS(data.getString(SERVICE_KEY));
+        String eServiceName =
+                xssUtils.stripXSS(data.getString(ESERVICENAME_KEY));
+        String serviceName =
+                xssUtils.stripXSS(data.getString(SERVICENAME_KEY));
+        String subject = xssUtils.stripXSS(data.getString(SUBJECT_KEY));
+        String comments = xssUtils.stripXSS(data.getString(COMMENTS_KEY));
+        // update
+        data.put("qid", qid);
+        data.put("eid", eid);
+        data.put(PASSPORT_KEY, passport);
+        data.put(NATIONALITY_KEY, nationality);
+        data.put(FULLNAME_KEY, fullName);
+        data.put(COMPANYNAME_KEY, companyName);
+        data.put(PHONENUMBER_KEY, phoneNo);
+        data.put(EMAIL_KEY, emailId);
+        data.put(ESERVICE_KEY, eservice);
+        data.put(SERVICE_KEY, service);
+        data.put(ESERVICENAME_KEY, eServiceName);
+        data.put(SERVICENAME_KEY, serviceName);
+        data.put(SUBJECT_KEY, subject);
+        data.put(COMMENTS_KEY, comments);
+        return data;
+    }
+
+    private boolean validateIdType(JSONObject data) {
+
+        String idType = data.getString("idType");
+        String qid = data.getString("qid");
+        String eid = data.getString("eid");
+        String passport = data.getString(PASSPORT_KEY);
+        String nationality = data.getString(NATIONALITY_KEY);
+
+        if (idType.equals("QID")) {
+            return validateQIDType(qid, eid);
+        } else if (idType.equals("Passport")) {
+            return validatePassportType(passport, nationality);
+        }
+        return false;
+
+    }
+
+    private boolean validateQIDType(String qid, String eid) {
+        ValidationUtils util = new ValidationUtils();
+        LOGGER.info("Validate QID : ");
+        if (qid == null || "".equals(qid.trim())
+                || !util.validateNumeric(qid)
+                || qid.trim().length() != 11) {
+            return false;
+        }
+        LOGGER.info("Validate eid : ");
+        if (eid != null && !"".equals(eid.trim())
+                && (!util.validateNumeric(eid.trim())
+                        || eid.trim().length() != 8)) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean validatePassportType(String passport,
+            String nationality) {
+        LOGGER.info("Validate passport : ");
+        if (passport == null || "".equals(passport.trim())
+                || passport.trim().length() > 8) {
+            return false;
+        }
+        LOGGER.info("Validate nationality : ");
+        if (nationality != null && !"".equals(nationality.trim())
+                && nationality.trim().length() > 50) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -123,139 +354,257 @@ public class SubmitTicket extends HttpServlet {
      * @return
      */
     private JSONObject validateFields(JSONObject data) {
+        data = stripXSS(data);
+        Iterator<String> keys = data.keys();
+        while (keys.hasNext()) {
+            String key = keys.next();
+            String value = data.getString(key);
+            boolean isValid = false;
+            switch (key) {
+            case "idType":
+                isValid = validateIdType(data);
+                break;
+            case FULLNAME_KEY:
+                isValid = validateName(value);
+                break;
+            case COMPANYNAME_KEY:
+                isValid = validateCompanyName(value);
+                break;
+            case PHONENUMBER_KEY:
+                isValid = validatePhoneNumber(value);
+                break;
+            case EMAIL_KEY:
+                isValid = validateMailID(value);
+                break;
+            case ESERVICE_KEY:
+                isValid = validateEservice(value);
+                break;
+            case SERVICE_KEY:
+                isValid = validateService(value);
+                break;
+            case ESERVICENAME_KEY:
+                isValid = validateEserviceName(value);
+                break;
+            case SERVICENAME_KEY:
+                isValid = validateServiceName(value);
+                break;
+            case SUBJECT_KEY:
+                isValid = validateSubject(value);
+                break;
+            case COMMENTS_KEY:
+                isValid = validateComments(value);
+                break;
+            case ATTACHMENT_KEY:
+                JSONObject attachment = data.getJSONObject(ATTACHMENT_KEY);
+                isValid = validateAttachment(data);
+                double fileSize = attachment.getDouble(FILESIZE_KEY);
+                double size = (1 * fileSize);
+                double kbFileSize = size / 1024.0;
+                attachment.put(FILESIZE_KEY, kbFileSize + " kb");
+                data.put(ATTACHMENT_KEY, attachment);
+                break;
+            default:
+                isValid = true;
+            }
+            if (!isValid) {
+                return null;
+            }
+        }
+        return data;
+
+    }
+
+    /**
+     * validates comments
+     *
+     * @param comments
+     * @return
+     */
+    private boolean validateComments(String comments) {
+        LOGGER.info("Validate comments : ");
+        return !(comments != null && !"".equals(comments.trim())
+                && comments.trim().length() > 2500);
+    }
+
+    /**
+     * validates subject of customer service
+     *
+     * @param subject
+     * @return
+     */
+    private boolean validateSubject(String subject) {
+        LOGGER.info("Validate subject : ");
+        return !(subject == null || "".equals(subject.trim())
+                || subject.trim().length() > 30);
+    }
+
+    /**
+     * validates service name
+     *
+     * @param serviceName
+     * @return
+     */
+    private boolean validateServiceName(String serviceName) {
+        LOGGER.info("Validate serviceName : ");
+        return !(serviceName == null || "".equals(serviceName.trim()));
+    }
+
+    /**
+     * validates eservice name
+     *
+     * @param eServiceName
+     * @return
+     */
+    private boolean validateEserviceName(String eServiceName) {
+        LOGGER.info("Validate eServiceName : ");
+        return !(eServiceName == null || "".equals(eServiceName.trim()));
+    }
+
+    /**
+     * validates service
+     *
+     * @param service
+     * @return
+     */
+    private boolean validateService(String service) {
+        LOGGER.info("Validate service :");
         ValidationUtils util = new ValidationUtils();
-        String idType = data.getString("idType");
-        XssUtils xssUtils = new XssUtils();
-        if (idType.equals("QID") || idType.equals("Passport")) {
-            String qid = xssUtils.stripXSS(data.getString("qid"));
-            String eid = xssUtils.stripXSS(data.getString("eid"));
-            String passport =
-                    xssUtils.stripXSS(data.getString("passport"));
-            String nationality =
-                    xssUtils.stripXSS(data.getString("nationality"));
-            String fullName =
-                    xssUtils.stripXSS(data.getString("fullName"));
-            String companyName =
-                    xssUtils.stripXSS(data.getString("companyName"));
-            String phoneNo = xssUtils.stripXSS(data.getString("phoneNo"));
-            String emailId = xssUtils.stripXSS(data.getString("emailId"));
-            String eservice =
-                    xssUtils.stripXSS(data.getString("eservice"));
-            String service = xssUtils.stripXSS(data.getString("service"));
-            String eServiceName =
-                    xssUtils.stripXSS(data.getString("eServiceName"));
-            String serviceName =
-                    xssUtils.stripXSS(data.getString("serviceName"));
-            String subject = xssUtils.stripXSS(data.getString("subject"));
-            String comments =
-                    xssUtils.stripXSS(data.getString("comments"));
-            if (idType.equals("QID")) {
-                LOGGER.info("Validate QID : ");
-                if (qid == null || "".equals(qid.trim())) {
-                    return null;
-                } else if (!util.validateNumeric(qid)
-                        || qid.trim().length() != 11) {
-                    return null;
-                }
-                LOGGER.info("Validate eid : ");
-                if (eid != null && !"".equals(eid.trim())) {
-                    if (!util.validateNumeric(eid)
-                            || eid.trim().length() != 8) {
-                        return null;
-                    }
-                }
-            } else if (idType.equals("Passport")) {
-                LOGGER.info("Validate passport : ");
-                if (passport == null || "".equals(passport.trim())) {
-                    return null;
-                } else if (passport.trim().length() > 8) {
-                    return null;
-                }
-                LOGGER.info("Validate nationality : ");
-                if (nationality != null || !"".equals(passport.trim())) {
-                    if (nationality.length() > 50) {
-                        return null;
-                    }
-                }
-            }
-            LOGGER.info("Validate fullName : ");
-            if (fullName == null || "".equals(fullName.trim())) {
-                return null;
-            } else if (fullName.length() > 30) {
-                return null;
-            }
-            LOGGER.info("Validate phoneNo : ");
-            if (phoneNo == null || "".equals(phoneNo.trim())) {
-                return null;
-            } else if (!util.validateNumeric(phoneNo)
-                    || (phoneNo.trim().length() != 8)) {
-                return null;
-            }
-            LOGGER.info("Validate emailId : ");
-            if (emailId == null || "".equals(emailId.trim())) {
-                return null;
-            } else if (!util.validateEmailId(emailId)
-                    || emailId.trim().length() > 50) {
-                return null;
-            }
-            LOGGER.info("Validate eservice : ");
-            if (eservice == null || "".equals(eservice.trim())) {
-                return null;
-            } else if (!util.validateNumeric(eservice)) {
-                return null;
-            }
-            LOGGER.info("Validate service :");
-            if (service == null || "".equals(service.trim())) {
-                return null;
-            } else if (!util.validateNumeric(service)) {
-                return null;
-            }
-            LOGGER.info("Validate eServiceName : ");
-            if (eServiceName == null || "".equals(eServiceName.trim())) {
-                return null;
-            }
-            LOGGER.info("Validate serviceName : ");
-            if (serviceName == null || "".equals(serviceName.trim())) {
-                return null;
-            }
-            LOGGER.info("Validate companyName : ");
-            if (companyName != null && !"".equals(companyName.trim())) {
-                if (companyName.trim().length() > 30) {
-                    return null;
-                }
-            }
-            LOGGER.info("Validate subject : ");
-            if (subject == null || "".equals(subject.trim())) {
-                return null;
-            } else if (subject.trim().length() > 30) {
-                return null;
-            }
-            LOGGER.info("Validate comments : ");
-            if (comments != null || !"".equals(comments.trim())) {
-                if (comments.trim().length() > 2500) {
-                    return null;
-                }
-            }
-            // update
-            data.put("qid", qid);
-            data.put("eid", eid);
-            data.put("passport", passport);
-            data.put("nationality", nationality);
-            data.put("fullName", fullName);
-            data.put("companyName", companyName);
-            data.put("phoneNo", phoneNo);
-            data.put("emailId", emailId);
-            data.put("eservice", eservice);
-            data.put("service", service);
-            data.put("eServiceName", eServiceName);
-            data.put("serviceName", serviceName);
-            data.put("subject", subject);
-            data.put("comments", comments);
-            return data;
-        } else {
-            return null;
+        return !(service == null || "".equals(service.trim())
+                || !util.validateNumeric(service));
+    }
+
+    /**
+     * validates eservice
+     *
+     * @param eservice
+     * @return
+     */
+    private boolean validateEservice(String eservice) {
+        LOGGER.info("Validate eservice : ");
+        ValidationUtils util = new ValidationUtils();
+        return !(eservice == null || "".equals(eservice.trim())
+                || !util.validateNumeric(eservice));
+    }
+
+    /**
+     * validates email id
+     *
+     * @param emailId
+     * @return
+     */
+    private boolean validateMailID(String emailId) {
+        LOGGER.info("Validate emailId : ");
+        ValidationUtils util = new ValidationUtils();
+        return !(emailId == null || "".equals(emailId.trim())
+                || !util.validateEmailId(emailId)
+                || emailId.trim().length() > 50);
+    }
+
+    /**
+     * validates phone number
+     *
+     * @param phoneNo
+     * @return
+     */
+    private boolean validatePhoneNumber(String phoneNo) {
+        LOGGER.info("Validate phoneNo : ");
+        ValidationUtils util = new ValidationUtils();
+        return !(phoneNo == null || "".equals(phoneNo.trim())
+                || !util.validateNumeric(phoneNo)
+                || (phoneNo.trim().length() != 8));
+    }
+
+    /**
+     * this method validates company name
+     *
+     * @param companyName
+     * @return
+     */
+    private boolean validateCompanyName(String companyName) {
+        LOGGER.info("Validate companyName : ");
+        return !(companyName != null && !"".equals(companyName.trim())
+                && companyName.trim().length() > 30);
+    }
+
+    /**
+     * validates the fullname
+     *
+     * @param fullName
+     * @return
+     */
+    private boolean validateName(String fullName) {
+        LOGGER.info("Validate fullName : ");
+        return !(fullName == null || "".equals(fullName.trim())
+                || fullName.length() > 30);
+    }
+
+    /**
+     * this method validates the attachment
+     *
+     * @param data
+     * @return
+     */
+    public boolean validateAttachment(JSONObject data) {
+        boolean status = true;
+        JSONObject attachment = data.getJSONObject(ATTACHMENT_KEY);
+        String fileName = attachment.getString("fileName");
+        LOGGER.info("fileName:" + fileName);
+        String fileType = attachment.getString("fileType");
+        LOGGER.info("fileType:" + fileType);
+        double fileSize = attachment.getDouble(FILESIZE_KEY);
+        LOGGER.info("fileSize:" + fileSize);
+        // check file name contains only alphanumeric and space
+        String[] fileNameArray = fileName.split("\\.");
+        LOGGER.info("fileNameArray length:" + fileNameArray.length);
+        LOGGER.info("fileNameArray:" + fileNameArray);
+        if (fileNameArray.length != 2) {
+            LOGGER.info(
+                    "Customer Service Submit Ticket: Filename in valid");
+            return false;
+        }
+        String fileExtension = fileNameArray[1].toLowerCase();
+        LOGGER.info("fileExtension:" + fileExtension);
+        if (fileExtension.equals("")) {
+            LOGGER.info(
+                    "Customer Service Submit Ticket:no file extension");
+
+            return false;
+        }
+        if (!fileExtension.equals("jpg") && !fileExtension.equals("png")
+                && !fileExtension.equals("gif")
+                && !fileExtension.equals("jpeg")
+                && !fileExtension.equals("pdf")
+                && !fileExtension.equals("doc")
+                && !fileExtension.equals("docx")) {
+            LOGGER.info(
+                    "Customer Service Submit Ticket file:invalid file extension");
+            return false;
+        }
+        if (fileName.length() > 50) {
+            LOGGER.info(
+                    "Customer Service Submit Ticket regex:invalid file name length");
+            return false;
         }
 
+        Pattern p = Pattern.compile("^[ 0-9A-Za-z]+$");
+        Matcher m = p.matcher(fileNameArray[0]);
+        boolean b = m.matches();
+        if (!b) {
+            LOGGER.info(
+                    "Customer Service Submit Ticket regex:invalid file Name");
+            return false;
+        }
+        if (!validateFileSize(fileSize)) {
+            LOGGER.info(
+                    "Customer Service Submit Ticket regex:invalid file Size");
+            return false;
+        }
+
+        return status;
+    }
+
+    public boolean validateFileSize(double kbFileSize) {
+        return kbFileSize < 2000 * 1024;
     }
 
     /**
@@ -269,7 +618,8 @@ public class SubmitTicket extends HttpServlet {
         LOGGER.debug("GoogleRecaptchaUtil : validateCaptch");
         boolean isCaptchaValid = false;
         try {
-            properties = loadProperties("captchaconfig.properties");
+            Properties properties =
+                    loadProperties("captchaconfig.properties");
             String params = "secret=" + properties.getProperty("secretKey")
                     + "&response=" + captchaResponse;
 
@@ -296,8 +646,8 @@ public class SubmitTicket extends HttpServlet {
             LOGGER.debug("response : " + response.toString());
 
             JSONObject json = new JSONObject(response.toString());
-            LOGGER.debug("isValid : " + json.getBoolean("success"));
-            isCaptchaValid = json.getBoolean("success");
+            LOGGER.debug("isValid : " + json.getBoolean(SUCCESS_KEY));
+            isCaptchaValid = json.getBoolean(SUCCESS_KEY);
         } catch (Exception e) {
             LOGGER.error("Exception in GoogleRecaptchaUtil", e);
         }
@@ -323,10 +673,8 @@ public class SubmitTicket extends HttpServlet {
             try {
                 inputStream = new FileInputStream(
                         root + "/" + propertiesFileName);
-                if (inputStream != null) {
-                    propFile.load(inputStream);
-                    LOGGER.info("Properties File Loaded");
-                }
+                propFile.load(inputStream);
+                LOGGER.info("Properties File Loaded");
             } catch (MalformedURLException e) {
                 LOGGER.error(
                         "Malformed URL Exception while loading Properties file : ",
