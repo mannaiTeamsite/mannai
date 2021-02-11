@@ -506,11 +506,6 @@ public class SurveyBO {
         this.submitType = submitType;
     }
 
-    /**
-     * Overrides the toString method to print the business objects values
-     * 
-     * @return Returns string of all business objects values
-     */
     @Override
     public String toString() {
         return "SurveyBO [action=" + action + ", surveyId=" + surveyId
@@ -524,6 +519,8 @@ public class SurveyBO {
                 + description + ", questionId=" + questionId
                 + ", questionNo=" + questionNo + ", groupCategory="
                 + groupCategory + ", category=" + category
-                + ", solrCategory=" + solrCategory + "]";
+                + ", solrCategory=" + solrCategory + ", serviceEntities="
+                + serviceEntities + ", topics=" + topics + ", submitType="
+                + submitType + "]";
     }
 }
