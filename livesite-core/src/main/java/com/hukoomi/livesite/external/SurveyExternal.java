@@ -44,17 +44,17 @@ public class SurveyExternal {
     Validator validate = new Validator();
 
     /**
-     * Success Status variable.
+     * Success Status constant.
      */
     private static final String SUCCESS = "Success";
 
     /**
-     * Failed Status variable.
+     * Failed Status constant.
      */
     private static final String FAILED = "Failed";
 
     /**
-     * Failed Status variable.
+     * Submitted Status constant.
      */
     private static final String SUBMITTED = "Submitted";
 
