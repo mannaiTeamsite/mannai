@@ -29,7 +29,7 @@ import com.interwoven.cssdk.workflow.CSURLExternalTask;
  * PollSurveyTask is the workflow task class for polls and survey master data
  * insert URL task. It contains methods to insert / update polls and survey
  * master date to its corresponding tables.
- * 
+ *
  * @author Vijayaragavamoorthy
  */
 public class PollSurveyTask implements CSURLExternalTask {
@@ -168,7 +168,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Overridden method from CSSDK
-     * 
+     *
      * @param client CSClient object
      * @param task   CSExternalTask object
      * @param params Hashtable object
@@ -204,6 +204,10 @@ public class PollSurveyTask implements CSURLExternalTask {
                             .equalsIgnoreCase(dcrType)) {
                         statusMap = (HashMap<String, String>) processSurveyDCR(
                                 taskSimpleFile);
+                    } else if ("Content/Blog".equalsIgnoreCase(dcrType)) {
+                        BlogTask blog = new BlogTask();
+                        statusMap = (HashMap<String, String>) blog.processBlogDCR(
+                                taskSimpleFile,postgre);
                     } else {
                         logger.debug(
                                 "Master data insert skipped - Not Polls or Survey DCR");
@@ -225,7 +229,7 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * Method process the poll dcr from the workflow task and insert poll master
      * data
-     * 
+     *
      * @param taskSimpleFile Task file of CSSimpleFile object
      * @return Returns map contains the transition status and transition comment.
      */
@@ -269,7 +273,7 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * Method process the survey dcr from the workflow task and insert survey master
      * data
-     * 
+     *
      * @param taskSimpleFile Task file of CSSimpleFile object
      * @return Returns map contains the transition status and transition comment.
      */
@@ -316,7 +320,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method to get the task file as a xml document.
-     * 
+     *
      * @param taskSimpleFile Task file of CSSimpleFile object
      * @return Returns xml document of the task file.
      */
@@ -338,7 +342,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Checks for poll master data already exists
-     * 
+     *
      * @param document Document object of the polls DCR
      * @return Returns true if the poll data is already available in the database
      *         else returns false
@@ -384,7 +388,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method creates the business object, calls insert master and option data
-     * 
+     *
      * @param document Document object of the polls DCR
      * @return Returns status of the insert poll data as boolean
      */
@@ -446,7 +450,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method inserts the polls master data
-     * 
+     *
      * @param pollsBO    Polls business object
      * @param connection Database connection object
      * @return Returns number of rows affected by query execution
@@ -487,7 +491,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method inserts the polls option data
-     * 
+     *
      * @param pollsBO    Polls business object
      * @param document   Document object of the polls DCR
      * @param connection Database connection object
@@ -548,7 +552,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method creates the business object, calls update master and option data
-     * 
+     *
      * @param document Document object of the polls DCR
      * @return Returns status of the update poll data as boolean
      */
@@ -609,7 +613,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method updates the polls master data
-     * 
+     *
      * @param pollsBO    Polls business object
      * @param connection Database connection object
      * @return Returns number of rows affected by query execution
@@ -650,7 +654,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method updates the polls option data
-     * 
+     *
      * @param pollsBO    Polls business object
      * @param document   Document object of the polls DCR
      * @param connection Database connection object
@@ -705,7 +709,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Checks for survey master data already exists
-     * 
+     *
      * @param document Document object of the survey DCR
      * @return Returns true if the survey data is already available in the database
      *         else returns false
@@ -752,7 +756,7 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * Method creates the business object, calls insert master, question and option
      * data
-     * 
+     *
      * @param document Document object of the survey DCR
      * @return Returns status of the insert survey data as boolean
      */
@@ -812,7 +816,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method inserts the survey master data
-     * 
+     *
      * @param surveyBO   Survey business object
      * @param connection Database connection object
      * @return Returns number of rows affected by query execution
@@ -855,7 +859,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method inserts the survey question data
-     * 
+     *
      * @param surveyBO   Survey business object
      * @param document   Document object of the survey DCR
      * @param connection Database connection object
@@ -946,7 +950,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method inserts the survey option data
-     * 
+     *
      * @param surveyBO   Survey business object
      * @param node       Node object of the survey option node
      * @param connection Database connection object
@@ -1012,7 +1016,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method creates the business object, calls update master and option data
-     * 
+     *
      * @param document Document object of the survey DCR
      * @return Returns status of the update survey data as boolean
      */
@@ -1082,7 +1086,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method updates the survey master data
-     * 
+     *
      * @param surveyBO   Survey business object
      * @param connection Database connection object
      * @return Returns number of rows affected by query execution
@@ -1125,7 +1129,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method updates the survey question data
-     * 
+     *
      * @param surveyBO   Survey business object
      * @param document   Document object of the survey DCR
      * @param connection Database connection object
@@ -1206,7 +1210,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method updates the survey option data
-     * 
+     *
      * @param surveyBO   Survey business object
      * @param node       Node object of the survey option node
      * @param connection Database connection object
@@ -1272,7 +1276,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
     /**
      * Method to get the DCR value for the input node name
-     * 
+     *
      * @param document Document object of the DCR
      * @param nodeName Name of the value node
      * @return
@@ -1287,7 +1291,7 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * Method to get only the date object without time for the input date time
      * string.
-     * 
+     *
      * @param inputDate Input date string.
      * @return Returns Date object created from the input date string.
      */
@@ -1302,7 +1306,7 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * Method to get the next sequence value from the database from the input
      * sequence name
-     * 
+     *
      * @param sequenceName Name of the database sequence to get the next value
      * @param connection   Database connection object
      * @return Returns next sequence value
