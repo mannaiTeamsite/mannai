@@ -198,11 +198,6 @@ public class SubmitTicket extends HttpServlet {
                 .getProperty("successMessageGreeting_" + lang));
         sb.append(
                 propertiesFile.getProperty("successMessageBody_" + lang));
-        sb.append(propertiesFile
-                .getProperty("successMessageTicketNumber_" + lang)
-                .replace(strTicketNumber, ticketNumber));
-        sb.append(propertiesFile
-                .getProperty("successMessageSignature_" + lang));
         if (lang.equals("ar")) {
             msg.setSubject(subject.replace(strTicketNumber, ticketNumber),
                     CHAR_SET);
