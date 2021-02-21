@@ -195,7 +195,7 @@ public class SubmitTicket extends HttpServlet {
         subject = propertiesFile.getProperty("messageSubject_" + lang);
         StringBuilder sb = new StringBuilder();
         sb.append(propertiesFile
-                .getProperty("successMessage_" + lang));
+                .getProperty("successMessageGreeting_" + lang));
         sb.append(
                 propertiesFile.getProperty("successMessageBody_" + lang));
         if (lang.equals("ar")) {
