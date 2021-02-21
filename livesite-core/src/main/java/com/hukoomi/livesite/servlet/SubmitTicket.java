@@ -194,17 +194,15 @@ public class SubmitTicket extends HttpServlet {
                 new InternetAddress(to));
         subject = propertiesFile.getProperty("messageSubject_" + lang);
         StringBuilder sb = new StringBuilder();
-        sb.append(propertiesFile
-                .getProperty("successMessageGreeting_" + lang));
         sb.append(
-                propertiesFile.getProperty("successMessageBody_" + lang));
+                propertiesFile.getProperty("successMessageBody_" + lang).replace(strTicketNumber, ticketNumber));
         if (lang.equals("ar")) {
             msg.setSubject(subject.replace(strTicketNumber, ticketNumber),
                     CHAR_SET);
-            msg.setContent(sb.toString().replace(strTicketNumber, ticketNumber), "text/html;Charset=UTF-8");
+            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
         } else {
             msg.setSubject(subject.replace(strTicketNumber, ticketNumber));
-            msg.setContent(sb.toString().replace(strTicketNumber, ticketNumber), "text/html;Charset=UTF-8");
+            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
         }
 
         LOGGER.debug("msg:" + sb.toString());
