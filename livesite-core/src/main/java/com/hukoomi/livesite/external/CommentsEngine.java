@@ -29,6 +29,7 @@ public class CommentsEngine {
         LOGGER.info("CommentsEngine");
         Document document = null;
         ValidationUtils util = new ValidationUtils();
+
         XssUtils xssUtils = new XssUtils();
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         String ip = requestHeaderUtils.getClientIpAddress();
