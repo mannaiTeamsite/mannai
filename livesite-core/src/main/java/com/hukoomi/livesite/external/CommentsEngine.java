@@ -21,6 +21,7 @@ import com.interwoven.livesite.runtime.RequestContext;
 public class CommentsEngine {
     private static final Logger LOGGER =
             Logger.getLogger(CommentsEngine.class);
+
     private static final String ELEMENT_RESULT = "Result";
     private static final String ELEMENT_STATUS = "Status";
 
