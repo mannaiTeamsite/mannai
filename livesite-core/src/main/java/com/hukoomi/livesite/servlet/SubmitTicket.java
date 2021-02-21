@@ -154,7 +154,8 @@ public class SubmitTicket extends HttpServlet {
 
     private void sentMailNotification(String ticketNumber, String email,
             String lang) {
-        if (ticketNumber != null && !ticketNumber.equals("")) {
+        if (ticketNumber != null && !ticketNumber.equals("")
+                && !ticketNumber.equals("null")) {
             MimeMessage mailMessage;
             LOGGER.debug(" lang::" + lang);
             try {
@@ -192,28 +193,23 @@ public class SubmitTicket extends HttpServlet {
         msg.setRecipient(Message.RecipientType.TO,
                 new InternetAddress(to));
         subject = propertiesFile.getProperty("messageSubject_" + lang);
-
         StringBuilder sb = new StringBuilder();
         sb.append(propertiesFile
                 .getProperty("successMessageGreeting_" + lang));
-        sb.append("\n");
-        sb.append(propertiesFile.getProperty("successMessageBody_" + lang)
-                .replaceAll("[$]", "\n"));
-        sb.append("\n");
+        sb.append(
+                propertiesFile.getProperty("successMessageBody_" + lang));
         sb.append(propertiesFile
                 .getProperty("successMessageTicketNumber_" + lang)
                 .replace(strTicketNumber, ticketNumber));
-        sb.append("\n");
         sb.append(propertiesFile
-                .getProperty("successMessageSignature_" + lang)
-                .replaceAll("[$]", "\n"));
+                .getProperty("successMessageSignature_" + lang));
         if (lang.equals("ar")) {
             msg.setSubject(subject.replace(strTicketNumber, ticketNumber),
                     CHAR_SET);
-            msg.setText(sb.toString(), CHAR_SET);
+            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
         } else {
             msg.setSubject(subject.replace(strTicketNumber, ticketNumber));
-            msg.setText(sb.toString());
+            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
         }
 
         LOGGER.debug("msg:" + sb.toString());
