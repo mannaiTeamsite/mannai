@@ -94,7 +94,7 @@ public class CommentsEngine {
             prepareStatement.setString(3, comments);
             prepareStatement.setString(4, userName);
             prepareStatement.setString(5, ip);
-            prepareStatement.setString(5, "Pending");
+            prepareStatement.setString(6, "Pending");
             final int result = prepareStatement.executeUpdate();
             if (result == 0) {
                 LOGGER.info("failed to insert/update comments data!");
