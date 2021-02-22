@@ -64,13 +64,15 @@ public class CommentsEngine {
         Document document = DocumentHelper.createDocument();
         try {
         String getcount = "SELECT BLOG_ID FROM BLOG_MASTER WHERE DCR_ID = ? AND LANGUAGE= ?";
-        while (rs.next()) {
-            blogId = rs.getInt("BLOG_ID");
-        }
+
         connection = objPostgre.getConnection();
         prepareStatement = connection.prepareStatement(getcount);
         prepareStatement.setString(1, dcrId);
         prepareStatement.setString(2, language);
+        rs = prepareStatement.executeQuery();
+        while (rs.next()) {
+            blogId = rs.getInt("BLOG_ID");
+        }
         if(blogId>0) {
             getcount =
                     "SELECT COMMENT_ID, COMMENT FROM BLOG_COMMENT WHERE BLOG_ID = ? AND LANGUAGE= ? AND STATUS = ? ";
@@ -82,7 +84,7 @@ public class CommentsEngine {
                 prepareStatement.setString(2, language);
                 prepareStatement.setString(3, "Approved");
                 prepareStatement.setFetchSize(cursorSize);
-                rs = prepareStatement.executeQuery();
+
                 Element resultElement = document.addElement(ELEMENT_RESULT);
                 while (rs.next()) {
                     LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
