@@ -85,7 +85,7 @@ public class CommentsEngine {
         String insertQuery = "";
         LOGGER.info("CommentEngine : insert");
         insertQuery =
-                "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,) VALUES(?,?,?,LOCALTIMESTAMP,?)";
+                "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,USER_IP_ADDRESS,STATUS) VALUES(?,?,?,LOCALTIMESTAMP,?,?,?)";
         try {
             connection = objPostgre.getConnection();
             prepareStatement = connection.prepareStatement(insertQuery);
@@ -94,7 +94,7 @@ public class CommentsEngine {
             prepareStatement.setString(3, comments);
             prepareStatement.setString(4, userName);
             prepareStatement.setString(5, ip);
-
+            prepareStatement.setString(5, "Pending");
             final int result = prepareStatement.executeUpdate();
             if (result == 0) {
                 LOGGER.info("failed to insert/update comments data!");
