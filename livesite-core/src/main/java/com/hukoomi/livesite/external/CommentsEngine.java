@@ -76,14 +76,14 @@ public class CommentsEngine {
         }
         if(blogId>0) {
             getcount =
-                    "SELECT COMMENT_ID, COMMENT FROM BLOG_COMMENT WHERE BLOG_ID = ? AND LANGUAGE= ? AND STATUS = ? ";
+                    "SELECT COMMENT_ID, COMMENT FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ";
 
 
                 connection = objPostgre.getConnection();
                 prepareStatement = connection.prepareStatement(getcount);
                 prepareStatement.setLong(1, blogId);
-                prepareStatement.setString(2, language);
-                prepareStatement.setString(3, "Approved");
+
+                prepareStatement.setString(2, "Approved");
                 prepareStatement.setFetchSize(cursorSize);
                 rs = prepareStatement.executeQuery();
                 Element resultElement = document.addElement(ELEMENT_RESULT);
