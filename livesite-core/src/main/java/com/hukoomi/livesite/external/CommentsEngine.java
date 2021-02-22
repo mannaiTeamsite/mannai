@@ -59,28 +59,44 @@ public class CommentsEngine {
         ResultSet rs = null;
         Postgre objPostgre = new Postgre(context);
         int commentId = 0;
+        int blogId = 0;
         String commentStr = "";
         Document document = DocumentHelper.createDocument();
-        final String getcount =
-                "SELECT COMMENT_ID, COMMENT FROM BLOG_MASTER WHERE DCR_ID = ? AND STATUS = ? AND LANGUAGE= ?";
         try {
-            connection = objPostgre.getConnection();
-            prepareStatement = connection.prepareStatement(getcount);
-            prepareStatement.setString(1, dcrId);
-            prepareStatement.setString(2, "Approved");
-            prepareStatement.setString(3, language);
-            prepareStatement.setFetchSize(cursorSize);
-            rs = prepareStatement.executeQuery();
-            Element resultElement = document.addElement(ELEMENT_RESULT);
-            while (rs.next()) {
-                LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
-                Element ID = resultElement.addElement("COMMENT_ID");
-                commentId = rs.getInt("COMMENT_ID");
-                ID.setText(String.valueOf(commentId));
-                Element comment = resultElement.addElement("COMMENT");
-                commentStr = rs.getString("COMMENT");
-                comment.setText(commentStr);
-            }
+        String getcount = "SELECT BLOG_ID FROM BLOG_MASTER WHERE DCR_ID = ? AND LANGUAGE= ?";
+        while (rs.next()) {
+            blogId = rs.getInt("BLOG_ID");
+        }
+        connection = objPostgre.getConnection();
+        prepareStatement = connection.prepareStatement(getcount);
+        prepareStatement.setString(1, dcrId);
+        prepareStatement.setString(2, language);
+        if(blogId>0) {
+            getcount =
+                    "SELECT COMMENT_ID, COMMENT FROM BLOG_COMMENT WHERE BLOG_ID = ? AND LANGUAGE= ? AND STATUS = ? ";
+
+
+                connection = objPostgre.getConnection();
+                prepareStatement = connection.prepareStatement(getcount);
+                prepareStatement.setLong(1, blogId);
+                prepareStatement.setString(2, language);
+                prepareStatement.setString(3, "Approved");
+                prepareStatement.setFetchSize(cursorSize);
+                rs = prepareStatement.executeQuery();
+                Element resultElement = document.addElement(ELEMENT_RESULT);
+                while (rs.next()) {
+                    LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
+                    Element ID = resultElement.addElement("COMMENT_ID");
+                    commentId = rs.getInt("COMMENT_ID");
+                    ID.setText(String.valueOf(commentId));
+                    Element comment = resultElement.addElement("COMMENT");
+                    commentStr = rs.getString("COMMENT");
+                    comment.setText(commentStr);
+                }
+
+        }
+
+
         } catch (SQLException e) {
             LOGGER.error("getBlogId()", e);
             e.printStackTrace();
