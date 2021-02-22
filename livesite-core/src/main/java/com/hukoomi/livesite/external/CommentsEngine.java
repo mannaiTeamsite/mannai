@@ -28,20 +28,67 @@ public class CommentsEngine {
     public Document insertComment(final RequestContext context) {
         LOGGER.info("CommentsEngine");
         Document document = null;
-        ValidationUtils util = new ValidationUtils();
 
+        ValidationUtils util = new ValidationUtils();
         XssUtils xssUtils = new XssUtils();
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
-        String ip = requestHeaderUtils.getClientIpAddress();
-        String comments = context.getParameterString("comments");
+        String action = context.getParameterString("action");
         String dcrId = context.getParameterString("dcr_id");
-        String blogUrl = context.getParameterString("blog_url");
-        String userName = context.getParameterString("username");
-        String language = context.getParameterString("language");
+        if (action.equals("getComments")) {
+            String cursorSize = context.getParameterString("dcr_id");
+            document = getComments(dcrId,Integer.parseInt(cursorSize),context);
+        }
+        else {
+            String ip = requestHeaderUtils.getClientIpAddress();
+            String comments = context.getParameterString("comments");
 
-        int blogId = getBlogId(dcrId, language, context);
-        document = insertCommentsToDB(blogId, blogUrl, comments,
-                userName, ip, context);
+            String blogUrl = context.getParameterString("blog_url");
+            String userName = context.getParameterString("username");
+            String language = context.getParameterString("language");
+
+            int blogId = getBlogId(dcrId, language, context);
+            document = insertCommentsToDB(blogId, blogUrl, comments,
+                    userName, ip, context);
+        }
+
+        return document;
+    }
+
+    private Document getComments(String dcrId,int cursorSize,RequestContext context) {
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        Postgre objPostgre = new Postgre(context);
+        int commentId = 0;
+        String commentStr = "";
+        Document document = DocumentHelper.createDocument();
+        final String getcount =
+                "SELECT COMMENT_ID, COMMENT FROM BLOG_MASTER WHERE DCR_ID = ? AND STATUS = ?";
+        try {
+            connection = objPostgre.getConnection();
+            prepareStatement = connection.prepareStatement(getcount);
+            prepareStatement.setString(1, dcrId);
+            prepareStatement.setString(2, "Approved");
+            prepareStatement.setFetchSize(cursorSize);
+            rs = prepareStatement.executeQuery();
+            Element resultElement = document.addElement(ELEMENT_RESULT);
+            while (rs.next()) {
+                LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
+                Element ID = resultElement.addElement("COMMENT_ID");
+                commentId = rs.getInt("COMMENT_ID");
+                ID.setText(String.valueOf(commentId));
+                Element comment = resultElement.addElement("COMMENT");
+                commentStr = rs.getString("COMMENT");
+                comment.setText(commentStr);
+            }
+        } catch (SQLException e) {
+            LOGGER.error("getBlogId()", e);
+            e.printStackTrace();
+
+        } finally {
+            objPostgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        objPostgre.releaseConnection(connection, prepareStatement, rs);
         return document;
     }
 
