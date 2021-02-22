@@ -71,6 +71,7 @@ public class CommentsEngine {
         prepareStatement.setString(2, language);
         rs = prepareStatement.executeQuery();
         while (rs.next()) {
+            LOGGER.debug("BLOG_ID: " + rs.getInt("BLOG_ID"));
             blogId = rs.getInt("BLOG_ID");
         }
         if(blogId>0) {
@@ -84,7 +85,7 @@ public class CommentsEngine {
                 prepareStatement.setString(2, language);
                 prepareStatement.setString(3, "Approved");
                 prepareStatement.setFetchSize(cursorSize);
-
+                rs = prepareStatement.executeQuery();
                 Element resultElement = document.addElement(ELEMENT_RESULT);
                 while (rs.next()) {
                     LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
