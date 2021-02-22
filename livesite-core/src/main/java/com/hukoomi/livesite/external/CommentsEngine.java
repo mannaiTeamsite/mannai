@@ -52,7 +52,7 @@ public class CommentsEngine {
         Postgre objPostgre = new Postgre(context);
         int blogId = 0;
         final String getcount =
-                "SELECT BLOG_ID as total FROM BLOG_MASTER WHERE DCR_ID = ? && LANGUAGE = ?";
+                "SELECT BLOG_ID FROM BLOG_MASTER WHERE DCR_ID = ? AND LANGUAGE = ?";
         try {
             connection = objPostgre.getConnection();
             prepareStatement = connection.prepareStatement(getcount);
@@ -60,11 +60,11 @@ public class CommentsEngine {
             prepareStatement.setString(2, language);
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
-                LOGGER.debug("Count: " + rs.getInt("total"));
-                blogId = rs.getInt("total");
+                LOGGER.debug("Count: " + rs.getInt("BLOG_ID"));
+                blogId = rs.getInt("BLOG_ID");
             }
         } catch (SQLException e) {
-            LOGGER.error("isscubscriberExist()", e);
+            LOGGER.error("getBlogId()", e);
             e.printStackTrace();
 
         } finally {
