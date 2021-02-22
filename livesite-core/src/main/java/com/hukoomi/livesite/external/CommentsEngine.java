@@ -34,17 +34,16 @@ public class CommentsEngine {
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         String action = context.getParameterString("action");
         String dcrId = context.getParameterString("dcr_id");
+        String language = context.getParameterString("locale");
         if (action.equals("getComments")) {
-            String cursorSize = context.getParameterString("dcr_id");
-            document = getComments(dcrId,Integer.parseInt(cursorSize),context);
+            String cursorSize = context.getParameterString("cursorSize");
+            document = getComments(dcrId,Integer.parseInt(cursorSize), language, context);
         }
-        else {
+        else if (action.equals("setComment")){
             String ip = requestHeaderUtils.getClientIpAddress();
             String comments = context.getParameterString("comments");
-
             String blogUrl = context.getParameterString("blog_url");
             String userName = context.getParameterString("username");
-            String language = context.getParameterString("language");
 
             int blogId = getBlogId(dcrId, language, context);
             document = insertCommentsToDB(blogId, blogUrl, comments,
@@ -54,7 +53,7 @@ public class CommentsEngine {
         return document;
     }
 
-    private Document getComments(String dcrId,int cursorSize,RequestContext context) {
+    private Document getComments(String dcrId,int cursorSize, String language, RequestContext context) {
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -63,12 +62,13 @@ public class CommentsEngine {
         String commentStr = "";
         Document document = DocumentHelper.createDocument();
         final String getcount =
-                "SELECT COMMENT_ID, COMMENT FROM BLOG_MASTER WHERE DCR_ID = ? AND STATUS = ?";
+                "SELECT COMMENT_ID, COMMENT FROM BLOG_MASTER WHERE DCR_ID = ? AND STATUS = ? AND LANGUAGE= ?";
         try {
             connection = objPostgre.getConnection();
             prepareStatement = connection.prepareStatement(getcount);
             prepareStatement.setString(1, dcrId);
             prepareStatement.setString(2, "Approved");
+            prepareStatement.setString(3, language);
             prepareStatement.setFetchSize(cursorSize);
             rs = prepareStatement.executeQuery();
             Element resultElement = document.addElement(ELEMENT_RESULT);
