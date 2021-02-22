@@ -125,6 +125,7 @@ public class CommentsEngine {
             prepareStatement.setString(1, dcrId);
             prepareStatement.setString(2, language);
             rs = prepareStatement.executeQuery();
+
             while (rs.next()) {
                 LOGGER.debug("Count: " + rs.getInt("BLOG_ID"));
                 blogId = rs.getInt("BLOG_ID");
