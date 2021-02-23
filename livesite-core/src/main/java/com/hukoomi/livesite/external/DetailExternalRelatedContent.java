@@ -64,8 +64,10 @@ public Document getContentDetail(final RequestContext context) {
                 dcr = dcr.substring(1);
             }
             docDcr = commonUtils.readDCR(dcr);
-            rootEle = docDcr.getRootElement();
-            docRoot.add(rootEle);
+			if (docDcr != null) {
+				rootEle = docDcr.getRootElement();
+				docRoot.add(rootEle);
+			}
         }
         detailDocument.getRootElement().add(
                 detailDoc.getRootElement());
