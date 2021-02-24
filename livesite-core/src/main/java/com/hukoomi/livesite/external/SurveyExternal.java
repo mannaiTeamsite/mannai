@@ -241,7 +241,6 @@ public class SurveyExternal {
             Postgre postgre, SurveyBO surveyBO) {
         logger.info("getSubmissionDatabaseStatus()");
 
-
         StringBuilder checkSubmittedSurveyQuery = new StringBuilder(
                 "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR,SURVEY_MASTER SM WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) AND SM.SUBMIT_TYPE='Single'");
         StringJoiner submittedSurveyIds = new StringJoiner(",");
