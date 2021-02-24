@@ -104,7 +104,7 @@ public class SurveyExternal {
                 GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
                 if ("submit".equalsIgnoreCase(surveyBO.getAction())) {
                     String status = getSubmissionDatabaseStatus(
-                            surveyBO.getSurveyId(), postgre);
+                            surveyBO.getSurveyId(), postgre, surveyBO);
 
                     if (StringUtils.isEmpty(status)) {
                         if (captchUtil.validateCaptcha(context,
@@ -146,7 +146,7 @@ public class SurveyExternal {
                     String submittedSurveyId = null;
                     if (StringUtils.isNotBlank(surveyId)) {
                         submittedSurveyId = getSubmissionDatabaseStatus(
-                                surveyId, postgre);
+                                surveyId, postgre, surveyBO);
                         logger.info("Submitted Survey Id : "
                                 + submittedSurveyId);
                     }
@@ -193,7 +193,7 @@ public class SurveyExternal {
 
         // Checking for already submitted Surveys
         String submittedSurveyIds = getSubmissionDatabaseStatus(surveyIds,
-                postgre);
+                postgre, surveyBO);
 
         // Add Status code to document
         if (StringUtils.isNotBlank(submittedSurveyIds)) {
@@ -208,7 +208,8 @@ public class SurveyExternal {
      * @param submittedSurveyIds
      * @return
      */
-    private Document addStatusToXml(Document document,
+    @SuppressWarnings("unchecked")
+    public Document addStatusToXml(Document document,
             String submittedSurveyIds) {
         logger.info("addStatusToXml()");
         List<Node> nodes = document
@@ -237,8 +238,9 @@ public class SurveyExternal {
      *         ids.
      */
     public String getSubmissionDatabaseStatus(String surveyIds,
-            Postgre postgre) {
+            Postgre postgre, SurveyBO surveyBO) {
         logger.info("getSubmissionDatabaseStatus()");
+
 
         StringBuilder checkSubmittedSurveyQuery = new StringBuilder(
                 "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR,SURVEY_MASTER SM WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) AND SM.SUBMIT_TYPE='Single'");
@@ -493,22 +495,7 @@ public class SurveyExternal {
         return isAdded;
     }
 
-    private boolean validateAnswer(String value) {
-        boolean isValid = false;
 
-        if (value != null && value.contains("#$#")) {
-            String[] multipleOption = value.split("#\\$#");
-            for (String mutiOptValue : multipleOption) {
-                isValid = validate.isValidPattern(mutiOptValue,
-                        Validator.TEXT);
-                if (!isValid)
-                    break;
-            }
-        } else {
-            isValid = validate.isValidPattern(value, Validator.TEXT);
-        }
-        return isValid;
-    }
 
     /**
      * This method is used to get int value.

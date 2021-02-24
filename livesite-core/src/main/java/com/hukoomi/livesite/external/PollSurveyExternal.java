@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -187,6 +188,24 @@ public class PollSurveyExternal {
                     Document surveySolrDoc = fetchDocument(context, surveyIds,
                             surveyBO.getSolrCategory(), solarCore);
                     logger.info("surveySolrDoc : " + surveySolrDoc.asXML());
+
+                    // Extract Survey Ids from document
+                    String surveyId = surveyExt
+                            .getSurveyIdsFromDoc(surveySolrDoc);
+                    logger.info("Survey Ids from document ==> " + surveyExt
+                            .getSurveyIdsFromDoc(surveySolrDoc));
+
+                    // Get Submission status
+                    String submittedSurveyIds = surveyExt
+                            .getSubmissionDatabaseStatus(surveyId,
+                                    postgre, surveyBO);
+
+                    // Add Status code to document
+                    if (StringUtils.isNotBlank(submittedSurveyIds)) {
+                        document = surveyExt.addStatusToXml(surveySolrDoc,
+                                submittedSurveyIds);
+                    }
+
                     surveyGroupElem = pollSurveyElem
                             .addElement("SurveyGroupResponse");
                     surveyGroupElem.add(surveySolrDoc.getRootElement());
