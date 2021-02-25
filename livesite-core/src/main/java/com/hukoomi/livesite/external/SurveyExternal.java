@@ -14,7 +14,12 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import org.dom4j.Node;
+=======
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
+>>>>>>> 44260d8... ESAPI Validation
 =======
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
@@ -75,6 +80,7 @@ public class SurveyExternal {
      * Constant for action survey submit.
      */
     public static final String ACTION_SUBIT = "submit";
+<<<<<<< HEAD
 
     /**
      * Submitted Status constant.
@@ -95,6 +101,8 @@ public class SurveyExternal {
      * Constant for Survey Id.
      */
     public static final String SURVEYID = "SURVEY_ID";
+=======
+>>>>>>> 44260d8... ESAPI Validation
 
     /**
      * This method will be called from Component External to insert Survey form
@@ -752,6 +760,163 @@ public class SurveyExternal {
                 return false;
             }
         }
+        return true;
+    }*/
+    
+    /**
+     * This method is used to set value to SurveyBO object.
+     * 
+     * @param context Request Context Object.
+     * 
+     * @return Returns SurveyBO Object.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
+    public boolean setBO(final RequestContext context, SurveyBO surveyBO) {
+
+        final String POLL_ACTION = "pollAction";
+        final String SURVEY_ACTION = "surveyAction";
+        final String LOCALE = "locale";
+        final String USER_ID = "user_id";
+        final String USER_AGENT = "User-Agent";
+        final String SURVEY_TAKEN_FROM = "surveyTakenfrom";
+        final String SURVEY_ID = "surveyId";
+        final String TOTAL_QUESTIONS = "totalQuestions";
+        final String SURVEY_GROUP = "SurveyGroup";
+        final String SURVEY_CATEGORY = "surveyCategory";
+        final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
+        final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
+
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+        ValidationErrorList errorList = new ValidationErrorList();
+        String validData  = "";
+        
+        //TODO: Field length needs to be validated against content model and database. 
+        
+        String surveyAction = context.getParameterString(SURVEY_ACTION);
+        logger.info(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
+        if (!ESAPIValidator.checkNull(surveyAction)) {
+            validData  = ESAPI.validator().getValidInput(SURVEY_ACTION, surveyAction, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setAction(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_ACTION));
+                return false;
+            }
+        }
+        
+        String locale = context.getParameterString(LOCALE, "en");
+        logger.info(LOCALE + " >>>"+locale+"<<<");
+        validData  = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setLang(validData);
+        }else {
+            logger.info(errorList.getError(LOCALE));
+            return false;
+        }
+        
+        String userId = context.getParameterString(USER_ID);
+        logger.info(USER_ID + " >>>"+userId+"<<<");
+        validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setUserId(validData);
+        }else {
+            logger.info(errorList.getError(USER_ID));
+            return false;
+        }
+        
+        String ipAddress = requestHeaderUtils.getClientIpAddress();
+        logger.info("ipaddress >>>" +ipAddress+"<<<");
+        validData  = ESAPI.validator().getValidInput("ipaddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setIpAddress(validData);
+        }else {
+            logger.info(errorList.getError("ipaddress"));
+            return false;
+        }
+        
+        surveyBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
+        
+        if(ACTION_SUBIT.equalsIgnoreCase(surveyAction)) {
+            
+            String surveyTakenFrom = context.getParameterString(SURVEY_TAKEN_FROM);
+            logger.info(SURVEY_TAKEN_FROM + " >>>"+surveyTakenFrom+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_TAKEN_FROM, surveyTakenFrom, ESAPIValidator.ALPHABET, 150, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setTakenFrom(validData);
+            }else {
+                logger.info(errorList.getError(USER_AGENT));
+                return false;
+            }
+            
+            String surveyId = context.getParameterString(SURVEY_ID);
+            logger.info(SURVEY_ID + " >>>"+surveyId+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_ID, surveyId, ESAPIValidator.NUMERIC, 200, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setSurveyId(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_ID));
+                return false;
+            }
+            
+            String totalQuestions = context.getParameterString(TOTAL_QUESTIONS);
+            logger.info(TOTAL_QUESTIONS + " >>>"+totalQuestions+"<<<");
+            validData  = ESAPI.validator().getValidInput(TOTAL_QUESTIONS, totalQuestions, ESAPIValidator.NUMERIC, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setTotalQuestions(validData);
+            }else {
+                logger.info(errorList.getError(TOTAL_QUESTIONS));
+                return false;
+            }
+            
+            surveyBO.setCaptchaResponse(
+                    context.getParameterString("g-recaptcha-response"));
+            
+        }
+        
+        String pollAction = context.getParameterString(POLL_ACTION);
+        logger.info(POLL_ACTION + " >>>" +pollAction+ "<<<");   
+        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
+            
+            String surveyGroup = context.getParameterString(SURVEY_GROUP);
+            logger.info(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
+            if (!ESAPIValidator.checkNull(surveyGroup)) {
+                surveyBO.setGroup(getContentName(surveyGroup));
+            }
+            
+            String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
+            logger.info(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setGroupCategory(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_GROUP_CATEGORY));
+                return false;
+            }
+            
+            String surveyCategory = context.getParameterString(SURVEY_CATEGORY);
+            logger.info(SURVEY_CATEGORY + " >>>"+surveyCategory+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_CATEGORY, surveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setCategory(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_CATEGORY));
+                return false;
+            }
+            
+            String solrSurveyCategory = context.getParameterString(SOLR_SURVEY_CATEGORY);
+            logger.info(SOLR_SURVEY_CATEGORY + " >>>"+solrSurveyCategory+"<<<");
+            validData  = ESAPI.validator().getValidInput(SOLR_SURVEY_CATEGORY, solrSurveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setSolrCategory(validData);
+            }else {
+                logger.info(errorList.getError(SOLR_SURVEY_CATEGORY));
+                return false;
+            }
+            
+        }
+        
         return true;
     }*/
     
