@@ -19,11 +19,16 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.Encoder;
+import org.owasp.esapi.Validator;
+import org.owasp.esapi.ValidationErrorList;
 
 import com.hukoomi.bo.PollsBO;
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
-import com.hukoomi.utils.Validator;
+//import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -86,7 +91,24 @@ public class PollsExternal {
     /**
      * Validator object.
      */
-    Validator validate = new Validator();
+    //Validator validate = new Validator();
+    /**
+     * Constant for action polls and survey.
+     */
+    public static final String ACTION_POLLS_AND_SURVEY = "pollsandsurvey";
+    /**
+     * Constant for action current polls.
+     */
+    public static final String ACTION_CURRENT_POLLS = "current";
+    /**
+     * Constant for action past polls.
+     */
+    public static final String ACTION_PAST_POLLS = "past";
+    /**
+     * Constant for action vote.
+     */
+    public static final String ACTION_VOTE = "vote";
+    
 
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -667,7 +689,7 @@ public class PollsExternal {
      * 
      * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
+    /*@Deprecated(since = "", forRemoval = false)
     public boolean setBO(final RequestContext context, PollsBO pollsBO) {
 
         final String POLL_ACTION = "pollAction";
@@ -849,6 +871,180 @@ public class PollsExternal {
                 return false;
             }
         }
+        return true;
+    }*/
+    
+    /**
+     * This method is used to set value to PollsBO object.
+     * 
+     * @param context Request Context Object.
+     * 
+     * @return Returns PollsBO Object.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
+    public boolean setBO(final RequestContext context, PollsBO pollsBO) {
+
+        final String POLL_ACTION = "pollAction";
+        final String LOCALE = "locale";
+        final String USER_ID = "user_id";
+        final String USER_AGENT = "User-Agent";
+        final String VOTED_FROM = "votedFrom";
+        final String POLLID = "pollId";
+        final String CURRENT_POLL_ROWS = "current_poll_rows";
+        final String PAST_POLL_ROWS = "past_poll_rows";
+        final String POLLS_GROUP = "PollsGroup";
+        final String OPTION = "option";
+        final String POLL_GROUP_CATEGORY = "pollGroupCategory";
+        final String POLL_CATEGORY = "pollCategory";
+        final String SOLR_POLL_CATEGORY = "solrPollCategory";
+        
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+        ValidationErrorList errorList = new ValidationErrorList();
+        String validData  = "";
+        
+        //TODO: Field length needs to be validated against content model and database. 
+        
+        String pollAction = context.getParameterString(POLL_ACTION);
+        logger.info(POLL_ACTION + " >>>"+pollAction+"<<<");
+        validData  = ESAPI.validator().getValidInput(POLL_ACTION, pollAction, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        if(errorList.isEmpty()) {
+            pollsBO.setAction(validData);
+        }else {
+            logger.info(errorList.getError(POLL_ACTION));
+            return false;
+        }
+        
+        String locale = context.getParameterString(LOCALE, "en");
+        logger.info(LOCALE + " >>>" +locale+ "<<<");
+        validData  = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true, errorList);
+        if(errorList.isEmpty()) {
+            pollsBO.setLang(validData);
+        }else {
+            logger.info(errorList.getError(LOCALE));
+            return false;
+        }
+        
+        String userID = context.getParameterString(USER_ID);
+        logger.info(USER_ID + " >>>" +userID+ "<<<");
+        validData  = ESAPI.validator().getValidInput(USER_ID, userID, ESAPIValidator.USER_ID, 50, true, true, errorList);
+        if(errorList.isEmpty()) {
+            pollsBO.setUserId(validData);
+        }else {
+            logger.info(errorList.getError(USER_ID));
+            return false;
+        }
+        
+        String ipAddress = requestHeaderUtils.getClientIpAddress();
+        logger.info("ipaddress >>>" +ipAddress+ "<<<");
+        validData  = ESAPI.validator().getValidInput("IPAddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
+        if(errorList.isEmpty()) {
+            pollsBO.setIpAddress(validData);
+        }else {
+            logger.info(errorList.getError("IPAddress"));
+            return false;
+        }
+        
+        pollsBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
+        
+        if(ACTION_CURRENT_POLLS.equalsIgnoreCase(pollAction)) {
+            String currentPollRows = context.getParameterString(CURRENT_POLL_ROWS);
+            logger.info(CURRENT_POLL_ROWS + " >>>" +currentPollRows+ "<<<");
+            validData  = ESAPI.validator().getValidInput(CURRENT_POLL_ROWS, currentPollRows, ESAPIValidator.NUMERIC, 2, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setCurrentPollsPerPage(validData);
+            }else {
+                logger.info(errorList.getError(CURRENT_POLL_ROWS));
+                return false;
+            }
+        }
+        
+        if(ACTION_PAST_POLLS.equalsIgnoreCase(pollAction)) {
+            String pastPollRows = context.getParameterString(PAST_POLL_ROWS);
+            logger.info(PAST_POLL_ROWS + " >>>" +pastPollRows+ "<<<");
+            validData  = ESAPI.validator().getValidInput(PAST_POLL_ROWS, pastPollRows, ESAPIValidator.NUMERIC, 2, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setPastPollsPerPage(validData);
+            }else {
+                logger.info(errorList.getError(PAST_POLL_ROWS));
+                return false;
+            }
+        }
+        
+        if(ACTION_VOTE.equalsIgnoreCase(pollAction)) {
+            
+            String pollId = context.getParameterString(POLLID);
+            logger.info(POLLID + " >>>" +pollId+ "<<<");
+            validData  = ESAPI.validator().getValidInput(POLLID, pollId, ESAPIValidator.NUMERIC, 200, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setPollId(validData);
+            }else {
+                logger.info(errorList.getError(POLLS_GROUP));
+                return false;
+            }
+            
+            String option = context.getParameterString(OPTION);
+            logger.info(OPTION + " >>>" +option+ "<<<");
+            validData  = ESAPI.validator().getValidInput(OPTION, option, ESAPIValidator.NUMERIC, 2, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setSelectedOption(validData);
+            }else {
+                logger.info(errorList.getError(OPTION));
+                return false;
+            }
+            
+            String votedFrom = context.getParameterString(VOTED_FROM);
+            logger.info(VOTED_FROM + " >>>" +votedFrom+ "<<<");
+            validData  = ESAPI.validator().getValidInput(VOTED_FROM, votedFrom, ESAPIValidator.ALPHABET, 150, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setVotedFrom(validData);
+            }else {
+                logger.info(errorList.getError(VOTED_FROM));
+                return false;
+            }
+        }
+        
+        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
+            
+            String pollsGroup = context.getParameterString(POLLS_GROUP);
+            logger.info(POLLS_GROUP + " >>>" +pollsGroup+ "<<<");
+            if (!ESAPIValidator.checkNull(pollsGroup)) {
+                pollsBO.setGroup(getContentName(pollsGroup));
+            }
+            
+            String pollGroupCategory = context.getParameterString(POLL_GROUP_CATEGORY);
+            logger.info(POLL_GROUP_CATEGORY + " >>>" +pollGroupCategory+ "<<<");
+            validData  = ESAPI.validator().getValidInput(POLL_GROUP_CATEGORY, pollGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setGroupCategory(validData);
+            }else {
+                logger.info(errorList.getError(POLL_GROUP_CATEGORY));
+                return false;
+            }
+            
+            String pollCategory = context.getParameterString(POLL_CATEGORY);
+            logger.info(POLL_CATEGORY + " >>>" +pollCategory+ "<<<");
+            validData  = ESAPI.validator().getValidInput(POLL_CATEGORY, pollCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setCategory(validData);
+            }else {
+                logger.info(errorList.getError(POLL_CATEGORY));
+                return false;
+            }
+            
+            String solrPollCategory = context.getParameterString(SOLR_POLL_CATEGORY);
+            logger.info(SOLR_POLL_CATEGORY + " >>>" +solrPollCategory+ "<<<");
+            validData  = ESAPI.validator().getValidInput(SOLR_POLL_CATEGORY, solrPollCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setSolrCategory(validData);
+            }else {
+                logger.info(errorList.getError(SOLR_POLL_CATEGORY));
+                return false;
+            } 
+            
+        }
+        
         return true;
     }
 
