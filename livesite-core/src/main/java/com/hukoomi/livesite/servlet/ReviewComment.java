@@ -100,7 +100,7 @@ public class ReviewComment extends HttpServlet {
         int result = 0;
         try {
 
-            int commentId = data.getInt("commentId");
+            long commentId = data.getLong("commentId");
             String status = data.getString("status");
             String query =
                     "UPDATE BLOG_COMMENT SET STATUS = ?, STATUS_UPDATED_DATE = LOCALTIMESTAMP "
@@ -109,7 +109,7 @@ public class ReviewComment extends HttpServlet {
             preparedStatement = connection.prepareStatement(query);
 
             preparedStatement.setString(1, status);
-            preparedStatement.setInt(2, commentId);
+            preparedStatement.setLong(2, commentId);
             result = preparedStatement.executeUpdate();
             LOGGER.info("update comment result : " + result);
 
