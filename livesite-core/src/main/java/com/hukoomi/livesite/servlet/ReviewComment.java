@@ -103,7 +103,7 @@ public class ReviewComment extends HttpServlet {
             long commentId = data.getLong("commentId");
             String status = data.getString("status");
             String query =
-                    "UPDATE BLOG_COMMENT SET STATUS = ?, STATUS_UPDATED_DATE = LOCALTIMESTAMP "
+                    "UPDATE BLOG_COMMENT SET STATUS = ?, STATUS_UPDATED_ON = LOCALTIMESTAMP "
                             + "WHERE COMMENT_ID = ? ";
             LOGGER.info("Query : " + query);
             preparedStatement = connection.prepareStatement(query);
