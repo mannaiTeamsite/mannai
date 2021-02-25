@@ -188,7 +188,7 @@ public class ReviewComment extends HttpServlet {
         Properties propFile = new Properties();
         if (propertiesFileName != null && !propertiesFileName.equals("")) {
             String root =
-                    "https://devauth.hukoomi.gov.qa/iw/cci/meta/no-injection/iw-mount/default/main/Hukoomi/WORKAREA/default/iw/config/properties";
+                    "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties";
             InputStream inputStream;
             try {
                 inputStream = new FileInputStream(
