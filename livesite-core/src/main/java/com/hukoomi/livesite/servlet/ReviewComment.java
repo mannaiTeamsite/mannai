@@ -107,7 +107,7 @@ public class ReviewComment extends HttpServlet {
                             + "WHERE COMMENT_ID = ? ";
             LOGGER.info("Query : " + query);
             preparedStatement = connection.prepareStatement(query);
-            preparedStatement.setString(1, status);
+            preparedStatement.setInt(1, commentId);
             preparedStatement.setString(2, status);
             result = preparedStatement.executeUpdate();
             LOGGER.info("update comment result : " + result);
