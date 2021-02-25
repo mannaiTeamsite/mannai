@@ -41,49 +41,13 @@ public class BlogTask {
      */
     public static final String UPDATE_DATE_PATH = "/root/information/date";
     /**
-     * XPath to the persona selection
-     */
-    public static final String PERSONA_PATH = "/root/settings/persona/value";
-    /**
-     * XPath to the survey description
-     */
-    public static final String DESCRIPTION_PATH = "/root/details/description";
-    /**
-     * XPath to the survey start date
-     */
-    public static final String SURVEY_START_DATE_PATH = "/root/details/start-date";
-    /**
-     * XPath to the survey end date
-     */
-    public static final String SURVEY_END_DATE_PATH = "/root/details/end-date";
-    /**
-     * XPath to the survey form field
-     */
-    public static final String FIELD_PATH = "/root/form-field";
-    /**
      * Success transition message
      */
-    public static final String SUCCESS_TRANSITION = "Insert Master Data Success";
+    public static final String SUCCESS_TRANSITION = "Insert Blog Master Data Success";
     /**
      * Failure transition message
      */
-    public static final String FAILURE_TRANSITION = "Insert Master Data Failure";
-    /**
-     * Database property file name
-     */
-    private static final String DB_PROPERTY_FILE = "dbconfig.properties";
-    /**
-     * XPath for the poll option label
-     */
-    private static final String OPTION_LABEL = "label";
-    /**
-     * XPath for the poll option value
-     */
-    private static final String OPTION_VALUE = "value";
-    /**
-     * XPath for the poll option is open respnse
-     */
-    private static final String IS_OPEN_RESPONSE = "isOpenResponse";
+    public static final String FAILURE_TRANSITION = "Insert Blog Master Data Failure";
     /**
      * Transition hashmap key
      */
@@ -93,25 +57,25 @@ public class BlogTask {
      */
     private static final String TRANSITION_COMMENT = "TRANSITION_COMMENT";
     /**
-     * Poll update transition success message
+     * Blog update transition success message
      */
-    private static final String BLOG_UPDATE_SUCCESS = "Poll master data updated successfully";
+    private static final String BLOG_UPDATE_SUCCESS = "Blog master data updated successfully";
     /**
-     * Poll update transition failure message
+     * Blog update transition failure message
      */
     private static final String BLOG_UPDATE_FAILURE = "Failed to updated blog master data";
     /**
-     * Poll insert transition success message
+     * Blog insert transition success message
      */
     private static final String BLOG_INSERT_SUCCESS = "Blog master data inserted successfully";
     /**
-     * Poll insert transition failure message
+     * Blog insert transition failure message
      */
     private static final String BLOG_INSERT_FAILURE = "Failed to insert blog master data";
     /**
-     * Poll transition technical error message
+     * Blog transition technical error message
      */
-    private static final String POLL_TECHNICAL_ERROR = "Technical Error in poll master data insert";
+    private static final String BLOG_TECHNICAL_ERROR = "Technical Error in Blog master data insert";
 
 
 
@@ -131,7 +95,7 @@ public class BlogTask {
             if (isBlogMasterDataAvailable(document,postgre)) {
                int result = updateBlogData(document,postgre);
                 logger.debug(
-                        "isPollDataUpdated : " + isDBOperationSuccess);
+                        "isBlogDataUpdated : " + isDBOperationSuccess);
                 if (result >0) {
                     statusMap.put(TRANSITION, SUCCESS_TRANSITION);
                     statusMap.put(TRANSITION_COMMENT, BLOG_UPDATE_SUCCESS);
@@ -153,19 +117,19 @@ public class BlogTask {
             }
         } catch (Exception e) {
             statusMap.put(TRANSITION, FAILURE_TRANSITION);
-            statusMap.put(TRANSITION_COMMENT, POLL_TECHNICAL_ERROR);
+            statusMap.put(TRANSITION_COMMENT, BLOG_TECHNICAL_ERROR);
             logger.error("Exception in poll master: ", e);
         }
         return statusMap;
     }
 
     private boolean insertBlogData(Document document,PostgreTSConnection postgre) {
-        logger.debug("PollSurveyTask : insertBlogData");
+        logger.debug("BlogTask : insertBlogData");
         Connection connection = null;
         boolean isBlogDataInserted = false;
         try {
             connection = postgre.getConnection();
-            logger.debug("PollSurveyTask : after getConnection");
+            logger.debug("BlogTask : after getConnection");
             BlogBO blogBO = new BlogBO();
             blogBO.setBlogId(getDCRValue(document, ID_PATH));
             blogBO.setLang(getDCRValue(document, LANG_PATH));
@@ -175,28 +139,28 @@ public class BlogTask {
             logger.debug("getLang : "+ blogBO.getLang());
             logger.debug("getTitle : "+ blogBO.getTitle());
             logger.debug("getUpdatedDate : "+ blogBO.getUpdatedDate());
-            int result = insertBolgMasterData(blogBO, connection);
-            logger.info("insertPollData result : " + result);
+            int result = insertBolgMasterData(blogBO, connection,postgre);
+            logger.info("insertBlogData result : " + result);
             if (result > 0) {
                 logger.info("Blog Master Data Inserted");
                 isBlogDataInserted = true;
             } else {
-                logger.info("Poll master insert failed");
+                logger.info("Blog master insert failed");
             }
 
         } catch (Exception e) {
                 logger.error(
-                        "Exception in insertPollData rollback catch block : ",
+                        "Exception in insertBlogData rollback catch block : ",
                         e);
         } finally {
             postgre.releaseConnection(connection, null, null);
-            logger.info("Released insertPollData connection");
+            logger.info("Released insertBlogData connection");
         }
         return isBlogDataInserted;
     }
 
     private int insertBolgMasterData(BlogBO blogBO,
-            Connection connection) throws Exception {
+            Connection connection,PostgreTSConnection postgre) {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
@@ -214,12 +178,16 @@ public class BlogTask {
                     Long.parseLong(blogBO.getBlogId()));
             preparedStatement.setString(2, blogBO.getTitle());
             preparedStatement.setString(3, blogBO.getLang());
-            //preparedStatement.setString(4, blogBO.getUpdatedDate());
             result = preparedStatement.executeUpdate();
             logger.info("insertSurveyMasterData result : " + result);
-        } catch (NumberFormatException | SQLException e) {
+        } catch (Exception e) {
             logger.error("Exception in insertSurveyMasterData: ", e);
-            throw e;
+        }
+        finally {
+
+                postgre.releaseConnection(connection, preparedStatement, null);
+                logger.info("Released insertBlogData connection");
+
         }
         return result;
     }
@@ -234,7 +202,7 @@ public class BlogTask {
             blogBO.setBlogId(getDCRValue(document, ID_PATH));
             blogBO.setLang(getDCRValue(document, LANG_PATH));
             blogBO.setUpdatedDate(getDCRValue(document, UPDATE_DATE_PATH));
-            logger.info("PollSurveyTask : updateBlogMasterData");
+            logger.info("BlogTask : updateBlogMasterData");
             String blogMasterQuery = "UPDATE BLOG_MASTER SET BLOG_TITLE = ?, UPDATED_DATE = LOCALTIMESTAMP "
                     + "WHERE DCR_ID = ? AND LANGUAGE = ?";
             logger.info("updateBlogMasterData pollMasterQuery : "
@@ -246,20 +214,20 @@ public class BlogTask {
                     blogBO.getBlogId());
             preparedStatement.setString(3, blogBO.getLang());
             result = preparedStatement.executeUpdate();
-            logger.info("updatePollMasterData result : " + result);
+            logger.info("updateBlogMasterData result : " + result);
 
         } catch (NumberFormatException | SQLException e) {
-            logger.error("Exception in updatePollMasterData: ", e);
+            logger.error("Exception in updateBlogMasterData: ", e);
             throw e;
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
-            logger.info("Released updatePollMasterData connection");
+            logger.info("Released updateBlogMasterData connection");
         }
         return result;
     }
 
     private boolean isBlogMasterDataAvailable(Document document,PostgreTSConnection postgre) {
-        logger.debug("PollSurveyTask : isBlogMasterDataAvailable");
+        logger.debug("BlogTask : isBlogMasterDataAvailable");
         PreparedStatement prepareStatement = null;
         Connection connection = null;
         ResultSet rs = null;
@@ -288,11 +256,11 @@ public class BlogTask {
             logger.info("isBlogDataAvailable : " + isBlogDataAvailable);
 
         } catch (Exception e) {
-            logger.error("Exception in isPollMasterDataAvailable : ", e);
+            logger.error("Exception in isBlogMasterDataAvailable : ", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
             logger.info(
-                    "Released connection in isPollMasterDataAvailable");
+                    "Released connection in isBlogMasterDataAvailable");
         }
         return isBlogDataAvailable;
     }
@@ -303,7 +271,7 @@ public class BlogTask {
      * @return Returns xml document of the task file.
      */
     public Document getTaskDocument(CSSimpleFile taskSimpleFile) {
-        logger.debug("PollSurveyTask : getTaskDocument");
+        logger.debug("BlogTask : getTaskDocument");
         Document document = null;
         try {
             byte[] taskSimpleFileByteArray = taskSimpleFile.read(0, -1);
@@ -325,7 +293,7 @@ public class BlogTask {
      * @return
      */
     public String getDCRValue(Document document, String nodeName) {
-        logger.debug("PollSurveyTask : getDCRValue");
+        logger.debug("BlogTask : getDCRValue");
         String dcrValue = document.selectSingleNode(nodeName).getText();
         logger.debug(nodeName + " : " + dcrValue);
         return dcrValue;
