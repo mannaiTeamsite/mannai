@@ -76,9 +76,7 @@ public class CommentsEngine {
         }
         if(blogId>0) {
             getcount =
-                    "SELECT COMMENT_ID, COMMENT FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ";
-
-
+                    "SELECT COMMENT_ID, COMMENT, USER_NAME FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ";
                 connection = objPostgre.getConnection();
                 prepareStatement = connection.prepareStatement(getcount);
                 prepareStatement.setLong(1, blogId);
@@ -89,10 +87,11 @@ public class CommentsEngine {
                 Element resultElement = document.addElement(ELEMENT_RESULT);
                 while (rs.next()) {
                     LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
-                    Element ID = resultElement.addElement("COMMENT_ID");
+                    Element comments = resultElement.addElement("Comments");
+                    Element ID = comments.addElement("CommentId");
                     commentId = rs.getInt("COMMENT_ID");
                     ID.setText(String.valueOf(commentId));
-                    Element comment = resultElement.addElement("COMMENT");
+                    Element comment = comments.addElement("Comment");
                     commentStr = rs.getString("COMMENT");
                     comment.setText(commentStr);
                 }
