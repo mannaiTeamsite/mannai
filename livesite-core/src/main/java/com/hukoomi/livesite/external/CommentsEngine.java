@@ -61,6 +61,8 @@ public class CommentsEngine {
         int commentId = 0;
         int blogId = 0;
         String commentStr = "";
+        String username = "";
+        String commentOn = "";
         Document document = DocumentHelper.createDocument();
         try {
         String getcount = "SELECT BLOG_ID FROM BLOG_MASTER WHERE DCR_ID = ? AND LANGUAGE= ?";
@@ -76,11 +78,10 @@ public class CommentsEngine {
         }
         if(blogId>0) {
             getcount =
-                    "SELECT COMMENT_ID, COMMENT, USER_NAME FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ";
+                    "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ";
                 connection = objPostgre.getConnection();
                 prepareStatement = connection.prepareStatement(getcount);
                 prepareStatement.setLong(1, blogId);
-
                 prepareStatement.setString(2, "Approved");
                 prepareStatement.setFetchSize(cursorSize);
                 rs = prepareStatement.executeQuery();
@@ -88,12 +89,18 @@ public class CommentsEngine {
                 while (rs.next()) {
                     LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
                     Element comments = resultElement.addElement("Comments");
-                    Element ID = comments.addElement("CommentId");
+                    Element id = comments.addElement("CommentId");
                     commentId = rs.getInt("COMMENT_ID");
-                    ID.setText(String.valueOf(commentId));
+                    id.setText(String.valueOf(commentId));
                     Element comment = comments.addElement("Comment");
                     commentStr = rs.getString("COMMENT");
                     comment.setText(commentStr);
+                    Element eleUsername = comments.addElement("UserName");
+                    username = rs.getString("USER_NAME");
+                    eleUsername.setText(String.valueOf(username));
+                    Element eleCommentOn = comments.addElement("CommentOn");
+                    commentOn = rs.getString("COMMENTED_ON");
+                    eleCommentOn.setText(commentOn);
                 }
 
         }
