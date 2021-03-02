@@ -68,6 +68,14 @@ public Document getLandingContent(final RequestContext context) {
     if(root!=null && root.isRootElement()) {
         root.addElement("category").addText(category);
     }
+    DashboardExternal dash = new DashboardExternal();
+    Document headerDetail = dash.dashboardServices(context);
+    Element header = headerDetail.getRootElement();
+    if(header!=null && header.isRootElement()) {
+    	Element userData = root.addElement("userData");
+    	userData.addElement(headerDetail.asXML());	
+	    }
+	
     return doc;
 }
 
