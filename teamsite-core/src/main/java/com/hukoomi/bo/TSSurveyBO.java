@@ -6,7 +6,7 @@ package com.hukoomi.bo;
  * @author Vijayaragavamoorthy
  *
  */
-public class SurveyBO {
+public class TSSurveyBO {
     /**
      * Survey action performed by the user
      */
@@ -91,6 +91,18 @@ public class SurveyBO {
      * Survey solr category name
      */
     private String solrCategory;
+    /**
+     * Service Entities
+     */
+    private String serviceEntities;
+    /**
+     * Survey Topics
+     */
+    private String topics;
+    /**
+     * Submit Type
+     */
+    private String submitType;
 
     /**
      * Getter method to get survey action
@@ -470,6 +482,30 @@ public class SurveyBO {
         this.solrCategory = solrCategory;
     }
 
+    public String getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(String serviceEntities) {
+        this.serviceEntities = serviceEntities;
+    }
+
+    public String getTopics() {
+        return topics;
+    }
+
+    public void setTopics(String topics) {
+        this.topics = topics;
+    }
+
+    public String getSubmitType() {
+        return submitType;
+    }
+
+    public void setSubmitType(String submitType) {
+        this.submitType = submitType;
+    }
+
     /**
      * Overrides the toString method to print the business objects values
      * 
@@ -488,6 +524,8 @@ public class SurveyBO {
                 + description + ", questionId=" + questionId
                 + ", questionNo=" + questionNo + ", groupCategory="
                 + groupCategory + ", category=" + category
-                + ", solrCategory=" + solrCategory + "]";
+                + ", solrCategory=" + solrCategory + ", serviceEntities="
+                + serviceEntities + ", topics=" + topics + ", submitType="
+                + submitType + "]";
     }
 }

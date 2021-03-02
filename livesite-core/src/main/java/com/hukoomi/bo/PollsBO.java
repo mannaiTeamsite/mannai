@@ -83,6 +83,14 @@ public class PollsBO {
      * Poll solr category name
      */
     private String solrCategory;
+    /**
+     * Service Entities
+     */
+    private String serviceEntities;
+    /**
+     * Poll Topics
+     */
+    private String topics;
 
     /**
      * Getter method to get poll action
@@ -150,7 +158,7 @@ public class PollsBO {
     /**
      * Setter method to set user id
      * 
-     * @param userId user id
+     * @param userId User id
      */
     public void setUserId(String userId) {
         this.userId = userId;
@@ -168,7 +176,7 @@ public class PollsBO {
     /**
      * Setter method to set user agent
      * 
-     * @param userAgent user agent
+     * @param userAgent User agent
      */
     public void setUserAgent(String userAgent) {
         this.userAgent = userAgent;
@@ -426,6 +434,22 @@ public class PollsBO {
         this.solrCategory = solrCategory;
     }
 
+    public String getServiceEntities() {
+        return serviceEntities;
+    }
+
+    public void setServiceEntities(String serviceEntities) {
+        this.serviceEntities = serviceEntities;
+    }
+
+    public String getTopics() {
+        return topics;
+    }
+
+    public void setTopics(String topics) {
+        this.topics = topics;
+    }
+
     /**
      * Overrides the toString method to print the business objects values
      * 
@@ -444,6 +468,7 @@ public class PollsBO {
                 + ", pastPollsPerPage=" + pastPollsPerPage + ", group="
                 + group + ", groupCategory=" + groupCategory
                 + ", category=" + category + ", solrCategory="
-                + solrCategory + "]";
+                + solrCategory + ", serviceEntities=" + serviceEntities
+                + ", topics=" + topics + "]";
     }
 }

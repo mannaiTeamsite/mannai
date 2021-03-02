@@ -15,8 +15,8 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 
-import com.hukoomi.bo.PollsBO;
-import com.hukoomi.bo.SurveyBO;
+import com.hukoomi.bo.TSPollsBO;
+import com.hukoomi.bo.TSSurveyBO;
 import com.hukoomi.utils.PostgreTSConnection;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
@@ -62,9 +62,21 @@ public class PollSurveyTask implements CSURLExternalTask {
      */
     public static final String POLL_END_DATE_PATH = "/root/detail/end-date";
     /**
+     * XPath to the submit type
+     */
+    public static final String SUBMIT_TYPE = "/root/details/submitType";
+    /**
      * XPath to the persona selection
      */
     public static final String PERSONA_PATH = "/root/settings/persona/value";
+    /**
+     * XPath to the organization selection
+     */
+    public static final String SERVICE_ENTITIES = "/root/settings/service-entities/value";
+    /**
+     * XPath to the topic selection
+     */
+    public static final String TOPICS = "/root/settings/topics/value";
     /**
      * XPath to the option
      */
@@ -395,7 +407,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
 
             connection = postgre.getConnection();
-            PollsBO pollsBO = new PollsBO();
+            TSPollsBO pollsBO = new TSPollsBO();
             pollsBO.setPollId(getDCRValue(document, ID_PATH));
             pollsBO.setLang(getDCRValue(document, LANG_PATH));
             pollsBO.setQuestion(getDCRValue(document, QUESTION_PATH));
@@ -403,6 +415,9 @@ public class PollSurveyTask implements CSURLExternalTask {
                     getDCRValue(document, POLL_START_DATE_PATH));
             pollsBO.setEndDate(getDCRValue(document, POLL_END_DATE_PATH));
             pollsBO.setPersona(getDCRValue(document, PERSONA_PATH));
+            pollsBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
+            pollsBO.setTopics(getDCRValue(document, TOPICS));
+            logger.debug("PollsBO : " + pollsBO);
 
             int result = insertPollMasterData(pollsBO, connection);
             logger.info("insertPollData result : " + result);
@@ -452,15 +467,15 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int insertPollMasterData(PollsBO pollsBO, Connection connection)
+    public int insertPollMasterData(TSPollsBO pollsBO, Connection connection)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : insertPollMasterData");
             String pollMasterQuery = "INSERT INTO POLL_MASTER (POLL_ID, "
-                    + "LANG, QUESTION, START_DATE, END_DATE, PERSONA) "
-                    + "VALUES (?, ?, ?, ?, ?, ?)";
+                    + "LANG, QUESTION, START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             logger.info("insertPollMasterData pollMasterQuery : "
                     + pollMasterQuery);
             connection.setAutoCommit(false);
@@ -473,6 +488,8 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setDate(4, getDate(pollsBO.getStartDate()));
             preparedStatement.setDate(5, getDate(pollsBO.getEndDate()));
             preparedStatement.setString(6, pollsBO.getPersona());
+            preparedStatement.setString(7, pollsBO.getServiceEntities());
+            preparedStatement.setString(8, pollsBO.getTopics());  
             result = preparedStatement.executeUpdate();
             logger.info("insertPollMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
@@ -494,7 +511,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful insert else false for failure.
      * @throws SQLException
      */
-    public boolean insertPollOptionsData(PollsBO pollsBO,
+    public boolean insertPollOptionsData(TSPollsBO pollsBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean isPollOptionInserted = false;
@@ -561,13 +578,18 @@ public class PollSurveyTask implements CSURLExternalTask {
             connection = postgre.getConnection();
             logger.info("updatePollData Connection : " + connection);
 
-            PollsBO pollsBO = new PollsBO();
+            TSPollsBO pollsBO = new TSPollsBO();
             pollsBO.setPollId(getDCRValue(document, ID_PATH));
             pollsBO.setLang(getDCRValue(document, LANG_PATH));
             pollsBO.setQuestion(getDCRValue(document, QUESTION_PATH));
             pollsBO.setEndDate(getDCRValue(document, POLL_END_DATE_PATH));
             pollsBO.setPersona(getDCRValue(document, PERSONA_PATH));
-
+            pollsBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
+            pollsBO.setTopics(getDCRValue(document, TOPICS));
+            pollsBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
+            pollsBO.setTopics(getDCRValue(document, TOPICS));
+            logger.debug("PollsBO : " + pollsBO);
+            
             int result = updatePollMasterData(pollsBO, connection);
 
             if (result > 0) {
@@ -615,14 +637,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int updatePollMasterData(PollsBO pollsBO, Connection connection)
+    public int updatePollMasterData(TSPollsBO pollsBO, Connection connection)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : updatePollMasterData");
             String pollMasterQuery = "UPDATE POLL_MASTER SET QUESTION = ?, "
-                    + "END_DATE = ?, PERSONA = ? "
+                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ? "
                     + "WHERE POLL_ID = ? AND LANG = ?";
             logger.info("updatePollMasterData pollMasterQuery : "
                     + pollMasterQuery);
@@ -632,9 +654,11 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(1, pollsBO.getQuestion());
             preparedStatement.setDate(2, getDate(pollsBO.getEndDate()));
             preparedStatement.setString(3, pollsBO.getPersona());
-            preparedStatement.setLong(4,
+            preparedStatement.setString(4, pollsBO.getServiceEntities());
+            preparedStatement.setString(5, pollsBO.getTopics());            
+            preparedStatement.setLong(6,
                     Long.parseLong(pollsBO.getPollId()));
-            preparedStatement.setString(5, pollsBO.getLang());
+            preparedStatement.setString(7, pollsBO.getLang());
 
             result = preparedStatement.executeUpdate();
             logger.info("updatePollMasterData result : " + result);
@@ -657,7 +681,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful update else false for failure.
      * @throws SQLException
      */
-    public boolean updatePollOptionsData(PollsBO pollsBO,
+    public boolean updatePollOptionsData(TSPollsBO pollsBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean isPollOptionUpdated = false;
@@ -764,7 +788,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
             connection = postgre.getConnection();
 
-            SurveyBO surveyBO = new SurveyBO();
+            TSSurveyBO surveyBO = new TSSurveyBO();
             surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
             surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
@@ -775,6 +799,10 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setEndDate(
                     getDCRValue(document, SURVEY_END_DATE_PATH));
             surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
+            surveyBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
+            surveyBO.setTopics(getDCRValue(document, TOPICS));
+            surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
+            logger.debug("SurveyBO : " + surveyBO);
 
             int result = insertSurveyMasterData(surveyBO, connection);
             logger.info("result : " + result);
@@ -818,7 +846,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int insertSurveyMasterData(SurveyBO surveyBO,
+    public int insertSurveyMasterData(TSSurveyBO surveyBO,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -826,8 +854,8 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("PollSurveyTask : insertSurveyMasterData");
             String surveyMasterQuery = "INSERT INTO SURVEY_MASTER ("
                     + "SURVEY_ID, LANG, SURVEY_TITLE, SURVEY_DESCRIPTION, "
-                    + "START_DATE, END_DATE, PERSONA) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + "START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, SUBMIT_TYPE) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             logger.info("insertSurveyMasterData surveyMasterQuery : "
                     + surveyMasterQuery);
             connection.setAutoCommit(false);
@@ -841,6 +869,9 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setDate(5, getDate(surveyBO.getStartDate()));
             preparedStatement.setDate(6, getDate(surveyBO.getEndDate()));
             preparedStatement.setString(7, surveyBO.getPersona());
+            preparedStatement.setString(8, surveyBO.getServiceEntities());
+            preparedStatement.setString(9, surveyBO.getTopics());
+            preparedStatement.setString(10, surveyBO.getSubmitType());
             result = preparedStatement.executeUpdate();
             logger.info("insertSurveyMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
@@ -862,7 +893,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful insert else false for failure.
      * @throws SQLException
      */
-    public boolean insertSurveyQuestionData(SurveyBO surveyBO,
+    public boolean insertSurveyQuestionData(TSSurveyBO surveyBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
@@ -953,7 +984,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful insert else false for failure.
      * @throws SQLException
      */
-    public boolean insertSurveyOptionData(SurveyBO surveyBO, Node node,
+    public boolean insertSurveyOptionData(TSSurveyBO surveyBO, Node node,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
@@ -1028,7 +1059,7 @@ public class PollSurveyTask implements CSURLExternalTask {
 
             connection = postgre.getConnection();
 
-            SurveyBO surveyBO = new SurveyBO();
+            TSSurveyBO surveyBO = new TSSurveyBO();
             surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
             surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
@@ -1037,6 +1068,9 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setEndDate(
                     getDCRValue(document, SURVEY_END_DATE_PATH));
             surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
+            surveyBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
+            surveyBO.setTopics(getDCRValue(document, TOPICS));
+            surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
             logger.debug("SurveyBO : " + surveyBO);
 
             int result = updateSurveyMasterData(surveyBO, connection);
@@ -1088,7 +1122,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int updateSurveyMasterData(SurveyBO surveyBO,
+    public int updateSurveyMasterData(TSSurveyBO surveyBO,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -1096,8 +1130,8 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("PollSurveyTask : updateSurveyMasterData");
             String surveyMasterQuery = "UPDATE SURVEY_MASTER SET "
                     + "SURVEY_TITLE = ?, SURVEY_DESCRIPTION = ?, "
-                    + "END_DATE = ?, PERSONA = ? WHERE SURVEY_ID = ? "
-                    + "AND LANG = ?";
+                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ?, SUBMIT_TYPE = ?  "
+                    + "WHERE SURVEY_ID = ? AND LANG = ?";
             logger.info("updateSurveyMasterData surveyMasterQuery : "
                     + surveyMasterQuery);
             connection.setAutoCommit(false);
@@ -1107,9 +1141,12 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(2, surveyBO.getDescription());
             preparedStatement.setDate(3, getDate(surveyBO.getEndDate()));
             preparedStatement.setString(4, surveyBO.getPersona());
-            preparedStatement.setLong(5,
+            preparedStatement.setString(5, surveyBO.getServiceEntities());
+            preparedStatement.setString(6, surveyBO.getTopics());
+            preparedStatement.setString(7, surveyBO.getSubmitType());
+            preparedStatement.setLong(8,
                     Long.parseLong(surveyBO.getSurveyId()));
-            preparedStatement.setString(6, surveyBO.getLang());
+            preparedStatement.setString(9, surveyBO.getLang());
 
             result = preparedStatement.executeUpdate();
             logger.info("updateSurveyMasterData result : " + result);
@@ -1132,7 +1169,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful update else false for failure.
      * @throws SQLException
      */
-    public boolean updateSurveyQuestionData(SurveyBO surveyBO,
+    public boolean updateSurveyQuestionData(TSSurveyBO surveyBO,
             Document document, Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
@@ -1213,7 +1250,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns true for successful update else false for failure.
      * @throws SQLException
      */
-    public boolean updateSurveyOptionData(SurveyBO surveyBO, Node node,
+    public boolean updateSurveyOptionData(TSSurveyBO surveyBO, Node node,
             Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         boolean result = false;
