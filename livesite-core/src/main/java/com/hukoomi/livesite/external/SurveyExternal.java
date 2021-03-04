@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringJoiner;
@@ -138,6 +140,14 @@ public class SurveyExternal {
                     logger.info("siteKey : " + siteKey);
                     document = detailExt.getContentDetail(context);
 
+                    String endDate = document
+                            .selectSingleNode(
+                                    "/content/root/details/end-date")
+                            .getText();
+
+                    boolean isExpired = checkExpiryDate(endDate);
+                    logger.info("Is expired : " + isExpired);
+                    if (!isExpired) {
                     String surveyId = document
                             .selectSingleNode(
                                     "/content/root/information/id")
@@ -157,6 +167,11 @@ public class SurveyExternal {
                     }
                     document.getRootElement().addAttribute("Sitekey",
                             siteKey);
+                } else {
+                    document.getRootElement().addAttribute("Expired",
+                            "true");
+                }
+
                 } else if ("listing"
                         .equalsIgnoreCase(surveyBO.getAction())) {
                     document = checkSubmissionStatus(context);
@@ -171,6 +186,25 @@ public class SurveyExternal {
             surveyStatusElem.setText(FAILED);
         }
         return document;
+    }
+
+    /**
+     * @param endDate
+     *                Survey End Date
+     * @return
+     */
+    private boolean checkExpiryDate(String endDate) {
+        logger.info("checkExpiryDate()");
+
+        // Formatter for date
+        DateTimeFormatter formatter = DateTimeFormatter
+                .ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        // Parse date to LocalDateTime
+        LocalDateTime localDateTime = LocalDateTime.parse(endDate,
+                formatter);
+
+        return LocalDateTime.now().isAfter(localDateTime);
     }
 
     /**
@@ -281,6 +315,7 @@ public class SurveyExternal {
                     + submittedSurveyIds.toString());
 
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Exception in getSubmissionDatabaseStatus", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
