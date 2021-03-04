@@ -12,8 +12,6 @@ import org.dom4j.Element;
 
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
-import com.hukoomi.utils.ValidationUtils;
-import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /** Logger object to check the flow of the code. */
@@ -25,19 +23,19 @@ public class CommentsEngine {
     private static final String ELEMENT_RESULT = "Result";
     private static final String ELEMENT_STATUS = "Status";
 
-    public Document insertComment(final RequestContext context) throws NumberFormatException, SQLException {
+    public Document commentEngine(final RequestContext context)
+            throws SQLException {
         LOGGER.info("CommentsEngine");
         Document document = null;
 
-        ValidationUtils util = new ValidationUtils();
-        XssUtils xssUtils = new XssUtils();
         RequestHeaderUtils requestHeaderUtils =
                 new RequestHeaderUtils(context);
         String action = context.getParameterString("action");
-        String dcrId = "";
+        String dcrId = context.getParameterString("dcr_id");
         String language = context.getParameterString("locale");
         if (action.equals("getComments")) {
             String cursorSize = context.getParameterString("cursorSize");
+
             document = getComments(dcrId, Integer.parseInt(cursorSize),
                     language, context);
         } else if (action.equals("setComment")) {
@@ -51,29 +49,26 @@ public class CommentsEngine {
                     userName, ip, context);
         } else if (action.equals("getCommentCount")) {
 
-            dcrId = context.getParameterString("dcr_id");
             int blogId = getBlogId(dcrId, language, context);
-            document = getCommentCount(dcrId, language, context);
+            document = getCommentCount(blogId, context);
 
         }
         return document;
     }
 
-    private Document getCommentCount(String dcrId, String language,
-            RequestContext context) {
+    private Document getCommentCount(int blogId, RequestContext context) {
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         Postgre objPostgre = new Postgre(context);
         int count = 0;
         final String getcount =
-                "SELECT COUNT(*) as total FROM BLOG_MASTER WHERE DCR_ID = ? AND LANGUAGE = ? AND STATUS = ?";
+                "SELECT COUNT(*) as total FROM BLOG_COMMENT WHERE DCR_ID = ? AND STATUS = ?";
         try {
             connection = objPostgre.getConnection();
             prepareStatement = connection.prepareStatement(getcount);
-            prepareStatement.setString(1, dcrId);
-            prepareStatement.setString(2, language);
-            prepareStatement.setString(3, "Approved");
+            prepareStatement.setInt(1, blogId);
+            prepareStatement.setString(2, "Approved");
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
                 LOGGER.debug("Count: " + rs.getInt("total"));
@@ -107,8 +102,8 @@ public class CommentsEngine {
         String commentOn = "";
         Document document = DocumentHelper.createDocument();
         try {
-                blogId = getBlogId(dcrId, language, context);
-                LOGGER.debug("BLOG_ID: " + blogId);
+            blogId = getBlogId(dcrId, language, context);
+            LOGGER.debug("BLOG_ID: " + blogId);
 
             if (blogId > 0) {
                 String getComment =
