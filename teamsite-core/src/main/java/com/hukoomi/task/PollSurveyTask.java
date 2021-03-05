@@ -787,7 +787,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
 
             connection = postgre.getConnection();
-
+            connection.setAutoCommit(false);
             TSSurveyBO surveyBO = new TSSurveyBO();
             surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
@@ -857,8 +857,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + "START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, SUBMIT_TYPE) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             logger.info("insertSurveyMasterData surveyMasterQuery : "
-                    + surveyMasterQuery);
-            connection.setAutoCommit(false);
+                    + surveyMasterQuery);            
             preparedStatement = connection
                     .prepareStatement(surveyMasterQuery);
             preparedStatement.setLong(1,
@@ -1058,7 +1057,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
 
             connection = postgre.getConnection();
-
+            connection.setAutoCommit(false);
             TSSurveyBO surveyBO = new TSSurveyBO();
             surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
@@ -1134,7 +1133,6 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + "WHERE SURVEY_ID = ? AND LANG = ?";
             logger.info("updateSurveyMasterData surveyMasterQuery : "
                     + surveyMasterQuery);
-            connection.setAutoCommit(false);
             preparedStatement = connection
                     .prepareStatement(surveyMasterQuery);
             preparedStatement.setString(1, surveyBO.getTitle());
