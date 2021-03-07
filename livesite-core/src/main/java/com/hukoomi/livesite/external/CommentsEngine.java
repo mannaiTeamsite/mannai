@@ -115,7 +115,7 @@ public class CommentsEngine {
                 prepareStatement.setLong(1, blogId);
                 prepareStatement.setString(2, "Approved");
                 prepareStatement.setInt(3, offset);
-                prepareStatement.setInt(2, noOfRows);
+                prepareStatement.setInt(4, noOfRows);
                 LOGGER.debug("getComment :" + getComment);
                 rs = prepareStatement.executeQuery();
                 Element resultElement =
