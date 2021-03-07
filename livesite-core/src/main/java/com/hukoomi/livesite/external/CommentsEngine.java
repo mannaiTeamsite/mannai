@@ -34,9 +34,9 @@ public class CommentsEngine {
         String dcrId = context.getParameterString("dcr_id");
         String language = context.getParameterString("locale");
         if (action.equals("getComments")) {
-            String cursorSize = context.getParameterString("cursorSize");
-
-            document = getComments(dcrId, Integer.parseInt(cursorSize),
+            String noOfRows = context.getParameterString("noOfRows");
+            String offset = context.getParameterString("offset");
+            document = getComments(dcrId,Integer.parseInt(offset), Integer.parseInt(noOfRows),
                     language, context);
         } else if (action.equals("setComment")) {
             String ip = requestHeaderUtils.getClientIpAddress();
@@ -63,7 +63,7 @@ public class CommentsEngine {
         Postgre objPostgre = new Postgre(context);
         int count = 0;
         final String getcount =
-                "SELECT COUNT(*) as total FROM BLOG_COMMENT WHERE DCR_ID = ? AND STATUS = ?";
+                "SELECT COUNT(*) as total FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ?";
         try {
             connection = objPostgre.getConnection();
             prepareStatement = connection.prepareStatement(getcount);
@@ -89,7 +89,7 @@ public class CommentsEngine {
         return document;
     }
 
-    private Document getComments(String dcrId, int cursorSize,
+    private Document getComments(String dcrId, int offset, int noOfRows,
             String language, RequestContext context) throws SQLException {
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -107,15 +107,16 @@ public class CommentsEngine {
 
             if (blogId > 0) {
                 String getComment =
-                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ";
+                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID "
+                                + "OFFSET ? ROWS "
+                                + "FETCH FIRST ? ROW ONLY;";
                 connection = objPostgre.getConnection();
-                connection.setAutoCommit(false);
                 prepareStatement = connection.prepareStatement(getComment);
                 prepareStatement.setLong(1, blogId);
                 prepareStatement.setString(2, "Approved");
+                prepareStatement.setInt(3, offset);
+                prepareStatement.setInt(2, noOfRows);
                 LOGGER.debug("getComment :" + getComment);
-                prepareStatement.setFetchSize(cursorSize);
-
                 rs = prepareStatement.executeQuery();
                 Element resultElement =
                         document.addElement(ELEMENT_RESULT);
