@@ -5,9 +5,6 @@ package com.hukoomi.livesite.external;
 
 import com.hukoomi.utils.CommonUtils;
 import com.interwoven.livesite.runtime.RequestContext;
-import com.interwoven.livesite.file.FileDal;
-import com.interwoven.livesite.runtime.LiveSiteDal;
-import com.interwoven.livesite.runtime.model.page.RuntimePage;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -17,9 +14,6 @@ import com.hukoomi.utils.SolrQueryUtil;
 import com.hukoomi.utils.PropertiesFileReader;
 import org.dom4j.Element;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.util.Map;
 import java.util.List;
 import java.util.Properties;
 
