@@ -13,9 +13,15 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+
 import org.dom4j.Node;
 
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
+
+
 import com.hukoomi.bo.SurveyBO;
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
@@ -52,6 +58,23 @@ public class SurveyExternal {
      * Failed Status constant.
      */
     private static final String FAILED = "Failed";
+    
+    /**
+     * Constant for action polls and survey.
+     */
+    public static final String ACTION_POLLS_AND_SURVEY = "pollsandsurvey";
+    /**
+     * Constant for action survey listing.
+     */
+    public static final String ACTION_SURVEY_LISTING = "listing";
+    /**
+     * Constant for action survey detail.
+     */
+    public static final String ACTION_SURVEY_DETAIL = "detail";
+    /**
+     * Constant for action survey submit.
+     */
+    public static final String ACTION_SUBIT = "submit";
 
     /**
      * Submitted Status constant.
@@ -546,8 +569,7 @@ public class SurveyExternal {
     /**
      * This method is used to set value to SurveyBO object.
      * 
-     * @param context
-     *                Request Context Object.
+     * @param context Request Context Object.
      * 
      * @return Returns SurveyBO Object.
      * 
@@ -556,6 +578,7 @@ public class SurveyExternal {
     @Deprecated(since = "", forRemoval = false)
     public boolean setBO(final RequestContext context, SurveyBO surveyBO) {
 
+        final String POLL_ACTION = "pollAction";
         final String SURVEY_ACTION = "surveyAction";
         final String LOCALE = "locale";
         final String USER_ID = "user_id";
@@ -567,168 +590,136 @@ public class SurveyExternal {
         final String SURVEY_CATEGORY = "surveyCategory";
         final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
         final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
-        final String SUBMIT_TYPE = "submitType";
 
-        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(
-                context);
-        logger.info("surveyAction >>>"
-                + context.getParameterString(SURVEY_ACTION) + "<<<");
-        if (!validate
-                .checkNull(context.getParameterString(SURVEY_ACTION))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SURVEY_ACTION),
-                    Validator.ALPHABET)) {
-                surveyBO.setAction(
-                        context.getParameterString(SURVEY_ACTION));
-            } else {
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+        ValidationErrorList errorList = new ValidationErrorList();
+        String validData  = "";
+        
+        //TODO: Field length needs to be validated against content model and database. 
+        
+        String surveyAction = context.getParameterString(SURVEY_ACTION);
+        logger.info(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
+        if (!ESAPIValidator.checkNull(surveyAction)) {
+            validData  = ESAPI.validator().getValidInput(SURVEY_ACTION, surveyAction, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setAction(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_ACTION));
                 return false;
             }
         }
-
-        logger.info(
-                "locale >>>" + context.getParameterString(LOCALE) + "<<<");
-        if (!validate.checkNull(context.getParameterString(LOCALE))) {
-            if (validate.isValidPattern(context.getParameterString(LOCALE),
-                    Validator.ALPHABET)) {
-                surveyBO.setLang(context.getParameterString(LOCALE, "en"));
-            } else {
-                return false;
-            }
+        
+        String locale = context.getParameterString(LOCALE, "en");
+        logger.info(LOCALE + " >>>"+locale+"<<<");
+        validData  = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setLang(validData);
+        }else {
+            logger.info(errorList.getError(LOCALE));
+            return false;
         }
-
-        logger.info("user_id >>>" + context.getParameterString(USER_ID)
-                + "<<<");
-        if (!validate.checkNull(context.getParameterString(USER_ID))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(USER_ID),
-                    Validator.USER_ID)) {
-                surveyBO.setUserId(context.getParameterString(USER_ID));
-            } else {
-                return false;
-            }
+        
+        String userId = context.getParameterString(USER_ID);
+        logger.info(USER_ID + " >>>"+userId+"<<<");
+        validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setUserId(validData);
+        }else {
+            logger.info(errorList.getError(USER_ID));
+            return false;
         }
-
-        logger.info("ipaddress >>>"
-                + requestHeaderUtils.getClientIpAddress() + "<<<");
-        if (!validate.checkNull(requestHeaderUtils.getClientIpAddress())) {
-            if (validate.isValidPattern(
-                    requestHeaderUtils.getClientIpAddress(),
-                    Validator.IP_ADDRESS)) {
-                surveyBO.setIpAddress(
-                        requestHeaderUtils.getClientIpAddress());
-            } else {
-                return false;
-            }
+        
+        String ipAddress = requestHeaderUtils.getClientIpAddress();
+        logger.info("ipaddress >>>" +ipAddress+"<<<");
+        validData  = ESAPI.validator().getValidInput("ipaddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setIpAddress(validData);
+        }else {
+            logger.info(errorList.getError("ipaddress"));
+            return false;
         }
-
+        
         surveyBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
-
-        logger.info("surveyTakenfrom >>>"
-                + context.getParameterString(SURVEY_TAKEN_FROM) + "<<<");
-        if (!validate.checkNull(
-                context.getParameterString(SURVEY_TAKEN_FROM))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SURVEY_TAKEN_FROM),
-                    Validator.ALPHABET)) {
-                surveyBO.setTakenFrom(
-                        context.getParameterString(SURVEY_TAKEN_FROM));
-            } else {
+        
+        if(ACTION_SUBIT.equalsIgnoreCase(surveyAction)) {
+            
+            String surveyTakenFrom = context.getParameterString(SURVEY_TAKEN_FROM);
+            logger.info(SURVEY_TAKEN_FROM + " >>>"+surveyTakenFrom+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_TAKEN_FROM, surveyTakenFrom, ESAPIValidator.ALPHABET, 150, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setTakenFrom(validData);
+            }else {
+                logger.info(errorList.getError(USER_AGENT));
                 return false;
             }
-        }
-
-        logger.info("surveyId >>>" + context.getParameterString(SURVEY_ID)
-                + "<<<");
-        if (!validate.checkNull(context.getParameterString(SURVEY_ID))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SURVEY_ID),
-                    Validator.NUMERIC)) {
-                surveyBO.setSurveyId(
-                        context.getParameterString(SURVEY_ID));
-            } else {
+            
+            String surveyId = context.getParameterString(SURVEY_ID);
+            logger.info(SURVEY_ID + " >>>"+surveyId+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_ID, surveyId, ESAPIValidator.NUMERIC, 200, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setSurveyId(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_ID));
                 return false;
             }
-        }
-
-        logger.info("totalQuestions >>>"
-                + context.getParameterString(TOTAL_QUESTIONS) + "<<<");
-        if (!validate
-                .checkNull(context.getParameterString(TOTAL_QUESTIONS))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(TOTAL_QUESTIONS),
-                    Validator.NUMERIC)) {
-                surveyBO.setTotalQuestions(
-                        context.getParameterString(TOTAL_QUESTIONS));
-            } else {
+            
+            String totalQuestions = context.getParameterString(TOTAL_QUESTIONS);
+            logger.info(TOTAL_QUESTIONS + " >>>"+totalQuestions+"<<<");
+            validData  = ESAPI.validator().getValidInput(TOTAL_QUESTIONS, totalQuestions, ESAPIValidator.NUMERIC, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setTotalQuestions(validData);
+            }else {
+                logger.info(errorList.getError(TOTAL_QUESTIONS));
                 return false;
             }
+            
+            surveyBO.setCaptchaResponse(
+                    context.getParameterString("g-recaptcha-response"));
+            
         }
-
-        surveyBO.setCaptchaResponse(
-                context.getParameterString("g-recaptcha-response"));
-
-        if (!validate
-                .checkNull(context.getParameterString(SURVEY_GROUP))) {
-            surveyBO.setGroup(getContentName(
-                    context.getParameterString(SURVEY_GROUP)));
-        }
-
-        logger.info("surveyGroupCategory >>>"
-                + context.getParameterString(SURVEY_GROUP_CATEGORY)
-                + "<<<");
-        if (!validate.checkNull(
-                context.getParameterString(SURVEY_GROUP_CATEGORY))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SURVEY_GROUP_CATEGORY),
-                    Validator.ALPHABET_HYPEN)) {
-                surveyBO.setGroupCategory(
-                        context.getParameterString(SURVEY_GROUP_CATEGORY));
-            } else {
+        
+        String pollAction = context.getParameterString(POLL_ACTION);
+        logger.info(POLL_ACTION + " >>>" +pollAction+ "<<<");   
+        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
+            
+            String surveyGroup = context.getParameterString(SURVEY_GROUP);
+            logger.info(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
+            if (!ESAPIValidator.checkNull(surveyGroup)) {
+                surveyBO.setGroup(getContentName(surveyGroup));
+            }
+            
+            String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
+            logger.info(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setGroupCategory(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_GROUP_CATEGORY));
                 return false;
             }
-        }
-
-        logger.info("surveyCategory >>>"
-                + context.getParameterString(SURVEY_CATEGORY) + "<<<");
-        if (!validate
-                .checkNull(context.getParameterString(SURVEY_CATEGORY))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SURVEY_CATEGORY),
-                    Validator.ALPHABET)) {
-                surveyBO.setCategory(
-                        context.getParameterString(SURVEY_CATEGORY));
-            } else {
+            
+            String surveyCategory = context.getParameterString(SURVEY_CATEGORY);
+            logger.info(SURVEY_CATEGORY + " >>>"+surveyCategory+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_CATEGORY, surveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setCategory(validData);
+            }else {
+                logger.info(errorList.getError(SURVEY_CATEGORY));
                 return false;
             }
-        }
-
-        logger.info("solrSurveyCategory >>>"
-                + context.getParameterString(SOLR_SURVEY_CATEGORY)
-                + "<<<");
-        if (!validate.checkNull(
-                context.getParameterString(SOLR_SURVEY_CATEGORY))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SOLR_SURVEY_CATEGORY),
-                    Validator.ALPHABET)) {
-                surveyBO.setSolrCategory(
-                        context.getParameterString(SOLR_SURVEY_CATEGORY));
-            } else {
+            
+            String solrSurveyCategory = context.getParameterString(SOLR_SURVEY_CATEGORY);
+            logger.info(SOLR_SURVEY_CATEGORY + " >>>"+solrSurveyCategory+"<<<");
+            validData  = ESAPI.validator().getValidInput(SOLR_SURVEY_CATEGORY, solrSurveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setSolrCategory(validData);
+            }else {
+                logger.info(errorList.getError(SOLR_SURVEY_CATEGORY));
                 return false;
             }
+            
         }
-
-        logger.info("submitType >>>"
-                + context.getParameterString(SUBMIT_TYPE) + "<<<");
-        if (!validate.checkNull(context.getParameterString(SUBMIT_TYPE))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SUBMIT_TYPE),
-                    Validator.ALPHABET)) {
-                surveyBO.setSolrCategory(
-                        context.getParameterString(SUBMIT_TYPE));
-            } else {
-                return false;
-            }
-        }
+        
         return true;
     }
 

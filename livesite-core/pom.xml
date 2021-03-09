@@ -281,6 +281,11 @@
 		<artifactId>commons-lang</artifactId>
 		<version>2.6</version>
 	</dependency>
+	<dependency>
+  		<groupId>org.owasp.esapi</groupId>
+  		<artifactId>esapi</artifactId>
+  		<version>2.2.2.0</version>
+  	</dependency>
   </dependencies>
     <reporting>
         <plugins>
