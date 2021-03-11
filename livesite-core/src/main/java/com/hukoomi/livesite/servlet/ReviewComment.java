@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class ReviewComment extends HttpServlet {
@@ -63,10 +64,46 @@ public class ReviewComment extends HttpServlet {
             LOGGER.info("End of Review comment");
         }
     }
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response) throws ServletException {
+        LOGGER.info("ReviewComment : Start");
+        StringBuilder resp = null;
+        JSONObject data = null;
+        JSONArray dataArray = null;
+        try {
+            BufferedReader inbr = new BufferedReader(
+                    new InputStreamReader(request.getInputStream()));
+            String json = "";
+            json = inbr.readLine();
+            data = new JSONObject(json);
+            dataArray = getCommentbyBlogId(data);
+            if (dataArray != null) {
+                data.put("success", "success");
+                response.getWriter().write(data.toString());
+            } else {
+                data.put("success", "false");
+                data.put("errorMessage", "Failed to update");
+                response.getWriter().write(data.toString());
+            }
 
+        } catch (IOException e) {
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            try {
+                data.put("success", "false");
+                data.put("errorMessage", e.getMessage());
+                response.getWriter().write(data.toString());
+            } catch (IOException e1) {
+                LOGGER.error("REVIEW Failed : Exception ", e);
+            }
+        } finally {
+            LOGGER.info("End of Review comment");
+        }
+    }
     private boolean updateReviewData(JSONObject data) {
         LOGGER.debug("BlogTask : insertBlogData");
-        Properties dbProperties = loadProperties("dbconfig.properties");
+        String path = data.getString("path");
+        Properties dbProperties = loadProperties(path);
         Connection connection = null;
         boolean isDataUpdated = false;
         try {
@@ -121,7 +158,57 @@ public class ReviewComment extends HttpServlet {
         }
         return result;
     }
+    private JSONArray getCommentbyBlogId(JSONObject data) {
+        LOGGER.info("getCommentbyBlogId");
+        int blogId = data.getInt("status");
+        String Propfilepath = data.getString("path");
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        Properties dbProperties = loadProperties(Propfilepath);
+        Connection connection = null;
+        JSONArray arrayComments = new JSONArray();
+        try {
+            String userName = dbProperties.getProperty("username");
+            String password = dbProperties.getProperty("password");
+            connection = DriverManager.getConnection(
+                    getConnectionString(dbProperties), userName, password);
+            if (blogId > 0) {
+                String getComment =
+                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BOLG_URL,USER_IP_ADDRESS  FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID ";
+                prepareStatement = connection.prepareStatement(getComment);
+                prepareStatement.setLong(1, blogId);
+                prepareStatement.setString(2, "Approved");
+                LOGGER.debug("getComment :" + getComment);
+                rs = prepareStatement.executeQuery();
 
+                while (rs.next()) {LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
+                    int commentId = rs.getInt("COMMENT_ID");
+                    String commentStr = rs.getString("COMMENT");
+                    String username = rs.getString("USER_NAME");
+                    String commentOn = rs.getString("COMMENTED_ON");
+                    String blogUrl = rs.getString("BLOG_URL");
+                    String ip = rs.getString("USER_IP_ADDRESS");
+                    JSONObject Comments = new JSONObject();
+                    Comments.put("CommentId", commentId);
+                    Comments.put("Comment", commentStr);
+                    Comments.put("UserName", username);
+                    Comments.put("CommentOn", commentOn);
+                    Comments.put("BlogURL", blogUrl);
+                    Comments.put("IP", ip);
+                    arrayComments.put(Comments);
+                }
+                rs.close();
+            }
+
+        } catch (SQLException e) {
+            LOGGER.error("getBlogId()", e);
+            e.printStackTrace();
+
+        } finally {
+            releaseConnection(connection, null, null);
+        }
+        return arrayComments;
+    }
     private String getConnectionString(Properties properties) {
         LOGGER.info("Postgre : getConnectionString()");
         String connectionStr = null;
@@ -184,16 +271,16 @@ public class ReviewComment extends HttpServlet {
      * @throws MalformedURLException
      *
      */
-    private Properties loadProperties(final String propertiesFileName) {
+    private Properties loadProperties(final String Propfilepath) {
         LOGGER.info("Loading Properties File from Request Context.");
         Properties propFile = new Properties();
-        if (propertiesFileName != null && !propertiesFileName.equals("")) {
+        if (Propfilepath != null && !Propfilepath.equals("")) {
             String root =
-                    "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties";
+                    Propfilepath;
             InputStream inputStream;
             try {
                 inputStream = new FileInputStream(
-                        root + "/" + propertiesFileName);
+                        root );
                 if (inputStream != null) {
                     propFile.load(inputStream);
                     LOGGER.info("Properties File Loaded");
