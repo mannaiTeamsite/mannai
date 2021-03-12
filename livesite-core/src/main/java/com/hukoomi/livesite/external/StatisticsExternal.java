@@ -13,6 +13,7 @@ import com.google.api.services.analytics.model.RealtimeData;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.text.DecimalFormat;
@@ -55,15 +56,21 @@ public class StatisticsExternal {
             GoogleCredential credential = new GoogleCredential.Builder()
                     .setTransport(httpTransport)
                     .setJsonFactory(JSON_FACTORY)
-                    .set
                     .setServiceAccountId("796485088924-0p8duvoi5rieneul88j36hc3forhgtdq@developer.gserviceaccount.com")
+
                     .setServiceAccountPrivateKeyFromP12File(new File("/Users/jatin/Projects/Hukoomi Revamp/GoogleAnalytics/" + "client_secrets.p12"))
                     .setServiceAccountScopes(AnalyticsScopes.all())
                     .build();
-
+            System.out.println(credential.getServiceAccountId());
+            System.out.println(credential.getServiceAccountScopes());
+            GoogleCredential googleCredential = GoogleCredential.fromStream(new FileInputStream("/Users/jatin/Projects/Hukoomi Revamp/GoogleAnalytics/motc-oogp-4205147-849b1733bf06.json"));
+//            System.out.println(new Analytics.Builder(httpTransport, JSON_FACTORY, googleCredential.getRequestInitializer()).build());
             // Construct the Analytics service object.
-            return new Analytics.Builder(httpTransport, JSON_FACTORY, credential)
-                    .setApplicationName("GA-ServiceAccount").build();
+//            return new Analytics.Builder(httpTransport, JSON_FACTORY, googleCredential)
+            System.out.println(googleCredential.getServiceAccountUser());
+            System.out.println(googleCredential.getServiceAccountId());
+            return new Analytics.Builder(httpTransport, JSON_FACTORY, googleCredential.getRequestInitializer())
+                    .setApplicationName("Hukoomi.ga").build();
         } catch(IOException | GeneralSecurityException ex) {
 
         }
