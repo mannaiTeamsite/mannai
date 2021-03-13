@@ -75,6 +75,7 @@ public class ReviewComment extends HttpServlet {
             dataArray = getCommentbyBlogId(data);
             if (dataArray != null) {
                 data.put("success", "success");
+                data.put("comments", dataArray);
                 response.getWriter().write(data.toString());
             } else {
                 data.put("success", "false");
