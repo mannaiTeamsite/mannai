@@ -32,7 +32,6 @@ public class ReviewComment extends HttpServlet {
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
         LOGGER.info("ReviewComment : Start");
-        StringBuilder resp = null;
         JSONObject data = null;
         try {
             BufferedReader inbr = new BufferedReader(
@@ -67,15 +66,12 @@ public class ReviewComment extends HttpServlet {
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
         LOGGER.info("ReviewComment : Start");
-        StringBuilder resp = null;
         JSONObject data = null;
         JSONArray dataArray = null;
         try {
-            BufferedReader inbr = new BufferedReader(
-                    new InputStreamReader(request.getInputStream()));
-            String json = "";
-            json = inbr.readLine();
-            data = new JSONObject(json);
+            data = new JSONObject();
+            data.put("blogId", Integer.parseInt(request.getParameter("blogId")));
+            data.put("path", request.getParameter("path"));
             dataArray = getCommentbyBlogId(data);
             if (dataArray != null) {
                 data.put("success", "success");
@@ -160,7 +156,7 @@ public class ReviewComment extends HttpServlet {
     }
     private JSONArray getCommentbyBlogId(JSONObject data) {
         LOGGER.info("getCommentbyBlogId");
-        int blogId = data.getInt("status");
+        int blogId = data.getInt("blogId");
         String Propfilepath = data.getString("path");
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
