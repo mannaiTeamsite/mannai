@@ -171,10 +171,10 @@ public class ReviewComment extends HttpServlet {
                     getConnectionString(dbProperties), userName, password);
             if (blogId > 0) {
                 String getComment =
-                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BOLG_URL,USER_IP_ADDRESS  FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID ";
+                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID ";
                 prepareStatement = connection.prepareStatement(getComment);
                 prepareStatement.setLong(1, blogId);
-                prepareStatement.setString(2, "Approved");
+                prepareStatement.setString(2, "Pending");
                 LOGGER.debug("getComment :" + getComment);
                 rs = prepareStatement.executeQuery();
 
