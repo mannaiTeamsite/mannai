@@ -43,11 +43,11 @@ public class BlogTask {
     /**
      * Success transition message
      */
-    public static final String SUCCESS_TRANSITION = "Insert Blog Master Data Success";
+    public static final String SUCCESS_TRANSITION = "Insert Master Data Success";
     /**
      * Failure transition message
      */
-    public static final String FAILURE_TRANSITION = "Insert Blog Master Data Failure";
+    public static final String FAILURE_TRANSITION = "Insert Master Data Failure";
     /**
      * Transition hashmap key
      */
