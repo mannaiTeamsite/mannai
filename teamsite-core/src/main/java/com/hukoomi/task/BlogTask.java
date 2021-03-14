@@ -35,7 +35,7 @@ public class BlogTask {
     /**
      * XPath to the Title path
      */
-    public static final String TITLE_PATH = "/root/detail/title";
+    public static final String TITLE_PATH = "/root/information/title";
     /**
      * XPath to the blog updated date
      */
@@ -200,6 +200,7 @@ public class BlogTask {
             connection = postgre.getConnection();
             BlogBO blogBO = new BlogBO();
             blogBO.setBlogId(getDCRValue(document, ID_PATH));
+            blogBO.setBlogId(getDCRValue(document, TITLE_PATH));
             blogBO.setLang(getDCRValue(document, LANG_PATH));
             blogBO.setUpdatedDate(getDCRValue(document, UPDATE_DATE_PATH));
             logger.info("BlogTask : updateBlogMasterData");
