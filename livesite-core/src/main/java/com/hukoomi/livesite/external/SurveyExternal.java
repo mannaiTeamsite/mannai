@@ -315,7 +315,6 @@ public class SurveyExternal {
                     + submittedSurveyIds.toString());
 
         } catch (Exception e) {
-            e.printStackTrace();
             logger.error("Exception in getSubmissionDatabaseStatus", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
