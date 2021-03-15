@@ -190,6 +190,8 @@ public class ReviewComment extends HttpServlet {
                     String ip = rs.getString("USER_IP_ADDRESS");
                     JSONObject Comments = new JSONObject();
                     Comments.put("CommentId", commentId);
+                    LOGGER.debug(" before decode commentStr :" + commentStr);
+                    LOGGER.debug(" after decode commentStr :" +  util.decodeToArabicString(commentStr));
                     Comments.put("Comment", util.decodeToArabicString(commentStr));
                     Comments.put("UserName", util.decodeToArabicString(username));
                     Comments.put("CommentOn", commentOn);
