@@ -201,7 +201,7 @@ public class BlogTask {
             BlogBO blogBO = new BlogBO();
             blogBO.setBlogId(getDCRValue(document, ID_PATH));
             logger.info("ID_PATH : " + blogBO.getBlogId());
-            blogBO.setBlogId(getDCRValue(document, TITLE_PATH));
+            blogBO.setTitle(getDCRValue(document, TITLE_PATH));
             logger.info("TITLE_PATH : " + blogBO.getTitle());
             blogBO.setLang(getDCRValue(document, LANG_PATH));
             logger.info("LANG_PATH : " + blogBO.getLang());
