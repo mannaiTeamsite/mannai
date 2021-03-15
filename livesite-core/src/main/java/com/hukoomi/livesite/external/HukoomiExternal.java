@@ -2,11 +2,11 @@ package com.hukoomi.livesite.external;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
-import java.util.List;
+import java.util.Enumeration;
 
-import javax.lang.model.util.Elements;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -23,7 +23,7 @@ public class HukoomiExternal {
 	private final Logger logger = Logger.getLogger(HukoomiExternal.class);
 	/** Default query to fetch all solr content. */
 	public static final String DEFAULT_QUERY = "*:*";
-
+	
 	/**
 	 * This method will be called from Component External for solr Content fetching.
 	 * 
@@ -69,72 +69,60 @@ public class HukoomiExternal {
 			root.addElement("category").addText(category);
 		}
 		logger.debug("Before calling : " + doc);
-		HttpServletRequest request = context.getRequest();
-		String accessToken = null;
-		Cookie cookie = null;
-		Cookie[] cookies = null;
-		cookies = request.getCookies();
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				cookie = cookies[i];
-				logger.info("Name:" + cookie.getName());
-				logger.info("Value:" + cookie.getValue());
-				if (cookie.getName().equals("accessToken")) {
-					accessToken = cookie.getValue();
-				}
-			}
-		}
-
-		if (accessToken != null && accessToken != "") {
-			DashboardExternal dash = new DashboardExternal();
-			Document headerDetail = dash.dashboardServices(context);
+		
+	
+		HttpServletRequest request = context.getRequest();		
+		HttpSession session = request.getSession(false);	
+		
+				if(session == null) {
+					 String accessToken = null;
+						Cookie cookie = null;
+						Cookie[] cookies = null;
+						cookies = request.getCookies();
+						if (cookies != null) {
+							for (int i = 0; i < cookies.length; i++) {
+								cookie = cookies[i];
+								if (cookie.getName().equals("accessToken")) {
+									accessToken = cookie.getValue();
+								}
+							}						
+						if(accessToken != null) {
+							
+						DashboardExternal dash = new DashboardExternal(context);
+						dash.dashboardServices(context , accessToken);
+						
+						Element userData = root.addElement("userData");	
+						Enumeration<String> attributes = request.getSession().getAttributeNames();
+						while (attributes.hasMoreElements()) {						
+						    String attribute = (String) attributes.nextElement();
+						    Element docElement = userData.addElement(attribute);
+							String docData = (String) request.getSession().getAttribute(attribute);
+							logger.info(attribute+" : "+docData);
+							docElement.setText(docData);
+							}
+						}
+						
+						}
+					}else {
+					if(request.getSession().getAttribute("status") == "valid") {
+					Element userData = root.addElement("userData");	
+					Enumeration<String> attributes = request.getSession().getAttributeNames();
+					while (attributes.hasMoreElements()) {
+					    String attribute = (String) attributes.nextElement();
+					    Element docElement = userData.addElement(attribute);
+						String docData = (String) request.getSession().getAttribute(attribute);
+						logger.info(attribute+" : "+docData);
+						docElement.setText(docData);
+						}
+					}
+				}		
+		
 			
-			logger.info("dashboard service called");
-			Element header = headerDetail.getRootElement();
-			if (header != null && header.isRootElement()) {
-				Element userData = root.addElement("userData");						
-				Element statusElement = userData.addElement("status");
-				String status = headerDetail.selectSingleNode("/UserInfo/status").getText();
-				statusElement.setText(status);
-				Element uidElement = userData.addElement("uid");
-				String uid = headerDetail.selectSingleNode("/UserInfo/uid").getText();
-				uidElement.setText(uid);
-				Element fnEnElement = userData.addElement("fnEn");
-				String fnEn = headerDetail.selectSingleNode("/UserInfo/fnEn").getText();
-				fnEnElement.setText(fnEn);
-				Element fnArElement = userData.addElement("fnAr");
-				String fnAr = headerDetail.selectSingleNode("/UserInfo/fnAr").getText();
-				fnArElement.setText(fnAr);
-				Element lnEnElement = userData.addElement("lnEn");
-				String lnEn = headerDetail.selectSingleNode("/UserInfo/lnEn").getText();
-				lnEnElement.setText(lnEn);
-				Element lnArElement = userData.addElement("lnAr");
-				String lnAr = headerDetail.selectSingleNode("/UserInfo/lnAr").getText();
-				lnArElement.setText(lnAr);
-				Element QIDElement = userData.addElement("QID");
-				String QID = headerDetail.selectSingleNode("/UserInfo/QID").getText();
-				QIDElement.setText(QID);
-				Element EIDElement = userData.addElement("EID");
-				String EID = headerDetail.selectSingleNode("/UserInfo/EID").getText();
-				EIDElement.setText(EID);
-				Element mobileElement = userData.addElement("mobile");
-				String mobile = headerDetail.selectSingleNode("/UserInfo/mobile").getText();
-				mobileElement.setText(mobile);
-				Element emailElement = userData.addElement("email");
-				String email = headerDetail.selectSingleNode("/UserInfo/email").getText();
-				emailElement.setText(email);
-				Element lstMdfyElement = userData.addElement("lstMdfy");
-				String lstMdfy = headerDetail.selectSingleNode("/UserInfo/lstMdfy").getText();
-				lstMdfyElement.setText(lstMdfy);
-				Element roleElement = userData.addElement("role");
-				String role = headerDetail.selectSingleNode("/UserInfo/role").getText();
-				roleElement.setText(role);
-					
-			}
-		}
-		logger.info("dashboard service called"+doc.asXML());
+		
 		return doc;
 		
 	}
+	
+
 
 }
