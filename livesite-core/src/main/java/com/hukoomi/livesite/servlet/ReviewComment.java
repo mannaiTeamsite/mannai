@@ -23,6 +23,8 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.hukoomi.utils.CommonUtils;
+
 public class ReviewComment extends HttpServlet {
 
     /** logger.debug object to check the flow of the code. */
@@ -164,6 +166,7 @@ public class ReviewComment extends HttpServlet {
         Properties dbProperties = loadProperties(Propfilepath);
         Connection connection = null;
         JSONArray arrayComments = new JSONArray();
+        CommonUtils util = new CommonUtils();
         try {
             String userName = dbProperties.getProperty("username");
             String password = dbProperties.getProperty("password");
@@ -187,8 +190,8 @@ public class ReviewComment extends HttpServlet {
                     String ip = rs.getString("USER_IP_ADDRESS");
                     JSONObject Comments = new JSONObject();
                     Comments.put("CommentId", commentId);
-                    Comments.put("Comment", commentStr);
-                    Comments.put("UserName", username);
+                    Comments.put("Comment", util.decodeToArabicString(commentStr));
+                    Comments.put("UserName", util.decodeToArabicString(username));
                     Comments.put("CommentOn", commentOn);
                     Comments.put("BlogURL", blogUrl);
                     Comments.put("IP", ip);
