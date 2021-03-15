@@ -200,9 +200,11 @@ public class BlogTask {
             connection = postgre.getConnection();
             BlogBO blogBO = new BlogBO();
             blogBO.setBlogId(getDCRValue(document, ID_PATH));
+            logger.info("ID_PATH : " + blogBO.getBlogId());
             blogBO.setBlogId(getDCRValue(document, TITLE_PATH));
+            logger.info("TITLE_PATH : " + blogBO.getTitle());
             blogBO.setLang(getDCRValue(document, LANG_PATH));
-            blogBO.setUpdatedDate(getDCRValue(document, UPDATE_DATE_PATH));
+            logger.info("LANG_PATH : " + blogBO.getLang());
             logger.info("BlogTask : updateBlogMasterData");
             String blogMasterQuery = "UPDATE BLOG_MASTER SET BLOG_TITLE = ?, UPDATED_DATE = LOCALTIMESTAMP "
                     + "WHERE DCR_ID = ? AND LANGUAGE = ?";
