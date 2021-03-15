@@ -145,7 +145,7 @@ public class ContactUsExternal {
             
             validData  = ESAPI.validator().getValidInput("senderEmail", senderEmail, ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
             if(errorList.isEmpty()) {
-               
+                email.setSenderEmail(senderEmail);
             }else {
                 LOGGER.debug(errorList.getError("senderEmail"));
                return false;
