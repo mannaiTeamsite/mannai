@@ -96,12 +96,11 @@ public class CommentsEngine {
     private boolean validateCommentData(String comments, String userName) {
         if (userName.length() > 100) {
             return false;
-        }
-        if (comments.length() > 150) {
+        } else if (comments.length() > 150) {
             return false;
         }
 
-        return false;
+        return true;
     }
 
     /**
