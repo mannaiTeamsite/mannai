@@ -11,9 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
-import java.util.Collection;
-import java.util.List;
-import java.util.Properties;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
+import java.util.*;
 
 public class SitemapGenerator {
 
@@ -38,34 +38,69 @@ public class SitemapGenerator {
         SitemapGenerator sitemapGenerator = new SitemapGenerator();
         String languages = properties.getProperty("languages", "en,ar");
         String sitemapSaveLocation = branch + "/WORKAREA/" + properties.getProperty("workarea","default") + "/" + properties.getProperty("sitemapSaveLocation","/sitemaps");
-
-        if(languages.contains(",")){
-            final String[] languagesToCrawl = languages.split(",");
-            for (String language : languagesToCrawl) {
-                Document sitemap = sitemapGenerator.sitemap(vPath, language, properties);
-                sitemapGenerator.saveSitemap(sitemap, sitemapSaveLocation, language);
-            }
-        } else {
-            Document sitemap = sitemapGenerator.sitemap(vPath, languages, properties);
-            sitemapGenerator.saveSitemap(sitemap, sitemapSaveLocation, languages);
+        String baseFilePermissions = properties.getProperty("filePermissions","rw-r--r--");
+        String baseDirPermissions = properties.getProperty("dirPermissions","rwxr-xr-x");
+        final String[] languagesToCrawl = languages.split(",");
+        sitemapGenerator.cleanupOldSitemaps(sitemapSaveLocation,languagesToCrawl);
+        for (String language : languagesToCrawl) {
+            Document sitemap = sitemapGenerator.sitemap(vPath, language, properties);
+            sitemapGenerator.saveSitemap(sitemap, sitemapSaveLocation, language, baseDirPermissions, baseFilePermissions);
         }
-
+        Document sitemapIndex = sitemapGenerator.sitemapIndex(languagesToCrawl, properties);
+        sitemapGenerator.saveSitemap(sitemapIndex,sitemapSaveLocation,"index", baseDirPermissions, baseFilePermissions);
     }
 
-    private void saveSitemap(Document sitemap, String path, String language) {
+    private boolean cleanupOldSitemaps(String path, String[] languages) {
+        boolean status = false;
+        if(StringUtils.isBlank(path)){
+            System.out.println("Path not provided to clean up Sitemap. Exiting.");
+            return status;
+        }
+        for(String language : languages){
+            System.out.println("Attempting to delete the sitemap for: " + language);
+            try{
+                Path sitemapPath = Path.of(path + "/sitemap-" + language + ".xml");
+                status = Files.deleteIfExists(sitemapPath);
+            } catch (IOException ex) {
+                System.out.println("Error while cleaning up Sitemap for: " + language);
+                status = false;
+                ex.printStackTrace(System.out);
+            }
+        }
+        System.out.println("Attempting to delete the sitemap index");
+        try{
+            Path sitemapPath = Path.of(path + "/sitemap.xml");
+            status = Files.deleteIfExists(sitemapPath);
+        } catch (IOException ex) {
+            System.out.println("Error while cleaning up Sitemap index");
+            status = false;
+            ex.printStackTrace(System.out);
+        }
+        return status;
+    }
+
+    private void saveSitemap(Document sitemap, String path, String language, String dirPermissions, String filePermissions) {
         if(StringUtils.isBlank(path)){
             System.out.println("Path not provided to save Sitemap. Exiting.");
             return;
         }
         try {
             Path directory = Path.of(path);
+            Set<PosixFilePermission> baseDirPermissions = PosixFilePermissions.fromString(dirPermissions);
             if(Files.notExists(directory)) {
                 System.out.println("Directory not found: "+path);
-                Files.createDirectory(directory);
+                Files.createDirectory(directory, PosixFilePermissions.asFileAttribute(baseDirPermissions));
             }
-            Writer writer = new OutputStreamWriter(new FileOutputStream(path + "/sitemap-" + language + ".xml"), StandardCharsets.UTF_8);//Convert file output stream to writer object
-            sitemap.write(writer);//Write DOM model built in memory to XML file
-            writer.close();//Close output stream
+            Set<PosixFilePermission> baseFilePermissions = PosixFilePermissions.fromString(filePermissions);
+            if(!language.equals("index")) {
+                path = path + "/sitemap-" + language + ".xml";
+            } else {
+                path = path + "/sitemap.xml";
+            }
+            Writer writer = new OutputStreamWriter(new FileOutputStream(path), StandardCharsets.UTF_8);
+            sitemap.write(writer);
+            writer.close();
+            Files.setPosixFilePermissions(Path.of(path),baseFilePermissions);
         } catch (IOException ex){
             System.out.println("Error while saving Sitemap");
             ex.printStackTrace(System.out);
@@ -105,6 +140,8 @@ public class SitemapGenerator {
         homepageUrl.addElement(sitemap_changefreq).addText(properties.getProperty("homepageChangeFrequency","daily"));
         homepageUrl.addElement(sitemap_priority).addText(properties.getProperty("homepagePriority","1.00"));
         Collection<File> files = FileUtils.listFiles(new File(sites), fileTypes, true);
+        String[] foldersToSkip = properties.getProperty("foldersToSkip", "ajax,dashboard").split(",");
+        String[] pagesToSkip = properties.getProperty("pagesToSkip", "error").split(",");
         for ( File file : files ) {
             String pageName = file.getPath().replaceAll(vPath+"/sites", "");
             if(pageName.endsWith("-details.page")){
@@ -125,7 +162,7 @@ public class SitemapGenerator {
                     System.out.println("Error while reading Page details");
                     ex.printStackTrace(System.out);
                 }
-            } else if(!file.getPath().contains("ajax") && !file.getName().equals("home.page")) {
+            } else if(!isItemMatchesInArray(file.getPath(),foldersToSkip) && !isItemInArray(file.getName(),pagesToSkip) && !file.getName().equals("home.page")) {
                 Element url = root.addElement(sitemap_url);
                 url.addElement(sitemap_location).addText(hostname + utils.getPrettyURLForPage(pageName, language,""));
                 try {
@@ -139,6 +176,44 @@ public class SitemapGenerator {
             }
         }
         return document;
+    }
+
+    private Document sitemapIndex(String[] languages,Properties properties) {
+        Document document = DocumentHelper.createDocument(DocumentHelper.createElement("sitemapindex"));
+        Date date = new Date();
+        String sitemapGenerationDate = date.toInstant().toString();
+        Element root = document.getRootElement();
+        String hostname = properties.getProperty("runtimeHost","https://hukoomi.gov.qa");
+        root.addAttribute("xmlns",properties.getProperty("xmlns","http://www.sitemaps.org/schemas/sitemap/0.9"));
+        root.addAttribute("xmlns:xsi",properties.getProperty("xmlns:xsi","http://www.w3.org/2001/XMLSchema-instance"));
+        root.addAttribute("xsi:schemaLocation",properties.getProperty("xsi:schemaLocation","http://www.sitemaps.org/schemas/sitemap/0.9\n" +
+                "http://www.sitemaps.org/schemas/sitemap/0.9/siteindex.xsd"));
+        String sitemapBaseLocation = hostname + properties.getProperty("sitemapSaveLocation","/sitemaps");
+        for(String language : languages){
+            Element sitemap = root.addElement("sitemap");
+            sitemap.addElement("loc").addText(sitemapBaseLocation + "/sitemap-" + language + ".xml");
+            sitemap.addElement("lastmod").addText(sitemapGenerationDate);
+        }
+        return document;
+    }
+
+    public boolean isItemMatchesInArray(String item, String[] items) {
+        for (String itemFromArray : items) {
+            if(item.contains(itemFromArray)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isItemInArray(String item, String[] items) {
+        item = item.replaceAll(".page","");
+        for (String itemFromArray : items) {
+            if(item.equals(itemFromArray)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
