@@ -75,6 +75,8 @@ public class ReviewComment extends HttpServlet {
             data.put("blogId", Integer.parseInt(request.getParameter("blogId")));
             data.put("path", request.getParameter("path"));
             dataArray = getCommentbyBlogId(data);
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
             if (dataArray != null) {
                 data.put("success", "success");
                 data.put("comments", dataArray);
