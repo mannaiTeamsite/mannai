@@ -73,8 +73,9 @@ public class HukoomiExternal {
 	
 		HttpServletRequest request = context.getRequest();		
 		HttpSession session = request.getSession(false);	
-		
-				if(session == null) {
+		logger.info("Session:" + session);
+		logger.info("Status : "+request.getSession().getAttribute("status"));
+				if(request.getSession().getAttribute("status") != "valid") {
 					 String accessToken = null;
 						Cookie cookie = null;
 						Cookie[] cookies = null;
@@ -87,28 +88,31 @@ public class HukoomiExternal {
 								}
 							}						
 						if(accessToken != null) {
-							
+						logger.info("--------Dashboard External is called--------");	
 						DashboardExternal dash = new DashboardExternal(context);
 						dash.dashboardServices(context , accessToken);
+						
+						if(root != null && root.isRootElement()) {
 						
 						Element userData = root.addElement("userData");	
 						Enumeration<String> attributes = request.getSession().getAttributeNames();
 						while (attributes.hasMoreElements()) {						
-						    String attribute = (String) attributes.nextElement();
+						    String attribute =  attributes.nextElement();
 						    Element docElement = userData.addElement(attribute);
 							String docData = (String) request.getSession().getAttribute(attribute);
 							logger.info(attribute+" : "+docData);
 							docElement.setText(docData);
+							
 							}
 						}
-						
+						}
 						}
 					}else {
-					if(request.getSession().getAttribute("status") == "valid") {
+					if(request.getSession().getAttribute("status") == "valid" && root != null && root.isRootElement()) {
 					Element userData = root.addElement("userData");	
 					Enumeration<String> attributes = request.getSession().getAttributeNames();
 					while (attributes.hasMoreElements()) {
-					    String attribute = (String) attributes.nextElement();
+					    String attribute = attributes.nextElement();
 					    Element docElement = userData.addElement(attribute);
 						String docData = (String) request.getSession().getAttribute(attribute);
 						logger.info(attribute+" : "+docData);
@@ -117,7 +121,7 @@ public class HukoomiExternal {
 					}
 				}		
 		
-			
+				logger.info("Document"+doc.asXML());	
 		
 		return doc;
 		

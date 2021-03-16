@@ -27,27 +27,21 @@ public class DashboardExternal {
 		String jwtParsedToken = null;
 
 		HttpServletRequest request = context.getRequest();
-		JWTTokenUtil jwt = new JWTTokenUtil(context);
-
-		HttpSession session = request.getSession(true);	
-		    session.setMaxInactiveInterval(30*60);		    
-		 		
+		JWTTokenUtil jwt = new JWTTokenUtil(context);		 		
 			if (accessToken != null) {
 				try {
-					jwtParsedToken = jwt.parseJwt(accessToken);
-					setSessionAttributes(jwtParsedToken, request);
+					jwtParsedToken = jwt.parseJwt(accessToken);	
+					
+					setSessionAttributes(jwtParsedToken, request, "valid");
 				} catch (ExpiredJwtException e) {
 					LOGGER.debug("Token Expired");
-					setSessionAttributes(jwtParsedToken, request);
-					session.setAttribute("status", "Token Expired");
+					setSessionAttributes(jwtParsedToken, request, "Token Expired");
 				} catch (SignatureException e) {
 					LOGGER.debug("Signature Exception");
-					session.setAttribute("status", "Signature Exception");
-					
+					setSessionAttributes(jwtParsedToken, request, "Signature Exception");				
 				} catch (Exception e) {
 					LOGGER.debug("Some other exception in JWT parsing" + e);
-					setSessionAttributes(jwtParsedToken, request);
-					session.setAttribute("status", "Exception");
+					setSessionAttributes(jwtParsedToken, request, "Some other exception in JWT parsing");
 				}
 			}
 		
@@ -55,11 +49,11 @@ public class DashboardExternal {
 		
 	
 
-	private void setSessionAttributes(String jwtParsedToken,HttpServletRequest request) {
+	private void setSessionAttributes(String jwtParsedToken,HttpServletRequest request, String status) {
 
 		LOGGER.info("--------------getDocument is called------------");		
-		HttpSession session = request.getSession();
-		session.setAttribute("status", "Valid");
+		HttpSession session = request.getSession(true);	
+		session.setAttribute("status", status);
 		session.setAttribute("unm", getValue(jwtParsedToken, "unm"));
 		session.setAttribute("uid", getValue(jwtParsedToken, "uid"));
 		session.setAttribute("fnEn", getValue(jwtParsedToken, "fnEn"));
@@ -72,7 +66,7 @@ public class DashboardExternal {
 		session.setAttribute("EID", getValue(jwtParsedToken, "email"));
 		session.setAttribute("mobile", getValue(jwtParsedToken, "lstMdfy"));
 		session.setAttribute("EID", getValue(jwtParsedToken, "role"));
-		
+		LOGGER.info("--------------getDocument is Ended------------");	
 	}
 
 	private static String getValue(final String response, final String key) {
