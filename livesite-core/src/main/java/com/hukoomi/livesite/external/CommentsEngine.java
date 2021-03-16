@@ -15,9 +15,8 @@ import com.hukoomi.utils.RequestHeaderUtils;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
-/** Logger object to check the flow of the code. */
-
 public class CommentsEngine {
+    /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(CommentsEngine.class);
 
@@ -130,8 +129,6 @@ public class CommentsEngine {
             }
         } catch (SQLException e) {
             LOGGER.error("getCommentCount()", e);
-            e.printStackTrace();
-
         } finally {
             objPostgre.releaseConnection(connection, prepareStatement, rs);
         }
@@ -208,12 +205,9 @@ public class CommentsEngine {
 
         } catch (SQLException e) {
             LOGGER.error("getBlogId()", e);
-            e.printStackTrace();
-
         } finally {
             objPostgre.releaseConnection(connection, prepareStatement, rs);
         }
-        objPostgre.releaseConnection(connection, prepareStatement, rs);
         return document;
     }
 
@@ -249,12 +243,9 @@ public class CommentsEngine {
             }
         } catch (SQLException e) {
             LOGGER.error("getBlogId()", e);
-            e.printStackTrace();
-
         } finally {
             objPostgre.releaseConnection(connection, prepareStatement, rs);
         }
-        objPostgre.releaseConnection(connection, prepareStatement, rs);
         return blogId;
     }
 
