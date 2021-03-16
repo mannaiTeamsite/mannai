@@ -9,9 +9,13 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
 
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /** Logger object to check the flow of the code. */
@@ -22,40 +26,130 @@ public class CommentsEngine {
 
     private static final String ELEMENT_RESULT = "Result";
     private static final String ELEMENT_STATUS = "Status";
+    final String BLOG_ACTION = "blogAction";
+    final String LOCALE = "locale";
+    final String DCR_ID = "dcr_id";
+    final String USER_AGENT = "User-Agent";
+    final String VOTED_FROM = "votedFrom";
+    final String POLLID = "pollId";
+    private static final String STATUS_FIELD_VALIDATION =
+            "FieldValidationFailed";
 
+    /**
+     * This method internally makes call to get Comment/set comment/ get
+     * count of approved comments
+     *
+     * @param context
+     * @return Document
+     * @throws SQLException
+     */
     public Document commentEngine(final RequestContext context)
             throws SQLException {
         LOGGER.info("CommentsEngine");
         Document document = null;
-
         RequestHeaderUtils requestHeaderUtils =
                 new RequestHeaderUtils(context);
-        String action = context.getParameterString("action");
-        String dcrId = context.getParameterString("dcr_id");
-        String language = context.getParameterString("locale");
-        if (action.equals("getComments")) {
-            String noOfRows = context.getParameterString("noOfRows");
-            String offset = context.getParameterString("offset");
-            document = getComments(dcrId,Integer.parseInt(offset), Integer.parseInt(noOfRows),
-                    language, context);
-        } else if (action.equals("setComment")) {
-            String ip = requestHeaderUtils.getClientIpAddress();
-            String comments = context.getParameterString("comments");
-            String blogUrl = context.getParameterString("blog_url");
-            String userName = context.getParameterString("username");
+        XssUtils xssUtils = new XssUtils();
+        String action =
+                xssUtils.stripXSS(context.getParameterString("action"));
+        int blogId = 0;
+        String status = "";
+        boolean validateAction = validateAction(context);
+        if (validateAction) {
 
-            int blogId = getBlogId(dcrId, language, context);
-            document = insertCommentsToDB(blogId, blogUrl, comments,
-                    userName, ip, context);
-        } else if (action.equals("getCommentCount")) {
+            String dcrId = xssUtils
+                    .stripXSS(context.getParameterString("dcr_id"));
+            String language = xssUtils
+                    .stripXSS(context.getParameterString("locale"));
+            if (validateDCR(context, dcrId, language)) {
+                switch (action) {
+                case "getComments":
+                    String noOfRows = xssUtils.stripXSS(
+                            context.getParameterString("noOfRows"));
+                    String offset = xssUtils.stripXSS(
+                            context.getParameterString("offset"));
 
-            int blogId = getBlogId(dcrId, language, context);
-            document = getCommentCount(blogId, context);
+                    document = getComments(dcrId, Integer.parseInt(offset),
+                            Integer.parseInt(noOfRows), language, context);
+                    break;
+                case "setComment":
+                    String ip = requestHeaderUtils.getClientIpAddress();
+                    String comments = xssUtils.stripXSS(
+                            context.getParameterString("comments"));
+                    String blogUrl = xssUtils.stripXSS(
+                            context.getParameterString("blog_url"));
+                    String userName = xssUtils.stripXSS(
+                            context.getParameterString("username"));
+
+                    blogId = getBlogId(dcrId, language, context);
+                    document = insertCommentsToDB(blogId, blogUrl,
+                            comments, userName, ip, context);
+                    break;
+                case "getCommentCount":
+                    blogId = getBlogId(dcrId, language, context);
+                    document = getCommentCount(blogId, context);
+                    break;
+                }
+            } else {
+                status = STATUS_FIELD_VALIDATION;
+                return getDocument(status);
+
+            }
+        }
+        else {
+            status = STATUS_FIELD_VALIDATION;
+            return getDocument(status);
 
         }
         return document;
     }
 
+    private boolean validateAction(RequestContext context) {
+        ValidationErrorList errorList = new ValidationErrorList();
+
+        String blogAction = context.getParameterString(BLOG_ACTION);
+        LOGGER.info(BLOG_ACTION + " >>>" + blogAction + "<<<");
+        ESAPI.validator().getValidInput(BLOG_ACTION, blogAction,
+                ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        if (errorList.isEmpty()) {
+            return true;
+        } else {
+            LOGGER.info(errorList.getError(BLOG_ACTION));
+            return false;
+        }
+    }
+
+    private boolean validateDCR(RequestContext context, String dcrId,
+            String language) {
+        ValidationErrorList errorList = new ValidationErrorList();
+
+        LOGGER.info(DCR_ID + " >>>" + dcrId + "<<<");
+        ESAPI.validator().getValidInput(DCR_ID, dcrId,
+                ESAPIValidator.NUMERIC, 20, false, true, errorList);
+        if (errorList.isEmpty()) {
+            ESAPI.validator().getValidInput(LOCALE, language,
+                    ESAPIValidator.ALPHABET, 2, false, true, errorList);
+            if (errorList.isEmpty()) {
+                return true;
+            } else {
+                LOGGER.info(errorList.getError(DCR_ID));
+                return false;
+            }
+        }
+
+        else {
+            LOGGER.info(errorList.getError(DCR_ID));
+            return false;
+        }
+    }
+
+    /**
+     * method will return approved comments for a blog
+     *
+     * @param blogId
+     * @param context
+     * @return Document
+     */
     private Document getCommentCount(int blogId, RequestContext context) {
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -89,6 +183,17 @@ public class CommentsEngine {
         return document;
     }
 
+    /**
+     * Method will return comments for a blog.
+     *
+     * @param dcrId
+     * @param offset
+     * @param noOfRows
+     * @param language
+     * @param context
+     * @return
+     * @throws SQLException
+     */
     private Document getComments(String dcrId, int offset, int noOfRows,
             String language, RequestContext context) throws SQLException {
         Connection connection = null;
@@ -152,6 +257,14 @@ public class CommentsEngine {
         return document;
     }
 
+    /**
+     * return blog id for dcr id and language.
+     *
+     * @param dcrId
+     * @param language
+     * @param context
+     * @return blogId
+     */
     private int getBlogId(String dcrId, String language,
             RequestContext context) {
         Connection connection = null;
@@ -185,6 +298,17 @@ public class CommentsEngine {
         return blogId;
     }
 
+    /**
+     * method will insert comments and comments related data to db.
+     *
+     * @param blogId
+     * @param blogUrl
+     * @param comments
+     * @param userName
+     * @param ip
+     * @param context
+     * @return
+     */
     public Document insertCommentsToDB(int blogId, String blogUrl,
             String comments, String userName, String ip,
             RequestContext context) {
