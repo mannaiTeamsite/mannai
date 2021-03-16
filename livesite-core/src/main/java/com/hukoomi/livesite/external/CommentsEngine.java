@@ -132,7 +132,6 @@ public class CommentsEngine {
         } finally {
             objPostgre.releaseConnection(connection, prepareStatement, rs);
         }
-        objPostgre.releaseConnection(connection, prepareStatement, rs);
         Document document = DocumentHelper.createDocument();
         Element resultElement = document.addElement(ELEMENT_RESULT);
         Element statusElement = resultElement.addElement("Count");
