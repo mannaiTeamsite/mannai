@@ -24,12 +24,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.XssUtils;
 
 public class ReviewComment extends HttpServlet {
 
     /** logger.debug object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(ReviewComment.class);
+    XssUtils xssUtils = new XssUtils();
 
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
@@ -65,6 +67,7 @@ public class ReviewComment extends HttpServlet {
             LOGGER.info("End of Review comment");
         }
     }
+
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
         LOGGER.info("ReviewComment : Start");
@@ -72,8 +75,11 @@ public class ReviewComment extends HttpServlet {
         JSONArray dataArray = null;
         try {
             data = new JSONObject();
-            data.put("blogId", Integer.parseInt(request.getParameter("blogId")));
-            data.put("path", request.getParameter("path"));
+
+            data.put("blogId", Integer.parseInt(
+                    xssUtils.stripXSS(request.getParameter("blogId"))));
+            data.put("path",
+                    xssUtils.stripXSS(request.getParameter("path")));
             dataArray = getCommentbyBlogId(data);
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
@@ -101,6 +107,7 @@ public class ReviewComment extends HttpServlet {
             LOGGER.info("End of Review comment");
         }
     }
+
     private boolean updateReviewData(JSONObject data) {
         LOGGER.debug("BlogTask : insertBlogData");
         String path = data.getString("path");
@@ -139,7 +146,8 @@ public class ReviewComment extends HttpServlet {
         try {
 
             long commentId = data.getLong("commentId");
-            String status = data.getString("status");
+            String status = xssUtils
+                    .stripXSS(data.getString("status"));
             String query =
                     "UPDATE BLOG_COMMENT SET STATUS = ?, STATUS_UPDATED_ON = LOCALTIMESTAMP "
                             + "WHERE COMMENT_ID = ? ";
@@ -159,6 +167,7 @@ public class ReviewComment extends HttpServlet {
         }
         return result;
     }
+
     private JSONArray getCommentbyBlogId(JSONObject data) {
         LOGGER.info("getCommentbyBlogId");
         int blogId = data.getInt("blogId");
@@ -183,7 +192,8 @@ public class ReviewComment extends HttpServlet {
                 LOGGER.debug("getComment :" + getComment);
                 rs = prepareStatement.executeQuery();
 
-                while (rs.next()) {LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
+                while (rs.next()) {
+                    LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
                     int commentId = rs.getInt("COMMENT_ID");
                     String commentStr = rs.getString("COMMENT");
                     String username = rs.getString("USER_NAME");
@@ -192,10 +202,14 @@ public class ReviewComment extends HttpServlet {
                     String ip = rs.getString("USER_IP_ADDRESS");
                     JSONObject Comments = new JSONObject();
                     Comments.put("CommentId", commentId);
-                    LOGGER.debug(" before decode commentStr :" + commentStr);
-                    LOGGER.debug(" after decode commentStr :" +  util.decodeToArabicString(commentStr));
-                    Comments.put("Comment", util.decodeToArabicString(commentStr));
-                    Comments.put("UserName", util.decodeToArabicString(username));
+                    LOGGER.debug(
+                            " before decode commentStr :" + commentStr);
+                    LOGGER.debug(" after decode commentStr :"
+                            + util.decodeToArabicString(commentStr));
+                    Comments.put("Comment",
+                            util.decodeToArabicString(commentStr));
+                    Comments.put("UserName",
+                            util.decodeToArabicString(username));
                     Comments.put("CommentOn", commentOn);
                     Comments.put("BlogURL", blogUrl);
                     Comments.put("IP", ip);
@@ -213,6 +227,7 @@ public class ReviewComment extends HttpServlet {
         }
         return arrayComments;
     }
+
     private String getConnectionString(Properties properties) {
         LOGGER.info("Postgre : getConnectionString()");
         String connectionStr = null;
@@ -279,12 +294,10 @@ public class ReviewComment extends HttpServlet {
         LOGGER.info("Loading Properties File from Request Context.");
         Properties propFile = new Properties();
         if (Propfilepath != null && !Propfilepath.equals("")) {
-            String root =
-                    Propfilepath;
+            String root = Propfilepath;
             InputStream inputStream;
             try {
-                inputStream = new FileInputStream(
-                        root );
+                inputStream = new FileInputStream(root);
                 if (inputStream != null) {
                     propFile.load(inputStream);
                     LOGGER.info("Properties File Loaded");
