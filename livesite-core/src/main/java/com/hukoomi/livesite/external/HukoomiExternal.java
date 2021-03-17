@@ -3,6 +3,7 @@ package com.hukoomi.livesite.external;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Enumeration;
+import java.util.HashMap;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -100,11 +101,11 @@ public class HukoomiExternal {
 						while (attributes.hasMoreElements()) {						
 						    String attribute =  attributes.nextElement();
 						    logger.info(attribute+" : "+request.getSession().getAttribute(attribute));
-							String docData = ""; // (String) request.getSession().getAttribute(attribute);
+							HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
 							logger.info(attribute+" : "+docData);
 							 if (!attribute.equals("") && !docData.equals("")) {
 								    Element docElement = userData.addElement(attribute);
-								    docElement.setText(docData);
+								    docElement.setText(docData.get("data"));
 								    }
 							
 							}
