@@ -100,14 +100,17 @@ public class HukoomiExternal {
 						Enumeration<String> attributes = request.getSession().getAttributeNames();
 						while (attributes.hasMoreElements()) {						
 						    String attribute =  attributes.nextElement();
-						    logger.info(attribute+" : "+request.getSession().getAttribute(attribute));
-							HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
-							logger.info(attribute+" : "+docData);
-							 if (!attribute.equals("") && !docData.equals("")) {
-								    Element docElement = userData.addElement(attribute);
-								    docElement.setText(docData.get("fnEn"));
-								    }
+						    logger.info(attribute+" = "+request.getSession().getAttribute(attribute));
+							//HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
+							if(request.getSession().getAttribute(attribute) != null) {
+								String attrValue = (String) request.getSession().getAttribute(attribute);
+								logger.info(attribute+" : "+attrValue);	
+								Element docElement = userData.addElement(attribute);
+								
+								docElement.setText(attrValue);
+							}
 							
+						    
 							}
 						}
 						}
