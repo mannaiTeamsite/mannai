@@ -89,9 +89,7 @@ public class ReviewComment extends HttpServlet {
                 data.put("blogId", Integer.parseInt(xssUtils
                         .stripXSS(request.getParameter("blogId"))));
                 dataArray = getCommentbyBlogId(data);
-
             }
-
             if (dataArray != null) {
                 data.put("success", "success");
                 data.put("comments", dataArray);
@@ -130,7 +128,6 @@ public class ReviewComment extends HttpServlet {
             String password = dbProperties.getProperty("password");
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
-
             String getBlog = "SELECT * FROM BLOG_MASTER";
             prepareStatement = connection.prepareStatement(getBlog);
             LOGGER.debug("getComment :" + getBlog);
@@ -147,7 +144,6 @@ public class ReviewComment extends HttpServlet {
             rs.close();
         } catch (SQLException e) {
             LOGGER.error("getBlogs()", e);
-            e.printStackTrace();
 
         } finally {
             releaseConnection(connection, null, null);
@@ -175,7 +171,6 @@ public class ReviewComment extends HttpServlet {
             } else {
                 LOGGER.info("Blog master insert failed");
             }
-
         } catch (Exception e) {
             LOGGER.error("Exception in Update comment data catch block : ",
                     e);
@@ -259,8 +254,6 @@ public class ReviewComment extends HttpServlet {
 
         } catch (SQLException e) {
             LOGGER.error("getCommentbyBlogId()", e);
-            e.printStackTrace();
-
         } finally {
             releaseConnection(connection, null, null);
         }
