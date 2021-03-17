@@ -99,10 +99,12 @@ public class HukoomiExternal {
 						Enumeration<String> attributes = request.getSession().getAttributeNames();
 						while (attributes.hasMoreElements()) {						
 						    String attribute =  attributes.nextElement();
-						    Element docElement = userData.addElement(attribute);
 							String docData = (String) request.getSession().getAttribute(attribute);
 							logger.info(attribute+" : "+docData);
-							docElement.setText(docData);
+							 if (!attribute.equals("") && !docData.equals("")) {
+								    Element docElement = userData.addElement(attribute);
+								    docElement.setText(docData);
+								    }
 							
 							}
 						}
@@ -114,10 +116,15 @@ public class HukoomiExternal {
 					Enumeration<String> attributes = request.getSession().getAttributeNames();
 					while (attributes.hasMoreElements()) {
 					    String attribute = attributes.nextElement();
-					    Element docElement = userData.addElement(attribute);
+					   
 						String docData = (String) request.getSession().getAttribute(attribute);
 						logger.info(attribute+" : "+docData);
-						docElement.setText(docData);
+						 Element docElement = userData.addElement(attribute);
+						 if (!docData.equals("")) {		
+							    docElement.setText(docData);
+							    }else {
+							    	docElement.setText("");
+							    }
 						}
 					}
 				}		
