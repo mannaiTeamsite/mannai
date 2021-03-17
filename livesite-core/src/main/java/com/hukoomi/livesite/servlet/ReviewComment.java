@@ -73,16 +73,25 @@ public class ReviewComment extends HttpServlet {
         LOGGER.info("ReviewComment : Start");
         JSONObject data = null;
         JSONArray dataArray = null;
+        String action = "";
         try {
             data = new JSONObject();
-
-            data.put("blogId", Integer.parseInt(
-                    xssUtils.stripXSS(request.getParameter("blogId"))));
-            data.put("path",
-                    xssUtils.stripXSS(request.getParameter("path")));
-            dataArray = getCommentbyBlogId(data);
+            request.getParameter("blogId");
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            action = xssUtils.stripXSS(request.getParameter("action"));
+            data.put("path",
+                    xssUtils.stripXSS(request.getParameter("path")));
+            data.put("action", action);
+            if (action.equals("getBlogs")) {
+                dataArray = getBlogs(data);
+            } else if (action.equals("getComments")) {
+                data.put("blogId", Integer.parseInt(xssUtils
+                        .stripXSS(request.getParameter("blogId"))));
+                dataArray = getCommentbyBlogId(data);
+
+            }
+
             if (dataArray != null) {
                 data.put("success", "success");
                 data.put("comments", dataArray);
@@ -108,6 +117,44 @@ public class ReviewComment extends HttpServlet {
         }
     }
 
+    private JSONArray getBlogs(JSONObject data) {
+        LOGGER.info("getBlogs");
+        String Propfilepath = data.getString("path");
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        Properties dbProperties = loadProperties(Propfilepath);
+        Connection connection = null;
+        JSONArray arrayComments = new JSONArray();
+        try {
+            String userName = dbProperties.getProperty("username");
+            String password = dbProperties.getProperty("password");
+            connection = DriverManager.getConnection(
+                    getConnectionString(dbProperties), userName, password);
+
+            String getBlog = "SELECT * FROM BLOG_MASTER";
+            prepareStatement = connection.prepareStatement(getBlog);
+            LOGGER.debug("getComment :" + getBlog);
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                LOGGER.debug("blog_id: " + rs.getInt("BLOG_ID"));
+                int blogId = rs.getInt("BLOG_ID");
+                String blogTitle = rs.getString("BLOG_TITLE");
+                JSONObject blogs = new JSONObject();
+                blogs.put("blogId", blogId);
+                blogs.put("Title", (blogTitle));
+                arrayComments.put(blogs);
+            }
+            rs.close();
+        } catch (SQLException e) {
+            LOGGER.error("getBlogs()", e);
+            e.printStackTrace();
+
+        } finally {
+            releaseConnection(connection, null, null);
+        }
+        return arrayComments;
+    }
+
     private boolean updateReviewData(JSONObject data) {
         LOGGER.debug("BlogTask : insertBlogData");
         String path = data.getString("path");
@@ -130,12 +177,11 @@ public class ReviewComment extends HttpServlet {
             }
 
         } catch (Exception e) {
-            LOGGER.error(
-                    "Exception in insertBlogData rollback catch block : ",
+            LOGGER.error("Exception in Update comment data catch block : ",
                     e);
         } finally {
             releaseConnection(connection, null, null);
-            LOGGER.info("Released insertBlogData connection");
+            LOGGER.info("Released Update comment data connection");
         }
         return isDataUpdated;
     }
@@ -146,8 +192,7 @@ public class ReviewComment extends HttpServlet {
         try {
 
             long commentId = data.getLong("commentId");
-            String status = xssUtils
-                    .stripXSS(data.getString("status"));
+            String status = xssUtils.stripXSS(data.getString("status"));
             String query =
                     "UPDATE BLOG_COMMENT SET STATUS = ?, STATUS_UPDATED_ON = LOCALTIMESTAMP "
                             + "WHERE COMMENT_ID = ? ";
@@ -202,14 +247,8 @@ public class ReviewComment extends HttpServlet {
                     String ip = rs.getString("USER_IP_ADDRESS");
                     JSONObject Comments = new JSONObject();
                     Comments.put("CommentId", commentId);
-                    LOGGER.debug(
-                            " before decode commentStr :" + commentStr);
-                    LOGGER.debug(" after decode commentStr :"
-                            + util.decodeToArabicString(commentStr));
-                    Comments.put("Comment",
-                            util.decodeToArabicString(commentStr));
-                    Comments.put("UserName",
-                            util.decodeToArabicString(username));
+                    Comments.put("Comment", commentStr);
+                    Comments.put("UserName", username);
                     Comments.put("CommentOn", commentOn);
                     Comments.put("BlogURL", blogUrl);
                     Comments.put("IP", ip);
@@ -219,7 +258,7 @@ public class ReviewComment extends HttpServlet {
             }
 
         } catch (SQLException e) {
-            LOGGER.error("getBlogId()", e);
+            LOGGER.error("getCommentbyBlogId()", e);
             e.printStackTrace();
 
         } finally {
