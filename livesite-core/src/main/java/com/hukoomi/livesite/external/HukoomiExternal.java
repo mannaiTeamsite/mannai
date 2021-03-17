@@ -75,7 +75,8 @@ public class HukoomiExternal {
 		HttpSession session = request.getSession(false);	
 		logger.info("Session:" + session);
 		logger.info("Status : "+request.getSession().getAttribute("status"));
-				if(request.getSession().getAttribute("status") != "valid") {
+		String status = (String) request.getSession().getAttribute("status");
+				if(status != "valid" || status == null || status =="") {
 					 String accessToken = null;
 						Cookie cookie = null;
 						Cookie[] cookies = null;
