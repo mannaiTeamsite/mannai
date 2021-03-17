@@ -8,86 +8,140 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.AnalyticsScopes;
 import com.google.api.services.analytics.model.GaData;
-import com.google.api.services.analytics.model.Profile;
 import com.google.api.services.analytics.model.RealtimeData;
+import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
-
-import java.io.File;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class StatisticsExternal {
 
-    public static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    /** JSON Factory object to use for Google APIs. */
+    private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+    /** Logger object to check the flow of the code. */
+    private final Logger logger = Logger.getLogger(StatisticsExternal.class);
 
-    public void generateStatistics(){
-        Calendar calendar = Calendar.getInstance();
-        int currentYear = calendar.get(Calendar.YEAR);
-        String dateFrom=Integer.toString(currentYear) + "-01-01";
-        String dateTo="today";
-        Analytics analytics = initializeAnalytics();
-        if(analytics == null){
-            System.out.println("Could not initialize Analytics object.");
-            return;
+    public Document getStatistics(final RequestContext context){
+        Document document = DocumentHelper.createDocument();
+        Element root = document.addElement("root");
+        String keyfile = context.getFileDal().getRoot() + context.getParameterString("keyfile", "/iw/config/properties//motc-oogp-4205147-849b1733bf06.json");
+        GoogleCredential credentials = getCredentials(keyfile);
+        if(credentials == null){
+            logger.debug("Could not Get Credentials.");
+            return document;
         }
-        System.out.println("Analytics account initialized....");
-        String totalSessionsCount = getAnalyticsData(getAnalyticsObj(analytics,"235015399",dateFrom,dateTo,"ga:pageviews,ga:sessions"),true);
-        System.out.println(totalSessionsCount);
-        String activeUsers = getRealtimeData(getRealtimeObj(analytics,"235015399"));
-        System.out.println("Current Active Users " + "   " + formatNumbers(activeUsers));
-        String otherData = getAnalyticsData(getAnalyticsObj(analytics,"235015399",dateFrom,dateTo,"ga:pageviews,ga:sessions"),true);
-        System.out.println(otherData);
-        String analyticsData = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,"235015399",dateFrom,dateTo,"ga:pageviews,ga:sessions","ga:month"),false);
-    }
-
-    public static void main(String[] args) {
-        StatisticsExternal statisticsExternal = new StatisticsExternal();
-        statisticsExternal.generateStatistics();
-    }
-
-    protected Analytics initializeAnalytics() {
+        Analytics analytics = initializeAnalytics(context,credentials);
+        if(analytics == null){
+            logger.debug("Could not initialize Analytics object.");
+            return document;
+        }
         try {
+            credentials.refreshToken();
+            root.addElement("accessToken").addText(credentials.getAccessToken());
+        } catch (IOException ex) {
+            logger.error("Error while refreshing Google API token.", ex);
+        }
+        Calendar calendar = Calendar.getInstance();
+        int currYear = calendar.get(Calendar.YEAR);
+        String currentYear = Integer.toString(currYear);
+        root.addElement("currentYear").addText(currentYear);
+        String dateFrom = currentYear + "-01-01";
+        String dateTo = "today";
+        String profile = context.getParameterString("profile", "235015399");
+        String realtimeObjects = context.getParameterString("realtime-objects", "activeUsers");
+        String locale = context.getParameterString("locale", "en");
+        String startYear = context.getParameterString("start-year", "2020");
+        StringBuilder realtimeObjectId = new StringBuilder();
+        for(String realtimeObject : realtimeObjects.split(",")){
+            if(!realtimeObjectId.toString().equals("")){
+                realtimeObjectId.append(",");
+            }
+            realtimeObjectId.append("rt:"+realtimeObject);
+        }
+        String analyticsObjects = context.getParameterString("analytics-objects", "pageviews,sessions");
+        StringBuilder analyticsObjectId = new StringBuilder();
+        for(String analyticsObject : analyticsObjects.split(",")){
+            if(!analyticsObjectId.toString().equals("")){
+                analyticsObjectId.append(",");
+            }
+            analyticsObjectId.append("ga:"+analyticsObject);
+        }
+        String currentYearDimensions = context.getParameterString("current-year-dimension", "deviceCategory");
+        StringBuilder currentYearDimensionId = new StringBuilder();
+        for(String  currentYearDimension : currentYearDimensions.split(",")){
+            if(!currentYearDimensionId.toString().equals("")){
+                currentYearDimensionId.append(",");
+            }
+            currentYearDimensionId.append("ga:"+currentYearDimension);
+        }
+        String analyticsDimensions = context.getParameterString("analytics-dimension", "month,deviceCategory");
+        StringBuilder analyticsDimensionId = new StringBuilder();
+        for(String  analyticsDimension : analyticsDimensions.split(",")){
+            if(!analyticsDimensionId.toString().equals("")){
+                analyticsDimensionId.append(",");
+            }
+            analyticsDimensionId.append("ga:"+analyticsDimension);
+        }
+        document = getRealtimeData(getRealtimeObj(analytics,profile, realtimeObjectId.toString()), document);
+        document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),currentYearDimensionId.toString()), document, currentYear, currentYear, locale);
+        int defaultYear = Integer.parseInt(startYear);
+        for(int year=defaultYear;year<currYear;year++){
+            document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),analyticsDimensionId.toString()), document, year+"-01-01", year+"-12-31", locale);
+        }
+        return document;
+    }
+
+    /**
+     * Initializes an Analytics service object.
+     *
+     * @return An authorized Analytics service object.
+     * @throws IOException
+     * @throws GeneralSecurityException
+     */
+    private Analytics initializeAnalytics(RequestContext context, GoogleCredential credential) {
+        try{
             HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
-            GoogleCredential credential = new GoogleCredential.Builder()
-                    .setTransport(httpTransport)
-                    .setJsonFactory(JSON_FACTORY)
-                    .setServiceAccountId("796485088924-0p8duvoi5rieneul88j36hc3forhgtdq@developer.gserviceaccount.com")
+            String application = context.getParameterString("application", "GA-ServiceAccount");
+            Analytics build = new Analytics.Builder(httpTransport, JSON_FACTORY, credential)
+                    .setApplicationName(application).build();
+            return build;
+        } catch (GeneralSecurityException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
-                    .setServiceAccountPrivateKeyFromP12File(new File("/Users/jatin/Projects/Hukoomi Revamp/GoogleAnalytics/" + "client_secrets.p12"))
-                    .setServiceAccountScopes(AnalyticsScopes.all())
-                    .build();
-            System.out.println(credential.getServiceAccountId());
-            System.out.println(credential.getServiceAccountScopes());
-            GoogleCredential googleCredential = GoogleCredential.fromStream(new FileInputStream("/Users/jatin/Projects/Hukoomi Revamp/GoogleAnalytics/motc-oogp-4205147-849b1733bf06.json"));
-//            System.out.println(new Analytics.Builder(httpTransport, JSON_FACTORY, googleCredential.getRequestInitializer()).build());
-            // Construct the Analytics service object.
-//            return new Analytics.Builder(httpTransport, JSON_FACTORY, googleCredential)
-            System.out.println(googleCredential.getServiceAccountUser());
-            System.out.println(googleCredential.getServiceAccountId());
-            return new Analytics.Builder(httpTransport, JSON_FACTORY, googleCredential.getRequestInitializer())
-                    .setApplicationName("Hukoomi.ga").build();
-        } catch(IOException | GeneralSecurityException ex) {
-
+    public GoogleCredential getCredentials(String keyfile){
+        try {
+            return GoogleCredential
+                    .fromStream(new FileInputStream(keyfile))
+                    .createScoped(AnalyticsScopes.all());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }
 
     private GaData getAnalyticsObjWithDimensions(Analytics analytics, String profileId, String dateFrom, String dateTo, String fields, String dimension) {
         if(StringUtils.isBlank(dimension)){
-            System.out.println("Dimension is not passed.");
+            logger.info("Dimension is not passed.");
             return null;
         }
         try {
-            System.out.println("Getting data for: "+ dimension);
-            System.out.println(analytics.getBaseUrl());
-            System.out.println(analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields).execute());
-            GaData execute = analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields).setDimensions(dimension).execute();
-            System.out.println(execute);
+            logger.info("Getting data for: "+ dimension);
+            GaData execute = analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields).setDimensions(dimension).setSort(dimension.split(",")[0]).execute();
             return execute;
         } catch (IOException ex) {
 
@@ -95,67 +149,84 @@ public class StatisticsExternal {
         return null;
     }
 
-    private GaData getAnalyticsObj(Analytics analytics, String profileId, String dateFrom, String dateTo, String dimension) {
-        if(StringUtils.isBlank(dimension)){
-            System.out.println("Dimension is not passed.");
-            return null;
-        }
-        try {
-            System.out.println("Getting data for: "+ dimension);
-            System.out.println(analytics.management().accounts().list().execute());
-            System.out.println(analytics.management().profiles().list("~all","~all").execute());
-            GaData execute = analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, dimension).execute();
-            System.out.println(execute);
-            return execute;
-        } catch (IOException ex) {
-
-        }
-        return null;
-    }
-
-    private String getAnalyticsData(GaData results, Boolean isSingleDimension) {
-        String data = "";
-        System.out.println(results);
-        if (results != null && null != results.getRows() && !results.getRows().isEmpty()) {
-            System.out.println("Getting Data from GAData Object");
+    private Document getAnalyticsData(GaData results, Document document,String yearFrom, String yearTo, String locale) {
+        Element root = document.getRootElement();
+        Element gaData = root.addElement("ga-data");
+        gaData.addElement("year-from").addText(yearFrom);
+        gaData.addElement("year-to").addText(yearTo);
+        if (results != null && null != results.getRows() && !results.getRows().isEmpty() && null != results.getColumnHeaders() && !results.getColumnHeaders().isEmpty()) {
+            logger.info("Getting Realtime Data from Object");
             List<GaData.ColumnHeaders> columnHeaders = results.getColumnHeaders();
-            List<String> gaRows = results.getRows().get(0);
-            for ( int i = 0; i < gaRows.size(); i++ ) {
-                data = data + "       " + columnHeaders.get(i).getName() + ">>>>" + formatNumbers(gaRows.get(i));
+            List<List<String>> rowSets = results.getRows();
+            for(int traverseRow=0; traverseRow < rowSets.size(); traverseRow++){
+                for(int traverseColumn=0; traverseColumn < columnHeaders.size(); traverseColumn++){
+                    String metricName = columnHeaders.get(traverseColumn).getName();
+                    gaData.addElement("name").addText(metricName);
+                    if(metricName.equals("ga:month")){
+                        gaData.addElement("value").addAttribute("month", rowSets.get(traverseRow).get(traverseColumn)).addText(formatMonth(rowSets.get(traverseRow).get(traverseColumn),locale));
+                    } else {
+                        gaData.addElement("value").addText(formatNumbers(rowSets.get(traverseRow).get(traverseColumn)));
+                    }
+                }
             }
+            return document;
         }
-        return data;
+        return document;
     }
 
-    private RealtimeData getRealtimeObj(Analytics analytics, String profileId) {
+    private RealtimeData getRealtimeObj(Analytics analytics, String profileId, String objectId) {
         if(StringUtils.isBlank(profileId)){
-            System.out.println("Dimension is not passed.");
+            logger.debug("Dimension is not passed.");
             return null;
         }
         try {
-            return analytics.data().realtime().get("ga:" + profileId, "rt:activeUsers").execute();
+            return analytics.data().realtime().get("ga:" + profileId, objectId).execute();
         } catch (IOException ex) {
-
+            logger.error("Error while fetching realtime data from API.", ex);
         }
         return null;
     }
 
-    private String getRealtimeData(RealtimeData results) {
-        String data = "";
-        System.out.println(results);
-        if (results != null && null != results.getRows() && !results.getRows().isEmpty()) {
-            System.out.println("Getting Realtime Data from Object");
-            return results.getRows().get(0).get(0);
+    private Document getRealtimeData(RealtimeData results, Document document) {
+        Element root = document.getRootElement();
+        if (results != null && null != results.getRows() && !results.getRows().isEmpty() && null != results.getColumnHeaders() && !results.getColumnHeaders().isEmpty()) {
+            logger.info("Getting Realtime Data from Object");
+            List<RealtimeData.ColumnHeaders> columnHeaders = results.getColumnHeaders();
+            List<List<String>> rowSets = results.getRows();
+            for(int traverseRow=0; traverseRow < rowSets.size(); traverseRow++){
+                for(int traverseColumn=0; traverseColumn < columnHeaders.size(); traverseColumn++){
+                    Element rtData = root.addElement("rt-data");
+                    rtData.addElement("name").addText(columnHeaders.get(traverseColumn).getName());
+                    rtData.addElement("value").addText(formatNumbers(rowSets.get(traverseRow).get(traverseColumn)));
+                }
+            }
+            return document;
         }
-        return data;
+        return document;
     }
 
     private String formatNumbers(String number){
-        System.out.println("Number before format: "+ number);
-        if(StringUtils.isBlank(number)){
-            return null;
+        logger.debug("Number before format: " + number);
+        if(StringUtils.isBlank(number) || !number.matches("[0-9]+")){
+            return number;
         }
         return DecimalFormat.getNumberInstance().format(Double.parseDouble(number));
+    }
+
+    private String formatMonth(String month, String language){
+        logger.debug("Month: " + month);
+        logger.debug("Language: " + language);
+        if(StringUtils.isBlank(month) || !month.matches("[0-9]+")){
+            return month;
+        }
+        Locale locale;
+        if(language.equals("ar")){
+            locale = new Locale(language,"QA");
+        } else {
+            locale = new Locale(language);
+        }
+        DateFormatSymbols dateFormat = new DateFormatSymbols(locale);
+        return dateFormat.getMonths()[Integer.parseInt(month)-1];
     }
 
 }
