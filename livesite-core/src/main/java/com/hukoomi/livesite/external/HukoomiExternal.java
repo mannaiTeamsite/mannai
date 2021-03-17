@@ -105,7 +105,7 @@ public class HukoomiExternal {
 							logger.info(attribute+" : "+docData);
 							 if (!attribute.equals("") && !docData.equals("")) {
 								    Element docElement = userData.addElement(attribute);
-								    docElement.setText(docData.get("data"));
+								    docElement.setText(docData.get("fnEn"));
 								    }
 							
 							}
@@ -119,11 +119,12 @@ public class HukoomiExternal {
 					while (attributes.hasMoreElements()) {
 					    String attribute = attributes.nextElement();
 					   
-						String docData = (String) request.getSession().getAttribute(attribute);
+					    logger.info(attribute+" : "+request.getSession().getAttribute(attribute));
+						HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
 						logger.info(attribute+" : "+docData);
 						 Element docElement = userData.addElement(attribute);
 						 if (!docData.equals("")) {		
-							    docElement.setText(docData);
+							    docElement.setText(docData.get("fnEn"));
 							    }
 						}
 					}
