@@ -100,30 +100,33 @@ public class HukoomiExternal {
 						Enumeration<String> attributes = request.getSession().getAttributeNames();
 						while (attributes.hasMoreElements()) {						
 						    String attribute =  attributes.nextElement();
-						    logger.info(attribute+" : "+request.getSession().getAttribute(attribute));
-							HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
-							logger.info(attribute+" : "+docData);
-							 if (!attribute.equals("") && !docData.equals("")) {
-								    Element docElement = userData.addElement(attribute);
-								    docElement.setText(docData.get("data"));
-								    }
+						    logger.info(attribute+" = "+request.getSession().getAttribute(attribute));
+							//HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
+						    Element docElement = userData.addElement(attribute);	
+						    if(request.getSession().getAttribute(attribute) != null) {
+								String attrValue = (String) request.getSession().getAttribute(attribute);
+								logger.info(attribute+" : "+attrValue);																
+								docElement.setText(attrValue);
+							}
 							
+						    
 							}
 						}
 						}
 						}
-					}else {
-					if(request.getSession().getAttribute("status") == "valid" && root != null && root.isRootElement()) {
+					}else if(request.getSession().getAttribute("status") == "valid") {
+					if(root != null && root.isRootElement()) {
 					Element userData = root.addElement("userData");	
 					Enumeration<String> attributes = request.getSession().getAttributeNames();
 					while (attributes.hasMoreElements()) {
 					    String attribute = attributes.nextElement();
 					   
-						String docData = (String) request.getSession().getAttribute(attribute);
+					    logger.info(attribute+" : "+request.getSession().getAttribute(attribute));
+						HashMap<String,String> docData = (HashMap<String, String>) request.getSession().getAttribute(attribute);
 						logger.info(attribute+" : "+docData);
 						 Element docElement = userData.addElement(attribute);
 						 if (!docData.equals("")) {		
-							    docElement.setText(docData);
+							    docElement.setText(docData.get("fnEn"));
 							    }
 						}
 					}

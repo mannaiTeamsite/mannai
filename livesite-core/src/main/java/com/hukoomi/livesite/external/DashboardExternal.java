@@ -30,8 +30,7 @@ public class DashboardExternal {
 		JWTTokenUtil jwt = new JWTTokenUtil(context);		 		
 			if (accessToken != null) {
 				try {
-					jwtParsedToken = jwt.parseJwt(accessToken);	
-					
+					jwtParsedToken = jwt.parseJwt(accessToken);						
 					setSessionAttributes(jwtParsedToken, request, "valid");
 				} catch (ExpiredJwtException e) {
 					LOGGER.debug("Token Expired");
