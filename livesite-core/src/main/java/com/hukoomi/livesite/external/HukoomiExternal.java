@@ -72,70 +72,67 @@ public class HukoomiExternal {
 		logger.debug("Before calling : " + doc);
 		
 	
-		HttpServletRequest request = context.getRequest();
-		String accessToken = null;
-		Cookie cookie = null;
-		Cookie[] cookies = null;
-		cookies = request.getCookies();
-		if (cookies != null) {
-			for (int i = 0; i < cookies.length; i++) {
-				cookie = cookies[i];
-				logger.info("Name:" + cookie.getName());
-				logger.info("Value:" + cookie.getValue());
-				if (cookie.getName().equals("accessToken")) {
-					accessToken = cookie.getValue();
-				}
-			}
-		}
-
-		if (accessToken != null && accessToken != "") {
-			DashboardExternal dash = new DashboardExternal();
-			Document headerDetail = dash.dashboardServices(context);
-			
-			logger.info("dashboard service called");
-			Element header = headerDetail.getRootElement();
-			if (header != null && header.isRootElement()) {
-				Element userData = root.addElement("userData");						
-				Element statusElement = userData.addElement("status");
-				String status = headerDetail.selectSingleNode("/UserInfo/status").getText();
-				statusElement.setText(status);
-				Element uidElement = userData.addElement("uid");
-				String uid = headerDetail.selectSingleNode("/UserInfo/uid").getText();
-				uidElement.setText(uid);
-				Element fnEnElement = userData.addElement("fnEn");
-				String fnEn = headerDetail.selectSingleNode("/UserInfo/fnEn").getText();
-				fnEnElement.setText(fnEn);
-				Element fnArElement = userData.addElement("fnAr");
-				String fnAr = headerDetail.selectSingleNode("/UserInfo/fnAr").getText();
-				fnArElement.setText(fnAr);
-				Element lnEnElement = userData.addElement("lnEn");
-				String lnEn = headerDetail.selectSingleNode("/UserInfo/lnEn").getText();
-				lnEnElement.setText(lnEn);
-				Element lnArElement = userData.addElement("lnAr");
-				String lnAr = headerDetail.selectSingleNode("/UserInfo/lnAr").getText();
-				lnArElement.setText(lnAr);
-				Element qidElement = userData.addElement("QID");
-				String QId = headerDetail.selectSingleNode("/UserInfo/QID").getText();
-				qidElement.setText(QId);
-				Element eidElement = userData.addElement("EID");
-				String EID = headerDetail.selectSingleNode("/UserInfo/EID").getText();
-				eidElement.setText(EID);
-				Element mobileElement = userData.addElement("mobile");
-				String mobile = headerDetail.selectSingleNode("/UserInfo/mobile").getText();
-				mobileElement.setText(mobile);
-				Element emailElement = userData.addElement("email");
-				String email = headerDetail.selectSingleNode("/UserInfo/email").getText();
-				emailElement.setText(email);
-				Element lstMdfyElement = userData.addElement("lstMdfy");
-				String lstMdfy = headerDetail.selectSingleNode("/UserInfo/lstMdfy").getText();
-				lstMdfyElement.setText(lstMdfy);
-				Element roleElement = userData.addElement("role");
-				String role = headerDetail.selectSingleNode("/UserInfo/role").getText();
-				roleElement.setText(role);
-					
-			}
-		}
-		logger.info("dashboard service called"+doc.asXML());	
+		HttpServletRequest request = context.getRequest();		
+		HttpSession session = request.getSession(false);	
+		logger.info("Session:" + session);
+		logger.info("Status : "+request.getSession().getAttribute("status"));
+		String status = (String) request.getSession().getAttribute("status");
+				if(status != "valid" || status == null || status =="") {
+					 String accessToken = null;
+						Cookie cookie = null;
+						Cookie[] cookies = null;
+						cookies = request.getCookies();
+						if (cookies != null) {
+							for (int i = 0; i < cookies.length; i++) {
+								cookie = cookies[i];
+								if (cookie.getName().equals("accessToken")) {
+									accessToken = cookie.getValue();
+								}
+							}						
+						if(accessToken != null) {
+						logger.info("--------Dashboard External is called--------");	
+						DashboardExternal dash = new DashboardExternal(context);
+						dash.dashboardServices(context , accessToken);
+						
+						if(root != null && root.isRootElement()) {
+						
+						Element userData = root.addElement("userData");	
+						Enumeration<String> attributes = request.getSession().getAttributeNames();
+						while (attributes.hasMoreElements()) {						
+						    String attribute =  attributes.nextElement();
+						    logger.info(attribute+" = "+request.getSession().getAttribute(attribute));
+							//HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
+						    Element docElement = userData.addElement(attribute);	
+						    if(request.getSession().getAttribute(attribute) != null) {
+								String attrValue = (String) request.getSession().getAttribute(attribute);
+								logger.info(attribute+" : "+attrValue);																
+								docElement.setText(attrValue);
+							}
+							
+						    
+							}
+						}
+						}
+						}
+					}else if(request.getSession().getAttribute("status") == "valid") {
+					if(root != null && root.isRootElement()) {
+					Element userData = root.addElement("userData");	
+					Enumeration<String> attributes = request.getSession().getAttributeNames();
+					while (attributes.hasMoreElements()) {
+					    String attribute = attributes.nextElement();
+					   
+					    logger.info(attribute+" : "+request.getSession().getAttribute(attribute));
+						HashMap<String,String> docData = (HashMap<String, String>) request.getSession().getAttribute(attribute);
+						logger.info(attribute+" : "+docData);
+						 Element docElement = userData.addElement(attribute);
+						 if (!docData.equals("")) {		
+							    docElement.setText(docData.get("fnEn"));
+							    }
+						}
+					}
+				}		
+		
+				logger.info("Document"+doc.asXML());	
 		
 		return doc;
 		
