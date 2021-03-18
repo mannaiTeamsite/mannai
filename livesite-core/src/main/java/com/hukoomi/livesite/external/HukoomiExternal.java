@@ -102,11 +102,12 @@ public class HukoomiExternal {
 						    String attribute =  attributes.nextElement();
 						    logger.info(attribute+" = "+request.getSession().getAttribute(attribute));
 							//HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
+						    
 						    Element docElement = userData.addElement(attribute);	
 						    if(request.getSession().getAttribute(attribute) != null) {
-								String attrValue = (String) request.getSession().getAttribute(attribute);
+								Object attrValue = request.getSession().getAttribute(attribute);
 								logger.info(attribute+" : "+attrValue);																
-								docElement.setText(attrValue);
+								docElement.setText(attrValue.toString());
 							}
 							
 						    
