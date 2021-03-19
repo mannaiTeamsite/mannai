@@ -9,6 +9,7 @@ import com.google.api.services.analytics.Analytics;
 import com.google.api.services.analytics.AnalyticsScopes;
 import com.google.api.services.analytics.model.GaData;
 import com.google.api.services.analytics.model.RealtimeData;
+import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -17,6 +18,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
@@ -34,7 +36,9 @@ public class StatisticsExternal {
     public Document getStatistics(final RequestContext context){
         Document document = DocumentHelper.createDocument();
         Element root = document.addElement("root");
-        String keyfile = context.getFileDal().getRoot() + context.getParameterString("keyfile", "/iw/config/properties//motc-oogp-4205147-849b1733bf06.json");
+        FileDal fileDal = context.getFileDal();
+        String fileRoot = fileDal.getRoot();
+        InputStream keyfile = fileDal.getStream(fileRoot + context.getParameterString("keyfile", "/iw/config/properties//motc-oogp-4205147-849b1733bf06.json"));
         GoogleCredential credentials = getCredentials(keyfile);
         if(credentials == null){
             logger.debug("Could not Get Credentials.");
@@ -123,10 +127,10 @@ public class StatisticsExternal {
         return null;
     }
 
-    public GoogleCredential getCredentials(String keyfile){
+    public GoogleCredential getCredentials(InputStream keyfile){
         try {
             return GoogleCredential
-                    .fromStream(new FileInputStream(keyfile))
+                    .fromStream(keyfile)
                     .createScoped(AnalyticsScopes.all());
         } catch (IOException e) {
             e.printStackTrace();
