@@ -35,16 +35,7 @@ public class DashboardExternal {
 			try {
 				jwtParsedToken = jwt.parseJwt(accessToken);
 				setSessionAttributes(jwtParsedToken, request, "valid");
-				Cookie[] cookies = request.getCookies();
-				for (int i = 0; i < cookies.length; i++) {
-					String name = cookies[i].getName();
-					if (name.equals(accessToken)) {
-						cookies[i].setValue("");
-						cookies[i].setPath("/");
-						cookies[i].setMaxAge(0);
-
-					}
-				}
+				
 			} catch (ExpiredJwtException e) {
 				LOGGER.debug("Token Expired");
 				setSessionAttributes(jwtParsedToken, request, "Token Expired");
