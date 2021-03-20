@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.json.JSONObject;
 
@@ -141,7 +142,12 @@ public class DashboardExternal {
 		response.sendRedirect(url);
 
 	}
-	
+	public Document wecomedata(RequestContext conetxt) {
+		Document doc = DocumentHelper.createDocument();
+		GetUserData(conetxt, doc);		
+		return doc;
+		
+	}
 	public Document GetUserData(RequestContext context , Document doc) {
 		
 		 Element root = doc.getRootElement();
