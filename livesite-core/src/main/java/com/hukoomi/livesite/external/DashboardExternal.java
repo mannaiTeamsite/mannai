@@ -133,15 +133,11 @@ public class DashboardExternal {
 		response.sendRedirect(url);
 
 	}
-	public Document wecomedata(RequestContext conetxt) {
-		Document doc = DocumentHelper.createDocument();
-		GetUserData(conetxt, doc);		
-		return doc;
+
+	public Document GetUserData(RequestContext context) {
 		
-	}
-	public Document GetUserData(RequestContext context , Document doc) {
-		
-		 Element root = doc.getRootElement();
+		 Document doc = DocumentHelper.createDocument();
+		Element root = doc.getRootElement();
 		 HttpServletRequest request = context.getRequest();
 			HttpSession session = request.getSession(false);
 			LOGGER.info("Session:" + session);
