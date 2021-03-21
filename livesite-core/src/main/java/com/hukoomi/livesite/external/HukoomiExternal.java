@@ -24,7 +24,7 @@ public class HukoomiExternal {
 	private final Logger logger = Logger.getLogger(HukoomiExternal.class);
 	/** Default query to fetch all solr content. */
 	public static final String DEFAULT_QUERY = "*:*";
-	
+
 	/**
 	 * This method will be called from Component External for solr Content fetching.
 	 * 
@@ -70,75 +70,14 @@ public class HukoomiExternal {
 			root.addElement("category").addText(category);
 		}
 		logger.debug("Before calling : " + doc);
-		
-	
-		HttpServletRequest request = context.getRequest();		
-		HttpSession session = request.getSession(false);	
-		logger.info("Session:" + session);
-		logger.info("Status : "+request.getSession().getAttribute("status"));
-		String status = (String) request.getSession().getAttribute("status");
-				if(status != "valid" || status == null || status =="") {
-					 String accessToken = null;
-						Cookie cookie = null;
-						Cookie[] cookies = null;
-						cookies = request.getCookies();
-						if (cookies != null) {
-							for (int i = 0; i < cookies.length; i++) {
-								cookie = cookies[i];
-								if (cookie.getName().equals("accessToken")) {
-									accessToken = cookie.getValue();
-								}
-							}						
-						if(accessToken != null) {
-						logger.info("--------Dashboard External is called--------");	
-						DashboardExternal dash = new DashboardExternal(context);
-						dash.dashboardServices(context , accessToken);
-						
-						if(root != null && root.isRootElement()) {
-						
-						Element userData = root.addElement("userData");	
-						Enumeration<String> attributes = request.getSession().getAttributeNames();
-						while (attributes.hasMoreElements()) {						
-						    String attribute =  attributes.nextElement();
-						    logger.info(attribute+" = "+request.getSession().getAttribute(attribute));
-							//HashMap<String,String> docData =  (HashMap<String, String>) request.getSession().getAttribute(attribute);
-						    
-						    Element docElement = userData.addElement(attribute);	
-						    if(request.getSession().getAttribute(attribute) != null) {
-								Object attrValue = request.getSession().getAttribute(attribute);
-								logger.info(attribute+" : "+attrValue);																
-								docElement.setText(attrValue.toString());
-							}
-							
-						    
-							}
-						}
-						}
-						}
-					}else if(request.getSession().getAttribute("status") == "valid") {
-					if(root != null && root.isRootElement()) {
-					Element userData = root.addElement("userData");	
-					Enumeration<String> attributes = request.getSession().getAttributeNames();
-					while (attributes.hasMoreElements()) {
-					    String attribute = attributes.nextElement();
-					   
-					    logger.info(attribute+" : "+request.getSession().getAttribute(attribute));
-						HashMap<String,String> docData = (HashMap<String, String>) request.getSession().getAttribute(attribute);
-						logger.info(attribute+" : "+docData);
-						 Element docElement = userData.addElement(attribute);
-						 if (!docData.equals("")) {		
-							    docElement.setText(docData.get("fnEn"));
-							    }
-						}
-					}
-				}		
-		
-				logger.info("Document"+doc.asXML());	
-		
-		return doc;
-		
-	}
-	
 
+		DashboardExternal dash = new DashboardExternal(context);
+		Document document = dash.GetUserData(context, doc);
+
+		logger.info("Document" + doc.asXML());
+
+		return document;
+
+	}
 
 }
