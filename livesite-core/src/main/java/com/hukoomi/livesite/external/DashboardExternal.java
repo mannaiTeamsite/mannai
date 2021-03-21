@@ -147,20 +147,21 @@ public class DashboardExternal {
 			LOGGER.info("Session:" + session);
 			LOGGER.info("Status : " + request.getSession().getAttribute("status"));
 			String status = (String) request.getSession().getAttribute("status");
-			String accessToken = null;
-			Cookie cookie = null;
-			Cookie[] cookies = null;
-			cookies = request.getCookies();
-			if (cookies != null) {
-				for (int i = 0; i < cookies.length; i++) {
-					cookie = cookies[i];
-					if (cookie.getName().equals("accessToken")) {
-						accessToken = cookie.getValue();
-					}
-				}
-			}
-			if (accessToken != null) {	
+		
 				if (!status.equalsIgnoreCase("valid")) {
+					String accessToken = null;
+					Cookie cookie = null;
+					Cookie[] cookies = null;
+					cookies = request.getCookies();
+					if (cookies != null) {
+						for (int i = 0; i < cookies.length; i++) {
+							cookie = cookies[i];
+							if (cookie.getName().equals("accessToken")) {
+								accessToken = cookie.getValue();
+							}
+						}
+					}
+					if (accessToken != null) {	
 					LOGGER.info("--------Dashboard External is called--------");
 					DashboardExternal dash = new DashboardExternal(context);
 					dash.dashboardServices(context, accessToken);

@@ -72,11 +72,11 @@ public class HukoomiExternal {
 		logger.debug("Before calling : " + doc);
 
 		DashboardExternal dash = new DashboardExternal(context);
-		dash.GetUserData(context, doc);
+		Document document = dash.GetUserData(context, doc);
 
 		logger.info("Document" + doc.asXML());
 
-		return doc;
+		return document;
 
 	}
 
