@@ -28,9 +28,7 @@ public class CommentsEngine {
     final String BLOG_ACTION = "blogAction";
     final String LOCALE = "locale";
     final String DCR_ID = "dcr_id";
-    final String USER_AGENT = "User-Agent";
-    final String VOTED_FROM = "votedFrom";
-    final String POLLID = "pollId";
+    final String BLOG_URL = "BlogURL";
     private static final String STATUS_FIELD_VALIDATION =
             "FieldValidationFailed";
     String status = "";
@@ -66,9 +64,12 @@ public class CommentsEngine {
                             context.getParameterString("noOfRows"));
                     String offset = xssUtils.stripXSS(
                             context.getParameterString("offset"));
-                    if(validateGetCommentCount(context, noOfRows, offset)) {
-                        document = getComments(dcrId, Integer.parseInt(offset),
-                                Integer.parseInt(noOfRows), language, context);
+                    if (validateGetCommentCount(context, noOfRows,
+                            offset)) {
+                        document = getComments(dcrId,
+                                Integer.parseInt(offset),
+                                Integer.parseInt(noOfRows), language,
+                                context);
                     }
                     break;
                 case "setComment":
@@ -79,7 +80,7 @@ public class CommentsEngine {
                             context.getParameterString("blog_url"));
                     String userName = xssUtils.stripXSS(
                             context.getParameterString("username"));
-                    if (validateCommentData(comments, userName)) {
+                    if (validateCommentData(comments, userName, blogUrl)) {
                         blogId = getBlogId(dcrId, language, context);
                         document = insertCommentsToDB(blogId, blogUrl,
                                 comments, userName, ip, context);
@@ -107,14 +108,20 @@ public class CommentsEngine {
         return document;
     }
 
-    private boolean validateCommentData(String comments, String userName) {
+    private boolean validateCommentData(String comments, String userName,
+            String blogUrl) {
         if (userName.length() > 100) {
             return false;
         } else if (comments.length() > 150) {
             return false;
+        } else {
+            ValidationErrorList errorList = new ValidationErrorList();
+            ESAPI.validator().getValidInput(BLOG_URL, blogUrl,
+                    ESAPIValidator.URL, 200, false, true, errorList);
+            return errorList.isEmpty();
         }
 
-        return true;
+
     }
 
     private boolean validateAction(RequestContext context) {
@@ -124,12 +131,7 @@ public class CommentsEngine {
         LOGGER.info(BLOG_ACTION + " >>>" + blogAction + "<<<");
         ESAPI.validator().getValidInput(BLOG_ACTION, blogAction,
                 ESAPIValidator.ALPHABET, 20, false, true, errorList);
-        if (errorList.isEmpty()) {
-            return true;
-        } else {
-            LOGGER.info(errorList.getError(BLOG_ACTION));
-            return false;
-        }
+        return errorList.isEmpty();
     }
 
     private boolean validateDCR(RequestContext context, String dcrId,
@@ -155,8 +157,9 @@ public class CommentsEngine {
             return false;
         }
     }
-    private boolean validateGetCommentCount(RequestContext context, String dcrId,
-            String language) {
+
+    private boolean validateGetCommentCount(RequestContext context,
+            String dcrId, String language) {
         ValidationErrorList errorList = new ValidationErrorList();
 
         LOGGER.info(DCR_ID + " >>>" + dcrId + "<<<");
