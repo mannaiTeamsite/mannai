@@ -16,7 +16,6 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.security.GeneralSecurityException;
@@ -38,7 +37,7 @@ public class StatisticsExternal {
         Element root = document.addElement("root");
         FileDal fileDal = context.getFileDal();
         String fileRoot = fileDal.getRoot();
-        InputStream keyfile = fileDal.getStream(fileRoot + context.getParameterString("keyfile", "/iw/config/properties//motc-oogp-4205147-849b1733bf06.json"));
+        InputStream keyfile = fileDal.getStream(fileRoot + context.getParameterString("keyfile", "/iw/config/properties/motc-oogp-4205147-849b1733bf06.json"));
         GoogleCredential credentials = getCredentials(keyfile);
         if(credentials == null){
             logger.debug("Could not Get Credentials.");
@@ -97,10 +96,13 @@ public class StatisticsExternal {
             analyticsDimensionId.append("ga:"+analyticsDimension);
         }
         document = getRealtimeData(getRealtimeObj(analytics,profile, realtimeObjectId.toString()), document);
-        document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),currentYearDimensionId.toString()), document, currentYear, currentYear, locale);
+        document = getAnalyticsData(getAnalyticsObj(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString()), document, currentYear, locale);
+        document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),currentYearDimensionId.toString()), document, currentYear, locale);
         int defaultYear = Integer.parseInt(startYear);
         for(int year=defaultYear;year<currYear;year++){
-            document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),analyticsDimensionId.toString()), document, year+"-01-01", year+"-12-31", locale);
+            dateFrom = year + "-01-01";
+            dateTo = year + "-12-31";
+            document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),analyticsDimensionId.toString()), document, String.valueOf(year), locale);
         }
         return document;
     }
@@ -138,6 +140,21 @@ public class StatisticsExternal {
         return null;
     }
 
+    private GaData getAnalyticsObj(Analytics analytics, String profileId, String dateFrom, String dateTo, String fields) {
+        if(StringUtils.isBlank(profileId)){
+            logger.info("Profile ID is not passed.");
+            return null;
+        }
+        try {
+            logger.info("Getting data for: "+ fields);
+            GaData execute = analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields).setSort(fields.split(",")[0]).execute();
+            return execute;
+        } catch (IOException ex) {
+
+        }
+        return null;
+    }
+
     private GaData getAnalyticsObjWithDimensions(Analytics analytics, String profileId, String dateFrom, String dateTo, String fields, String dimension) {
         if(StringUtils.isBlank(dimension)){
             logger.info("Dimension is not passed.");
@@ -153,23 +170,25 @@ public class StatisticsExternal {
         return null;
     }
 
-    private Document getAnalyticsData(GaData results, Document document,String yearFrom, String yearTo, String locale) {
+    private Document getAnalyticsData(GaData results, Document document, String year, String locale) {
         Element root = document.getRootElement();
         Element gaData = root.addElement("ga-data");
-        gaData.addElement("year-from").addText(yearFrom);
-        gaData.addElement("year-to").addText(yearTo);
+        Element yearElement = gaData.addElement("year").addAttribute("value", year);
         if (results != null && null != results.getRows() && !results.getRows().isEmpty() && null != results.getColumnHeaders() && !results.getColumnHeaders().isEmpty()) {
             logger.info("Getting Realtime Data from Object");
             List<GaData.ColumnHeaders> columnHeaders = results.getColumnHeaders();
             List<List<String>> rowSets = results.getRows();
             for(int traverseRow=0; traverseRow < rowSets.size(); traverseRow++){
+                Element deviceElement = yearElement.addElement("deviceCategory");
                 for(int traverseColumn=0; traverseColumn < columnHeaders.size(); traverseColumn++){
                     String metricName = columnHeaders.get(traverseColumn).getName();
-                    gaData.addElement("name").addText(metricName);
                     if(metricName.equals("ga:month")){
-                        gaData.addElement("value").addAttribute("month", rowSets.get(traverseRow).get(traverseColumn)).addText(formatMonth(rowSets.get(traverseRow).get(traverseColumn),locale));
+                        yearElement.addElement("month").addAttribute("value", rowSets.get(traverseRow).get(traverseColumn)).addAttribute("name",formatMonth(rowSets.get(traverseRow).get(traverseColumn),locale));
+                        continue;
+                    } else if(metricName.equals("ga:deviceCategory")){
+                        deviceElement.addAttribute("name",formatNumbers(rowSets.get(traverseRow).get(traverseColumn)));
                     } else {
-                        gaData.addElement("value").addText(formatNumbers(rowSets.get(traverseRow).get(traverseColumn)));
+                        deviceElement.addElement(metricName.replaceAll("ga:","")).addText(formatNumbers(rowSets.get(traverseRow).get(traverseColumn)));
                     }
                 }
             }
@@ -180,7 +199,7 @@ public class StatisticsExternal {
 
     private RealtimeData getRealtimeObj(Analytics analytics, String profileId, String objectId) {
         if(StringUtils.isBlank(profileId)){
-            logger.debug("Dimension is not passed.");
+            logger.debug("Profile ID is not passed.");
             return null;
         }
         try {
