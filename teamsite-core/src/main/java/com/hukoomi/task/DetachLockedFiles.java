@@ -47,11 +47,16 @@ public class DetachLockedFiles implements CSURLExternalTask {
             CSAreaRelativePath[] files = task.getFiles();
             List<CSAreaRelativePath> filesToDetach = new ArrayList<>();
             CSArea area = task.getArea();
+            String fileOwner;
+            String jobOwner;
 
             for (CSAreaRelativePath file : files) {
                 CSFile attachedFile = area.getFile(file);
                 if (attachedFile.isLocked()) {
-                    filesToDetach.add(file);
+                    fileOwner = attachedFile.getLockOwner().getName();
+                    jobOwner = task.getWorkflow().getOwner().getName();
+                    if(!(fileOwner.equals(jobOwner)))
+                        filesToDetach.add(file);
                 }
             }
             if (!filesToDetach.isEmpty()) {
