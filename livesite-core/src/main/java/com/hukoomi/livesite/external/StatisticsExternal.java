@@ -99,7 +99,7 @@ public class StatisticsExternal {
         document = getAnalyticsData(getAnalyticsObj(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString()), document, currentYear, locale);
         document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),currentYearDimensionId.toString()), document, currentYear, locale);
         int defaultYear = Integer.parseInt(startYear);
-        for(int year=defaultYear;year<currYear;year++){
+        for(int year=defaultYear;year<=currYear;year++){
             dateFrom = year + "-01-01";
             dateTo = year + "-12-31";
             document = getAnalyticsData(getAnalyticsObjWithDimensions(analytics,profile,dateFrom,dateTo,analyticsObjectId.toString(),analyticsDimensionId.toString()), document, String.valueOf(year), locale);
