@@ -29,8 +29,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
 
-import com.hukoomi.utils.ValidationUtils;
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.XssUtils;
 
 @MultipartConfig
@@ -305,20 +307,17 @@ public class SubmitTicket extends HttpServlet {
     }
 
     private boolean validateQIDType(String qid, String eid) {
-        ValidationUtils util = new ValidationUtils();
+        ValidationErrorList errorList = new ValidationErrorList();
         LOGGER.info("Validate QID : ");
-        if (qid == null || "".equals(qid.trim())
-                || !util.validateNumeric(qid)
-                || qid.trim().length() != 11) {
-            return false;
+         ESAPI.validator().getValidInput("qId", qid, ESAPIValidator.NUMERIC, 11, false, true, errorList);
+        if(errorList.isEmpty()) {
+            LOGGER.info("Validate EID : ");
+            ESAPI.validator().getValidInput("eId", eid, ESAPIValidator.NUMERIC, 8, false, true, errorList);
+            if(errorList.isEmpty()) {
+                return true;
+            }
         }
-        LOGGER.info("Validate eid : ");
-        if (eid != null && !"".equals(eid.trim())
-                && (!util.validateNumeric(eid.trim())
-                        || eid.trim().length() != 8)) {
-            return false;
-        }
-        return true;
+        return false;
     }
 
     private boolean validatePassportType(String passport,
@@ -457,9 +456,9 @@ public class SubmitTicket extends HttpServlet {
      */
     private boolean validateService(String service) {
         LOGGER.info("Validate service :");
-        ValidationUtils util = new ValidationUtils();
-        return !(service == null || "".equals(service.trim())
-                || !util.validateNumeric(service));
+        ValidationErrorList errorList = new ValidationErrorList();
+        ESAPI.validator().getValidInput(SERVICE_KEY, service, ESAPIValidator.NUMERIC, 10, false, true, errorList);
+        return errorList.isEmpty();
     }
 
     /**
@@ -469,10 +468,9 @@ public class SubmitTicket extends HttpServlet {
      * @return
      */
     private boolean validateEservice(String eservice) {
-        LOGGER.info("Validate eservice : ");
-        ValidationUtils util = new ValidationUtils();
-        return !(eservice == null || "".equals(eservice.trim())
-                || !util.validateNumeric(eservice));
+        ValidationErrorList errorList = new ValidationErrorList();
+        ESAPI.validator().getValidInput(ESERVICE_KEY, eservice, ESAPIValidator.NUMERIC, 10, false, true, errorList);
+        return errorList.isEmpty();
     }
 
     /**
@@ -483,10 +481,9 @@ public class SubmitTicket extends HttpServlet {
      */
     private boolean validateMailID(String emailId) {
         LOGGER.info("Validate emailId : ");
-        ValidationUtils util = new ValidationUtils();
-        return !(emailId == null || "".equals(emailId.trim())
-                || !util.validateEmailId(emailId)
-                || emailId.trim().length() > 50);
+        ValidationErrorList errorList = new ValidationErrorList();
+        ESAPI.validator().getValidInput("email", emailId, ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
+        return errorList.isEmpty();
     }
 
     /**
@@ -497,10 +494,9 @@ public class SubmitTicket extends HttpServlet {
      */
     private boolean validatePhoneNumber(String phoneNo) {
         LOGGER.info("Validate phoneNo : ");
-        ValidationUtils util = new ValidationUtils();
-        return !(phoneNo == null || "".equals(phoneNo.trim())
-                || !util.validateNumeric(phoneNo)
-                || (phoneNo.trim().length() != 8));
+        ValidationErrorList errorList = new ValidationErrorList();
+        ESAPI.validator().getValidInput("eId", phoneNo, ESAPIValidator.NUMERIC, 8, false, true, errorList);
+        return errorList.isEmpty();
     }
 
     /**
