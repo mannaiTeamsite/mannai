@@ -50,21 +50,21 @@ public class CommentsEngine {
         XssUtils xssUtils = new XssUtils();
         String action =
                 xssUtils.stripXSS(context.getParameterString("action"));
-        if (validateAction(context)) {
+        if (validateAction(action)) {
             int blogId = 0;
 
             String dcrId = xssUtils
                     .stripXSS(context.getParameterString("dcr_id"));
             String language = xssUtils
                     .stripXSS(context.getParameterString("locale"));
-            if (validateDCR(context, dcrId, language)) {
+            if (validateDCR(dcrId, language)) {
                 switch (action) {
                 case "getComments":
                     String noOfRows = xssUtils.stripXSS(
                             context.getParameterString("noOfRows"));
                     String offset = xssUtils.stripXSS(
                             context.getParameterString("offset"));
-                    if (validateGetCommentCount(context, noOfRows,
+                    if (validateGetCommentCount( noOfRows,
                             offset)) {
                         document = getComments(dcrId,
                                 Integer.parseInt(offset),
@@ -121,21 +121,17 @@ public class CommentsEngine {
             return errorList.isEmpty();
         }
 
-
     }
 
-    private boolean validateAction(RequestContext context) {
+    private boolean validateAction(String blogAction) {
         ValidationErrorList errorList = new ValidationErrorList();
-
-        String blogAction = context.getParameterString(BLOG_ACTION);
         LOGGER.info(BLOG_ACTION + " >>>" + blogAction + "<<<");
         ESAPI.validator().getValidInput(BLOG_ACTION, blogAction,
                 ESAPIValidator.ALPHABET, 20, false, true, errorList);
         return errorList.isEmpty();
     }
 
-    private boolean validateDCR(RequestContext context, String dcrId,
-            String language) {
+    private boolean validateDCR(String dcrId, String language) {
         ValidationErrorList errorList = new ValidationErrorList();
 
         LOGGER.info(DCR_ID + " >>>" + dcrId + "<<<");
@@ -158,8 +154,8 @@ public class CommentsEngine {
         }
     }
 
-    private boolean validateGetCommentCount(RequestContext context,
-            String dcrId, String language) {
+    private boolean validateGetCommentCount(String dcrId,
+            String language) {
         ValidationErrorList errorList = new ValidationErrorList();
 
         LOGGER.info(DCR_ID + " >>>" + dcrId + "<<<");
