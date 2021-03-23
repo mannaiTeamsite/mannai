@@ -148,7 +148,6 @@ public class CommentsEngine {
                 return false;
             }
         }
-
         else {
             LOGGER.info(errorList.getError(DCR_ID));
             return false;
