@@ -31,6 +31,7 @@ public class CommentsEngine {
     final String BLOG_URL = "BlogURL";
     final String OFFSET = "offset";
     final String NO_OF_ROWS = "noOfRows";
+    final String IP = "ip";
     private static final String STATUS_FIELD_VALIDATION =
             "FieldValidationFailed";
     String status = "";
@@ -81,7 +82,8 @@ public class CommentsEngine {
                             context.getParameterString("blog_url"));
                     String userName = xssUtils.stripXSS(
                             context.getParameterString("username"));
-                    if (validateCommentData(comments, userName, blogUrl)) {
+                    if (validateCommentData(comments, userName, blogUrl,
+                            ip)) {
                         blogId = getBlogId(dcrId, language, context);
                         document = insertCommentsToDB(blogId, blogUrl,
                                 comments, userName, ip, context);
@@ -110,7 +112,7 @@ public class CommentsEngine {
     }
 
     private boolean validateCommentData(String comments, String userName,
-            String blogUrl) {
+            String blogUrl, String ip) {
         if (userName.length() > 100) {
             return false;
         } else if (comments.length() > 150) {
@@ -119,9 +121,14 @@ public class CommentsEngine {
             ValidationErrorList errorList = new ValidationErrorList();
             ESAPI.validator().getValidInput(BLOG_URL, blogUrl,
                     ESAPIValidator.URL, 200, false, true, errorList);
-            return errorList.isEmpty();
+            if (errorList.isEmpty()) {
+                ESAPI.validator().getValidInput(IP, ip,
+                        ESAPIValidator.IP_ADDRESS, 20, false, true,
+                        errorList);
+                return errorList.isEmpty();
+            }
         }
-
+        return false;
     }
 
     private boolean validateAction(String blogAction) {
@@ -147,8 +154,7 @@ public class CommentsEngine {
                 LOGGER.info(errorList.getError(LOCALE));
                 return false;
             }
-        }
-        else {
+        } else {
             LOGGER.info(errorList.getError(DCR_ID));
             return false;
         }
