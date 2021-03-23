@@ -312,7 +312,7 @@ public class SubmitTicket extends HttpServlet {
          ESAPI.validator().getValidInput("qId", qid, ESAPIValidator.NUMERIC, 11, false, true, errorList);
         if(errorList.isEmpty()) {
             LOGGER.info("Validate EID : ");
-            ESAPI.validator().getValidInput("eId", eid, ESAPIValidator.NUMERIC, 8, false, true, errorList);
+            ESAPI.validator().getValidInput("eId", eid, ESAPIValidator.NUMERIC, 8, true, true, errorList);
             if(errorList.isEmpty()) {
                 return true;
             }
