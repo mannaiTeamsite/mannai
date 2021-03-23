@@ -58,13 +58,15 @@ public class CustomerServiceExternal {
                 result = getEServices(context);
             } else if (action.equals(ACTION_SERVICE)) {
                 eService = context.getParameterString("eService");
-
                 if (validateEService(eService)) {
                     result = getServices(eService, context);
                 } else {
                      result = getFieldValidationFailedDocument(result);
                 }
             }
+            else {
+                result = getFieldValidationFailedDocument(result);
+           }
         }
         else {
             result = getFieldValidationFailedDocument(result);
