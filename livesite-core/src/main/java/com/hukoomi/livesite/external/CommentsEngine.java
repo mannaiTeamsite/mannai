@@ -29,6 +29,8 @@ public class CommentsEngine {
     final String LOCALE = "locale";
     final String DCR_ID = "dcr_id";
     final String BLOG_URL = "BlogURL";
+    final String OFFSET = "offset";
+    final String NO_OF_ROWS = "noOfRows";
     private static final String STATUS_FIELD_VALIDATION =
             "FieldValidationFailed";
     String status = "";
@@ -64,8 +66,7 @@ public class CommentsEngine {
                             context.getParameterString("noOfRows"));
                     String offset = xssUtils.stripXSS(
                             context.getParameterString("offset"));
-                    if (validateGetCommentCount( noOfRows,
-                            offset)) {
+                    if (validateGetCommentCount(noOfRows, offset)) {
                         document = getComments(dcrId,
                                 Integer.parseInt(offset),
                                 Integer.parseInt(noOfRows), language,
@@ -154,16 +155,16 @@ public class CommentsEngine {
         }
     }
 
-    private boolean validateGetCommentCount(String dcrId,
-            String language) {
+    private boolean validateGetCommentCount(String noOfRows,
+            String offset) {
         ValidationErrorList errorList = new ValidationErrorList();
 
-        LOGGER.info(DCR_ID + " >>>" + dcrId + "<<<");
-        ESAPI.validator().getValidInput(DCR_ID, dcrId,
-                ESAPIValidator.NUMERIC, 20, false, true, errorList);
+        LOGGER.info(DCR_ID + " >>>" + noOfRows + "<<<");
+        ESAPI.validator().getValidInput(NO_OF_ROWS, noOfRows,
+                ESAPIValidator.NUMERIC, 2, false, true, errorList);
         if (errorList.isEmpty()) {
-            ESAPI.validator().getValidInput(LOCALE, language,
-                    ESAPIValidator.ALPHABET, 2, false, true, errorList);
+            ESAPI.validator().getValidInput(OFFSET, offset,
+                    ESAPIValidator.NUMERIC, 2, false, true, errorList);
             if (errorList.isEmpty()) {
                 return true;
             } else {
