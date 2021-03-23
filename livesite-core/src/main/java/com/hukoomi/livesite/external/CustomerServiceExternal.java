@@ -73,7 +73,7 @@ public class CustomerServiceExternal {
     }
 
     private Document getFieldValidationFailedDocument( Document result) {
-        DocumentHelper.createDocument();
+        result = DocumentHelper.createDocument();
         Element resultElement =
                 result.addElement(ELEMENT_RESULT);
         Element element =
