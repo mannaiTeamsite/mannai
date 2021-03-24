@@ -50,7 +50,6 @@ public class CustomerServiceExternal {
         String action = "";
         String eService = "";
         Document result = null;
-
         LOGGER.info("CustomerService");
         action = context.getParameterString("action");
         if (validateAction(action)) {
