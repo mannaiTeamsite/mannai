@@ -76,10 +76,10 @@ public class ContactUsExternal {
         action = context.getParameterString(CONTACT_ACTION);
         ValidationErrorList errorList = new ValidationErrorList();
         LOGGER.debug("action:" + action);
-        
+
         validData  = ESAPI.validator().getValidInput(CONTACT_ACTION, action, ESAPIValidator.ALPHABET, 20, false, true, errorList);
         if(errorList.isEmpty()) {
-           
+
         }else {
             LOGGER.debug(errorList.getError(CONTACT_ACTION));
             status = STATUS_FIELD_VALIDATION;
@@ -90,7 +90,6 @@ public class ContactUsExternal {
             LOGGER.debug("page:" + context.getParameterString("page"));
 
             senderName = context.getParameterString("senderName");
-
             senderEmail = context.getParameterString("senderEmail");
             emailSubject = context.getParameterString("emailSubject");
             emailText = context.getParameterString("emailText");
@@ -142,7 +141,7 @@ public class ContactUsExternal {
             } else {
                 return false;
             }
-            
+
             validData  = ESAPI.validator().getValidInput("senderEmail", senderEmail, ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 email.setSenderEmail(senderEmail);
