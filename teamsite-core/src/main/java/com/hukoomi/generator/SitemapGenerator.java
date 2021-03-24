@@ -27,6 +27,11 @@ public class SitemapGenerator {
         if(args.length>1){
             propertiesFile = branch + "/" + STAGING + PROPERTIES_FILE_PATH + "/" + args[1];
         }
+        SitemapGenerator sitemapGenerator = new SitemapGenerator();
+        sitemapGenerator.generateSitemap(branch, propertiesFile);
+    }
+
+    private void generateSitemap(String branch, String propertiesFile){
         String vPath = branch + "/" + STAGING;
         Properties properties = new Properties();
         try (FileInputStream propertiesAsStream = new FileInputStream(propertiesFile)) {
@@ -35,19 +40,18 @@ public class SitemapGenerator {
             System.out.println("Error while fetching Properties file: " + propertiesFile);
             e.printStackTrace(System.out);
         }
-        SitemapGenerator sitemapGenerator = new SitemapGenerator();
         String languages = properties.getProperty("languages", "en,ar");
         String sitemapSaveLocation = branch + "/WORKAREA/" + properties.getProperty("workarea","default") + "/" + properties.getProperty("sitemapSaveLocation","/sitemaps");
         String baseFilePermissions = properties.getProperty("filePermissions","rw-r--r--");
         String baseDirPermissions = properties.getProperty("dirPermissions","rwxr-xr-x");
         final String[] languagesToCrawl = languages.split(",");
-        sitemapGenerator.cleanupOldSitemaps(sitemapSaveLocation,languagesToCrawl);
+        cleanupOldSitemaps(sitemapSaveLocation,languagesToCrawl);
         for (String language : languagesToCrawl) {
-            Document sitemap = sitemapGenerator.sitemap(vPath, language, properties);
-            sitemapGenerator.saveSitemap(sitemap, sitemapSaveLocation, language, baseDirPermissions, baseFilePermissions);
+            Document sitemap = sitemap(vPath, language, properties);
+            saveSitemap(sitemap, sitemapSaveLocation, language, baseDirPermissions, baseFilePermissions);
         }
-        Document sitemapIndex = sitemapGenerator.sitemapIndex(languagesToCrawl, properties);
-        sitemapGenerator.saveSitemap(sitemapIndex,sitemapSaveLocation,"index", baseDirPermissions, baseFilePermissions);
+        Document sitemapIndex = sitemapIndex(languagesToCrawl, properties);
+        saveSitemap(sitemapIndex,sitemapSaveLocation,"index", baseDirPermissions, baseFilePermissions);
     }
 
     private boolean cleanupOldSitemaps(String path, String[] languages) {
