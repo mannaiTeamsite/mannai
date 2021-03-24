@@ -22,7 +22,6 @@ public class CommentsEngine {
     /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(CommentsEngine.class);
-
     private static final String ELEMENT_RESULT = "Result";
     private static final String ELEMENT_STATUS = "Status";
     final String BLOG_ACTION = "blogAction";
