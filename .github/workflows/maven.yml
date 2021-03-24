@@ -23,9 +23,9 @@ jobs:
     - name: Build with Maven
       run: mvn clean install --file Hukoomi/pom.xml
     - name: Check if deployment is needed
-        id: deployment_check
-        if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/production') }}
-        run: |
+      id: deployment_check
+      if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/production') }}
+      run: |
           echo '::set-output name=should_deploy::true'
   deploy:
     runs-on: ubuntu-latest
@@ -65,18 +65,18 @@ jobs:
           token: ${{secrets.GH_ACTION}}
 
       - name: Remove old artifacts
-          run: |
+        run: |
             rm -rf Hukoomi
 
       - name: Download Artifacts
-          uses: actions/download-artifact@v1
-          with:
-            name: Hukoomi
-            path: Hukoomi
+        uses: actions/download-artifact@v1
+        with:
+          name: Hukoomi
+          path: Hukoomi
 
       - name: Commit changes to Github
-          id: commit_change
-          run: |
+        id: commit_change
+        run: |
             git add --all Hukoomi/
             git status
             if ! git diff-index --quiet HEAD --; then
@@ -86,7 +86,7 @@ jobs:
               echo "::set-output name=has_changes::true"
             fi
       - name: Remove artifacts after deployment
-          uses: geekyeggo/delete-artifact@v1
-          with:
-            name: |
+        uses: geekyeggo/delete-artifact@v1
+        with:
+          name: |
               Hukoomi
