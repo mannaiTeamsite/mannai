@@ -1,6 +1,6 @@
 package com.hukoomi.generator;
 
-import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.TeamSiteUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.dom4j.*;
@@ -109,7 +109,7 @@ public class SitemapGenerator {
 
     private Document sitemap(String vPath, String language,Properties properties) {
         Document document = DocumentHelper.createDocument(DocumentHelper.createElement("urlset"));
-        CommonUtils utils = new CommonUtils();
+        TeamSiteUtils utils = new TeamSiteUtils();
         Element root = document.getRootElement();
         String hostname = properties.getProperty("runtimeHost","https://hukoomi.gov.qa");
         root.addAttribute("xmlns",properties.getProperty("xmlns","http://www.sitemaps.org/schemas/sitemap/0.9"));
