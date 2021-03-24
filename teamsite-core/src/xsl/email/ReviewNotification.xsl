@@ -16,7 +16,8 @@
   </xsl:variable>
 
   <!-- holds the TeamSite hostname -->
-  <xsl:variable name="teamSiteHostName" select="/EmailTask/Environment/Property[@Name='teamSiteHostName']"/>
+  <!-- <xsl:variable name="teamSiteHostName" select="/EmailTask/Environment/Property[@Name='teamSiteHostName']"/> -->
+  <xsl:variable name="teamSiteHostName"><xsl:text>stgauth.hukoomi.gov.qa</xsl:text></xsl:variable>
 
   <xsl:variable name="activeTask" select="/EmailTask/Job/Tasks/Task[@Active='true']"/>
 
@@ -114,21 +115,38 @@
 		<xsl:choose>
             <xsl:when test="//Job/Variables/Variable[Name='ErrorMessages']/Value != ''">
 				<div class="indent description" style="color: #880000">
+					<b><xsl:value-of select="//Job/Variables/Variable[Name='ErrorMessages']/Value"/></b>
+				</div>
+            </xsl:when>
+		</xsl:choose>
+		
+		<xsl:choose>
+            <xsl:when test="//Job/Variables/Variable[Name='removedFiles']/Value != ''">
+				<div class="indent description" style="color: #880000">
 					<b>
-						<xsl:value-of select="//Job/Variables/Variable[Name='ErrorMessages']/Value"/>
 						<xsl:text>Following files are locked in workarea:</xsl:text>
 						<xsl:value-of select="//Job/Variables/Variable[Name='removedFiles']/Value"/>
-						<xsl:text>Following Links are broken:</xsl:text>
+					</b>
+				</div>
+            </xsl:when>
+		</xsl:choose>
+		
+		<xsl:choose>
+            <xsl:when test="//Job/Variables/Variable[Name='brokenLinks']/Value != ''">
+				<div class="indent description" style="color: #880000">
+					<b>
+						<xsl:text>Following Links are broken in mentinoed files(FILENAME : BROKENLINK):</xsl:text>
 						<xsl:value-of select="//Job/Variables/Variable[Name='brokenLinks']/Value"/>
 					</b>
 				</div>
             </xsl:when>
 		</xsl:choose>
 
+
         <div class="indent" style="margin-top:10px;">
           If you would like to use VisualAnnotate to review and edit a file, click the file's "Review and Annotate" link.
           If you need to install the VisualAnnotate toolbar, click
-          <a href="http://{$teamSiteHostName}/iw-cc/vannotate/ifatclient/install.jsp">install toolbar</a>.
+          <a href="https://{$teamSiteHostName}/iw-cc/vannotate/ifatclient/install.jsp">install toolbar</a>.
         </div>
         <div class="indent" style="margin-top:10px;">
           You can review a file by clicking the file name. Then if you do not want to use VisualAnnotate or if your browser does not support the toolbar,
@@ -151,13 +169,13 @@
           <table cellspacing="0" cellpadding="0" border="0" style="display:inline;">
             <tr>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
               </td>
-              <td style="white-space:nowrap;" valign="middle" align="middle" background="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
-                <a href="http://{$teamSiteHostName}/iw-cc/livesite/Workflow/TransitionComments.jsp?taskid={//Task[Name=$reviewTaskName]/@Id}&amp;transition=Approve+Changes&amp;type=approve" class="button-link">Approve</a>
+              <td style="white-space:nowrap;" valign="middle" align="middle" background="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
+                <a href="https://{$teamSiteHostName}/iw-cc/livesite/Workflow/TransitionComments.jsp?taskid={//Task[Name=$reviewTaskName]/@Id}&amp;transition=Approve+Changes&amp;type=approve" class="button-link">Approve</a>
               </td>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
               </td>
             </tr>
           </table>
@@ -165,37 +183,37 @@
           <table cellspacing="0" cellpadding="0" border="0" style="display:inline;">
             <tr>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
               </td>
-              <td style="white-space:nowrap;" valign="middle" align="middle" background="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
-                <a href="http://{$teamSiteHostName}/iw-cc/livesite/Workflow/TransitionComments.jsp?taskid={//Task[Name=$reviewTaskName]/@Id}&amp;transition=Revisions+Needed&amp;type=reject&amp;author={$safeAuthorName}" class="button-link">Revisions Needed</a>
+              <td style="white-space:nowrap;" valign="middle" align="middle" background="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
+                <a href="https://{$teamSiteHostName}/iw-cc/livesite/Workflow/TransitionComments.jsp?taskid={//Task[Name=$reviewTaskName]/@Id}&amp;transition=Revisions+Needed&amp;type=reject&amp;author={$safeAuthorName}" class="button-link">Revisions Needed</a>
               </td>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
               </td>
             </tr>
           </table>&nbsp;&nbsp;&nbsp;<table cellspacing="0" cellpadding="0" border="0" style="display:inline;">
             <tr>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
               </td>
-              <td style="white-space:nowrap;" valign="middle" align="middle" background="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
-                <a href="http://{$teamSiteHostName}/iw-cc/viewtaskdetails?taskid={//Task[Name=$reviewTaskName]/@Id}" class="button-link">Task Details</a>
+              <td style="white-space:nowrap;" valign="middle" align="middle" background="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
+                <a href="https://{$teamSiteHostName}/iw-cc/viewtaskdetails?taskid={//Task[Name=$reviewTaskName]/@Id}" class="button-link">Task Details</a>
               </td>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
               </td>
             </tr>
           </table>&nbsp;&nbsp;&nbsp;<table cellspacing="0" cellpadding="0" border="0" style="display:inline;">
             <tr>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_left.gif"/>
               </td>
-              <td style="white-space:nowrap;" valign="middle" align="middle" background="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
-                <a href="http://{$teamSiteHostName}/iw-cc" class="button-link">Login to SitePublisher</a>
+              <td style="white-space:nowrap;" valign="middle" align="middle" background="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_mid.gif">
+                <a href="https://{$teamSiteHostName}/iw-cc" class="button-link">Login to SitePublisher</a>
               </td>
               <td width="1">
-                <img src="http://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
+                <img src="https://{$teamSiteHostName}/iw-cc/base/images/dialog_btn_right.gif"/>
               </td>
             </tr>
           </table>
@@ -209,7 +227,7 @@
             <tr>
               <td class="workflow-history-heading">Job:</td>
               <td class="workflow-history">
-                <a href="http://{$teamSiteHostName}/iw-cc/viewjobdetails?jobid={//Job/@Id}">
+                <a href="https://{$teamSiteHostName}/iw-cc/viewjobdetails?jobid={//Job/@Id}">
                   <xsl:value-of select="//Job/@Id"/>
                 </a>
               </td>
@@ -281,7 +299,7 @@
       <xsl:when test="substring(Vpath,string-length(Vpath)-string-length('branch.taxonomies') + 1,string-length('branch.taxonomies')) = 'branch.taxonomies'">
         <tr>
           <td style="width:15px;">
-            <img src="http://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
+            <img src="https://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
           </td>
           <td style="width:410px;">
             <xsl:value-of select="substring(Vpath,string-length($areaVpath)+2)"/>
@@ -295,7 +313,7 @@
       <xsl:when test="substring(Vpath,string-length(Vpath)-string-length('default.sitemap') + 1,string-length('default.sitemap')) = 'default.sitemap'">
         <tr>
           <td style="width:15px;">
-            <img src="http://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
+            <img src="https://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
           </td>
           <td style="width:410px;">
             <xsl:value-of select="substring(Vpath,string-length($areaVpath)+2)"/>
@@ -309,7 +327,7 @@
       <xsl:when test="@Type != 'file'">
         <tr>
           <td style="width:15px;">
-            <img src="http://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
+            <img src="https://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
           </td>
           <td style="width:410px;">
             <xsl:value-of select="substring(Vpath,string-length($areaVpath)+2)"/>
@@ -323,18 +341,18 @@
       <xsl:otherwise>
         <tr>
           <td style="width:15px;">
-            <img src="http://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
+            <img src="https://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
           </td>
           <td style="width:410px;">
-            <a href="http://{$teamSiteHostName}/iw-cc/previewfile?vpath={Vpath}">
+            <a href="https://{$teamSiteHostName}/iw-cc/previewfile?vpath={Vpath}">
               <xsl:value-of select="substring(Vpath,string-length($areaVpath)+2)"/>
             </a>
           </td>
           <td style="width:15px;">
-            <img src="http://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
+            <img src="https://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
           </td>
           <td>
-            <a href="http://{$teamSiteHostName}/iw-cc/review?vpath={Vpath}">Review and Annotate</a>
+            <a href="https://{$teamSiteHostName}/iw-cc/review?vpath={Vpath}">Review and Annotate</a>
           </td>
         </tr>
       </xsl:otherwise>
@@ -352,7 +370,7 @@
     </xsl:if>
     <tr>
       <td rowspan="4" style="width:15px;vertical-align:top;padding-top:4px;">
-        <img src="http://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
+        <img src="https://{$teamSiteHostName}/iw-cc/base/images/icn_pageright.gif" style="width:15px;height:19px;"/>
       </td>
       <td colspan="2" class="workflow-history">
         <xsl:value-of select="Message"/>
@@ -393,7 +411,7 @@
     <tr>
       <td class="workflow-history-heading">Task:</td>
       <td class="workflow-history">
-        <a href="http://{$teamSiteHostName}/iw-cc/viewtaskdetails?taskid={$commentTask/@Id}">
+        <a href="https://{$teamSiteHostName}/iw-cc/viewtaskdetails?taskid={$commentTask/@Id}">
           <xsl:value-of select="concat($commentTask/Name,' (', $commentTask/@Id, ') ')"/>
         </a>
       </td>

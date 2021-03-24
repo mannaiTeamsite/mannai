@@ -156,11 +156,27 @@
 		<xsl:choose>
             <xsl:when test="//Job/Variables/Variable[Name='ErrorMessages']/Value != ''">
 				<div class="indent description" style="color: #880000">
+					<b><xsl:value-of select="//Job/Variables/Variable[Name='ErrorMessages']/Value"/></b>
+				</div>
+            </xsl:when>
+		</xsl:choose>
+		
+		<xsl:choose>
+            <xsl:when test="//Job/Variables/Variable[Name='removedFiles']/Value != ''">
+				<div class="indent description" style="color: #880000">
 					<b>
-						<xsl:value-of select="//Job/Variables/Variable[Name='ErrorMessages']/Value"/>
 						<xsl:text>Following files are locked in workarea:</xsl:text>
 						<xsl:value-of select="//Job/Variables/Variable[Name='removedFiles']/Value"/>
-						<xsl:text>Following Links are broken:</xsl:text>
+					</b>
+				</div>
+            </xsl:when>
+		</xsl:choose>
+		
+		<xsl:choose>
+            <xsl:when test="//Job/Variables/Variable[Name='brokenLinks']/Value != ''">
+				<div class="indent description" style="color: #880000">
+					<b>
+						<xsl:text>Following Links are broken in mentinoed files(FILENAME : BROKENLINK):</xsl:text>
 						<xsl:value-of select="//Job/Variables/Variable[Name='brokenLinks']/Value"/>
 					</b>
 				</div>

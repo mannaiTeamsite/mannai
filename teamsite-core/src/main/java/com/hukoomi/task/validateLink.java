@@ -95,7 +95,7 @@ public class validateLink implements CSURLExternalTask {
                             for(String strDataTemp:linkArrayList) {
                                 url = new URL(strDataTemp);
                                 if (!doesURLExist(url))
-                                    brokenLinkList.add(strDataTemp);
+                                    brokenLinkList.add(file.toString()+" : "+strDataTemp);
                                 logger.info("Link to validate: " + strDataTemp);
                             }
                             linkArrayList.clear();
