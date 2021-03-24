@@ -1,6 +1,6 @@
 package com.hukoomi.utils;
 
-public class CommonUtils {
+public class TeamSiteUtils {
 
     /*
      * Get pretty URL from the Page Link items.
