@@ -63,8 +63,8 @@ jobs:
       - name: Checkout deployment branch
         uses: actions/checkout@v2
         with:
-          token: ${{secrets.ACCESS_TOKEN}}
           ref: ${{env.DEPLOY_BRANCH}}
+          token: ${{secrets.GITHUB_TOKEN}}
 
       - name: Remove old artifacts
         run: |
