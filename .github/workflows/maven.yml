@@ -22,12 +22,20 @@ jobs:
       with:
         java-version: 11.0.7
     - name: Build with Maven
+      id: maven_build
       run: mvn clean install --file Hukoomi/pom.xml
     - name: Check if deployment is needed
       id: deployment_check
       if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/development' || github.ref == 'refs/heads/staging' || github.ref == 'refs/heads/production') }}
       run: |
           echo '::set-output name=should_deploy::true'
+    - name: Upload Artifacts
+      id: upload_jars
+      if: ${{ steps.deployment_check.outputs.should_deploy && steps.maven_build.outcome == 'success' }}
+      uses: actions/upload-artifact@v1
+      with:
+        name: global
+        path: global
   deploy:
     runs-on: ubuntu-latest
     needs: [ 'build' ]
