@@ -34,6 +34,7 @@ jobs:
     if: ${{ needs.build.outputs.should_deploy }}
     env:
       ACTIONS_ALLOW_UNSECURE_COMMANDS: true
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Set deployment environments
         run: |
