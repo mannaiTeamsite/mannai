@@ -16,9 +16,12 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
 import org.springframework.mail.MailException;
 
 import com.hukoomi.contact.model.ContactEmail;
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
@@ -68,14 +71,25 @@ public class ContactUsExternal {
         String action = null;
         String gRecaptchaResponse = null;
         String status = "";
-        action = context.getParameterString("action");
+        String validData="";
+        String CONTACT_ACTION = "action";
+        action = context.getParameterString(CONTACT_ACTION);
+        ValidationErrorList errorList = new ValidationErrorList();
         LOGGER.debug("action:" + action);
+
+        validData  = ESAPI.validator().getValidInput(CONTACT_ACTION, action, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        if(errorList.isEmpty()) {
+
+        }else {
+            LOGGER.debug(errorList.getError(CONTACT_ACTION));
+            status = STATUS_FIELD_VALIDATION;
+            return getDocument(status);
+        }
         if (action.equals("sendmail")) {
             LOGGER.info("Sendingemail.");
             LOGGER.debug("page:" + context.getParameterString("page"));
 
             senderName = context.getParameterString("senderName");
-
             senderEmail = context.getParameterString("senderEmail");
             emailSubject = context.getParameterString("emailSubject");
             emailText = context.getParameterString("emailText");
@@ -114,7 +128,10 @@ public class ContactUsExternal {
     private boolean setValueToContactModel(final String senderName,
             final String senderEmail, final String emailText,
             final String emailSubject) {
+        String validData="";
+        String CONTACT_ACTION = "action";
         ValidationUtils util = new ValidationUtils();
+        ValidationErrorList errorList = new ValidationErrorList();
         XssUtils xssUtils = new XssUtils();
         LOGGER.info("setValueToContactModel: Enter");
         if (senderName != null && senderEmail != null && emailText != null
@@ -124,12 +141,19 @@ public class ContactUsExternal {
             } else {
                 return false;
             }
-            if (senderEmail.length() <= 50 && util
-                    .validateEmailId(xssUtils.stripXSS(senderEmail))) {
+
+            validData  = ESAPI.validator().getValidInput("senderEmail", senderEmail, ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
                 email.setSenderEmail(senderEmail);
-            } else {
-                return false;
+            }else {
+                LOGGER.debug(errorList.getError("senderEmail"));
+               return false;
             }
+            /*
+             * if (senderEmail.length() <= 50 && util
+             * .validateEmailId(xssUtils.stripXSS(senderEmail))) {
+             * email.setSenderEmail(senderEmail); } else { return false; }
+             */
             if (emailText.length() <= 2500) {
                 email.setEmailText(xssUtils.stripXSS(emailText));
             } else {
