@@ -9,7 +9,10 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
 
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.hukoomi.utils.XssUtils;
@@ -19,17 +22,18 @@ public class CommentsEngine {
     /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(CommentsEngine.class);
-
     private static final String ELEMENT_RESULT = "Result";
     private static final String ELEMENT_STATUS = "Status";
     final String BLOG_ACTION = "blogAction";
     final String LOCALE = "locale";
     final String DCR_ID = "dcr_id";
-    final String USER_AGENT = "User-Agent";
-    final String VOTED_FROM = "votedFrom";
-    final String POLLID = "pollId";
+    final String BLOG_URL = "BlogURL";
+    final String OFFSET = "offset";
+    final String NO_OF_ROWS = "noOfRows";
+    final String IP = "ip";
     private static final String STATUS_FIELD_VALIDATION =
             "FieldValidationFailed";
+    String status = "";
 
     /**
      * This method internally makes call to get Comment/set comment/ get
@@ -48,58 +52,135 @@ public class CommentsEngine {
         XssUtils xssUtils = new XssUtils();
         String action =
                 xssUtils.stripXSS(context.getParameterString("action"));
-        int blogId = 0;
-        String status = "";
-        String dcrId =
-                xssUtils.stripXSS(context.getParameterString("dcr_id"));
-        String language =
-                xssUtils.stripXSS(context.getParameterString("locale"));
+        if (validateAction(action)) {
+            int blogId = 0;
 
-        switch (action) {
-        case "getComments":
-            String noOfRows = xssUtils
-                    .stripXSS(context.getParameterString("noOfRows"));
-            String offset = xssUtils
-                    .stripXSS(context.getParameterString("offset"));
-            document = getComments(dcrId, Integer.parseInt(offset),
-                    Integer.parseInt(noOfRows), language, context);
-            break;
-        case "setComment":
-            String ip = requestHeaderUtils.getClientIpAddress();
-            String comments = xssUtils
-                    .stripXSS(context.getParameterString("comments"));
-            String blogUrl = xssUtils
-                    .stripXSS(context.getParameterString("blog_url"));
-            String userName = xssUtils
-                    .stripXSS(context.getParameterString("username"));
-            if (validateCommentData(comments, userName)) {
-                blogId = getBlogId(dcrId, language, context);
-                document = insertCommentsToDB(blogId, blogUrl, comments,
-                        userName, ip, context);
+            String dcrId = xssUtils
+                    .stripXSS(context.getParameterString("dcr_id"));
+            String language = xssUtils
+                    .stripXSS(context.getParameterString("locale"));
+            if (validateDCR(dcrId, language)) {
+                switch (action) {
+                case "getComments":
+                    String noOfRows = xssUtils.stripXSS(
+                            context.getParameterString("noOfRows"));
+                    String offset = xssUtils.stripXSS(
+                            context.getParameterString("offset"));
+                    if (validateGetCommentCount(noOfRows, offset)) {
+                        document = getComments(dcrId,
+                                Integer.parseInt(offset),
+                                Integer.parseInt(noOfRows), language,
+                                context);
+                    }
+                    break;
+                case "setComment":
+                    String ip = requestHeaderUtils.getClientIpAddress();
+                    String comments = xssUtils.stripXSS(
+                            context.getParameterString("comments"));
+                    String blogUrl = xssUtils.stripXSS(
+                            context.getParameterString("blog_url"));
+                    String userName = xssUtils.stripXSS(
+                            context.getParameterString("username"));
+                    if (validateCommentData(comments, userName, blogUrl,
+                            ip)) {
+                        blogId = getBlogId(dcrId, language, context);
+                        document = insertCommentsToDB(blogId, blogUrl,
+                                comments, userName, ip, context);
+                    } else {
+                        status = STATUS_FIELD_VALIDATION;
+                        document = getDocument(status);
+                    }
+
+                    break;
+                case "getCommentCount":
+                    blogId = getBlogId(dcrId, language, context);
+                    document = getCommentCount(blogId, context);
+                    break;
+                }
             } else {
                 status = STATUS_FIELD_VALIDATION;
                 document = getDocument(status);
-
             }
 
-            break;
-        case "getCommentCount":
-            blogId = getBlogId(dcrId, language, context);
-            document = getCommentCount(blogId, context);
-            break;
+        } else {
+            status = STATUS_FIELD_VALIDATION;
+            document = getDocument(status);
         }
 
         return document;
     }
 
-    private boolean validateCommentData(String comments, String userName) {
+    private boolean validateCommentData(String comments, String userName,
+            String blogUrl, String ip) {
         if (userName.length() > 100) {
             return false;
         } else if (comments.length() > 150) {
             return false;
+        } else {
+            ValidationErrorList errorList = new ValidationErrorList();
+            ESAPI.validator().getValidInput(BLOG_URL, blogUrl,
+                    ESAPIValidator.URL, 200, false, true, errorList);
+            if (errorList.isEmpty()) {
+                ESAPI.validator().getValidInput(IP, ip,
+                        ESAPIValidator.IP_ADDRESS, 20, false, true,
+                        errorList);
+                return errorList.isEmpty();
+            }
+        }
+        return false;
+    }
+
+    private boolean validateAction(String blogAction) {
+        ValidationErrorList errorList = new ValidationErrorList();
+        LOGGER.info(BLOG_ACTION + " >>>" + blogAction + "<<<");
+        ESAPI.validator().getValidInput(BLOG_ACTION, blogAction,
+                ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        return errorList.isEmpty();
+    }
+
+    private boolean validateDCR(String dcrId, String language) {
+        ValidationErrorList errorList = new ValidationErrorList();
+
+        LOGGER.info(DCR_ID + " >>>" + dcrId + "<<<");
+        ESAPI.validator().getValidInput(DCR_ID, dcrId,
+                ESAPIValidator.NUMERIC, 20, false, true, errorList);
+        if (errorList.isEmpty()) {
+            ESAPI.validator().getValidInput(LOCALE, language,
+                    ESAPIValidator.ALPHABET, 2, false, true, errorList);
+            if (errorList.isEmpty()) {
+                return true;
+            } else {
+                LOGGER.info(errorList.getError(LOCALE));
+                return false;
+            }
+        } else {
+            LOGGER.info(errorList.getError(DCR_ID));
+            return false;
+        }
+    }
+
+    private boolean validateGetCommentCount(String noOfRows,
+            String offset) {
+        ValidationErrorList errorList = new ValidationErrorList();
+
+        LOGGER.info(DCR_ID + " >>>" + noOfRows + "<<<");
+        ESAPI.validator().getValidInput(NO_OF_ROWS, noOfRows,
+                ESAPIValidator.NUMERIC, 2, false, true, errorList);
+        if (errorList.isEmpty()) {
+            ESAPI.validator().getValidInput(OFFSET, offset,
+                    ESAPIValidator.NUMERIC, 2, false, true, errorList);
+            if (errorList.isEmpty()) {
+                return true;
+            } else {
+                LOGGER.info(errorList.getError(LOCALE));
+                return false;
+            }
         }
 
-        return true;
+        else {
+            LOGGER.info(errorList.getError(DCR_ID));
+            return false;
+        }
     }
 
     /**
