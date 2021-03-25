@@ -12,11 +12,13 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
 
 import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
-import com.hukoomi.utils.ValidationUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class CustomerServiceExternal {
@@ -48,31 +50,54 @@ public class CustomerServiceExternal {
         String action = "";
         String eService = "";
         Document result = null;
-
         LOGGER.info("CustomerService");
         action = context.getParameterString("action");
-        if (!action.equals("")) {
+        if (validateAction(action)) {
             if (action.equals(ACTION_ESERVICE)) {
                 result = getEServices(context);
             } else if (action.equals(ACTION_SERVICE)) {
                 eService = context.getParameterString("eService");
-                ValidationUtils util = new ValidationUtils();
-                if (util.validateNumeric(eService)) {
+                if (validateEService(eService)) {
                     result = getServices(eService, context);
                 } else {
-                    result = DocumentHelper.createDocument();
-                    Element resultElement =
-                            result.addElement(ELEMENT_RESULT);
-                    Element element =
-                            resultElement.addElement(ELEMENT_STATUS);
-                    element.setText(STATUS_FIELD_VALIDATION);
-                    return result;
+                     result = getFieldValidationFailedDocument(result);
                 }
             }
+            else {
+                result = getFieldValidationFailedDocument(result);
+           }
+        }
+        else {
+            result = getFieldValidationFailedDocument(result);
         }
         return result;
     }
 
+    private Document getFieldValidationFailedDocument( Document result) {
+        result = DocumentHelper.createDocument();
+        Element resultElement =
+                result.addElement(ELEMENT_RESULT);
+        Element element =
+                resultElement.addElement(ELEMENT_STATUS);
+        element.setText(STATUS_FIELD_VALIDATION);
+        return result;
+    }
+
+    private boolean validateAction(String action) {
+        ValidationErrorList errorList = new ValidationErrorList();
+        LOGGER.info("CUSTOMER_SERVICE_ACTION" + " >>>" + action + "<<<");
+        ESAPI.validator().getValidInput("CUSTOMER_SERVICE_ACTION", action,
+                ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        return errorList.isEmpty();
+    }
+
+    private boolean validateEService(String eServiceID) {
+        ValidationErrorList errorList = new ValidationErrorList();
+        LOGGER.info("E_SERVICE" + " >>>" + eServiceID + "<<<");
+        ESAPI.validator().getValidInput("E_SERVICE", eServiceID,
+                ESAPIValidator.NUMERIC, 8, false, true, errorList);
+        return errorList.isEmpty();
+    }
     /**
      * This method will be used to get the services from db.
      *
