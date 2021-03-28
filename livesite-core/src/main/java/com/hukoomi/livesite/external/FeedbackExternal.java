@@ -49,7 +49,7 @@ public class FeedbackExternal {
         logger.debug("insertFeedback()====> Starts");
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         CommonUtils commonUtils = new CommonUtils();
-        Document topSearchDoc = DocumentHelper.createDocument();
+        Document feedbackDoc = DocumentHelper.createDocument();
         String status="";
         postgre = new Postgre(context);
         gRecaptchaResponse = context.getParameterString("captcha");
@@ -127,10 +127,10 @@ public class FeedbackExternal {
             status = STATUS_ERROR_RECAPTHCHA;
         }
 
-        Element topSearchResultEle = topSearchDoc.addElement("insertResult");
-        topSearchResultEle.setText(status);
+        Element feedbackDocEle = feedbackDoc.addElement("insertResult");
+        feedbackDocEle.setText(status);
         logger.debug("insertFeedback()====> ends");
-        return topSearchDoc;
+        return feedbackDoc;
     }
 
 
