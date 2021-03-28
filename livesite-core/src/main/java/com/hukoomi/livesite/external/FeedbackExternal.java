@@ -17,7 +17,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.hukoomi.utils.GoogleRecaptchaUtil;
+
+
 public class FeedbackExternal {
+    private static final String STATUS_ERROR_RECAPTHCHA =
+            "errorInRecaptcha";
+    private static final String STATUS_SUCCESS = "success";
+    private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
+    private boolean verify = false;
+
     private String locale = "";
     private String userID = "";
     private String pagePath = "";
@@ -28,6 +37,7 @@ public class FeedbackExternal {
     private String feedbackDate = "";
     private String topic = "";
     private String entity = "";
+    private String gRecaptchaResponse = null;
     private String table = "";
 
     private int topSearchLimit;
@@ -42,7 +52,7 @@ public class FeedbackExternal {
         Document topSearchDoc = DocumentHelper.createDocument();
         String status="";
         postgre = new Postgre(context);
-
+        gRecaptchaResponse = context.getParameterString("captcha");
         userID = context.getParameterString("userID").trim();
         if(userID=="")
         {
@@ -95,20 +105,28 @@ public class FeedbackExternal {
         logger.debug("locale:" + locale);
 
         logger.debug("table:" + table);
+        GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+        verify = captchUtil.validateCaptcha(context,
+                gRecaptchaResponse);
+        logger.debug("Recapcha verification status:" + verify);
+        if (verify) {
+            if(!"".equals(table)){
 
+                int insertStatus = insertFeedback();
+                if(insertStatus == 1){
+                    logger.debug("Keyword inserted");
+                    status="Successfully Inserted";
+                }else{
+                    logger.debug("Keyword not inserted");
+                    status="Not Inserted";
+                }
 
-        if(!"".equals(table)){
-
-            int insertStatus = insertFeedback();
-            if(insertStatus == 1){
-                logger.debug("Keyword inserted");
-                status="Successfully Inserted";
-            }else{
-                logger.debug("Keyword not inserted");
-                status="Not Inserted";
             }
 
+        } else {
+            status = STATUS_ERROR_RECAPTHCHA;
         }
+
         Element topSearchResultEle = topSearchDoc.addElement("insertResult");
         topSearchResultEle.setText(status);
         logger.debug("insertFeedback()====> ends");
@@ -157,7 +175,6 @@ public class FeedbackExternal {
     private Connection getConnection() {
         return postgre.getConnection();
     }
-
 
 
 }
