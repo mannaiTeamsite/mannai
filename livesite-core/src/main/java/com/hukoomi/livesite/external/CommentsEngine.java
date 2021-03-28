@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -349,7 +351,9 @@ public class CommentsEngine {
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         String insertQuery = "";
-
+        HttpServletRequest request = context.getRequest();
+        userName = request.getSession().getAttribute("fnEn").toString();
+        LOGGER.info("username:"+ userName );
         insertQuery =
                 "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,USER_IP_ADDRESS,STATUS) VALUES(?,?,?,LOCALTIMESTAMP,?,?,?)";
         try {
