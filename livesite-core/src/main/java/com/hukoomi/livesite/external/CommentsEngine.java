@@ -352,8 +352,10 @@ public class CommentsEngine {
         PreparedStatement prepareStatement = null;
         String insertQuery = "";
         HttpServletRequest request = context.getRequest();
-        userName = request.getSession().getAttribute("fnEn").toString();
-        LOGGER.info("username:"+ userName );
+        if(request.getSession().getAttribute("fnEn").toString() != null) {
+            userName = request.getSession().getAttribute("fnEn").toString();
+            LOGGER.info("username:"+ userName );
+        }
         insertQuery =
                 "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,USER_IP_ADDRESS,STATUS) VALUES(?,?,?,LOCALTIMESTAMP,?,?,?)";
         try {
