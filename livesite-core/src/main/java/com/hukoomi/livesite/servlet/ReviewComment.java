@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Enumeration;
 import java.util.Properties;
 
 import javax.servlet.ServletException;
@@ -37,6 +38,9 @@ public class ReviewComment extends HttpServlet {
             HttpServletResponse response) throws ServletException {
         LOGGER.info("ReviewComment : Start");
         JSONObject data = null;
+        Enumeration<String> attributes = request.getSession().getAttributeNames();
+        while (attributes.hasMoreElements())
+            LOGGER.info("Value is: " + attributes.nextElement());
         try {
             BufferedReader inbr = new BufferedReader(
                     new InputStreamReader(request.getInputStream()));
@@ -185,6 +189,7 @@ public class ReviewComment extends HttpServlet {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
+
 
             long commentId = data.getLong("commentId");
             String status = xssUtils.stripXSS(data.getString("status"));
