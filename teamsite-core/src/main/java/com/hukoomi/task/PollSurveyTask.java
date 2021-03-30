@@ -797,7 +797,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
             surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
             surveyBO.setDescription(
-                    getDCRValue(document, SURVEY_START_DATE_PATH));
+                    getDCRValue(document, DESCRIPTION_PATH));
             surveyBO.setStartDate(
                     getDCRValue(document, SURVEY_START_DATE_PATH));
             surveyBO.setEndDate(
@@ -1067,7 +1067,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setLang(getDCRValue(document, LANG_PATH));
             surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
             surveyBO.setDescription(
-                    getDCRValue(document, SURVEY_START_DATE_PATH));
+                    getDCRValue(document, DESCRIPTION_PATH));
             surveyBO.setEndDate(
                     getDCRValue(document, SURVEY_END_DATE_PATH));
             surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
