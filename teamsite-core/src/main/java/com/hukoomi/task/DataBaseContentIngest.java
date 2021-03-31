@@ -164,6 +164,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      */
     private static final String DB_PROPERTY_FILE = "DbInsertConfig.properties";
     /**
+     * Database property file name
+     */
+    private static final String LS_DB_PROPERTY_FILE = "dbconfig.properties";
+    /**
      * Transition hashmap key
      */
     private static final String TRANSITION = "TRANSITION";
@@ -175,6 +179,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      * Postgre class instance variable
      */
     PostgreTSConnection postgre = null;
+    PostgreTSConnection postgreLS = null;
 
     /**
      * Overridden method from CSSDK
@@ -193,6 +198,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         //task.getWorkflow().getId();
         // CSWorkflow workFlow = new CSWorkflowImpl(task,)
         postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
+        postgreLS = new PostgreTSConnection(client, task, LS_DB_PROPERTY_FILE);
         statusMap = new HashMap<>();
         statusMap.put(TRANSITION, SUCCESS_TRANSITION);
         statusMap.put(TRANSITION_COMMENT, "");
@@ -244,7 +250,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
                     isDBOperationContentSuccess = insertData(taskSimpleFile, document);
                 }
                 else if(dcrType.contains("Taxonomy/")){
-                    isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document);
+                    isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document, postgre);
+                    isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document, postgreLS);
                 }
             }
             isDBOperationWorkflowSuccess = insertWorkFlowData(taskSimpleFile, task);
@@ -545,7 +552,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public boolean insertTaxonomyData(CSSimpleFile taskSimpleFile, Document document)
+    public boolean insertTaxonomyData(CSSimpleFile taskSimpleFile, Document document, PostgreTSConnection postgreConnection)
             throws SQLException, CSException {
         boolean isDataInserted = false;
         //String Url = "/" + getDCRValue(document, getLang(taskSimpleFile)) + "/"
@@ -582,10 +589,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
                 labelAr = label.selectSingleNode("LabelAr").getText();
                 logger.info("Taxonomy Arabic Label : " + labelAr);
 
-                isDataInserted = taxonomyQuery("en", taxonomyType, taxonomyKey, labelEn, taxonomyDcr);
+                isDataInserted = taxonomyQuery("en", taxonomyType, taxonomyKey, labelEn, taxonomyDcr,postgreConnection);
                 logger.info("English Taxonomy Inserted / Updated : " + isDataInserted);
 
-                isDataInserted = taxonomyQuery("ar", taxonomyType, taxonomyKey, labelAr, taxonomyDcr);
+                isDataInserted = taxonomyQuery("ar", taxonomyType, taxonomyKey, labelAr, taxonomyDcr,postgreConnection);
                 logger.info("Arabic Taxonomy Inserted / Updated : " + isDataInserted);
 
             }
@@ -632,10 +639,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
                     labelAr = subCatLabelAr+" ( "+catLabelAr+" )";
                     logger.info("Taxonomy Arabic Label : " + labelAr);
 
-                    isDataInserted = taxonomyQuery("en", taxonomyType, taxonomyKey, labelEn, taxonomyDcr);
+                    isDataInserted = taxonomyQuery("en", taxonomyType, taxonomyKey, labelEn, taxonomyDcr,postgreConnection);
                     logger.info("English Taxonomy Inserted / Updated : " + isDataInserted);
 
-                    isDataInserted = taxonomyQuery("ar", taxonomyType, taxonomyKey, labelAr, taxonomyDcr);
+                    isDataInserted = taxonomyQuery("ar", taxonomyType, taxonomyKey, labelAr, taxonomyDcr,postgreConnection);
                     logger.info("Arabic Taxonomy Inserted / Updated : " + isDataInserted);
                 }
 
@@ -646,7 +653,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
     }
 
 
-    public boolean taxonomyQuery(String lang, String type,String key,String label,String dcr ){
+    public boolean taxonomyQuery(String lang, String type,String key,String label,String dcr,PostgreTSConnection postgreConnection ){
         logger.debug("DataBaseContentIngest : insertTaxonomyData");
         Connection connection = null;
         boolean isDataSelected = false;
@@ -663,7 +670,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             // .getValue());
             // }
 
-            connection = postgre.getConnection();
+            connection = postgreConnection.getConnection();
 
 
             logger.info("DataBaseContentIngest : taxonomyQuery");
@@ -701,22 +708,22 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             postgre.releaseConnection(connection, preparedStatement, null);
             logger.info("Released taxonomyQuery connection");
             if(isDataSelected){
-                isDataInserted = taxonomyUpdateQuery(lang, type, key, label, dcr );
+                isDataInserted = taxonomyUpdateQuery(lang, type, key, label, dcr,postgreConnection );
             }else{
-                isDataInserted = taxonomyInsertQuery(lang, type, key, label, dcr );
+                isDataInserted = taxonomyInsertQuery(lang, type, key, label, dcr,postgreConnection );
             }
         }
         return isDataInserted;
     }
 
-    public boolean taxonomyUpdateQuery(String lang, String type,String key,String label,String dcr ){
+    public boolean taxonomyUpdateQuery(String lang, String type,String key,String label,String dcr,PostgreTSConnection postgreConnection ){
         logger.debug("DataBaseContentIngest : updateTaxonomyData");
         Connection connection = null;
         boolean isDataInserted = false;
         PreparedStatement preparedStatement = null;
         try {
 
-            connection = postgre.getConnection();
+            connection = postgreConnection.getConnection();
 
             int result = 0;
             logger.info("DataBaseContentIngest : taxonomyUpdateQuery");
@@ -751,14 +758,14 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         }
         return isDataInserted;
     }
-    public boolean taxonomyInsertQuery(String lang, String type,String key,String label,String dcr ){
+    public boolean taxonomyInsertQuery(String lang, String type,String key,String label,String dcr,PostgreTSConnection postgreConnection ){
         logger.debug("DataBaseContentIngest : insertTaxonomyData");
         Connection connection = null;
         boolean isDataInserted = false;
         PreparedStatement preparedStatement = null;
         try {
 
-            connection = postgre.getConnection();
+            connection = postgreConnection.getConnection();
 
             int result = 0;
             logger.info("DataBaseContentIngest : taxonomyInsertQuery");
