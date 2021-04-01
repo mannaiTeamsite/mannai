@@ -7,7 +7,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Properties;
 
 import javax.crypto.BadPaddingException;
@@ -16,6 +18,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 
 import com.interwoven.livesite.runtime.RequestContext;
 
@@ -60,6 +63,7 @@ public class JWTTokenUtil {
 			throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,
 			BadPaddingException, NoSuchPaddingException, java.security.InvalidKeyException {
 
+		String strDate = null ;
 		String rsaSignPublicKey = properties.getProperty("RSASignaturePublicKey");
 		logger.info("rsaSignPublicKey :" + rsaSignPublicKey);
 		String rsaPayloadPublicKey = properties.getProperty("RSAPayloadPublicKey");
@@ -71,15 +75,25 @@ public class JWTTokenUtil {
 		Jws<Claims> jwt;
 		logger.info("Jwts object :" + Jwts.parser().setSigningKey(publicKey));
 		jwt = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwtString);
-		String encryptedData = jwt.getBody().getSubject();
-		logger.info("encryptedData:" + encryptedData);
-		publicKey = getPublicKey(rsaPayloadPublicKey);
-		logger.info("publicKey:" + publicKey);
-		data = decrypt(encryptedData, publicKey);
-		logger.info("data:" + data);
-		System.out.println("Data :" + data);
+		
+		Date exp = jwt.getBody().getExpiration();
+		if(exp != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");  
+			strDate = formatter.format(exp); 
+		}
+		    logger.info("Expiration Date :"+exp);
+			String encryptedData = jwt.getBody().getSubject();
+			logger.info("encryptedData:" + encryptedData);
+			publicKey = getPublicKey(rsaPayloadPublicKey);
+			data = decrypt(encryptedData, publicKey);
+			JSONObject jsonObj = new JSONObject(data);
+			jsonObj.put("exp", strDate);
+		    data = jsonObj.toString();
+		    logger.info("data:" + data);
+		
 		return data;
 	}
+		 
 
 	public static String decrypt(String data, PublicKey publicKey)
 			throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException,
