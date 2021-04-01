@@ -24,7 +24,6 @@ public class FeedbackExternal {
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
     private static final String STATUS_SUCCESS = "success";
-    private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
     private boolean verify = false;
 
     private String locale = "";
@@ -58,6 +57,7 @@ public class FeedbackExternal {
         {
             userID=null;
         }
+        logger.debug("userID:" + userID);
         locale = context.getParameterString("locale").trim().toLowerCase();
         if(locale=="")
         {
@@ -114,10 +114,10 @@ public class FeedbackExternal {
 
                 int insertStatus = insertFeedback();
                 if(insertStatus == 1){
-                    logger.debug("Keyword inserted");
+                    logger.debug("Feedback inserted");
                     status="Successfully Inserted";
                 }else{
-                    logger.debug("Keyword not inserted");
+                    logger.debug("Feedback not inserted");
                     status="Not Inserted";
                 }
 
@@ -168,7 +168,7 @@ public class FeedbackExternal {
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
-        logger.debug("insertTopSearch()====> ends");
+        logger.debug("insertFeedback()====> ends");
         return result;
     }
 
