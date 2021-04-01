@@ -93,9 +93,7 @@ public class JWTTokenUtil {
 		
 		return data;
 	}
-	
-	
-	 
+		 
 
 	public static String decrypt(String data, PublicKey publicKey)
 			throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException,
