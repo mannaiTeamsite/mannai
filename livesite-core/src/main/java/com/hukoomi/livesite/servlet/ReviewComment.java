@@ -151,8 +151,7 @@ public class ReviewComment extends HttpServlet {
             }
             rs.close();
         } catch (SQLException e) {
-            LOGGER.error("getBlogs()", e);
-            e.printStackTrace();
+            LOGGER.error("getBlogs()", e);            
 
         } finally {
             releaseConnection(connection, null, null);
@@ -271,8 +270,7 @@ public class ReviewComment extends HttpServlet {
 
 
         } catch (SQLException e) {
-            LOGGER.error("getCommentbyBlogId()", e);
-            e.printStackTrace();
+            LOGGER.error("getCommentbyBlogId()", e);            
 
         } finally {
             releaseConnection(connection, null, null);
