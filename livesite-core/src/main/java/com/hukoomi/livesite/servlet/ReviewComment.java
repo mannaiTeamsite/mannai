@@ -24,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.XssUtils;
 
 public class ReviewComment extends HttpServlet {
@@ -90,10 +89,14 @@ public class ReviewComment extends HttpServlet {
             if (action.equals("getBlogs")) {
                 dataArray = getBlogs(data);
             } else if (action.equals("getComments")) {
+
                 data.put("blogId", Integer.parseInt(xssUtils
                         .stripXSS(request.getParameter("blogId"))));
                 dataArray = getCommentbyBlogId(data);
+
+
             }
+
             if (dataArray != null) {
                 data.put("success", "success");
                 data.put("comments", dataArray);
@@ -132,6 +135,7 @@ public class ReviewComment extends HttpServlet {
             String password = dbProperties.getProperty("password");
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
+
             String getBlog = "SELECT * FROM BLOG_MASTER";
             prepareStatement = connection.prepareStatement(getBlog);
             LOGGER.debug("getComment :" + getBlog);
@@ -148,6 +152,7 @@ public class ReviewComment extends HttpServlet {
             rs.close();
         } catch (SQLException e) {
             LOGGER.error("getBlogs()", e);
+            e.printStackTrace();
 
         } finally {
             releaseConnection(connection, null, null);
@@ -175,6 +180,7 @@ public class ReviewComment extends HttpServlet {
             } else {
                 LOGGER.info("Blog master insert failed");
             }
+
         } catch (Exception e) {
             LOGGER.error("Exception in Update comment data catch block : ",
                     e);
@@ -222,18 +228,25 @@ public class ReviewComment extends HttpServlet {
         Properties dbProperties = loadProperties(Propfilepath);
         Connection connection = null;
         JSONArray arrayComments = new JSONArray();
-        CommonUtils util = new CommonUtils();
+        String getComment ="";
         try {
             String userName = dbProperties.getProperty("username");
             String password = dbProperties.getProperty("password");
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
             if (blogId > 0) {
-                String getComment =
+                getComment =
                         "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID ";
                 prepareStatement = connection.prepareStatement(getComment);
                 prepareStatement.setLong(1, blogId);
                 prepareStatement.setString(2, "Pending");
+            } else  {
+                getComment =
+                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  FROM BLOG_COMMENT WHERE STATUS = ? ORDER BY COMMENT_ID ";
+                prepareStatement = connection.prepareStatement(getComment);
+                prepareStatement.setString(1, "Pending");
+            }
+
                 LOGGER.debug("getComment :" + getComment);
                 rs = prepareStatement.executeQuery();
 
@@ -255,10 +268,12 @@ public class ReviewComment extends HttpServlet {
                     arrayComments.put(Comments);
                 }
                 rs.close();
-            }
+
 
         } catch (SQLException e) {
             LOGGER.error("getCommentbyBlogId()", e);
+            e.printStackTrace();
+
         } finally {
             releaseConnection(connection, null, null);
         }

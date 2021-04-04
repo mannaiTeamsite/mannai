@@ -15,6 +15,7 @@ import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
 
 import com.hukoomi.utils.ESAPIValidator;
+import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.hukoomi.utils.XssUtils;
@@ -24,6 +25,7 @@ public class CommentsEngine {
     /** Logger object to check the flow of the code. */
     private static final Logger LOGGER =
             Logger.getLogger(CommentsEngine.class);
+
     private static final String ELEMENT_RESULT = "Result";
     private static final String ELEMENT_STATUS = "Status";
     final String BLOG_ACTION = "blogAction";
@@ -35,6 +37,8 @@ public class CommentsEngine {
     final String IP = "ip";
     private static final String STATUS_FIELD_VALIDATION =
             "FieldValidationFailed";
+    private static final String STATUS_ERROR_RECAPTHCHA =
+            "errorInRecaptcha";
     String status = "";
 
     /**
@@ -83,11 +87,24 @@ public class CommentsEngine {
                             context.getParameterString("blog_url"));
                     String userName = xssUtils.stripXSS(
                             context.getParameterString("username"));
+                    String gRecaptchaResponse = xssUtils.stripXSS(
+                            context.getParameterString("recaptcha"));
                     if (validateCommentData(comments, userName, blogUrl,
                             ip)) {
-                        blogId = getBlogId(dcrId, language, context);
-                        document = insertCommentsToDB(blogId, blogUrl,
-                                comments, userName, ip, context);
+                        GoogleRecaptchaUtil captchUtil =
+                                new GoogleRecaptchaUtil();
+                        boolean verify = captchUtil.validateCaptcha(
+                                context, gRecaptchaResponse);
+                        if (verify) {
+                            LOGGER.debug("Recapcha verification status:"
+                                    + verify);
+                            blogId = getBlogId(dcrId, language, context);
+                            document = insertCommentsToDB(blogId, blogUrl,
+                                    comments, userName, ip, context);
+                        } else {
+                            status = STATUS_ERROR_RECAPTHCHA;
+                            return getDocument(status);
+                        }
                     } else {
                         status = STATUS_FIELD_VALIDATION;
                         document = getDocument(status);
@@ -352,9 +369,11 @@ public class CommentsEngine {
         PreparedStatement prepareStatement = null;
         String insertQuery = "";
         HttpServletRequest request = context.getRequest();
-        if(request.getSession().getAttribute("fnEn").toString() != null) {
-            userName = request.getSession().getAttribute("fnEn").toString();
-            LOGGER.info("username:"+ userName );
+
+        if (request.getSession().getAttribute("fnEn") != null) {
+            userName =
+                    request.getSession().getAttribute("fnEn").toString();
+            LOGGER.info("username:" + userName);
         }
         insertQuery =
                 "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,USER_IP_ADDRESS,STATUS) VALUES(?,?,?,LOCALTIMESTAMP,?,?,?)";
