@@ -15,12 +15,9 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-
 import org.dom4j.Node;
-
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
-
 
 import com.hukoomi.bo.SurveyBO;
 import com.hukoomi.utils.ESAPIValidator;
@@ -248,6 +245,7 @@ public class SurveyExternal {
 
         logger.info("SurveyIds from doc : " + surveyIds);
 
+        if (StringUtils.isNotBlank(surveyIds)) {
         // Checking for already submitted Surveys
         String submittedSurveyIds = getSubmissionDatabaseStatus(surveyIds,
                 postgre, surveyBO);
@@ -255,6 +253,7 @@ public class SurveyExternal {
         // Add Status code to document
         if (StringUtils.isNotBlank(submittedSurveyIds)) {
             document = addStatusToXml(document, submittedSurveyIds);
+        }
         }
 
         return document;
@@ -299,7 +298,7 @@ public class SurveyExternal {
         logger.info("getSubmissionDatabaseStatus()");
 
         StringBuilder checkSubmittedSurveyQuery = new StringBuilder(
-                "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR,SURVEY_MASTER SM WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) AND SM.SUBMIT_TYPE='Single'");
+                "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR,SURVEY_MASTER SM WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) AND SM.SUBMIT_TYPE='Single' ");
         StringJoiner submittedSurveyIds = new StringJoiner(",");
 
         String[] surveyIdsArr = surveyIds.split(",");
