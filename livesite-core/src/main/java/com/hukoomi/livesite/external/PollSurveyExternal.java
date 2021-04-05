@@ -195,6 +195,7 @@ public class PollSurveyExternal {
                     logger.info("Survey Ids from document ==> " + surveyExt
                             .getSurveyIdsFromDoc(surveySolrDoc));
 
+                    if (StringUtils.isNotBlank(surveyId)) {
                     // Get Submission status
                     String submittedSurveyIds = surveyExt
                             .getSubmissionDatabaseStatus(surveyId,
@@ -205,6 +206,7 @@ public class PollSurveyExternal {
                         document = surveyExt.addStatusToXml(surveySolrDoc,
                                 submittedSurveyIds);
                     }
+                }
 
                     surveyGroupElem = pollSurveyElem
                             .addElement("SurveyGroupResponse");
