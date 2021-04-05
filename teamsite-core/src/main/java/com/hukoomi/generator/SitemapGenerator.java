@@ -129,7 +129,7 @@ public class SitemapGenerator {
             sites = sites + "/portal-ar";
         }
         final String sitemap_url = "url";
-        final String sitemap_location = "location";
+        final String sitemap_location = "loc";
         final String sitemap_lastmod = "lastmod";
         final String sitemap_changefreq = "changefreq";
         final String sitemap_priority = "priority";
