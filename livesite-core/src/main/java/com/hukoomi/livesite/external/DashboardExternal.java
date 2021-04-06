@@ -90,7 +90,7 @@ protected void removeSessionAttr(RequestContext context) {
     HttpServletRequest request = context.getRequest();
     HttpSession session = request.getSession(false);
     if (session != null)
-    	 session.removeAttribute("status");
+    	session.removeAttribute("status");
 	    session.removeAttribute("unm");
 	    session.removeAttribute("uid");
 	    session.removeAttribute("fnEn");
@@ -104,64 +104,31 @@ protected void removeSessionAttr(RequestContext context) {
 	    session.removeAttribute("lstMdfy");
 	    session.removeAttribute("role"); 
 	    session.removeAttribute("exp");
-    Cookie[] cookies = request.getCookies();
-    for (int i = 0; i < cookies.length; i++) {
-      String name = cookies[i].getName();
-      if (name.equals("accessToken")) {
-        cookies[i].setMaxAge(0);
-        cookies[i].setPath(request.getRequestURI());
-      } 
-    } 
-    LOGGER.info("--------------removeSessionAttr is Ended------------");
+    LOGGER.info("--------------removeSessionAttr is Ended------------"+session.getAttribute("status"));
 }
   
-public DashboardExternal(RequestContext context) {
-	LOGGER.info("DashboardExternal : Loading Properties....");
-	properties = DashboardExternal.loadProperties(context);
-	LOGGER.info("DashboardExternal : Properties Loaded");
-}
 
-/**
- * This method will be used to load the configuration properties.
- * 
- * @param context Request context object.
- * 
- */
-private static Properties loadProperties(final RequestContext context) {
-	LOGGER.info("loadProperties:Begin");
-	PropertiesFileReader prop = null;
-	prop = new PropertiesFileReader(context, "dashboard.properties");
-	return prop.getPropertiesFile();
-
-}
-
- public void doLogout(RequestContext context) throws IOException {
-	 LOGGER.info("--------------doLogout is Ended------------");
+ public Document doLogout(RequestContext context) throws IOException {
+	 LOGGER.info("--------------doLogout  Started------------");
+	 Document doc = DocumentHelper.createDocument();
 	 removeSessionAttr(context);
-	 String url = this.properties.getProperty("logout");
-    url = url + "?relayURL=" + url;
+	 
+	 PropertiesFileReader prop = null;
+	 prop = new PropertiesFileReader(context, "dashboard.properties");
+	 properties = prop.getPropertiesFile();
+	 String url = properties.getProperty("logout");	 
+    LOGGER.info("---Logout url---"+url);
     HttpServletResponse response = context.getResponse();
     response.sendRedirect(url);
-    LOGGER.info("--------------doLogout is Ended------------");
+    LOGGER.info("--------------doLogout Ended------------");
+	return doc;
   }
   
   public Document getprofileInfo(RequestContext context) {
 	  Document doc = DocumentHelper.createDocument();
-	  HttpServletRequest request = context.getRequest();
 	  	Element root = doc.getRootElement();
-	    Element result = root.addElement("result");
-	    Element statusElement = result.addElement("status");
-	    statusElement.setText(request.getSession().getAttribute("status").toString());
-	    Element fnEnElement = result.addElement("fnEn");
-		fnEnElement.setText(request.getSession().getAttribute("fnEn").toString());
-		Element fnArElement = result.addElement("fnAr");
-		fnArElement.setText(request.getSession().getAttribute("fnAr").toString());
-		Element lnEnElement = result.addElement("lnEn");
-		lnEnElement.setText(request.getSession().getAttribute("lnEn").toString());
-		Element lnArElement = result.addElement("lnAr");
-		lnArElement.setText(request.getSession().getAttribute("lnAr").toString());
-		Element roleElement = result.addElement("role");
-		roleElement.setText(request.getSession().getAttribute("role").toString());
+	  	root = root.addElement("result");
+	   doc =getUserData(context, doc);
 	  
 	  return doc;
   }
@@ -207,7 +174,7 @@ private static Properties loadProperties(final RequestContext context) {
 			}
 			
 			if(status != null && status.equalsIgnoreCase("valid"))	{	
-				if (expDt != null &&cureentDate.compareTo(expiryDate) < 0 ) {
+				if (expDt != null && cureentDate.compareTo(expiryDate) < 0 ) {
 					Element root = doc.getRootElement();
 					if(root != null && root.isRootElement()) {
 					Element userData = root.addElement("userData");
@@ -238,9 +205,10 @@ private static Properties loadProperties(final RequestContext context) {
 					roleElement.setText(request.getSession().getAttribute("role").toString());
 				}
 				}
-		}else {
+				else {
 
-				removeSessionAttr(context);
+					removeSessionAttr(context);
+		}
 			
 		}				
 		}
