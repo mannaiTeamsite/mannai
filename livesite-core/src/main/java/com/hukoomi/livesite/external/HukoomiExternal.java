@@ -69,7 +69,7 @@ public class HukoomiExternal {
 		}
 		logger.debug("Before calling : " + doc);
 		
-		DashboardExternal dash = new DashboardExternal(context);		
+		DashboardExternal dash = new DashboardExternal();		
 		doc = dash.getUserData(context, doc);
 		logger.info("Document" + doc.asXML());
 
