@@ -28,6 +28,9 @@ public class ErrorExternal {
         	 insertErrorResponse(context);       
         	 RequestHeaderUtils req = new RequestHeaderUtils(context);
              Integer status = req.getStatus();
+             if(status == 200) {
+            	 status = 404;
+             }
           	 Element errData = doc.addElement("errData");
         	 Element statusElement = errData.addElement("status");
 	         statusElement.setText(status.toString());
@@ -41,12 +44,13 @@ public class ErrorExternal {
          Integer status = req.getStatus();
          String referer = req.getReferer();
          String reqURL = req.getRequestURL();
+         String lang = req.getCookie("lang");
          String compType = context.getParameterString("componentType");
          logger.info("Componrnt Type:"+compType);
          
          boolean iserrorDataInserted = false;   
          
-         if(compType != null && compType.equalsIgnoreCase("FAQ") && !referer.isBlank() && !reqURL.isBlank() && status != 200) {
+         if(compType != null && compType.equalsIgnoreCase("Banner") && !referer.isBlank() && !reqURL.isBlank() && status != 200) {
         	  PreparedStatement errorprepareStatement = null;
               Connection connection = null;
               postgre = new Postgre(context);
@@ -55,16 +59,17 @@ public class ErrorExternal {
              connection = postgre.getConnection();  
              String errorResponseQuery = "";
              errorResponseQuery = "INSERT INTO ERROR_RESPONSE ("
-                     + "BROKEN_LINK, CONTENT_PAGE, REPORTED_ON, "
-                     + ") VALUES( ?, ?,?,LOCALTIMESTAMP)";  
+                     + "BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON"
+                     + ") VALUES( ?, ?,?,?,LOCALTIMESTAMP)";  
              logger.info("ErrorExternal : errorResponseQuery"+errorResponseQuery);
              connection.setAutoCommit(false);
              errorprepareStatement = connection
                      .prepareStatement(errorResponseQuery);
-             errorprepareStatement.setLong(1, status);
+             errorprepareStatement.setString(1, reqURL);
              errorprepareStatement.setString(2, referer);
-             errorprepareStatement.setString(3, reqURL);
-             
+             errorprepareStatement.setString(3, lang);
+             errorprepareStatement.setLong(4, status);             
+             errorprepareStatement.executeUpdate();
              
              iserrorDataInserted = true;
              logger.info("ErrorExternal : insertTable--End");   	
