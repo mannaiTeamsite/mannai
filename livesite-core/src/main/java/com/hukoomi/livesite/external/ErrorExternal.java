@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
 
@@ -44,22 +45,21 @@ public class ErrorExternal {
         Element root = doc.addElement("content");
         String status = reqcontext.getParameterString(STATUS);
         String generalError = reqcontext.getParameterString(GENERAL_ERROR);
-        
        String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
-      
+       logger.info("DCR Type"+dcrPath);
        logger.info("Status"+status);
-     
+       logger.info("DCR Path " + dcrPath);
        if(dcrPath.equals("")){
            return doc;
        }
         CommonUtils commonUtils = new CommonUtils(reqcontext);
         Document data = null;
-        if (commonUtils.isPathExists(dcrPath)) {
-        	 logger.info("DCR Path: " + dcrPath);
-              data = commonUtils.readDCR(dcrPath);
+        if (commonUtils.isPathExists(dcrPath)) {        	
+        	logger.info("DCR Path: " + dcrPath);
+             data = commonUtils.readDCR(dcrPath);	
         }else {
         	logger.info("generalError Path: " + generalError);
-             data = commonUtils.readDCR(generalError);
+        	 data = commonUtils.readDCR(generalError);
         }
         
         if (data == null) {
@@ -73,7 +73,7 @@ public class ErrorExternal {
 	
 	 private boolean insertErrorResponse(RequestContext context) {
          logger.info("ErrorExternal : insertErrorResponse");
-         final String STATUS = "status";
+         final String STATUS = "error_code";
          RequestHeaderUtils req = new RequestHeaderUtils(context);
          
          final String LOCALE = "locale";
