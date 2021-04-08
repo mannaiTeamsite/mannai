@@ -7,7 +7,6 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.dom4j.Node;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
 
@@ -39,21 +38,30 @@ public class ErrorExternal {
 	
 	public Document getErrorDCRContent(RequestContext reqcontext) {
         logger.info("Fetching Error DCR Content");
-        final String STATUS = "status";
+        final String STATUS = "error_code";
+        final String GENERAL_ERROR = "general_error";
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("content");
         String status = reqcontext.getParameterString(STATUS);
+        String generalError = reqcontext.getParameterString(GENERAL_ERROR);
+        
        String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
-       logger.info("DCR Type"+dcrPath);
+      
        logger.info("Status"+status);
-       logger.info("DCR Path " + dcrPath);
+     
        if(dcrPath.equals("")){
            return doc;
        }
         CommonUtils commonUtils = new CommonUtils(reqcontext);
-       
-        logger.info("DCR Path: " + dcrPath);
-        Document data = commonUtils.readDCR(dcrPath);
+        Document data = null;
+        if (commonUtils.isPathExists(dcrPath)) {
+        	 logger.info("DCR Path: " + dcrPath);
+              data = commonUtils.readDCR(dcrPath);
+        }else {
+        	logger.info("generalError Path: " + generalError);
+             data = commonUtils.readDCR(generalError);
+        }
+        
         if (data == null) {
             return null;
         }
