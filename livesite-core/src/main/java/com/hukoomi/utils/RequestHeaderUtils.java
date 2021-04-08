@@ -11,6 +11,7 @@ public class RequestHeaderUtils {
     private static final String X_FORWARDED_FOR = "x-forwarded-for";
     private static final String X_FORWARDED_HOST = "x-forwarded-host";
     private static final String REFERER = "Referer";
+  
     public RequestHeaderUtils(RequestContext context) {
          this.context = context;
     }
@@ -51,20 +52,14 @@ public class RequestHeaderUtils {
         return hostname;
     }
 
-    public Integer getStatus(){
-        logger.debug("getStatus()====> Start");
-        int status = context.getResponse().getStatus();
-        logger.debug("HTTP status code ="+status);
-        logger.debug("getStatus()====> End");
-       return status;
-    }
+    
     
     public String getReferer(){
         logger.debug("getReferer()====> Start");  
         String referrer = "";
         if(context.getRequest().getHeader(REFERER) != null && !context.getRequest().getHeader(REFERER).isBlank())
         	referrer = context.getRequest().getHeader(REFERER);
-        logger.debug("HTTP status code ="+referrer);
+        logger.debug("Referer ="+referrer+"=");
         logger.debug("getReferer()====> End");
        return referrer;
     }

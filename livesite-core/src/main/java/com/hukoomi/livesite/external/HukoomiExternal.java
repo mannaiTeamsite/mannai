@@ -15,6 +15,7 @@ import org.dom4j.Element;
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.SolrQueryUtil;
+import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class HukoomiExternal {
@@ -69,8 +70,8 @@ public class HukoomiExternal {
 		}
 		logger.debug("Before calling : " + doc);
 		
-		DashboardExternal dash = new DashboardExternal();		
-		doc = dash.getUserData(context, doc);
+		UserInfoSession inf = new UserInfoSession();		
+		doc = inf.getUserData(context, doc);
 		logger.info("Document" + doc.asXML());
 
 		return doc;
