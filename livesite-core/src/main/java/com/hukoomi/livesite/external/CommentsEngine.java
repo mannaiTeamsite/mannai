@@ -1,10 +1,21 @@
 package com.hukoomi.livesite.external;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -17,6 +28,7 @@ import org.owasp.esapi.ValidationErrorList;
 import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -40,6 +52,18 @@ public class CommentsEngine {
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
     String status = "";
+    /** mail properties key. */
+    private static final String CONTACT_FROM_MAIL = "sentFrom";
+    /** mail properties key. */
+    private static final String CONTACT_TO_MAIL = "sentTo";
+    /** mail properties key. */
+    private static final String CONTACT_MAIL_HOST = "host";
+    /** mail properties key. */
+    private static final String CONTACT_MAIL_PORT = "port";
+    /** mail properties key. */    
+    private static final String STARTTLS_ENABLE = "false";
+    /** character set Constant */
+    private static final String CHAR_SET = "UTF-8";
 
     /**
      * This method internally makes call to get Comment/set comment/ get
@@ -60,6 +84,7 @@ public class CommentsEngine {
                 xssUtils.stripXSS(context.getParameterString("action"));
         if (validateAction(action)) {
             int blogId = 0;
+            String blogName = "";
 
             String dcrId = xssUtils
                     .stripXSS(context.getParameterString("dcr_id"));
@@ -98,9 +123,13 @@ public class CommentsEngine {
                         if (verify) {
                             LOGGER.debug("Recapcha verification status:"
                                     + verify);
-                            blogId = getBlogId(dcrId, language, context);
+                            
+                            blogId = getBlogId(dcrId, language, context);                            
+                            blogName = getBlogTitle(dcrId, language, context);
+                            
                             document = insertCommentsToDB(blogId, blogUrl,
-                                    comments, userName, ip, context);
+                                    comments, userName, ip, context, blogName, language);
+                            
                         } else {
                             status = STATUS_ERROR_RECAPTHCHA;
                             return getDocument(status);
@@ -129,6 +158,14 @@ public class CommentsEngine {
         return document;
     }
 
+    /**
+     * This method validate the comments input data 
+     * @param comments
+     * @param userName
+     * @param blogUrl
+     * @param ip
+     * @return
+     */
     private boolean validateCommentData(String comments, String userName,
             String blogUrl, String ip) {
         if (userName.length() > 100) {
@@ -149,6 +186,11 @@ public class CommentsEngine {
         return false;
     }
 
+    /**
+     * This method is used to validate blog action 
+     * @param blogAction
+     * @return
+     */
     private boolean validateAction(String blogAction) {
         ValidationErrorList errorList = new ValidationErrorList();
         LOGGER.info(BLOG_ACTION + " >>>" + blogAction + "<<<");
@@ -157,6 +199,12 @@ public class CommentsEngine {
         return errorList.isEmpty();
     }
 
+    /**
+     * This method is used to validate DCR
+     * @param dcrId
+     * @param language
+     * @return
+     */
     private boolean validateDCR(String dcrId, String language) {
         ValidationErrorList errorList = new ValidationErrorList();
 
@@ -178,6 +226,11 @@ public class CommentsEngine {
         }
     }
 
+    /**
+     * @param noOfRows
+     * @param offset
+     * @return
+     */
     private boolean validateGetCommentCount(String noOfRows,
             String offset) {
         ValidationErrorList errorList = new ValidationErrorList();
@@ -349,6 +402,44 @@ public class CommentsEngine {
     }
 
     /**
+     * return blog title for dcr id and language.
+     *
+     * @param dcrId
+     * @param language
+     * @param context
+     * @return blogId
+     */
+    private String getBlogTitle(String dcrId, String language,
+            RequestContext context) {
+        Connection connection = null;
+
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        Postgre objPostgre = new Postgre(context);
+        String blogTitle = "";
+        final String query =
+                "SELECT BLOG_TITLE FROM BLOG_MASTER WHERE DCR_ID = ? AND LANGUAGE = ?";
+                       
+        try {
+            connection = objPostgre.getConnection();
+
+            prepareStatement = connection.prepareStatement(query);
+            prepareStatement.setString(1, dcrId);
+            prepareStatement.setString(2, language);
+            LOGGER.debug("query : " + query);
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                LOGGER.debug("Count: " + rs.getString("BLOG_TITLE"));
+                blogTitle = rs.getString("BLOG_TITLE");
+            }
+        } catch (SQLException e) {
+            LOGGER.error("getBlogTitle", e);
+        } finally {
+            objPostgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        return blogTitle;
+    }
+    /**
      * method will insert comments and comments related data to db.
      *
      * @param blogId
@@ -361,7 +452,7 @@ public class CommentsEngine {
      */
     public Document insertCommentsToDB(int blogId, String blogUrl,
             String comments, String userName, String ip,
-            RequestContext context) {
+            RequestContext context, String blogtitle, String lang) {
         LOGGER.info("CommentEngine : insertCommentsToDB");
         Postgre objPostgre = new Postgre(context);
         Document document = DocumentHelper.createDocument();
@@ -369,11 +460,9 @@ public class CommentsEngine {
         PreparedStatement prepareStatement = null;
         String insertQuery = "";
         HttpServletRequest request = context.getRequest();
-
-        if (request.getSession().getAttribute("fnEn") != null) {
-            userName =
-                    request.getSession().getAttribute("fnEn").toString();
-            LOGGER.info("username:" + userName);
+        if(request.getSession().getAttribute("fnEn") != null) {
+            userName = request.getSession().getAttribute("fnEn").toString();
+            LOGGER.info("username:"+ userName );
         }
         insertQuery =
                 "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,USER_IP_ADDRESS,STATUS) VALUES(?,?,?,LOCALTIMESTAMP,?,?,?)";
@@ -394,6 +483,8 @@ public class CommentsEngine {
             } else {
                 LOGGER.info(" comments data insert/update successfully!");
                 document = getDocument("success");
+                sentMailNotification(blogtitle, lang, context);
+                LOGGER.info("Notification sent to comments approver!");
             }
         } catch (SQLException e) {
             LOGGER.error("SQLException :", e);
@@ -407,6 +498,11 @@ public class CommentsEngine {
         return document;
     }
 
+    /**
+     * This method returns document with status updated.
+     * @param status
+     * @return
+     */
     private Document getDocument(final String status) {
         LOGGER.info("getDocument:Enter");
         Document document = DocumentHelper.createDocument();
@@ -414,6 +510,102 @@ public class CommentsEngine {
         Element statusElement = resultElement.addElement(ELEMENT_STATUS);
         statusElement.setText(status);
         return document;
+    }
+    
+    /**
+     * This method is used to send the email notification
+     * @param blogtitle
+     * @param lang
+     * @param context
+     */
+    private void sentMailNotification(String blogtitle,
+            String lang, final RequestContext context) {
+       
+            MimeMessage mailMessage;
+            LOGGER.debug(" lang::" + lang);
+            try {
+                mailMessage = createMailMessage(blogtitle, lang, context);
+                Transport.send(mailMessage);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+     
+
+    }
+
+    /**
+     * This Method creates the email message for the notification
+     * along with all the message related set to MimeMessage
+     * @param blogtitle
+     * @param lang
+     * @param context
+     * @return
+     * @throws MessagingException
+     */
+    private MimeMessage createMailMessage(String blogtitle,
+             String lang,final RequestContext context) throws MessagingException {
+        LOGGER.info("createMailMessage: Enter");
+
+        String strBlogName = "<blogname>";
+        Properties propertiesFile =
+                CommentsEngine.loadProperties(context);
+        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
+        String to = propertiesFile.getProperty(CONTACT_TO_MAIL);
+        LOGGER.debug("sent To :" + to);
+        String[] addressToList = to.split(",");
+        InternetAddress[] dests = new InternetAddress[addressToList.length];
+        int counter = 0;
+        for (String addressTo : addressToList) {
+            dests[counter] = new InternetAddress(addressTo.trim());
+            counter++;
+        }        
+        LOGGER.debug("Language :" + lang);
+        String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
+        LOGGER.debug("relay IP :" + host);
+        String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
+        Properties props = new Properties();
+        String subject = "";
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.starttls.enable", STARTTLS_ENABLE);
+        props.put("mail.smtp.port", port);
+        Session session = Session.getDefaultInstance(props, null);
+        session.setDebug(true);
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(from));        
+        msg.setRecipients(Message.RecipientType.TO,
+                dests);
+        subject = propertiesFile.getProperty("messageSubject_" + lang);        
+        StringBuilder sb = new StringBuilder();
+        sb.append(
+                propertiesFile.getProperty("successMessageBody_" + lang).replace(strBlogName, blogtitle));        
+        if (lang.equals("ar")) {
+            msg.setSubject(subject.replace(strBlogName, blogtitle),
+                    CHAR_SET);
+            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
+        } else {
+            
+            msg.setSubject(subject.replace(strBlogName, blogtitle));           
+            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
+        }
+
+        LOGGER.debug("msg:" + sb.toString());
+        return msg;
+    }    
+    
+    
+    /**
+     * This method will be used to load the configuration properties.
+     *
+     * @param context The parameter context object passed from Component.
+     * @return properties
+     *
+     */
+    private static Properties
+            loadProperties(final RequestContext context) {
+        LOGGER.info("loadProperties:Begin");
+        PropertiesFileReader propertyFileReader =
+                new PropertiesFileReader(context, "blogcomment.properties");
+        return propertyFileReader.getPropertiesFile();
     }
 
 }
