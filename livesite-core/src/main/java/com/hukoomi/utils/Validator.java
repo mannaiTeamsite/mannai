@@ -26,6 +26,7 @@ public class Validator {
     public static final String IP_ADDRESS = "^(2[0-4]\\d|25[0-5]|1\\d\\d|\\d\\d?).(2[0-4]\\d|25[0-5]|1\\d\\d|\\d\\d?).(2[0-4]\\d|25[0-5]|1\\d\\d|\\d\\d?).(2[0-4]\\d|25[0-5]|1\\d\\d|\\d\\d?)$";
     public static final String USER_ID = "^[a-zA-Z0-9_-]*$";
     public static final String TEXT = "^[a-zA-Z0-9-.@,'?\"!%+_ \\t\\n]*$";
+    public static final String URL = "^(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
     
     
     public boolean isValidPattern(String inputValue, String inputPattern) {

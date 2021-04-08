@@ -7,9 +7,11 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.Node;
 import org.owasp.esapi.ESAPI;
 import org.owasp.esapi.ValidationErrorList;
 
+import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
@@ -25,44 +27,55 @@ public class ErrorExternal {
 	    Postgre postgre = null;
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
-		Document doc = DocumentHelper.createDocument();
-		
-         
-         
-        	 insertErrorResponse(context);       
-        	 RequestHeaderUtils req = new RequestHeaderUtils(context);
-             Integer status = req.getStatus();
-             if(status == 200) {
-            	 status = 404;
-             }
-             boolean insert = insertErrorResponse(context);
-          	 Element errData = doc.addElement("errData");
-        	 Element statusElement = errData.addElement("status");
-        	 statusElement.setText(status.toString());
-        	 Element insertElement = errData.addElement("Inserted");
-        	 if(insert == true)
-        		 insertElement.setText("true");       		 
-        	 else
-        		 insertElement.setText("false");
-        		 
-	        
-        
+		final String COMPONENT_TYPE = "componentType";
+		 String compType = context.getParameterString(COMPONENT_TYPE); 
+		 logger.info("Component Type"+compType);
+		if(compType != null && compType.equalsIgnoreCase("Banner"))
+			insertErrorResponse(context);               
+        Document doc = getErrorDCRContent(context);  
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
+	
+	public Document getErrorDCRContent(RequestContext reqcontext) {
+        logger.info("Fetching Error DCR Content");
+        final String STATUS = "status";
+        Document doc = DocumentHelper.createDocument();
+        Element root = doc.addElement("content");
+        String status = reqcontext.getParameterString(STATUS);
+       String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
+       logger.info("DCR Type"+dcrPath);
+       logger.info("Status"+status);
+       logger.info("DCR Path " + dcrPath);
+       if(dcrPath.equals("")){
+           return doc;
+       }
+        CommonUtils commonUtils = new CommonUtils(reqcontext);
+       
+        logger.info("DCR Path: " + dcrPath);
+        Document data = commonUtils.readDCR(dcrPath);
+        if (data == null) {
+            return null;
+        }
+        Element detailedElement = data.getRootElement();
+        root.add(detailedElement);
+        return doc;
+    }
+	
+	
 	 private boolean insertErrorResponse(RequestContext context) {
          logger.info("ErrorExternal : insertErrorResponse");
+         final String STATUS = "status";
          RequestHeaderUtils req = new RequestHeaderUtils(context);
          
          final String LOCALE = "locale";
-         final String COMPONENT_TYPE = "componentType";
          ValidationErrorList errorList = new ValidationErrorList();
          
          
-         String status = req.getStatus().toString();
+         String status = context.getParameterString(STATUS);
          
          if (!ESAPIValidator.checkNull(status.toString())) {
-        	 status  = ESAPI.validator().getValidInput("status", status, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        	 status  = ESAPI.validator().getValidInput("status", status, ESAPIValidator.ALPHANUMERIC, 20, false, true, errorList);
              if(!errorList.isEmpty()) {            
                  logger.info(errorList.getError("status"));
                  status = null;
@@ -71,7 +84,7 @@ public class ErrorExternal {
          
          String referer = req.getReferer();
          if (!ESAPIValidator.checkNull(referer)) {
-        	 referer  = ESAPI.validator().getValidInput("referer", referer, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        	 referer  = ESAPI.validator().getValidInput("referer", referer, ESAPIValidator.URL, 255, false, true, errorList);
              if(!errorList.isEmpty()) {
                  logger.info(errorList.getError("referer"));
                  referer = null;
@@ -81,7 +94,7 @@ public class ErrorExternal {
          
          String reqURL = req.getRequestURL();
          if (!ESAPIValidator.checkNull(reqURL)) {
-        	 reqURL  = ESAPI.validator().getValidInput("reqURL", reqURL, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        	 reqURL  = ESAPI.validator().getValidInput("reqURL", reqURL, ESAPIValidator.URL, 255, false, true, errorList);
              if(!errorList.isEmpty()) {
                  logger.info(errorList.getError("reqURL"));
                  reqURL = null;
@@ -97,16 +110,11 @@ public class ErrorExternal {
                  lang = null;
                 
              }
-         }
-        
-
+         }      
+         boolean iserrorDataInserted = false;  
          
-         String compType = context.getParameterString(COMPONENT_TYPE);      
-         logger.info("Componrnt Type:"+compType);
          
-         boolean iserrorDataInserted = false;   
-         
-         if(compType != null && compType.equalsIgnoreCase("Banner") && referer != null && reqURL != null && req.getStatus() != 200 && status != null) {
+         if( referer != null && !(referer.trim()).equals("") && reqURL != null && !(reqURL.trim()).equals("") &&  status != null) {
         	  PreparedStatement errorprepareStatement = null;
               Connection connection = null;
               postgre = new Postgre(context);
@@ -116,7 +124,7 @@ public class ErrorExternal {
              String errorResponseQuery = "";
              errorResponseQuery = "INSERT INTO ERROR_RESPONSE ("
                      + "BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON"
-                     + ") VALUES( ?, ?,?,?,LOCALTIMESTAMP)";  
+                     + ") VALUES(?,?,?,?,LOCALTIMESTAMP)";  
              logger.info("ErrorExternal : errorResponseQuery"+errorResponseQuery);
              connection.setAutoCommit(false);
              errorprepareStatement = connection
@@ -125,9 +133,9 @@ public class ErrorExternal {
              errorprepareStatement.setString(2, referer);
              errorprepareStatement.setString(3, lang);
              errorprepareStatement.setString(4, status);             
-          
+             int insertResponse = errorprepareStatement.executeUpdate();
              
-             if( errorprepareStatement.executeUpdate() == 1) {
+             if( insertResponse == 1) {
             	 iserrorDataInserted = true;
              }
              logger.info("ErrorExternal : insertTable--End");   	
@@ -140,7 +148,7 @@ public class ErrorExternal {
                     null);
         }
          } 
-
+         logger.info("iserrorDataInserted : " +iserrorDataInserted);  
         return iserrorDataInserted;
     }
          
