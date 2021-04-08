@@ -39,10 +39,12 @@ public class ErrorExternal {
 	
 	public Document getErrorDCRContent(RequestContext reqcontext) {
         logger.info("Fetching Error DCR Content");
-        final String STATUS = "status";
+        final String STATUS = "error_code";
+        final String GENERAL_ERROR = "general_error";
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("content");
         String status = reqcontext.getParameterString(STATUS);
+        String generalError = reqcontext.getParameterString(GENERAL_ERROR);
        String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
        logger.info("DCR Type"+dcrPath);
        logger.info("Status"+status);
@@ -51,9 +53,14 @@ public class ErrorExternal {
            return doc;
        }
         CommonUtils commonUtils = new CommonUtils(reqcontext);
-       
-        logger.info("DCR Path: " + dcrPath);
-        Document data = commonUtils.readDCR(dcrPath);
+        Document data = null;
+        if (commonUtils.isPathExists(dcrPath)) {        	
+        	logger.info("DCR Path: " + dcrPath);
+             data = commonUtils.readDCR(dcrPath);	
+        }else {
+        	 data = commonUtils.readDCR(generalError);
+        }
+        
         if (data == null) {
             return null;
         }
