@@ -73,7 +73,7 @@ public class ErrorExternal {
 	
 	 private boolean insertErrorResponse(RequestContext context) {
          logger.info("ErrorExternal : insertErrorResponse");
-         final String STATUS = "status";
+         final String STATUS = "error_code";
          RequestHeaderUtils req = new RequestHeaderUtils(context);
          
          final String LOCALE = "locale";

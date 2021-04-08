@@ -1,12 +1,9 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Properties;
 
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -109,7 +106,7 @@ public void removeSessionAttr(RequestContext context) {
 }
   
 
- public Document doLogout(RequestContext context) throws IOException {
+public Document doLogout(RequestContext context) throws IOException {
 	 LOGGER.info("--------------doLogout  Started------------");
 	 Document doc = DocumentHelper.createDocument();
 	 removeSessionAttr(context);
@@ -118,13 +115,13 @@ public void removeSessionAttr(RequestContext context) {
 	 prop = new PropertiesFileReader(context, "dashboard.properties");
 	 properties = prop.getPropertiesFile();
 	 String url = properties.getProperty("logout");	 
-    LOGGER.info("---Logout url---"+url);
-    HttpServletResponse response = context.getResponse();
-    response.sendRedirect(url);
-    LOGGER.info("--------------doLogout Ended------------");
+   LOGGER.info("---Logout url---"+url);
+   HttpServletResponse response = context.getResponse();
+   response.sendRedirect(url);
+   LOGGER.info("--------------doLogout Ended------------");
 	return doc;
-  }
-  
+ }
+ 
   public Document getprofileInfo(RequestContext context) {
 	  Document doc = DocumentHelper.createDocument();
 	  	Element root = doc.getRootElement();

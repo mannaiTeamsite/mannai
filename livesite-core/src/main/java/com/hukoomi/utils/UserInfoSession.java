@@ -37,7 +37,7 @@ public class UserInfoSession {
 			DashboardExternal dashboard = new DashboardExternal();
 			String status = (String) request.getSession().getAttribute("status");
 			LOGGER.info("Status:"+status);		
-			if(status.equalsIgnoreCase("valid")) {			
+			if(status != "valid") {			
 					LOGGER.info("--------dashboardServices is called--------");					
 					dashboard.dashboardServices(context, accessToken);	
 					status = (String) request.getSession().getAttribute("status");
