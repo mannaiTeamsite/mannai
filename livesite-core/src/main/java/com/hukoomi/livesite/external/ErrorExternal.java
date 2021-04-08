@@ -58,6 +58,7 @@ public class ErrorExternal {
         	logger.info("DCR Path: " + dcrPath);
              data = commonUtils.readDCR(dcrPath);	
         }else {
+        	logger.info("generalError Path: " + generalError);
         	 data = commonUtils.readDCR(generalError);
         }
         
