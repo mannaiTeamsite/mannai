@@ -29,9 +29,10 @@ public class ErrorExternal {
 		final String COMPONENT_TYPE = "componentType";
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
 		 logger.info("Component Type"+compType);
-		if(compType != null && compType.equalsIgnoreCase("Banner"))
-			insertErrorResponse(context);               
+		              
         Document doc = getErrorDCRContent(context);  
+        if(compType != null && compType.equalsIgnoreCase("Banner"))
+			insertErrorResponse(context); 
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
@@ -43,30 +44,31 @@ public class ErrorExternal {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("content");
         String status = reqcontext.getParameterString(STATUS);
-        String generalError = reqcontext.getParameterString(GENERAL_ERROR);
         
        String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
+     
       
        logger.info("Status"+status);
-     
-       if(dcrPath.equals("")){
-           return doc;
-       }
         CommonUtils commonUtils = new CommonUtils(reqcontext);
+        if (!commonUtils.isPathExists(dcrPath)) {
+         	
+        	dcrPath = reqcontext.getParameterString(GENERAL_ERROR);
+        	 status = reqcontext.getParameterString(GENERAL_ERROR);         	 
+         }
+        logger.info("DCR Path: " + dcrPath);
         Document data = null;
-        if (commonUtils.isPathExists(dcrPath)) {
-        	 logger.info("DCR Path: " + dcrPath);
+       
               data = commonUtils.readDCR(dcrPath);
-        }else {
-        	logger.info("generalError Path: " + generalError);
-             data = commonUtils.readDCR(generalError);
-        }
+        
         
         if (data == null) {
             return null;
         }
         Element detailedElement = data.getRootElement();
         root.add(detailedElement);
+        root = doc.addElement("erorStatus");
+        Element statusElement = root.addElement("status");
+		statusElement.setText(status);
         return doc;
     }
 	
