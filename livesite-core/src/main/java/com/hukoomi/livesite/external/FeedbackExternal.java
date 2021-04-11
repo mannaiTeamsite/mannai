@@ -19,6 +19,8 @@ import java.sql.SQLException;
 
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 
+import javax.servlet.http.HttpSession;
+
 
 public class FeedbackExternal {
     private static final String STATUS_ERROR_RECAPTHCHA =
@@ -52,7 +54,12 @@ public class FeedbackExternal {
         String status="";
         postgre = new Postgre(context);
         gRecaptchaResponse = context.getParameterString("captcha");
-        userID = context.getParameterString("userID").trim();
+
+        HttpSession session = context.getRequest().getSession();
+        session.getAttribute("status");
+        if(status.equals("valid")) {
+            userID = session.getAttribute("uid").toString();
+        }
         if(userID=="")
         {
             userID=null;
