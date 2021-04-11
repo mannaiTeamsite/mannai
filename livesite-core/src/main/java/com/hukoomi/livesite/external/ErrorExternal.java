@@ -29,13 +29,21 @@ public class ErrorExternal {
 		final String COMPONENT_TYPE = "componentType";
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
 		 logger.info("Component Type"+compType);
-		              
+		if(compType != null && compType.equalsIgnoreCase("Banner"))
+			insertErrorResponse(context);               
         Document doc = getErrorDCRContent(context);  
-        if(compType != null && compType.equalsIgnoreCase("Banner"))
-			insertErrorResponse(context); 
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
+	public Document getStatus(final RequestContext context) {
+		logger.info("ErrorExternal : getStatus ---- Started");              
+        Document doc = DocumentHelper.createDocument();    
+        Element statusElement = doc.addElement("status");
+		statusElement.setText(context.getParameterString("error_code"));
+        logger.info("ErrorExternal : getStatus ---- Ended");
+		return doc;		
+	}
+
 	
 	public Document getErrorDCRContent(RequestContext reqcontext) {
         logger.info("Fetching Error DCR Content");
@@ -44,31 +52,30 @@ public class ErrorExternal {
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("content");
         String status = reqcontext.getParameterString(STATUS);
+        String generalError = reqcontext.getParameterString(GENERAL_ERROR);
         
        String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
-     
       
        logger.info("Status"+status);
+     
+       if(dcrPath.equals("")){
+           return doc;
+       }
         CommonUtils commonUtils = new CommonUtils(reqcontext);
-        if (!commonUtils.isPathExists(dcrPath)) {
-         	
-        	dcrPath = reqcontext.getParameterString(GENERAL_ERROR);
-        	 status = reqcontext.getParameterString(GENERAL_ERROR);         	 
-         }
-        logger.info("DCR Path: " + dcrPath);
         Document data = null;
-       
+        if (commonUtils.isPathExists(dcrPath)) {
+        	 logger.info("DCR Path: " + dcrPath);
               data = commonUtils.readDCR(dcrPath);
-        
+        }else {
+        	logger.info("generalError Path: " + generalError);
+             data = commonUtils.readDCR(generalError);
+        }
         
         if (data == null) {
             return null;
         }
         Element detailedElement = data.getRootElement();
         root.add(detailedElement);
-        root = doc.addElement("erorStatus");
-        Element statusElement = root.addElement("status");
-		statusElement.setText(status);
         return doc;
     }
 	
