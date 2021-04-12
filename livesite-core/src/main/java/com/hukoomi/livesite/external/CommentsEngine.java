@@ -144,6 +144,10 @@ public class CommentsEngine {
                     blogId = getBlogId(dcrId, language, context);
                     document = getCommentCount(blogId, context);
                     break;
+                    
+                case "isUserLogged":                   
+                    document = isUserLogged(context);
+                    break;
                 }
             } else {
                 status = STATUS_FIELD_VALIDATION;
@@ -459,13 +463,17 @@ public class CommentsEngine {
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         String insertQuery = "";
+        String emailid="";
         HttpServletRequest request = context.getRequest();
-        if(request.getSession().getAttribute("fnEn") != null) {
-            userName = request.getSession().getAttribute("fnEn").toString();
-            LOGGER.info("username:"+ userName );
+        if(request.getSession().getAttribute("status") != null 
+                && "valid".equals(request.getSession().getAttribute("status"))) {
+            
+                userName = request.getSession().getAttribute("fnEn").toString()+" "+ request.getSession().getAttribute("lnEn").toString(); 
+                emailid = request.getSession().getAttribute("email").toString();
+               LOGGER.info("username:"+ userName );           
         }
         insertQuery =
-                "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,USER_IP_ADDRESS,STATUS) VALUES(?,?,?,LOCALTIMESTAMP,?,?,?)";
+                "INSERT INTO BLOG_COMMENT (BLOG_ID,BLOG_URL,COMMENT,COMMENTED_ON,USER_NAME,USER_IP_ADDRESS,STATUS,USER_EMAILID) VALUES(?,?,?,LOCALTIMESTAMP,?,?,?,?)";
         try {
             connection = objPostgre.getConnection();
             prepareStatement = connection.prepareStatement(insertQuery);
@@ -475,6 +483,7 @@ public class CommentsEngine {
             prepareStatement.setString(4, userName);
             prepareStatement.setString(5, ip);
             prepareStatement.setString(6, "Pending");
+            prepareStatement.setString(7, emailid);
             LOGGER.debug("query : " + insertQuery);
             final int result = prepareStatement.executeUpdate();
             if (result == 0) {
@@ -483,7 +492,7 @@ public class CommentsEngine {
             } else {
                 LOGGER.info(" comments data insert/update successfully!");
                 document = getDocument("success");
-                sentMailNotification(blogtitle, lang, context);
+                sentMailNotification(blogtitle, lang, userName, comments, context);
                 LOGGER.info("Notification sent to comments approver!");
             }
         } catch (SQLException e) {
@@ -519,12 +528,12 @@ public class CommentsEngine {
      * @param context
      */
     private void sentMailNotification(String blogtitle,
-            String lang, final RequestContext context) {
+            String lang, String username, String comments, final RequestContext context) {
        
             MimeMessage mailMessage;
             LOGGER.debug(" lang::" + lang);
             try {
-                mailMessage = createMailMessage(blogtitle, lang, context);
+                mailMessage = createMailMessage(blogtitle, lang, username, comments, context);
                 Transport.send(mailMessage);
             } catch (MessagingException e) {
                 e.printStackTrace();
@@ -543,10 +552,12 @@ public class CommentsEngine {
      * @throws MessagingException
      */
     private MimeMessage createMailMessage(String blogtitle,
-             String lang,final RequestContext context) throws MessagingException {
+             String lang,String username, String comments,final RequestContext context) throws MessagingException {
         LOGGER.info("createMailMessage: Enter");
 
         String strBlogName = "<blogname>";
+        String strUsername = "<username>";
+        String strComments = "<comments>";
         Properties propertiesFile =
                 CommentsEngine.loadProperties(context);
         String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
@@ -577,7 +588,12 @@ public class CommentsEngine {
         subject = propertiesFile.getProperty("messageSubject_" + lang);        
         StringBuilder sb = new StringBuilder();
         sb.append(
-                propertiesFile.getProperty("successMessageBody_" + lang).replace(strBlogName, blogtitle));        
+                propertiesFile.getProperty("successMessageBody_" + lang).replace(strBlogName, blogtitle));
+        sb.append(
+                propertiesFile.getProperty("successMessageBody1_" + lang).replace(strUsername, username));
+        sb.append(
+                propertiesFile.getProperty("successMessageBody2_" + lang).replace(strComments, comments));
+        LOGGER.debug("SuccessMessageBody :" +sb.toString());
         if (lang.equals("ar")) {
             msg.setSubject(subject.replace(strBlogName, blogtitle),
                     CHAR_SET);
@@ -606,6 +622,32 @@ public class CommentsEngine {
         PropertiesFileReader propertyFileReader =
                 new PropertiesFileReader(context, "blogcomment.properties");
         return propertyFileReader.getPropertiesFile();
+    }
+    
+    /**
+     * This method is used to check if user is logged in
+     * @param context
+     * @return
+     */
+    private Document isUserLogged(final RequestContext context) {
+        LOGGER.info("isUserLogged:Enter");
+        Boolean bool=false;
+        String username= "";
+        HttpServletRequest request = context.getRequest();       
+        if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
+            bool = true;
+            username = request.getSession().getAttribute("fnEn").toString();
+        }
+        Document document = DocumentHelper.createDocument();
+        Element resultElement = document.addElement(ELEMENT_RESULT);
+        Element statusElement = resultElement.addElement("Boolean");
+        statusElement.setText(String.valueOf(bool));
+        LOGGER.info("isUserLogged:Enter>>>>>>>"+username);
+        Element usernameElement = resultElement.addElement("Username");
+        usernameElement.setText(String.valueOf(username));
+        LOGGER.info("isUserLogged:Enter<<<<<<<<<");
+        return document;
+       
     }
 
 }
