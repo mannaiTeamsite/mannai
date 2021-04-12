@@ -16,6 +16,7 @@ import org.json.JSONObject;
 
 import com.hukoomi.utils.JWTTokenUtil;
 import com.hukoomi.utils.PropertiesFileReader;
+import com.hukoomi.utils.RequestHeaderUtils;
 import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
 
@@ -108,13 +109,16 @@ public void removeSessionAttr(RequestContext context) {
 
 public Document doLogout(RequestContext context) throws IOException {
 	 LOGGER.info("--------------doLogout  Started------------");
+	 final String RELAY_URL = "relayURL";
 	 Document doc = DocumentHelper.createDocument();
 	 removeSessionAttr(context);
 	 
 	 PropertiesFileReader prop = null;
 	 prop = new PropertiesFileReader(context, "dashboard.properties");
 	 properties = prop.getPropertiesFile();
-	 String url = properties.getProperty("logout");	 
+	 RequestHeaderUtils rhu = new RequestHeaderUtils(context);
+	 String relayURL = rhu.getCookie(RELAY_URL);
+	 String url = properties.getProperty("logout")+"?relayURL="+relayURL;	 
    LOGGER.info("---Logout url---"+url);
    HttpServletResponse response = context.getResponse();
    response.sendRedirect(url);
