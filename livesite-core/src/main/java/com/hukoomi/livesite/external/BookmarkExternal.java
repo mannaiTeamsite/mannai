@@ -142,7 +142,7 @@ public class BookmarkExternal {
         Connection connection = getConnection();
         PreparedStatement prepareStatement = null;
         String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " " +
-                table + " " + "where" + " " + "locale='"+ locale +"' and " + "user_id='" + userID+"' and category='" + category+"'"+"' and active='" + activeflag+"'" ;
+                table + " " + "where" + " " + "locale='"+ locale +"' and " + "user_id='" + userID+"' and category='" + category+"' and active='" + activeflag+"'" ;
         logger.info("searchQuery:" + searchQuery);
         ResultSet resultSet = null;
         try {
