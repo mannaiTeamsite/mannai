@@ -1606,6 +1606,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
         statusMap = new HashMap<>();
         
+        
         for (CSAreaRelativePath taskFilePath : taskFileList) {
             try {
                 
@@ -1615,32 +1616,43 @@ public class PollSurveyTask implements CSURLExternalTask {
                 
                 if(file instanceof CSHoleImpl) {
                     CSHoleImpl taskHoleFile = (CSHoleImpl) file;
-                    logger.info("PollSurveyTask - Deleted File");
-                    CSSimpleFile csSimpleTaskFile = getDeletedFile(client, taskHoleFile);
-                    String dcrType = csSimpleTaskFile
-                            .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
-                            .getValue();
                     
-                    if (dcrType != null) {
-                        if (POLLS_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
-                            Document doc = getTaskDocument(csSimpleTaskFile);
-                            logger.error("doc of hole file : "+doc.asXML());
-                            String pollId = getDCRValue(doc, ID_PATH);
-                            String lang = getDCRValue(doc, LANG_PATH);
-                            statusMap = (HashMap<String, String>) updateDeletePollMasterData(pollId, lang, postgre.getConnection());
-                        }else if (SURVEY_CONTENT_TYPE
-                                .equalsIgnoreCase(dcrType)) {
-                            Document doc = getTaskDocument(csSimpleTaskFile);
-                            logger.error("doc of hole file : "+doc.asXML());
-                            String surveyId = getDCRValue(doc, ID_PATH);
-                            String lang = getDCRValue(doc, LANG_PATH);
-                            statusMap = (HashMap<String, String>) updateDeleteSurveyMasterData(surveyId, lang, postgre.getConnection());
-                        }else {
-                            logger.debug(
-                                    "Deleted status update skipped - Not Polls or Survey DCR");
-                            statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-                            statusMap.put(TRANSITION_COMMENT, "");
+                    String comment = taskHoleFile.getRevisionComment();
+                    logger.info("comment : "+comment);
+                    
+                    if(!comment.startsWith("[moved to")) {
+                    
+                        logger.info("PollSurveyTask - Deleted File");
+                        CSSimpleFile csSimpleTaskFile = getDeletedFile(client, taskHoleFile);
+                        String dcrType = csSimpleTaskFile
+                                .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
+                                .getValue();
+                        
+                        if (dcrType != null) {
+                            if (POLLS_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
+                                Document doc = getTaskDocument(csSimpleTaskFile);
+                                logger.info("doc of hole file : "+doc.asXML());
+                                String pollId = getDCRValue(doc, ID_PATH);
+                                String lang = getDCRValue(doc, LANG_PATH);
+                                statusMap = (HashMap<String, String>) updateDeletePollMasterData(pollId, lang, postgre.getConnection());
+                            }else if (SURVEY_CONTENT_TYPE
+                                    .equalsIgnoreCase(dcrType)) {
+                                Document doc = getTaskDocument(csSimpleTaskFile);
+                                logger.info("doc of hole file : "+doc.asXML());
+                                String surveyId = getDCRValue(doc, ID_PATH);
+                                String lang = getDCRValue(doc, LANG_PATH);
+                                statusMap = (HashMap<String, String>) updateDeleteSurveyMasterData(surveyId, lang, postgre.getConnection());
+                            }else {
+                                logger.debug(
+                                        "Deleted status update skipped - Not Polls or Survey DCR");
+                                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                                statusMap.put(TRANSITION_COMMENT, "");
+                            }
                         }
+                    }else {
+                        logger.debug("PollSurveyTask - Renamed moved file");
+                        statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                        statusMap.put(TRANSITION_COMMENT, "");
                     }
                     
                 }else {
