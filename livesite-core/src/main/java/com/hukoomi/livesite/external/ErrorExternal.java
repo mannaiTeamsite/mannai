@@ -130,7 +130,10 @@ public class ErrorExternal {
              }
          }      
          boolean iserrorDataInserted = false;  
-         
+         logger.info("Referer URL"+referer);
+         logger.info("Request URL"+reqURL);
+         logger.info("Final Status"+status);
+         logger.info("Language"+lang);
          
          if( referer != null && !(referer.trim()).equals("") && reqURL != null && !(reqURL.trim()).equals("") &&  status != null) {
         	  PreparedStatement errorprepareStatement = null;
@@ -143,8 +146,9 @@ public class ErrorExternal {
              errorResponseQuery = "INSERT INTO ERROR_RESPONSE ("
                      + "BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON"
                      + ") VALUES(?,?,?,?,LOCALTIMESTAMP)";  
+          
              logger.info("ErrorExternal : errorResponseQuery"+errorResponseQuery);
-             connection.setAutoCommit(false);
+             
              errorprepareStatement = connection
                      .prepareStatement(errorResponseQuery);
              errorprepareStatement.setString(1, reqURL);
