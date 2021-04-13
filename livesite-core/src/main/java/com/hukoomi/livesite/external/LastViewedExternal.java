@@ -41,18 +41,19 @@ public class LastViewedExternal {
     Postgre postgre = null;
 
     public Document lastViewedsearch(final RequestContext context) {
-        logger.debug("lastViewedsearch()====> Starts");
+        logger.info("lastViewedsearch()====> Starts");
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         CommonUtils commonUtils = new CommonUtils();
         Document lastviewedDoc = DocumentHelper.createDocument();
         Element lastviewedResultEle = lastviewedDoc.addElement("bookmark");
-        String status="";
+        String status="valid";
         postgre = new Postgre(context);
-        HttpSession session = context.getRequest().getSession();
-        session.getAttribute("status");
+        HttpSession session = context.getRequest().getSession(true);
+         status=(String) session.getAttribute("status");
+        logger.info("status="+status);
         if(status.equals("valid")) {
-            userID = session.getAttribute("uid").toString();
-            logger.debug("userID:" + userID);
+            userID = (String) session.getAttribute("uid");;
+            logger.info("userID:" + userID);
 
             locale = context.getParameterString("locale").trim().toLowerCase();
             pagetitle = context.getParameterString("page_title");
@@ -63,9 +64,9 @@ public class LastViewedExternal {
             String queryType = context.getParameterString("queryType").trim();
             table = context.getParameterString("last_viewed").trim();
             boolean isExist = false;
-            logger.debug("locale:" + locale);
+            logger.info("locale:" + locale);
 
-            logger.debug("table:" + table);
+            logger.info("table:" + table);
 
             if (!"".equals(table) && !"".equals(userID)) {
                 if ("insert".equalsIgnoreCase(queryType)) {
@@ -73,41 +74,41 @@ public class LastViewedExternal {
                     if (isExist) {
                         int updateStatus = updateLastViewed();
                         if (updateStatus == 1) {
-                            logger.debug("LastViewed updared");
+                            logger.info("LastViewed updared");
                         } else {
-                            logger.debug("LastViewed not updated");
+                            logger.info("LastViewed not updated");
                         }
                     } else {
                         int insertStatus = insertLastViewed();
                         if (insertStatus == 1) {
-                            logger.debug("LastViewed inserted");
+                            logger.info("LastViewed inserted");
                         } else {
-                            logger.debug("LastViewed not inserted");
+                            logger.info("LastViewed not inserted");
                         }
                     }
                 } else {
                     getLastviewed(lastviewedResultEle);
                 }
             }
-            logger.debug("session valid");
+            logger.info("session valid");
         }
         else {
-            logger.debug("session invalid");
+            logger.info("session invalid");
         }
-        logger.debug("LastViewedSearch====> ends");
+        logger.info("LastViewedSearch====> ends");
         return lastviewedDoc;
     }
 
 
     private int insertLastViewed() {
-        logger.debug("insertLastViewed()====> Starts");
+        logger.info("insertLastViewed()====> Starts");
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         String lastviewedInsertQuery = "INSERT INTO" + " "
                 + table +"(\"page_title\",\"page_description\", \"page_url\", \"locale\", \"view_date\", \"user_id\",\"content_type\",\"category\")"
                 + " VALUES(?,?,?,?,LOCALTIMESTAMP,?,?,?)";
-        logger.debug("lastviewedInsertQuery:" +lastviewedInsertQuery);
+        logger.info("lastviewedInsertQuery:" +lastviewedInsertQuery);
 
         try{
             connection = getConnection();
@@ -124,14 +125,14 @@ public class LastViewedExternal {
                 result = prepareStatement.executeUpdate();
 
             }else{
-                logger.debug("Connection is null !");
+                logger.info("Connection is null !");
             }
         }catch(SQLException ex){
             logger.error("Exception on insert Query:", ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
-        logger.debug("insertLastViewed()====> ends");
+        logger.info("insertLastViewed()====> ends");
         return result;
     }
 
@@ -141,12 +142,12 @@ public class LastViewedExternal {
 
     private void getLastviewed(Element lastviewedResultEle) {
 
-        logger.debug("getLastviewed()====> Starts");
+        logger.info("getLastviewed()====> Starts");
         Connection connection = getConnection();
         PreparedStatement prepareStatement = null;
         String searchQuery = "select page_title, page_url, page_description, content_type, category from" + " " +
                 table + " " + "where" + " " + "locale='"+ locale +"' and " + "user_id='" + userID+"' and category='" + category+"'" ;
-        logger.debug("searchQuery:" + searchQuery);
+        logger.info("searchQuery:" + searchQuery);
         ResultSet resultSet = null;
         try {
             if(connection != null){
@@ -173,7 +174,7 @@ public class LastViewedExternal {
                         ele5.setText(ctype);
                         Element ele6 = ele.addElement("category");
                         ele6.setText(categoryType);
-                        logger.debug("Result:" + pageTitle+":"+pageURL);
+                        logger.info("Result:" + pageTitle+":"+pageURL);
                     }
                     i++;
                 }
@@ -183,14 +184,14 @@ public class LastViewedExternal {
         }finally {
             postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
-        logger.debug("getLastviewed()====> ends");
+        logger.info("getLastviewed()====> ends");
 
     }
 
     private boolean isLastViewed() {
         boolean check=false;
         int count=0;
-        logger.debug("isLastViewed()====> Starts");
+        logger.info("isLastViewed()====> Starts");
         Connection connection = getConnection();
         PreparedStatement prepareStatement = null;
         String searchQuery = "select count(*) from" + " " +
@@ -217,12 +218,12 @@ public class LastViewedExternal {
         }finally {
             postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
-        logger.debug("isLastViewed()====> ends");
+        logger.info("isLastViewed()====> ends");
         return check;
     }
 
     private int updateLastViewed() {
-        logger.debug("updateLastViewed()====> Starts");
+        logger.info("updateLastViewed()====> Starts");
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -240,14 +241,14 @@ public class LastViewedExternal {
                 result = prepareStatement.executeUpdate();
 
             }else{
-                logger.debug("Connection is null !");
+                logger.info("Connection is null !");
             }
         }catch(SQLException ex){
             logger.error("Exception on insert Query:", ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
-        logger.debug("updateLastViewed()====> ends");
+        logger.info("updateLastViewed()====> ends");
         return result;
     }
 
