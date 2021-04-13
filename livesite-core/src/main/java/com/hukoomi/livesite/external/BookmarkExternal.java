@@ -35,18 +35,19 @@ public class BookmarkExternal {
     Postgre postgre = null;
 
     public Document bookmarkSearch(final RequestContext context) {
-        logger.debug("BookmarkExternal()====> Starts");
+        logger.info("BookmarkExternal()====> Starts");
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         CommonUtils commonUtils = new CommonUtils();
         Document bookmarkSearchDoc = DocumentHelper.createDocument();
         Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
-        String status="";
+        String status="valid";
         postgre = new Postgre(context);
         HttpSession session = context.getRequest().getSession();
-        session.getAttribute("status");
+        status=(String) session.getAttribute("status");
+        logger.info("status="+session.getAttribute("status"));
         if(status.equals("valid")) {
-            userID = session.getAttribute("uid").toString();
-            logger.debug("userID:" + userID);
+            userID = (String) session.getAttribute("uid");
+            logger.info("userID:" + userID);
             locale = context.getParameterString("locale").trim().toLowerCase();
             pagetitle = context.getParameterString("page_title");
             pagedescription = context.getParameterString("page_description");
@@ -57,9 +58,9 @@ public class BookmarkExternal {
             String queryType = context.getParameterString("queryType").trim();
             table = context.getParameterString("bookmark").trim();
             boolean isExist = false;
-            logger.debug("locale:" + locale);
+            logger.info("locale:" + locale);
 
-            logger.debug("table:" + table);
+            logger.info("table:" + table);
 
             if (!"".equals(table) && !"".equals(userID)) {
                 if ("insert".equalsIgnoreCase(queryType)) {
@@ -67,42 +68,42 @@ public class BookmarkExternal {
                     if (isExist) {
                         int updateStatus = updateBookmark();
                         if (updateStatus == 1) {
-                            logger.debug("Bookmark updared");
+                            logger.info("Bookmark updared");
                         } else {
-                            logger.debug("Bookmark not updated");
+                            logger.info("Bookmark not updated");
                         }
                     } else {
                         int insertStatus = insertBookmark();
                         if (insertStatus == 1) {
-                            logger.debug("Bookmark inserted");
+                            logger.info("Bookmark inserted");
                         } else {
-                            logger.debug("Bookmark not inserted");
+                            logger.info("Bookmark not inserted");
                         }
                     }
                 } else {
                     getBookmark(bookmarkResultEle);
                 }
             }
-            logger.debug("session valid");
+            logger.info("session valid");
         }
         else {
             // bookmarkResultEle.setText(status);
-            logger.debug("session invalid");
+            logger.info("session invalid");
         }
-        logger.debug("bookmarkSearch====> ends");
+        logger.info("bookmarkSearch====> ends");
         return bookmarkSearchDoc;
     }
 
 
     private int insertBookmark() {
-        logger.debug("insertBookmark()====> Starts");
+        logger.info("insertBookmark()====> Starts");
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         String bookmarkInsertQuery = "INSERT INTO" + " "
                 + table +"(\"page_title\",\"page_description\", \"page_url\", \"locale\", \"creation_date\", \"user_id\",\"active\",\"content_type\",\"category\")"
                 + " VALUES(?,?,?,?,LOCALTIMESTAMP,?,?,?,?)";
-        logger.debug("bookmarkInsertQuery:" +bookmarkInsertQuery);
+        logger.info("bookmarkInsertQuery:" +bookmarkInsertQuery);
 
         try{
             connection = getConnection();
@@ -120,14 +121,14 @@ public class BookmarkExternal {
                 result = prepareStatement.executeUpdate();
 
             }else{
-                logger.debug("Connection is null !");
+                logger.info("Connection is null !");
             }
         }catch(SQLException ex){
             logger.error("Exception on insert Query:", ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
-        logger.debug("insertBookmark()====> ends");
+        logger.info("insertBookmark()====> ends");
         return result;
     }
 
@@ -137,12 +138,12 @@ public class BookmarkExternal {
 
     private void getBookmark(Element bookmarkResultEle) {
         String activeflag="Y";
-        logger.debug("getTopSearch()====> Starts");
+        logger.info("getTopSearch()====> Starts");
         Connection connection = getConnection();
         PreparedStatement prepareStatement = null;
         String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " " +
                 table + " " + "where" + " " + "locale='"+ locale +"' and " + "user_id='" + userID+"' and category='" + category+"'"+"' and active='" + activeflag+"'" ;
-        logger.debug("searchQuery:" + searchQuery);
+        logger.info("searchQuery:" + searchQuery);
         ResultSet resultSet = null;
         try {
             if(connection != null){
@@ -172,7 +173,7 @@ public class BookmarkExternal {
                         ele5.setText(ctype);
                         Element ele6 = ele.addElement("category");
                         ele6.setText(categoryType);
-                        logger.debug("Result:" + pageTitle+":"+pageURL);
+                        logger.info("Result:" + pageTitle+":"+pageURL);
                     }
                     i++;
                 }
@@ -182,13 +183,13 @@ public class BookmarkExternal {
         }finally {
             postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
-        logger.debug("getBookmark()====> ends");
+        logger.info("getBookmark()====> ends");
 
     }
 
     private boolean isBookmarkPresent() {
         boolean check=false;
-        logger.debug("isBookmarkPresent()====> Starts");
+        logger.info("isBookmarkPresent()====> Starts");
         Connection connection = getConnection();
         PreparedStatement prepareStatement = null;
         String searchQuery = "select active from" + " " +
@@ -206,7 +207,7 @@ public class BookmarkExternal {
                     if(!"".equals(isBookmarked))
                     {
                         check=true;
-                        logger.debug("check:" + check);
+                        logger.info("check:" + check);
                     }
                 }
             }
@@ -215,12 +216,12 @@ public class BookmarkExternal {
         }finally {
             postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
-        logger.debug("getBookmark()====> ends");
+        logger.info("getBookmark()====> ends");
         return check;
     }
 
     private int updateBookmark() {
-        logger.debug("updateBookmark()====> Starts");
+        logger.info("updateBookmark()====> Starts");
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -228,7 +229,7 @@ public class BookmarkExternal {
                 + table +" set active='"+active+"' where locale='"+ locale
                 +"' and user_id='" + userID+"' and page_title='"+pagetitle+ "' and page_url='"
                 +pageurl+"' and content_type='"+contenttype+"'";
-        logger.debug("bookmarkInsertQuery:" +bookmarkUpdateQuery);
+        logger.info("bookmarkInsertQuery:" +bookmarkUpdateQuery);
 
         try{
             connection = getConnection();
@@ -238,14 +239,14 @@ public class BookmarkExternal {
                 result = prepareStatement.executeUpdate();
 
             }else{
-                logger.debug("Connection is null !");
+                logger.info("Connection is null !");
             }
         }catch(SQLException ex){
             logger.error("Exception on insert Query:", ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
-        logger.debug("insertBookmark()====> ends");
+        logger.info("insertBookmark()====> ends");
         return result;
     }
 

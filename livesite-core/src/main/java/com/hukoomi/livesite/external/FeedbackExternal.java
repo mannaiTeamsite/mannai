@@ -47,24 +47,25 @@ public class FeedbackExternal {
     Postgre postgre = null;
 
     public Document insertFeedback(final RequestContext context) {
-        logger.debug("insertFeedback()====> Starts");
+        logger.info("insertFeedback()====> Starts");
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         CommonUtils commonUtils = new CommonUtils();
         Document feedbackDoc = DocumentHelper.createDocument();
-        String status="";
+        String status="valid";
         postgre = new Postgre(context);
         gRecaptchaResponse = context.getParameterString("captcha");
 
-        HttpSession session = context.getRequest().getSession();
-        session.getAttribute("status");
+        HttpSession session = context.getRequest().getSession(true);
+        status=(String) session.getAttribute("status");
+        logger.info("status="+status);
         if(status.equals("valid")) {
-            userID = session.getAttribute("uid").toString();
+            userID = (String) session.getAttribute("uid");
         }
         if(userID=="")
         {
             userID=null;
         }
-        logger.debug("userID:" + userID);
+        logger.info("userID:" + userID);
         locale = context.getParameterString("locale").trim().toLowerCase();
         if(locale=="")
         {
@@ -109,22 +110,22 @@ public class FeedbackExternal {
         }
         table = context.getParameterString("feedback_content").trim();
 
-        logger.debug("locale:" + locale);
+        logger.info("locale:" + locale);
 
-        logger.debug("table:" + table);
+        logger.info("table:" + table);
         GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
         verify = captchUtil.validateCaptcha(context,
                 gRecaptchaResponse);
-        logger.debug("Recapcha verification status:" + verify);
+        logger.info("Recapcha verification status:" + verify);
         if (verify) {
             if(!"".equals(table)){
 
                 int insertStatus = insertFeedback();
                 if(insertStatus == 1){
-                    logger.debug("Feedback inserted");
+                    logger.info("Feedback inserted");
                     status="Successfully Inserted";
                 }else{
-                    logger.debug("Feedback not inserted");
+                    logger.info("Feedback not inserted");
                     status="Not Inserted";
                 }
 
@@ -136,20 +137,20 @@ public class FeedbackExternal {
 
         Element feedbackDocEle = feedbackDoc.addElement("insertResult");
         feedbackDocEle.setText(status);
-        logger.debug("insertFeedback()====> ends");
+        logger.info("insertFeedback()====> ends");
         return feedbackDoc;
     }
 
 
     private int insertFeedback() {
-        logger.debug("insertFeedback()====> Starts");
+        logger.info("insertFeedback()====> Starts");
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         String feedbackInsertQuery = "INSERT INTO" + " "
                 + table +"(\"USER_ID\",\"LANG\", \"PAGE_PATH\", \"MODULE_NAME\", \"PERSONA\", \"OPTION_SELECTED\",\"FEEDBACK\",\"FEEDBACK_DATE\",\"TOPIC\",\"ENTITY\")"
                 + " VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP,?,?)";
-        logger.debug("feedbackInsertQuery:" +feedbackInsertQuery);
+        logger.info("feedbackInsertQuery:" +feedbackInsertQuery);
 
         try{
             connection = getConnection();
@@ -168,14 +169,14 @@ public class FeedbackExternal {
                 result = prepareStatement.executeUpdate();
 
             }else{
-                logger.debug("Connection is null !");
+                logger.info("Connection is null !");
             }
         }catch(SQLException ex){
             logger.error("Exception on insert Query:", ex);
         }finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
-        logger.debug("insertFeedback()====> ends");
+        logger.info("insertFeedback()====> ends");
         return result;
     }
 
