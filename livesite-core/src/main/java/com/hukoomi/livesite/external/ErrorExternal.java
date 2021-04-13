@@ -54,7 +54,7 @@ public class ErrorExternal {
         String status = reqcontext.getParameterString(STATUS);
         String generalError = reqcontext.getParameterString(GENERAL_ERROR);
         Element statusElement = root.addElement("status");
-      	statusElement.setText(status);
+      		statusElement.setText(status);
        String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
       
        logger.info("Status"+status);
@@ -144,7 +144,7 @@ public class ErrorExternal {
                      + "BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON"
                      + ") VALUES(?,?,?,?,LOCALTIMESTAMP)";  
              logger.info("ErrorExternal : errorResponseQuery"+errorResponseQuery);
-             connection.setAutoCommit(false);
+             
              errorprepareStatement = connection
                      .prepareStatement(errorResponseQuery);
              errorprepareStatement.setString(1, reqURL);
