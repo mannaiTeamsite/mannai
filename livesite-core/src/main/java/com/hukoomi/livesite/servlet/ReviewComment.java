@@ -15,6 +15,12 @@ import java.sql.Statement;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +31,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.XssUtils;
+import com.interwoven.livesite.runtime.RequestContext;
 
 public class ReviewComment extends HttpServlet {
 
@@ -32,6 +39,19 @@ public class ReviewComment extends HttpServlet {
     private static final Logger LOGGER =
             Logger.getLogger(ReviewComment.class);
     XssUtils xssUtils = new XssUtils();
+    
+    /** mail properties key. */
+    private static final String CONTACT_FROM_MAIL = "sentFrom";
+    /** mail properties key. */
+    private static final String CONTACT_TO_MAIL = "sentTo";
+    /** mail properties key. */
+    private static final String CONTACT_MAIL_HOST = "host";
+    /** mail properties key. */
+    private static final String CONTACT_MAIL_PORT = "port";
+    /** mail properties key. */    
+    private static final String STARTTLS_ENABLE = "false";
+    /** character set Constant */
+    private static final String CHAR_SET = "UTF-8";
 
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
@@ -190,12 +210,18 @@ public class ReviewComment extends HttpServlet {
         return isDataUpdated;
     }
 
+    /**
+     * This method updates the comment status for approved/rejected
+     * @param connection
+     * @param data
+     * @return
+     */
     private int updateCommentData(Connection connection, JSONObject data) {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
-
-
+            String Propfilepath = data.getString("path");
+            String Blogproppath = data.getString("blogpath");
             long commentId = data.getLong("commentId");
             String status = xssUtils.stripXSS(data.getString("status"));
             String query =
@@ -208,6 +234,12 @@ public class ReviewComment extends HttpServlet {
             preparedStatement.setLong(2, commentId);
             result = preparedStatement.executeUpdate();
             LOGGER.info("update comment result : " + result);
+            String blogTitle = getBlogTitle(commentId,Propfilepath);
+            String userEmailID = getUserEmail(commentId,Propfilepath);
+            if(!userEmailID.equals("") && userEmailID !=null) {
+                sentMailNotification(status,blogTitle,userEmailID,Blogproppath);
+            }
+            
 
         } catch (NumberFormatException | SQLException e) {
             LOGGER.error("Exception in updateBlogMasterData: ", e);
@@ -218,6 +250,12 @@ public class ReviewComment extends HttpServlet {
         return result;
     }
 
+    /**
+     * This method returns all the comments submitted for
+     * specific blog based on blogID
+     * @param data
+     * @return
+     */
     private JSONArray getCommentbyBlogId(JSONObject data) {
         LOGGER.info("getCommentbyBlogId");
         int blogId = data.getInt("blogId");
@@ -277,6 +315,97 @@ public class ReviewComment extends HttpServlet {
         }
         return arrayComments;
     }
+    
+    /**
+     * This method returns the blog title for comment approved/rejected
+     * @param commentid
+     * @param path
+     * @return
+     */
+    private String getBlogTitle(long commentid,String path) {
+        LOGGER.info("getBlogId");
+        
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        Properties dbProperties = loadProperties(path);
+        Connection connection = null;
+        String titleQuery ="";
+        String blogTitle="";
+        try {
+            String userName = dbProperties.getProperty("username");
+            String password = dbProperties.getProperty("password");
+            connection = DriverManager.getConnection(
+                    getConnectionString(dbProperties), userName, password);
+           
+            titleQuery =                        
+                        "SELECT BLOG_TITLE FROM BLOG_MASTER WHERE BLOG_ID IN (SELECT BLOG_ID FROM BLOG_COMMENT WHERE COMMENT_ID = ? )";
+                prepareStatement = connection.prepareStatement(titleQuery);
+                prepareStatement.setLong(1, commentid);          
+                LOGGER.debug("titleQuery :" + titleQuery);
+                rs = prepareStatement.executeQuery();
+
+                while (rs.next()) {
+                   
+                    blogTitle   =   rs.getString("BLOG_TITLE");              
+                }
+                LOGGER.info("Blog Title " +blogTitle);
+                rs.close();
+
+
+        } catch (SQLException e) {
+            LOGGER.error("getCommentbyBlogId()", e);            
+
+        } finally {
+            releaseConnection(connection, null, null);
+        }
+        return blogTitle;
+    }
+    
+    /**
+     * This method returns the user emailid for mail notification
+     * for the specific comment approved/rejected
+     * @param commentid
+     * @param path
+     * @return
+     */
+    private String getUserEmail(long commentid,String path) {
+        LOGGER.info("getUserEmail");
+        
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        Properties dbProperties = loadProperties(path);
+        Connection connection = null;
+        String emailQuery ="";
+        String useremailID="";
+        try {
+            String userName = dbProperties.getProperty("username");
+            String password = dbProperties.getProperty("password");
+            connection = DriverManager.getConnection(
+                    getConnectionString(dbProperties), userName, password);
+           
+            emailQuery =                        
+                        "SELECT USER_EMAILID FROM BLOG_COMMENT WHERE COMMENT_ID = ? ";
+                prepareStatement = connection.prepareStatement(emailQuery);
+                prepareStatement.setLong(1, commentid);          
+                LOGGER.debug("titleQuery :" + emailQuery);
+                rs = prepareStatement.executeQuery();
+
+                while (rs.next()) {
+                   
+                    useremailID   =   rs.getString("USER_EMAILID");              
+                }
+                LOGGER.info("User EmailID " +useremailID);
+                rs.close();
+
+
+        } catch (SQLException e) {
+            LOGGER.error("getCommentbyBlogId()", e);            
+
+        } finally {
+            releaseConnection(connection, null, null);
+        }
+        return useremailID;
+    }
 
     private String getConnectionString(Properties properties) {
         LOGGER.info("Postgre : getConnectionString()");
@@ -332,6 +461,83 @@ public class ReviewComment extends HttpServlet {
         }
     }
 
+      
+    /**
+     * This method is used to send notification to user about 
+     * status of his comment submitted for blog
+     * @param status
+     * @param blogtitle
+     * @param userEmail
+     * @param path
+     */
+    private void sentMailNotification(String status, String blogtitle, 
+            String userEmail, String path) {
+       
+            MimeMessage mailMessage;
+            LOGGER.debug(" status::" + status);
+            LOGGER.debug(" blogtitle::" + blogtitle);            
+            try {
+                mailMessage = createMailMessage(status, blogtitle, userEmail, path);
+                Transport.send(mailMessage);
+            } catch (MessagingException e) {
+                e.printStackTrace();
+            }
+     
+
+    }
+
+    /**
+     * This method is used to create message to update user comment status
+     * @param status
+     * @param blogtitle
+     * @param toEmail
+     * @param path
+     * @return
+     * @throws MessagingException
+     */
+    private MimeMessage createMailMessage(String status, String blogtitle, 
+            String toEmail, String path) throws MessagingException {
+        LOGGER.info("createMailMessage: Enter");
+
+        String strBlogName = "<blogname>";
+        String strStatus = "<status>";        
+        Properties propertiesFile =
+                loadProperties(path);
+        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);        
+        LOGGER.debug("sent To :" + toEmail);    
+        
+        String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
+        LOGGER.debug("relay IP :" + host);
+        String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
+        Properties props = new Properties();
+        String subject = "";
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.starttls.enable", STARTTLS_ENABLE);
+        props.put("mail.smtp.port", port);
+        Session session = Session.getDefaultInstance(props, null);
+        session.setDebug(true);
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(from));        
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));       
+        
+        subject = propertiesFile.getProperty("statusmessageSubject");
+        LOGGER.debug("subject :" + subject);
+        StringBuilder sb = new StringBuilder();
+        sb.append(
+                propertiesFile.getProperty("statusMessageBody").replace(strStatus, status));
+        
+            LOGGER.debug("SuccessMessageBody :" +sb.toString());
+        
+            LOGGER.debug("before subject :" );
+            msg.setSubject(subject.replace(strBlogName, blogtitle));
+            LOGGER.debug("after subject :" );
+            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
+      
+
+        LOGGER.debug("msg:" + sb.toString());
+        return msg;
+    } 
+    
     /**
      * This method will be used to load the configuration properties.
      *
