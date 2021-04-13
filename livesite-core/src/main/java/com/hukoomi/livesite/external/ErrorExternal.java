@@ -146,7 +146,7 @@ public class ErrorExternal {
              errorResponseQuery = "INSERT INTO ERROR_RESPONSE ("
                      + "BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON"
                      + ") VALUES(?,?,?,?,LOCALTIMESTAMP)";  
-            // errorResponseQuery =  "INSERT INTO ERROR_RESPONSE (BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON) VALUES('https://hukoomi.gov.qa/en/e','https://hukoomi.gov.qa/en/','En','404',LOCALTIMESTAMP)";
+          
              logger.info("ErrorExternal : errorResponseQuery"+errorResponseQuery);
              
              errorprepareStatement = connection
