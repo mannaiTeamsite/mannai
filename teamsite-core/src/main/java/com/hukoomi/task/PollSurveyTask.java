@@ -1,5 +1,6 @@
 package com.hukoomi.task;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -18,12 +20,28 @@ import org.dom4j.Node;
 import com.hukoomi.bo.TSPollsBO;
 import com.hukoomi.bo.TSSurveyBO;
 import com.hukoomi.utils.PostgreTSConnection;
+import com.interwoven.cssdk.access.CSAuthorizationException;
+import com.interwoven.cssdk.access.CSExpiredSessionException;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
+import com.interwoven.cssdk.common.CSObjectNotFoundException;
+import com.interwoven.cssdk.common.CSRemoteException;
+import com.interwoven.cssdk.common.CSUnsupportedOpException;
+import com.interwoven.cssdk.filesys.CSArea;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
+import com.interwoven.cssdk.filesys.CSBranch;
+import com.interwoven.cssdk.filesys.CSDir;
+import com.interwoven.cssdk.filesys.CSEdition;
+import com.interwoven.cssdk.filesys.CSFile;
+import com.interwoven.cssdk.filesys.CSHole;
+import com.interwoven.cssdk.filesys.CSReadOnlyFileSystemException;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
+import com.interwoven.cssdk.filesys.CSSubmitRecord;
+import com.interwoven.cssdk.filesys.CSVPath;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
+import com.interwoven.cssdk.filesys.impl.CSHoleImpl;
+import com.interwoven.cssdk.filesys.pvt.CSAssetData;
 
 /**
  * PollSurveyTask is the workflow task class for polls and survey master data
@@ -174,6 +192,26 @@ public class PollSurveyTask implements CSURLExternalTask {
      */
     private static final String SURVEY_TECHNICAL_ERROR = "Technical Error in survey master data insert";
     /**
+     * Polls Published Status
+     */
+    private static final String PUBLISHED_STATUS = "Published";
+    /**
+     * Polls Unpublished Status
+     */
+    private static final String UNPUBLISHED_STATUS = "Unpublished";
+    /**
+     * Polls Content type
+     */
+    private static final String POLLS_CONTENT_TYPE = "Content/Polls";
+    /**
+     * Survey Content type
+     */
+    private static final String SURVEY_CONTENT_TYPE = "Content/Survey";
+    /**
+     * Blog Content type
+     */
+    private static final String BLOG_CONTENT_TYPE = "Content/Blog";
+    /**
      * Postgre class instance variable
      */
     PostgreTSConnection postgre = null;
@@ -195,34 +233,82 @@ public class PollSurveyTask implements CSURLExternalTask {
 
         postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
         statusMap = new HashMap<>();
-        statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-        statusMap.put(TRANSITION_COMMENT, "");
-
-        for (CSAreaRelativePath taskFile : taskFileList) {
+        
+        
+        for (CSAreaRelativePath taskFilePath : taskFileList) {
             try {
-                CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea()
-                        .getFile(taskFile);
-                logger.debug("File Name : " + taskSimpleFile.getName());
-
-                String dcrType = taskSimpleFile
-                        .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
-                        .getValue();
-
-                if (dcrType != null) {
-                    if ("Content/Polls".equalsIgnoreCase(dcrType)) {
-                        statusMap = (HashMap<String, String>) processPollDCR(
-                                taskSimpleFile);
-                    } else if ("Content/Survey"
-                            .equalsIgnoreCase(dcrType)) {
-                        statusMap = (HashMap<String, String>) processSurveyDCR(
-                                taskSimpleFile);
-                    } else if ("Content/Blog".equalsIgnoreCase(dcrType)) {
-                        BlogTask blog = new BlogTask();
-                        statusMap = (HashMap<String, String>) blog.processBlogDCR(
-                                taskSimpleFile,postgre);
-                    } else {
-                        logger.debug(
-                                "Master data insert skipped - Not Polls or Survey DCR");
+                
+                CSFile file = task.getArea().getFile(taskFilePath);
+                String fileName = file.getName();
+                logger.debug("File Name : " + fileName);
+                
+                if(file instanceof CSHoleImpl) {
+                    CSHoleImpl taskHoleFile = (CSHoleImpl) file;
+                    
+                    String comment = taskHoleFile.getRevisionComment();
+                    logger.info("comment : "+comment);
+                    
+                    if(!comment.startsWith("[moved to")) {
+                    
+                        logger.info("PollSurveyTask - Deleted File");
+                        CSSimpleFile csSimpleTaskFile = getDeletedFile(client, taskHoleFile);
+                        String dcrType = csSimpleTaskFile
+                                .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
+                                .getValue();
+                        
+                        if (dcrType != null) {
+                            if (POLLS_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
+                                Document doc = getTaskDocument(csSimpleTaskFile);
+                                logger.info("doc of hole file : "+doc.asXML());
+                                String pollId = getDCRValue(doc, ID_PATH);
+                                String lang = getDCRValue(doc, LANG_PATH);
+                                statusMap = (HashMap<String, String>) updateDeletePollMasterData(pollId, lang, postgre.getConnection());
+                            }else if (SURVEY_CONTENT_TYPE
+                                    .equalsIgnoreCase(dcrType)) {
+                                Document doc = getTaskDocument(csSimpleTaskFile);
+                                logger.info("doc of hole file : "+doc.asXML());
+                                String surveyId = getDCRValue(doc, ID_PATH);
+                                String lang = getDCRValue(doc, LANG_PATH);
+                                statusMap = (HashMap<String, String>) updateDeleteSurveyMasterData(surveyId, lang, postgre.getConnection());
+                            }else {
+                                logger.debug(
+                                        "Deleted status update skipped - Not Polls or Survey DCR");
+                                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                                statusMap.put(TRANSITION_COMMENT, "");
+                            }
+                        }
+                    }else {
+                        logger.debug("PollSurveyTask - Renamed moved file");
+                        statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                        statusMap.put(TRANSITION_COMMENT, "");
+                    }
+                    
+                }else {
+                
+                    CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
+    
+                    String dcrType = taskSimpleFile
+                            .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
+                            .getValue();
+    
+                    if (dcrType != null) {
+                        if (POLLS_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
+                            statusMap = (HashMap<String, String>) processPollDCR(
+                                    taskSimpleFile);
+                        } else if (SURVEY_CONTENT_TYPE
+                                .equalsIgnoreCase(dcrType)) {
+                            statusMap = (HashMap<String, String>) processSurveyDCR(
+                                    taskSimpleFile);
+                        } else if (BLOG_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
+                            BlogTask blog = new BlogTask();
+                            statusMap = (HashMap<String, String>) blog.processBlogDCR(
+                                    taskSimpleFile,postgre);
+                        } else {
+                            logger.debug(
+                                    "Master data insert skipped - Not Polls or Survey DCR");
+                            statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                            statusMap.put(TRANSITION_COMMENT, "");
+                        }
                     }
                 }
 
@@ -236,6 +322,48 @@ public class PollSurveyTask implements CSURLExternalTask {
                 + statusMap.get(TRANSITION_COMMENT));
         task.chooseTransition(statusMap.get(TRANSITION),
                 statusMap.get(TRANSITION_COMMENT));
+    }
+    
+    
+    private CSSimpleFile getDeletedFile(CSClient client, CSHoleImpl taskHoleFile) {
+        CSSimpleFile taskFile = null;
+        logger.info("PollSurveyTask - getDeletedFile");
+        try {
+            logger.error("Task file kind : "+taskHoleFile.getKind());
+            if (taskHoleFile.getKind() == CSHole.KIND) {
+                CSHole hole = (CSHole) taskHoleFile;
+                logger.error("Task file prvious kind : "+hole.getPreviousKind());
+                if(hole.getPreviousKind() == CSSimpleFile.KIND) {
+                    CSBranch branch = hole.getRevisionBranch();
+                    //logger.error("branch : "+branch);
+                    CSEdition[] editions =  branch.getEditions(true, false, 999999);
+                    //logger.error("editions length : "+editions.length);
+                    CSEdition edition = null;
+                    logger.error("File creation time : "+hole.getCreationDate().getTime());
+                    for (CSEdition ed : editions) {
+                        logger.error("Edtion creation time : "+ed.getCreationDate().getTime());
+                        if (hole.getCreationDate().getTime() > ed.getCreationDate().getTime()) {
+                            edition = ed;
+                            break;
+                        }
+                    }
+                    String areaRelativePath = taskHoleFile.getAreaRelativePath();
+                    logger.error("areaRelativePath : "+areaRelativePath);
+                    CSAreaRelativePath caAreaRelativePath = new CSAreaRelativePath(areaRelativePath);
+                    CSFile file = edition.getFile(caAreaRelativePath);
+                    if (file.getKind() == CSHole.KIND) {
+                        logger.error("Deleted File");
+                    }else if (file.getKind() == CSSimpleFile.KIND) {
+                        logger.error("Simple File");
+                        taskFile = (CSSimpleFile)file;                        
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Exception in getDeletedFile : ", e);
+            e.printStackTrace();
+        }
+        return taskFile;
     }
 
     /**
@@ -252,7 +380,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             Document document = getTaskDocument(taskSimpleFile);
             if (isPollMasterDataAvailable(document)) {
-                isDBOperationSuccess = updatePollData(document);
+                isDBOperationSuccess = updatePollData(document, taskSimpleFile.getName());
                 logger.debug(
                         "isPollDataUpdated : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
@@ -263,7 +391,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                     statusMap.put(TRANSITION_COMMENT, POLL_UPDATE_FAILURE);
                 }
             } else {
-                isDBOperationSuccess = insertPollData(document);
+                isDBOperationSuccess = insertPollData(document, taskSimpleFile.getName());
                 logger.debug(
                         "isPollDataInserted : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
@@ -277,7 +405,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         } catch (Exception e) {
             statusMap.put(TRANSITION, FAILURE_TRANSITION);
             statusMap.put(TRANSITION_COMMENT, POLL_TECHNICAL_ERROR);
-            logger.error("Exception in poll master: ", e);
+            logger.error("Exception in processPollDCR : ", e);
         }
         return statusMap;
     }
@@ -296,7 +424,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             Document document = getTaskDocument(taskSimpleFile);
             if (isSurveyMasterDataAvailable(document)) {
-                isDBOperationSuccess = updateSurveyData(document);
+                isDBOperationSuccess = updateSurveyData(document, taskSimpleFile.getName());
                 logger.debug(
                         "isSurveyDataUpdated : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
@@ -309,7 +437,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                             SURVEY_UPDATE_FAILURE);
                 }
             } else {
-                isDBOperationSuccess = insertSurveyData(document);
+                isDBOperationSuccess = insertSurveyData(document, taskSimpleFile.getName());
                 logger.debug(
                         "isSurveyDataInserted : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
@@ -325,7 +453,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         } catch (Exception e) {
             statusMap.put(TRANSITION, FAILURE_TRANSITION);
             statusMap.put(TRANSITION_COMMENT, SURVEY_TECHNICAL_ERROR);
-            logger.error("Exception in survey master: ", e);
+            logger.error("Exception in processSurveyDCR : ", e);
         }
         return statusMap;
     }
@@ -351,7 +479,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return document;
     }
-
+    
     /**
      * Checks for poll master data already exists
      *
@@ -404,7 +532,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param document Document object of the polls DCR
      * @return Returns status of the insert poll data as boolean
      */
-    public boolean insertPollData(Document document) {
+    public boolean insertPollData(Document document, String fileName) {
         logger.debug("PollSurveyTask : insertPollData");
         Connection connection = null;
         boolean isPollDataInserted = false;
@@ -423,7 +551,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             pollsBO.setTopics(getDCRValue(document, TOPICS));
             logger.debug("PollsBO : " + pollsBO);
 
-            int result = insertPollMasterData(pollsBO, connection);
+            int result = insertPollMasterData(pollsBO, connection, fileName);
             logger.info("insertPollData result : " + result);
             if (result > 0) {
                 logger.info("Poll Master Data Inserted");
@@ -471,15 +599,15 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int insertPollMasterData(TSPollsBO pollsBO, Connection connection)
+    public int insertPollMasterData(TSPollsBO pollsBO, Connection connection, String fileName)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : insertPollMasterData");
             String pollMasterQuery = "INSERT INTO POLL_MASTER (POLL_ID, "
-                    + "LANG, QUESTION, START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "LANG, QUESTION, START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, STATUS, FILE_NAME) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             logger.info("insertPollMasterData pollMasterQuery : "
                     + pollMasterQuery);
             connection.setAutoCommit(false);
@@ -494,6 +622,8 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(6, pollsBO.getPersona());
             preparedStatement.setString(7, pollsBO.getServiceEntities());
             preparedStatement.setString(8, pollsBO.getTopics());  
+            preparedStatement.setString(9, PUBLISHED_STATUS);
+            preparedStatement.setString(10, fileName);
             result = preparedStatement.executeUpdate();
             logger.info("insertPollMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
@@ -573,7 +703,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param document Document object of the polls DCR
      * @return Returns status of the update poll data as boolean
      */
-    public boolean updatePollData(Document document) {
+    public boolean updatePollData(Document document, String fileName) {
         logger.debug("PollSurveyTask : updatePollData");
         Connection connection = null;
         boolean isPollDataInserted = false;
@@ -594,7 +724,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             pollsBO.setTopics(getDCRValue(document, TOPICS));
             logger.debug("PollsBO : " + pollsBO);
             
-            int result = updatePollMasterData(pollsBO, connection);
+            int result = updatePollMasterData(pollsBO, connection, fileName);
 
             if (result > 0) {
                 logger.info("Poll Master Data Updated");
@@ -641,14 +771,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int updatePollMasterData(TSPollsBO pollsBO, Connection connection)
+    public int updatePollMasterData(TSPollsBO pollsBO, Connection connection, String fileName)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : updatePollMasterData");
             String pollMasterQuery = "UPDATE POLL_MASTER SET QUESTION = ?, "
-                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ? "
+                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ?, STATUS = ?, FILE_NAME = ? "
                     + "WHERE POLL_ID = ? AND LANG = ?";
             logger.info("updatePollMasterData pollMasterQuery : "
                     + pollMasterQuery);
@@ -659,10 +789,12 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setDate(2, getDate(pollsBO.getEndDate()));
             preparedStatement.setString(3, pollsBO.getPersona());
             preparedStatement.setString(4, pollsBO.getServiceEntities());
-            preparedStatement.setString(5, pollsBO.getTopics());            
-            preparedStatement.setLong(6,
+            preparedStatement.setString(5, pollsBO.getTopics()); 
+            preparedStatement.setString(6, PUBLISHED_STATUS);
+            preparedStatement.setString(7, fileName);
+            preparedStatement.setLong(8,
                     Long.parseLong(pollsBO.getPollId()));
-            preparedStatement.setString(7, pollsBO.getLang());
+            preparedStatement.setString(9, pollsBO.getLang());
 
             result = preparedStatement.executeUpdate();
             logger.info("updatePollMasterData result : " + result);
@@ -674,6 +806,106 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("Released updatePollMasterData connection");
         }
         return result;
+    }
+    
+    /**
+     * Method updates the delete status as unpublished in polls master data
+     *
+     * @param pollId    Poll id of the deleted poll
+     * @param lang  Language of the deleted poll
+     * @param connection Database connection object
+     * @return Returns status of the update in the Map object
+     */
+    public Map<String, String> updateDeletePollMasterData(String pollId, String lang, Connection connection)
+            throws SQLException {
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        HashMap<String, String> statusMap = new HashMap<>();
+        try {
+            logger.info("PollSurveyTask : updateDeletePollMasterData");
+            String pollMasterQuery = "UPDATE POLL_MASTER SET STATUS = ? "
+                    + "WHERE POLL_ID = ? AND LANG = ?";
+            logger.info("updatePollMasterData pollMasterQuery : "
+                    + pollMasterQuery);
+            connection.setAutoCommit(false);
+            preparedStatement = connection
+                    .prepareStatement(pollMasterQuery);
+            preparedStatement.setString(1, UNPUBLISHED_STATUS); 
+            preparedStatement.setLong(2,
+                    Long.parseLong(pollId));
+            preparedStatement.setString(3, lang);
+
+            result = preparedStatement.executeUpdate();
+            logger.info("updateDeletePollMasterData result : " + result);
+            if (result > 0) {
+                connection.commit();
+                logger.info("updateDeletePollMasterData transaction committed : ");
+                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT, POLL_UPDATE_SUCCESS);
+            }else {
+                statusMap.put(TRANSITION, FAILURE_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT, POLL_UPDATE_FAILURE);
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updateDeletePollMasterData: ", e);
+            statusMap.put(TRANSITION, FAILURE_TRANSITION);
+            statusMap.put(TRANSITION_COMMENT, POLL_TECHNICAL_ERROR);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updateDeletePollMasterData connection");
+        }
+        return statusMap;
+    }
+    
+    /**
+     * Method updates the delete status as unpublished in survey master data
+     *
+     * @param surveyId    survey id of the deleted poll
+     * @param lang  Language of the deleted poll
+     * @param connection Database connection object
+     * @return Returns status of the update in the Map object
+     */
+    public Map<String, String> updateDeleteSurveyMasterData(String surveyId, String lang, Connection connection)
+            throws SQLException {
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        HashMap<String, String> statusMap = new HashMap<>();
+        try {
+            logger.info("PollSurveyTask : updateDeleteSurveyMasterData");
+            String surveyMasterQuery = "UPDATE SURVEY_MASTER SET STATUS = ? "
+                    + "WHERE SURVEY_ID = ? AND LANG = ?";
+            logger.info("updateDeleteSurveyMasterData surveyMasterQuery : "
+                    + surveyMasterQuery);
+            connection.setAutoCommit(false);
+            preparedStatement = connection
+                    .prepareStatement(surveyMasterQuery);
+            preparedStatement.setString(1, UNPUBLISHED_STATUS); 
+            preparedStatement.setLong(2,
+                    Long.parseLong(surveyId));
+            preparedStatement.setString(3, lang);
+
+            result = preparedStatement.executeUpdate();
+            logger.info("updateDeleteSurveyMasterData result : " + result);
+            if (result > 0) {
+                connection.commit();
+                logger.info("updateDeleteSurveyMasterData transaction committed : ");
+                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT, SURVEY_UPDATE_SUCCESS);
+            }else {
+                statusMap.put(TRANSITION, FAILURE_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT, SURVEY_UPDATE_FAILURE);
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updateDeleteSurveyMasterData: ", e);
+            statusMap.put(TRANSITION, FAILURE_TRANSITION);
+            statusMap.put(TRANSITION_COMMENT, SURVEY_TECHNICAL_ERROR);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updateDeleteSurveyMasterData connection");
+        }
+        return statusMap;
     }
 
     /**
@@ -784,7 +1016,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param document Document object of the survey DCR
      * @return Returns status of the insert survey data as boolean
      */
-    public boolean insertSurveyData(Document document) {
+    public boolean insertSurveyData(Document document, String fileName) {
         logger.debug("PollSurveyTask : insertSurveyData");
         Connection connection = null;
         boolean isSurveyDataInserted = false;
@@ -808,7 +1040,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
             logger.debug("SurveyBO : " + surveyBO);
 
-            int result = insertSurveyMasterData(surveyBO, connection);
+            int result = insertSurveyMasterData(surveyBO, connection, fileName);
             logger.info("result : " + result);
             if (result > 0) {
                 logger.info("Survey Master Data Inserted");
@@ -851,17 +1083,17 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @throws SQLException
      */
     public int insertSurveyMasterData(TSSurveyBO surveyBO,
-            Connection connection) throws SQLException {
+            Connection connection, String fileName) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : insertSurveyMasterData");
             String surveyMasterQuery = "INSERT INTO SURVEY_MASTER ("
                     + "SURVEY_ID, LANG, SURVEY_TITLE, SURVEY_DESCRIPTION, "
-                    + "START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, SUBMIT_TYPE) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    + "START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, SUBMIT_TYPE, STATUS, FILE_NAME) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             logger.info("insertSurveyMasterData surveyMasterQuery : "
-                    + surveyMasterQuery);            
+                    + surveyMasterQuery);
             preparedStatement = connection
                     .prepareStatement(surveyMasterQuery);
             preparedStatement.setLong(1,
@@ -875,6 +1107,8 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(8, surveyBO.getServiceEntities());
             preparedStatement.setString(9, surveyBO.getTopics());
             preparedStatement.setString(10, surveyBO.getSubmitType());
+            preparedStatement.setString(11, PUBLISHED_STATUS);
+            preparedStatement.setString(12, fileName);
             result = preparedStatement.executeUpdate();
             logger.info("insertSurveyMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
@@ -1050,7 +1284,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param document Document object of the survey DCR
      * @return Returns status of the update survey data as boolean
      */
-    public boolean updateSurveyData(Document document) {
+    public boolean updateSurveyData(Document document, String fileName) {
         logger.debug("PollSurveyTask : updateSurveyData");
         PreparedStatement prepareStatement = null;
         PreparedStatement prepareStatementSurveyQuestion = null;
@@ -1076,7 +1310,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
             logger.debug("SurveyBO : " + surveyBO);
 
-            int result = updateSurveyMasterData(surveyBO, connection);
+            int result = updateSurveyMasterData(surveyBO, connection, fileName);
 
             if (result > 0) {
                 logger.info("Survey Master Data Updated");
@@ -1126,14 +1360,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @throws SQLException
      */
     public int updateSurveyMasterData(TSSurveyBO surveyBO,
-            Connection connection) throws SQLException {
+            Connection connection, String fileName) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : updateSurveyMasterData");
             String surveyMasterQuery = "UPDATE SURVEY_MASTER SET "
                     + "SURVEY_TITLE = ?, SURVEY_DESCRIPTION = ?, "
-                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ?, SUBMIT_TYPE = ?  "
+                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ?, SUBMIT_TYPE = ?, STATUS = ? , FILE_NAME = ?  "
                     + "WHERE SURVEY_ID = ? AND LANG = ?";
             logger.info("updateSurveyMasterData surveyMasterQuery : "
                     + surveyMasterQuery);
@@ -1146,9 +1380,11 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(5, surveyBO.getServiceEntities());
             preparedStatement.setString(6, surveyBO.getTopics());
             preparedStatement.setString(7, surveyBO.getSubmitType());
-            preparedStatement.setLong(8,
+            preparedStatement.setString(8, PUBLISHED_STATUS);
+            preparedStatement.setString(9, fileName);
+            preparedStatement.setLong(10,
                     Long.parseLong(surveyBO.getSurveyId()));
-            preparedStatement.setString(9, surveyBO.getLang());
+            preparedStatement.setString(11, surveyBO.getLang());
 
             result = preparedStatement.executeUpdate();
             logger.info("updateSurveyMasterData result : " + result);
