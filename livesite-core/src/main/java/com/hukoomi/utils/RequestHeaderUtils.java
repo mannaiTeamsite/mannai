@@ -54,6 +54,23 @@ public class RequestHeaderUtils {
 
     
     
-    
+    public String getReferer(){
+        logger.debug("getReferer()====> Start");  
+        String referrer = "";
+        if(context.getRequest().getHeader(REFERER) != null && !context.getRequest().getHeader(REFERER).isBlank())
+        	referrer = context.getRequest().getHeader(REFERER);
+        logger.debug("Referer ="+referrer+"=");
+        logger.debug("getReferer()====> End");
+       return referrer;
+    }
+    public String getRequestURL(){
+        logger.debug("getRequestURL()====> Start");        
+        String requestURL = "";
+        if(context.getRequest().getRequestURL() != null )
+        	requestURL = context.getRequest().getRequestURL().toString();      
+        logger.debug("HTTP status code ="+requestURL);
+        logger.debug("getReferer()====> End");
+       return requestURL;
+    }
     
 }
