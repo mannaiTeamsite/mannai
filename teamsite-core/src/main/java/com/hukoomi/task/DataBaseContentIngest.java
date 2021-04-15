@@ -1,5 +1,8 @@
 package com.hukoomi.task;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,10 +11,10 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import com.interwoven.cssdk.filesys.CSHole;
 import com.interwoven.cssdk.filesys.CSVPath;
 import com.interwoven.cssdk.sci.filesys.CSPath;
-import com.interwoven.cssdk.workflow.CSWorkflow;
-import com.interwoven.cssdk.workflow.CSWorkflowEngine;
+import com.interwoven.cssdk.workflow.*;
 import com.interwoven.cssdk.workflow.impl.CSWorkflowImpl;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -25,8 +28,6 @@ import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
-import com.interwoven.cssdk.workflow.CSExternalTask;
-import com.interwoven.cssdk.workflow.CSURLExternalTask;
 
 /**
  * DataBaseContentIngest is the workflow task class for dcr data
@@ -217,7 +218,25 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             }
         }
 
-
+        if(!statusMap.get(TRANSITION).contains("Failure")){
+            try {
+                FileWriter writer = new FileWriter("/usr/opentext/TeamSite/tmp/taxonomyFilesPublished.txt", true);
+                BufferedWriter bufferedWriter = new BufferedWriter(writer);
+                for (CSAreaRelativePath tFile : taskFileList) {
+                    logger.info("tFile with path: "+tFile.toString());
+                    if (tFile.toString().contains("Taxonomy/")) {
+                        bufferedWriter.write(tFile.toString());
+                        bufferedWriter.newLine();
+                    }
+                }
+                bufferedWriter.close();
+                writer.close();
+            } catch (IOException e) {
+                logger.error("IOException in DataBaseContentIngest: "+e);
+            } catch (Exception e){
+                logger.error("Exception in DataBaseContentIngest: "+e);
+            }
+        }
 
         logger.debug("transition : " + statusMap.get(TRANSITION));
         logger.debug("transitionComment : "
@@ -254,7 +273,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
                     isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document, postgreLS);
                 }
             }
-            isDBOperationWorkflowSuccess = insertWorkFlowData(taskSimpleFile, task);
+            //isDBOperationWorkflowSuccess = insertWorkFlowData(taskSimpleFile, task);
+            isDBOperationWorkflowSuccess = updateWorkflowData(taskSimpleFile, task);
             logger.debug(
                     "DBOperationContent : " + isDBOperationContentSuccess);
             logger.debug(
@@ -686,7 +706,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             preparedStatement.setString(4, dcr);
 
             logger.info("insertData preparedStatement : " + preparedStatement);
-            // result = preparedStatement.executeUpdate();
+           // result = preparedStatement.executeUpdate();
             result = preparedStatement.executeQuery();
 
             logger.info("selectQuery result : " + result.toString());
@@ -761,7 +781,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
     public boolean taxonomyInsertQuery(String lang, String type,String key,String label,String dcr,PostgreTSConnection postgreConnection ){
         logger.debug("DataBaseContentIngest : insertTaxonomyData");
         Connection connection = null;
-        boolean isDataInserted = false;
+		boolean isDataInserted = false;
         PreparedStatement preparedStatement = null;
         try {
 
@@ -808,7 +828,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public boolean insertWorkFlowData(CSSimpleFile taskSimpleFile, CSExternalTask task)
+    /*public boolean insertWorkFlowData(CSSimpleFile taskSimpleFile, CSExternalTask task)
             throws SQLException, CSException {
         logger.debug("DataBaseContentIngest : insertWorkFlowData");
         Connection connection = null;
@@ -908,6 +928,103 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.info("Released insertData connection");
         }
         return isDataInserted;
+    } */
+
+    /**
+     * Method updates the content
+     *
+     * @param taskSimpleFile    file path
+     * @param taskObj content
+     * @return Returns number of rows affected by query execution
+     * @throws SQLException
+     */
+    public boolean updateWorkflowData(CSSimpleFile taskSimpleFile, CSExternalTask taskObj) throws SQLException, CSException{
+        logger.debug("DataBaseContentIngest : updateWorkflowData");
+        Connection connection = null;
+        boolean isDataUpdated = false;
+        PreparedStatement preparedStatement = null;
+
+        String reviewDate = "";
+        String approveDate = "";
+        String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
+        String jobStatus = "PUBLISHED";
+        String fileStatus  = "";
+        String commentStr = "";
+
+        try {
+
+            reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+            logger.info("Review Date : " + reviewDate );
+
+            Timestamp reviewedDate = null;
+            if(reviewDate != null)
+                reviewedDate = new Timestamp(DateUtils.parseDate(reviewDate,dateFormats).getTime());
+            logger.info("reviewedDate : " + reviewedDate );
+
+
+            approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            logger.info("Approve Date : " + approveDate );
+
+            Timestamp approvalDate = null;
+            if(approveDate != null)
+                approvalDate = new Timestamp(DateUtils.parseDate(approveDate,dateFormats).getTime());
+            logger.info("approvalDate : " + approvalDate );
+
+            if(taskSimpleFile.getKind() == CSHole.KIND){
+                fileStatus = "DELETE";
+            }else if(taskSimpleFile.getRevisionNumber() == 0){
+                fileStatus = "ADD";
+            }else if(taskSimpleFile.getRevisionNumber() > 0){
+                fileStatus = "MODIFY";
+            }
+
+            CSWorkflow workflow = taskObj.getWorkflow();
+            CSComment[] comments = workflow.getComments();
+            StringBuilder commentsToLogInDB = new StringBuilder();
+            for(CSComment comment : comments) {
+                commentsToLogInDB.append("["+ comment.getCreationDate() +"] "+ comment.getCreator() + ": "+ comment.getComment() + System.lineSeparator());
+            }
+            commentStr = commentsToLogInDB.toString();
+
+            connection = postgre.getConnection();
+            long millis = System.currentTimeMillis();
+            Timestamp PublishDate = new Timestamp(millis);
+            logger.info("Publish Date : "+PublishDate.toString());
+
+            int result = 0;
+            String updateQuery = "UPDATE WORKFLOW_TABLE SET \"WORKFLOW_END_DATE\" = ?, \"REVIEW_DATE\" = ?, \"APPROVAL_DATE\" = ?, \"COUNT_REJECT_REVIEW\" = ?, \"COUNT_REJECT_APPROVE\" = ?, \"PUBLISH_DATE\" = ?, \"WORKFLOW_STATUS\" = ?, \"FILE_STATUS\" = ?, \"WORKFLOW_COMMENTS\" = ? WHERE \"WORKFLOW_ID\" = ? AND \"CONTENT_PATH\" = ?";
+            logger.info("updateQuery : " + updateQuery);
+
+            connection.setAutoCommit(true);
+            preparedStatement = connection.prepareStatement(updateQuery);
+            preparedStatement.setTimestamp(1, PublishDate);
+            preparedStatement.setTimestamp(2, reviewedDate);
+            preparedStatement.setTimestamp(3, approvalDate);
+            preparedStatement.setLong(4,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
+            preparedStatement.setLong(5,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+            preparedStatement.setTimestamp(6, PublishDate);
+            preparedStatement.setString(7,jobStatus);
+            preparedStatement.setString(8,fileStatus);
+            preparedStatement.setString(9,commentStr);
+            preparedStatement.setLong(10,taskObj.getWorkflowId());
+            preparedStatement.setString(11,getTaskFilePath(taskSimpleFile));
+
+            logger.info("updateData preparedStatement : " + preparedStatement);
+            result = preparedStatement.executeUpdate();
+            logger.info("updateQuery result : " + result);
+            if (result > 0) {
+                isDataUpdated = true;
+            }
+        }catch (NumberFormatException | SQLException e) {
+            logger.error("NumberFormatException/SQL Exception in updateData: ", e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Exception in updateData: ", e);
+        } finally {
+            postgre.releaseConnection(connection, preparedStatement, null);
+            logger.info("Released updateData connection");
+        }
+        return isDataUpdated;
     }
 
     public int getRejectCount(String rejectDateString){
