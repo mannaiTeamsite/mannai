@@ -3,10 +3,6 @@ package com.hukoomi.livesite.external;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -15,7 +11,7 @@ import org.dom4j.Element;
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.SolrQueryUtil;
-import com.hukoomi.utils.UserInfoSession;
+
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class HukoomiExternal {
@@ -70,8 +66,7 @@ public class HukoomiExternal {
 		}
 		logger.debug("Before calling : " + doc);
 		
-		UserInfoSession inf = new UserInfoSession();		
-		doc = inf.getUserData(context, doc);
+		
 		logger.info("Document" + doc.asXML());
 
 		return doc;
