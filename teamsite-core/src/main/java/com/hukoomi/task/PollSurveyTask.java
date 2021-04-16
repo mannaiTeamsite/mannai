@@ -233,6 +233,8 @@ public class PollSurveyTask implements CSURLExternalTask {
 
         postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
         statusMap = new HashMap<>();
+        statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+        statusMap.put(TRANSITION_COMMENT, "");
         
         
         for (CSAreaRelativePath taskFilePath : taskFileList) {
@@ -242,7 +244,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 String fileName = file.getName();
                 logger.debug("File Name : " + fileName);
                 
-                if(file instanceof CSHoleImpl) {
+                if (file.getKind() == CSHole.KIND) {
                     CSHoleImpl taskHoleFile = (CSHoleImpl) file;
                     
                     String comment = taskHoleFile.getRevisionComment();
@@ -273,14 +275,12 @@ public class PollSurveyTask implements CSURLExternalTask {
                             }else {
                                 logger.debug(
                                         "Deleted status update skipped - Not Polls or Survey DCR");
-                                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-                                statusMap.put(TRANSITION_COMMENT, "");
                             }
+                        }else {
+                            logger.info("PollSurveyTask - DCR Type metadata is null");
                         }
                     }else {
-                        logger.debug("PollSurveyTask - Renamed moved file");
-                        statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-                        statusMap.put(TRANSITION_COMMENT, "");
+                        logger.info("PollSurveyTask - Renamed moved file");
                     }
                     
                 }else {
@@ -304,14 +304,14 @@ public class PollSurveyTask implements CSURLExternalTask {
                             statusMap = (HashMap<String, String>) blog.processBlogDCR(
                                     taskSimpleFile,postgre);
                         } else {
-                            logger.debug(
+                            logger.info(
                                     "Master data insert skipped - Not Polls or Survey DCR");
-                            statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-                            statusMap.put(TRANSITION_COMMENT, "");
                         }
+                    }else {
+                        logger.info("PollSurveyTask - DCR Type metadata is null");
                     }
                 }
-
+                
             } catch (Exception e) {
                 logger.error("Exception in execute: ", e);
             }
