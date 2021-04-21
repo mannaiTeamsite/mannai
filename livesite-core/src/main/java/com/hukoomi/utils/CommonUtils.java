@@ -271,6 +271,8 @@ public class CommonUtils {
                 image = ImageIO.read(new File(imageSourcePath));
             } catch (IOException ex) {
                 logger.error("Error while Retrieving Image File.",ex);
+            } catch (IllegalArgumentException ex) {
+                logger.error("Illegal Argument Exception while getting dimensions for Image", ex);
             }
             if(image != null) {
                 dimensions.put("width", image.getWidth());
