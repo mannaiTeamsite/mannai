@@ -40,10 +40,9 @@ public class FeedbackExternal {
     private String entity = "";
     private String gRecaptchaResponse = null;
     private String table = "";
-
     private int topSearchLimit;
-
     private static final Logger logger = Logger.getLogger(FeedbackExternal.class);
+
     Postgre postgre = null;
 
     public Document insertFeedback(final RequestContext context) {
@@ -54,11 +53,10 @@ public class FeedbackExternal {
         String status="valid";
         postgre = new Postgre(context);
         gRecaptchaResponse = context.getParameterString("captcha");
-
         HttpSession session = context.getRequest().getSession(true);
         status=(String) session.getAttribute("status");
         logger.info("status="+status);
-        if(status.equals("valid")) {
+        if(status!=null && status.equals("valid")) {
             userID = (String) session.getAttribute("uid");
         }
         if(userID=="")
