@@ -131,7 +131,7 @@ public class PollsExternal {
         logger.info("isValidInput : " + isValidInput);
         if (isValidInput) {
 
-            logger.info("PollsBO : " + pollsBO);
+            logger.debug("PollsBO : " + pollsBO);
             postgre = new Postgre(context);
             HukoomiExternal he = new HukoomiExternal();
 
@@ -158,7 +158,7 @@ public class PollsExternal {
                 doc.addElement("PollResult").addElement(RESULT);
             }
         }
-        logger.info("Final Result :" + doc.asXML());
+        logger.debug("Final Result :" + doc.asXML());
         return doc;
 
     }
@@ -197,7 +197,7 @@ public class PollsExternal {
         boolean isPollVoted = false;
 
         logger.info("isPollVoted()");
-        logger.info("isPollVoted - PollId : " + pollsBO.getPollId()
+        logger.debug("isPollVoted - PollId : " + pollsBO.getPollId()
                 + "\nUserId : " + pollsBO.getUserId() + "\nIpAddress : "
                 + pollsBO.getIpAddress());
         StringBuilder checkVotedQuery = new StringBuilder(
@@ -210,7 +210,7 @@ public class PollsExternal {
                 && !"".equals(pollsBO.getIpAddress())) {
             checkVotedQuery.append("AND IP_ADDRESS = ? ");
         }
-        logger.info("checkVotedQuery ::" + checkVotedQuery.toString());
+        logger.debug("checkVotedQuery ::" + checkVotedQuery.toString());
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -258,10 +258,10 @@ public class PollsExternal {
 
         doc = he.getLandingContent(context);
 
-        logger.info("doc : " + doc.asXML());
+        logger.debug("doc : " + doc.asXML());
 
         String pollIdSFromDoc = getPollIdSFromDoc(doc);
-        logger.info("past pollIdSFromDoc : " + pollIdSFromDoc);
+        logger.debug("past pollIdSFromDoc : " + pollIdSFromDoc);
 
         if (pollIdSFromDoc != null && !"".equals(pollIdSFromDoc.trim())) {
             pollsBO.setPollId(pollIdSFromDoc);
@@ -292,10 +292,10 @@ public class PollsExternal {
 
         doc = he.getLandingContent(context);
 
-        logger.info("current doc : " + doc.asXML());
+        logger.debug("current doc : " + doc.asXML());
 
         String pollIdSFromDoc = getPollIdSFromDoc(doc);
-        logger.info("current pollIdSFromDoc : " + pollIdSFromDoc);
+        logger.debug("current pollIdSFromDoc : " + pollIdSFromDoc);
 
         if (StringUtils.isNotBlank(pollIdSFromDoc)) {
 
@@ -343,7 +343,7 @@ public class PollsExternal {
                 Entry<String, List<Map<String, String>>> entry = iterator
                         .next();
                 List<Map<String, String>> optList = entry.getValue();
-                logger.info((entry.getKey() + ":" + entry.getValue()));
+                logger.debug((entry.getKey() + ":" + entry.getValue()));
                 Element pollresult = votedpolls.addElement("pollresult");
                 pollresult.setAttributeValue("pollId", entry.getKey());
 
@@ -397,14 +397,14 @@ public class PollsExternal {
     public Document addResultToXml(Document doc,
             Map<String, List<Map<String, String>>> response) {
         logger.info("addResultToXml()");
-        logger.info("Received Doc :" + doc.asXML());
+        logger.debug("Received Doc :" + doc.asXML());
         try {
             List<Node> nodes = doc
                     .selectNodes("/SolrResponse/response/docs");
-            logger.info("Nodes::" + nodes);
+            logger.debug("Nodes::" + nodes);
             for (Node node : nodes) {
                 String sPollId = node.selectSingleNode("id").getText();
-                logger.info("sPollId" + sPollId);
+                logger.debug("sPollId" + sPollId);
                 if (response != null && response.containsKey(sPollId)) {
                     List<Map<String, String>> responseMap = response
                             .get(sPollId);
@@ -522,7 +522,7 @@ public class PollsExternal {
      * @param connection Connection Object.
      */
     public void insertPollResponse(PollsBO pollsBO, Postgre postgre) {
-        logger.debug("PollsExternal : insertPollResponse");
+        logger.info("PollsExternal : insertPollResponse");
         String pollResponseQuery = "INSERT INTO POLL_RESPONSE (POLL_ID, "
                 + "OPTION_ID, USER_ID, IP_ADDRESS, LANG, VOTED_FROM, "
                 + "USER_AGENT, VOTED_ON) VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP)";
@@ -568,13 +568,13 @@ public class PollsExternal {
         logger.info("getPollResponse()");
 
         String pollQuery = null;
-        logger.info("lang:: " + pollsBO.getLang());
+        logger.debug("lang:: " + pollsBO.getLang());
         if (pollsBO.getLang().equalsIgnoreCase("en")) {
             pollQuery = "SELECT * FROM vw_poll_stats_en WHERE poll_id = ANY(?)";
         } else {
             pollQuery = "SELECT * FROM vw_poll_stats_ar WHERE poll_id = ANY(?)";
         }
-        logger.info("Poll Query ::" + pollQuery);
+        logger.debug("Poll Query ::" + pollQuery);
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -591,7 +591,7 @@ public class PollsExternal {
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
 
-                logger.info("Option Value::" + rs.getString(OPTION_VALUE));
+                logger.debug("Option Value::" + rs.getString(OPTION_VALUE));
 
                 List<Map<String, String>> pollOptList = null;
                 Map<String, String> pollMap = new HashMap<>();
@@ -620,7 +620,7 @@ public class PollsExternal {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
-        logger.info("Poll Result Map :: " + pollsResultMap.toString());
+        logger.debug("Poll Result Map :: " + pollsResultMap.toString());
         return pollsResultMap;
 
     }
@@ -648,7 +648,7 @@ public class PollsExternal {
                 && !"".equals(pollsBO.getIpAddress())) {
             checkVotedQuery.append("AND IP_ADDRESS = ? ");
         }
-        logger.info("checkVotedQuery ::" + checkVotedQuery.toString());
+        logger.debug("checkVotedQuery ::" + checkVotedQuery.toString());
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -670,7 +670,7 @@ public class PollsExternal {
             while (rs.next()) {
                 votedPollIds.add(rs.getString(POLL_ID));
             }
-            logger.info("Voteed Polls : " + votedPollIds.toString());
+            logger.debug("Voteed Polls : " + votedPollIds.toString());
 
         } catch (Exception e) {
             logger.error("Exception in checkResponseData", e);
@@ -708,7 +708,7 @@ public class PollsExternal {
 
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(
                 context);
-        logger.info(POLL_ACTION + " >>>"
+        logger.debug(POLL_ACTION + " >>>"
                 + context.getParameterString(POLL_ACTION) + "<<<");
         if (!validate.checkNull(context.getParameterString(POLL_ACTION))) {
             if (validate.isValidPattern(
@@ -720,7 +720,7 @@ public class PollsExternal {
             }
         }
 
-        logger.info(LOCALE + " >>>" + context.getParameterString(LOCALE)
+        logger.debug(LOCALE + " >>>" + context.getParameterString(LOCALE)
                 + "<<<");
         if (!validate.checkNull(context.getParameterString(LOCALE))) {
             if (validate.isValidPattern(context.getParameterString(LOCALE),
@@ -731,22 +731,22 @@ public class PollsExternal {
             }
         }
 
-        logger.info(USER_ID + " >>>" + context.getParameterString(USER_ID)
+        logger.debug(USER_ID + " >>>" + context.getParameterString(USER_ID)
                 + "<<<");
         if (!validate.checkNull(context.getParameterString(USER_ID))) {
             if (validate.isValidPattern(
                     context.getParameterString(USER_ID),
                     Validator.USER_ID)) {
-                logger.info("user_id 1");
+                logger.debug("user_id 1");
                 pollsBO.setUserId(context.getParameterString(USER_ID));
-                logger.info("user_id 2");
+                logger.debug("user_id 2");
             } else {
-                logger.info("user_id else");
+                logger.debug("user_id else");
                 return false;
             }
         }
 
-        logger.info("ipaddress >>>"
+        logger.debug("ipaddress >>>"
                 + requestHeaderUtils.getClientIpAddress() + "<<<");
         if (!validate.checkNull(requestHeaderUtils.getClientIpAddress())) {
             if (validate.isValidPattern(
@@ -761,7 +761,7 @@ public class PollsExternal {
 
         pollsBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
 
-        logger.info(VOTED_FROM + " >>>"
+        logger.debug(VOTED_FROM + " >>>"
                 + context.getParameterString(VOTED_FROM) + "<<<");
         if (!validate.checkNull(context.getParameterString(VOTED_FROM))) {
             if (validate.isValidPattern(
@@ -774,7 +774,7 @@ public class PollsExternal {
             }
         }
 
-        logger.info(POLLID + " >>>" + context.getParameterString(POLLID)
+        logger.debug(POLLID + " >>>" + context.getParameterString(POLLID)
                 + "<<<");
         if (!validate.checkNull(context.getParameterString(POLLID))) {
             if (validate.isValidPattern(context.getParameterString(POLLID),
@@ -784,7 +784,7 @@ public class PollsExternal {
                 return false;
             }
         }
-        logger.info(CURRENT_POLL_ROWS + " >>>"
+        logger.debug(CURRENT_POLL_ROWS + " >>>"
                 + context.getParameterString(CURRENT_POLL_ROWS) + "<<<");
         if (!validate.checkNull(
                 context.getParameterString(CURRENT_POLL_ROWS))) {
@@ -798,7 +798,7 @@ public class PollsExternal {
             }
         }
 
-        logger.info(PAST_POLL_ROWS + " >>>"
+        logger.debug(PAST_POLL_ROWS + " >>>"
                 + context.getParameterString(PAST_POLL_ROWS) + "<<<");
         if (!validate
                 .checkNull(context.getParameterString(PAST_POLL_ROWS))) {
@@ -818,7 +818,7 @@ public class PollsExternal {
                 getContentName(context.getParameterString(POLLS_GROUP)));
         }
 
-        logger.info(OPTION + " >>>" + context.getParameterString(OPTION)
+        logger.debug(OPTION + " >>>" + context.getParameterString(OPTION)
                 + "<<<");
         if (!validate.checkNull(context.getParameterString(OPTION))) {
             if (validate.isValidPattern(context.getParameterString(OPTION),
@@ -830,7 +830,7 @@ public class PollsExternal {
             }
         }
 
-        logger.info(POLL_GROUP_CATEGORY + " >>>"
+        logger.debug(POLL_GROUP_CATEGORY + " >>>"
                 + context.getParameterString(POLL_GROUP_CATEGORY) + "<<<");
         if (!validate.checkNull(
                 context.getParameterString(POLL_GROUP_CATEGORY))) {
@@ -844,7 +844,7 @@ public class PollsExternal {
             }
         }
 
-        logger.info(POLL_CATEGORY + " >>>"
+        logger.debug(POLL_CATEGORY + " >>>"
                 + context.getParameterString(POLL_CATEGORY) + "<<<");
         if (!validate
                 .checkNull(context.getParameterString(POLL_CATEGORY))) {
@@ -858,7 +858,7 @@ public class PollsExternal {
             }
         }
 
-        logger.info(SOLR_POLL_CATEGORY + " >>>"
+        logger.debug(SOLR_POLL_CATEGORY + " >>>"
                 + context.getParameterString(SOLR_POLL_CATEGORY) + "<<<");
         if (!validate.checkNull(
                 context.getParameterString(SOLR_POLL_CATEGORY))) {
@@ -907,42 +907,42 @@ public class PollsExternal {
         //TODO: Field length needs to be validated against content model and database. 
         
         String pollAction = context.getParameterString(POLL_ACTION);
-        logger.info(POLL_ACTION + " >>>"+pollAction+"<<<");
+        logger.debug(POLL_ACTION + " >>>"+pollAction+"<<<");
         validData  = ESAPI.validator().getValidInput(POLL_ACTION, pollAction, ESAPIValidator.ALPHABET, 20, false, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setAction(validData);
         }else {
-            logger.info(errorList.getError(POLL_ACTION));
+            logger.debug(errorList.getError(POLL_ACTION));
             return false;
         }
         
         String locale = context.getParameterString(LOCALE, "en");
-        logger.info(LOCALE + " >>>" +locale+ "<<<");
+        logger.debug(LOCALE + " >>>" +locale+ "<<<");
         validData  = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setLang(validData);
         }else {
-            logger.info(errorList.getError(LOCALE));
+            logger.debug(errorList.getError(LOCALE));
             return false;
         }
         
         String userID = context.getParameterString(USER_ID);
-        logger.info(USER_ID + " >>>" +userID+ "<<<");
+        logger.debug(USER_ID + " >>>" +userID+ "<<<");
         validData  = ESAPI.validator().getValidInput(USER_ID, userID, ESAPIValidator.USER_ID, 50, true, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setUserId(validData);
         }else {
-            logger.info(errorList.getError(USER_ID));
+            logger.debug(errorList.getError(USER_ID));
             return false;
         }
         
         String ipAddress = requestHeaderUtils.getClientIpAddress();
-        logger.info("ipaddress >>>" +ipAddress+ "<<<");
+        logger.debug("ipaddress >>>" +ipAddress+ "<<<");
         validData  = ESAPI.validator().getValidInput("IPAddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setIpAddress(validData);
         }else {
-            logger.info(errorList.getError("IPAddress"));
+            logger.debug(errorList.getError("IPAddress"));
             return false;
         }
         
@@ -950,24 +950,24 @@ public class PollsExternal {
         
         if(ACTION_CURRENT_POLLS.equalsIgnoreCase(pollAction)) {
             String currentPollRows = context.getParameterString(CURRENT_POLL_ROWS);
-            logger.info(CURRENT_POLL_ROWS + " >>>" +currentPollRows+ "<<<");
+            logger.debug(CURRENT_POLL_ROWS + " >>>" +currentPollRows+ "<<<");
             validData  = ESAPI.validator().getValidInput(CURRENT_POLL_ROWS, currentPollRows, ESAPIValidator.NUMERIC, 2, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setCurrentPollsPerPage(validData);
             }else {
-                logger.info(errorList.getError(CURRENT_POLL_ROWS));
+                logger.debug(errorList.getError(CURRENT_POLL_ROWS));
                 return false;
             }
         }
         
         if(ACTION_PAST_POLLS.equalsIgnoreCase(pollAction)) {
             String pastPollRows = context.getParameterString(PAST_POLL_ROWS);
-            logger.info(PAST_POLL_ROWS + " >>>" +pastPollRows+ "<<<");
+            logger.debug(PAST_POLL_ROWS + " >>>" +pastPollRows+ "<<<");
             validData  = ESAPI.validator().getValidInput(PAST_POLL_ROWS, pastPollRows, ESAPIValidator.NUMERIC, 2, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setPastPollsPerPage(validData);
             }else {
-                logger.info(errorList.getError(PAST_POLL_ROWS));
+                logger.debug(errorList.getError(PAST_POLL_ROWS));
                 return false;
             }
         }
@@ -975,32 +975,32 @@ public class PollsExternal {
         if(ACTION_VOTE.equalsIgnoreCase(pollAction)) {
             
             String pollId = context.getParameterString(POLLID);
-            logger.info(POLLID + " >>>" +pollId+ "<<<");
+            logger.debug(POLLID + " >>>" +pollId+ "<<<");
             validData  = ESAPI.validator().getValidInput(POLLID, pollId, ESAPIValidator.NUMERIC, 200, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setPollId(validData);
             }else {
-                logger.info(errorList.getError(POLLS_GROUP));
+                logger.debug(errorList.getError(POLLS_GROUP));
                 return false;
             }
             
             String option = context.getParameterString(OPTION);
-            logger.info(OPTION + " >>>" +option+ "<<<");
+            logger.debug(OPTION + " >>>" +option+ "<<<");
             validData  = ESAPI.validator().getValidInput(OPTION, option, ESAPIValidator.NUMERIC, 2, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setSelectedOption(validData);
             }else {
-                logger.info(errorList.getError(OPTION));
+                logger.debug(errorList.getError(OPTION));
                 return false;
             }
             
             String votedFrom = context.getParameterString(VOTED_FROM);
-            logger.info(VOTED_FROM + " >>>" +votedFrom+ "<<<");
+            logger.debug(VOTED_FROM + " >>>" +votedFrom+ "<<<");
             validData  = ESAPI.validator().getValidInput(VOTED_FROM, votedFrom, ESAPIValidator.ALPHABET, 150, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setVotedFrom(validData);
             }else {
-                logger.info(errorList.getError(VOTED_FROM));
+                logger.debug(errorList.getError(VOTED_FROM));
                 return false;
             }
         }
@@ -1008,38 +1008,38 @@ public class PollsExternal {
         if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
             
             String pollsGroup = context.getParameterString(POLLS_GROUP);
-            logger.info(POLLS_GROUP + " >>>" +pollsGroup+ "<<<");
+            logger.debug(POLLS_GROUP + " >>>" +pollsGroup+ "<<<");
             if (!ESAPIValidator.checkNull(pollsGroup)) {
                 pollsBO.setGroup(getContentName(pollsGroup));
             }
             
             String pollGroupCategory = context.getParameterString(POLL_GROUP_CATEGORY);
-            logger.info(POLL_GROUP_CATEGORY + " >>>" +pollGroupCategory+ "<<<");
+            logger.debug(POLL_GROUP_CATEGORY + " >>>" +pollGroupCategory+ "<<<");
             validData  = ESAPI.validator().getValidInput(POLL_GROUP_CATEGORY, pollGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setGroupCategory(validData);
             }else {
-                logger.info(errorList.getError(POLL_GROUP_CATEGORY));
+                logger.debug(errorList.getError(POLL_GROUP_CATEGORY));
                 return false;
             }
             
             String pollCategory = context.getParameterString(POLL_CATEGORY);
-            logger.info(POLL_CATEGORY + " >>>" +pollCategory+ "<<<");
+            logger.debug(POLL_CATEGORY + " >>>" +pollCategory+ "<<<");
             validData  = ESAPI.validator().getValidInput(POLL_CATEGORY, pollCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setCategory(validData);
             }else {
-                logger.info(errorList.getError(POLL_CATEGORY));
+                logger.debug(errorList.getError(POLL_CATEGORY));
                 return false;
             }
             
             String solrPollCategory = context.getParameterString(SOLR_POLL_CATEGORY);
-            logger.info(SOLR_POLL_CATEGORY + " >>>" +solrPollCategory+ "<<<");
+            logger.debug(SOLR_POLL_CATEGORY + " >>>" +solrPollCategory+ "<<<");
             validData  = ESAPI.validator().getValidInput(SOLR_POLL_CATEGORY, solrPollCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setSolrCategory(validData);
             }else {
-                logger.info(errorList.getError(SOLR_POLL_CATEGORY));
+                logger.debug(errorList.getError(SOLR_POLL_CATEGORY));
                 return false;
             } 
             

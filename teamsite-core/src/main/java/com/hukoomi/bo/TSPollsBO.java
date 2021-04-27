@@ -94,6 +94,10 @@ public class TSPollsBO {
      * Poll Topics
      */
     private String topics;
+    /**
+     * File Name
+     */
+    private String fileName;
 
     /**
      * Getter method to get poll action
@@ -453,6 +457,14 @@ public class TSPollsBO {
         this.topics = topics;
     }
 
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
     /**
      * Overrides the toString method to print the business objects values
      * 
@@ -460,18 +472,27 @@ public class TSPollsBO {
      */
     @Override
     public String toString() {
-        return "PollsBO [action=" + action + ", pollId=" + pollId
-                + ", lang=" + lang + ", userId=" + userId + ", userAgent="
-                + userAgent + ", ipAddress=" + ipAddress + ", startDate="
-                + startDate + ", endDate=" + endDate + ", persona="
-                + persona + ", votedOn=" + votedOn + ", votedFrom="
-                + votedFrom + ", question=" + question
-                + ", selectedOption=" + selectedOption
-                + ", currentPollsPerPage=" + currentPollsPerPage
-                + ", pastPollsPerPage=" + pastPollsPerPage + ", group="
-                + group + ", groupCategory=" + groupCategory
-                + ", category=" + category + ", solrCategory="
-                + solrCategory + ", serviceEntities=" + serviceEntities
-                + ", topics=" + topics + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("TSPollsBO [action=").append(action)
+                .append(", pollId=").append(pollId).append(", lang=")
+                .append(lang).append(", userId=").append(userId)
+                .append(", userAgent=").append(userAgent)
+                .append(", ipAddress=").append(ipAddress)
+                .append(", startDate=").append(startDate)
+                .append(", endDate=").append(endDate).append(", persona=")
+                .append(persona).append(", votedOn=").append(votedOn)
+                .append(", votedFrom=").append(votedFrom)
+                .append(", question=").append(question)
+                .append(", selectedOption=").append(selectedOption)
+                .append(", currentPollsPerPage=")
+                .append(currentPollsPerPage).append(", pastPollsPerPage=")
+                .append(pastPollsPerPage).append(", group=").append(group)
+                .append(", groupCategory=").append(groupCategory)
+                .append(", category=").append(category)
+                .append(", solrCategory=").append(solrCategory)
+                .append(", serviceEntities=").append(serviceEntities)
+                .append(", topics=").append(topics).append(", fileName=")
+                .append(fileName).append("]");
+        return builder.toString();
     }
 }

@@ -103,6 +103,23 @@ public class TSSurveyBO {
      * Submit Type
      */
     private String submitType;
+    /**
+     * Estimated Time
+     */
+    private String estimatedTime;
+    /**
+     * File Name
+     */
+    private String fileName;
+    /**
+     * Survey Master Id
+     */
+    private Long surveyMasterId;
+    /**
+     * Survey Question Id
+     */
+    private Long surveyQuestionId;
+    
 
     /**
      * Getter method to get survey action
@@ -506,6 +523,38 @@ public class TSSurveyBO {
         this.submitType = submitType;
     }
 
+    public String getEstimatedTime() {
+        return estimatedTime;
+    }
+
+    public void setEstimatedTime(String estimatedTime) {
+        this.estimatedTime = estimatedTime;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public Long getSurveyMasterId() {
+        return surveyMasterId;
+    }
+
+    public void setSurveyMasterId(Long surveyMasterId) {
+        this.surveyMasterId = surveyMasterId;
+    }
+
+    public Long getSurveyQuestionId() {
+        return surveyQuestionId;
+    }
+
+    public void setSurveyQuestionId(Long surveyQuestionId) {
+        this.surveyQuestionId = surveyQuestionId;
+    }
+
     /**
      * Overrides the toString method to print the business objects values
      * 
@@ -513,19 +562,32 @@ public class TSSurveyBO {
      */
     @Override
     public String toString() {
-        return "SurveyBO [action=" + action + ", surveyId=" + surveyId
-                + ", lang=" + lang + ", userId=" + userId + ", userAgent="
-                + userAgent + ", ipAddress=" + ipAddress + ", startDate="
-                + startDate + ", endDate=" + endDate + ", persona="
-                + persona + ", takenOn=" + takenOn + ", takenFrom="
-                + takenFrom + ", totalQuestions=" + totalQuestions
-                + ", captchaResponse=" + captchaResponse + ", group="
-                + group + ", title=" + title + ", description="
-                + description + ", questionId=" + questionId
-                + ", questionNo=" + questionNo + ", groupCategory="
-                + groupCategory + ", category=" + category
-                + ", solrCategory=" + solrCategory + ", serviceEntities="
-                + serviceEntities + ", topics=" + topics + ", submitType="
-                + submitType + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("TSSurveyBO [action=").append(action)
+                .append(", surveyId=").append(surveyId).append(", lang=")
+                .append(lang).append(", userId=").append(userId)
+                .append(", userAgent=").append(userAgent)
+                .append(", ipAddress=").append(ipAddress)
+                .append(", startDate=").append(startDate)
+                .append(", endDate=").append(endDate).append(", persona=")
+                .append(persona).append(", takenOn=").append(takenOn)
+                .append(", takenFrom=").append(takenFrom)
+                .append(", totalQuestions=").append(totalQuestions)
+                .append(", captchaResponse=").append(captchaResponse)
+                .append(", group=").append(group).append(", title=")
+                .append(title).append(", description=").append(description)
+                .append(", questionId=").append(questionId)
+                .append(", questionNo=").append(questionNo)
+                .append(", groupCategory=").append(groupCategory)
+                .append(", category=").append(category)
+                .append(", solrCategory=").append(solrCategory)
+                .append(", serviceEntities=").append(serviceEntities)
+                .append(", topics=").append(topics).append(", submitType=")
+                .append(submitType).append(", estimatedTime=")
+                .append(estimatedTime).append(", fileName=")
+                .append(fileName).append(", surveyMasterId=")
+                .append(surveyMasterId).append(", surveyQuestionId=")
+                .append(surveyQuestionId).append("]");
+        return builder.toString();
     }
 }

@@ -1,16 +1,15 @@
 package com.hukoomi.task;
 
-import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -20,28 +19,17 @@ import org.dom4j.Node;
 import com.hukoomi.bo.TSPollsBO;
 import com.hukoomi.bo.TSSurveyBO;
 import com.hukoomi.utils.PostgreTSConnection;
-import com.interwoven.cssdk.access.CSAuthorizationException;
-import com.interwoven.cssdk.access.CSExpiredSessionException;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
-import com.interwoven.cssdk.common.CSObjectNotFoundException;
-import com.interwoven.cssdk.common.CSRemoteException;
-import com.interwoven.cssdk.common.CSUnsupportedOpException;
-import com.interwoven.cssdk.filesys.CSArea;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
 import com.interwoven.cssdk.filesys.CSBranch;
-import com.interwoven.cssdk.filesys.CSDir;
 import com.interwoven.cssdk.filesys.CSEdition;
 import com.interwoven.cssdk.filesys.CSFile;
 import com.interwoven.cssdk.filesys.CSHole;
-import com.interwoven.cssdk.filesys.CSReadOnlyFileSystemException;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
-import com.interwoven.cssdk.filesys.CSSubmitRecord;
-import com.interwoven.cssdk.filesys.CSVPath;
+import com.interwoven.cssdk.filesys.impl.CSHoleImpl;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
-import com.interwoven.cssdk.filesys.impl.CSHoleImpl;
-import com.interwoven.cssdk.filesys.pvt.CSAssetData;
 
 /**
  * PollSurveyTask is the workflow task class for polls and survey master data
@@ -119,6 +107,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      * XPath to the survey form field
      */
     public static final String FIELD_PATH = "/root/form-field";
+    /**
+     * XPath to the option field
+     */
+    public static final String OPTION_FIELD_PATH = "/root/options/option-field/option";
+    /**
+     * XPath to the estimated time
+     */
+    public static final String ESTIMATED_TIME = "/root/details/estimatedTime";
     /**
      * Success transition message
      */
@@ -212,9 +208,17 @@ public class PollSurveyTask implements CSURLExternalTask {
      */
     private static final String BLOG_CONTENT_TYPE = "Content/Blog";
     /**
+     * Dynamic Survey Content type
+     */
+    private static final String DYNAMIC_SURVEY_CONTENT_TYPE = "Content/Dynamic-Survey";
+    /**
      * Postgre class instance variable
      */
     PostgreTSConnection postgre = null;
+    /**
+     * Options List array contains the list of field type which has options
+     */
+    ArrayList optionsList = new ArrayList<>();
 
     /**
      * Overridden method from CSSDK
@@ -235,7 +239,6 @@ public class PollSurveyTask implements CSURLExternalTask {
         statusMap = new HashMap<>();
         statusMap.put(TRANSITION, SUCCESS_TRANSITION);
         statusMap.put(TRANSITION_COMMENT, "");
-        
         
         for (CSAreaRelativePath taskFilePath : taskFileList) {
             try {
@@ -271,7 +274,16 @@ public class PollSurveyTask implements CSURLExternalTask {
                                 logger.info("doc of hole file : "+doc.asXML());
                                 String surveyId = getDCRValue(doc, ID_PATH);
                                 String lang = getDCRValue(doc, LANG_PATH);
-                                statusMap = (HashMap<String, String>) updateDeleteSurveyMasterData(surveyId, lang, postgre.getConnection());
+                                statusMap = (HashMap<String, String>) updateDeleteSurveyMasterData(
+                                        surveyId, lang, postgre.getConnection());
+                            } else if (DYNAMIC_SURVEY_CONTENT_TYPE
+                                    .equalsIgnoreCase(dcrType)) {
+                                Document doc = getTaskDocument(csSimpleTaskFile);
+                                logger.debug("doc of hole file : "+doc.asXML());
+                                String surveyId = getDCRValue(doc, ID_PATH);
+                                String lang = getDCRValue(doc, LANG_PATH);
+                                statusMap = (HashMap<String, String>) updateDeleteDynamicSurveyMasterData(
+                                        surveyId, lang, postgre.getConnection());
                             }else {
                                 logger.debug(
                                         "Deleted status update skipped - Not Polls or Survey DCR");
@@ -297,12 +309,18 @@ public class PollSurveyTask implements CSURLExternalTask {
                                     taskSimpleFile);
                         } else if (SURVEY_CONTENT_TYPE
                                 .equalsIgnoreCase(dcrType)) {
+                            setOptionFieldTypes();
                             statusMap = (HashMap<String, String>) processSurveyDCR(
                                     taskSimpleFile);
                         } else if (BLOG_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
                             BlogTask blog = new BlogTask();
                             statusMap = (HashMap<String, String>) blog.processBlogDCR(
                                     taskSimpleFile,postgre);
+                        } else if (DYNAMIC_SURVEY_CONTENT_TYPE
+                            .equalsIgnoreCase(dcrType)) {
+                            setOptionFieldTypes();
+                            statusMap = (HashMap<String, String>) processDynamicSurveyDCR(
+                                taskSimpleFile);
                         } else {
                             logger.info(
                                     "Master data insert skipped - Not Polls or Survey DCR");
@@ -317,11 +335,22 @@ public class PollSurveyTask implements CSURLExternalTask {
             }
         }
 
-        logger.debug("transition : " + statusMap.get(TRANSITION));
-        logger.debug("transitionComment : "
+        logger.info("transition : " + statusMap.get(TRANSITION));
+        logger.info("transitionComment : "
                 + statusMap.get(TRANSITION_COMMENT));
         task.chooseTransition(statusMap.get(TRANSITION),
                 statusMap.get(TRANSITION_COMMENT));
+    }
+    
+    
+    private void setOptionFieldTypes() {
+        logger.info("PollSurveyTask - setOptionFieldTypes");
+        if(optionsList != null) {
+            optionsList.add("radio");
+            optionsList.add("checkbox");
+            optionsList.add("singleselect");
+            optionsList.add("multiselect");
+        }
     }
     
     
@@ -329,32 +358,32 @@ public class PollSurveyTask implements CSURLExternalTask {
         CSSimpleFile taskFile = null;
         logger.info("PollSurveyTask - getDeletedFile");
         try {
-            logger.error("Task file kind : "+taskHoleFile.getKind());
+            logger.debug("Task file kind : "+taskHoleFile.getKind());
             if (taskHoleFile.getKind() == CSHole.KIND) {
                 CSHole hole = (CSHole) taskHoleFile;
-                logger.error("Task file prvious kind : "+hole.getPreviousKind());
+                logger.debug("Task file prvious kind : "+hole.getPreviousKind());
                 if(hole.getPreviousKind() == CSSimpleFile.KIND) {
                     CSBranch branch = hole.getRevisionBranch();
                     //logger.error("branch : "+branch);
                     CSEdition[] editions =  branch.getEditions(true, false, 999999);
                     //logger.error("editions length : "+editions.length);
                     CSEdition edition = null;
-                    logger.error("File creation time : "+hole.getCreationDate().getTime());
+                    logger.debug("File creation time : "+hole.getCreationDate().getTime());
                     for (CSEdition ed : editions) {
-                        logger.error("Edtion creation time : "+ed.getCreationDate().getTime());
+                        logger.debug("Edtion creation time : "+ed.getCreationDate().getTime());
                         if (hole.getCreationDate().getTime() > ed.getCreationDate().getTime()) {
                             edition = ed;
                             break;
                         }
                     }
                     String areaRelativePath = taskHoleFile.getAreaRelativePath();
-                    logger.error("areaRelativePath : "+areaRelativePath);
+                    logger.debug("areaRelativePath : "+areaRelativePath);
                     CSAreaRelativePath caAreaRelativePath = new CSAreaRelativePath(areaRelativePath);
                     CSFile file = edition.getFile(caAreaRelativePath);
                     if (file.getKind() == CSHole.KIND) {
-                        logger.error("Deleted File");
+                        logger.info("Deleted File");
                     }else if (file.getKind() == CSSimpleFile.KIND) {
-                        logger.error("Simple File");
+                        logger.info("Simple File");
                         taskFile = (CSSimpleFile)file;                        
                     }
                 }
@@ -375,13 +404,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      */
     public Map<String, String> processPollDCR(
             CSSimpleFile taskSimpleFile) {
+        logger.info("PollSurveyTask : processPollDCR");
         boolean isDBOperationSuccess = false;
         HashMap<String, String> statusMap = new HashMap<>();
         try {
             Document document = getTaskDocument(taskSimpleFile);
             if (isPollMasterDataAvailable(document)) {
                 isDBOperationSuccess = updatePollData(document, taskSimpleFile.getName());
-                logger.debug(
+                logger.info(
                         "isPollDataUpdated : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
                     statusMap.put(TRANSITION, SUCCESS_TRANSITION);
@@ -392,7 +422,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 }
             } else {
                 isDBOperationSuccess = insertPollData(document, taskSimpleFile.getName());
-                logger.debug(
+                logger.info(
                         "isPollDataInserted : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
                     statusMap.put(TRANSITION, SUCCESS_TRANSITION);
@@ -419,13 +449,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      */
     public Map<String, String> processSurveyDCR(
             CSSimpleFile taskSimpleFile) {
+        logger.info("PollSurveyTask : processSurveyDCR");
         boolean isDBOperationSuccess = false;
         HashMap<String, String> statusMap = new HashMap<>();
         try {
             Document document = getTaskDocument(taskSimpleFile);
             if (isSurveyMasterDataAvailable(document)) {
                 isDBOperationSuccess = updateSurveyData(document, taskSimpleFile.getName());
-                logger.debug(
+                logger.info(
                         "isSurveyDataUpdated : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
                     statusMap.put(TRANSITION, SUCCESS_TRANSITION);
@@ -438,7 +469,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                 }
             } else {
                 isDBOperationSuccess = insertSurveyData(document, taskSimpleFile.getName());
-                logger.debug(
+                logger.info(
                         "isSurveyDataInserted : " + isDBOperationSuccess);
                 if (isDBOperationSuccess) {
                     statusMap.put(TRANSITION, SUCCESS_TRANSITION);
@@ -457,6 +488,56 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return statusMap;
     }
+    
+    
+    /**
+     * Method process the dynamic survey dcr from the workflow task and insert dynamic survey master
+     * data
+     *
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns map contains the transition status and transition comment.
+     */
+    public Map<String, String> processDynamicSurveyDCR(
+            CSSimpleFile taskSimpleFile) {
+        logger.info("PollSurveyTask : processDynamicSurveyDCR");
+        boolean isDBOperationSuccess = false;
+        HashMap<String, String> statusMap = new HashMap<>();
+        try {
+            Document document = getTaskDocument(taskSimpleFile);
+            if (isDynamicSurveyMasterDataAvailable(document)) {
+                isDBOperationSuccess = updateDynamicSurveyData(document, taskSimpleFile.getName());
+                logger.info(
+                        "isDynamicSurveyDataUpdated : " + isDBOperationSuccess);
+                if (isDBOperationSuccess) {
+                    statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                    statusMap.put(TRANSITION_COMMENT,
+                            SURVEY_UPDATE_SUCCESS);
+                } else {
+                    statusMap.put(TRANSITION, FAILURE_TRANSITION);
+                    statusMap.put(TRANSITION_COMMENT,
+                            SURVEY_UPDATE_FAILURE);
+                }
+            } else {
+                isDBOperationSuccess = insertDynamicSurveyData(document, taskSimpleFile.getName());
+                logger.info(
+                        "isDynamicSurveyDataUpdated : " + isDBOperationSuccess);
+                if (isDBOperationSuccess) {
+                    statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                    statusMap.put(TRANSITION_COMMENT,
+                            SURVEY_INSERT_SUCCESS);
+                } else {
+                    statusMap.put(TRANSITION, FAILURE_TRANSITION);
+                    statusMap.put(TRANSITION_COMMENT,
+                            SURVEY_INSERT_FAILURE);
+                }
+            }
+        } catch (Exception e) {
+            statusMap.put(TRANSITION, FAILURE_TRANSITION);
+            statusMap.put(TRANSITION_COMMENT, SURVEY_TECHNICAL_ERROR);
+            logger.error("Exception in processDynamicSurveyDCR : ", e);
+        }
+        return statusMap;
+    }
 
     /**
      * Method to get the task file as a xml document.
@@ -465,7 +546,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns xml document of the task file.
      */
     public Document getTaskDocument(CSSimpleFile taskSimpleFile) {
-        logger.debug("PollSurveyTask : getTaskDocument");
+        logger.info("PollSurveyTask : getTaskDocument");
         Document document = null;
         try {
             byte[] taskSimpleFileByteArray = taskSimpleFile.read(0, -1);
@@ -501,7 +582,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             String lang = getDCRValue(document, LANG_PATH);
 
             String pollMasterQuery = "SELECT COUNT(*) FROM POLL_MASTER WHERE POLL_ID = ? AND LANG = ?";
-            logger.info("pollMasterQuery in isPollMasterDataAvailable: "
+            logger.debug("pollMasterQuery in isPollMasterDataAvailable: "
                     + pollMasterQuery);
             prepareStatement = connection
                     .prepareStatement(pollMasterQuery);
@@ -533,7 +614,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns status of the insert poll data as boolean
      */
     public boolean insertPollData(Document document, String fileName) {
-        logger.debug("PollSurveyTask : insertPollData");
+        logger.info("PollSurveyTask : insertPollData");
         Connection connection = null;
         boolean isPollDataInserted = false;
         try {
@@ -549,9 +630,10 @@ public class PollSurveyTask implements CSURLExternalTask {
             pollsBO.setPersona(getDCRValue(document, PERSONA_PATH));
             pollsBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
             pollsBO.setTopics(getDCRValue(document, TOPICS));
+            pollsBO.setFileName(fileName);
             logger.debug("PollsBO : " + pollsBO);
 
-            int result = insertPollMasterData(pollsBO, connection, fileName);
+            int result = insertPollMasterData(pollsBO, connection);
             logger.info("insertPollData result : " + result);
             if (result > 0) {
                 logger.info("Poll Master Data Inserted");
@@ -599,7 +681,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int insertPollMasterData(TSPollsBO pollsBO, Connection connection, String fileName)
+    public int insertPollMasterData(TSPollsBO pollsBO, Connection connection)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -608,7 +690,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             String pollMasterQuery = "INSERT INTO POLL_MASTER (POLL_ID, "
                     + "LANG, QUESTION, START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, STATUS, FILE_NAME) "
                     + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            logger.info("insertPollMasterData pollMasterQuery : "
+            logger.debug("insertPollMasterData pollMasterQuery : "
                     + pollMasterQuery);
             connection.setAutoCommit(false);
             preparedStatement = connection
@@ -623,7 +705,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(7, pollsBO.getServiceEntities());
             preparedStatement.setString(8, pollsBO.getTopics());  
             preparedStatement.setString(9, PUBLISHED_STATUS);
-            preparedStatement.setString(10, fileName);
+            preparedStatement.setString(10, pollsBO.getFileName());
             result = preparedStatement.executeUpdate();
             logger.info("insertPollMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
@@ -656,20 +738,20 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + "OPTION_VALUE) VALUES(?, ?, ?, ?, ?)";
             preparedStatement = connection
                     .prepareStatement(pollOptionQuery);
-            logger.info("insertPollOptionsData pollOptionQuery : "
+            logger.debug("insertPollOptionsData pollOptionQuery : "
                     + pollOptionQuery);
 
             List<Node> nodes = document.selectNodes(OPTION_PATH);
             long optionId = 1l;
             for (Node node : nodes) {
-                logger.info(
+                logger.debug(
                         "insertPollOptionsData optionId : " + optionId);
                 String label = node.selectSingleNode(OPTION_LABEL)
                         .getText();
                 String value = node.selectSingleNode(OPTION_VALUE)
                         .getText();
-                logger.info("insertPollOptionsData label : " + label);
-                logger.info("insertPollOptionsData value : " + value);
+                logger.debug("insertPollOptionsData label : " + label);
+                logger.debug("insertPollOptionsData value : " + value);
                 preparedStatement.setLong(1, optionId);
                 preparedStatement.setString(2, pollsBO.getLang());
                 preparedStatement.setLong(3,
@@ -704,13 +786,12 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns status of the update poll data as boolean
      */
     public boolean updatePollData(Document document, String fileName) {
-        logger.debug("PollSurveyTask : updatePollData");
+        logger.info("PollSurveyTask : updatePollData");
         Connection connection = null;
         boolean isPollDataInserted = false;
         try {
 
             connection = postgre.getConnection();
-            logger.info("updatePollData Connection : " + connection);
 
             TSPollsBO pollsBO = new TSPollsBO();
             pollsBO.setPollId(getDCRValue(document, ID_PATH));
@@ -722,9 +803,10 @@ public class PollSurveyTask implements CSURLExternalTask {
             pollsBO.setTopics(getDCRValue(document, TOPICS));
             pollsBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
             pollsBO.setTopics(getDCRValue(document, TOPICS));
+            pollsBO.setFileName(fileName);
             logger.debug("PollsBO : " + pollsBO);
             
-            int result = updatePollMasterData(pollsBO, connection, fileName);
+            int result = updatePollMasterData(pollsBO, connection);
 
             if (result > 0) {
                 logger.info("Poll Master Data Updated");
@@ -771,7 +853,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns number of rows affected by query execution
      * @throws SQLException
      */
-    public int updatePollMasterData(TSPollsBO pollsBO, Connection connection, String fileName)
+    public int updatePollMasterData(TSPollsBO pollsBO, Connection connection)
             throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -780,7 +862,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             String pollMasterQuery = "UPDATE POLL_MASTER SET QUESTION = ?, "
                     + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ?, STATUS = ?, FILE_NAME = ? "
                     + "WHERE POLL_ID = ? AND LANG = ?";
-            logger.info("updatePollMasterData pollMasterQuery : "
+            logger.debug("updatePollMasterData pollMasterQuery : "
                     + pollMasterQuery);
             connection.setAutoCommit(false);
             preparedStatement = connection
@@ -791,7 +873,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(4, pollsBO.getServiceEntities());
             preparedStatement.setString(5, pollsBO.getTopics()); 
             preparedStatement.setString(6, PUBLISHED_STATUS);
-            preparedStatement.setString(7, fileName);
+            preparedStatement.setString(7, pollsBO.getFileName());
             preparedStatement.setLong(8,
                     Long.parseLong(pollsBO.getPollId()));
             preparedStatement.setString(9, pollsBO.getLang());
@@ -825,7 +907,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("PollSurveyTask : updateDeletePollMasterData");
             String pollMasterQuery = "UPDATE POLL_MASTER SET STATUS = ? "
                     + "WHERE POLL_ID = ? AND LANG = ?";
-            logger.info("updatePollMasterData pollMasterQuery : "
+            logger.debug("updatePollMasterData pollMasterQuery : "
                     + pollMasterQuery);
             connection.setAutoCommit(false);
             preparedStatement = connection
@@ -875,7 +957,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("PollSurveyTask : updateDeleteSurveyMasterData");
             String surveyMasterQuery = "UPDATE SURVEY_MASTER SET STATUS = ? "
                     + "WHERE SURVEY_ID = ? AND LANG = ?";
-            logger.info("updateDeleteSurveyMasterData surveyMasterQuery : "
+            logger.debug("updateDeleteSurveyMasterData surveyMasterQuery : "
                     + surveyMasterQuery);
             connection.setAutoCommit(false);
             preparedStatement = connection
@@ -907,7 +989,57 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return statusMap;
     }
+    
+    /**
+     * Method updates the delete status as unpublished in dynamic survey master data
+     *
+     * @param surveyId    survey id of the deleted poll
+     * @param lang  Language of the deleted poll
+     * @param connection Database connection object
+     * @return Returns status of the update in the Map object
+     */
+    public Map<String, String> updateDeleteDynamicSurveyMasterData(String surveyId, String lang, Connection connection)
+            throws SQLException {
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        HashMap<String, String> statusMap = new HashMap<>();
+        try {
+            logger.info("PollSurveyTask : updateDeleteDynamicSurveyMasterData");
+            String surveyMasterQuery = "UPDATE DYNAMIC_SURVEY_MASTER SET STATUS = ? "
+                    + "WHERE SURVEY_ID = ? AND LANG = ?";
+            logger.debug("updateDeleteDynamicSurveyMasterData dynamicSurveyMasterQuery : "
+                    + surveyMasterQuery);
+            connection.setAutoCommit(false);
+            preparedStatement = connection
+                    .prepareStatement(surveyMasterQuery);
+            preparedStatement.setString(1, UNPUBLISHED_STATUS); 
+            preparedStatement.setLong(2,
+                    Long.parseLong(surveyId));
+            preparedStatement.setString(3, lang);
 
+            result = preparedStatement.executeUpdate();
+            logger.info("updateDeleteDynamicSurveyMasterData result : " + result);
+            if (result > 0) {
+                connection.commit();
+                logger.info("updateDeleteDynamicSurveyMasterData transaction committed : ");
+                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT, SURVEY_UPDATE_SUCCESS);
+            }else {
+                statusMap.put(TRANSITION, FAILURE_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT, SURVEY_UPDATE_FAILURE);
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updateDeleteDynamicSurveyMasterData: ", e);
+            statusMap.put(TRANSITION, FAILURE_TRANSITION);
+            statusMap.put(TRANSITION_COMMENT, SURVEY_TECHNICAL_ERROR);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updateDeleteDynamicSurveyMasterData connection");
+        }
+        return statusMap;
+    }
+    
     /**
      * Method updates the polls option data
      *
@@ -928,16 +1060,16 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + "POLL_ID = ? AND LANG = ?";
             preparedStatement = connection
                     .prepareStatement(pollOptionQuery);
-            logger.info("updatePollMasterData pollOptionQuery : "
+            logger.debug("updatePollMasterData pollOptionQuery : "
                     + pollOptionQuery);
 
             List<Node> nodes = document.selectNodes(OPTION_PATH);
             long optionId = 1l;
             for (Node node : nodes) {
-                logger.info("updatePollMasterData optionId : " + optionId);
+                logger.debug("updatePollMasterData optionId : " + optionId);
                 String label = node.selectSingleNode(OPTION_LABEL)
                         .getText();
-                logger.info("updatePollMasterData label : " + label);
+                logger.debug("updatePollMasterData label : " + label);
                 preparedStatement.setString(1, label);
                 preparedStatement.setLong(2, optionId);
                 preparedStatement.setLong(3,
@@ -971,7 +1103,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      *         else returns false
      */
     public boolean isSurveyMasterDataAvailable(Document document) {
-        logger.debug("PollSurveyTask : isSurveyMasterDataAvailable");
+        logger.info("PollSurveyTask : isSurveyMasterDataAvailable");
         PreparedStatement prepareStatement = null;
         Connection connection = null;
         ResultSet rs = null;
@@ -984,7 +1116,7 @@ public class PollSurveyTask implements CSURLExternalTask {
             String lang = getDCRValue(document, LANG_PATH);
 
             String surveyMasterQuery = "SELECT COUNT(*) FROM SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ?";
-            logger.info("surveyMasterQuery isSurveyMasterDataAvailable : "
+            logger.debug("surveyMasterQuery isSurveyMasterDataAvailable : "
                     + surveyMasterQuery);
             prepareStatement = connection
                     .prepareStatement(surveyMasterQuery);
@@ -1008,6 +1140,53 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return isSurveyDataAvailable;
     }
+    
+    
+    /**
+     * Checks for dynamic survey master data already exists
+     *
+     * @param document Document object of the survey DCR
+     * @return Returns true if the dynamic survey data is already available in the database
+     *         else returns false
+     */
+    public boolean isDynamicSurveyMasterDataAvailable(Document document) {
+        logger.info("PollSurveyTask : isDynamicSurveyMasterDataAvailable");
+        PreparedStatement prepareStatement = null;
+        Connection connection = null;
+        ResultSet rs = null;
+        boolean isSurveyDataAvailable = false;
+        try {
+
+            connection = postgre.getConnection();
+
+            Long surveyId = Long.parseLong(getDCRValue(document, ID_PATH));
+            String lang = getDCRValue(document, LANG_PATH);
+
+            String surveyMasterQuery = "SELECT COUNT(*) FROM DYNAMIC_SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ?";
+            logger.debug("surveyMasterQuery isDynamicSurveyMasterDataAvailable : "
+                    + surveyMasterQuery);
+            prepareStatement = connection
+                    .prepareStatement(surveyMasterQuery);
+            prepareStatement.setLong(1, surveyId);
+            prepareStatement.setString(2, lang);
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                int count = rs.getInt(1);
+                if (count > 0) {
+                    isSurveyDataAvailable = true;
+                }
+            }
+            logger.info(
+                    "isSurveyDataAvailable : " + isSurveyDataAvailable);
+
+        } catch (Exception e) {
+            logger.error("Exception in isDynamicSurveyMasterDataAvailable: ", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+            logger.info("isDynamicSurveyMasterDataAvailable Released connection");
+        }
+        return isSurveyDataAvailable;
+    }
 
     /**
      * Method creates the business object, calls insert master, question and option
@@ -1017,7 +1196,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns status of the insert survey data as boolean
      */
     public boolean insertSurveyData(Document document, String fileName) {
-        logger.debug("PollSurveyTask : insertSurveyData");
+        logger.info("PollSurveyTask : insertSurveyData");
         Connection connection = null;
         boolean isSurveyDataInserted = false;
         try {
@@ -1038,9 +1217,11 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
             surveyBO.setTopics(getDCRValue(document, TOPICS));
             surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
+            surveyBO.setEstimatedTime(getDCRValue(document, ESTIMATED_TIME));
+            surveyBO.setFileName(fileName);
             logger.debug("SurveyBO : " + surveyBO);
 
-            int result = insertSurveyMasterData(surveyBO, connection, fileName);
+            int result = insertSurveyMasterData(surveyBO, connection);
             logger.info("result : " + result);
             if (result > 0) {
                 logger.info("Survey Master Data Inserted");
@@ -1073,6 +1254,78 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return isSurveyDataInserted;
     }
+    
+    /**
+     * Method creates the business object, calls insert master, question and option
+     * data
+     *
+     * @param document Document object of the survey DCR
+     * @return Returns status of the insert survey data as boolean
+     */
+    public boolean insertDynamicSurveyData(Document document, String fileName) {
+        logger.info("PollSurveyTask : insertDynamicSurveyData");
+        Connection connection = null;
+        boolean isSurveyDataInserted = false;
+        try {
+
+            connection = postgre.getConnection();
+            connection.setAutoCommit(false);
+            TSSurveyBO surveyBO = new TSSurveyBO();
+            surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
+            surveyBO.setLang(getDCRValue(document, LANG_PATH));
+            surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
+            surveyBO.setDescription(
+                    getDCRValue(document, DESCRIPTION_PATH));
+            surveyBO.setStartDate(
+                    getDCRValue(document, SURVEY_START_DATE_PATH));
+            surveyBO.setEndDate(
+                    getDCRValue(document, SURVEY_END_DATE_PATH));
+            surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
+            surveyBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
+            surveyBO.setTopics(getDCRValue(document, TOPICS));
+            surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
+            surveyBO.setEstimatedTime(getDCRValue(document, ESTIMATED_TIME));
+            surveyBO.setFileName(fileName);
+            logger.debug("SurveyBO : " + surveyBO);
+            
+            Long surveyMasterId = getNextSequenceValue(
+                    "dynamic_survey_master_survey_master_id_seq",
+                    postgre.getConnection());
+            surveyBO.setSurveyMasterId(surveyMasterId);
+
+            int result = insertDynamicSurveyMasterData(surveyBO, connection);
+            logger.info("result : " + result);
+            if (result > 0) {
+                logger.info("Dynamic Survey Master Data Inserted");
+                isSurveyDataInserted = insertDynamicSurveyQuestionData(surveyBO,
+                        document, connection);
+            } else {
+                connection.rollback();
+                logger.info("Dynamic Survey master insert failed");
+            }
+
+            if (isSurveyDataInserted) {
+                connection.commit();
+                logger.info("Dynamic Survey insert transaction committed");
+            }
+
+        } catch (Exception e) {
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+                logger.error("Exception in insertDynamicSurveyData : ", e);
+            } catch (SQLException ex) {
+                logger.error(
+                        "Exception in insertDynamicSurveyData rollback catch block : ",
+                        ex);
+            }
+        } finally {
+            postgre.releaseConnection(connection, null, null);
+            logger.info("Released insertDynamicSurveyData connection");
+        }
+        return isSurveyDataInserted;
+    }
 
     /**
      * Method inserts the survey master data
@@ -1083,16 +1336,16 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @throws SQLException
      */
     public int insertSurveyMasterData(TSSurveyBO surveyBO,
-            Connection connection, String fileName) throws SQLException {
+            Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : insertSurveyMasterData");
             String surveyMasterQuery = "INSERT INTO SURVEY_MASTER ("
                     + "SURVEY_ID, LANG, SURVEY_TITLE, SURVEY_DESCRIPTION, "
-                    + "START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, SUBMIT_TYPE, STATUS, FILE_NAME) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            logger.info("insertSurveyMasterData surveyMasterQuery : "
+                    + "START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, SUBMIT_TYPE, STATUS, FILE_NAME, ESTIMATED_TIME) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            logger.debug("insertSurveyMasterData surveyMasterQuery : "
                     + surveyMasterQuery);
             preparedStatement = connection
                     .prepareStatement(surveyMasterQuery);
@@ -1108,7 +1361,8 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(9, surveyBO.getTopics());
             preparedStatement.setString(10, surveyBO.getSubmitType());
             preparedStatement.setString(11, PUBLISHED_STATUS);
-            preparedStatement.setString(12, fileName);
+            preparedStatement.setString(12, surveyBO.getFileName());
+            preparedStatement.setString(13, surveyBO.getEstimatedTime());
             result = preparedStatement.executeUpdate();
             logger.info("insertSurveyMasterData result : " + result);
         } catch (NumberFormatException | SQLException e) {
@@ -1117,6 +1371,56 @@ public class PollSurveyTask implements CSURLExternalTask {
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertSurveyMasterData connection");
+        }
+        return result;
+    }
+    
+    /**
+     * Method inserts the survey master data
+     *
+     * @param surveyBO   Survey business object
+     * @param connection Database connection object
+     * @return Returns number of rows affected by query execution
+     * @throws SQLException
+     */
+    public int insertDynamicSurveyMasterData(TSSurveyBO surveyBO,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        try {
+            logger.info("PollSurveyTask : insertDynamicSurveyMasterData");
+            String surveyMasterQuery = "INSERT INTO DYNAMIC_SURVEY_MASTER ("
+                    + "SURVEY_MASTER_ID, SURVEY_ID, LANG, SURVEY_TITLE, SURVEY_DESCRIPTION, "
+                    + "START_DATE, END_DATE, PERSONA, SERVICE_ENTITIES, TOPICS, SUBMIT_TYPE, "
+                    + "ESTIMATED_TIME, STATUS, FILE_NAME) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            logger.debug("insertDynamicSurveyMasterData surveyMasterQuery : "
+                    + surveyMasterQuery);
+            preparedStatement = connection
+                    .prepareStatement(surveyMasterQuery);
+            preparedStatement.setLong(1, surveyBO.getSurveyMasterId());
+            preparedStatement.setLong(2,
+                    Long.parseLong(surveyBO.getSurveyId()));
+            preparedStatement.setString(3, surveyBO.getLang());
+            preparedStatement.setString(4, surveyBO.getTitle());
+            preparedStatement.setString(5, surveyBO.getDescription());
+            preparedStatement.setDate(6, getDate(surveyBO.getStartDate()));
+            preparedStatement.setDate(7, getDate(surveyBO.getEndDate()));
+            preparedStatement.setString(8, surveyBO.getPersona());
+            preparedStatement.setString(9, surveyBO.getServiceEntities());
+            preparedStatement.setString(10, surveyBO.getTopics());
+            preparedStatement.setString(11, surveyBO.getSubmitType());
+            preparedStatement.setString(12, surveyBO.getEstimatedTime());
+            preparedStatement.setString(13, PUBLISHED_STATUS);
+            preparedStatement.setString(14, surveyBO.getFileName());
+            result = preparedStatement.executeUpdate();
+            logger.info("insertDynamicSurveyMasterData result : " + result);
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertDynamicSurveyMasterData: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertDynamicSurveyMasterData connection");
         }
         return result;
     }
@@ -1141,31 +1445,31 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + "QUESTION_TYPE, QUESTION) VALUES (?, ?, ?, ?, ?, ?)";
             preparedStatement = connection
                     .prepareStatement(surveyQuestionQuery);
-            logger.info("insertSurveyQuestionData surveyQuestionQuery : "
+            logger.debug("insertSurveyQuestionData surveyQuestionQuery : "
                     + surveyQuestionQuery);
 
             List<Node> nodes = document.selectNodes(FIELD_PATH);
             int questionNo = 1;
             for (Node node : nodes) {
-                logger.info("insertSurveyQuestionData questionNo : "
+                logger.debug("insertSurveyQuestionData questionNo : "
                         + questionNo);
 
                 String questionType = node
                         .selectSingleNode(".//field-type").getText();
-                logger.info("insertSurveyQuestionData questionType : "
+                logger.debug("insertSurveyQuestionData questionType : "
                         + questionType);
 
-                if (!"button".equalsIgnoreCase(questionType)) {
+                if (questionType != null && !"".equals(questionType) && !"button".equalsIgnoreCase(questionType)) {
 
                     Long questionId = getNextSequenceValue(
                             "survey_question_question_id_seq",
                             postgre.getConnection());
-                    logger.info("insertSurveyQuestionData questionId : "
+                    logger.debug("insertSurveyQuestionData questionId : "
                             + questionId);
 
                     String question = node.selectSingleNode(".//question")
                             .getText();
-                    logger.info("question : " + question);
+                    logger.debug("question : " + question);
                     preparedStatement.setLong(1, questionId);
                     preparedStatement.setLong(2,
                             Long.parseLong(surveyBO.getSurveyId()));
@@ -1178,21 +1482,23 @@ public class PollSurveyTask implements CSURLExternalTask {
                     if (questionResult > 0) {
                         result = true;
                         logger.info("Survey Question Inserted");
-                        surveyBO.setQuestionId(questionId);
-                        surveyBO.setQuestionNo(questionNo);
-                        boolean isOptionsInserted = insertSurveyOptionData(
-                                surveyBO, node, connection);
-
-                        if (isOptionsInserted) {
-                            result = true;
-                        } else {
-                            result = false;
-                            connection.rollback();
-                            logger.info(
-                                    "insertSurveyQuestionData Option batch insert failed");
-                            break;
+                        if(optionsList.contains(questionType)) {
+                            surveyBO.setQuestionId(questionId);
+                            surveyBO.setQuestionNo(questionNo);
+                            boolean isOptionsInserted = insertSurveyOptionData(
+                                    surveyBO, node, connection);
+    
+                            if (isOptionsInserted) {
+                                result = true;
+                            } else {
+                                result = false;
+                                connection.rollback();
+                                logger.info(
+                                        "insertSurveyQuestionData Option batch insert failed");
+                                break;
+                            }
+                            questionNo++;
                         }
-                        questionNo++;
                     } else {
                         result = false;
                         connection.rollback();
@@ -1208,6 +1514,102 @@ public class PollSurveyTask implements CSURLExternalTask {
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released insertSurveyQuestionData connection");
+        }
+        return result;
+    }
+    
+    /**
+     * Method inserts the dynamic survey question data
+     *
+     * @param surveyBO   Survey business object
+     * @param document   Document object of the survey DCR
+     * @param connection Database connection object
+     * @return Returns true for successful insert else false for failure.
+     * @throws SQLException
+     */
+    public boolean insertDynamicSurveyQuestionData(TSSurveyBO surveyBO,
+            Document document, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : insertDynamicSurveyQuestionData");
+            String surveyQuestionQuery = "INSERT INTO DYNAMIC_SURVEY_QUESTION "
+                    + "(SURVEY_QUESTION_ID, SURVEY_MASTER_ID, QUESTION_ID, "
+                    + "QUESTION_TYPE, QUESTION) VALUES (?, ?, ?, ?, ?)";
+            preparedStatement = connection
+                    .prepareStatement(surveyQuestionQuery);
+            logger.debug("insertDynamicSurveyQuestionData surveyQuestionQuery : "
+                    + surveyQuestionQuery);
+
+            List<Node> nodes = document.selectNodes(OPTION_FIELD_PATH);
+            for (Node node : nodes) {
+                
+                Long surveyQuestionId = getNextSequenceValue(
+                        "dynamic_survey_question_survey_question_id_seq",
+                        postgre.getConnection());
+                surveyBO.setSurveyQuestionId(surveyQuestionId);
+                
+                String questionIdStr = node
+                        .selectSingleNode(".//question-id").getText();
+                if(questionIdStr != null && !"".equals(questionIdStr)) {
+                    
+                    long questionId = Long.parseLong(questionIdStr);
+                    logger.debug("insertDynamicSurveyQuestionData questionId : "
+                        + questionId);
+                    
+                    String questionType = node
+                            .selectSingleNode(".//field-type").getText();
+                    logger.debug("insertDynamicSurveyQuestionData questionType : "
+                            + questionType);
+
+                    if (questionType != null && !"".equals(questionType) && !"button".equalsIgnoreCase(questionType)) {
+
+                        String question = node.selectSingleNode(".//question")
+                                .getText();
+                        logger.debug("question : " + question);
+                        
+                        preparedStatement.setLong(1, surveyQuestionId);
+                        preparedStatement.setLong(2, surveyBO.getSurveyMasterId());
+                        preparedStatement.setLong(3, questionId);
+                        preparedStatement.setString(4, questionType);
+                        preparedStatement.setString(5, question);
+                        int questionResult = preparedStatement.executeUpdate();
+
+                        if (questionResult > 0) {
+                            result = true;
+                            logger.info("Survey Question Inserted");
+                            if(optionsList.contains(questionType)) {
+                                boolean isOptionsInserted = insertDynamicSurveyOptionData(
+                                        surveyBO, node, connection);
+    
+                                if (isOptionsInserted) {
+                                    result = true;
+                                } else {
+                                    result = false;
+                                    connection.rollback();
+                                    logger.info(
+                                            "insertDynamicSurveyQuestionData Option batch insert failed");
+                                    break;
+                                }
+                            }
+                        } else {
+                            result = false;
+                            connection.rollback();
+                            logger.info(
+                                    "insertDynamicSurveyQuestionData Question insert failed");
+                            break;
+                        }
+                    }
+                    
+                }
+                
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertDynamicSurveyQuestionData: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertDynamicSurveyQuestionData connection");
         }
         return result;
     }
@@ -1235,18 +1637,18 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + ", ?, ?, ?, ?, ?, ?, ?, ?)";
             preparedStatement = connection
                     .prepareStatement(surveyOptionQuery);
-            logger.info("surveyOptionQuery : " + surveyOptionQuery);
+            logger.debug("surveyOptionQuery : " + surveyOptionQuery);
             List<Node> optionNodes = node.selectNodes(".//option");
             int optionNo = 1;
             for (Node optnode : optionNodes) {
-                logger.info("optionNo : " + optionNo);
+                logger.debug("optionNo : " + optionNo);
                 String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
                         .getText();
                 String optionValue = optnode.selectSingleNode(OPTION_VALUE)
                         .getText();
                 String isOpenResponse = optnode.selectSingleNode(IS_OPEN_RESPONSE)
                         .getText();
-                logger.info(optionLabel + " : " + optionValue);
+                logger.debug(optionLabel + " : " + optionValue);
                 preparedStatement.setLong(1,
                         Long.parseLong(surveyBO.getSurveyId()));
                 preparedStatement.setString(2, surveyBO.getLang());
@@ -1277,6 +1679,65 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return result;
     }
+    
+    /**
+     * Method inserts the survey option data
+     *
+     * @param surveyBO   Survey business object
+     * @param node       Node object of the survey option node
+     * @param connection Database connection object
+     * @return Returns true for successful insert else false for failure.
+     * @throws SQLException
+     */
+    public boolean insertDynamicSurveyOptionData(TSSurveyBO surveyBO, Node node,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : insertDynamicSurveyOptionData");
+            //OPTION_ID - should be generated in the db
+            String surveyOptionQuery = "INSERT INTO DYNAMIC_SURVEY_OPTION "
+                    + " (SURVEY_QUESTION_ID, OPTION_LABEL, IS_USER_INPUT, "
+                    + "OPTION_VALUE) VALUES (?, ?, ?, ?) ";
+            preparedStatement = connection
+                    .prepareStatement(surveyOptionQuery);
+            logger.debug("surveyOptionQuery : " + surveyOptionQuery);
+            List<Node> optionNodes = node.selectNodes(".//option");
+            int optionNo = 1;
+            for (Node optnode : optionNodes) {
+                logger.debug("optionNo : " + optionNo);
+                String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
+                        .getText();
+                String optionValue = optnode.selectSingleNode(OPTION_VALUE)
+                        .getText();
+                String isOpenResponse = optnode.selectSingleNode(IS_OPEN_RESPONSE)
+                        .getText();
+                logger.debug(optionLabel + " : " + optionValue);
+                preparedStatement.setLong(1, surveyBO.getSurveyQuestionId());
+                preparedStatement.setString(2, optionLabel);
+                preparedStatement.setString(3, isOpenResponse);
+                preparedStatement.setString(4, optionValue);
+                preparedStatement.addBatch();
+                optionNo++;
+            }
+            int[] optionBatch = preparedStatement.executeBatch();
+            logger.info("insertDynamicSurveyOptionData optionBatch length : "
+                    + optionBatch.length);
+
+            if (optionBatch.length == optionNo - 1) {
+                logger.info("Survey Option Inserted");
+                result = true;
+            }
+
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in insertDynamicSurveyOptionData: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released insertSurveyOptionData connection");
+        }
+        return result;
+    }
 
     /**
      * Method creates the business object, calls update master and option data
@@ -1285,7 +1746,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns status of the update survey data as boolean
      */
     public boolean updateSurveyData(Document document, String fileName) {
-        logger.debug("PollSurveyTask : updateSurveyData");
+        logger.info("PollSurveyTask : updateSurveyData");
         PreparedStatement prepareStatement = null;
         PreparedStatement prepareStatementSurveyQuestion = null;
         PreparedStatement optionPrepareStatement = null;
@@ -1308,9 +1769,11 @@ public class PollSurveyTask implements CSURLExternalTask {
             surveyBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
             surveyBO.setTopics(getDCRValue(document, TOPICS));
             surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
+            surveyBO.setEstimatedTime(getDCRValue(document, ESTIMATED_TIME));
+            surveyBO.setFileName(fileName);
             logger.debug("SurveyBO : " + surveyBO);
 
-            int result = updateSurveyMasterData(surveyBO, connection, fileName);
+            int result = updateSurveyMasterData(surveyBO, connection);
 
             if (result > 0) {
                 logger.info("Survey Master Data Updated");
@@ -1350,6 +1813,160 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return isSurveyDataUpdated;
     }
+    
+    /**
+     * Method creates the business object, calls update master and option data
+     *
+     * @param document Document object of the survey DCR
+     * @return Returns status of the update survey data as boolean
+     */
+    public boolean updateDynamicSurveyData(Document document, String fileName) {
+        logger.info("PollSurveyTask : updateDynamicSurveyData");
+        PreparedStatement prepareStatement = null;
+        PreparedStatement prepareStatementSurveyQuestion = null;
+        PreparedStatement optionPrepareStatement = null;
+        Connection connection = null;
+        ResultSet rs = null;
+        boolean isSurveyDataUpdated = false;
+        try {
+
+            connection = postgre.getConnection();
+            connection.setAutoCommit(false);
+            TSSurveyBO surveyBO = new TSSurveyBO();
+            surveyBO.setSurveyId(getDCRValue(document, ID_PATH));
+            surveyBO.setLang(getDCRValue(document, LANG_PATH));
+            surveyBO.setTitle(getDCRValue(document, TITLE_PATH));
+            surveyBO.setDescription(
+                    getDCRValue(document, SURVEY_START_DATE_PATH));
+            surveyBO.setEndDate(
+                    getDCRValue(document, SURVEY_END_DATE_PATH));
+            surveyBO.setPersona(getDCRValue(document, PERSONA_PATH));
+            surveyBO.setServiceEntities(getDCRValue(document, SERVICE_ENTITIES));
+            surveyBO.setTopics(getDCRValue(document, TOPICS));
+            surveyBO.setSubmitType(getDCRValue(document, SUBMIT_TYPE));
+            surveyBO.setEstimatedTime(getDCRValue(document, ESTIMATED_TIME));
+            surveyBO.setFileName(fileName);
+            
+            setSurveyMasterId(surveyBO, connection);
+            
+            logger.debug("SurveyBO : " + surveyBO);
+
+            int result = updateDynamicSurveyMasterData(surveyBO, connection);
+
+            if (result > 0) {
+                logger.info("Survey Master Data Updated");
+                isSurveyDataUpdated = updateDynamicSurveyQuestionData(surveyBO,
+                        document, connection);
+            } else {
+                if (connection != null) {
+                    connection.rollback();
+                }
+                logger.info("Survey master update failed");
+            }
+
+            if (isSurveyDataUpdated) {
+                if (connection != null) {
+                    connection.commit();
+                }
+                logger.info("Survey update transaction committed");
+            }
+
+        } catch (Exception e) {
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+                logger.error("Exception in updateDynamicSurveyData : ", e);
+            } catch (SQLException ex) {
+                logger.error(
+                        "Exception in updateDynamicSurveyData rollback catch block : ",
+                        ex);
+            }
+        } finally {
+            postgre.releaseConnection(null, prepareStatementSurveyQuestion,
+                    null);
+            postgre.releaseConnection(null, optionPrepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
+            logger.info("Released updateDynamicSurveyData connection");
+        }
+        return isSurveyDataUpdated;
+    }
+    
+    /**
+     * Method fetches the survey master id and set it to the survey BO
+     *
+     * @param surveyBO   Survey business object
+     * @param connection Database connection object
+     * @throws SQLException
+     */
+    public void setSurveyMasterId(TSSurveyBO surveyBO,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        int result = 0;
+        try {
+            logger.info("PollSurveyTask : setSurveyMasterId");
+            String dynamicSurveyMasterQuery = "SELECT SURVEY_MASTER_ID FROM DYNAMIC_SURVEY_MASTER "
+                    + "WHERE SURVEY_ID = ? AND LANG = ? ";
+            logger.debug("setSurveyMasterId dynamicSurveyMasterQuery : "
+                    + dynamicSurveyMasterQuery);
+            preparedStatement = connection
+                    .prepareStatement(dynamicSurveyMasterQuery);
+            preparedStatement.setLong(1,
+                    Long.parseLong(surveyBO.getSurveyId()));
+            preparedStatement.setString(2, surveyBO.getLang());
+
+            rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Long surveyMasterId = rs.getLong(1);
+                surveyBO.setSurveyMasterId(surveyMasterId);
+            }
+            logger.debug("surveyMasterId : " + surveyBO.getSurveyMasterId());
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in setSurveyMasterId: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, rs);
+            logger.info("Released setSurveyMasterId connection");
+        }
+    }
+    
+    /**
+     * Method fetches the survey question id and set it to the survey BO
+     *
+     * @param surveyBO   Survey business object
+     * @param connection Database connection object
+     * @throws SQLException
+     */
+    public void setSurveyQuestionId(TSSurveyBO surveyBO,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
+        int result = 0;
+        try {
+            logger.info("PollSurveyTask : setSurveyQuestionId");
+            String dynamicSurveyMasterQuery = "SELECT SURVEY_QUESTION_ID FROM DYNAMIC_SURVEY_QUESTION "
+                    + "WHERE SURVEY_MASTER_ID = ? ";
+            logger.debug("setSurveyQuestionId dynamicSurveyMasterQuery : "
+                    + dynamicSurveyMasterQuery);
+            preparedStatement = connection
+                    .prepareStatement(dynamicSurveyMasterQuery);
+            preparedStatement.setLong(1, surveyBO.getSurveyMasterId());
+
+            rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Long surveyQuestionId = rs.getLong(1);
+                surveyBO.setSurveyQuestionId(surveyQuestionId);
+            }
+            logger.debug("surveyQuestionId : " + surveyBO.getSurveyQuestionId());
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in setSurveyQuestionId: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, rs);
+            logger.info("Released setSurveyQuestionId connection");
+        }
+    }
 
     /**
      * Method updates the survey master data
@@ -1360,16 +1977,17 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @throws SQLException
      */
     public int updateSurveyMasterData(TSSurveyBO surveyBO,
-            Connection connection, String fileName) throws SQLException {
+            Connection connection) throws SQLException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
             logger.info("PollSurveyTask : updateSurveyMasterData");
             String surveyMasterQuery = "UPDATE SURVEY_MASTER SET "
                     + "SURVEY_TITLE = ?, SURVEY_DESCRIPTION = ?, "
-                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ?, SUBMIT_TYPE = ?, STATUS = ? , FILE_NAME = ?  "
+                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, "
+                    + "TOPICS = ?, SUBMIT_TYPE = ?, STATUS = ? , FILE_NAME = ?, ESTIMATED_TIME = ? "
                     + "WHERE SURVEY_ID = ? AND LANG = ?";
-            logger.info("updateSurveyMasterData surveyMasterQuery : "
+            logger.debug("updateSurveyMasterData surveyMasterQuery : "
                     + surveyMasterQuery);
             preparedStatement = connection
                     .prepareStatement(surveyMasterQuery);
@@ -1381,10 +1999,11 @@ public class PollSurveyTask implements CSURLExternalTask {
             preparedStatement.setString(6, surveyBO.getTopics());
             preparedStatement.setString(7, surveyBO.getSubmitType());
             preparedStatement.setString(8, PUBLISHED_STATUS);
-            preparedStatement.setString(9, fileName);
-            preparedStatement.setLong(10,
+            preparedStatement.setString(9, surveyBO.getFileName());
+            preparedStatement.setString(10, surveyBO.getEstimatedTime());
+            preparedStatement.setLong(11,
                     Long.parseLong(surveyBO.getSurveyId()));
-            preparedStatement.setString(11, surveyBO.getLang());
+            preparedStatement.setString(12, surveyBO.getLang());
 
             result = preparedStatement.executeUpdate();
             logger.info("updateSurveyMasterData result : " + result);
@@ -1394,6 +2013,52 @@ public class PollSurveyTask implements CSURLExternalTask {
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released updateSurveyMasterData connection");
+        }
+        return result;
+    }
+    
+    /**
+     * Method updates the survey master data
+     *
+     * @param surveyBO   Survey business object
+     * @param connection Database connection object
+     * @return Returns number of rows affected by query execution
+     * @throws SQLException
+     */
+    public int updateDynamicSurveyMasterData(TSSurveyBO surveyBO,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        int result = 0;
+        try {
+            logger.info("PollSurveyTask : updateDynamicSurveyMasterData");
+            String surveyMasterQuery = "UPDATE DYNAMIC_SURVEY_MASTER SET "
+                    + "SURVEY_TITLE = ?, SURVEY_DESCRIPTION = ?, "
+                    + "END_DATE = ?, PERSONA = ?, SERVICE_ENTITIES = ?, TOPICS = ?, SUBMIT_TYPE = ?, ESTIMATED_TIME = ?, STATUS = ?, FILE_NAME = ?  "
+                    + "WHERE SURVEY_MASTER_ID = ?";
+            logger.debug("updateSurveyMasterData surveyMasterQuery : "
+                    + surveyMasterQuery);
+            preparedStatement = connection
+                    .prepareStatement(surveyMasterQuery);
+            preparedStatement.setString(1, surveyBO.getTitle());
+            preparedStatement.setString(2, surveyBO.getDescription());
+            preparedStatement.setDate(3, getDate(surveyBO.getEndDate()));
+            preparedStatement.setString(4, surveyBO.getPersona());
+            preparedStatement.setString(5, surveyBO.getServiceEntities());
+            preparedStatement.setString(6, surveyBO.getTopics());
+            preparedStatement.setString(7, surveyBO.getSubmitType());
+            preparedStatement.setString(8, surveyBO.getEstimatedTime());
+            preparedStatement.setString(9, PUBLISHED_STATUS);
+            preparedStatement.setString(10, surveyBO.getFileName());
+            preparedStatement.setLong(11, surveyBO.getSurveyMasterId());
+
+            result = preparedStatement.executeUpdate();
+            logger.info("updateDynamicSurveyMasterData result : " + result);
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updateDynamicSurveyMasterData: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updateDynamicSurveyMasterData connection");
         }
         return result;
     }
@@ -1418,24 +2083,24 @@ public class PollSurveyTask implements CSURLExternalTask {
                     + "AND QUESTION_NO = ?";
             preparedStatement = connection
                     .prepareStatement(surveyQuestionQuery);
-            logger.info("surveyQuestionQuery : " + surveyQuestionQuery);
+            logger.debug("surveyQuestionQuery : " + surveyQuestionQuery);
 
             List<Node> nodes = document.selectNodes(FIELD_PATH);
             int questionNo = 1;
             for (Node node : nodes) {
-                logger.info("updateSurveyQuestionData questionNo : "
+                logger.debug("updateSurveyQuestionData questionNo : "
                         + questionNo);
 
                 String questionType = node
                         .selectSingleNode(".//field-type").getText();
-                logger.info("updateSurveyQuestionData questionType : "
+                logger.debug("updateSurveyQuestionData questionType : "
                         + questionType);
 
-                if (!"button".equalsIgnoreCase(questionType)) {
+                if (questionType != null && !"".equals(questionType) && !"button".equalsIgnoreCase(questionType)) {
 
                     String question = node.selectSingleNode(".//question")
                             .getText();
-                    logger.info("question : " + question);
+                    logger.debug("question : " + question);
                     preparedStatement.setString(1, question);
                     preparedStatement.setLong(2,
                             Long.parseLong(surveyBO.getSurveyId()));
@@ -1446,20 +2111,22 @@ public class PollSurveyTask implements CSURLExternalTask {
                     if (questionResult > 0) {
                         result = true;
                         logger.info("Survey Question Inserted");
-                        surveyBO.setQuestionNo(questionNo);
-                        boolean isOptionsUpdated = updateSurveyOptionData(
-                                surveyBO, node, connection);
-
-                        if (isOptionsUpdated) {
-                            result = true;
-                        } else {
-                            result = false;
-                            connection.rollback();
-                            logger.info(
-                                    "updateSurveyQuestionData Option batch update failed");
-                            break;
+                        if(optionsList.contains(questionType)) {
+                            surveyBO.setQuestionNo(questionNo);
+                            boolean isOptionsUpdated = updateSurveyOptionData(
+                                    surveyBO, node, connection);
+    
+                            if (isOptionsUpdated) {
+                                result = true;
+                            } else {
+                                result = false;
+                                connection.rollback();
+                                logger.info(
+                                        "updateSurveyQuestionData Option batch update failed");
+                                break;
+                            }
+                            questionNo++;
                         }
-                        questionNo++;
                     } else {
                         result = false;
                         connection.rollback();
@@ -1475,6 +2142,83 @@ public class PollSurveyTask implements CSURLExternalTask {
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released updateSurveyQuestionData connection");
+        }
+        return result;
+    }
+    
+    /**
+     * Method updates the dynamic survey question data
+     *
+     * @param surveyBO   Survey business object
+     * @param document   Document object of the survey DCR
+     * @param connection Database connection object
+     * @return Returns true for successful update else false for failure.
+     * @throws SQLException
+     */
+    public boolean updateDynamicSurveyQuestionData(TSSurveyBO surveyBO,
+            Document document, Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : updateDynamicSurveyQuestionData");
+            String surveyQuestionQuery = "UPDATE DYNAMIC_SURVEY_QUESTION SET "
+                    + "QUESTION = ? WHERE SURVEY_QUESTION_ID = ? AND SURVEY_MASTER_ID = ? ";
+            preparedStatement = connection
+                    .prepareStatement(surveyQuestionQuery);
+            logger.debug("surveyQuestionQuery : " + surveyQuestionQuery);
+            
+            setSurveyQuestionId(surveyBO, connection);
+
+            List<Node> nodes = document.selectNodes(OPTION_FIELD_PATH);
+            for (Node node : nodes) {
+
+                String questionType = node
+                        .selectSingleNode(".//field-type").getText();
+                logger.debug("updateDynamicSurveyQuestionData questionType : "
+                        + questionType);
+
+                if (questionType != null && !"".equals(questionType) && !"button".equalsIgnoreCase(questionType)) {
+
+                    String question = node.selectSingleNode(".//question")
+                            .getText();
+                    logger.debug("question : " + question);
+                    preparedStatement.setString(1, question);
+                    preparedStatement.setLong(2, surveyBO.getSurveyQuestionId());
+                    preparedStatement.setLong(3, surveyBO.getSurveyMasterId());
+                    int questionResult = preparedStatement.executeUpdate();
+
+                    if (questionResult > 0) {
+                        result = true;
+                        logger.info("Survey Question Inserted");
+                        if(optionsList.contains(questionType)) {
+                            boolean isOptionsUpdated = updateDynamicSurveyOptionData(
+                                    surveyBO, node, connection);
+    
+                            if (isOptionsUpdated) {
+                                result = true;
+                            } else {
+                                result = false;
+                                connection.rollback();
+                                logger.info(
+                                        "updateDynamicSurveyQuestionData Option batch update failed");
+                                break;
+                            }
+                        }
+                    } else {
+                        result = false;
+                        connection.rollback();
+                        logger.info(
+                                "updateDynamicSurveyQuestionData Question update failed");
+                        break;
+                    }
+                }
+            }
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updateDynamicSurveyQuestionData: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updateDynamicSurveyQuestionData connection");
         }
         return result;
     }
@@ -1496,17 +2240,18 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.info("PollSurveyTask : updateSurveyOptionData");
             String surveyOptionQuery = "UPDATE "
                     + "SURVEY_OPTION SET OPTION_LABEL = ?,  IS_USER_INPUT = ?,"
-                    + "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
+                    //+ "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
+                    + "WHERE SURVEY_ID = ? "
                     + "AND LANG = ? AND QUESTION_NO = ? "
                     + "AND OPTION_NO = ?";
             preparedStatement = connection
                     .prepareStatement(surveyOptionQuery);
-            logger.info("updateSurveyOptionData surveyOptionQuery : "
+            logger.debug("updateSurveyOptionData surveyOptionQuery : "
                     + surveyOptionQuery);
             List<Node> optionNodes = node.selectNodes(".//option");
             int optionNo = 1;
             for (Node optnode : optionNodes) {
-                logger.info(
+                logger.debug(
                         "updateSurveyOptionData optionNo : " + optionNo);
                 String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
                         .getText();
@@ -1514,15 +2259,20 @@ public class PollSurveyTask implements CSURLExternalTask {
                         .getText();
                 String optionValue = optnode.selectSingleNode(OPTION_VALUE)
                         .getText();
-                logger.info(optionLabel + " : " + optionValue);
+                logger.debug(optionLabel + " : " + optionValue);
                 preparedStatement.setString(1, optionLabel);
                 preparedStatement.setString(2, isOpenResponse);
-                preparedStatement.setString(3, optionValue);
+                /*preparedStatement.setString(3, optionValue);
                 preparedStatement.setLong(4,
                         Long.parseLong(surveyBO.getSurveyId()));
                 preparedStatement.setString(5, surveyBO.getLang());
                 preparedStatement.setInt(6, surveyBO.getQuestionNo());
-                preparedStatement.setInt(7, optionNo);
+                preparedStatement.setInt(7, optionNo);*/
+                preparedStatement.setLong(3,
+                        Long.parseLong(surveyBO.getSurveyId()));
+                preparedStatement.setString(4, surveyBO.getLang());
+                preparedStatement.setInt(5, surveyBO.getQuestionNo());
+                preparedStatement.setInt(6, optionNo);
                 preparedStatement.addBatch();
                 optionNo++;
             }
@@ -1544,6 +2294,63 @@ public class PollSurveyTask implements CSURLExternalTask {
         }
         return result;
     }
+    
+    /**
+     * Method updates the dynamic survey option data
+     *
+     * @param surveyBO   Survey business object
+     * @param node       Node object of the survey option node
+     * @param connection Database connection object
+     * @return Returns true for successful update else false for failure.
+     * @throws SQLException
+     */
+    public boolean updateDynamicSurveyOptionData(TSSurveyBO surveyBO, Node node,
+            Connection connection) throws SQLException {
+        PreparedStatement preparedStatement = null;
+        boolean result = false;
+        try {
+            logger.info("PollSurveyTask : updateDynamicSurveyOptionData");
+            String surveyOptionQuery = "UPDATE "
+                    + "DYNAMIC_SURVEY_OPTION SET OPTION_LABEL = ?,  IS_USER_INPUT = ? "
+                    + "WHERE SURVEY_QUESTION_ID = ? ";
+            preparedStatement = connection
+                    .prepareStatement(surveyOptionQuery);
+            logger.debug("updateDynamicSurveyOptionData surveyOptionQuery : "
+                    + surveyOptionQuery);
+            List<Node> optionNodes = node.selectNodes(".//option");
+            int optionNo = 1;
+            for (Node optnode : optionNodes) {
+                logger.debug(
+                        "updateDynamicSurveyOptionData optionNo : " + optionNo);
+                String optionLabel = optnode.selectSingleNode(OPTION_LABEL)
+                        .getText();
+                String isOpenResponse = optnode.selectSingleNode(IS_OPEN_RESPONSE)
+                        .getText();
+                logger.debug("optionLabel : "+optionLabel);
+                preparedStatement.setString(1, optionLabel);
+                preparedStatement.setString(2, isOpenResponse);
+                preparedStatement.setLong(3, surveyBO.getSurveyQuestionId());
+                preparedStatement.addBatch();
+                optionNo++;
+            }
+            int[] optionBatch = preparedStatement.executeBatch();
+            logger.info("updateDynamicSurveyOptionData optionBatch length : "
+                    + optionBatch.length);
+
+            if (optionBatch.length == optionNo - 1) {
+                logger.info("Survey Option Inserted");
+                result = true;
+            }
+
+        } catch (NumberFormatException | SQLException e) {
+            logger.error("Exception in updateDynamicSurveyOptionData: ", e);
+            throw e;
+        } finally {
+            postgre.releaseConnection(null, preparedStatement, null);
+            logger.info("Released updateDynamicSurveyOptionData connection");
+        }
+        return result;
+    }
 
     /**
      * Method to get the DCR value for the input node name
@@ -1553,7 +2360,7 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return
      */
     public String getDCRValue(Document document, String nodeName) {
-        logger.debug("PollSurveyTask : getDCRValue");
+        logger.info("PollSurveyTask : getDCRValue");
         String dcrValue = document.selectSingleNode(nodeName).getText();
         logger.debug(nodeName + " : " + dcrValue);
         return dcrValue;
@@ -1567,10 +2374,10 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @return Returns Date object created from the input date string.
      */
     public Date getDate(String inputDate) {
-        logger.debug("PollSurveyTask : getDate");
+        logger.info("PollSurveyTask : getDate");
         String[] dateArr = inputDate.split(" ");
         Date outDate = java.sql.Date.valueOf(dateArr[0]);
-        logger.info(inputDate + " >>> " + outDate);
+        logger.debug(inputDate + " >>> " + outDate);
         return outDate;
     }
 
