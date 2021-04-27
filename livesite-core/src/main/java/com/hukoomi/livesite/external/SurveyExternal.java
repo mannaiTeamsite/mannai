@@ -4,11 +4,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringJoiner;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -73,7 +74,13 @@ public class SurveyExternal {
     /**
      * Constant for action survey submit.
      */
-    public static final String ACTION_SUBIT = "submit";
+    public static final String ACTION_SURVEY_SUBIT = "submit";
+    
+    /**
+     * Constant for action survey submit.
+     */
+    public static final String ACTION_DYNAMIC_SURVEY_SUBIT = "dynamicsurveysubmit";
+
 
     /**
      * Submitted Status constant.
@@ -94,6 +101,25 @@ public class SurveyExternal {
      * Constant for Survey Id.
      */
     public static final String SURVEYID = "SURVEY_ID";
+    
+    /**
+     * Constant for Survey Master Id.
+     */
+    public static final String SURVEY_MASTER_ID = "SURVEY_MASTER_ID";
+    /**
+     * Constant for Survey Question Id.
+     */
+    public static final String SURVEY_QUESTION_ID = "SURVEY_QUESTION_ID";
+    /**
+     * Solr Categroy of survey.
+     */
+    public static final String CATEGORY_SURVEY = "survey";
+    
+    /**
+     * Solr Categroy of dynamic survey.
+     */
+    public static final String CATEGORY_DYNAMIC_SURVEY = "dynamic-survey";
+    
 
     /**
      * This method will be called from Component External to insert Survey form
@@ -115,7 +141,7 @@ public class SurveyExternal {
         DetailExternal detailExt = new DetailExternal();
         surveyBO = new SurveyBO();
         boolean isInputValid = setBO(context, surveyBO);
-        logger.info("SurveyBO : " + surveyBO);
+        logger.debug("SurveyBO : " + surveyBO);
 
         Document document = DocumentHelper.createDocument();
         Element surveyResponseElem = document.addElement("SurveyResponse");
@@ -124,11 +150,12 @@ public class SurveyExternal {
             if (surveyBO.getAction() != null
                     && !"".equals(surveyBO.getAction())) {
                 GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-                if ("submit".equalsIgnoreCase(surveyBO.getAction())) {
-                    String status = getSubmissionDatabaseStatus(
-                            surveyBO.getSurveyId(), postgre, surveyBO);
+                if (ACTION_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {
+                    ArrayList surveyArr = new ArrayList();
+                    surveyArr.add(surveyBO.getSurveyId());
+                    ArrayList submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, null, postgre, surveyBO);
 
-                    if (StringUtils.isEmpty(status)) {
+                    if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
                         if (captchUtil.validateCaptcha(context,
                                 surveyBO.getCaptchaResponse())) {
                             logger.info("Google Recaptcha is valid");
@@ -148,8 +175,7 @@ public class SurveyExternal {
                     } else {
                         surveyStatusElem.setText(SUBMITTED);
                     }
-                } else if ("detail"
-                        .equalsIgnoreCase(surveyBO.getAction())) {
+                } else if (ACTION_SURVEY_DETAIL.equalsIgnoreCase(surveyBO.getAction())) {
                     logger.info("SurveyExternal : Loading Properties....");
                     PropertiesFileReader propertyFileReader = new PropertiesFileReader(
                             context, "captchaconfig.properties");
@@ -157,47 +183,59 @@ public class SurveyExternal {
                             .getPropertiesFile();
                     logger.info("SurveyExternal : Properties Loaded");
                     String siteKey = properties.getProperty("siteKey");
-                    logger.info("siteKey : " + siteKey);
+                    logger.debug("siteKey : " + siteKey);
                     document = detailExt.getContentDetail(context);
 
-                    String endDate = document
-                            .selectSingleNode(
-                                    "/content/root/details/end-date")
-                            .getText();
-
-                    boolean isExpired = checkExpiryDate(endDate);
-                    logger.info("Is expired : " + isExpired);
-                    if (!isExpired) {
                     String surveyId = document
                             .selectSingleNode(
                                     "/content/root/information/id")
                             .getText();
-                    logger.info("Detail External Survey Id : " + surveyId);
-                    String submittedSurveyId = null;
+                    logger.debug("Detail External Survey Id : " + surveyId);
+                    ArrayList submittedSurveyIdArr = null;
                     if (StringUtils.isNotBlank(surveyId)) {
-                        submittedSurveyId = getSubmissionDatabaseStatus(
-                                surveyId, postgre, surveyBO);
-                        logger.info("Submitted Survey Id : "
-                                + submittedSurveyId);
+                        ArrayList surveyArr = new ArrayList();
+                        surveyArr.add(surveyId);
+                        submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, 
+                                null, postgre, surveyBO);
+                        logger.debug("Submitted Survey Id : "
+                                + submittedSurveyIdArr);
                     }
 
-                    if (StringUtils.isNotEmpty(submittedSurveyId)) {
+                    if(submittedSurveyIdArr != null && !submittedSurveyIdArr.isEmpty()) {
                         document.getRootElement().addAttribute("Status",
                                 SUBMITTED);
                     }
-                    document.getRootElement().addAttribute("Sitekey",
-                            siteKey);
-                } else {
-                    document.getRootElement().addAttribute("Expired",
-                            "true");
-                }
+                    document.getRootElement().addAttribute("Sitekey", siteKey);
+                } else if (ACTION_SURVEY_LISTING.equalsIgnoreCase(surveyBO.getAction())) {
+                    document = getSurveyList(context);
+                } else if (ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {
+                    ArrayList dynamicSurveyArr = new ArrayList();
+                    dynamicSurveyArr.add(surveyBO.getSurveyId());
+                    ArrayList submittedSurveyIdArr = getSubmittedSurveyIds(null, dynamicSurveyArr, postgre, surveyBO);
 
-                } else if ("listing"
-                        .equalsIgnoreCase(surveyBO.getAction())) {
-                    document = checkSubmissionStatus(context);
-                }
+                    if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
+                        if (captchUtil.validateCaptcha(context,
+                                surveyBO.getCaptchaResponse())) {
+                            logger.info("Google Recaptcha is valid");
+                            boolean insertDynamicSurveyResponse = insertDynamicSurveyResponse(
+                                    surveyBO, context);
+                            logger.info("insertDynamicSurveyResponse : "
+                                    + insertDynamicSurveyResponse);
+                            if (insertDynamicSurveyResponse) {
+                                surveyStatusElem.setText(SUCCESS);
+                            } else {
+                                surveyStatusElem.setText(FAILED);
+                            }
+                        } else {
+                            logger.info("Google Recaptcha is not valid");
+                            surveyStatusElem.setText(FAILED);
+                        }
+                    } else {
+                        surveyStatusElem.setText(SUBMITTED);
+                    }
+                } 
 
-                logger.info("Final Result :" + document.asXML());
+                logger.debug("Final Result :" + document.asXML());
             } else {
                 logger.info("Error : Survey Action not available");
             }
@@ -209,51 +247,38 @@ public class SurveyExternal {
     }
 
     /**
-     * @param endDate
-     *                Survey End Date
-     * @return
-     */
-    private boolean checkExpiryDate(String endDate) {
-        logger.info("checkExpiryDate()");
-
-        // Formatter for date
-        DateTimeFormatter formatter = DateTimeFormatter
-                .ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        // Parse date to LocalDateTime
-        LocalDateTime localDateTime = LocalDateTime.parse(endDate,
-                formatter);
-
-        return LocalDateTime.now().isAfter(localDateTime);
-    }
-
-    /**
      * @param context
      * @return document
      */
-    private Document checkSubmissionStatus(RequestContext context) {
-        logger.info("checkSubmissionStatus()");
+    private Document getSurveyList(RequestContext context) {
+        logger.info("SurveyExternal : getSurveyList");
         Document document = null;
 
         HukoomiExternal hukoomiExternal = new HukoomiExternal();
 
         // Getting Survey Solr Document
         document = hukoomiExternal.getLandingContent(context);
+        logger.debug("Survey Listing Doc :" + document.asXML());
 
         // Extracting Survey Ids from Survey Document
-        String surveyIds = getSurveyIdsFromDoc(document);
-
-        logger.info("SurveyIds from doc : " + surveyIds);
-
-        if (StringUtils.isNotBlank(surveyIds)) {
-        // Checking for already submitted Surveys
-        String submittedSurveyIds = getSubmissionDatabaseStatus(surveyIds,
+        ArrayList surveyArr = new ArrayList();
+        ArrayList dynamicSurveyArr = new ArrayList();
+        getSurveyIdsFromDoc(document, surveyArr, dynamicSurveyArr);
+        logger.debug("Survey SurveyIds from doc : " + surveyArr);
+        logger.debug("Dynamic Survey SurveyIds from doc : " + dynamicSurveyArr);
+        
+        if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {
+        //if (StringUtils.isNotBlank(surveyIds)) {
+            // Checking for already submitted Surveys
+            
+            ArrayList submittedSurveyIds = getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
                 postgre, surveyBO);
-
-        // Add Status code to document
-        if (StringUtils.isNotBlank(submittedSurveyIds)) {
-            document = addStatusToXml(document, submittedSurveyIds);
-        }
+            logger.debug("No. of Submitted Survey Ids : " + submittedSurveyIds.size());
+            
+            // Add Status code to document
+            if (submittedSurveyIds != null && !submittedSurveyIds.isEmpty()) {
+                document = addStatusToXml(document, submittedSurveyIds);
+            }
         }
 
         return document;
@@ -266,7 +291,7 @@ public class SurveyExternal {
      */
     @SuppressWarnings("unchecked")
     public Document addStatusToXml(Document document,
-            String submittedSurveyIds) {
+            ArrayList submittedSurveyIds) {
         logger.info("addStatusToXml()");
         List<Node> nodes = document
                 .selectNodes("/SolrResponse/response/docs");
@@ -293,76 +318,113 @@ public class SurveyExternal {
      * @return Returns comma seperated string containing already submitted Survey
      *         ids.
      */
-    public String getSubmissionDatabaseStatus(String surveyIds,
+    public ArrayList getSubmittedSurveyIds(ArrayList surveyArr, ArrayList dynamicSurveyArr,
             Postgre postgre, SurveyBO surveyBO) {
-        logger.info("getSubmissionDatabaseStatus()");
-
-        StringBuilder checkSubmittedSurveyQuery = new StringBuilder(
-                "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR,SURVEY_MASTER SM WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) AND SM.SUBMIT_TYPE='Single' ");
-        StringJoiner submittedSurveyIds = new StringJoiner(",");
-
-        String[] surveyIdsArr = surveyIds.split(",");
-
-        if (surveyBO.getUserId() != null
-                && !"".equals(surveyBO.getUserId())) {
-            checkSubmittedSurveyQuery.append("AND USER_ID = ? ");
-        } else if (surveyBO.getIpAddress() != null
-                && !"".equals(surveyBO.getIpAddress())) {
-            checkSubmittedSurveyQuery.append("AND IP_ADDRESS = ? ");
-        }
-        logger.info("checkSubmittedSurveyQuery ::"
-                + checkSubmittedSurveyQuery.toString());
+        logger.info("SurveyExternal : getSubmittedSurveyIds");
+        ArrayList submittedSurveyIds = new ArrayList();
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
-
+        
         try {
             connection = postgre.getConnection();
-            prepareStatement = connection.prepareStatement(
-                    checkSubmittedSurveyQuery.toString());
-            prepareStatement.setArray(1,
-                    connection.createArrayOf(BIGINT, surveyIdsArr));
-            if (surveyBO.getUserId() != null
-                    && !"".equals(surveyBO.getUserId())) {
-                prepareStatement.setString(2, surveyBO.getUserId());
-            } else if (surveyBO.getIpAddress() != null
-                    && !"".equals(surveyBO.getIpAddress())) {
-                prepareStatement.setString(2, surveyBO.getIpAddress());
+            String userId = surveyBO.getUserId();
+            String ipAddress = surveyBO.getIpAddress();
+            
+            if(surveyArr != null && !surveyArr.isEmpty()) {
+                
+                logger.info("Fetching submitted id's for Survey");
+                StringBuilder surveyQuery = new StringBuilder(
+                        "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR, SURVEY_MASTER SM "
+                        + "WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) "
+                        + "AND SM.SUBMIT_TYPE = 'Single' ");
+    
+                if(userId != null && !"".equals(userId)) {
+                    surveyQuery.append("AND USER_ID = ? ");
+                }else if(ipAddress != null && !"".equals(ipAddress)) {
+                    surveyQuery.append("AND IP_ADDRESS = ? ");
+                }
+                logger.debug("Survey Query : "+ surveyQuery.toString());
+                    
+                prepareStatement = connection.prepareStatement(
+                        surveyQuery.toString());
+                prepareStatement.setArray(1,
+                        connection.createArrayOf(BIGINT, surveyArr.toArray()));
+                if(userId != null && !"".equals(userId)) {
+                    prepareStatement.setString(2, surveyBO.getUserId());
+                }else if(ipAddress != null && !"".equals(ipAddress)) {
+                    prepareStatement.setString(2, surveyBO.getIpAddress());
+                }
+                rs = prepareStatement.executeQuery();
+                while (rs.next()) {
+                    submittedSurveyIds.add(rs.getString(SURVEYID));
+                }
+                
             }
-            rs = prepareStatement.executeQuery();
-            while (rs.next()) {
-                submittedSurveyIds.add(rs.getString(SURVEYID));
+            
+            if(dynamicSurveyArr != null && !dynamicSurveyArr.isEmpty()) {
+                logger.info("Fetching submitted id's for Dynamic Survey");
+                StringBuilder dynamicSurveyQuery = new StringBuilder(
+                        "SELECT DISTINCT DSM.SURVEY_ID FROM DYNAMIC_SURVEY_RESPONSE DSR, DYNAMIC_SURVEY_MASTER DSM "
+                        + "WHERE DSM.SURVEY_MASTER_ID = DSR.SURVEY_MASTER_ID AND DSM.SURVEY_ID = ANY (?) "
+                        + "AND DSM.SUBMIT_TYPE = 'Single' ");
+    
+                if(userId != null && !"".equals(userId)) {
+                    dynamicSurveyQuery.append("AND USER_ID = ? ");
+                }else if(ipAddress != null && !"".equals(ipAddress)) {
+                    dynamicSurveyQuery.append("AND IP_ADDRESS = ? ");
+                }
+                logger.debug("Dynamic Survey Query : "+ dynamicSurveyQuery.toString());
+                    
+                prepareStatement = connection.prepareStatement(
+                        dynamicSurveyQuery.toString());
+                prepareStatement.setArray(1,
+                        connection.createArrayOf(BIGINT, dynamicSurveyArr.toArray()));
+                if(userId != null && !"".equals(userId)) {
+                    prepareStatement.setString(2, surveyBO.getUserId());
+                }else if(ipAddress != null && !"".equals(ipAddress)) {
+                    prepareStatement.setString(2, surveyBO.getIpAddress());
+                }
+                rs = prepareStatement.executeQuery();
+                while (rs.next()) {
+                    submittedSurveyIds.add(rs.getString(SURVEYID));
+                }
             }
-            logger.info("Submitted Surveys : "
-                    + submittedSurveyIds.toString());
-
+            logger.debug("Survey submitted id's : "+ submittedSurveyIds);
+            
         } catch (Exception e) {
-            logger.error("Exception in getSubmissionDatabaseStatus", e);
+            logger.error("Exception in getSubmittedSurveyIds", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
-        return submittedSurveyIds.toString();
+        
+        return submittedSurveyIds;
     }
 
     /**
-     * This method is used to extract and create Survey Ids' comma seprated string.
+     * This method is used to extract the survey id's from the input document and
+     * sets the id to the respective list
      *
-     * @param doc
-     *            Document Object.
+     * @param doc Document Object.
      *
-     * @return Comma Seprated String containing Survey Ids.
      */
     @SuppressWarnings("unchecked")
-    public String getSurveyIdsFromDoc(Document doc) {
+    public void getSurveyIdsFromDoc(Document doc, ArrayList surveyArray, ArrayList dynamicSurveyArray) {
         logger.info("getSurveyIdsFromDoc()");
 
-        List<Node> nodes = doc.selectNodes("/SolrResponse/response/docs");
-        StringJoiner joiner = new StringJoiner(",");
-
-        for (Node node : nodes) {
-            joiner.add(node.selectSingleNode("id").getText());
+        if(surveyArray != null && dynamicSurveyArray != null) {
+            List<Node> nodes = doc.selectNodes("/SolrResponse/response/docs");
+    
+            for (Node node : nodes) {
+                String category = node.selectSingleNode("category").getText();
+                
+                if(category != null && CATEGORY_SURVEY.equals(category)) {
+                    surveyArray.add(node.selectSingleNode("id").getText());
+                }else if(category != null && CATEGORY_DYNAMIC_SURVEY.equals(category)) {
+                    dynamicSurveyArray.add(node.selectSingleNode("id").getText());
+                }
+            }
         }
-        return joiner.toString();
     }
 
     /**
@@ -397,7 +459,7 @@ public class SurveyExternal {
             Long responseId = getNextSequenceValue(
                     "survey_response_response_id_seq",
                     postgre.getConnection());
-            logger.info("responseId : " + responseId);
+            logger.debug("responseId : " + responseId);
 
             connection = postgre.getConnection();
 
@@ -420,18 +482,18 @@ public class SurveyExternal {
             int result = surveyprepareStatement.executeUpdate();
             if (result > 0) {
                 logger.info("Survey Response Inserted : " + result);
-
+                
                 String surveyAnswerQuery = "INSERT INTO SURVEY_ANSWERS "
                         + "(ANSWER_ID, RESPONSE_ID, SURVEY_ID, LANG, "
                         + "QUESTION_NO, ANSWER) VALUES(?, ?, ?, ?, ?, ?)";
                 answersprepareStatement = connection
                         .prepareStatement(surveyAnswerQuery);
 
-                boolean isAdded = addAnswerstoBatch(totalCount, context,
+                boolean isAdded = addSurveyAnswerstoBatch(totalCount, context,
                         answersprepareStatement, responseId, surveyBO);
                 logger.info("isAdded : " + isAdded);
                 if (isAdded) {
-                    logger.info("responseId : " + responseId);
+                    logger.debug("responseId : " + responseId);
 
                     // Number of items added to the answers batch is set to the un-used qustionNo
                     // field.
@@ -469,9 +531,222 @@ public class SurveyExternal {
 
         return isSurveyInserted;
     }
+    
+    /**
+     * This method gets the Survey master id from the dynamic survey master table.
+     * 
+     * @param postgre
+     *                  Postgre Object.
+     * @param surveyBO
+     *                  dynamic survey business object.
+     * 
+     * @return Returns Survey master id for the dynamic survey 
+     */
+    public Long getDynamicSurveyMasterId(Postgre postgre, SurveyBO surveyBO) {
+        logger.info("SurveyExternal : getDynamicSurveyMasterId");
+        Long surveyMasterId = null;
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        
+        try {
+            
+            connection = postgre.getConnection();
+            String surveyId = surveyBO.getSurveyId();
+            String lang = surveyBO.getLang();
+            
+            if((surveyId != null && !"".equals(surveyId)) && 
+                    (lang != null && !"".equals(lang)) ) {
+                String dynamicSurveyQuery = "SELECT DISTINCT SURVEY_MASTER_ID FROM DYNAMIC_SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ? ";
+    
+                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery.toString());
+                    
+                prepareStatement = connection.prepareStatement(dynamicSurveyQuery);
+                prepareStatement.setLong(1, Long.parseLong(surveyId));
+                prepareStatement.setString(2, lang);
+                rs = prepareStatement.executeQuery();
+                while (rs.next()) {
+                    surveyMasterId = rs.getLong(SURVEY_MASTER_ID);
+                    /*String surveyMasterIdStr = rs.getString(SURVEY_MASTER_ID);
+                    if(surveyMasterIdStr != null && !"".endsWith(surveyMasterIdStr)) {
+                        surveyMasterId = Long.parseLong(surveyMasterIdStr);
+                    }*/
+                }
+            }
+            logger.debug("Dynamic Survey Master Id : "+ surveyMasterId);
+            
+        } catch (Exception e) {
+            logger.error("Exception in getDynamicSurveyMasterId", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        
+        return surveyMasterId;
+    }
+    
+    /**
+     * This method gets the Survey question id from the dynamic survey master table.
+     * 
+     * @param postgre
+     *                  Postgre Object.
+     * @param surveyBO
+     *                  dynamic survey business object.
+     * 
+     * @return Returns Survey question id for the dynamic survey 
+     */
+    public Long getDynamicSurveyQuestionId(Postgre postgre, SurveyBO surveyBO) {
+        logger.info("SurveyExternal : getDynamicSurveyQuestionId");
+        Long surveyQuestionId = null;
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        
+        try {
+            connection = postgre.getConnection();
+            Long questionId = surveyBO.getQuestionId();
+            Long surveyMasterId = surveyBO.getSurveyMasterId();
+            
+            if(questionId != null && surveyMasterId != null  ) {
+                String dynamicSurveyQuery = "SELECT SURVEY_QUESTION_ID FROM dynamic_survey_question WHERE SURVEY_MASTER_ID = ? AND QUESTION_ID = ? ";
+    
+                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery.toString());
+                    
+                prepareStatement = connection.prepareStatement(dynamicSurveyQuery);
+                prepareStatement.setLong(1, surveyMasterId);
+                prepareStatement.setLong(2, questionId);
+                rs = prepareStatement.executeQuery();
+                while (rs.next()) {
+                    surveyQuestionId = rs.getLong(SURVEY_QUESTION_ID);
+                    /*String surveyQuestionIdStr = rs.getString(SURVEY_QUESTION_ID);
+                    if(surveyQuestionIdStr != null && !"".endsWith(surveyQuestionIdStr)) {
+                        surveyQuestionId = Long.parseLong(surveyQuestionIdStr);
+                    }*/
+                }
+            }
+            logger.debug("Dynamic Survey Question Id : "+ surveyQuestionId);
+            
+        } catch (Exception e) {
+            logger.error("Exception in getDynamicSurveyQuestionId", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        
+        return surveyQuestionId;
+    }
+            
+    
+    /**
+     * This method is used to insert dynamic survey data into database.
+     * 
+     * @param surveyBO
+     *                 SurveyBO object.
+     * @param context
+     *                 Request Context object.
+     * 
+     * @return Returns boolean status about data insert operation.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
+    private boolean insertDynamicSurveyResponse(SurveyBO surveyBO,
+            RequestContext context) {
+        logger.info("SurveyExternal : insertDynamicSurveyResponse");
+
+        PreparedStatement surveyprepareStatement = null;
+        PreparedStatement answersprepareStatement = null;
+        Connection connection = null;
+        ResultSet rs = null;
+        int totalCount = 0;
+        boolean isSurveyInserted = false;
+
+        try {
+            
+            totalCount = getIntValue(surveyBO.getTotalQuestions());
+            logger.info("totalCount : " + totalCount);
+            
+            Long dynamicSurveyMasterId = getDynamicSurveyMasterId(postgre, surveyBO);
+            surveyBO.setSurveyMasterId(dynamicSurveyMasterId);
+
+            //totalCount = getIntValue(surveyBO.getTotalQuestions());
+            //logger.info("totalCount : " + totalCount);
+
+            Long responseId = getNextSequenceValue(
+                    "dynamic_survey_response_response_id_seq",
+                    postgre.getConnection());
+            logger.debug("responseId : " + responseId);
+            surveyBO.setResponseId(responseId);
+            
+            connection = postgre.getConnection();
+
+            String surveyResponseQuery = "INSERT INTO DYNAMIC_SURVEY_RESPONSE ("
+                    + "RESPONSE_ID, SURVEY_MASTER_ID, USER_ID, "
+                    + "IP_ADDRESS, USER_AGENT, SURVEY_TAKEN_ON, "
+                    + "SURVEY_TAKEN_FROM) VALUES(?, ?, ?, ?, ?, "
+                    + "LOCALTIMESTAMP, ?)";
+            connection.setAutoCommit(false);
+            surveyprepareStatement = connection
+                    .prepareStatement(surveyResponseQuery);
+            surveyprepareStatement.setLong(1, surveyBO.getResponseId());
+            surveyprepareStatement.setLong(2, surveyBO.getSurveyMasterId());
+            surveyprepareStatement.setString(3, surveyBO.getUserId());
+            surveyprepareStatement.setString(4, surveyBO.getIpAddress());
+            surveyprepareStatement.setString(5, surveyBO.getUserAgent());
+            surveyprepareStatement.setString(6, surveyBO.getTakenFrom());
+            int result = surveyprepareStatement.executeUpdate();
+            if (result > 0) {
+                logger.info("Dynamic Survey Response Inserted : " + result);
+                
+                String surveyAnswerQuery = "INSERT INTO DYNAMIC_SURVEY_ANSWERS "
+                        + "( RESPONSE_ID, SURVEY_QUESTION_ID, ANSWER ) "
+                        + "VALUES(?, ?, ?)";
+                answersprepareStatement = connection
+                        .prepareStatement(surveyAnswerQuery);
+
+                boolean isAdded = addDynamicSurveyAnswerstoBatch(totalCount, context,
+                        answersprepareStatement, responseId, surveyBO);
+                logger.info("isAdded : " + isAdded);
+                if (isAdded) {
+                    logger.debug("responseId : " + responseId);
+
+                    // Number of items added to the answers batch is set to the un-used qustionNo
+                    // field.
+                    int addedToBatch = surveyBO.getQuestionNo();
+                    logger.info("addedToBatch : " + addedToBatch);
+
+                    int[] answerBatch = answersprepareStatement
+                            .executeBatch();
+                    logger.info("Total answers inserted : "
+                            + answerBatch.length);
+
+                    if (answerBatch.length == addedToBatch) {
+                        connection.commit();
+                        logger.info("Dynamic Survey Answer Inserted");
+                        isSurveyInserted = true;
+                    } else {
+                        logger.info("Failed to insert Dynamic Survey Answer");
+                        connection.rollback();
+                    }
+                } else {
+                    logger.info("Dynamic Survey answer is not created.");
+                    connection.rollback();
+                }
+            } else {
+                logger.info("Dynamic Survey Response not Inserted.");
+                connection.rollback();
+            }
+        } catch (Exception e) {
+            logger.error("Exception in insertDynamicSurveyResponse", e);
+        } finally {
+            postgre.releaseConnection(null, answersprepareStatement, null);
+            postgre.releaseConnection(connection, surveyprepareStatement,
+                    rs);
+        }
+
+        return isSurveyInserted;
+    }
 
     /**
-     * This method is used to add the answers to the batch for database batch
+     * This method is used to add the survey answers to the batch for database batch
      * execution for inserting the survey answers.
      * 
      * @param totalCount
@@ -491,29 +766,29 @@ public class SurveyExternal {
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
-    private boolean addAnswerstoBatch(int totalCount,
+    private boolean addSurveyAnswerstoBatch(int totalCount,
             final RequestContext context,
             PreparedStatement answersprepareStatement, Long responseId,
             SurveyBO surveyBO) throws SQLException {
-        logger.info("SurveyExternal : addAnswerstoBatch");
+        logger.info("SurveyExternal : addSurveyAnswerstoBatch");
         XssUtils xssUtils = new XssUtils();
         int numOfAnswersAdded = 0;
-        boolean isAdded = true;
+        boolean isAdded = false;
         for (int i = 1; i <= totalCount; i++) {
             String value = context.getParameterString(String.valueOf(i));
-            logger.info("value >>>" + value + "<<<");
-            logger.info("Answer for question " + i + " : " + value);
+            logger.debug("value >>>" + value + "<<<");
+            logger.debug("Answer for question " + i + " : " + value);
 
             if (value != null && value.contains("#$#")) {
                 String[] multipleOption = value.split("#\\$#");
-                logger.info(
+                logger.debug(
                         "Multiple Option Answer" + multipleOption.length);
                 for (String mutiOptValue : multipleOption) {
                     Long answerId = getNextSequenceValue(
                             "survey_answers_answer_id_seq",
                             postgre.getConnection());
-                    logger.info("answerId : " + answerId);
-                    logger.info("mutiOptValue : " + mutiOptValue);
+                    logger.debug("answerId : " + answerId);
+                    logger.debug("mutiOptValue : " + mutiOptValue);
 
                     answersprepareStatement.setLong(1, answerId);
                     answersprepareStatement.setLong(2, responseId);
@@ -526,13 +801,14 @@ public class SurveyExternal {
                             xssUtils.stripXSS(mutiOptValue));
                     answersprepareStatement.addBatch();
                     numOfAnswersAdded++;
+                    isAdded = true;
                 }
 
             } else {
                 Long answerId = getNextSequenceValue(
                         "survey_answers_answer_id_seq",
                         postgre.getConnection());
-                logger.info("answerId : " + answerId);
+                logger.debug("answerId : " + answerId);
 
                 answersprepareStatement.setLong(1, answerId);
                 answersprepareStatement.setLong(2, responseId);
@@ -544,13 +820,94 @@ public class SurveyExternal {
                         xssUtils.stripXSS(value));
                 answersprepareStatement.addBatch();
                 numOfAnswersAdded++;
+                isAdded = true;
             }
             surveyBO.setQuestionNo(numOfAnswersAdded);
         }
         return isAdded;
     }
-
-
+    
+    /**
+     * This method is used to add the dynamic survey answers to the batch for database batch
+     * execution for inserting the survey answers.
+     * 
+     * @param totalCount
+     *                                Total number of answers.
+     * @param context
+     *                                Request Context object.
+     * @param answersprepareStatement
+     *                                Answer query prepared statement.
+     * @param responseId
+     *                                Response Id from the survey resposne table.
+     * @param surveyBO
+     *                                SurveyBO object.
+     * 
+     * @return Returns true if all the answers are added to the batch else returns
+     *         false
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
+    private boolean addDynamicSurveyAnswerstoBatch(int totalCount,
+            final RequestContext context,
+            PreparedStatement answersprepareStatement, Long responseId,
+            SurveyBO surveyBO) throws SQLException {
+        logger.info("SurveyExternal : addDynamicSurveyAnswerstoBatch");
+        XssUtils xssUtils = new XssUtils();
+        int numOfAnswersAdded = 0;
+        boolean isAdded = false;
+        logger.debug("totalCount : " + totalCount);
+        for (int i = 1; i <= totalCount; i++) {
+            
+            String value = context.getParameterString(String.valueOf(i));
+            logger.debug("value >>>" + value + "<<<");
+            
+            String[] questionAnswerArr = value.split("#\\?#");
+            
+            String questionId = questionAnswerArr[0];
+            String answer = questionAnswerArr[1];
+            
+            if((questionId != null && !"".equals(questionId)) &&
+                    (answer != null && !"".equals(answer)) ) {
+                
+                surveyBO.setQuestionId(Long.parseLong(questionId));
+            
+                Long dynamicSurveyQuestionId = getDynamicSurveyQuestionId(postgre, surveyBO);
+                //surveyBO.setQuestionId(dynamicSurveyQuestionId);
+                
+                logger.debug("Answer for questionId " + questionId + " : " + answer);
+    
+                if (answer.contains("#$#")) {
+                    String[] multipleOption = answer.split("#\\$#");
+                    logger.debug(
+                            "Multiple Option Answer" + multipleOption.length);
+                    for (String mutiOptValue : multipleOption) {
+                        logger.debug("mutiOptValue : " + mutiOptValue);
+    
+                        answersprepareStatement.setLong(1, surveyBO.getResponseId());
+                        answersprepareStatement.setLong(2, dynamicSurveyQuestionId);
+                        answersprepareStatement.setString(3,
+                                xssUtils.stripXSS(mutiOptValue));
+                        answersprepareStatement.addBatch();
+                        numOfAnswersAdded++;
+                        isAdded = true;
+                    }
+    
+                } else {
+    
+                    answersprepareStatement.setLong(1, surveyBO.getResponseId());
+                    answersprepareStatement.setLong(2, dynamicSurveyQuestionId);
+                    answersprepareStatement.setString(3,
+                            xssUtils.stripXSS(answer));
+                    answersprepareStatement.addBatch();
+                    numOfAnswersAdded++;
+                    isAdded = true;
+                }
+                surveyBO.setQuestionNo(numOfAnswersAdded);
+            }
+        }
+        return isAdded;
+    }
 
     /**
      * This method is used to get int value.
@@ -631,78 +988,93 @@ public class SurveyExternal {
         //TODO: Field length needs to be validated against content model and database. 
         
         String surveyAction = context.getParameterString(SURVEY_ACTION);
-        logger.info(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
+        logger.debug(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
         if (!ESAPIValidator.checkNull(surveyAction)) {
-            validData  = ESAPI.validator().getValidInput(SURVEY_ACTION, surveyAction, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+            validData  = ESAPI.validator().getValidInput(SURVEY_ACTION, surveyAction, ESAPIValidator.ALPHABET, 25, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setAction(validData);
             }else {
-                logger.info(errorList.getError(SURVEY_ACTION));
+                logger.debug(errorList.getError(SURVEY_ACTION));
                 return false;
             }
         }
         
         String locale = context.getParameterString(LOCALE, "en");
-        logger.info(LOCALE + " >>>"+locale+"<<<");
+        logger.debug(LOCALE + " >>>"+locale+"<<<");
         validData  = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true, errorList);
         if(errorList.isEmpty()) {
             surveyBO.setLang(validData);
         }else {
-            logger.info(errorList.getError(LOCALE));
+            logger.debug(errorList.getError(LOCALE));
             return false;
         }
         
-        String userId = context.getParameterString(USER_ID);
-        logger.info(USER_ID + " >>>"+userId+"<<<");
+        HttpServletRequest request = context.getRequest();
+        if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
+            String userId = request.getSession().getAttribute("uid").toString();
+            
+            logger.debug(USER_ID + " >>>"+userId+"<<<");
+            validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setUserId(validData);
+            }else {
+                logger.debug(errorList.getError(USER_ID));
+                return false;
+            }
+        }
+        
+        /*String userId = context.getParameterString(USER_ID);
+        logger.debug(USER_ID + " >>>"+userId+"<<<");
         validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
         if(errorList.isEmpty()) {
             surveyBO.setUserId(validData);
         }else {
-            logger.info(errorList.getError(USER_ID));
+            logger.debug(errorList.getError(USER_ID));
             return false;
-        }
+        }*/
         
         String ipAddress = requestHeaderUtils.getClientIpAddress();
-        logger.info("ipaddress >>>" +ipAddress+"<<<");
+        logger.debug("ipaddress >>>" +ipAddress+"<<<");
         validData  = ESAPI.validator().getValidInput("ipaddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
         if(errorList.isEmpty()) {
             surveyBO.setIpAddress(validData);
         }else {
-            logger.info(errorList.getError("ipaddress"));
+            logger.debug(errorList.getError("ipaddress"));
             return false;
         }
         
         surveyBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
         
-        if(ACTION_SUBIT.equalsIgnoreCase(surveyAction)) {
+        if(ACTION_SURVEY_SUBIT.equalsIgnoreCase(surveyAction) || 
+                ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyAction)) {
             
             String surveyTakenFrom = context.getParameterString(SURVEY_TAKEN_FROM);
-            logger.info(SURVEY_TAKEN_FROM + " >>>"+surveyTakenFrom+"<<<");
+            logger.debug(SURVEY_TAKEN_FROM + " >>>"+surveyTakenFrom+"<<<");
             validData  = ESAPI.validator().getValidInput(SURVEY_TAKEN_FROM, surveyTakenFrom, ESAPIValidator.ALPHABET, 150, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setTakenFrom(validData);
             }else {
-                logger.info(errorList.getError(USER_AGENT));
+                logger.debug(errorList.getError(USER_AGENT));
                 return false;
             }
             
             String surveyId = context.getParameterString(SURVEY_ID);
-            logger.info(SURVEY_ID + " >>>"+surveyId+"<<<");
+            logger.debug(SURVEY_ID + " >>>"+surveyId+"<<<");
             validData  = ESAPI.validator().getValidInput(SURVEY_ID, surveyId, ESAPIValidator.NUMERIC, 200, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setSurveyId(validData);
             }else {
-                logger.info(errorList.getError(SURVEY_ID));
+                logger.debug(errorList.getError(SURVEY_ID));
                 return false;
             }
             
             String totalQuestions = context.getParameterString(TOTAL_QUESTIONS);
-            logger.info(TOTAL_QUESTIONS + " >>>"+totalQuestions+"<<<");
+            logger.debug(TOTAL_QUESTIONS + " >>>"+totalQuestions+"<<<");
             validData  = ESAPI.validator().getValidInput(TOTAL_QUESTIONS, totalQuestions, ESAPIValidator.NUMERIC, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setTotalQuestions(validData);
             }else {
-                logger.info(errorList.getError(TOTAL_QUESTIONS));
+                logger.debug(errorList.getError(TOTAL_QUESTIONS));
                 return false;
             }
             
@@ -712,42 +1084,42 @@ public class SurveyExternal {
         }
         
         String pollAction = context.getParameterString(POLL_ACTION);
-        logger.info(POLL_ACTION + " >>>" +pollAction+ "<<<");   
+        logger.debug(POLL_ACTION + " >>>" +pollAction+ "<<<");   
         if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
             
             String surveyGroup = context.getParameterString(SURVEY_GROUP);
-            logger.info(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
+            logger.debug(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
             if (!ESAPIValidator.checkNull(surveyGroup)) {
                 surveyBO.setGroup(getContentName(surveyGroup));
             }
             
             String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
-            logger.info(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
+            logger.debug(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
             validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setGroupCategory(validData);
             }else {
-                logger.info(errorList.getError(SURVEY_GROUP_CATEGORY));
+                logger.debug(errorList.getError(SURVEY_GROUP_CATEGORY));
                 return false;
             }
             
             String surveyCategory = context.getParameterString(SURVEY_CATEGORY);
-            logger.info(SURVEY_CATEGORY + " >>>"+surveyCategory+"<<<");
+            logger.debug(SURVEY_CATEGORY + " >>>"+surveyCategory+"<<<");
             validData  = ESAPI.validator().getValidInput(SURVEY_CATEGORY, surveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setCategory(validData);
             }else {
-                logger.info(errorList.getError(SURVEY_CATEGORY));
+                logger.debug(errorList.getError(SURVEY_CATEGORY));
                 return false;
             }
             
             String solrSurveyCategory = context.getParameterString(SOLR_SURVEY_CATEGORY);
-            logger.info(SOLR_SURVEY_CATEGORY + " >>>"+solrSurveyCategory+"<<<");
+            logger.debug(SOLR_SURVEY_CATEGORY + " >>>"+solrSurveyCategory+"<<<");
             validData  = ESAPI.validator().getValidInput(SOLR_SURVEY_CATEGORY, solrSurveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setSolrCategory(validData);
             }else {
-                logger.info(errorList.getError(SOLR_SURVEY_CATEGORY));
+                logger.debug(errorList.getError(SOLR_SURVEY_CATEGORY));
                 return false;
             }
             

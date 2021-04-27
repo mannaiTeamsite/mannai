@@ -16,6 +16,14 @@ public class SurveyBO {
      */
     private String surveyId;
     /**
+     * Survey master id of the dynamic survey
+     */
+    private Long surveyMasterId;
+    /**
+     * Response id of the dynamic survey
+     */
+    private Long responseId;
+    /**
      * Language of the survey
      */
     private String lang;
@@ -138,6 +146,22 @@ public class SurveyBO {
      */
     public void setSurveyId(String surveyId) {
         this.surveyId = surveyId;
+    }
+
+    public Long getSurveyMasterId() {
+        return surveyMasterId;
+    }
+
+    public void setSurveyMasterId(Long surveyMasterId) {
+        this.surveyMasterId = surveyMasterId;
+    }
+
+    public Long getResponseId() {
+        return responseId;
+    }
+
+    public void setResponseId(Long responseId) {
+        this.responseId = responseId;
     }
 
     /**
@@ -506,21 +530,37 @@ public class SurveyBO {
         this.submitType = submitType;
     }
 
+    /**
+     * Overrides the toString method to print the business objects values
+     * 
+     * @return Returns string of all business objects values
+     */
     @Override
     public String toString() {
-        return "SurveyBO [action=" + action + ", surveyId=" + surveyId
-                + ", lang=" + lang + ", userId=" + userId + ", userAgent="
-                + userAgent + ", ipAddress=" + ipAddress + ", startDate="
-                + startDate + ", endDate=" + endDate + ", persona="
-                + persona + ", takenOn=" + takenOn + ", takenFrom="
-                + takenFrom + ", totalQuestions=" + totalQuestions
-                + ", captchaResponse=" + captchaResponse + ", group="
-                + group + ", title=" + title + ", description="
-                + description + ", questionId=" + questionId
-                + ", questionNo=" + questionNo + ", groupCategory="
-                + groupCategory + ", category=" + category
-                + ", solrCategory=" + solrCategory + ", serviceEntities="
-                + serviceEntities + ", topics=" + topics + ", submitType="
-                + submitType + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("SurveyBO [action=").append(action)
+                .append(", surveyId=").append(surveyId)
+                .append(", surveyMasterId=").append(surveyMasterId)
+                .append(", responseId=").append(responseId)
+                .append(", lang=").append(lang).append(", userId=")
+                .append(userId).append(", userAgent=").append(userAgent)
+                .append(", ipAddress=").append(ipAddress)
+                .append(", startDate=").append(startDate)
+                .append(", endDate=").append(endDate).append(", persona=")
+                .append(persona).append(", takenOn=").append(takenOn)
+                .append(", takenFrom=").append(takenFrom)
+                .append(", totalQuestions=").append(totalQuestions)
+                .append(", captchaResponse=").append(captchaResponse)
+                .append(", group=").append(group).append(", title=")
+                .append(title).append(", description=").append(description)
+                .append(", questionId=").append(questionId)
+                .append(", questionNo=").append(questionNo)
+                .append(", groupCategory=").append(groupCategory)
+                .append(", category=").append(category)
+                .append(", solrCategory=").append(solrCategory)
+                .append(", serviceEntities=").append(serviceEntities)
+                .append(", topics=").append(topics).append(", submitType=")
+                .append(submitType).append("]");
+        return builder.toString();
     }
 }
