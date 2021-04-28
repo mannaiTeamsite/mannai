@@ -208,6 +208,10 @@ public class PollSurveyTask implements CSURLExternalTask {
      */
     private static final String BLOG_CONTENT_TYPE = "Content/Blog";
     /**
+     * Error Content type
+     */
+    private static final String ERROR_CONTENT_TYPE = "Content/Error-page-banner";
+    /**
      * Dynamic Survey Content type
      */
     private static final String DYNAMIC_SURVEY_CONTENT_TYPE = "Content/Dynamic-Survey";
@@ -316,7 +320,12 @@ public class PollSurveyTask implements CSURLExternalTask {
                             BlogTask blog = new BlogTask();
                             statusMap = (HashMap<String, String>) blog.processBlogDCR(
                                     taskSimpleFile,postgre);
-                        } else if (DYNAMIC_SURVEY_CONTENT_TYPE
+                        } else if (ERROR_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
+                            ErrorTask error = new ErrorTask();
+                            statusMap = (HashMap<String, String>) error.processBlogDCR(
+                                    taskSimpleFile,postgre);
+                        } 
+                        else if (DYNAMIC_SURVEY_CONTENT_TYPE
                             .equalsIgnoreCase(dcrType)) {
                             setOptionFieldTypes();
                             statusMap = (HashMap<String, String>) processDynamicSurveyDCR(
