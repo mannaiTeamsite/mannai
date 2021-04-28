@@ -6,12 +6,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -20,8 +24,6 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.owasp.esapi.ESAPI;
-import org.owasp.esapi.Encoder;
-import org.owasp.esapi.Validator;
 import org.owasp.esapi.ValidationErrorList;
 
 import com.hukoomi.bo.PollsBO;
@@ -45,9 +47,9 @@ public class PollsExternal {
     /** Default query to fetch all solr content. */
     public static final String DEFAULT_QUERY = "*:*";
     /**
-     * Maximum current polls to be fethced.
+     * Maximum current polls to be fethced. public static final String
+     * MAX_CURRENT_POLLS_FETCH = "1000";
      */
-    public static final String MAX_CURRENT_POLLS_FETCH = "1000";
     /**
      * Constant for Result.
      */
@@ -108,7 +110,10 @@ public class PollsExternal {
      * Constant for action vote.
      */
     public static final String ACTION_VOTE = "vote";
-    
+    /**
+     * HashSet to collect Voted Poll Ids.
+     */
+    HashSet<String> votedPolls;
 
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -121,6 +126,8 @@ public class PollsExternal {
      */
     @Deprecated(since = "", forRemoval = false)
     public Document performPollAction(final RequestContext context) {
+
+        votedPolls = new LinkedHashSet<String>();
 
         logger.info("PollsExternal : performPollAction()");
 
@@ -137,7 +144,7 @@ public class PollsExternal {
 
             if (pollsBO.getAction() != null
                     && "vote".equalsIgnoreCase(pollsBO.getAction())) {
-                doc = processVotePoll(pollsBO, postgre);
+                doc = processVotePoll(pollsBO, postgre, votedPolls);
             } else if (pollsBO.getAction() != null
                     && "current".equalsIgnoreCase(pollsBO.getAction())) {
                 doc = processCurrentPolls(context, he, pollsBO);
@@ -172,15 +179,21 @@ public class PollsExternal {
      * @return Returns document which contains the result of the voted poll.
      * 
      */
-    public Document processVotePoll(PollsBO pollsBO, Postgre postgre) {
+    public Document processVotePoll(PollsBO pollsBO, Postgre postgre,
+            HashSet<String> votedPolls) {
         if (!isPollVoted(pollsBO, postgre)) {
             insertPollResponse(pollsBO, postgre);
         }
         // Fetch Result from DB for above poll_ids which were voted already by user
         Map<String, List<Map<String, String>>> response = getPollResponse(
-                pollsBO, postgre);
+                pollsBO, postgre, votedPolls);
 
-        return createPollResultDoc(pollsBO, response);
+        Map<Long, Long> votedOptions = getVotedOption(postgre, votedPolls,
+                pollsBO);
+
+        logger.info("Voted Polls : " + votedOptions.toString());
+
+        return createPollResultDoc(pollsBO, response, votedOptions);
     }
 
     /**
@@ -268,19 +281,95 @@ public class PollsExternal {
 
             // Fetch Result from DB for above poll_ids which were voted already by user
             Map<String, List<Map<String, String>>> response = getPollResponse(
-                    pollsBO, postgre);
+                    pollsBO, postgre, votedPolls);
 
-            doc = addResultToXml(doc, response);
+            Map<Long, Long> votedOptions = getVotedOption(postgre,
+                    votedPolls, pollsBO);
+
+            logger.info("Voted Polls : " + votedOptions.toString());
+
+            doc = addResultToXml(doc, response, votedOptions);
         }
         return doc;
     }
 
     /**
+     * @param
+     * @return
+     */
+    public Map<Long, Long> getVotedOption(Postgre postgre,
+            HashSet<String> votedPolls, PollsBO pollsBO) {
+        logger.info("getVotedOption()");
+
+        logger.info("Voted Polls : " + votedPolls.toString());
+        logger.info("Polls BO : " + pollsBO);
+
+        StringJoiner pollIds = new StringJoiner(",");
+
+        Map<Long, Long> votedOptions = new LinkedHashMap<Long, Long>();
+
+        Iterator<String> iterator = votedPolls.iterator();
+        while (iterator.hasNext()) {
+            pollIds.add(iterator.next());
+        }
+
+        StringBuilder getVotedOptions = new StringBuilder(
+                "SELECT POLL_ID,OPTION_ID FROM POLL_RESPONSE WHERE POLL_ID = ANY (?) ");
+
+        if (pollsBO.getUserId() != null
+                && !"".equals(pollsBO.getUserId())) {
+            getVotedOptions.append("AND USER_ID = ? ");
+        } else if (pollsBO.getIpAddress() != null
+                && !"".equals(pollsBO.getIpAddress())) {
+            getVotedOptions.append("AND IP_ADDRESS = ? ");
+        }
+        logger.info("checkVotedQuery ::" + getVotedOptions.toString());
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(getVotedOptions.toString());
+            prepareStatement.setArray(1, connection.createArrayOf(BIGINT,
+                    pollIds.toString().split(",")));
+            logger.info("Log 1");
+            if (pollsBO.getUserId() != null
+                    && !"".equals(pollsBO.getUserId())) {
+                prepareStatement.setString(2, pollsBO.getUserId());
+                logger.info("Log 2");
+            } else if (pollsBO.getIpAddress() != null
+                    && !"".equals(pollsBO.getIpAddress())) {
+                prepareStatement.setString(2, pollsBO.getIpAddress());
+                logger.info("Log 3");
+            }
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                logger.info("Log 4");
+                votedOptions.put(rs.getLong(POLL_ID),
+                        rs.getLong("OPTION_ID"));
+            }
+            logger.info("Voted Polls : " + votedOptions.toString());
+
+        } catch (Exception e) {
+            logger.error("Exception in checkResponseData", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+
+        return votedOptions;
+    }
+
+    /**
      * This method is used to process the past poll.
      * 
-     * @param context Request context object.
-     * @param he      HukoomiExternal object.
-     * @param postgre Postgre object.
+     * @param context
+     *                Request context object.
+     * @param he
+     *                HukoomiExternal object.
+     * @param postgre
+     *                Postgre object.
      * 
      * @return Returns document which contains the current polls.
      * 
@@ -288,7 +377,8 @@ public class PollsExternal {
     private Document processCurrentPolls(final RequestContext context,
             HukoomiExternal he, PollsBO pollsBO) {
         Document doc;
-        context.setParameterString("rows", MAX_CURRENT_POLLS_FETCH);
+        context.setParameterString("rows",
+                pollsBO.getCurrentPollsPerPage());
 
         doc = he.getLandingContent(context);
 
@@ -308,11 +398,16 @@ public class PollsExternal {
             if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = getPollResponse(
-                        pollsBO, postgre);
+                        pollsBO, postgre, votedPolls);
+
+                Map<Long, Long> votedOptions = getVotedOption(postgre,
+                        votedPolls, pollsBO);
+
+                logger.info("Voted Polls : " + votedOptions.toString());
 
                 // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
                 // particular poll_id element
-                doc = addResultToXml(doc, response);
+                doc = addResultToXml(doc, response, votedOptions);
             }
         }
         return doc;
@@ -395,22 +490,27 @@ public class PollsExternal {
      */
     @SuppressWarnings("unchecked")
     public Document addResultToXml(Document doc,
-            Map<String, List<Map<String, String>>> response) {
+            Map<String, List<Map<String, String>>> response,
+            Map<Long, Long> votedOptions) {
         logger.info("addResultToXml()");
         logger.debug("Received Doc :" + doc.asXML());
         try {
             List<Node> nodes = doc
                     .selectNodes("/SolrResponse/response/docs");
-            logger.debug("Nodes::" + nodes);
+            logger.info("Nodes::" + nodes);
+            logger.info("votedOptions in addResultToXml : "
+                    + votedOptions.toString());
             for (Node node : nodes) {
                 String sPollId = node.selectSingleNode("id").getText();
+                Long optionVoted = votedOptions
+                        .get(Long.parseLong(sPollId));
                 logger.debug("sPollId" + sPollId);
                 if (response != null && response.containsKey(sPollId)) {
                     List<Map<String, String>> responseMap = response
                             .get(sPollId);
                     Element element = (Element) node;
                     Element resultElement = element.addElement(RESULT);
-
+                    Long i = 1L;
                     for (Map<String, String> optMap : responseMap) {
                         Element optionElement = resultElement
                                 .addElement("Option");
@@ -434,7 +534,11 @@ public class PollsExternal {
                         totRespElem.setText(optMap.get(TOTALRESPONSE));
                         Element pollPercentElem = optionElement
                                 .addElement(POLLPCT);
+                        if (i == optionVoted) {
+                            pollPercentElem.addAttribute("Voted", "true");
+                        }
                         pollPercentElem.setText(optMap.get(POLLPCT));
+                        i++;
                     }
                 }
             }
@@ -455,7 +559,8 @@ public class PollsExternal {
      *
      */
     public Document createPollResultDoc(PollsBO pollsBO,
-            Map<String, List<Map<String, String>>> response) {
+            Map<String, List<Map<String, String>>> response,
+            Map<Long, Long> votedOptions) {
         Document document = null;
         try {
 
@@ -465,6 +570,9 @@ public class PollsExternal {
             Element pollResultElem = document.addElement("PollResult");
             Element resultElement = pollResultElem.addElement(RESULT);
 
+            Long optionVoted = votedOptions
+                    .get(Long.parseLong(pollsBO.getPollId()));
+            Long i = 1L;
             for (Map<String, String> optMap : responseList) {
                 Element optionElement = resultElement.addElement("Option");
                 Element pollIDElem = optionElement.addElement(POLL_ID);
@@ -485,7 +593,11 @@ public class PollsExternal {
                 totRespElem.setText(optMap.get(TOTALRESPONSE));
                 Element pollPercentElem = optionElement
                         .addElement(POLLPCT);
+                if (i == optionVoted) {
+                    pollPercentElem.addAttribute("Voted", "true");
+                }
                 pollPercentElem.setText(optMap.get(POLLPCT));
+                i++;
             }
         } catch (Exception e) {
             logger.error("Exception in createPollResultDoc", e);
@@ -564,7 +676,7 @@ public class PollsExternal {
      * @return
      */
     public Map<String, List<Map<String, String>>> getPollResponse(
-            PollsBO pollsBO, Postgre postgre) {
+            PollsBO pollsBO, Postgre postgre, HashSet<String> votedPolls) {
         logger.info("getPollResponse()");
 
         String pollQuery = null;
@@ -592,6 +704,8 @@ public class PollsExternal {
             while (rs.next()) {
 
                 logger.debug("Option Value::" + rs.getString(OPTION_VALUE));
+
+                votedPolls.add(rs.getString(POLL_ID));
 
                 List<Map<String, String>> pollOptList = null;
                 Map<String, String> pollMap = new HashMap<>();
@@ -926,14 +1040,21 @@ public class PollsExternal {
             return false;
         }
         
-        String userID = context.getParameterString(USER_ID);
-        logger.debug(USER_ID + " >>>" +userID+ "<<<");
-        validData  = ESAPI.validator().getValidInput(USER_ID, userID, ESAPIValidator.USER_ID, 50, true, true, errorList);
-        if(errorList.isEmpty()) {
-            pollsBO.setUserId(validData);
-        }else {
-            logger.debug(errorList.getError(USER_ID));
-            return false;
+        HttpServletRequest request = context.getRequest();
+        if (request.getSession().getAttribute("status") != null && "valid"
+                .equals(request.getSession().getAttribute("status"))) {
+            String userId = request.getSession().getAttribute("uid")
+                    .toString();
+
+            logger.debug(USER_ID + " >>>" + userId + "<<<");
+            validData = ESAPI.validator().getValidInput(USER_ID, userId,
+                    ESAPIValidator.USER_ID, 50, true, true, errorList);
+            if (errorList.isEmpty()) {
+                pollsBO.setUserId(validData);
+            } else {
+                logger.debug(errorList.getError(USER_ID));
+                return false;
+            }
         }
         
         String ipAddress = requestHeaderUtils.getClientIpAddress();
