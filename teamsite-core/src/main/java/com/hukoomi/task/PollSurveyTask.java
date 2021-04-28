@@ -2239,8 +2239,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             logger.info("PollSurveyTask : updateSurveyOptionData");
             String surveyOptionQuery = "UPDATE "
-                    + "SURVEY_OPTION SET OPTION_LABEL = ?,  IS_USER_INPUT = ?, "
-                    //+ "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
+                    + "SURVEY_OPTION SET OPTION_LABEL = ?,  IS_USER_INPUT = ? "
                     + "WHERE SURVEY_ID = ? "
                     + "AND LANG = ? AND QUESTION_NO = ? "
                     + "AND OPTION_NO = ? ";
