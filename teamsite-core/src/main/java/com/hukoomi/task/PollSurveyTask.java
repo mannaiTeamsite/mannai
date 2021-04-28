@@ -1497,8 +1497,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                                         "insertSurveyQuestionData Option batch insert failed");
                                 break;
                             }
-                            questionNo++;
                         }
+                        questionNo++;
                     } else {
                         result = false;
                         connection.rollback();
