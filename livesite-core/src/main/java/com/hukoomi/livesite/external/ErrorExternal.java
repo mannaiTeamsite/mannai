@@ -8,8 +8,8 @@ import org.dom4j.Element;
 
 import com.hukoomi.utils.CommonUtils;
 
-import com.hukoomi.utils.ErrorDBInsert;
 
+import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class ErrorExternal {
@@ -19,12 +19,22 @@ public class ErrorExternal {
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
 		final String COMPONENT_TYPE = "componentType";
+		final String LOCALE = "locale";
+		 final String STATUS = "error_code";
+		RequestHeaderUtils req = new RequestHeaderUtils(context);
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
 		 logger.info("Component Type"+compType);
-		if(compType != null && compType.equalsIgnoreCase("Banner"))
+		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
 		{
-			ErrorDBInsert edb = new ErrorDBInsert();
-			edb.insertErrorResponse(context);   
+			
+			 String brokenLink = req.getReferer();
+			 String language = context.getParameterString(LOCALE);
+			 String statusCode = context.getParameterString(STATUS);
+			   String contentPage = req.getRequestURL();
+			
+			CommonUtils cu = new CommonUtils();
+			cu.logBrokenLink(brokenLink, contentPage, language, statusCode);
+			 
 		}
         Document doc = getErrorDCRContent(context);  
         logger.info("ErrorExternal : errorData ---- Ended");

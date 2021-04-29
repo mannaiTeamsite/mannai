@@ -322,7 +322,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                                     taskSimpleFile,postgre);
                         } else if (ERROR_CONTENT_TYPE.equalsIgnoreCase(dcrType)) {
                             ErrorTask error = new ErrorTask();
-                            statusMap = (HashMap<String, String>) error.processBlogDCR(
+                            statusMap = (HashMap<String, String>) error.processErrorDCR(
                                     taskSimpleFile,postgre);
                         } 
                         else if (DYNAMIC_SURVEY_CONTENT_TYPE
