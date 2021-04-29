@@ -65,6 +65,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      */
     public static final String META_APPROVE_DATE = "TeamSite/Metadata/ApproveTime";
     /**
+     * DCR Service Entity
+     */
+    public static final String META_ENTITY = "TeamSite/Metadata/Entity";
+    /**
      * XPath to the poll /sruvey id
      */
     public static final String ID_PATH = "/root/information/id";
@@ -482,6 +486,9 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         logger.debug("modifyDate : "+ modifyDate);
         logger.debug("modifiedDateVal : "+ modifiedDateVal);
 
+        String fileStatus  = "PUBLISHED";
+        if(taskSimpleFile.getKind() == CSHole.KIND)
+            fileStatus = "DELETED";
 
         PreparedStatement preparedStatement = null;
         try {
@@ -531,7 +538,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             //  preparedStatement.setTimestamp(13, getSqlDate(getDCRValue(document, MODIFIED_DATE_PATH)));
             preparedStatement.setTimestamp(13, getModificationDate(taskSimpleFile));
             preparedStatement.setLong(14, version);
-            preparedStatement.setString(15, "Submitted");
+            //preparedStatement.setString(15, "Submitted");
+            preparedStatement.setString(15,fileStatus);
             preparedStatement.setString(16, getDCRValue(document, SERVICE_TYPE));
             preparedStatement.setString(17, getDCRValue(document, SERVICE_MODE));
             preparedStatement.setString(18, getDCRValue(document, SERVICE_CLASSIFICATION));
@@ -950,6 +958,9 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         String jobStatus = "PUBLISHED";
         String fileStatus  = "";
         String commentStr = "";
+        String entityVal = taskSimpleFile.getExtendedAttribute(META_ENTITY).getValue();
+        if(entityVal == null)
+            entityVal = "";
 
         try {
 
@@ -992,7 +1003,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.info("Publish Date : "+PublishDate.toString());
 
             int result = 0;
-            String updateQuery = "UPDATE WORKFLOW_TABLE SET \"WORKFLOW_END_DATE\" = ?, \"REVIEW_DATE\" = ?, \"APPROVAL_DATE\" = ?, \"COUNT_REJECT_REVIEW\" = ?, \"COUNT_REJECT_APPROVE\" = ?, \"PUBLISH_DATE\" = ?, \"WORKFLOW_STATUS\" = ?, \"FILE_STATUS\" = ?, \"WORKFLOW_COMMENTS\" = ? WHERE \"WORKFLOW_ID\" = ? AND \"CONTENT_PATH\" = ?";
+            String updateQuery = "UPDATE WORKFLOW_TABLE SET \"WORKFLOW_END_DATE\" = ?, \"REVIEW_DATE\" = ?, \"APPROVAL_DATE\" = ?, \"COUNT_REJECT_REVIEW\" = ?, \"COUNT_REJECT_APPROVE\" = ?, \"PUBLISH_DATE\" = ?, \"WORKFLOW_STATUS\" = ?, \"FILE_STATUS\" = ?, \"WORKFLOW_COMMENTS\" = ?, \"ENTITY\" = ? WHERE \"WORKFLOW_ID\" = ? AND \"CONTENT_PATH\" = ?";
             logger.info("updateQuery : " + updateQuery);
 
             connection.setAutoCommit(true);
@@ -1006,8 +1017,9 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             preparedStatement.setString(7,jobStatus);
             preparedStatement.setString(8,fileStatus);
             preparedStatement.setString(9,commentStr);
-            preparedStatement.setLong(10,taskObj.getWorkflowId());
-            preparedStatement.setString(11,getTaskFilePath(taskSimpleFile));
+            preparedStatement.setString(10,entityVal);
+            preparedStatement.setLong(11,taskObj.getWorkflowId());
+            preparedStatement.setString(12,getTaskFilePath(taskSimpleFile));
 
             logger.info("updateData preparedStatement : " + preparedStatement);
             result = preparedStatement.executeUpdate();
