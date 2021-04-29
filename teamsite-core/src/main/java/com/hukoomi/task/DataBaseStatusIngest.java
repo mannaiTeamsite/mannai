@@ -49,6 +49,10 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
      */
     public static final String META_APPROVE_REJECT_DATES = "TeamSite/Metadata/approveRejectDates";
     /**
+     * DCR Service Entity
+     */
+    public static final String META_ENTITY = "TeamSite/Metadata/Entity";
+    /**
      * Transition hashmap key
      */
     private static final String TRANSITION = "TRANSITION";
@@ -211,6 +215,9 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             String jobStatus = taskObj.getName().split("DB")[0].trim().toUpperCase();
             String fileStatus  = "";
             String commentStr = "";
+            String entityVal = taskSimpleFile.getExtendedAttribute(META_ENTITY).getValue();
+            if(entityVal == null)
+                entityVal = "";
 
             try {
 
@@ -249,7 +256,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
 
                 connection = postgre.getConnection();
                 int result = 0;
-                String updateQuery = "UPDATE WORKFLOW_TABLE SET \"REVIEW_DATE\" = ?, \"APPROVAL_DATE\" = ?, \"COUNT_REJECT_REVIEW\" = ?, \"COUNT_REJECT_APPROVE\" = ?, \"WORKFLOW_STATUS\" = ?, \"FILE_STATUS\" = ?, \"WORKFLOW_COMMENTS\" = ? WHERE \"WORKFLOW_ID\" = ? AND \"CONTENT_PATH\" = ?";
+                String updateQuery = "UPDATE WORKFLOW_TABLE SET \"REVIEW_DATE\" = ?, \"APPROVAL_DATE\" = ?, \"COUNT_REJECT_REVIEW\" = ?, \"COUNT_REJECT_APPROVE\" = ?, \"WORKFLOW_STATUS\" = ?, \"FILE_STATUS\" = ?, \"WORKFLOW_COMMENTS\" = ?, \"ENTITY\" = ? WHERE \"WORKFLOW_ID\" = ? AND \"CONTENT_PATH\" = ?";
                 logger.info("updateQuery : " + updateQuery);
 
                 connection.setAutoCommit(true);
@@ -261,8 +268,9 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 preparedStatement.setString(5,jobStatus);
                 preparedStatement.setString(6,fileStatus);
                 preparedStatement.setString(7,commentStr);
-                preparedStatement.setLong(8,taskObj.getWorkflowId());
-                preparedStatement.setString(9,getTaskFilePath(taskSimpleFile));
+                preparedStatement.setString(8,entityVal);
+                preparedStatement.setLong(9,taskObj.getWorkflowId());
+                preparedStatement.setString(10,getTaskFilePath(taskSimpleFile));
 
                 logger.info("updateData preparedStatement : " + preparedStatement);
                 result = preparedStatement.executeUpdate();
@@ -308,6 +316,9 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             String jobStatus = task.getName().split("DB")[0].trim().toUpperCase();
             String fileStatus  = "";
             String commentStr = "";
+            String entityVal = taskSimpleFile.getExtendedAttribute(META_ENTITY).getValue();
+            if(entityVal == null)
+                entityVal = "";
 
             reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
             logger.info("Review Date : " + reviewDate );
@@ -356,7 +367,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             logger.info("Publish Date : "+PublishDate.toString()); */
             int result = 0;
             logger.info("DataBaseStatusIngest : insertWorkFlowData");
-            String query = "INSERT INTO WORKFLOW_TABLE(\"WORKFLOW_ID\", \"WORKFLOW_USER\",\"CATEGORY\", \"CONTENT_PATH\", \"LANG\", \"WORKFLOW_START_DATE\", \"WORKFLOW_REVIEWER\", \"REVIEW_DATE\", \"WORKFLOW_APPROVER\", \"APPROVAL_DATE\", \"COUNT_REJECT_REVIEW\", \"COUNT_REJECT_APPROVE\", \"WORKFLOW_STATUS\", \"FILE_STATUS\", \"WORKFLOW_COMMENTS\") VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            String query = "INSERT INTO WORKFLOW_TABLE(\"WORKFLOW_ID\", \"WORKFLOW_USER\",\"CATEGORY\", \"CONTENT_PATH\", \"LANG\", \"WORKFLOW_START_DATE\", \"WORKFLOW_REVIEWER\", \"REVIEW_DATE\", \"WORKFLOW_APPROVER\", \"APPROVAL_DATE\", \"COUNT_REJECT_REVIEW\", \"COUNT_REJECT_APPROVE\", \"WORKFLOW_STATUS\", \"FILE_STATUS\", \"WORKFLOW_COMMENTS\", \"ENTITY\") VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             logger.info("Query : " + query);
             connection.setAutoCommit(true);
             preparedStatement = connection.prepareStatement(query);
@@ -377,6 +388,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             preparedStatement.setString(13,jobStatus);
             preparedStatement.setString(14,fileStatus);
             preparedStatement.setString(15,commentStr);
+            preparedStatement.setString(16,entityVal);
             logger.info("insertData preparedStatement : " + preparedStatement);
             result = preparedStatement.executeUpdate();
             logger.info("insertData result : " + result);
