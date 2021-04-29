@@ -1,11 +1,12 @@
 package com.hukoomi.livesite.external;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -57,6 +58,10 @@ public class PollSurveyExternal {
      * Validator object.
      */
     Validator validate = new Validator();
+    /**
+     * HashSet to collect Voted Poll Ids.
+     */
+    HashSet<String> votedPolls;
     
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -70,6 +75,9 @@ public class PollSurveyExternal {
     @Deprecated(since = "", forRemoval = false)
     public Document getContent(final RequestContext context) {
         logger.info("PollSurveyExternal : getContent");
+
+        votedPolls = new LinkedHashSet<String>();
+
         Document doc = DocumentHelper.createDocument();
         PollsExternal pollsExt = new PollsExternal();
         try {
@@ -84,7 +92,8 @@ public class PollSurveyExternal {
                 boolean isInputValid = pollsExt.setBO(context, pollsBO);
                 if(isInputValid) {
                     logger.debug("PollsBO : " + pollsBO);
-                    doc = pollsExt.processVotePoll(pollsBO, postgre);
+                    doc = pollsExt.processVotePoll(pollsBO, postgre,
+                            votedPolls);
                 }else {
                     doc.addElement("PollResult").addElement(PollsExternal.RESULT);
                 }
@@ -113,6 +122,7 @@ public class PollSurveyExternal {
     public Document getGroupData(RequestContext context) {
         Document doc = null;
         Document pollDoc = null;
+        votedPolls = new LinkedHashSet<String>();
         try {
             PollsExternal pollsExt = new PollsExternal();
             SurveyExternal surveyExt = new SurveyExternal();
@@ -167,11 +177,18 @@ public class PollSurveyExternal {
                         if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
                             pollsBO.setPollId(votedPollIds);
                             response = pollsExt.getPollResponse(pollsBO,
-                                    postgre);
+                                    postgre, votedPolls);
                         }
     
+                        Map<Long, Long> votedOptions = pollsExt
+                                .getVotedOption(postgre, votedPolls,
+                                        pollsBO);
+
+                        logger.info("Voted Polls : "
+                                + votedOptions.toString());
+
                         pollDoc = pollsExt.addResultToXml(pollsSolrDoc,
-                                response);
+                                response, votedOptions);
                         pollGroupElem.add(pollDoc.getRootElement());
                     }
                 }
