@@ -180,12 +180,14 @@ public class PollSurveyExternal {
                                     postgre, votedPolls);
                         }
     
-                        Map<Long, Long> votedOptions = pollsExt
-                                .getVotedOption(postgre, votedPolls,
-                                        pollsBO);
+                        Map<Long, Long> votedOptions = null;
 
-                        logger.info("Voted Polls : "
-                                + votedOptions.toString());
+                        if (votedPolls.isEmpty() != true) {
+                            votedOptions = pollsExt.getVotedOption(postgre,
+                                    votedPolls, pollsBO);
+                            logger.info("Voted Polls : "
+                                    + votedOptions.toString());
+                        }
 
                         pollDoc = pollsExt.addResultToXml(pollsSolrDoc,
                                 response, votedOptions);

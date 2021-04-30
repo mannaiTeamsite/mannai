@@ -188,10 +188,12 @@ public class PollsExternal {
         Map<String, List<Map<String, String>>> response = getPollResponse(
                 pollsBO, postgre, votedPolls);
 
-        Map<Long, Long> votedOptions = getVotedOption(postgre, votedPolls,
-                pollsBO);
+        Map<Long, Long> votedOptions = null;
 
-        logger.info("Voted Polls : " + votedOptions.toString());
+        if (votedPolls.isEmpty() != true) {
+            votedOptions = getVotedOption(postgre, votedPolls, pollsBO);
+            logger.info("Voted Polls : " + votedOptions.toString());
+        }
 
         return createPollResultDoc(pollsBO, response, votedOptions);
     }
@@ -283,10 +285,13 @@ public class PollsExternal {
             Map<String, List<Map<String, String>>> response = getPollResponse(
                     pollsBO, postgre, votedPolls);
 
-            Map<Long, Long> votedOptions = getVotedOption(postgre,
-                    votedPolls, pollsBO);
+            Map<Long, Long> votedOptions = null;
 
-            logger.info("Voted Polls : " + votedOptions.toString());
+            if (votedPolls.isEmpty() != true) {
+                votedOptions = getVotedOption(postgre, votedPolls,
+                        pollsBO);
+                logger.info("Voted Polls : " + votedOptions.toString());
+            }
 
             doc = addResultToXml(doc, response, votedOptions);
         }
@@ -400,10 +405,14 @@ public class PollsExternal {
                 Map<String, List<Map<String, String>>> response = getPollResponse(
                         pollsBO, postgre, votedPolls);
 
-                Map<Long, Long> votedOptions = getVotedOption(postgre,
-                        votedPolls, pollsBO);
+                Map<Long, Long> votedOptions = null;
 
-                logger.info("Voted Polls : " + votedOptions.toString());
+                if (votedPolls.isEmpty() != true) {
+                    votedOptions = getVotedOption(postgre, votedPolls,
+                            pollsBO);
+                    logger.info(
+                            "Voted Polls : " + votedOptions.toString());
+                }
 
                 // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
                 // particular poll_id element
@@ -498,12 +507,13 @@ public class PollsExternal {
             List<Node> nodes = doc
                     .selectNodes("/SolrResponse/response/docs");
             logger.info("Nodes::" + nodes);
-            logger.info("votedOptions in addResultToXml : "
-                    + votedOptions.toString());
             for (Node node : nodes) {
                 String sPollId = node.selectSingleNode("id").getText();
-                Long optionVoted = votedOptions
+                Long optionVoted = null;
+                if (votedOptions != null) {
+                    optionVoted = votedOptions
                         .get(Long.parseLong(sPollId));
+                }
                 logger.debug("sPollId" + sPollId);
                 if (response != null && response.containsKey(sPollId)) {
                     List<Map<String, String>> responseMap = response
