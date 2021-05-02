@@ -51,7 +51,7 @@ public class LastViewedExternal {
         HttpSession session = context.getRequest().getSession(true);
          status=(String) session.getAttribute("status");
         logger.info("status="+status);
-        if(status.equals("valid")) {
+        if(status!=null && status.equals("valid")) {
             userID = (String) session.getAttribute("uid");;
             logger.info("userID:" + userID);
 
@@ -93,6 +93,8 @@ public class LastViewedExternal {
             logger.info("session valid");
         }
         else {
+            lastviewedResultEle = lastviewedResultEle.addElement("session");
+            lastviewedResultEle.setText("Session invalid");
             logger.info("session invalid");
         }
         logger.info("LastViewedSearch====> ends");
