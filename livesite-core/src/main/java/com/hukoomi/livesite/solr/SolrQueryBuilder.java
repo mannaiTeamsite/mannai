@@ -83,6 +83,10 @@ public class SolrQueryBuilder {
      * will define the facet field to group
      * the results fetching from solr query url. */
     private String facetField;
+    /** Declare highlight field that
+     * will come as suggestion text fetched by the
+     * solr query url. */
+    private String highlightField;
     /** Declare highlighter On/Off that
      * will highlight the suggestion text fetched by the
      * solr query url. */
@@ -232,6 +236,17 @@ public class SolrQueryBuilder {
 
     /**
      * Add fields to solr query url.
+     * @param hlField fields params to solr query
+     *
+     * @return this set fields to solr url.
+     */
+    public SolrQueryBuilder addHlField(final String hlField) {
+        this.highlightField = hlField;
+        return this;
+    }
+
+    /**
+     * Add fields to solr query url.
      * @param hlTag fields params to solr query
      *
      * @return this set fields to solr url.
@@ -346,8 +361,12 @@ public class SolrQueryBuilder {
             sb.append("&fq=" + this.fieldQuery);
         }
 
+        if(StringUtils.isNotBlank(this.highlightField)){
+            sb.append("&hl.fl="+this.highlightField);
+        }
+
         if(StringUtils.isNotBlank(this.hlHtmlTag)){
-            sb.append("&hl.fl=title&hl.simple.post=</"+this.hlHtmlTag+">&hl.simple.pre=<"+this.hlHtmlTag+">");
+            sb.append("&hl.simple.post=</"+this.hlHtmlTag+">&hl.simple.pre=<"+this.hlHtmlTag+">");
         }
 
         if(StringUtils.isNotBlank(this.highlighter)){

@@ -5,7 +5,7 @@ import java.net.URLDecoder;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSession
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -74,6 +74,13 @@ public class HukoomiExternal {
 		if(StringUtils.isNotBlank(highlightTagVal)){
 			logger.debug("fieldQuery highlightTag"+fieldQuery);
 			sqb.addHlHtmlTag(highlightTagVal);
+		}
+
+		String highlightFieldVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightField",""));
+		logger.debug("highlightFieldVal: "+highlightFieldVal);
+		if(StringUtils.isNotBlank(highlightFieldVal)){
+			logger.debug("fieldQuery highlightFieldVal"+fieldQuery);
+			sqb.addHlField(highlightFieldVal);
 		}
 
 		String query = sqb.build();
