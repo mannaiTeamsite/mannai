@@ -24,6 +24,10 @@ public class DashboardSettingsBO {
      * Persona for the logged-in user
      */
     private String persona;
+    /**
+     * User Type
+     */
+    private String userType;
     
     /**
      * Getter method to get action
@@ -89,19 +93,29 @@ public class DashboardSettingsBO {
     public void setPersona(String persona) {
         this.persona = persona;
     }
-    
     /**
-     * Overrides the toString method to print the business objects values
+     * Getter method to get user type
      * 
-     * @return Returns string of all business objects values
+     * @return Returns user type
      */
+    public String getUserType() {
+        return userType;
+    }
+    /**
+     * Setter method to set user type
+     * 
+     * @param userType user type of the logged-in user
+     */
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("DashboardSettingsBO [action=").append(action)
                 .append(", userId=").append(userId).append(", userRole=")
                 .append(userRole).append(", persona=").append(persona)
-                .append("]");
+                .append(", userType=").append(userType).append("]");
         return builder.toString();
     }
 

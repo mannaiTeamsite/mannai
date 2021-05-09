@@ -90,7 +90,7 @@ public class DashboardSettingsExternal {
             logger.info("Input data validation is successfull");
             logger.debug("settingsBO : "+settingsBO);
             Element userTypeElem = responseElem.addElement("user-type");
-            userTypeElem.addText(settingsBO.getUserRole());
+            userTypeElem.addText(settingsBO.getUserType());
             if (ACTION_GET_ALL_SETTINGS.equalsIgnoreCase(settingsBO.getAction())) {
                 getAllSettings(responseElem, settingsBO);
             //}else if (ACTION_GET_PERSONA.equalsIgnoreCase(personaAction)) {
@@ -123,6 +123,8 @@ public class DashboardSettingsExternal {
         final String USER_ID = "userId";
         final String PERSONA = "persona";
         final String USER_ROLE = "userRole";
+        final String USER_TYPE = "userType";
+        final String EMAIL = "email";
         String validData  = "";
         
         String settingsAction = context.getParameterString(SETTINGS_ACTION);
@@ -137,7 +139,7 @@ public class DashboardSettingsExternal {
         
         HttpServletRequest request = context.getRequest();
         if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
-            String userId = request.getSession().getAttribute("uid").toString();
+            String userId = request.getSession().getAttribute("userId").toString();
             logger.debug(USER_ID + " >>>"+userId+"<<<");
             validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
             if(errorList.isEmpty()) {
@@ -147,8 +149,19 @@ public class DashboardSettingsExternal {
                 return false;
             }
             
+            /*if(qId == null || "".equals(qId)) {
+                String email = request.getSession().getAttribute("email").toString();
+                logger.debug(EMAIL + " >>>"+email+"<<<");
+                validData  = ESAPI.validator().getValidInput(EMAIL, email, ESAPIValidator.EMAIL_ID, 200, true, true, errorList);
+                if(errorList.isEmpty()) {
+                    settingsBO.setUserId(validData);
+                }else {
+                    logger.debug(errorList.getError(EMAIL));
+                    return false;
+                }
+            }*/
             
-            String userRole = request.getSession().getAttribute("role").toString();
+            /*String userRole = request.getSession().getAttribute("role").toString();
             logger.debug(USER_ROLE + " >>>"+userRole+"<<<");
             validData  = ESAPI.validator().getValidInput(USER_ROLE, userRole, ESAPIValidator.ALPHABET, 50, true, true, errorList);
             if(errorList.isEmpty()) {
@@ -156,10 +169,26 @@ public class DashboardSettingsExternal {
             }else {
                 logger.debug(errorList.getError(USER_ROLE));
                 return false;
+            }*/
+            
+            String userType = request.getSession().getAttribute("userType").toString();
+            logger.debug(USER_TYPE + " >>>"+userType+"<<<");
+            validData  = ESAPI.validator().getValidInput(USER_TYPE, userType, ESAPIValidator.ALPHABET, 10, true, true, errorList);
+            if(errorList.isEmpty()) {
+                settingsBO.setUserType(validData);
+                /*int user_type = Integer.parseInt(validData);
+                if(user_type == 1 || user_type == 4) {
+                    settingsBO.setUserType(PERSONAL);
+                }else if(user_type == 2) {
+                    settingsBO.setUserType(BUSINESS);
+                }*/
+            }else {
+                logger.debug(errorList.getError(USER_ROLE));
+                return false;
             }
         }
         //settingsBO.setUserId("Test_User");
-        //settingsBO.setUserRole("Personal");
+        //settingsBO.setUserType(PERSONAL);
         
         
         /*userId = context.getParameterString(USER_ID);
