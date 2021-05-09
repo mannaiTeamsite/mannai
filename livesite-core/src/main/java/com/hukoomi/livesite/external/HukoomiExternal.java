@@ -61,6 +61,21 @@ public class HukoomiExternal {
 			logger.debug("fieldQuery : " + fieldQuery);
 			sqb.addFields(fields);
 		}
+
+		String highlighterVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlighter",""));
+		logger.debug("highlighter: " +highlighterVal);
+		if(StringUtils.isNotBlank(highlighterVal)){
+			logger.debug("fieldQuery highlighter : " +fieldQuery);
+			sqb.addHlTag(highlighterVal);
+		}
+
+		String highlightTagVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightTag",""));
+		logger.debug("highlightTag: "+highlightTagVal);
+		if(StringUtils.isNotBlank(highlightTagVal)){
+			logger.debug("fieldQuery highlightTag"+fieldQuery);
+			sqb.addHlHtmlTag(highlightTagVal);
+		}
+
 		String query = sqb.build();
 		logger.debug("Landing Query : " + query);
 		Document doc = squ.doJsonQuery(query, "SolrResponse");
