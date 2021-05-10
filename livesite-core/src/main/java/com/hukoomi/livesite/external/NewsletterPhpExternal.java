@@ -1,7 +1,5 @@
 package com.hukoomi.livesite.external;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.security.NoSuchAlgorithmException;
@@ -99,7 +97,7 @@ public class NewsletterPhpExternal {
     private static final String CHAR_SET = "UTF-8";
 
     /** Initialising the filepath for Properties file inside WorkArea. */
-    private static final String NEWSLETTER_TEMPLATE_PATH = "/iw/config/newsletter-html-templates/";
+    private static final String NEWSLETTER_TEMPLATE_PATH = "/iw/config/newsletter-templates/";
 
     /** MySql Object variable. */
     MySql mysql = null;
@@ -776,25 +774,10 @@ public class NewsletterPhpExternal {
     private static String getHtmlFile(String htmlFileName,
             RequestContext context) {
         logger.info("NewsletterPhp External : getHtmlFile");
-        logger.info("Loading HTML File from Request Context.");
-        StringBuilder contentBuilder = new StringBuilder();
-
         FileDal fileDal = context.getFileDal();
         String root = fileDal.getRoot();
-        String fileName = root + NEWSLETTER_TEMPLATE_PATH + htmlFileName;
-
-        try (BufferedReader in = new BufferedReader(
-                new FileReader(fileName))) {
-
-            String str;
-            while ((str = in.readLine()) != null) {
-                contentBuilder.append(str);
-            }
-        } catch (IOException e) {
-            logger.error("Exception in getHtmlFile", e);
-        }
-        logger.info("Finish Loading Properties File.");
-        return contentBuilder.toString();
+        return fileDal
+                .read(root + NEWSLETTER_TEMPLATE_PATH + htmlFileName);
     }
 
 }
