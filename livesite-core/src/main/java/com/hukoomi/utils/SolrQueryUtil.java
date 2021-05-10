@@ -9,9 +9,6 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-
-import java.nio.file.LinkOption;
-import java.util.Iterator;
 import java.util.List;
 
 public class SolrQueryUtil {
@@ -69,7 +66,6 @@ public class SolrQueryUtil {
             String returnXML = "";
             if(query.contains("&hl=")) {
                 logger.info("Json Response: " + response.getBody());
-                System.out.println(response.getBody());
                 String jsonResponse = response.getBody().replaceAll("\"\\d+\":", "\"higTitle\":");
                 logger.info("Json After Id Tag replacement: " + jsonResponse);
                 int inc = 0;
@@ -85,7 +81,6 @@ public class SolrQueryUtil {
                 returnXML = XML.toString(returnObject);
             }
             document = Dom4jUtils.newDocument(returnXML);
-            System.out.println(document.asXML());
         } catch (Exception e) {
             logger.error(SOLR_EXCEPTION, e);
         }
@@ -102,7 +97,6 @@ public class SolrQueryUtil {
     public Document doXMLQuery(final String query, final String xmlRootName) {
         Document document = DocumentHelper.createDocument();
         logger.debug("SOLR Execute Query:" + query);
-        System.out.println(query);
         if(!query.contains("wt=xml")){
             logger.info("Query is not intended for XML output. Use JSON output instead or add wt=xml in the query");
             return document;
@@ -112,27 +106,18 @@ public class SolrQueryUtil {
             ResponseEntity<String> response = restTemplate.getForEntity(query, String.class);
             String solrResponse = response.getBody();
             logger.debug("XML Response from Solr: " + solrResponse);
-            System.out.println(solrResponse);
             if(StringUtils.isNotBlank(solrResponse)){
                 Document solrDocument = DocumentHelper.parseText(solrResponse);
-                System.out.println(solrDocument.asXML());
                 document.add(formatSolrDocument(solrDocument,xmlRootName).getRootElement().detach());
-                System.out.println(document.asXML());
             }
         } catch (Exception e) {
             logger.error(SOLR_EXCEPTION, e);
-            e.printStackTrace(System.out);
         }
         return document;
     }
 
-    public static void main(String[] args) {
-        SolrQueryUtil solrQueryUtil = new SolrQueryUtil();
-        solrQueryUtil.doXMLQuery("http://localhost:8984/solr/portal-en/select?facet.field=organizer&facet=on&hl.fl=title&hl.simple.post=%3C%2Fb%3E&hl.simple.pre=%3Cb%3E&hl=on&q=Find%20Job&wt=xml","SolrResponse");
-    }
-
     public Document formatSolrDocument(Document solrDocument, String xmlRootName){
-        System.out.println("Formating Document");
+        logger.info("Formating Document");
         Document document = DocumentHelper.createDocument();
         Element root = document.addElement(xmlRootName);
         Element response = root.addElement("response");
@@ -161,14 +146,13 @@ public class SolrQueryUtil {
            for (Node doc : docs) {
                Element currentDoc = response.addElement("docs");
                String documentId = doc.selectSingleNode("str[@name='id']").getText();
-               System.out.println(documentId);
+               logger.debug("Document ID: " + documentId);
                List<Node> arrays = doc.selectNodes("arr");
                 if(!arrays.isEmpty()){
                     for ( Node array : arrays ){
                         Element arrayElement = (Element) array;
                         if(isHighlightResponse){
                             List<Node> correspondingHighlightedValueNodes = solrDocument.selectNodes("//lst[@name='highlighting']/lst[@name='" + documentId + "']/arr[@name='" + arrayElement.attributeValue("name") + "']");
-                            System.out.println(correspondingHighlightedValueNodes.size());
                             if(!correspondingHighlightedValueNodes.isEmpty()) {
                                 currentDoc.addElement(arrayElement.attributeValue("name")).addText(correspondingHighlightedValueNodes.get(0).selectSingleNode("str").getText());
                             } else {
@@ -233,11 +217,9 @@ public class SolrQueryUtil {
 
      public Element formatElement(Element elementToAdd, Element solrElement){
          for(Element currentElement : solrElement.elements()){
-             System.out.println(currentElement.asXML());
-             System.out.println(currentElement.getName());
              String currentElementName = currentElement.attributeValue("name");
-             System.out.println(currentElementName);
              if(currentElementName.matches("[0-9]+")){
+                 logger.debug("Element with Numeric only in name. Prepending with doc");
                  currentElementName = "doc-"+currentElementName;
              }
              if(currentElement.isTextOnly()) {
