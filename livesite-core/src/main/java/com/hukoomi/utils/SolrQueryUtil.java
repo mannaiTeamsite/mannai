@@ -216,7 +216,8 @@ public class SolrQueryUtil {
      }
 
      public Element formatElement(Element elementToAdd, Element solrElement){
-         for(Element currentElement : solrElement.elements()){
+         List<Element> childElements = solrElement.elements();
+         for(Element currentElement : childElements){
              String currentElementName = currentElement.attributeValue("name");
              if(currentElementName.matches("[0-9]+")){
                  logger.debug("Element with Numeric only in name. Prepending with doc");
