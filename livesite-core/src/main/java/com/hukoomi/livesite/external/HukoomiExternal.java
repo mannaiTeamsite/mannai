@@ -17,6 +17,7 @@ import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.SolrQueryUtil;
 import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
+import org.json.JSONException;
 
 public class HukoomiExternal {
 	/** Logger object to check the flow of the code. */
@@ -31,7 +32,7 @@ public class HukoomiExternal {
 	 *
 	 * @return doc return the solr response document generated from solr query.
 	 */
-	public Document getLandingContent(RequestContext context) {
+	public Document getLandingContent(RequestContext context) throws JSONException {
 		SolrQueryUtil squ = new SolrQueryUtil();
 		SolrQueryBuilder sqb = new SolrQueryBuilder(context);
 		CommonUtils commonUtils = new CommonUtils();
@@ -85,7 +86,13 @@ public class HukoomiExternal {
 
 		String query = sqb.build();
 		logger.debug("Landing Query : " + query);
-		Document doc = squ.doJsonQuery(query, "SolrResponse");
+		Document doc;
+		if(StringUtils.isNotBlank(highlighterVal)){
+			doc = squ.doXMLQuery(query, "SolrResponse");
+		}else{
+			doc = squ.doJsonQuery(query, "SolrResponse");
+		}
+
 		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);

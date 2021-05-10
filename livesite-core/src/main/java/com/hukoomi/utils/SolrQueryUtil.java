@@ -3,23 +3,16 @@ package com.hukoomi.utils;
 import com.interwoven.livesite.dom4j.Dom4jUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
+import org.dom4j.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.*;
+import java.nio.file.LinkOption;
+import java.util.Iterator;
+import java.util.List;
 
 public class SolrQueryUtil {
     /** Logger object to check the flow of the code.*/
@@ -74,8 +67,9 @@ public class SolrQueryUtil {
             JSONObject returnObject = new JSONObject();
 
             String returnXML = "";
-            if(query.contains("&hl=") || query.contains("&hl.fl=title&hl.simple.post=") || query.contains("&hl.simple.pre=")) {
+            if(query.contains("&hl=")) {
                 logger.info("Json Response: " + response.getBody());
+                System.out.println(response.getBody());
                 String jsonResponse = response.getBody().replaceAll("\"\\d+\":", "\"higTitle\":");
                 logger.info("Json After Id Tag replacement: " + jsonResponse);
                 int inc = 0;
@@ -86,75 +80,134 @@ public class SolrQueryUtil {
                 returnObject.put(xmlRootName, new JSONObject(jsonResponse));
                 String tempReturnXML = XML.toString(returnObject);
                 logger.info("XML data after conversion: " + tempReturnXML);
-
-                //Writing Temporary XML File
-                FileWriter writer = new FileWriter("/usr/opentext/TeamSite/tmp/SearchText.xml");
-                BufferedWriter bufferedWriter = new BufferedWriter(writer);
-                bufferedWriter.write(tempReturnXML);
-                bufferedWriter.close();
-                writer.close();
-
-                File xmlFile = new File("/usr/opentext/TeamSite/tmp/SearchText.xml");
-                DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
-
-                org.w3c.dom.Document doc = docBuilder.parse(xmlFile);
-                NodeList titleL = doc.getElementsByTagName("title");
-                logger.info("Title tags total Length: " + titleL.getLength());
-                Node highlightTag = doc.getElementsByTagName("highlighting").item(0);
-                if (highlightTag.hasChildNodes()) {
-                    NodeList nodeL = highlightTag.getChildNodes();
-                    for (int i = 0; i < nodeL.getLength(); i++) {
-                        logger.info("highlight Tag Child" + i + " :" + nodeL.item(i));
-                        Node titleNode = titleL.item(i);
-                        for (int j = 0; j < nodeL.getLength(); j++) {
-                            Node hightitleNode = nodeL.item(j);
-                            logger.info("hightitle Node Name: "+hightitleNode.getNodeName());
-                            Node subTitleNode = hightitleNode.getFirstChild();
-                            logger.info("subTitle Node: "+subTitleNode);
-                            if (hightitleNode.getNodeName().equals("hightitle"+(i+1))) {
-                                if(!hightitleNode.getTextContent().isBlank()) {
-                                    logger.info("title values" + i + " :" + titleNode.getTextContent() + "---" + subTitleNode.getTextContent());
-                                    titleNode.setTextContent(subTitleNode.getTextContent());
-                                    logger.info("Main Title Node Value after replacement: " + titleNode.getTextContent());
-                                }
-                                logger.info("Breaking For hightitle number: "+j);
-                                break;
-                            }
-                        }
-                    }
-                    //Remove highlighting tags from XML
-                    Node docFirstChild = doc.getFirstChild();
-                    NodeList rootChildList = docFirstChild.getChildNodes();
-                    for (int temp = 0; temp < rootChildList.getLength(); temp++) {
-                        Node nodeRootChild = rootChildList.item(temp);
-                        if (nodeRootChild.getNodeName().equals("highlighting")) {
-                            docFirstChild.removeChild(nodeRootChild);
-                            break;
-                        }
-                    }
-                }
-                //Converting Document object into String
-                DOMSource domSource = new DOMSource(doc);
-                StringWriter stringWriter = new StringWriter();
-                StreamResult result = new StreamResult(stringWriter);
-                TransformerFactory tf = TransformerFactory.newInstance();
-                Transformer transformer = tf.newTransformer();
-                transformer.transform(domSource, result);
-                returnXML = stringWriter.toString();
-                logger.info("stringWriter Result String: " + returnXML);
-
-                //Empty Temporary XML File
-                PrintWriter printWriter = new PrintWriter("/usr/opentext/TeamSite/tmp/SearchText.xml");
-                printWriter.print("");
-                printWriter.close();
             }else{
                 returnObject.put(xmlRootName, new JSONObject(response.getBody()));
                 returnXML = XML.toString(returnObject);
             }
             document = Dom4jUtils.newDocument(returnXML);
+            System.out.println(document.asXML());
         } catch (Exception e) {
             logger.error(SOLR_EXCEPTION, e);
+        }
+        return document;
+    }
+
+    /**
+     * Query Solr based on solution result target in specified xmlRootName.
+     * @param query Solr Query.
+     * @param xmlRootName root node name for Solr Query results document.
+     *
+     * @return document solr query result document.
+     */
+    public Document doXMLQuery(final String query, final String xmlRootName) {
+        Document document = DocumentHelper.createDocument();
+        logger.debug("SOLR Execute Query:" + query);
+        System.out.println(query);
+        if(!query.contains("wt=xml")){
+            logger.info("Query is not intended for XML output. Use JSON output instead or add wt=xml in the query");
+            return document;
+        }
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate.getForEntity(query, String.class);
+            String solrResponse = response.getBody();
+            logger.debug("XML Response from Solr: " + solrResponse);
+            System.out.println(solrResponse);
+            if(StringUtils.isNotBlank(solrResponse)){
+                Document solrDocument = DocumentHelper.parseText(solrResponse);
+                System.out.println(solrDocument.asXML());
+                document.add(formatSolrDocument(solrDocument,xmlRootName).getRootElement().detach());
+                System.out.println(document.asXML());
+            }
+        } catch (Exception e) {
+            logger.error(SOLR_EXCEPTION, e);
+            e.printStackTrace(System.out);
+        }
+        return document;
+    }
+
+    public static void main(String[] args) {
+        SolrQueryUtil solrQueryUtil = new SolrQueryUtil();
+        solrQueryUtil.doXMLQuery("http://localhost:8984/solr/portal-en/select?facet.field=organizer&facet=on&hl.fl=title&hl.simple.post=%3C%2Fb%3E&hl.simple.pre=%3Cb%3E&hl=on&q=Find%20Job&wt=xml","SolrResponse");
+    }
+
+    public Document formatSolrDocument(Document solrDocument, String xmlRootName){
+        System.out.println("Formating Document");
+        Document document = DocumentHelper.createDocument();
+        Element root = document.addElement(xmlRootName);
+        Element response = root.addElement("response");
+        Element solrDocumentRootElement = solrDocument.getRootElement();
+        Node solrResult = solrDocumentRootElement.selectSingleNode("result");
+        Element solrResultElement = (Element) solrResult;
+        List<Attribute> resultAttributes = solrResultElement.attributes();
+        for(Attribute attribute : resultAttributes){
+            response.addElement(attribute.getName()).addText(attribute.getText());
+        }
+        List<Node> docs = solrResult.selectNodes("doc");
+        List<Node> listingNodes = solrDocumentRootElement.selectNodes("lst");
+
+        Boolean isHighlightResponse = false;
+        if(!listingNodes.isEmpty()){
+            for(Node listing: listingNodes){
+                Element listingElement = (Element) listing;
+                if(listingElement.attributeValue("name").equals("highlighting")){
+                    isHighlightResponse = true;
+                }
+                formatElement(root.addElement(listingElement.attributeValue("name")),listingElement);
+            }
+        }
+
+        if(!docs.isEmpty()) {
+           for (Node doc : docs) {
+               Element currentDoc = response.addElement("docs");
+               String documentId = doc.selectSingleNode("str[@name='id']").getText();
+               System.out.println(documentId);
+               List<Node> arrays = doc.selectNodes("arr");
+                if(!arrays.isEmpty()){
+                    for ( Node array : arrays ){
+                        Element arrayElement = (Element) array;
+                        if(isHighlightResponse){
+                            List<Node> correspondingHighlightedValueNodes = solrDocument.selectNodes("//lst[@name='highlighting']/lst[@name='" + documentId + "']/arr[@name='" + arrayElement.attributeValue("name") + "']");
+                            System.out.println(correspondingHighlightedValueNodes.size());
+                            if(!correspondingHighlightedValueNodes.isEmpty()) {
+                                currentDoc.addElement(arrayElement.attributeValue("name")).addText(correspondingHighlightedValueNodes.get(0).selectSingleNode("str").getText());
+                            } else {
+                                currentDoc.addElement(arrayElement.attributeValue("name")).addText(arrayElement.element("str").getText());
+                            }
+                        } else {
+                            currentDoc.addElement(arrayElement.attributeValue("name")).addText(arrayElement.element("str").getText());
+                        }
+                    }
+                }
+               List<Node> strings = doc.selectNodes("str");
+               if(!strings.isEmpty()){
+                   for ( Node string : strings ){
+                       Element stringElement = (Element) string;
+                       currentDoc.addElement(stringElement.attributeValue("name")).addText(stringElement.getText());
+                   }
+               }
+               List<Node> dates = doc.selectNodes("date");
+               if(!dates.isEmpty()){
+                   for ( Node date : dates ){
+                       Element dateElement = (Element) date;
+                       currentDoc.addElement(dateElement.attributeValue("name")).addText(dateElement.getText());
+                   }
+               }
+               List<Node> longs = doc.selectNodes("long");
+               if(!dates.isEmpty()){
+                   for ( Node longItems : longs ){
+                       Element longElement = (Element) longItems;
+                       currentDoc.addElement(longElement.attributeValue("name")).addText(longElement.getText());
+                   }
+               }
+               List<Node> ints = doc.selectNodes("int");
+               if(!dates.isEmpty()){
+                   for ( Node integer : ints ){
+                       Element intElement = (Element) integer;
+                       currentDoc.addElement(intElement.attributeValue("name")).addText(intElement.getText());
+                   }
+               }
+            }
         }
         return document;
     }
@@ -176,5 +229,25 @@ public class SolrQueryUtil {
              logger.error(SOLR_EXCEPTION, e);
          }
          return responseBody;
+     }
+
+     public Element formatElement(Element elementToAdd, Element solrElement){
+         for(Element currentElement : solrElement.elements()){
+             System.out.println(currentElement.asXML());
+             System.out.println(currentElement.getName());
+             String currentElementName = currentElement.attributeValue("name");
+             System.out.println(currentElementName);
+             if(currentElementName.matches("[0-9]+")){
+                 currentElementName = "doc-"+currentElementName;
+             }
+             if(currentElement.isTextOnly()) {
+                 elementToAdd.addElement(currentElementName).addText(currentElement.getText());
+             } else if (currentElement.getName().equals("arr")) {
+                 elementToAdd.addElement(currentElementName).addText(currentElement.selectSingleNode("str").getText());
+             } else {
+                 formatElement(elementToAdd.addElement(currentElementName),currentElement);
+             }
+         }
+         return elementToAdd;
      }
 }

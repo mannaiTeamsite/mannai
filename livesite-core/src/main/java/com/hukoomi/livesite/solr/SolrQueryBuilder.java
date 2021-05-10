@@ -371,6 +371,7 @@ public class SolrQueryBuilder {
 
         if(StringUtils.isNotBlank(this.highlighter)){
             sb.append("&hl="+this.highlighter);
+            sb.append("&wt=xml");
         }
 
         if (StringUtils.isNotBlank(this.groupingField)) {
