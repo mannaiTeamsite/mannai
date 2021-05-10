@@ -32,7 +32,7 @@ public class HukoomiExternal {
 	 *
 	 * @return doc return the solr response document generated from solr query.
 	 */
-	public Document getLandingContent(RequestContext context) throws JSONException {
+	public Document getLandingContent(RequestContext context) {
 		SolrQueryUtil squ = new SolrQueryUtil();
 		SolrQueryBuilder sqb = new SolrQueryBuilder(context);
 		CommonUtils commonUtils = new CommonUtils();
