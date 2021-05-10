@@ -1,23 +1,17 @@
 package com.hukoomi.livesite.external;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.Element;
-
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.SolrQueryUtil;
 import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
-import org.json.JSONException;
+import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.Element;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class HukoomiExternal {
 	/** Logger object to check the flow of the code. */
