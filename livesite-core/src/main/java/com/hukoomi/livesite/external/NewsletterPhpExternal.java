@@ -14,6 +14,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
@@ -109,6 +110,8 @@ public class NewsletterPhpExternal {
     public Document subscribeToNewsletter(final RequestContext context) {
         logger.info("NewsletterPhpExternal : subscribeToNewsletter()");
 
+        HttpSession session = context.getRequest().getSession();
+
         postgre = new Postgre(context);
 
         Document memberdetail = null;
@@ -116,8 +119,10 @@ public class NewsletterPhpExternal {
         XssUtils xssUtils = new XssUtils();
 
         String pageLang = context.getParameterString("lang");
-        logger.info("Page Language : " + pageLang);
-
+        String uid = null;
+        if (session.getAttribute("status") == "valid") {
+            uid = (String) session.getAttribute("uid");
+        }
         String email = context.getParameterString(ELEMENT_EMAIL);
         String subscriptionLang = context
                 .getParameterString("subscriptionLang");
@@ -138,17 +143,17 @@ public class NewsletterPhpExternal {
                     && (email.length() <= 50 && util
                             .validateEmailId(xssUtils.stripXSS(email)))) {
                 if (!isEmailAlreadyExist(email)) {
-                    double subscriber_id = generateSubscriberId();
+                    double subscriberId = generateSubscriberId();
                     boolean subscriberMasterDataInsert = addSubscriberInMasterTable(
-                            subscriber_id, email,
+                            uid, subscriberId, email,
                             STATUS_PENDING);
                     boolean subscriberPreferenceDataInsert = addSubscriberPreferences(
-                            subscriber_id,
+                            subscriberId,
                             subscriptionLang, persona, STATUS_PENDING);
-                    double preferenceId = getPreferenceId(subscriber_id,
+                    double preferenceId = getPreferenceId(subscriberId,
                             subscriptionLang, persona);
                     String confirmationToken = generateConfirmationToken(
-                            subscriber_id, preferenceId, email);
+                            subscriberId, preferenceId, email);
                     if (subscriberMasterDataInsert
                             && subscriberPreferenceDataInsert) {
                         sendConfirmationMail(email, pageLang,
@@ -696,11 +701,12 @@ public class NewsletterPhpExternal {
      *                                  this method will verify the flag, based on
      *                                  flag it makes call to mailchimp
      */
-    public boolean addSubscriberInMasterTable(double subscriberId,
+    public boolean addSubscriberInMasterTable(String uid,
+            double subscriberId,
             String email, String status) {
         logger.info("NewsletterPhp External : addSubscriberInMasterTable");
         boolean subscriberMasterDataInsert = false;
-        String addMasterDataQuery = "INSERT INTO NEWSLETTER_MASTER (SUBSCRIBER_ID, SUBSCRIBER_EMAIL, STATUS, SUBSCRIBED_DATE) VALUES(?,?,?,LOCALTIMESTAMP)";
+        String addMasterDataQuery = "INSERT INTO NEWSLETTER_MASTER (SUBSCRIBER_ID, SUBSCRIBER_EMAIL, STATUS, SUBSCRIBED_DATE,UID) VALUES(?,?,?,LOCALTIMESTAMP,?)";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
 
@@ -711,6 +717,7 @@ public class NewsletterPhpExternal {
             prepareStatement.setDouble(1, subscriberId);
             prepareStatement.setString(2, email);
             prepareStatement.setString(3, status);
+            prepareStatement.setString(4, uid);
             int result = prepareStatement.executeUpdate();
             if (result != 0) {
                 logger.info("Subscriber Added !");
