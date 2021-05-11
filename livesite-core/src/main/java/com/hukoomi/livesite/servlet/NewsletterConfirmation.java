@@ -155,7 +155,7 @@ public class NewsletterConfirmation extends HttpServlet {
             } catch (IOException e) {            
                 logger.error("NewsletterConfirmation : doGet() <<<<"+e);
             }
-            String tokenType = getTokenType(token);
+            String tokenType = getTokenType(subscriberId);
             boolean tokenStatusUpdate = false;
             boolean masterDataUpdate = false;
             boolean preferenceDataUpdate = false;
@@ -200,7 +200,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @param token
      * @return
      */
-    private String getTokenType(String subscriberId) {
+    private String getTokenType(double subscriberId) {
         logger.info("NewsletterConfirmation : getTokenType");
         String confirmationTokentype = null;
         String getTokenTypeQuery = "SELECT COUNT(*) FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ?";
@@ -211,7 +211,7 @@ public class NewsletterConfirmation extends HttpServlet {
             connection = postgre.getConnection();
             prepareStatement = connection
                     .prepareStatement(getTokenTypeQuery);
-            prepareStatement.setString(1, subscriberId);
+            prepareStatement.setDouble(1, subscriberId);
 
             rs = prepareStatement.executeQuery();
             rs.next();
@@ -825,6 +825,8 @@ public class NewsletterConfirmation extends HttpServlet {
             response.append('\r');
         }
         rd.close();
+        logger.debug(
+                "Response in getphpListToken() " + response.toString());
         return getToken(response.toString());
         
         
