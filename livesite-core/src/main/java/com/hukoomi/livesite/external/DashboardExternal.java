@@ -191,6 +191,14 @@ public class DashboardExternal {
 					Element userTypeNoElement = userdata.addElement("userTypeNoElement");
 					userTypeNoElement.setText(session.getAttribute("userTypeNo").toString());
 	        }
+	        
+	     Element quicklinks =  rootElement.addElement("quick-links");
+	     HukoomiExternal he = new HukoomiExternal();
+	      Document quicklinkdoc =  he.getLandingContent(context);
+	      Element quicklunkRoot = quicklinkdoc.getRootElement();
+	      quicklinks.add(quicklunkRoot);
+	        
+	        
 		LOGGER.info("Final doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
