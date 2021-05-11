@@ -179,11 +179,11 @@ public class DashboardExternal {
 		Element bookmarkEle = rootElement.addElement("bookmarks");
 		bookmarkEle.add(bookmarkRoot);
 		LOGGER.info("After adding Bookmark" + doc.asXML());
-		
+		Element userdata = rootElement.addElement("user-data");
 		 String status=(String) session.getAttribute("status");
 		 LOGGER.info("status="+session.getAttribute("status"));
 	        if(status!=null && status.equals("valid")) {
-					Element userdata = rootElement.addElement("user-data");
+					
 					Element userTypeElement = userdata.addElement("userType");
 					userTypeElement.setText(session.getAttribute("userType").toString());
 					Element fnEnElement = userdata.addElement("fnEn");
@@ -203,18 +203,31 @@ public class DashboardExternal {
 		HttpSession session = context.getRequest().getSession();
 
 		Document doc = DocumentHelper.createDocument();
-		LOGGER.info("Bookmark doc" + doc.asXML());
-		Element userData = doc.addElement("userData");
+		Element resultTelement = doc.addElement("result");
+		Element userData = resultTelement.addElement("userData");
 		String status=(String) session.getAttribute("status");
 		
 		 if(status!=null && status.equals("valid")) {
 				Element userTypeElement = userData.addElement("userType");
-				userTypeElement.setText(session.getAttribute("userType").toString());
+				String userType = (String) session.getAttribute("userType");
+				
+				if(userType != null) {
+					userTypeElement.setText(userType);
+				}
+				String fnEn = (String) session.getAttribute("fnEn");
 				Element fnEnElement = userData.addElement("fnEn");
-				fnEnElement.setText(session.getAttribute("fnEn").toString());
+				if(fnEn != null) {
+					fnEnElement.setText(fnEn);
+				}
+				
 				Element userTypeNoElement = userData.addElement("userTypeNoElement");
-				userTypeNoElement.setText(session.getAttribute("userTypeNo").toString());
+				String userTypeNo = (String) session.getAttribute("userTypeNo");
+				if(userTypeNo != null) {
+					userTypeNoElement.setText(userTypeNo);
+				}
+				
 		 }
+		 LOGGER.info("Bookmark doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 
