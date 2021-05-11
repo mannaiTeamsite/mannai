@@ -157,7 +157,7 @@ public class DashboardExternal {
 	public Document getDashboardContent(RequestContext context) {
 
 		LOGGER.info("--------------getDashboardConetent Started------------");
-		HttpServletRequest request = context.getRequest();
+		  HttpSession session = context.getRequest().getSession();
 		
 		BookmarkExternal bookmark = new BookmarkExternal();
 		Document doc = DocumentHelper.createDocument();
@@ -179,13 +179,18 @@ public class DashboardExternal {
 		Element bookmarkEle = rootElement.addElement("bookmarks");
 		bookmarkEle.add(bookmarkRoot);
 		LOGGER.info("After adding Bookmark" + doc.asXML());
-		Element userdata = rootElement.addElement("user-data");
-		Element userTypeElement = userdata.addElement("userType");
-		userTypeElement.setText(request.getSession().getAttribute("userType").toString());
-		Element fnEnElement = userdata.addElement("fnEn");
-		fnEnElement.setText(request.getSession().getAttribute("fnEn").toString());
-		Element userTypeNoElement = userdata.addElement("userTypeNoElement");
-		userTypeNoElement.setText(request.getSession().getAttribute("userTypeNo").toString());
+		
+		 String status=(String) session.getAttribute("status");
+		 LOGGER.info("status="+session.getAttribute("status"));
+	        if(status!=null && status.equals("valid")) {
+					Element userdata = rootElement.addElement("user-data");
+					Element userTypeElement = userdata.addElement("userType");
+					userTypeElement.setText(session.getAttribute("userType").toString());
+					Element fnEnElement = userdata.addElement("fnEn");
+					fnEnElement.setText(session.getAttribute("fnEn").toString());
+					Element userTypeNoElement = userdata.addElement("userTypeNoElement");
+					userTypeNoElement.setText(session.getAttribute("userTypeNo").toString());
+	        }
 		LOGGER.info("Final doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
@@ -195,20 +200,20 @@ public class DashboardExternal {
 	public Document getMyDataContent(RequestContext context) {
 
 		LOGGER.info("--------------getDashboardConetent Started------------");
-		HttpServletRequest request = context.getRequest();
+		HttpSession session = context.getRequest().getSession();
 
 		Document doc = DocumentHelper.createDocument();
 		LOGGER.info("Bookmark doc" + doc.asXML());
 		Element userData = doc.addElement("userData");
-		String status = request.getSession().getAttribute("status").toString();
+		String status=(String) session.getAttribute("status");
 		
 		 if(status!=null && status.equals("valid")) {
 				Element userTypeElement = userData.addElement("userType");
-				userTypeElement.setText(request.getSession().getAttribute("userType").toString());
+				userTypeElement.setText(session.getAttribute("userType").toString());
 				Element fnEnElement = userData.addElement("fnEn");
-				fnEnElement.setText(request.getSession().getAttribute("fnEn").toString());
+				fnEnElement.setText(session.getAttribute("fnEn").toString());
 				Element userTypeNoElement = userData.addElement("userTypeNoElement");
-				userTypeNoElement.setText(request.getSession().getAttribute("userTypeNo").toString());
+				userTypeNoElement.setText(session.getAttribute("userTypeNo").toString());
 		 }
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
