@@ -46,7 +46,7 @@ public class BookmarkExternal {
         status=(String) session.getAttribute("status");
         logger.info("status="+session.getAttribute("status"));
         if(status!=null && status.equals("valid")) {
-            userID = (String) session.getAttribute("userId");
+            userID = (String) session.getAttribute("uid");
             logger.info("userID:" + userID);
             locale = context.getParameterString("locale").trim().toLowerCase();
             pagetitle = context.getParameterString("page_title");
