@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import com.hukoomi.utils.JWTTokenUtil;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
-import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -201,14 +200,16 @@ public class DashboardExternal {
 		Document doc = DocumentHelper.createDocument();
 		LOGGER.info("Bookmark doc" + doc.asXML());
 		Element userData = doc.addElement("userData");
-
-		Element userTypeElement = userData.addElement("userType");
-		userTypeElement.setText(request.getSession().getAttribute("userType").toString());
-		Element fnEnElement = userData.addElement("fnEn");
-		fnEnElement.setText(request.getSession().getAttribute("fnEn").toString());
-		Element userTypeNoElement = userData.addElement("userTypeNoElement");
-		userTypeNoElement.setText(request.getSession().getAttribute("userTypeNo").toString());
-
+		String status = request.getSession().getAttribute("status").toString();
+		
+		 if(status!=null && status.equals("valid")) {
+				Element userTypeElement = userData.addElement("userType");
+				userTypeElement.setText(request.getSession().getAttribute("userType").toString());
+				Element fnEnElement = userData.addElement("fnEn");
+				fnEnElement.setText(request.getSession().getAttribute("fnEn").toString());
+				Element userTypeNoElement = userData.addElement("userTypeNoElement");
+				userTypeNoElement.setText(request.getSession().getAttribute("userTypeNo").toString());
+		 }
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 
