@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import com.hukoomi.utils.JWTTokenUtil;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
-import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -153,35 +152,43 @@ public class DashboardExternal {
 		return doc;
 	}
 
-	public Document getprofileInfo(RequestContext context) {
-		Document doc = DocumentHelper.createDocument();
-		Element root = doc.getRootElement();
-		root = root.addElement("result");
-		UserInfoSession inf = new UserInfoSession();
-		doc = inf.getUserData(context, doc);
-
-		return doc;
-	}
+	
 
 	public Document getDashboardContent(RequestContext context) {
 
 		LOGGER.info("--------------getDashboardConetent Started------------");
 		HttpServletRequest request = context.getRequest();
-
+		
 		BookmarkExternal bookmark = new BookmarkExternal();
-		Document doc = bookmark.bookmarkSearch(context);
-		LOGGER.info("Bookmark doc" + doc.asXML());
+		Document doc = DocumentHelper.createDocument();
+		Element rootElement = doc.addElement("result");	
+		
+		
+		Document bookmarkDoc = bookmark.bookmarkSearch(context);
+		
 
 		PollSurveyExternal ps = new PollSurveyExternal();
 		Document pollsSurveyDoc = ps.getContent(context);
 
-		Element rootElement = pollsSurveyDoc.getRootElement();
-		Element docRoot = doc.getRootElement();
-		docRoot.add(rootElement);
-		
-
+		Element pollsrootElement = pollsSurveyDoc.getRootElement();
+		Element bookmarkRoot = bookmarkDoc.getRootElement();
+	
+		Element PollsSurvey = rootElement.addElement("polls-survey");
+		PollsSurvey.add(pollsrootElement);
+		LOGGER.info("After adding Polls" + doc.asXML());
+		Element bookmarkEle = rootElement.addElement("bookmarks");
+		bookmarkEle.add(bookmarkRoot);
+		LOGGER.info("After adding Bookmark" + doc.asXML());
+		Element userdata = rootElement.addElement("user-data");
+		Element userTypeElement = userdata.addElement("userType");
+		userTypeElement.setText(request.getSession().getAttribute("userType").toString());
+		Element fnEnElement = userdata.addElement("fnEn");
+		fnEnElement.setText(request.getSession().getAttribute("fnEn").toString());
+		Element userTypeNoElement = userdata.addElement("userTypeNoElement");
+		userTypeNoElement.setText(request.getSession().getAttribute("userTypeNo").toString());
+		LOGGER.info("Final doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
-		return null;
+		return doc;
 
 	}
 
