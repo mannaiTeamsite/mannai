@@ -146,7 +146,7 @@ public class NewsletterPhpExternal {
                             subscriber_id,
                             subscriptionLang, persona, STATUS_PENDING);
                     double preferenceId = getPreferenceId(subscriber_id,
-                            subscriptionLang);
+                            subscriptionLang, persona);
                     String confirmationToken = generateConfirmationToken(
                             subscriber_id, preferenceId, email);
                     if (subscriberMasterDataInsert
@@ -182,7 +182,8 @@ public class NewsletterPhpExternal {
                                         subscriberId, subscriptionLang,
                                         persona, STATUS_PENDING);
                                 double preferenceId = getPreferenceId(
-                                        subscriberId, subscriptionLang);
+                                        subscriberId, subscriptionLang,
+                                        persona);
                                 if (preferenceUpdateStatus) {
                                     String confirmationToken = generateConfirmationToken(
                                             subscriberId, preferenceId,
@@ -477,10 +478,10 @@ public class NewsletterPhpExternal {
      * @return
      */
     private double getPreferenceId(double subscriberId,
-            String subscriptionLang) {
+            String subscriptionLang, String persona) {
         logger.info("NewsletterPhpExternal : getPreferenceId()");
         double preferenceId = 0;
-        String getPreferenceIdQuery = "SELECT PREFERENCE_ID FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
+        String getPreferenceIdQuery = "SELECT PREFERENCE_ID FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ? AND PERSONA = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
 
@@ -490,6 +491,7 @@ public class NewsletterPhpExternal {
                     .prepareStatement(getPreferenceIdQuery);
             prepareStatement.setDouble(1, subscriberId);
             prepareStatement.setString(2, subscriptionLang);
+            prepareStatement.setString(3, persona);
 
             ResultSet resultSet = prepareStatement.executeQuery();
 
