@@ -17,7 +17,6 @@ import org.json.JSONObject;
 import com.hukoomi.utils.JWTTokenUtil;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
-import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
 
 import io.jsonwebtoken.ExpiredJwtException;
