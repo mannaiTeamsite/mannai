@@ -89,8 +89,12 @@ public class DashboardSettingsExternal {
         if (validateInput(context, settingsBO)) {
             logger.info("Input data validation is successfull");
             logger.debug("settingsBO : "+settingsBO);
-            Element userTypeElem = responseElem.addElement("user-type");
-            userTypeElem.addText(settingsBO.getUserType());
+            
+            if(settingsBO.getUserType() != null && !"".equals(settingsBO.getUserType())) {
+                Element userTypeElem = responseElem.addElement("user-type");
+                userTypeElem.addText(settingsBO.getUserType());
+            }
+            
             if (ACTION_GET_ALL_SETTINGS.equalsIgnoreCase(settingsBO.getAction())) {
                 getAllSettings(responseElem, settingsBO);
             //}else if (ACTION_GET_PERSONA.equalsIgnoreCase(personaAction)) {
@@ -138,16 +142,24 @@ public class DashboardSettingsExternal {
         }
         
         HttpServletRequest request = context.getRequest();
+        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
         if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
-            String userId = request.getSession().getAttribute("userId").toString();
-            logger.debug(USER_ID + " >>>"+userId+"<<<");
-            validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
+            
+            if(request.getSession().getAttribute("userId") != null) {
+                String userId = request.getSession().getAttribute("userId").toString();
+                logger.debug(USER_ID + " >>>"+userId+"<<<");
+                settingsBO.setUserId(userId);
+            }else {
+                logger.debug("UserId from session is null.");
+            }
+            
+            /*validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
             if(errorList.isEmpty()) {
                 settingsBO.setUserId(validData);
             }else {
                 logger.debug(errorList.getError(USER_ID));
                 return false;
-            }
+            }*/
             
             /*if(qId == null || "".equals(qId)) {
                 String email = request.getSession().getAttribute("email").toString();
@@ -171,24 +183,28 @@ public class DashboardSettingsExternal {
                 return false;
             }*/
             
-            String userType = request.getSession().getAttribute("userType").toString();
-            logger.debug(USER_TYPE + " >>>"+userType+"<<<");
-            validData  = ESAPI.validator().getValidInput(USER_TYPE, userType, ESAPIValidator.ALPHABET, 10, true, true, errorList);
-            if(errorList.isEmpty()) {
-                settingsBO.setUserType(validData);
-                /*int user_type = Integer.parseInt(validData);
-                if(user_type == 1 || user_type == 4) {
-                    settingsBO.setUserType(PERSONAL);
-                }else if(user_type == 2) {
-                    settingsBO.setUserType(BUSINESS);
-                }*/
+            if(request.getSession().getAttribute("userType") != null) {
+                String userType = request.getSession().getAttribute("userType").toString();
+                logger.debug(USER_TYPE + " >>>"+userType+"<<<");
+                validData  = ESAPI.validator().getValidInput(USER_TYPE, userType, ESAPIValidator.ALPHABET, 10, true, true, errorList);
+                if(errorList.isEmpty()) {
+                    settingsBO.setUserType(validData);
+                    /*int user_type = Integer.parseInt(validData);
+                    if(user_type == 1 || user_type == 4) {
+                        settingsBO.setUserType(PERSONAL);
+                    }else if(user_type == 2) {
+                        settingsBO.setUserType(BUSINESS);
+                    }*/
+                }else {
+                    logger.debug(errorList.getError(USER_ROLE));
+                    return false;
+                }
             }else {
-                logger.debug(errorList.getError(USER_ROLE));
-                return false;
+                logger.debug("UserType from session is null.");
             }
         }
         //settingsBO.setUserId("Test_User");
-        //settingsBO.setUserType(PERSONAL);
+        //settingsBO.setUserType("personal");
         
         
         /*userId = context.getParameterString(USER_ID);
@@ -226,7 +242,7 @@ public class DashboardSettingsExternal {
         logger.info("DashboardSettingsExternal : getAllSettings()");
         //Document doc = DocumentHelper.createDocument();
         try {
-            String personaValue = getPersonaForUser(settingsBO.getUserId());
+            String personaValue = getPersonaForUser(settingsBO.getUserId(), postgre);
             logger.debug("Persona Value :" + personaValue);
             if (personaValue != null && !"".equals(personaValue)) {
                 createResponseDoc(responseElem, settingsBO.getAction(), settingsBO.getUserId(), personaValue, STATUS_SUCCESS, "");
@@ -245,7 +261,7 @@ public class DashboardSettingsExternal {
      *
      * @return returns the persona value  
      */
-    public String getPersonaForUser(String userId) {
+    public String getPersonaForUser(String userId, Postgre postgre) {
         logger.info("DashboardSettingsExternal : getPersonaForUser()");
         String personaValue = null;
         String personaQuery = "SELECT * FROM persona_settings WHERE user_id = ? AND active = True";
@@ -293,7 +309,7 @@ public class DashboardSettingsExternal {
                 prepareStatement.setBoolean(2, true);
                 prepareStatement.setString(3, settingsBO.getUserId());
                 int result = prepareStatement.executeUpdate();
-                String personaValue = getPersonaForUser(settingsBO.getUserId());
+                String personaValue = getPersonaForUser(settingsBO.getUserId(), postgre);
                 if (result == 0) {
                     logger.info("Persona settings updation failed!");
                     createResponseDoc(responseElem, settingsBO.getAction(), settingsBO.getUserId(), personaValue, STATUS_FAILED, "Persona settings updation failed");
@@ -315,7 +331,7 @@ public class DashboardSettingsExternal {
                 prepareStatement.setString(2, settingsBO.getPersona());
                 prepareStatement.setBoolean(3, true);
                 int result = prepareStatement.executeUpdate();
-                String personaValue = getPersonaForUser(settingsBO.getUserId());
+                String personaValue = getPersonaForUser(settingsBO.getUserId(), postgre);
                 if (result == 0) {
                     logger.info("Persona settings insertion failed!");
                     createResponseDoc(responseElem, settingsBO.getAction(), settingsBO.getUserId(), personaValue, STATUS_FAILED, "Persona settings insertion failed");
