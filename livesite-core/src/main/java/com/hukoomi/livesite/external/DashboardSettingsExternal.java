@@ -34,22 +34,6 @@ public class DashboardSettingsExternal {
      */
     Postgre postgre = null;
     /**
-     * Persona Action variable.
-     */
-    //String settingsAction = null;
-    /**
-     * UserId variable.
-     */
-    //String userId = null;
-    /**
-     * Persona variable.
-     */
-    //String persona = null;
-    /**
-     * UserRole variable.
-     */
-    //String userRole = null;
-    /**
      * Constant for action get persona settings.
      */
     public static final String ACTION_GET_ALL_SETTINGS = "getAllSettings";
@@ -97,8 +81,6 @@ public class DashboardSettingsExternal {
             
             if (ACTION_GET_ALL_SETTINGS.equalsIgnoreCase(settingsBO.getAction())) {
                 getAllSettings(responseElem, settingsBO);
-            //}else if (ACTION_GET_PERSONA.equalsIgnoreCase(personaAction)) {
-                //doc = getPersonaForUser();
             } else if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsBO.getAction())) {
                 updatePersonaForUser(responseElem, settingsBO);
             }
@@ -153,48 +135,12 @@ public class DashboardSettingsExternal {
                 logger.debug("UserId from session is null.");
             }
             
-            /*validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
-            if(errorList.isEmpty()) {
-                settingsBO.setUserId(validData);
-            }else {
-                logger.debug(errorList.getError(USER_ID));
-                return false;
-            }*/
-            
-            /*if(qId == null || "".equals(qId)) {
-                String email = request.getSession().getAttribute("email").toString();
-                logger.debug(EMAIL + " >>>"+email+"<<<");
-                validData  = ESAPI.validator().getValidInput(EMAIL, email, ESAPIValidator.EMAIL_ID, 200, true, true, errorList);
-                if(errorList.isEmpty()) {
-                    settingsBO.setUserId(validData);
-                }else {
-                    logger.debug(errorList.getError(EMAIL));
-                    return false;
-                }
-            }*/
-            
-            /*String userRole = request.getSession().getAttribute("role").toString();
-            logger.debug(USER_ROLE + " >>>"+userRole+"<<<");
-            validData  = ESAPI.validator().getValidInput(USER_ROLE, userRole, ESAPIValidator.ALPHABET, 50, true, true, errorList);
-            if(errorList.isEmpty()) {
-                settingsBO.setUserRole(validData);
-            }else {
-                logger.debug(errorList.getError(USER_ROLE));
-                return false;
-            }*/
-            
             if(request.getSession().getAttribute("userType") != null) {
                 String userType = request.getSession().getAttribute("userType").toString();
                 logger.debug(USER_TYPE + " >>>"+userType+"<<<");
                 validData  = ESAPI.validator().getValidInput(USER_TYPE, userType, ESAPIValidator.ALPHABET, 10, true, true, errorList);
                 if(errorList.isEmpty()) {
                     settingsBO.setUserType(validData);
-                    /*int user_type = Integer.parseInt(validData);
-                    if(user_type == 1 || user_type == 4) {
-                        settingsBO.setUserType(PERSONAL);
-                    }else if(user_type == 2) {
-                        settingsBO.setUserType(BUSINESS);
-                    }*/
                 }else {
                     logger.debug(errorList.getError(USER_ROLE));
                     return false;
@@ -203,20 +149,6 @@ public class DashboardSettingsExternal {
                 logger.debug("UserType from session is null.");
             }
         }
-        //settingsBO.setUserId("Test_User");
-        //settingsBO.setUserType("personal");
-        
-        
-        /*userId = context.getParameterString(USER_ID);
-        logger.info(USER_ID + " >>>"+userId+"<<<");
-        validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, false, true, errorList);
-        if(errorList.isEmpty()) {
-            userId = validData;
-        }else {
-            logger.info(errorList.getError(USER_ID));
-            return false;
-        }*/        
-        
         
         if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsAction)) {
             String persona = context.getParameterString(PERSONA);
@@ -240,7 +172,6 @@ public class DashboardSettingsExternal {
      */
     public void getAllSettings(Element responseElem, DashboardSettingsBO settingsBO) {
         logger.info("DashboardSettingsExternal : getAllSettings()");
-        //Document doc = DocumentHelper.createDocument();
         try {
             String personaValue = getPersonaForUser(settingsBO.getUserId(), postgre);
             logger.debug("Persona Value :" + personaValue);
@@ -252,7 +183,6 @@ public class DashboardSettingsExternal {
         } catch (Exception e) {
             logger.error("Exception in getAllSettings", e);
         } 
-        //return doc;
     }
     
     
@@ -296,7 +226,6 @@ public class DashboardSettingsExternal {
      */
     public void updatePersonaForUser(Element responseElem, DashboardSettingsBO settingsBO) {
         logger.info("DashboardSettingsExternal : updatePersonaForUser()");
-        //Document doc = DocumentHelper.createDocument(); 
         Connection connection = postgre.getConnection();
         PreparedStatement prepareStatement = null;
         String personaSettingsQuery = null;
@@ -346,7 +275,6 @@ public class DashboardSettingsExternal {
                 postgre.releaseConnection(connection, prepareStatement, null);
             }
         }
-        //return doc;
     }
     
     /**
@@ -369,14 +297,12 @@ public class DashboardSettingsExternal {
         if(error == null) error = "";
         
         Document doc = DocumentHelper.createDocument();
-        //Element responseElem = doc.addElement("persona-settings").addElement("response");
         Element personaresponseElem = responseElem.addElement("persona-settings");
         personaresponseElem.addElement("status").setText(status);
         personaresponseElem.addElement("settings-action").setText(action);
         personaresponseElem.addElement("user-id").setText(userId);
         personaresponseElem.addElement("persona").setText(persona);
         personaresponseElem.addElement("error").setText(error);
-        //return doc;
     }
     
     /**
