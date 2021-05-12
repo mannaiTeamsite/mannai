@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringJoiner;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -466,8 +467,8 @@ public class SurveyExternal {
             String surveyResponseQuery = "INSERT INTO SURVEY_RESPONSE ("
                     + "RESPONSE_ID, SURVEY_ID, LANG, USER_ID, "
                     + "IP_ADDRESS, USER_AGENT, SURVEY_TAKEN_ON, "
-                    + "SURVEY_TAKEN_FROM) VALUES(?, ?, ?, ?, ?, ?, "
-                    + "LOCALTIMESTAMP, ?)";
+                    + "SURVEY_TAKEN_FROM, PERSONA) VALUES(?, ?, ?, ?, ?, ?, "
+                    + "LOCALTIMESTAMP, ?, ?)";
             connection.setAutoCommit(false);
             surveyprepareStatement = connection
                     .prepareStatement(surveyResponseQuery);
@@ -479,6 +480,7 @@ public class SurveyExternal {
             surveyprepareStatement.setString(5, surveyBO.getIpAddress());
             surveyprepareStatement.setString(6, surveyBO.getUserAgent());
             surveyprepareStatement.setString(7, surveyBO.getTakenFrom());
+            surveyprepareStatement.setString(8, surveyBO.getPersona());
             int result = surveyprepareStatement.executeUpdate();
             if (result > 0) {
                 logger.info("Survey Response Inserted : " + result);
@@ -681,8 +683,8 @@ public class SurveyExternal {
             String surveyResponseQuery = "INSERT INTO DYNAMIC_SURVEY_RESPONSE ("
                     + "RESPONSE_ID, SURVEY_MASTER_ID, USER_ID, "
                     + "IP_ADDRESS, USER_AGENT, SURVEY_TAKEN_ON, "
-                    + "SURVEY_TAKEN_FROM) VALUES(?, ?, ?, ?, ?, "
-                    + "LOCALTIMESTAMP, ?)";
+                    + "SURVEY_TAKEN_FROM, PERSONA) VALUES(?, ?, ?, ?, ?, "
+                    + "LOCALTIMESTAMP, ?, ?)";
             connection.setAutoCommit(false);
             surveyprepareStatement = connection
                     .prepareStatement(surveyResponseQuery);
@@ -692,6 +694,7 @@ public class SurveyExternal {
             surveyprepareStatement.setString(4, surveyBO.getIpAddress());
             surveyprepareStatement.setString(5, surveyBO.getUserAgent());
             surveyprepareStatement.setString(6, surveyBO.getTakenFrom());
+            surveyprepareStatement.setString(7, surveyBO.getPersona());
             int result = surveyprepareStatement.executeUpdate();
             if (result > 0) {
                 logger.info("Dynamic Survey Response Inserted : " + result);
@@ -980,10 +983,13 @@ public class SurveyExternal {
         final String SURVEY_CATEGORY = "surveyCategory";
         final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
         final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
+        final String PERSONA = "persona";
 
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         ValidationErrorList errorList = new ValidationErrorList();
+        HttpServletRequest request = context.getRequest();
         String validData  = "";
+        String userId = null;
         
         //TODO: Field length needs to be validated against content model and database. 
         
@@ -1009,18 +1015,23 @@ public class SurveyExternal {
             return false;
         }
         
-        HttpServletRequest request = context.getRequest();
+        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
         if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
-            String userId = request.getSession().getAttribute("uid").toString();
-            
-            logger.debug(USER_ID + " >>>"+userId+"<<<");
-            validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
+            if(request.getSession().getAttribute("userId") != null) {
+                userId = request.getSession().getAttribute("userId").toString();
+                
+                logger.debug(USER_ID + " >>>"+userId+"<<<");
+                surveyBO.setUserId(userId);
+            }else {
+                logger.debug("UserId from session is null.");
+            }
+            /*validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setUserId(validData);
             }else {
                 logger.debug(errorList.getError(USER_ID));
                 return false;
-            }
+            }*/
         }
         
         /*String userId = context.getParameterString(USER_ID);
@@ -1081,6 +1092,34 @@ public class SurveyExternal {
             surveyBO.setCaptchaResponse(
                     context.getParameterString("g-recaptcha-response"));
             
+          //Get Persona details from persona settings
+            String persona = null;
+            if(userId != null && !"".equals(userId)) {
+                DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
+                persona = dsExt.getPersonaForUser(userId, postgre);
+                logger.debug("Persona from DB >>>" +persona+ "<<<");
+                surveyBO.setPersona(persona);
+            }
+            
+            if(persona == null || "".equals(persona)) {
+                Cookie[] cookies = request.getCookies();
+                for(int i = 0 ; i < cookies.length;  i++) {
+                    Cookie cookie = cookies[i];
+                    String name = cookie.getName();
+                    String personaValue = null;
+                    if(name != null && "persona".equalsIgnoreCase(name)) {
+                        personaValue = cookie.getValue();
+                        logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
+                        validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                        if(errorList.isEmpty()) {
+                            surveyBO.setPersona(validData);
+                        }else {
+                            logger.debug(errorList.getError(PERSONA));
+                            return false;
+                        }
+                    }
+                }
+            }
         }
         
         String pollAction = context.getParameterString(POLL_ACTION);
