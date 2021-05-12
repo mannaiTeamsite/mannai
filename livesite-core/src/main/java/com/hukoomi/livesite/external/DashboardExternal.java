@@ -1,7 +1,10 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +18,7 @@ import org.dom4j.Element;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.JWTTokenUtil;
+import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -24,8 +28,13 @@ import io.jsonwebtoken.security.SignatureException;
 
 public class DashboardExternal {
 	private Properties properties = null;
+	private String locale = "";
+    private String userID = "";
+    private String table = "";
+   
 
 	private static final Logger LOGGER = Logger.getLogger(DashboardExternal.class);
+	   Postgre postgre = null;
 
 	public void dashboardServices(RequestContext context, String accessToken) {
 		String jwtParsedToken = null;
@@ -68,7 +77,8 @@ public class DashboardExternal {
 			session.setAttribute("role", getValue(jwtParsedToken, "role"));
 			session.setAttribute("exp", getValue(jwtParsedToken, "exp"));
 			session.setAttribute("usertypeNo", getValue(jwtParsedToken, "type"));
-
+			session.setAttribute("userId", getValue(jwtParsedToken, "uid"));
+			
 			String userTypeStr = getValue(jwtParsedToken, "type");
 			LOGGER.info("userType JWT : " + userTypeStr);
 			if (userTypeStr != null && !"".equals(userTypeStr)) {
@@ -82,14 +92,6 @@ public class DashboardExternal {
 			}
 			LOGGER.info("userType : " + session.getAttribute("userType"));
 
-			LOGGER.info("QID : " + getValue(jwtParsedToken, "QID"));
-			LOGGER.info("email : " + getValue(jwtParsedToken, "email"));
-			if (getValue(jwtParsedToken, "QID") != null && !"".equals(getValue(jwtParsedToken, "QID").trim())) {
-				session.setAttribute("userId", getValue(jwtParsedToken, "QID"));
-			} else {
-				session.setAttribute("userId", getValue(jwtParsedToken, "email"));
-			}
-			LOGGER.info("userId : " + session.getAttribute("userId"));
 		}
 
 		LOGGER.info("Expiry Date" + session.getAttribute("exp"));
@@ -159,12 +161,11 @@ public class DashboardExternal {
 		LOGGER.info("--------------getDashboardConetent Started------------");
 		  HttpSession session = context.getRequest().getSession();
 		
-		BookmarkExternal bookmark = new BookmarkExternal();
 		Document doc = DocumentHelper.createDocument();
 		Element rootElement = doc.addElement("result");	
 		
 		
-		Document bookmarkDoc = bookmark.bookmarkSearch(context);
+		Document bookmarkDoc = getDashboardbookmark(context);
 		
 
 		PollSurveyExternal ps = new PollSurveyExternal();
@@ -240,5 +241,111 @@ public class DashboardExternal {
 		return doc;
 
 	}
+	
+	
+	
+	 public Document getDashboardbookmark(final RequestContext context) {
+	        LOGGER.info("BookmarkExternal()====> Starts");
+	        
+	        
+	        Document bookmarkSearchDoc = DocumentHelper.createDocument();
+	        Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
+	        String status = "valid";
+	        postgre = new Postgre(context);
+	        HttpSession session = context.getRequest().getSession();
+	        status=(String) session.getAttribute("status");
+	        LOGGER.info("status="+session.getAttribute("status"));
+	        if(status!=null && status.equals("valid")) {
+	        	 userID = (String) session.getAttribute("userId");
+	            LOGGER.info("userID:" + userID);
+	            locale = context.getParameterString("locale").trim().toLowerCase();            
+	           
+	            table = context.getParameterString("bookmark").trim();
+	            LOGGER.info("locale:" + locale);
+
+	            LOGGER.info("table:" + table);
+
+	            if (!"".equals(table) && !"".equals(userID)) {
+	            	Element bmm = bookmarkResultEle.addElement("bmm");
+	                    getBookmark(bmm, "bmm");
+	                Element bmd = bookmarkResultEle.addElement("bmd");
+	                    getBookmark(bmd, "bmd");
+	                Element bms = bookmarkResultEle.addElement("bms");
+	                    getBookmark(bms, "bms");
+	                   
+	                
+	            }
+	            LOGGER.info("session valid");
+	        }
+	        else {
+	      
+	            bookmarkResultEle = bookmarkResultEle.addElement("session");
+	            bookmarkResultEle.setText("Session invalid");
+	            LOGGER.info("session invalid");
+	        }
+	        LOGGER.info("bookmarkSearch====> ends");
+	        return bookmarkSearchDoc;
+	    }
+	 private Connection getConnection() {
+	        return postgre.getConnection();
+	    }
+	 private void getBookmark(Element element, String category) {
+	        String activeflag="Y";
+	        LOGGER.info("getTopSearch()====> Starts");
+	        Connection connection = getConnection();
+	        PreparedStatement prepareStatement = null;
+	        String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " " +
+	                table + " " + "where" + " " + "locale='"+locale+"' and " + "user_id='"+userID+"' and active='" +activeflag+"' and category='"+category+"'";
+	        LOGGER.info("searchQuery:" + searchQuery);
+	        ResultSet resultSet = null;
+	        try {
+	        	Element ele = element.addElement("bookmarks");
+	            if(connection != null){
+	                prepareStatement = connection.prepareStatement(searchQuery);
+	                resultSet = prepareStatement.executeQuery();
+	                String pageTitle = "";
+	                String pageURL="";
+	                int i = 0;
+	                while(resultSet.next()){
+	                	
+	                    pageTitle = resultSet.getString(1);
+	                    pageURL = resultSet.getString(2);
+	                    String pagedesc = resultSet.getString(3);
+	                    String pageactive = resultSet.getString(4);
+	                    String ctype = resultSet.getString(5);
+	                    String categoryType = resultSet.getString(6);
+	                    if(!"".equals(pageTitle) && !"".equals(pageURL)){
+	                        Element ele1 = ele.addElement("pageTitle");
+	                        ele1.setText(pageTitle);
+	                        Element ele2 = ele.addElement("pageURL");
+	                        ele2.setText(pageURL);
+	                        Element ele3 = ele.addElement("pageDescription");
+	                        ele3.setText(pagedesc);
+	                        Element ele4 = ele.addElement("active");
+	                        ele4.setText(pageactive);
+	                        Element ele5 = ele.addElement("contentType");
+	                        ele5.setText(ctype);
+	                        Element ele6 = ele.addElement("category");
+	                        ele6.setText(categoryType);
+	                        LOGGER.info("Result:" + pageTitle+":"+pageURL);
+	                    }
+	                   i++;
+	                }
+	                Element ele7 = ele.addElement("count");
+                    ele7.setText(""+i+"");
+	            }
+	        } catch (SQLException ex) {
+	        	LOGGER.error("Exception on Select Query:",ex);
+	        }finally {
+	            postgre.releaseConnection(connection, prepareStatement, resultSet);
+	        }
+	        LOGGER.info("getBookmark()====> ends");
+
+	    }
+	
+	
+	
+	
+	
 
 }
