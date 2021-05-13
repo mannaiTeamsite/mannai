@@ -3,6 +3,9 @@ package com.hukoomi.livesite.external;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringJoiner;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,6 +49,14 @@ public class DashboardSettingsExternal {
      */
     public static final String ACTION_UPDATE_PERSONA = "updatePersonaForUser";
     /**
+     * Constant for action update persona settings.
+     */
+    public static final String ACTION_UPDATE_TOPICS = "updateTopicsForUser";
+    /**
+     * Constant for action update persona settings.
+     */
+    public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
+    /**
      * Constant for status success.
      */
     public static final String STATUS_SUCCESS = "success";
@@ -53,6 +64,38 @@ public class DashboardSettingsExternal {
      * Constant for status failed.
      */
     public static final String STATUS_FAILED = "failed";
+    /** active status constant. */
+    private static final String STATUS_ACTIVE = "Active";
+    /**
+     * Constant for status.
+     */
+    public static final String STATUS = "status";
+    /**
+     * Constant for persona.
+     */
+    public static final String PERSONA = "persona";
+    /**
+     * Constant for user-id.
+     */
+    public static final String USER_ID = "user-id";
+    /**
+     * Constant for settings-action.
+     */
+    public static final String TOPICS = "topics";
+    /**
+     * Constant for error.
+     */
+    public static final String ERROR = "error";
+    /**
+     * Constant for status subscried.
+     */
+    public static final String STATUS_SUBSCRIBED = "subscribed";
+    /** confirmation pending status constant. */
+    private static final String CONFIRMATION_PENDING = "ConfirmationPending";
+    /**
+     * Constant for status not subscried.
+     */
+    public static final String STATUS_NOT_SUBSCRIBED = "notSubscribed";
     
     /**
      * This method will be called from Component External for fetching and updating the persona settings.
@@ -81,8 +124,18 @@ public class DashboardSettingsExternal {
             
             if (ACTION_GET_ALL_SETTINGS.equalsIgnoreCase(settingsBO.getAction())) {
                 getAllSettings(responseElem, settingsBO);
+                getTopicSettings(responseElem, settingsBO);
             } else if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsBO.getAction())) {
                 updatePersonaForUser(responseElem, settingsBO);
+            } else if (ACTION_UPDATE_TOPICS
+                    .equalsIgnoreCase(settingsBO.getAction())) {
+                logger.info("Topic Update Action");
+                String topics = context.getParameterString(TOPICS);
+                processTopicsOperations(responseElem, settingsBO, topics);
+            } else if (ACTION_UNSUBSCRIBE
+                    .equalsIgnoreCase(settingsBO.getAction())) {
+                logger.info("Unsubscribe Action");
+
             }
         }else {
             logger.info("Invalid input parameter");
@@ -93,12 +146,325 @@ public class DashboardSettingsExternal {
     }
     
     /**
+     * @author Arbaj
+     * 
+     * @param responseElem
+     * @param topics
+     */
+    public void processTopicsOperations(Element responseElem,
+            DashboardSettingsBO settingsBO, String topics) {
+
+        if (isTopicsExist(settingsBO.getUserId())) {
+            updateTopicsData(responseElem, settingsBO, topics);
+        } else {
+            insertTopicsData(responseElem, settingsBO, topics);
+        }
+    }
+
+    /**
+     * @author Arbaj
+     * @param topics
+     */
+    public void insertTopicsData(Element responseElem,
+            DashboardSettingsBO settingsBO,
+            String topics) {
+        logger.info("DashboardSettingsExternal : insertTopicsData()");
+        Connection connection = postgre.getConnection();
+        PreparedStatement prepareStatement = null;
+        String personaSettingsQuery = null;
+        String topicsArray[] = topics.split(",");
+        
+        Map<String, String> subscriptionDetails = getSubscriptionDetails(
+                "0");
+
+        try {
+            personaSettingsQuery = "INSERT INTO NEWSLETTER_INTEREST (SUBSCRIBER_ID, UID, TOPIC_INTEREST_NAME, STATUS) VALUES (?, ?, ?, ?)";
+            prepareStatement = connection
+                    .prepareStatement(personaSettingsQuery);
+            
+            for (int index = 0; index < topicsArray.length; index++) {
+                prepareStatement.setDouble(1, Double.parseDouble(
+                        subscriptionDetails.get("subscriberId")));
+                prepareStatement.setString(2,subscriptionDetails.get("subscriberEmail"));
+                prepareStatement.setString(3, topicsArray[index]);
+                prepareStatement.setString(4, STATUS_ACTIVE);
+                prepareStatement.addBatch();
+            }
+
+            int result = prepareStatement.executeUpdate();
+            String personaValue = getPersonaForUser(settingsBO.getUserId(),
+                    postgre);
+            if (result == 0) {
+                logger.info(
+                        "Newsletter interest topics insertion failed");
+                createTopicsResponseDoc(responseElem, null, null,
+                        personaValue,
+                        STATUS_FAILED,
+                        "Newsletter interest topics insertion failed");
+            } else {
+                logger.info(
+                        "Newsletter interest topics inserted successfully!");
+                createTopicsResponseDoc(responseElem, null, null,
+                        personaValue,
+                        STATUS_SUCCESS, "");
+            }
+        } catch (Exception e) {
+            logger.error("Exception in insertTopicsData", e);
+            createTopicsResponseDoc(responseElem, null, null, null,
+                    STATUS_FAILED,
+                    "Exception in insertTopicsData");
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
+
+    }
+
+
+    /**
+     * @author Arbaj
+     * @param topics
+     */
+    public void updateTopicsData(Element responseElem,
+            DashboardSettingsBO settingsBO,
+            String topics) {
+        logger.info("DashboardSettingsExternal : updateTopicsData()");
+
+    }
+
+    /**
+     * @author Arbaj
+     * @param userId
+     * @return
+     */
+    private boolean isTopicsExist(String userId) {
+        logger.info("DashboardSettingsExternal : isTopicsExist()");
+
+        boolean isTopicsExist = false;
+
+        String personaSettingsQuery = "SELECT COUNT(*) FROM newsletter_interest WHERE UID = ?";
+
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(personaSettingsQuery);
+            prepareStatement.setString(1, userId);
+            rs = prepareStatement.executeQuery();
+            int count = 0;
+            while (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+            if (count > 0) {
+                isTopicsExist = true;
+            }
+            logger.debug(
+                    "isTopicsExist : " + isTopicsExist);
+
+        } catch (Exception e) {
+            logger.error("Exception in isTopicsExist", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        return isTopicsExist;
+    }
+
+    /**
+     * @author Arbaj
+     * 
+     *         This method is used to get topic settings for Newsletter.
+     * 
+     * @param responseElem
+     * @param settingsBO
+     */
+    public void getTopicSettings(Element responseElem,
+            DashboardSettingsBO settingsBO) {
+        logger.info("DashboardSettingsExternal : getTopicSettings()");
+        getSubscriptionDetails(settingsBO.getUserId());
+        // String subscriptionStatus = getSubscriptionStatus(
+        // settingsBO.getUserId());
+        String subscriptionStatus = getSubscriptionStatus(
+                "0");
+        String topics = "";
+
+        if ("Subscribed".equals(subscriptionStatus)) {
+            // String topics = getTopicsInterest(settingsBO.getUserId());
+            topics = getTopicsInterest("0");
+
+
+            createTopicsResponseDoc(responseElem, topics,
+                    settingsBO.getUserId(), settingsBO.getPersona(),
+                    STATUS_SUBSCRIBED, "");
+
+        } else if ("Pending".equals(subscriptionStatus)) {
+            createTopicsResponseDoc(responseElem, topics,
+                    settingsBO.getUserId(), settingsBO.getPersona(),
+                    CONFIRMATION_PENDING, "");
+        } else {
+            createTopicsResponseDoc(responseElem, topics,
+                    settingsBO.getUserId(), settingsBO.getPersona(),
+                    STATUS_NOT_SUBSCRIBED, "");
+        }
+
+    }
+
+    /**
+     * @param userId
+     * @return
+     */
+    private Map<String, String> getSubscriptionDetails(String userId) {
+        logger.info("DashboardSettingsExternal : getSubscriptionDetails()");
+        
+        Map<String, String> subscriptionDetails = new HashMap<String, String>();
+        
+        String subscriptionDetailsQuery = "SELECT SUBSCRIBER_ID, SUBSCRIBER_EMAIL, STATUS, SUBSCRIBED_DATE, UID FROM NEWSLETTER_MASTER WHERE UID = ?"; 
+        
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(subscriptionDetailsQuery);
+            prepareStatement.setString(1, userId);
+            rs = prepareStatement.executeQuery();
+
+            while (rs.next()) {
+                subscriptionDetails.put("subscriberId", rs.getString(1));
+                subscriptionDetails.put("subscriberEmail",
+                        rs.getString(2));
+                subscriptionDetails.put(STATUS, rs.getString(3));
+                subscriptionDetails.put("subscribedDate", rs.getString(4));
+                subscriptionDetails.put("userId", rs.getString(5));
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception in getSubscriptionDetails", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        
+        return subscriptionDetails;
+    }
+
+    /**
+     * @author Arbaj
+     * 
+     * @param userId
+     */
+    public String getTopicsInterest(String userId) {
+        logger.info("DashboardSettingsExternal : getTopicsInterest()");
+        String getTopicsQuery = "SELECT TOPIC_INTEREST_NAME FROM NEWSLETTER_INTEREST WHERE UID = ?";
+        StringJoiner topics = new StringJoiner(",");
+
+        logger.debug("getTopicsQuery ::" + getTopicsQuery.toString());
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection.prepareStatement(getTopicsQuery);
+            prepareStatement.setString(1, userId);
+
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                topics.add(rs.getString(1));
+            }
+            logger.debug("Topic From DB : " + topics.toString());
+
+        } catch (Exception e) {
+            logger.error("Exception in getTopicsInterest", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        return topics.toString();
+    }
+
+    /**
+     * @author Arbaj
+     * 
+     *         This method is used to create the topics response document based on
+     *         the input.
+     * 
+     * @param responseElem
+     * @param action
+     * @param userId
+     * @param persona
+     * @param status
+     * @param error
+     */
+    private void createTopicsResponseDoc(Element responseElem,
+            String topics, String userId, String persona, String status,
+            String error) {
+        if (topics == null)
+            topics = "";
+        if (userId == null)
+            userId = "";
+        if (persona == null)
+            persona = "";
+        if (status == null)
+            status = "";
+        if (error == null)
+            error = "";
+
+        Element newsletterResponseElem = responseElem
+                .addElement("newsletter-settings");
+
+        newsletterResponseElem.addElement(STATUS).setText(status);
+        newsletterResponseElem.addElement(TOPICS).setText(topics);
+        newsletterResponseElem.addElement(USER_ID).setText(userId);
+        newsletterResponseElem.addElement(PERSONA).setText(persona);
+        newsletterResponseElem.addElement(ERROR).setText(error);
+
+    }
+
+    /**
+     * @author Arbaj
+     * 
+     *         This method is used to get subscription status for Newsletter.
+     * 
+     * @param userId
+     * 
+     * @return
+     */
+    private String getSubscriptionStatus(String userId) {
+        logger.info("DashboardSettingsExternal : getSubscriptionStatus()");
+        String subscriptionStatus = null;
+        String getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE UID = ?";
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(getSubscriptionStatusQuery);
+            prepareStatement.setString(1, userId);
+
+            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet.next();
+            subscriptionStatus = resultSet.getString(1);
+
+        } catch (Exception e) {
+            logger.error("Exception in getSubscriptionStatus", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
+        return subscriptionStatus;
+    }
+
+    /**
      * This method is used to validate the input.
      * 
-     * @param context Request context object.
+     * @param context
+     *                Request context object.
      * 
-     * @return Returns true if the input is valid
-     *         else returns false.
+     * @return Returns true if the input is valid else returns false.
      * 
      */
     public boolean validateInput(final RequestContext context, DashboardSettingsBO settingsBO) {
