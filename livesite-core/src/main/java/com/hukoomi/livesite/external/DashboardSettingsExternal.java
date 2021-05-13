@@ -185,7 +185,8 @@ public class DashboardSettingsExternal {
             for (int index = 0; index < topicsArray.length; index++) {
                 prepareStatement.setDouble(1, Double.parseDouble(
                         subscriptionDetails.get("subscriberId")));
-                prepareStatement.setString(2,subscriptionDetails.get("subscriberEmail"));
+                prepareStatement.setString(2,
+                        subscriptionDetails.get("userId"));
                 prepareStatement.setString(3, topicsArray[index]);
                 prepareStatement.setString(4, STATUS_ACTIVE);
                 prepareStatement.addBatch();
