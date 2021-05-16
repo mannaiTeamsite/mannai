@@ -3,26 +3,31 @@ package com.hukoomi.utils;
 import com.interwoven.livesite.dom4j.Dom4jUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
+import org.dom4j.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.XML;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import java.util.List;
 
 public class SolrQueryUtil {
-    /** Logger object to check the flow of the code.*/
+    /**
+     * Logger object to check the flow of the code.
+     */
     private final Logger logger = Logger.getLogger(SolrQueryUtil.class);
-    /** Set contant variable with default solr error message.*/
+    /**
+     * Set contant variable with default solr error message.
+     */
     public static final String SOLR_EXCEPTION = "SOLR Query Exception";
+
     /**
      * Query Solr based on solution result target jsonObjectName
      * in specified xmlRootName.
-     * @param query Solr Query.
-     * @param jsonObjectName Fetched JSON Object to be returned.
-     * @param xmlRootName XML Root Element ofr returned document.
      *
+     * @param query          Solr Query.
+     * @param jsonObjectName Fetched JSON Object to be returned.
+     * @param xmlRootName    XML Root Element ofr returned document.
      * @return document solr query result document.
      */
     public Document doJsonQuery(
@@ -47,11 +52,12 @@ public class SolrQueryUtil {
         }
         return document;
     }
+
     /**
      * Query Solr based on solution result target in specified xmlRootName.
-     * @param query Solr Query.
-     * @param xmlRootName root node name for Solr Query results document.
      *
+     * @param query       Solr Query.
+     * @param xmlRootName root node name for Solr Query results document.
      * @return document solr query result document.
      */
     public Document doJsonQuery(final String query, final String xmlRootName) {
@@ -59,34 +65,68 @@ public class SolrQueryUtil {
         logger.debug("SOLR Execute Query:" + query);
         try {
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate
-                    .getForEntity(query, String.class);
+            ResponseEntity<String> response = restTemplate.getForEntity(query, String.class);
             JSONObject returnObject = new JSONObject();
-            returnObject.put(xmlRootName, new JSONObject(response.getBody()));
-            String returnXML = XML.toString(returnObject);
+            String returnXML = "";
+            logger.info("Json Response: " + response.getBody());
+            String jsonResponse = response.getBody().replaceAll("\"(\\d+)\":", "\"doc-$1\":");
+            logger.info("Json After Id Tag replacement: " + jsonResponse);
+            returnObject.put(xmlRootName, new JSONObject(jsonResponse));
+            returnXML = XML.toString(returnObject);
+            logger.info("XML data after conversion: " + returnXML);
+//            System.out.println(returnXML);
             document = Dom4jUtils.newDocument(returnXML);
+            Node highlightNode = document.getRootElement().selectSingleNode("highlighting");
+            if (highlightNode != null) {
+                logger.info("Highlighting Text Query available in the Response");
+                List<Node> resultDocs = document.selectNodes("//docs");
+                for (Node resultDoc : resultDocs) {
+                    Node documentIDNode = resultDoc.selectSingleNode("id");
+                    if (documentIDNode != null) {
+                        String documentID = documentIDNode.getText();
+                        logger.trace("Changing Highlighted Values for: " + documentID);
+                        Node highlightedDocumentNode = highlightNode.selectSingleNode("doc-" + documentID);
+                        if (highlightedDocumentNode != null) {
+                            Element highlightedDocumentElement = (Element) highlightedDocumentNode;
+                            List<Element> highlightedDocuments = highlightedDocumentElement.elements();
+                            for (Element highlightedDocument : highlightedDocuments) {
+                                Element correspondingProperty = (Element) resultDoc.selectSingleNode(highlightedDocument.getName());
+                                logger.trace("From: " + correspondingProperty.getText());
+                                if (StringUtils.isNotBlank(highlightedDocument.getText())) {
+                                    correspondingProperty.setText(highlightedDocument.getText());
+                                    logger.trace("To: " + highlightedDocument.getText());
+                                }
+                            }
+                        }
+                        logger.trace("Changed Highlighted Values for: " + documentID);
+                    } else {
+                        logger.error("ID need to be present in the response to show the highlight functionality.");
+                    }
+                }
+            }
         } catch (Exception e) {
             logger.error(SOLR_EXCEPTION, e);
         }
         return document;
     }
+
     /**
      * Query Solr based on solution result target jsonObjectName
      * in specified xmlRootName.
-     * @param query Solr Query.
      *
+     * @param query Solr Query.
      * @return responseBody return solr response as String.
      */
-     public String doJsonQuery(final String query) {
-         String responseBody = StringUtils.EMPTY;
-         try {
-             RestTemplate restTemplate = new RestTemplate();
-             ResponseEntity<String> response = restTemplate
-                     .getForEntity(query, String.class);
-             responseBody = response.getBody();
-         } catch (Exception e) {
-             logger.error(SOLR_EXCEPTION, e);
-         }
-         return responseBody;
-     }
+    public String doJsonQuery(final String query) {
+        String responseBody = StringUtils.EMPTY;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            ResponseEntity<String> response = restTemplate
+                    .getForEntity(query, String.class);
+            responseBody = response.getBody();
+        } catch (Exception e) {
+            logger.error(SOLR_EXCEPTION, e);
+        }
+        return responseBody;
+    }
 }
