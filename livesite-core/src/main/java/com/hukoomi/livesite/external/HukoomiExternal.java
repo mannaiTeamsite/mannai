@@ -81,11 +81,7 @@ public class HukoomiExternal {
 		String query = sqb.build();
 		logger.debug("Landing Query : " + query);
 		Document doc;
-		if(StringUtils.isNotBlank(highlighterVal)){
-			doc = squ.doXMLQuery(query, "SolrResponse");
-		}else{
-			doc = squ.doJsonQuery(query, "SolrResponse");
-		}
+		doc = squ.doJsonQuery(query, "SolrResponse");
 
 		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {

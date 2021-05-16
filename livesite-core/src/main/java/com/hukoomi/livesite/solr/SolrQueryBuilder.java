@@ -87,7 +87,7 @@ public class SolrQueryBuilder {
      * will come as suggestion text fetched by the
      * solr query url. */
     private String highlightField;
-    /** Declare highlighter On/Off that
+    /** Declare highlighter on/off that
      * will highlight the suggestion text fetched by the
      * solr query url. */
     private String highlighter;
@@ -371,7 +371,6 @@ public class SolrQueryBuilder {
 
         if(StringUtils.isNotBlank(this.highlighter)){
             sb.append("&hl="+this.highlighter);
-            sb.append("&wt=xml");
         }
 
         if (StringUtils.isNotBlank(this.groupingField)) {
