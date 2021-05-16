@@ -184,10 +184,10 @@ public class ErrorTask {
         int result = 0;
         try {
             logger.info("ErrorTask : insertBolgMasterData");
-
+           
             String errorMasterQuery = "INSERT INTO ERROR_MASTER ("
                     + " STATUS_CODE, LANGUAGE, ERROR_NAME_TECHNICAL,"
-                    + "TITLE, ERROR_MESSAGE ) "
+                    + "ERROR_TITLE, ERROR_MESSAGE ) "
                     + "VALUES ( ?, ?, ?, ?, ?)";
             logger.info("insertErrorMasterData errorMasterQuery : "
                     + errorMasterQuery);
@@ -229,8 +229,8 @@ public class ErrorTask {
             errorBO.setLang(getDCRValue(document, LANG_PATH));
             logger.info("LANG_PATH : " + errorBO.getLang());
             logger.info("ErrorTask : updateErrorMasterData");
-            String errorMasterQuery = "UPDATE ERROR_MASTER SET TITILE = ?, ERROR_MESSAGE = ?,ERROR_NAME_TECHNICAL = ?, STATUS_CODE = ?"
-                    + "WHERE DCR_ID = ? AND LANGUAGE = ?";
+            String errorMasterQuery = "UPDATE ERROR_MASTER SET  ERROR_MESSAGE = ?, ERROR_TITLE = ?,ERROR_NAME_TECHNICAL = ?, STATUS_CODE = ?,  LANGUAGE = ? "
+                    + "WHERE STATUS_CODE = ? AND LANGUAGE = ?";
             logger.info("updateErrorMasterData pollMasterQuery : "
                     + errorMasterQuery);
             preparedStatement = connection
@@ -239,8 +239,9 @@ public class ErrorTask {
             preparedStatement.setString(2, errorBO.getTitle());
             preparedStatement.setString(3, errorBO.getErrorNameTechnical());
             preparedStatement.setString(4, errorBO.getStatusCode());
-            preparedStatement.setString(5, errorBO.getErrorId());
-            preparedStatement.setString(6, errorBO.getLang());
+            preparedStatement.setString(5, errorBO.getLang());
+            preparedStatement.setString(6, errorBO.getErrorId());
+            preparedStatement.setString(7, errorBO.getLang());
             result = preparedStatement.executeUpdate();
             logger.info("updateErrorMasterData result : " + result);
 
