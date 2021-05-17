@@ -66,13 +66,18 @@ public class DashboardSettingsExternal {
      */
     public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
     /**
-     * Constant for action update language english.
+     * Constant for action update Language switch.
      */
-    public static final String ACTION_ENGLISH_ONOFF = "englishOnOff";
+    public static final String ACTION_LANG_ONOFF = "langOnOff";
+    
+    /**
+     * Constant for action update language english.
+     
+    public static final String ACTION_ENGLISH_ONOFF = "englishOnOff";*/
     /**
      * Constant for action update language arabic.
-     */
-    public static final String ACTION_ARABIC_ONOFF = "arabicOnOff";
+     
+    public static final String ACTION_ARABIC_ONOFF = "arabicOnOff";*/
     /**
      * Constant for language arabic.
      */
@@ -84,7 +89,7 @@ public class DashboardSettingsExternal {
     /**
      * Constant for language switch.
      */
-    public static final String LANGUAGE_SWITCH = "languageSwitch";
+    public static final String SWITCH_LANGUAGE = "switchlang";
     /**
      * Constant for language switch.
      */
@@ -177,6 +182,7 @@ public class DashboardSettingsExternal {
         postgre = new Postgre(context);
         mysql = new MySql(context);
         String langSwitch = context.getParameterString(LANG_SWITCH);
+        String language = context.getParameterString(SWITCH_LANGUAGE);
         if (validateInput(context, settingsBO)) {
             logger.info("Input data validation is successfull");
             logger.debug("settingsBO : "+settingsBO);
@@ -201,15 +207,22 @@ public class DashboardSettingsExternal {
                 logger.info("Unsubscribe Action");  
                 String unsubReason = context.getParameterString("UNSUBSCRIBE_REASON");
                 unsubscribeDashboardUser(settingsBO.getUserId(),unsubReason);
-            } else if (ACTION_ENGLISH_ONOFF
-                .equalsIgnoreCase(settingsBO.getAction())) {
-                logger.info("English Language Action");            
-                switchDashboardLanguage(settingsBO.getUserId(),langSwitch,LANGUAGE_ENGLISH);
-            } else if (ACTION_ARABIC_ONOFF
+            } else if (ACTION_LANG_ONOFF
                     .equalsIgnoreCase(settingsBO.getAction())) {
-                logger.info("Arabic Language Action");            
-                switchDashboardLanguage(settingsBO.getUserId(),langSwitch,LANGUAGE_ARABIC);
+                    logger.info("Switch Language Action");                      
+                    switchDashboardLanguage(settingsBO.getUserId(),langSwitch,language);
             }
+            /*
+             * else if (ACTION_ENGLISH_ONOFF
+             * .equalsIgnoreCase(settingsBO.getAction())) {
+             * logger.info("English Language Action");
+             * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
+             * LANGUAGE_ENGLISH); } else if (ACTION_ARABIC_ONOFF
+             * .equalsIgnoreCase(settingsBO.getAction())) {
+             * logger.info("Arabic Language Action");
+             * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
+             * LANGUAGE_ARABIC); }
+             */
         }else {
             logger.info("Invalid input parameter");
             createResponseDoc(responseElem, settingsBO.getAction(), settingsBO.getAction(), settingsBO.getPersona(), STATUS_FAILED, "Invalid input parameter");
