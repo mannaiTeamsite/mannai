@@ -29,12 +29,17 @@ import io.jsonwebtoken.security.SignatureException;
 public class DashboardExternal {
 	private Properties properties = null;
 	private String locale = "";
-    private String userID = "";
-    private String table = "";
-   
+	private String userID = "";
+	private String table = "";
+
+	private String pagetitle = "";
+
+	private String pageurl = "";
+	private String isBookmarked = "";
+	private String contenttype = "";
 
 	private static final Logger LOGGER = Logger.getLogger(DashboardExternal.class);
-	   Postgre postgre = null;
+	Postgre postgre = null;
 
 	public void dashboardServices(RequestContext context, String accessToken) {
 		String jwtParsedToken = null;
@@ -78,7 +83,7 @@ public class DashboardExternal {
 			session.setAttribute("exp", getValue(jwtParsedToken, "exp"));
 			session.setAttribute("usertypeNo", getValue(jwtParsedToken, "type"));
 			session.setAttribute("userId", getValue(jwtParsedToken, "uid"));
-			
+
 			String userTypeStr = getValue(jwtParsedToken, "type");
 			LOGGER.info("userType JWT : " + userTypeStr);
 			if (userTypeStr != null && !"".equals(userTypeStr)) {
@@ -154,52 +159,41 @@ public class DashboardExternal {
 		return doc;
 	}
 
-	
-
 	public Document getDashboardContent(RequestContext context) {
 
 		LOGGER.info("--------------getDashboardConetent Started------------");
-		  HttpSession session = context.getRequest().getSession();
-		
+		HttpSession session = context.getRequest().getSession();
+
 		Document doc = DocumentHelper.createDocument();
-		Element rootElement = doc.addElement("result");	
-		
-		
+		Element rootElement = doc.addElement("result");
+
 		Document bookmarkDoc = getDashboardbookmark(context);
-		
 
 		PollSurveyExternal ps = new PollSurveyExternal();
 		Document pollsSurveyDoc = ps.getContent(context);
 
 		Element pollsrootElement = pollsSurveyDoc.getRootElement();
 		Element bookmarkRoot = bookmarkDoc.getRootElement();
-	
-		Element PollsSurvey = rootElement.addElement("polls-survey");
-		PollsSurvey.add(pollsrootElement);
+
+		Element pollsSurvey = rootElement.addElement("polls-survey");
+		pollsSurvey.add(pollsrootElement);
 		LOGGER.info("After adding Polls" + doc.asXML());
 		Element bookmarkEle = rootElement.addElement("bookmarks");
 		bookmarkEle.add(bookmarkRoot);
 		LOGGER.info("After adding Bookmark" + doc.asXML());
 		Element userdata = rootElement.addElement("user-data");
-		 String status=(String) session.getAttribute("status");
-		 LOGGER.info("status="+session.getAttribute("status"));
-	        if(status!=null && status.equals("valid")) {
-					
-					Element userTypeElement = userdata.addElement("userType");
-					userTypeElement.setText(session.getAttribute("userType").toString());
-					Element fnEnElement = userdata.addElement("fnEn");
-					fnEnElement.setText(session.getAttribute("fnEn").toString());
-					Element userTypeNoElement = userdata.addElement("userTypeNoElement");
-					userTypeNoElement.setText(session.getAttribute("userTypeNo").toString());
-	        }
-	        
-	     Element quicklinks =  rootElement.addElement("quick-links");
-	     HukoomiExternal he = new HukoomiExternal();
-	      Document quicklinkdoc =  he.getLandingContent(context);
-	      Element quicklunkRoot = quicklinkdoc.getRootElement();
-	      quicklinks.add(quicklunkRoot);
-	        
-	        
+		String status = (String) session.getAttribute("status");
+		LOGGER.info("status=" + session.getAttribute("status"));
+		if (status != null && status.equals("valid")) {
+
+			Element userTypeElement = userdata.addElement("userType");
+			userTypeElement.setText("personal");
+			Element fnEnElement = userdata.addElement("fnEn");
+			fnEnElement.setText("Mohammad");
+			Element userTypeNoElement = userdata.addElement("userTypeNoElement");
+			userTypeNoElement.setText("1");
+		}
+
 		LOGGER.info("Final doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
@@ -214,138 +208,217 @@ public class DashboardExternal {
 		Document doc = DocumentHelper.createDocument();
 		Element resultTelement = doc.addElement("result");
 		Element userData = resultTelement.addElement("userData");
-		String status=(String) session.getAttribute("status");
-		
-		 if(status!=null && status.equals("valid")) {
-				Element userTypeElement = userData.addElement("userType");
-				String userType = (String) session.getAttribute("userType");
-				
-				if(userType != null) {
-					userTypeElement.setText(userType);
-				}
-				String fnEn = (String) session.getAttribute("fnEn");
-				Element fnEnElement = userData.addElement("fnEn");
-				if(fnEn != null) {
-					fnEnElement.setText(fnEn);
-				}
-				
-				Element userTypeNoElement = userData.addElement("userTypeNoElement");
-				String userTypeNo = (String) session.getAttribute("userTypeNo");
-				if(userTypeNo != null) {
-					userTypeNoElement.setText(userTypeNo);
-				}
-				
-		 }
-		 LOGGER.info("Bookmark doc" + doc.asXML());
+		String status = (String) session.getAttribute("status");
+		if (status != null && status.equals("valid")) {
+			Element userTypeElement = userData.addElement("userType");
+			String userType = (String) session.getAttribute("userType");
+
+			if (userType != null) {
+				userTypeElement.setText(userType);
+			}
+
+			String fnEn = (String) session.getAttribute("fnEn");
+			Element fnEnElement = userData.addElement("fnEn");
+			if (fnEn != null) {
+				fnEnElement.setText(fnEn);
+			}
+
+			Element userTypeNoElement = userData.addElement("userTypeNoElement");
+
+			String userTypeNo = (String) session.getAttribute("userTypeNo");
+			if (userTypeNo != null) {
+				userTypeNoElement.setText(userTypeNo);
+			}
+
+		}
+		LOGGER.info("Bookmark doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 
 	}
-	
-	
-	
-	 public Document getDashboardbookmark(final RequestContext context) {
-	        LOGGER.info("BookmarkExternal()====> Starts");
-	        
-	        
-	        Document bookmarkSearchDoc = DocumentHelper.createDocument();
-	        Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
-	        String status = "valid";
-	        postgre = new Postgre(context);
-	        HttpSession session = context.getRequest().getSession();
-	        status=(String) session.getAttribute("status");
-	        LOGGER.info("status="+session.getAttribute("status"));
-	        if(status!=null && status.equals("valid")) {
-	        	 userID = (String) session.getAttribute("userId");
-	            LOGGER.info("userID:" + userID);
-	            locale = context.getParameterString("locale").trim().toLowerCase();            
-	           
-	            table = context.getParameterString("bookmark").trim();
-	            LOGGER.info("locale:" + locale);
 
-	            LOGGER.info("table:" + table);
+	public Document getDashboardbookmark(RequestContext context) {
+		LOGGER.info("getDashboardbookmark()====> Starts");
 
-	            if (!"".equals(table) && !"".equals(userID)) {
-	            	Element bmm = bookmarkResultEle.addElement("bmm");
-	                    getBookmark(bmm, "bmm");
-	                Element bmd = bookmarkResultEle.addElement("bmd");
-	                    getBookmark(bmd, "bmd");
-	                Element bms = bookmarkResultEle.addElement("bms");
-	                    getBookmark(bms, "bms");
-	                   
-	                
-	            }
-	            LOGGER.info("session valid");
-	        }
-	        else {
-	      
-	            bookmarkResultEle = bookmarkResultEle.addElement("session");
-	            bookmarkResultEle.setText("Session invalid");
-	            LOGGER.info("session invalid");
-	        }
-	        LOGGER.info("bookmarkSearch====> ends");
-	        return bookmarkSearchDoc;
-	    }
-	 private Connection getConnection() {
-	        return postgre.getConnection();
-	    }
-	 private void getBookmark(Element element, String category) {
-	        String activeflag="Y";
-	        LOGGER.info("getTopSearch()====> Starts");
-	        Connection connection = getConnection();
-	        PreparedStatement prepareStatement = null;
-	        String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " " +
-	                table + " " + "where" + " " + "locale='"+locale+"' and " + "user_id='"+userID+"' and active='" +activeflag+"' and category='"+category+"'";
-	        LOGGER.info("searchQuery:" + searchQuery);
-	        ResultSet resultSet = null;
-	        try {
-	        	Element ele = element.addElement("bookmarks");
-	            if(connection != null){
-	                prepareStatement = connection.prepareStatement(searchQuery);
-	                resultSet = prepareStatement.executeQuery();
-	                String pageTitle = "";
-	                String pageURL="";
-	                int i = 0;
-	                while(resultSet.next()){
-	                	
-	                    pageTitle = resultSet.getString(1);
-	                    pageURL = resultSet.getString(2);
-	                    String pagedesc = resultSet.getString(3);
-	                    String pageactive = resultSet.getString(4);
-	                    String ctype = resultSet.getString(5);
-	                    String categoryType = resultSet.getString(6);
-	                    if(!"".equals(pageTitle) && !"".equals(pageURL)){
-	                        Element ele1 = ele.addElement("pageTitle");
-	                        ele1.setText(pageTitle);
-	                        Element ele2 = ele.addElement("pageURL");
-	                        ele2.setText(pageURL);
-	                        Element ele3 = ele.addElement("pageDescription");
-	                        ele3.setText(pagedesc);
-	                        Element ele4 = ele.addElement("active");
-	                        ele4.setText(pageactive);
-	                        Element ele5 = ele.addElement("contentType");
-	                        ele5.setText(ctype);
-	                        Element ele6 = ele.addElement("category");
-	                        ele6.setText(categoryType);
-	                        LOGGER.info("Result:" + pageTitle+":"+pageURL);
-	                    }
-	                   i++;
-	                }
-	                Element ele7 = ele.addElement("count");
-                    ele7.setText(""+i+"");
-	            }
-	        } catch (SQLException ex) {
-	        	LOGGER.error("Exception on Select Query:",ex);
-	        }finally {
-	            postgre.releaseConnection(connection, prepareStatement, resultSet);
-	        }
-	        LOGGER.info("getBookmark()====> ends");
+		
+		pagetitle = context.getParameterString("page_title");
 
-	    }
-	
-	
-	
-	
-	
+		pageurl = context.getParameterString("page_url");
+
+		contenttype = context.getParameterString("content_type");
+
+		String queryType = context.getParameterString("queryType").trim();
+
+		Document bookmarkSearchDoc = DocumentHelper.createDocument();
+		Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
+
+		postgre = new Postgre(context);
+		HttpSession session = context.getRequest().getSession();
+String status=(String) session.getAttribute("status");
+		
+LOGGER.info("status="+session.getAttribute("status"));
+		if (status != null && status.equals("valid")) {
+			
+userID = (String) session.getAttribute("userId");
+			LOGGER.info("userID:" + userID);
+			locale = context.getParameterString("locale").trim().toLowerCase();
+
+			table = context.getParameterString("bookmark").trim();
+			boolean isExist = false;
+			LOGGER.info("locale:" + locale);
+			
+			isExist = isBookmarkPresent();
+			
+			LOGGER.info("table:" + table);
+
+			if (!"".equals(table) && !"".equals(userID)) {
+				if ("select".equals(queryType)) {
+					Element bmm = bookmarkResultEle.addElement("bmm");
+					getBookmark(bmm, "bmm");
+					Element bmd = bookmarkResultEle.addElement("bmd");
+					getBookmark(bmd, "bmd");
+					Element bms = bookmarkResultEle.addElement("bms");
+					getBookmark(bms, "bms");
+
+				} else if (isExist && "remove".equals(queryType)) {
+					removeBookmark(bookmarkResultEle);
+
+				}
+
+			}
+			LOGGER.info("session valid");
+		} else {
+
+			bookmarkResultEle = bookmarkResultEle.addElement("session");
+			bookmarkResultEle.setText("Session invalid");
+			LOGGER.info("session invalid");
+		}
+		LOGGER.info("getDashboardbookmark()====> ends");
+		return bookmarkSearchDoc;
+	}
+
+	private Connection getConnection() {
+		return postgre.getConnection();
+	}
+
+	private void getBookmark(Element element, String category) {
+		String activeflag = "Y";
+		LOGGER.info("getBookmark()====> Starts");
+		Connection connection = getConnection();
+		PreparedStatement prepareStatement = null;
+		String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " "
+				+ table + " " + "where" + " " + "locale='" + locale + "' and " + "user_id='" + userID + "' and active='"
+				+ activeflag + "' and category='" + category + "'";
+		LOGGER.info("searchQuery:" + searchQuery);
+		ResultSet resultSet = null;
+		try {
+
+			if (connection != null) {
+				prepareStatement = connection.prepareStatement(searchQuery);
+				resultSet = prepareStatement.executeQuery();
+				String pageTitle = "";
+				String pageURL = "";
+				int i = 0;
+				while (resultSet.next()) {
+					Element ele = element.addElement("bookmarks");
+					pageTitle = resultSet.getString(1);
+					pageURL = resultSet.getString(2);
+					String pagedesc = resultSet.getString(3);
+					String pageactive = resultSet.getString(4);
+					String ctype = resultSet.getString(5);
+					String categoryType = resultSet.getString(6);
+					if (!"".equals(pageTitle) && !"".equals(pageURL)) {
+						Element ele1 = ele.addElement("pageTitle");
+						ele1.setText(pageTitle);
+						Element ele2 = ele.addElement("pageURL");
+						ele2.setText(pageURL);
+						Element ele3 = ele.addElement("pageDescription");
+						ele3.setText(pagedesc);
+						Element ele4 = ele.addElement("active");
+						ele4.setText(pageactive);
+						Element ele5 = ele.addElement("contentType");
+						ele5.setText(ctype);
+						Element ele6 = ele.addElement("category");
+						ele6.setText(categoryType);
+						LOGGER.info("Result:" + pageTitle + ":" + pageURL);
+					}
+					i++;
+				}
+				Element ele7 = element.addElement("count");
+				ele7.setText("" + i + "");
+			}
+		} catch (SQLException ex) {
+			LOGGER.error("Exception on Select Query:", ex);
+		} finally {
+			postgre.releaseConnection(connection, prepareStatement, resultSet);
+		}
+		LOGGER.info("getBookmark()====> ends");
+
+	}
+
+	private void removeBookmark(Element bookmarkResultEle) {
+
+		String activeflag = "F";
+		LOGGER.info("removeBookmark()====> Starts");
+		Connection connection = getConnection();
+		PreparedStatement prepareStatement = null;
+		String updateQuery = "UPDATE" + " " + table + " set active='" + activeflag + "' where locale='" + locale
+				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
+				+ "' and content_type='" + contenttype + "'";
+		LOGGER.info("updateQuery:" + updateQuery);
+		int result = 0;
+		try {
+			if (connection != null) {
+				prepareStatement = connection.prepareStatement(updateQuery);
+				result = prepareStatement.executeUpdate();
+
+				Element bmm = bookmarkResultEle.addElement("bmm");
+				getBookmark(bmm, "bmm");
+				Element bmd = bookmarkResultEle.addElement("bmd");
+				getBookmark(bmd, "bmd");
+				Element bms = bookmarkResultEle.addElement("bms");
+				getBookmark(bms, "bms");
+
+			}
+		} catch (SQLException ex) {
+			LOGGER.error("Exception on Select Query:", ex);
+		} finally {
+			postgre.releaseConnection(connection, prepareStatement, null);
+		}
+		LOGGER.info("removeBookmark()====> ends");
+
+	}
+	public boolean isBookmarkPresent() {
+        boolean check=false;
+        LOGGER.info("isBookmarkPresent()====> Starts");
+        Connection connection = getConnection();
+        PreparedStatement prepareStatement = null;
+        String searchQuery = "select active from" + " " +
+                table + " " + "where" + " " + "locale='"+ locale +"' and user_id='"
+                + userID+"' and page_title='"+pagetitle+ "' and page_url='"+pageurl+"' and content_type='"+contenttype+"'";
+        ResultSet resultSet = null;
+        try {
+            if(connection != null){
+                prepareStatement = connection.prepareStatement(searchQuery);
+                resultSet = prepareStatement.executeQuery();
+
+                while(resultSet.next()){
+                    isBookmarked = resultSet.getString(1);
+
+                    if(!"".equals(isBookmarked))
+                    {
+                        check=true;
+                        LOGGER.info("check:" + check);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+        	LOGGER.error("Exception on Select Query:",ex);
+        }finally {
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
+        }
+        LOGGER.info("getBookmark()====> ends");
+        return check;
+    }
 
 }
