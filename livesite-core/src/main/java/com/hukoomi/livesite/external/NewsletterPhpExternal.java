@@ -105,6 +105,8 @@ public class NewsletterPhpExternal {
 
     /** Postgre Object variable. */
     Postgre postgre = null;
+    
+    DashboardSettingsExternal settingExternal = new DashboardSettingsExternal();
 
     @SuppressWarnings("deprecation")
     public Document subscribeToNewsletter(final RequestContext context) {
@@ -127,6 +129,11 @@ public class NewsletterPhpExternal {
         String subscriptionLang = context
                 .getParameterString("subscriptionLang");
         String persona = context.getParameterString(PERSONA);
+        if(uid !=null && !uid.equals("")) {
+            
+            persona = settingExternal.getPersonaForUser(uid,postgre);
+            logger.debug("NewsletterPhpExternal : dashboard persona "+persona);
+        }
 
         if (persona == null) {
             persona = "general";
