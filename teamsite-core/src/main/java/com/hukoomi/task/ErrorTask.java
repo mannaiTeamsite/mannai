@@ -194,6 +194,7 @@ public class ErrorTask {
             preparedStatement = connection
                     .prepareStatement(errorMasterQuery);
             
+            
             preparedStatement.setString(1, errorBO.getStatusCode());
             preparedStatement.setString(2, errorBO.getLang());
             preparedStatement.setString(3, errorBO.getErrorNameTechnical());
