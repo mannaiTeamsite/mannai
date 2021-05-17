@@ -1506,8 +1506,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                                         "insertSurveyQuestionData Option batch insert failed");
                                 break;
                             }
-                            questionNo++;
                         }
+                        questionNo++;
                     } else {
                         result = false;
                         connection.rollback();
@@ -2248,11 +2248,10 @@ public class PollSurveyTask implements CSURLExternalTask {
         try {
             logger.info("PollSurveyTask : updateSurveyOptionData");
             String surveyOptionQuery = "UPDATE "
-                    + "SURVEY_OPTION SET OPTION_LABEL = ?,  IS_USER_INPUT = ?,"
-                    //+ "OPTION_VALUE = ? WHERE SURVEY_ID = ? "
+                    + "SURVEY_OPTION SET OPTION_LABEL = ?,  IS_USER_INPUT = ? "
                     + "WHERE SURVEY_ID = ? "
                     + "AND LANG = ? AND QUESTION_NO = ? "
-                    + "AND OPTION_NO = ?";
+                    + "AND OPTION_NO = ? ";
             preparedStatement = connection
                     .prepareStatement(surveyOptionQuery);
             logger.debug("updateSurveyOptionData surveyOptionQuery : "

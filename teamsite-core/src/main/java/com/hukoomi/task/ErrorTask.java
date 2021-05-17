@@ -158,7 +158,7 @@ public class ErrorTask {
             logger.info("getLang : "+ errorBO.getLang());
             logger.info("getTitle : "+ errorBO.getStatusCode());
             logger.info("getUpdatedDate : "+ errorBO.getErrorNameTechnical());
-            int result = insertErrorMasterData(errorBO, connection,postgre);
+            int result = insertBolgMasterData(errorBO, connection,postgre);
             logger.info("insertErrorData result : " + result);
             if (result > 0) {
                 logger.info("Error Master Data Inserted");
@@ -178,7 +178,7 @@ public class ErrorTask {
         return isErrorDataInserted;
     }
 
-    private int insertErrorMasterData(ErrorBO errorBO,
+    private int insertBolgMasterData(ErrorBO errorBO,
             Connection connection,PostgreTSConnection postgre) {
         PreparedStatement preparedStatement = null;
         int result = 0;

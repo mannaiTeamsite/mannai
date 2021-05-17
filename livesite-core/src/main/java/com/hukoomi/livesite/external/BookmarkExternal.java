@@ -45,8 +45,8 @@ public class BookmarkExternal {
         HttpSession session = context.getRequest().getSession();
         status=(String) session.getAttribute("status");
         logger.info("status="+session.getAttribute("status"));
-        if(status.equals("valid")) {
-            userID = (String) session.getAttribute("uid");
+        if(status!=null && status.equals("valid")) {
+            userID = (String) session.getAttribute("userId");
             logger.info("userID:" + userID);
             locale = context.getParameterString("locale").trim().toLowerCase();
             pagetitle = context.getParameterString("page_title");
@@ -88,6 +88,8 @@ public class BookmarkExternal {
         }
         else {
             // bookmarkResultEle.setText(status);
+            bookmarkResultEle = bookmarkResultEle.addElement("session");
+            bookmarkResultEle.setText("Session invalid");
             logger.info("session invalid");
         }
         logger.info("bookmarkSearch====> ends");
