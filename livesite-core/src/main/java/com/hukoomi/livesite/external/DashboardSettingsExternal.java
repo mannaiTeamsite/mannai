@@ -3,12 +3,14 @@ package com.hukoomi.livesite.external;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -118,10 +120,10 @@ public class DashboardSettingsExternal {
      * Constant for status failed.
      */
     public static final String STATUS_FAILED = "failed";
-    /** 
-     * active status constant. 
-     */
+    /** active status constant. */
     private static final String STATUS_ACTIVE = "Active";
+    /** inActive status constant. */
+    private static final String STATUS_INACTIVE = "InActive";
     /**
      * Constant for status.
      */
@@ -587,7 +589,9 @@ public class DashboardSettingsExternal {
         String topicsArray[] = topics.split(",");
         
         Map<String, String> subscriptionDetails = getSubscriptionDetails(
-                "0");
+                settingsBO.getUserId());
+        logger.debug("subscriptionDetailsMap : "
+                + subscriptionDetails.toString());
 
         try {
             personaSettingsQuery = "INSERT INTO NEWSLETTER_INTEREST (SUBSCRIBER_ID, UID, TOPIC_INTEREST_NAME, STATUS) VALUES (?, ?, ?, ?)";
@@ -642,6 +646,77 @@ public class DashboardSettingsExternal {
             String topics) {
         logger.info("DashboardSettingsExternal : updateTopicsData()");
 
+        Connection connection = postgre.getConnection();
+        PreparedStatement prepareStatement = null;
+        String personaSettingsQuery = null;
+        String inputTopicsArray[] = topics.split(",");
+        List<String> databaseTopicsList = Arrays.asList(
+                getTopicsInterest(settingsBO.getUserId()).split(","));
+
+        logger.debug("Input Topics : " + inputTopicsArray.toString());
+        logger.debug("Database Topics : " + databaseTopicsList.toString());
+
+        Map<String, String> subscriptionDetails = getSubscriptionDetails(
+                settingsBO.getUserId());
+
+        try {
+            personaSettingsQuery = "UPDATE NEWSLETTER_INTEREST SET SUBSCRIBER_ID = ? , TOPIC_INTEREST_NAME= ?, STATUS = ? WHERE UID = ?";
+            prepareStatement = connection
+                    .prepareStatement(personaSettingsQuery);
+
+            for (int index = 0; index < inputTopicsArray.length; index++) {
+                // If topic is not available in Database, inserting it
+                if (!databaseTopicsList
+                        .contains(inputTopicsArray[index])) {
+                    insertTopicsData(responseElem, settingsBO,
+                            inputTopicsArray[index]);
+                }
+                // If topic is already available in database
+                else if (databaseTopicsList
+                        .contains(inputTopicsArray[index])) {
+                    prepareStatement.setDouble(1, Double.parseDouble(
+                            subscriptionDetails.get("subscriberId")));
+                    prepareStatement.setString(2, inputTopicsArray[index]);
+                    prepareStatement.setString(3, STATUS_ACTIVE);
+                    prepareStatement.setString(4,
+                            subscriptionDetails.get("userId"));
+                    prepareStatement.addBatch();
+                }
+                // If topic is available in database but removed from frontend request,
+                // updating status
+                else {
+                    prepareStatement.setDouble(1, Double.parseDouble(
+                            subscriptionDetails.get("subscriberId")));
+                    prepareStatement.setString(2, inputTopicsArray[index]);
+                    prepareStatement.setString(3, STATUS_INACTIVE);
+                    prepareStatement.setString(4,
+                            subscriptionDetails.get("userId"));
+                    prepareStatement.addBatch();
+                }
+
+            }
+
+            int result = prepareStatement.executeUpdate();
+            String personaValue = getPersonaForUser(settingsBO.getUserId(),
+                    postgre);
+            if (result == 0) {
+                logger.info("Newsletter interest topics insertion failed");
+                createTopicsResponseDoc(responseElem, null, null,
+                        personaValue, STATUS_FAILED,
+                        "Newsletter interest topics insertion failed");
+            } else {
+                logger.info(
+                        "Newsletter interest topics inserted successfully!");
+                createTopicsResponseDoc(responseElem, null, null,
+                        personaValue, STATUS_SUCCESS, "");
+            }
+        } catch (Exception e) {
+            logger.error("Exception in updateTopicsData", e);
+            createTopicsResponseDoc(responseElem, null, null, null,
+                    STATUS_FAILED, "Exception in updateTopicsData");
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
     }
 
     /**
@@ -700,12 +775,12 @@ public class DashboardSettingsExternal {
         // String subscriptionStatus = getSubscriptionStatus(
         // settingsBO.getUserId());
         String subscriptionStatus = getSubscriptionStatus(
-                "0");
+                settingsBO.getUserId());
         String topics = "";
 
         if ("Subscribed".equals(subscriptionStatus)) {
             // String topics = getTopicsInterest(settingsBO.getUserId());
-            topics = getTopicsInterest("0");
+            topics = getTopicsInterest(settingsBO.getUserId());
 
 
             createTopicsResponseDoc(responseElem, topics,
@@ -734,6 +809,8 @@ public class DashboardSettingsExternal {
         Map<String, String> subscriptionDetails = new HashMap<String, String>();
         
         String subscriptionDetailsQuery = "SELECT SUBSCRIBER_ID, SUBSCRIBER_EMAIL, STATUS, SUBSCRIBED_DATE, UID FROM NEWSLETTER_MASTER WHERE UID = ?"; 
+        logger.info(
+                "subscriptionDetailsQuery : " + subscriptionDetailsQuery);
         
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -928,6 +1005,7 @@ public class DashboardSettingsExternal {
                 logger.debug("UserType from session is null.");
             }
         }
+        //settingsBO.setUserId("0");
         
         if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsAction)) {
             String persona = context.getParameterString(PERSONA);

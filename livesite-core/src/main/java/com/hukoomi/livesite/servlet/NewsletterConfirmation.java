@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -52,6 +54,9 @@ public class NewsletterConfirmation extends HttpServlet {
 
     /** confirmed status constant. */
     private static final String STATUS_CONFIRMED = "Confirmed";
+    
+    /** external parameter. */
+    private static final String STATUS_SUCCESS = "Success";
 
     /** Postgre Object variable. */
     PostgreForServlet postgre = null;
@@ -98,6 +103,18 @@ public class NewsletterConfirmation extends HttpServlet {
     private static final String STATUS_PERSONA_NOTFOUND =
             "personaNOTFOUND";
     
+    /** phpList response status. */
+    private static final String SESSION_FAILED =
+            "sessionfailed";
+    
+    /** phpList response status. */
+    private static final String SUBSCRIBED_SUCCESSFULLY =
+            "subscribedSuccessfully";
+    
+    /** phpList response status. */
+    private static final String SUBSCRIBED_UNSUCCESSFULL =
+            "subscribedUnsuccessfull";
+    
     /** Postgre Object variable. */
     MySqlForServlet mysql = null;
 
@@ -128,28 +145,27 @@ public class NewsletterConfirmation extends HttpServlet {
             String persona = getSubscriberPersona(subscriberId,preferenceId);
             int listid = getSubscriberListID(persona);
             String status="";
-            int uniqueid;
+            String subStatus="";
+            String uptpostgreData = "";
+            int userId;
             status = phpSubscriberExists(subscriberemail,listid);
             try {
                 if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
                     
-                     uniqueid = createSubscriberPhplist(subscriberemail);
-                    if(uniqueid>0) {                
-                       updateSubscriberPersona(uniqueid,listid);
+                    subStatus = createSubscriberPhplist(subscriberemail);
+                    if(!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) { 
+                        userId = getSubscriberID(subscriberemail);
+                       updateSubscriberPersona(userId,listid);
                     }
-                    
+                    uptpostgreData=STATUS_SUCCESS;
                 }
                 if(!status.equals("") && status.equals(STATUS_PERSONA_NOTFOUND))
                 {
-                    uniqueid = getSubscriberID(subscriberemail);
-                    updateSubscriberPersona(uniqueid,listid);
-                }
-                /*
-                 * int uniqueid = createSubscriberPhplist(subscriberemail);
-                 * if(uniqueid>0) { status=
-                 * updateSubscriberPersona(uniqueid,listid); }
-                 */
-                logger.debug("NewsletterConfirmation : doGet() >>>><<<<");
+                    userId = getSubscriberID(subscriberemail);
+                    updateSubscriberPersona(userId,listid);
+                    uptpostgreData=STATUS_SUCCESS;
+                }                
+               
             } catch (NoSuchAlgorithmException e) {            
                 logger.error("NewsletterConfirmation : doGet() >>>>"+e);
             } catch (IOException e) {            
@@ -512,7 +528,7 @@ public class NewsletterConfirmation extends HttpServlet {
                 subscriberEmail =  rs.getString(SUBSCRIBER_EMAIL);
             }
         } catch (Exception e) {
-            logger.error("Exception in updateMasterTable", e);
+            logger.error("Exception in getSubscriberEmail", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
@@ -671,27 +687,35 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method is to add subscriber to phpList 
      */
-    private int createSubscriberPhplist(final String email)
+    private String createSubscriberPhplist(final String email)
             throws IOException, NoSuchAlgorithmException {
         logger.info("createSubscriberPhplist:Enter");       
         Properties properties =
                 postgre.loadProperties("phplist.properties");
         String base64Token = getphpListToken();
-        authorizationHeader =
-                "Basic " + base64Token;
-        baseUrl = properties.getProperty(BASE_URL);
-        int unique_id = 0;
-        try {            
+        String status="";
+        if(!base64Token.equals(SESSION_FAILED)) {
             
-                    unique_id =
-                            createSubscriber(email,authorizationHeader);
-                    logger.debug("unique_id: " + unique_id);
+            authorizationHeader =
+                    "Basic " + base64Token;
+            baseUrl = properties.getProperty(BASE_URL);
+            /* int unique_id = 0; */
+            try {            
+                
+                status =
+                                createSubscriber(email,authorizationHeader);
+                        logger.debug("status: " + status);
 
-        } catch (Exception e) {
-            logger.error("exception:", e);
-        }
+            } catch (Exception e) {
+                logger.error("exception: createSubscriberPhplist", e);
+            }
+            
+        }else {
+            
+            status = SESSION_FAILED;
+        }      
 
-        return unique_id;
+        return status;
     }
     
     /**
@@ -703,11 +727,14 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method makes service call to add subscriber to phpList
      */
-    private int createSubscriber(final String email,String authHeader)
+    private String createSubscriber(final String email,String authHeader)
             throws NoSuchAlgorithmException {
         logger.info("createsubscriber:Enter");
         InputStream is = null;
         String requestJSON = "";
+        StringBuilder response = new StringBuilder();
+        int statusCode=0;
+        String status = "";
         try {
             // Create connection
             Properties properties =
@@ -744,28 +771,35 @@ public class NewsletterConfirmation extends HttpServlet {
             is = httpConnection.getInputStream();
             BufferedReader rd =
                     new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder();
+            
             String line;
             while ((line = rd.readLine()) != null) {
                 response.append(line);
                 response.append('\r');
             }
             rd.close();
-            return getResponseValue(response.toString(),PHP_USER_ID);
-        } catch (IOException ioe) {
-            int statusCode=0;
+            statusCode = httpConnection.getResponseCode();
+        } catch (IOException ioe) {            
             try {
                 statusCode = httpConnection.getResponseCode();
                 logger.debug("statusCode: " + statusCode);
-                return statusCode;
+                status = SUBSCRIBED_UNSUCCESSFULL;
+                
             } catch (IOException e) {
                 logger.error("Exception in subscriber creation: ", e);
             }
             httpConnection.disconnect();
             logger.error("Exception in subscriber creation: ", ioe);
-            return statusCode;
+            
         }
-
+        logger.debug("createsubscriber: statuscode" + statusCode);
+        /* return getResponseValue(response.toString(),PHP_USER_ID); */
+        if(statusCode==201) {
+            status = SUBSCRIBED_SUCCESSFULLY;
+        }else {
+            status = SUBSCRIBED_UNSUCCESSFULL;
+        }
+        return status;
     }
     
     /**
@@ -782,7 +816,8 @@ public class NewsletterConfirmation extends HttpServlet {
         String requestJSON = "";
         InputStream is = null;
         String adminID= "";
-        String adminPWD= "";        
+        String adminPWD= ""; 
+        int statusCode=0;
         Properties properties =
                   postgre.loadProperties("phplist.properties"); 
         baseUrl = properties.getProperty(BASE_URL);
@@ -791,45 +826,67 @@ public class NewsletterConfirmation extends HttpServlet {
         String endpoint = baseUrl +
           "/api/v2/sessions";       
          
-        URL url = new URL(endpoint);
-        httpConnection = (HttpURLConnection) url.openConnection();
-        httpConnection.setRequestMethod("POST");
-        httpConnection.setRequestProperty("Content-Type",
-                "application/json");
-        httpConnection.setDoOutput(true);       
-        requestJSON = "{ \"login_name\" : \"" + adminID
-                + "\", \"password\" : \""
-                + adminPWD + "\" }";
-        
-        logger.debug("requestJSON: " + requestJSON);
-        httpConnection.setRequestProperty("Content-Length",
-                Integer.toString(requestJSON.getBytes().length));
-        httpConnection.setRequestProperty("Content-Language", "en-US");
-        httpConnection.setUseCaches(false);
-        httpConnection.setDoOutput(true);
-
-        // Send request
-        DataOutputStream wr =
-                new DataOutputStream(httpConnection.getOutputStream());
-        wr.writeBytes(requestJSON);
-        wr.close();
-
-        // Get Response
-        is = httpConnection.getInputStream();
-        BufferedReader rd =
-                new BufferedReader(new InputStreamReader(is));
         StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = rd.readLine()) != null) {
-            response.append(line);
-            response.append('\r');
+        
+        try {
+            URL url = new URL(endpoint);
+            httpConnection = (HttpURLConnection) url.openConnection();
+            httpConnection.setRequestMethod("POST");
+            httpConnection.setRequestProperty("Content-Type",
+                    "application/json");
+            httpConnection.setDoOutput(true);       
+            requestJSON = "{ \"login_name\" : \"" + adminID
+                    + "\", \"password\" : \""
+                    + adminPWD + "\" }";
+            
+            logger.debug("requestJSON: " + requestJSON);
+            httpConnection.setRequestProperty("Content-Length",
+                    Integer.toString(requestJSON.getBytes().length));
+            httpConnection.setRequestProperty("Content-Language", "en-US");
+            httpConnection.setUseCaches(false);
+            httpConnection.setDoOutput(true);
+
+            // Send request
+            DataOutputStream wr =
+                    new DataOutputStream(httpConnection.getOutputStream());
+            wr.writeBytes(requestJSON);
+            wr.close();
+
+            // Get Response
+            is = httpConnection.getInputStream();
+            BufferedReader rd =
+                    new BufferedReader(new InputStreamReader(is));
+            /* response = new StringBuilder(); */
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            logger.debug(
+                    "Response in getphpListToken() " + response.toString());
+            statusCode = httpConnection.getResponseCode();
+        } catch (IOException e) {           
+            
+            try {
+                statusCode = httpConnection.getResponseCode();
+                logger.debug("statusCode: " + statusCode);
+                
+            } catch (IOException ioe) {
+                logger.error("Exception in session creation: getphpListToken ", ioe);
+            }
+            httpConnection.disconnect();
+            logger.error("Exception in session creation: getphpListToken ", e);
+         
+            return (SESSION_FAILED);
         }
-        rd.close();
-        logger.debug(
-                "Response in getphpListToken() " + response.toString());
-        return getToken(response.toString());
-        
-        
+        logger.debug("statusCode: " + statusCode);
+        if(statusCode==201) {
+            token = getToken(response.toString());
+        }else {
+            
+        }
+       return token;
     }
     
     /**
