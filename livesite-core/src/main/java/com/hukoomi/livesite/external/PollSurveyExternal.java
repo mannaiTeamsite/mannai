@@ -35,6 +35,10 @@ public class PollSurveyExternal {
      */
     private static final String CONTENT = "Content";
     /**
+     * Constant for Content. 
+     */
+    private static final String DASHBOARD = "Dashboard";
+    /**
      * Constant for Poll node. 
      */
     private static final String POLL_NODE = "/content/root/detail/polls";
@@ -299,7 +303,7 @@ public class PollSurveyExternal {
                 // PollGroup Processing
                 String pollGroupConfig = pollsBO.getPollGroupConfig();
                 logger.debug("pollGroupConfig : " + pollGroupConfig);
-                Document pollGroupConfigdoc = fetchGroupDoc(context, CONTENT,
+                Document pollGroupConfigdoc = fetchGroupDoc(context, DASHBOARD,
                         pollsBO.getPollGroupConfigCategory(), pollsBO.getLang(),
                         pollGroupConfig);
                 logger.debug("Polls Group Config Doc :" + pollGroupConfigdoc.asXML());
@@ -359,7 +363,7 @@ public class PollSurveyExternal {
                 // SurveyGroup Processing
                 String surveyGroupConfig = surveyBO.getSurveyGroupConfig();
                 logger.debug("surveyGroupConfig : " + surveyGroupConfig);
-                Document surveyGroupConfigdoc = fetchGroupDoc(context, CONTENT,
+                Document surveyGroupConfigdoc = fetchGroupDoc(context, DASHBOARD,
                         surveyBO.getSurveyGroupConfigCategory(), surveyBO.getLang(),
                         surveyGroupConfig);
                 logger.debug("Survey Group Config Doc :" + surveyGroupConfigdoc.asXML());
