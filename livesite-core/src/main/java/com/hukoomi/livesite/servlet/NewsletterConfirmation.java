@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
@@ -171,6 +169,8 @@ public class NewsletterConfirmation extends HttpServlet {
             } catch (IOException e) {            
                 logger.error("NewsletterConfirmation : doGet() <<<<"+e);
             }
+
+            if (uptpostgreData.equals(STATUS_SUCCESS)) {
             String tokenType = getTokenType(subscriberId);
             boolean tokenStatusUpdate = false;
             boolean masterDataUpdate = false;
@@ -202,6 +202,12 @@ public class NewsletterConfirmation extends HttpServlet {
             response.addCookie(confirmationCookie);
             rd.forward(request, response);
         }
+    } else {
+        Cookie confirmationCookie = new Cookie("confirmationStatus",
+                "technicalIssue");
+        response.addCookie(confirmationCookie);
+        rd.forward(request, response);
+    }
        
     } else {
         Cookie confirmationCookie = new Cookie("confirmationStatus",
@@ -209,7 +215,7 @@ public class NewsletterConfirmation extends HttpServlet {
         response.addCookie(confirmationCookie);
         rd.forward(request, response);
     }
-        writer.flush();
+
     }
 
     /**
