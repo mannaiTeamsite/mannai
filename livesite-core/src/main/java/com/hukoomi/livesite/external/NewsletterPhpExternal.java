@@ -145,8 +145,7 @@ public class NewsletterPhpExternal {
 
         if (!email.equals("") && !subscriptionLang.equals("")) {
             if ((subscriptionLang.equals("ar")
-                    || subscriptionLang.equals("en")
-                    || subscriptionLang.equals("en,ar"))
+                    || subscriptionLang.equals("en"))
                     && (email.length() <= 50 && util
                             .validateEmailId(xssUtils.stripXSS(email)))) {
                 if (!isEmailAlreadyExist(email)) {
@@ -182,11 +181,15 @@ public class NewsletterPhpExternal {
                             memberdetail = getDocument(email,
                                     STATUS_ALREADY_PENDING);
                         } else {
-                            boolean preferenceStatus = checkPrefernceStatus(
+                            String preferenceStatus = checkPrefernceStatus(
                                     email, persona, subscriptionLang);
-                            if (preferenceStatus) {
+                            if (STATUS_ACTIVE.equals(preferenceStatus)) {
                                 memberdetail = getDocument(email,
                                         STATUS_ALREADY_SUBSCRIBED);
+                            } else if (STATUS_PENDING
+                                    .equals(preferenceStatus)) {
+                                memberdetail = getDocument(email,
+                                        CONFIRMATION_PENDING);
                             } else {
                                 double subscriberId = getSubcriberId(
                                         email);
@@ -312,11 +315,11 @@ public class NewsletterPhpExternal {
      * @param subscriptionLang
      * @return
      */
-    private boolean checkPrefernceStatus(String email, String persona,
+    private String checkPrefernceStatus(String email, String persona,
             String subscriptionLang) {
         logger.info("NewsletterPhpExternal : checkPrefernceStatus()");
-        boolean preferenceStatus = false;
-        String tokenCheckQuery = "SELECT COUNT(*) FROM NEWSLETTER_MASTER NM INNER JOIN NEWSLETTER_PREFERENCE NP ON NM.SUBSCRIBER_ID = NP.SUBSCRIBER_ID WHERE NM.SUBSCRIBER_EMAIL = ? AND NP.PERSONA = ? and NP.LANGUAGE = ?";
+        String preferenceStatus = "";
+        String tokenCheckQuery = "SELECT NP.STATUS FROM NEWSLETTER_MASTER NM INNER JOIN NEWSLETTER_PREFERENCE NP ON NM.SUBSCRIBER_ID = NP.SUBSCRIBER_ID WHERE NM.SUBSCRIBER_EMAIL = ? AND NP.PERSONA = ? AND NP.LANGUAGE = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
 
@@ -329,15 +332,12 @@ public class NewsletterPhpExternal {
             prepareStatement.setString(3, subscriptionLang);
 
             ResultSet resultSet = prepareStatement.executeQuery();
-            resultSet.next();
-            if (resultSet.getInt(1) >= 1) {
-                logger.info("Preference Exist !");
-                preferenceStatus = true;
-            } else {
-                logger.info("Preference Doesn't Exist !");
+            while (resultSet.next()) {
+                preferenceStatus = resultSet.getString(1);
             }
+
         } catch (Exception e) {
-            logger.error("Exception in isConfirmationTokenExist", e);
+            logger.error("Exception in checkPrefernceStatus", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
@@ -348,9 +348,9 @@ public class NewsletterPhpExternal {
      * @param email
      */
     private String checkConfirmationStatus(String email) {
-        String confirmationStatus = null;
+        String confirmationStatus = STATUS_PENDING;
 
-        String checkConfirmationStatusQuery = "SELECT CONFIRMATION_STATUS FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE SUBSCRIBER_EMAIL = ?";
+        String checkConfirmationStatusQuery = "SELECT COUNT(*) FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE SUBSCRIBER_EMAIL = ? AND CONFIRMATION_STATUS = 'Confirmed'";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
 
@@ -362,7 +362,10 @@ public class NewsletterPhpExternal {
             prepareStatement.setString(1, email);
             ResultSet resultSet = prepareStatement.executeQuery();
             resultSet.next();
-            confirmationStatus = resultSet.getString(1);
+            long count = resultSet.getLong(1);
+            if (count > 0) {
+                confirmationStatus = STATUS_CONFIRMED;
+            }
 
         } catch (Exception e) {
             logger.error("Exception in checkConfirmationStatus", e);
