@@ -266,22 +266,26 @@ public class DashboardSettingsExternal {
             Connection connection = null;
             PreparedStatement prepareStatement = null;
             ResultSet rs = null;
+            String prefStatus = "";
             
             if(langSwitch.equals(LANGUAGE_ON)) {
+                prefStatus = "Active";
                 updatePreferenceQuery = 
-                        "UPDATE NEWSLETTER_PREFERENCE SET STATUS = \"Active\" WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
+                        "UPDATE NEWSLETTER_PREFERENCE SET STATUS = ? WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
             }else if(langSwitch.equals(LANGUAGE_OFF)) {
+                prefStatus = "InActive";
                 updatePreferenceQuery = 
-                        "UPDATE NEWSLETTER_PREFERENCE SET STATUS = \"InActive\" WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
+                        "UPDATE NEWSLETTER_PREFERENCE SET STATUS = ? WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
             }            
             
             try {
                 connection = postgre.getConnection();
                 prepareStatement = connection
                         .prepareStatement(updatePreferenceQuery);
-                   
-                prepareStatement.setInt(1,subscriberID);
-                prepareStatement.setString(2, language);                
+                
+                prepareStatement.setString(1, prefStatus);
+                prepareStatement.setInt(2,subscriberID);
+                prepareStatement.setString(3, language);                
                 rs = prepareStatement.executeQuery();
 
                 while (rs.next()) {
