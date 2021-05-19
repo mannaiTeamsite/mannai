@@ -1,5 +1,6 @@
 package com.hukoomi.livesite.external;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -181,53 +182,66 @@ public class DashboardSettingsExternal {
         DashboardSettingsBO settingsBO = new DashboardSettingsBO();
         Document doc = DocumentHelper.createDocument();
         Element responseElem = doc.addElement("dashboard-settings");
-        postgre = new Postgre(context);
-        mysql = new MySql(context);
-        String langSwitch = context.getParameterString(LANG_SWITCH);
-        String language = context.getParameterString(SWITCH_LANGUAGE);
-        if (validateInput(context, settingsBO)) {
-            logger.info("Input data validation is successfull");
-            logger.debug("settingsBO : "+settingsBO);
-            
-            if(settingsBO.getUserType() != null && !"".equals(settingsBO.getUserType())) {
-                Element userTypeElem = responseElem.addElement("user-type");
-                userTypeElem.addText(settingsBO.getUserType());
+        
+        HttpServletRequest request = context.getRequest();
+        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
+        if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
+            postgre = new Postgre(context);
+            mysql = new MySql(context);
+            String langSwitch = context.getParameterString(LANG_SWITCH);
+            String language = context.getParameterString(SWITCH_LANGUAGE);
+            if (validateInput(context, settingsBO)) {
+                logger.info("Input data validation is successfull");
+                logger.debug("settingsBO : "+settingsBO);
+                
+                if(settingsBO.getUserType() != null && !"".equals(settingsBO.getUserType())) {
+                    Element userTypeElem = responseElem.addElement("user-type");
+                    userTypeElem.addText(settingsBO.getUserType());
+                }
+                
+                if (ACTION_GET_ALL_SETTINGS.equalsIgnoreCase(settingsBO.getAction())) {
+                    getAllSettings(responseElem, settingsBO);
+                    getTopicSettings(responseElem, settingsBO);
+                } else if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsBO.getAction())) {
+                    updatePersonaForUser(responseElem, settingsBO);
+                } else if (ACTION_UPDATE_TOPICS
+                        .equalsIgnoreCase(settingsBO.getAction())) {
+                    logger.info("Topic Update Action");
+                    String topics = context.getParameterString(TOPICS);
+                    processTopicsOperations(responseElem, settingsBO, topics);
+                } else if (ACTION_UNSUBSCRIBE
+                        .equalsIgnoreCase(settingsBO.getAction())) {
+                    logger.info("Unsubscribe Action");  
+                    String unsubReason = context.getParameterString("UNSUBSCRIBE_REASON");
+                    unsubscribeDashboardUser(settingsBO.getUserId(),unsubReason);
+                } else if (ACTION_LANG_ONOFF
+                        .equalsIgnoreCase(settingsBO.getAction())) {
+                        logger.info("Switch Language Action");                      
+                        switchDashboardLanguage(settingsBO.getUserId(),langSwitch,language);
+                }
+                /*
+                 * else if (ACTION_ENGLISH_ONOFF
+                 * .equalsIgnoreCase(settingsBO.getAction())) {
+                 * logger.info("English Language Action");
+                 * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
+                 * LANGUAGE_ENGLISH); } else if (ACTION_ARABIC_ONOFF
+                 * .equalsIgnoreCase(settingsBO.getAction())) {
+                 * logger.info("Arabic Language Action");
+                 * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
+                 * LANGUAGE_ARABIC); }
+                 */
+            }else {
+                logger.info("Invalid input parameter");
+                createResponseDoc(responseElem, settingsBO.getAction(), settingsBO.getAction(), settingsBO.getPersona(), STATUS_FAILED, "Invalid input parameter");
             }
-            
-            if (ACTION_GET_ALL_SETTINGS.equalsIgnoreCase(settingsBO.getAction())) {
-                getAllSettings(responseElem, settingsBO);
-                getTopicSettings(responseElem, settingsBO);
-            } else if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsBO.getAction())) {
-                updatePersonaForUser(responseElem, settingsBO);
-            } else if (ACTION_UPDATE_TOPICS
-                    .equalsIgnoreCase(settingsBO.getAction())) {
-                logger.info("Topic Update Action");
-                String topics = context.getParameterString(TOPICS);
-                processTopicsOperations(responseElem, settingsBO, topics);
-            } else if (ACTION_UNSUBSCRIBE
-                    .equalsIgnoreCase(settingsBO.getAction())) {
-                logger.info("Unsubscribe Action");  
-                String unsubReason = context.getParameterString("UNSUBSCRIBE_REASON");
-                unsubscribeDashboardUser(settingsBO.getUserId(),unsubReason);
-            } else if (ACTION_LANG_ONOFF
-                    .equalsIgnoreCase(settingsBO.getAction())) {
-                    logger.info("Switch Language Action");                      
-                    switchDashboardLanguage(settingsBO.getUserId(),langSwitch,language);
-            }
-            /*
-             * else if (ACTION_ENGLISH_ONOFF
-             * .equalsIgnoreCase(settingsBO.getAction())) {
-             * logger.info("English Language Action");
-             * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
-             * LANGUAGE_ENGLISH); } else if (ACTION_ARABIC_ONOFF
-             * .equalsIgnoreCase(settingsBO.getAction())) {
-             * logger.info("Arabic Language Action");
-             * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
-             * LANGUAGE_ARABIC); }
-             */
         }else {
-            logger.info("Invalid input parameter");
-            createResponseDoc(responseElem, settingsBO.getAction(), settingsBO.getAction(), settingsBO.getPersona(), STATUS_FAILED, "Invalid input parameter");
+            logger.info("Invalid session - Redirecting to Login Page");
+            try {
+                //DashboardExternal de = new DashboardExternal();
+                //de.redirectToLoginPage(context);
+            } catch (Exception e) {
+                logger.error("Exception in performDashboardSettingsAction - Redirecting to Login Page", e);
+            }
         }
         logger.debug("Final Result :" + doc.asXML());
         return doc;
@@ -955,10 +969,10 @@ public class DashboardSettingsExternal {
     /**
      * This method is used to validate the input.
      * 
-     * @param context
-     *                Request context object.
+     * @param context Request context object.
      * 
-     * @return Returns true if the input is valid else returns false.
+     * @return Returns true if the input is valid
+     *         else returns false.
      * 
      */
     public boolean validateInput(final RequestContext context, DashboardSettingsBO settingsBO) {
@@ -984,10 +998,10 @@ public class DashboardSettingsExternal {
         }
         
         HttpServletRequest request = context.getRequest();
-        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
-        if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
+       // logger.debug("Session Status : "+request.getSession().getAttribute("status"));
+       // if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
             
-            if(request.getSession().getAttribute("userId") != null) {
+        if(request.getSession().getAttribute("userId") != null && !"".equals(request.getSession().getAttribute("userId"))) {
                 String userId = request.getSession().getAttribute("userId").toString();
                 logger.debug(USER_ID + " >>>"+userId+"<<<");
                 settingsBO.setUserId(userId);
@@ -1008,7 +1022,7 @@ public class DashboardSettingsExternal {
             }else {
                 logger.debug("UserType from session is null.");
             }
-        }
+        //}
         //settingsBO.setUserId("0");
         
         if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsAction)) {
