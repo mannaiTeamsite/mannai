@@ -83,7 +83,9 @@ public class DashboardExternal {
 			session.setAttribute("exp", getValue(jwtParsedToken, "exp"));
 			session.setAttribute("usertypeNo", getValue(jwtParsedToken, "type"));
 			session.setAttribute("userId", getValue(jwtParsedToken, "uid"));
-
+			
+			LOGGER.info("UserId : " + getValue(jwtParsedToken, "uid"));
+			
 			String userTypeStr = getValue(jwtParsedToken, "type");
 			LOGGER.info("userType JWT : " + userTypeStr);
 			if (userTypeStr != null && !"".equals(userTypeStr)) {
@@ -189,9 +191,16 @@ public class DashboardExternal {
 			Element userTypeElement = userdata.addElement("userType");
 			userTypeElement.setText("personal");
 			Element fnEnElement = userdata.addElement("fnEn");
-			fnEnElement.setText("Mohammad");
+			fnEnElement.setText((String) session.getAttribute("fnEn"));
+			Element lnEnElement = userdata.addElement("lnEn");
+			lnEnElement.setText((String) session.getAttribute("lnEn"));
+			
+			Element fnArElement = userdata.addElement("fnAr");
+			fnArElement.setText((String) session.getAttribute("fnAr"));
+			Element lnArElement = userdata.addElement("lnAr");
+			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userdata.addElement("userTypeNoElement");
-			userTypeNoElement.setText("1");
+			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
 		}
 
 		LOGGER.info("Final doc" + doc.asXML());
@@ -222,15 +231,42 @@ public class DashboardExternal {
 			if (fnEn != null) {
 				fnEnElement.setText(fnEn);
 			}
+			String lnEn = (String) session.getAttribute("lnEn");
+			Element lnEnElement = userData.addElement("lnEn");
+			if (lnEn != null) {
+				lnEnElement.setText(lnEn);
+			}
+			
+			String fnAr = (String) session.getAttribute("fnAr");
+			Element fnArElement = userData.addElement("fnAr");
+			if (fnAr != null) {
+				fnArElement.setText(fnAr);
+			}
+			String lnAr = (String) session.getAttribute("lnAr");
+			Element lnArEnElement = userData.addElement("lnAr");
+			if (lnAr != null) {
+				lnArEnElement.setText(lnAr);
+			}
 
 			Element userTypeNoElement = userData.addElement("userTypeNoElement");
 
 			String userTypeNo = (String) session.getAttribute("userTypeNo");
+			LOGGER.info("userTypeNo :"+userTypeNo);
 			if (userTypeNo != null) {
 				userTypeNoElement.setText(userTypeNo);
 			}
 
 		}
+		else {
+			//
+//						try {
+//							redirectToLoginPage(context);
+//						} catch (IOException e) {
+//							// TODO Auto-generated catch block
+//							LOGGER.info("Error"+e);
+//						}
+						LOGGER.info("session invalid");
+					}
 		LOGGER.info("Bookmark doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
@@ -255,11 +291,10 @@ public class DashboardExternal {
 		postgre = new Postgre(context);
 		HttpSession session = context.getRequest().getSession();
 String status=(String) session.getAttribute("status");
-		
 LOGGER.info("status="+session.getAttribute("status"));
 		if (status != null && status.equals("valid")) {
-			
-userID = (String) session.getAttribute("userId");
+			userID = "0";
+//userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
 
@@ -288,9 +323,13 @@ userID = (String) session.getAttribute("userId");
 			}
 			LOGGER.info("session valid");
 		} else {
-
-			bookmarkResultEle = bookmarkResultEle.addElement("session");
-			bookmarkResultEle.setText("Session invalid");
+//
+//			try {
+//				redirectToLoginPage(context);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				LOGGER.info("Error"+e);
+//			}
 			LOGGER.info("session invalid");
 		}
 		LOGGER.info("getDashboardbookmark()====> ends");
@@ -420,5 +459,25 @@ userID = (String) session.getAttribute("userId");
         LOGGER.info("getBookmark()====> ends");
         return check;
     }
-
+	
+	public void redirectToLoginPage(RequestContext context) throws IOException {
+		LOGGER.info("--------------nonLoggedIn Started------------");
+		
+		
+//			final String RELAY_URL = "relayURL";
+			PropertiesFileReader prop = null;
+			prop = new PropertiesFileReader(context, "dashboard.properties");
+			properties = prop.getPropertiesFile();
+			RequestHeaderUtils rhu = new RequestHeaderUtils(context);
+			String relayURL = rhu.getRequestURL();
+			LOGGER.info("---relayURL url---" + relayURL);
+			String url = properties.getProperty("login") + "?relayURL=" + relayURL;
+			LOGGER.info("---Login url---" + url);
+			HttpServletResponse response = context.getResponse();
+			response.sendRedirect(url);
+	
+		
+		LOGGER.info("--------------nonLoggedIn Ended------------");
+		
+	}
 }
