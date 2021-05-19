@@ -884,7 +884,7 @@ public class NewsletterConfirmation extends HttpServlet {
         if(statusCode==201) {
             token = getToken(response.toString());
         }else {
-            
+            token = SESSION_FAILED;
         }
        return token;
     }
