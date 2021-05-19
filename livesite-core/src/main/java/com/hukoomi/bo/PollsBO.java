@@ -91,7 +91,15 @@ public class PollsBO {
      * Poll Topics
      */
     private String topics;
-
+    /**
+     * Poll Group Configuration
+     */
+    private String pollGroupConfig;
+    /**
+     * Poll group config category name
+     */
+    private String pollGroupConfigCategory;
+    
     /**
      * Getter method to get poll action
      * 
@@ -450,6 +458,21 @@ public class PollsBO {
         this.topics = topics;
     }
 
+	 public String getPollGroupConfig() {
+        return pollGroupConfig;
+    }
+
+    public void setPollGroupConfig(String pollGroupConfig) {
+        this.pollGroupConfig = pollGroupConfig;
+    }
+
+    public String getPollGroupConfigCategory() {
+        return pollGroupConfigCategory;
+    }
+
+    public void setPollGroupConfigCategory(String pollGroupConfigCategory) {
+        this.pollGroupConfigCategory = pollGroupConfigCategory;
+    }
     /**
      * Overrides the toString method to print the business objects values
      * 
@@ -457,18 +480,29 @@ public class PollsBO {
      */
     @Override
     public String toString() {
-        return "PollsBO [action=" + action + ", pollId=" + pollId
-                + ", lang=" + lang + ", userId=" + userId + ", userAgent="
-                + userAgent + ", ipAddress=" + ipAddress + ", startDate="
-                + startDate + ", endDate=" + endDate + ", persona="
-                + persona + ", votedOn=" + votedOn + ", votedFrom="
-                + votedFrom + ", question=" + question
-                + ", selectedOption=" + selectedOption
-                + ", currentPollsPerPage=" + currentPollsPerPage
-                + ", pastPollsPerPage=" + pastPollsPerPage + ", group="
-                + group + ", groupCategory=" + groupCategory
-                + ", category=" + category + ", solrCategory="
-                + solrCategory + ", serviceEntities=" + serviceEntities
-                + ", topics=" + topics + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("PollsBO [action=").append(action)
+                .append(", pollId=").append(pollId).append(", lang=")
+                .append(lang).append(", userId=").append(userId)
+                .append(", userAgent=").append(userAgent)
+                .append(", ipAddress=").append(ipAddress)
+                .append(", startDate=").append(startDate)
+                .append(", endDate=").append(endDate).append(", persona=")
+                .append(persona).append(", votedOn=").append(votedOn)
+                .append(", votedFrom=").append(votedFrom)
+                .append(", question=").append(question)
+                .append(", selectedOption=").append(selectedOption)
+                .append(", currentPollsPerPage=")
+                .append(currentPollsPerPage).append(", pastPollsPerPage=")
+                .append(pastPollsPerPage).append(", group=").append(group)
+                .append(", groupCategory=").append(groupCategory)
+                .append(", category=").append(category)
+                .append(", solrCategory=").append(solrCategory)
+                .append(", serviceEntities=").append(serviceEntities)
+                .append(", topics=").append(topics)
+                .append(", pollGroupConfig=").append(pollGroupConfig)
+                .append(", pollGroupConfigCategory=")
+                .append(pollGroupConfigCategory).append("]");
+        return builder.toString();
     }
 }

@@ -561,7 +561,7 @@ public class SurveyExternal {
                     (lang != null && !"".equals(lang)) ) {
                 String dynamicSurveyQuery = "SELECT DISTINCT SURVEY_MASTER_ID FROM DYNAMIC_SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ? ";
     
-                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery.toString());
+                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery);
                     
                 prepareStatement = connection.prepareStatement(dynamicSurveyQuery);
                 prepareStatement.setLong(1, Long.parseLong(surveyId));
@@ -611,7 +611,7 @@ public class SurveyExternal {
             if(questionId != null && surveyMasterId != null  ) {
                 String dynamicSurveyQuery = "SELECT SURVEY_QUESTION_ID FROM dynamic_survey_question WHERE SURVEY_MASTER_ID = ? AND QUESTION_ID = ? ";
     
-                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery.toString());
+                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery);
                     
                 prepareStatement = connection.prepareStatement(dynamicSurveyQuery);
                 prepareStatement.setLong(1, surveyMasterId);
@@ -980,8 +980,10 @@ public class SurveyExternal {
         final String SURVEY_ID = "surveyId";
         final String TOTAL_QUESTIONS = "totalQuestions";
         final String SURVEY_GROUP = "SurveyGroup";
+        final String SURVEY_GROUP_CONFIG = "SurveyGroupConfig";
         final String SURVEY_CATEGORY = "surveyCategory";
         final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
+        final String SURVEY_GROUP_CONFIG_CATEGORY = "surveyGroupConfigCategory";
         final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
         final String PERSONA = "persona";
 
@@ -990,8 +992,6 @@ public class SurveyExternal {
         HttpServletRequest request = context.getRequest();
         String validData  = "";
         String userId = null;
-        
-        //TODO: Field length needs to be validated against content model and database. 
         
         String surveyAction = context.getParameterString(SURVEY_ACTION);
         logger.debug(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
@@ -1132,6 +1132,12 @@ public class SurveyExternal {
                 surveyBO.setGroup(getContentName(surveyGroup));
             }
             
+            String surveyGroupConfig = context.getParameterString(SURVEY_GROUP_CONFIG);
+            logger.debug(SURVEY_GROUP_CONFIG + " >>>" +surveyGroupConfig+ "<<<");
+            if (!ESAPIValidator.checkNull(surveyGroupConfig)) {
+                surveyBO.setGroup(getContentName(surveyGroupConfig));
+            }
+            
             String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
             logger.debug(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
             validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
@@ -1139,6 +1145,16 @@ public class SurveyExternal {
                 surveyBO.setGroupCategory(validData);
             }else {
                 logger.debug(errorList.getError(SURVEY_GROUP_CATEGORY));
+                return false;
+            }
+            
+            String surveyGroupConfigCategory = context.getParameterString(SURVEY_GROUP_CONFIG_CATEGORY);
+            logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
+            validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY, surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                surveyBO.setGroupCategory(validData);
+            }else {
+                logger.debug(errorList.getError(SURVEY_GROUP_CONFIG_CATEGORY));
                 return false;
             }
             

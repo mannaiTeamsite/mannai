@@ -1021,8 +1021,10 @@ public class PollsExternal {
         final String CURRENT_POLL_ROWS = "current_poll_rows";
         final String PAST_POLL_ROWS = "past_poll_rows";
         final String POLLS_GROUP = "PollsGroup";
+        final String POLLS_GROUP_CONFIG = "PollsGroupConfig";
         final String OPTION = "option";
         final String POLL_GROUP_CATEGORY = "pollGroupCategory";
+        final String POLL_GROUP_CONFIG_CATEGORY = "pollGroupConfigCategory";
         final String POLL_CATEGORY = "pollCategory";
         final String SOLR_POLL_CATEGORY = "solrPollCategory";
         final String PERSONA = "persona";
@@ -1032,8 +1034,6 @@ public class PollsExternal {
         HttpServletRequest request = context.getRequest();
         String validData  = "";
         String userId = null;
-        
-        //TODO: Field length needs to be validated against content model and database. 
         
         String pollAction = context.getParameterString(POLL_ACTION);
         logger.debug(POLL_ACTION + " >>>"+pollAction+"<<<");
@@ -1185,6 +1185,12 @@ public class PollsExternal {
                 pollsBO.setGroup(getContentName(pollsGroup));
             }
             
+            String pollsGroupConfig = context.getParameterString(POLLS_GROUP);
+            logger.debug(POLLS_GROUP_CONFIG + " >>>" +pollsGroupConfig+ "<<<");
+            if (!ESAPIValidator.checkNull(pollsGroupConfig)) {
+                pollsBO.setGroup(getContentName(pollsGroupConfig));
+            }
+            
             String pollGroupCategory = context.getParameterString(POLL_GROUP_CATEGORY);
             logger.debug(POLL_GROUP_CATEGORY + " >>>" +pollGroupCategory+ "<<<");
             validData  = ESAPI.validator().getValidInput(POLL_GROUP_CATEGORY, pollGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
@@ -1192,6 +1198,16 @@ public class PollsExternal {
                 pollsBO.setGroupCategory(validData);
             }else {
                 logger.debug(errorList.getError(POLL_GROUP_CATEGORY));
+                return false;
+            }
+            
+            String pollGroupConfigCategory = context.getParameterString(POLL_GROUP_CONFIG_CATEGORY);
+            logger.debug(POLL_GROUP_CONFIG_CATEGORY + " >>>" +pollGroupConfigCategory+ "<<<");
+            validData  = ESAPI.validator().getValidInput(POLL_GROUP_CONFIG_CATEGORY, pollGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+            if(errorList.isEmpty()) {
+                pollsBO.setPollGroupConfigCategory(validData);
+            }else {
+                logger.debug(errorList.getError(POLL_GROUP_CONFIG_CATEGORY));
                 return false;
             }
             
@@ -1214,6 +1230,35 @@ public class PollsExternal {
                 logger.debug(errorList.getError(SOLR_POLL_CATEGORY));
                 return false;
             } 
+            
+          //Get Persona details from persona settings
+            String persona = null;
+            if(userId != null && !"".equals(userId)) {
+                DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
+                persona = dsExt.getPersonaForUser(userId, postgre);
+                logger.debug("Persona from DB >>>" +persona+ "<<<");
+                pollsBO.setPersona(persona);
+            }
+            
+            if(persona == null || "".equals(persona)) {
+                Cookie[] cookies = request.getCookies();
+                for(int i = 0 ; i < cookies.length;  i++) {
+                    Cookie cookie = cookies[i];
+                    String name = cookie.getName();
+                    String personaValue = null;
+                    if(name != null && "persona".equalsIgnoreCase(name)) {
+                        personaValue = cookie.getValue();
+                        logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
+                        validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                        if(errorList.isEmpty()) {
+                            pollsBO.setPersona(validData);
+                        }else {
+                            logger.debug(errorList.getError(PERSONA));
+                            return false;
+                        }
+                    }
+                }
+            }
             
         }
         

@@ -111,7 +111,15 @@ public class SurveyBO {
      * Submit Type
      */
     private String submitType;
-
+    /**
+     * Survey Group Configuration
+     */
+    private String surveyGroupConfig;
+    /**
+     * Survey group config category name
+     */
+    private String surveyGroupConfigCategory;
+    
     /**
      * Getter method to get survey action
      * 
@@ -530,6 +538,23 @@ public class SurveyBO {
         this.submitType = submitType;
     }
 
+    public String getSurveyGroupConfig() {
+        return surveyGroupConfig;
+    }
+
+    public void setSurveyGroupConfig(String surveyGroupConfig) {
+        this.surveyGroupConfig = surveyGroupConfig;
+    }
+
+    public String getSurveyGroupConfigCategory() {
+        return surveyGroupConfigCategory;
+    }
+
+    public void setSurveyGroupConfigCategory(
+            String surveyGroupConfigCategory) {
+        this.surveyGroupConfigCategory = surveyGroupConfigCategory;
+    }
+	
     /**
      * Overrides the toString method to print the business objects values
      * 
@@ -560,7 +585,10 @@ public class SurveyBO {
                 .append(", solrCategory=").append(solrCategory)
                 .append(", serviceEntities=").append(serviceEntities)
                 .append(", topics=").append(topics).append(", submitType=")
-                .append(submitType).append("]");
+                .append(submitType).append(", surveyGroupConfig=")
+                .append(surveyGroupConfig)
+                .append(", surveyGroupConfigCategory=")
+                .append(surveyGroupConfigCategory).append("]");
         return builder.toString();
     }
 }
