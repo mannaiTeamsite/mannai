@@ -153,11 +153,14 @@ public class ErrorTask {
             errorBO.setStatusCode(getDCRValue(document, STATUS_PATH));            
             errorBO.setErrorNameTechnical(getDCRValue(document, ERROR_NAME_PATH));
             errorBO.setTitle(getDCRValue(document, ERROR_TITLE_PATH));
+            
             errorBO.setMessage(getDCRValue(document, ERROR_MESSAGE_PATH));
             logger.info("getErrorId : "+ errorBO.getErrorId());
             logger.info("getLang : "+ errorBO.getLang());
-            logger.info("getTitle : "+ errorBO.getStatusCode());
-            logger.info("getUpdatedDate : "+ errorBO.getErrorNameTechnical());
+            logger.info("Title : "+ errorBO.getTitle());
+            logger.info("Status code : "+ errorBO.getStatusCode());
+            logger.info("getTechnical name : "+ errorBO.getErrorNameTechnical());
+            logger.info("Error Message : "+ errorBO.getMessage());
             int result = insertErrorMasterData(errorBO, connection,postgre);
             logger.info("insertErrorData result : " + result);
             if (result > 0) {
