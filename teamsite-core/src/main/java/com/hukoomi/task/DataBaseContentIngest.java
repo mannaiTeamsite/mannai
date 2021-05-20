@@ -390,7 +390,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.debug(" orig category : " + category);
             category = category.toLowerCase().replace("content/", "").replaceAll("\\s+", "");
             logger.debug(" small letter category : " + category);
-            if (!StringUtils.equalsIgnoreCase(category, "news")) {
+            if (!StringUtils.equalsIgnoreCase(category, "news") && category.contains("s")) {
                 category = category.substring(0, category.lastIndexOf("s"));
             }
             //category = StringUtils.equalsIgnoreCase(category,"news") ? category.substring(0,category.lastIndexOf("s")) : category;
