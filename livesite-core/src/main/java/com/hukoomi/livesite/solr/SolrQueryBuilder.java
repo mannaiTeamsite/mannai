@@ -95,6 +95,10 @@ public class SolrQueryBuilder {
      * will highlight the string in suggestion text fetched by the
      * solr query url. */
     private String hlHtmlTag;
+    /** Declare personaCookieValue HTML tag that
+     * will boost the search as per the persona cookie value fetched by
+     * solr query url. */
+    private String personaCookieValue;
 
     /** This method will be called from Component
      * External Java for solr query building.
@@ -269,6 +273,17 @@ public class SolrQueryBuilder {
 
     /**
      * Add fields to solr query url.
+     * @param personaValue fields params to solr query
+     *
+     * @return this set fields to solr url.
+     */
+    public SolrQueryBuilder addDismaxBq(final String personaValue) {
+        this.personaCookieValue = personaValue;
+        return this;
+    }
+
+    /**
+     * Add fields to solr query url.
      * @param fieldsValue fields params to solr query
      *
      * @return this set fields to solr url.
@@ -371,6 +386,10 @@ public class SolrQueryBuilder {
 
         if(StringUtils.isNotBlank(this.highlighter)){
             sb.append("&hl="+this.highlighter);
+        }
+
+        if(StringUtils.isNotBlank(personaCookieValue)){
+            sb.append("&bq=audience:*"+personaCookieValue+"*^0.9&defType=dismax");
         }
 
         if (StringUtils.isNotBlank(this.groupingField)) {
