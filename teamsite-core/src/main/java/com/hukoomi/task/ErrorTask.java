@@ -179,6 +179,8 @@ public class ErrorTask {
             logger.info("Released insertErrorData connection");
         }
         return isErrorDataInserted;
+        
+        
     }
 
     private int insertErrorMasterData(ErrorBO errorBO,
