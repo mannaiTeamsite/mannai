@@ -4,6 +4,7 @@ import com.hukoomi.livesite.solr.SolrQueryBuilder;
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.SolrQueryUtil;
 import com.hukoomi.utils.UserInfoSession;
+import com.interwoven.livesite.common.web.CookieUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -18,6 +19,8 @@ public class HukoomiExternal {
 	private final Logger logger = Logger.getLogger(HukoomiExternal.class);
 	/** Default query to fetch all solr content. */
 	public static final String DEFAULT_QUERY = "*:*";
+	/** Constant for cookie name. */
+	private static final String DEFAULT_COOKIE = "persona";
 
 	/**
 	 * This method will be called from Component External for solr Content fetching.
@@ -76,6 +79,16 @@ public class HukoomiExternal {
 		if(StringUtils.isNotBlank(highlightFieldVal)){
 			logger.debug("fieldQuery highlightFieldVal"+fieldQuery);
 			sqb.addHlField(highlightFieldVal);
+		}
+
+		String cookieName = context.getParameterString("cookieName",DEFAULT_COOKIE);
+		if(cookieName != null && !cookieName.equalsIgnoreCase("")){
+			logger.debug("Cookie Name : " + cookieName);
+			String personaCookieValue = CookieUtils.getValue(context.getRequest(), cookieName);
+			if (personaCookieValue != null && !personaCookieValue.equalsIgnoreCase("")) {
+				logger.debug("Persona Cookie Value: "+personaCookieValue);
+				sqb.addDismaxBq(personaCookieValue);
+			}
 		}
 
 		String query = sqb.build();
