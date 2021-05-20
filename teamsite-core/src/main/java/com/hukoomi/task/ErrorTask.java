@@ -179,6 +179,8 @@ public class ErrorTask {
             logger.info("Released insertErrorData connection");
         }
         return isErrorDataInserted;
+        
+        
     }
 
     private int insertErrorMasterData(ErrorBO errorBO,
@@ -227,17 +229,16 @@ public class ErrorTask {
             connection = postgre.getConnection();
             ErrorBO errorBO = new ErrorBO();
             errorBO.setErrorId(getDCRValue(document, ID_PATH));
-            logger.info("ID_PATH : " + errorBO.getErrorId());
-            errorBO.setStatusCode(getDCRValue(document, STATUS_PATH));
-            logger.info("TITLE_PATH : " + errorBO.getStatusCode());
-            errorBO.setErrorNameTechnical(getDCRValue(document, ERROR_NAME_PATH));
-            logger.info("TITLE_PATH : " + errorBO.getErrorNameTechnical());
             errorBO.setLang(getDCRValue(document, LANG_PATH));
-            logger.info("LANG_PATH : " + errorBO.getLang());
-            logger.info("ErrorTask : updateErrorMasterData");
+            errorBO.setStatusCode(getDCRValue(document, STATUS_PATH));            
+            errorBO.setErrorNameTechnical(getDCRValue(document, ERROR_NAME_PATH));
+            errorBO.setTitle(getDCRValue(document, ERROR_TITLE_PATH)); 
+            errorBO.setMessage(getDCRValue(document, ERROR_MESSAGE_PATH));
+            
             String errorMasterQuery = "UPDATE ERROR_MASTER	SET STATUS_CODE=?, ERROR_NAME_TECHNICAL=?, ERROR_TITLE=?, ERROR_MESSAGE=?, LANGUAGE=? WHERE LANGUAGE=? AND STATUS_CODE=?;";
             logger.info("updateErrorMasterData pollMasterQuery : "
                     + errorMasterQuery);
+            
             preparedStatement = connection
                     .prepareStatement(errorMasterQuery);
             preparedStatement.setString(1, errorBO.getStatusCode());
