@@ -158,7 +158,7 @@ public class ErrorTask {
             logger.info("getLang : "+ errorBO.getLang());
             logger.info("getTitle : "+ errorBO.getStatusCode());
             logger.info("getUpdatedDate : "+ errorBO.getErrorNameTechnical());
-            int result = insertBolgMasterData(errorBO, connection,postgre);
+            int result = insertErrorMasterData(errorBO, connection,postgre);
             logger.info("insertErrorData result : " + result);
             if (result > 0) {
                 logger.info("Error Master Data Inserted");
@@ -178,7 +178,7 @@ public class ErrorTask {
         return isErrorDataInserted;
     }
 
-    private int insertBolgMasterData(ErrorBO errorBO,
+    private int insertErrorMasterData(ErrorBO errorBO,
             Connection connection,PostgreTSConnection postgre) {
         PreparedStatement preparedStatement = null;
         int result = 0;
@@ -211,13 +211,15 @@ public class ErrorTask {
                 logger.info("Released insertErrorData connection");
 
         }
-        return result;
+        return result;      
+        
     }
 
     private int updateErrorData(Document document,PostgreTSConnection postgre) throws Exception {
         PreparedStatement preparedStatement = null;
         int result = 0;
         Connection connection = null;
+        
         try {
             connection = postgre.getConnection();
             ErrorBO errorBO = new ErrorBO();
@@ -230,19 +232,18 @@ public class ErrorTask {
             errorBO.setLang(getDCRValue(document, LANG_PATH));
             logger.info("LANG_PATH : " + errorBO.getLang());
             logger.info("ErrorTask : updateErrorMasterData");
-            String errorMasterQuery = "UPDATE ERROR_MASTER SET  ERROR_MESSAGE = ?, ERROR_TITLE = ?,ERROR_NAME_TECHNICAL = ?, STATUS_CODE = ?,  LANGUAGE = ? "
-                    + "WHERE STATUS_CODE = ? AND LANGUAGE = ?";
+            String errorMasterQuery = "UPDATE ERROR_MASTER	SET STATUS_CODE=?, ERROR_NAME_TECHNICAL=?, ERROR_TITLE=?, ERROR_MESSAGE=?, LANGUAGE=? WHERE LANGUAGE=? AND STATUS_CODE=?;";
             logger.info("updateErrorMasterData pollMasterQuery : "
                     + errorMasterQuery);
             preparedStatement = connection
                     .prepareStatement(errorMasterQuery);
-            preparedStatement.setString(1, errorBO.getMessage());
-            preparedStatement.setString(2, errorBO.getTitle());
-            preparedStatement.setString(3, errorBO.getErrorNameTechnical());
-            preparedStatement.setString(4, errorBO.getStatusCode());
+            preparedStatement.setString(1, errorBO.getStatusCode());
+            preparedStatement.setString(2, errorBO.getErrorNameTechnical());
+            preparedStatement.setString(3, errorBO.getTitle());
+            preparedStatement.setString(4, errorBO.getMessage());
             preparedStatement.setString(5, errorBO.getLang());
-            preparedStatement.setString(6, errorBO.getErrorId());
-            preparedStatement.setString(7, errorBO.getLang());
+            preparedStatement.setString(6, errorBO.getLang());
+            preparedStatement.setString(7, errorBO.getStatusCode());
             result = preparedStatement.executeUpdate();
             logger.info("updateErrorMasterData result : " + result);
 
