@@ -238,6 +238,7 @@ public class ErrorTask {
             String errorMasterQuery = "UPDATE ERROR_MASTER	SET STATUS_CODE=?, ERROR_NAME_TECHNICAL=?, ERROR_TITLE=?, ERROR_MESSAGE=?, LANGUAGE=? WHERE LANGUAGE=? AND STATUS_CODE=?;";
             logger.info("updateErrorMasterData pollMasterQuery : "
                     + errorMasterQuery);
+            
             preparedStatement = connection
                     .prepareStatement(errorMasterQuery);
             preparedStatement.setString(1, errorBO.getStatusCode());
