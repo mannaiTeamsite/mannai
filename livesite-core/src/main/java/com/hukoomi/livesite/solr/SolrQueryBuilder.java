@@ -83,6 +83,18 @@ public class SolrQueryBuilder {
      * will define the facet field to group
      * the results fetching from solr query url. */
     private String facetField;
+    /** Declare highlight field that
+     * will come as suggestion text fetched by the
+     * solr query url. */
+    private String highlightField;
+    /** Declare highlighter on/off that
+     * will highlight the suggestion text fetched by the
+     * solr query url. */
+    private String highlighter;
+    /** Declare hlHtmlTag HTML tag that
+     * will highlight the string in suggestion text fetched by the
+     * solr query url. */
+    private String hlHtmlTag;
 
     /** This method will be called from Component
      * External Java for solr query building.
@@ -224,6 +236,39 @@ public class SolrQueryBuilder {
 
     /**
      * Add fields to solr query url.
+     * @param hlField fields params to solr query
+     *
+     * @return this set fields to solr url.
+     */
+    public SolrQueryBuilder addHlField(final String hlField) {
+        this.highlightField = hlField;
+        return this;
+    }
+
+    /**
+     * Add fields to solr query url.
+     * @param hlTag fields params to solr query
+     *
+     * @return this set fields to solr url.
+     */
+    public SolrQueryBuilder addHlTag(final String hlTag) {
+        this.highlighter = hlTag;
+        return this;
+    }
+
+    /**
+     * Add fields to solr query url.
+     * @param htmlTag fields params to solr query
+     *
+     * @return this set fields to solr url.
+     */
+    public SolrQueryBuilder addHlHtmlTag(final String htmlTag) {
+        this.hlHtmlTag = htmlTag;
+        return this;
+    }
+
+    /**
+     * Add fields to solr query url.
      * @param fieldsValue fields params to solr query
      *
      * @return this set fields to solr url.
@@ -314,6 +359,18 @@ public class SolrQueryBuilder {
 
         if (StringUtils.isNotBlank(this.fieldQuery)) {
             sb.append("&fq=" + this.fieldQuery);
+        }
+
+        if(StringUtils.isNotBlank(this.highlightField)){
+            sb.append("&hl.fl="+this.highlightField);
+        }
+
+        if(StringUtils.isNotBlank(this.hlHtmlTag)){
+            sb.append("&hl.simple.post=</"+this.hlHtmlTag+">&hl.simple.pre=<"+this.hlHtmlTag+">");
+        }
+
+        if(StringUtils.isNotBlank(this.highlighter)){
+            sb.append("&hl="+this.highlighter);
         }
 
         if (StringUtils.isNotBlank(this.groupingField)) {

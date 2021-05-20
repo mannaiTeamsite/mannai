@@ -60,7 +60,8 @@ public class ErrorExternal {
         String generalError = reqcontext.getParameterString(GENERAL_ERROR);
         Element statusElement = root.addElement("status");
       		statusElement.setText(status);
-       String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status;
+       String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status.replace("\"", "");
+
       
        logger.info("Status"+status);
      

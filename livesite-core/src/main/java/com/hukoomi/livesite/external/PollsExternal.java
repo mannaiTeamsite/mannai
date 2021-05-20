@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang.StringUtils;
@@ -134,12 +135,12 @@ public class PollsExternal {
         Document doc = DocumentHelper.createDocument();
 
         PollsBO pollsBO = new PollsBO();
+        postgre = new Postgre(context);
         boolean isValidInput = setBO(context, pollsBO);
         logger.info("isValidInput : " + isValidInput);
         if (isValidInput) {
 
             logger.debug("PollsBO : " + pollsBO);
-            postgre = new Postgre(context);
             HukoomiExternal he = new HukoomiExternal();
 
             if (pollsBO.getAction() != null
@@ -647,7 +648,7 @@ public class PollsExternal {
         logger.info("PollsExternal : insertPollResponse");
         String pollResponseQuery = "INSERT INTO POLL_RESPONSE (POLL_ID, "
                 + "OPTION_ID, USER_ID, IP_ADDRESS, LANG, VOTED_FROM, "
-                + "USER_AGENT, VOTED_ON) VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP)";
+                + "USER_AGENT, VOTED_ON, PERSONA) VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP,?)";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
 
@@ -664,6 +665,7 @@ public class PollsExternal {
             prepareStatement.setString(5, pollsBO.getLang());
             prepareStatement.setString(6, pollsBO.getVotedFrom());
             prepareStatement.setString(7, pollsBO.getUserAgent());
+            prepareStatement.setString(8, pollsBO.getPersona());
             int result = prepareStatement.executeUpdate();
             if (result == 0) {
                 logger.info("Vote Not Recorded !");
@@ -1023,10 +1025,13 @@ public class PollsExternal {
         final String POLL_GROUP_CATEGORY = "pollGroupCategory";
         final String POLL_CATEGORY = "pollCategory";
         final String SOLR_POLL_CATEGORY = "solrPollCategory";
+        final String PERSONA = "persona";
         
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         ValidationErrorList errorList = new ValidationErrorList();
+        HttpServletRequest request = context.getRequest();
         String validData  = "";
+        String userId = null;
         
         //TODO: Field length needs to be validated against content model and database. 
         
@@ -1050,21 +1055,28 @@ public class PollsExternal {
             return false;
         }
         
-        HttpServletRequest request = context.getRequest();
+        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
         if (request.getSession().getAttribute("status") != null && "valid"
                 .equals(request.getSession().getAttribute("status"))) {
-            String userId = request.getSession().getAttribute("uid")
-                    .toString();
-
-            logger.debug(USER_ID + " >>>" + userId + "<<<");
-            validData = ESAPI.validator().getValidInput(USER_ID, userId,
+            
+            if(request.getSession().getAttribute("userId") != null) {
+                userId = request.getSession().getAttribute("userId")
+                        .toString();
+    
+                logger.debug(USER_ID + " >>>" + userId + "<<<");
+                pollsBO.setUserId(userId);
+            }else {
+                logger.debug("UserId from session is null.");
+            }
+            /*validData = ESAPI.validator().getValidInput(USER_ID, userId,
                     ESAPIValidator.USER_ID, 50, true, true, errorList);
             if (errorList.isEmpty()) {
                 pollsBO.setUserId(validData);
+                userId = validData;
             } else {
                 logger.debug(errorList.getError(USER_ID));
                 return false;
-            }
+            }*/
         }
         
         String ipAddress = requestHeaderUtils.getClientIpAddress();
@@ -1133,6 +1145,35 @@ public class PollsExternal {
             }else {
                 logger.debug(errorList.getError(VOTED_FROM));
                 return false;
+            }
+            
+            //Get Persona details from persona settings
+            String persona = null;
+            if(userId != null && !"".equals(userId)) {
+                DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
+                persona = dsExt.getPersonaForUser(userId, postgre);
+                logger.debug("Persona from DB >>>" +persona+ "<<<");
+                pollsBO.setPersona(persona);
+            }
+            
+            if(persona == null || "".equals(persona)) {
+                Cookie[] cookies = request.getCookies();
+                for(int i = 0 ; i < cookies.length;  i++) {
+                    Cookie cookie = cookies[i];
+                    String name = cookie.getName();
+                    String personaValue = null;
+                    if(name != null && "persona".equalsIgnoreCase(name)) {
+                        personaValue = cookie.getValue();
+                        logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
+                        validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                        if(errorList.isEmpty()) {
+                            pollsBO.setPersona(validData);
+                        }else {
+                            logger.debug(errorList.getError(PERSONA));
+                            return false;
+                        }
+                    }
+                }
             }
         }
         

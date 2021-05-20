@@ -269,12 +269,16 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             if (dcrType != null) {
                 logger.debug("File DCR Type : " + dcrType);
                 Document document = getTaskDocument(taskSimpleFile);
-                if(dcrType.contains("Content/")) {
+                /*if(dcrType.contains("Content/")) {
                     isDBOperationContentSuccess = insertData(taskSimpleFile, document);
                 }
                 else if(dcrType.contains("Taxonomy/")){
+                */
+                if(dcrType.contains("Taxonomy/")){
                     isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document, postgre);
                     isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document, postgreLS);
+                }else {
+                    isDBOperationContentSuccess = insertData(taskSimpleFile, document);
                 }
             }
             //isDBOperationWorkflowSuccess = insertWorkFlowData(taskSimpleFile, task);
@@ -476,6 +480,9 @@ public class DataBaseContentIngest implements CSURLExternalTask {
     public boolean insertData(CSSimpleFile taskSimpleFile, Document document)
             throws SQLException, CSException {
         logger.debug("DataBaseContentIngest : insertData");
+		String DcrId = getDCRValue(document, ID_PATH);
+        if(DcrId == null)
+            return true;
         Connection connection = null;
         boolean isDataInserted = false;
         //String Url = "/" + getDCRValue(document, getLang(taskSimpleFile)) + "/"
@@ -519,7 +526,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             preparedStatement = connection
                     .prepareStatement(query);
             preparedStatement.setLong(1,
-                    Long.parseLong(getDCRValue(document, ID_PATH)));
+                    Long.parseLong(DcrId));
             preparedStatement.setString(2, taskSimpleFile
                     .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
                     .getValue());
