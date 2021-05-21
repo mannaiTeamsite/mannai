@@ -1,6 +1,7 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -122,22 +123,22 @@ public class DashboardExternal {
 		HttpSession session = request.getSession(false);
 		if (session != null)
 			session.removeAttribute("status");
-		session.removeAttribute("unm");
-		session.removeAttribute("uid");
-		session.removeAttribute("fnEn");
-		session.removeAttribute("fnAr");
-		session.removeAttribute("lnEn");
-		session.removeAttribute("lnAr");
-		session.removeAttribute("QID");
-		session.removeAttribute("EID");
-		session.removeAttribute("mobile");
-		session.removeAttribute("email");
-		session.removeAttribute("lstMdfy");
-		session.removeAttribute("role");
-		session.removeAttribute("exp");
-		session.removeAttribute("userId");
-		session.removeAttribute("usertypeNo");
-		session.removeAttribute("userType");
+			session.removeAttribute("unm");
+			session.removeAttribute("uid");
+			session.removeAttribute("fnEn");
+			session.removeAttribute("fnAr");
+			session.removeAttribute("lnEn");
+			session.removeAttribute("lnAr");
+			session.removeAttribute("QID");
+			session.removeAttribute("EID");
+			session.removeAttribute("mobile");
+			session.removeAttribute("email");
+			session.removeAttribute("lstMdfy");
+			session.removeAttribute("role");
+			session.removeAttribute("exp");
+			session.removeAttribute("userId");
+			session.removeAttribute("usertypeNo");
+			session.removeAttribute("userType");
 
 		LOGGER.info("--------------removeSessionAttr is Ended------------" + session.getAttribute("status"));
 	}
@@ -189,7 +190,7 @@ public class DashboardExternal {
 		if (status != null && status.equals("valid")) {
 
 			Element userTypeElement = userdata.addElement("userType");
-			userTypeElement.setText("personal");
+			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userdata.addElement("fnEn");
 			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userdata.addElement("lnEn");
@@ -219,43 +220,22 @@ public class DashboardExternal {
 		Element userData = resultTelement.addElement("userData");
 		String status = (String) session.getAttribute("status");
 		if (status != null && status.equals("valid")) {
-			Element userTypeElement = userData.addElement("userType");
-			String userType = (String) session.getAttribute("userType");
-
-			if (userType != null) {
-				userTypeElement.setText(userType);
-			}
-
-			String fnEn = (String) session.getAttribute("fnEn");
-			Element fnEnElement = userData.addElement("fnEn");
-			if (fnEn != null) {
-				fnEnElement.setText(fnEn);
-			}
-			String lnEn = (String) session.getAttribute("lnEn");
-			Element lnEnElement = userData.addElement("lnEn");
-			if (lnEn != null) {
-				lnEnElement.setText(lnEn);
-			}
 			
-			String fnAr = (String) session.getAttribute("fnAr");
+
+			Element userTypeElement = userData.addElement("userType");
+			userTypeElement.setText((String) session.getAttribute("userType"));
+			Element fnEnElement = userData.addElement("fnEn");
+			fnEnElement.setText((String) session.getAttribute("fnEn"));
+			Element lnEnElement = userData.addElement("lnEn");
+			lnEnElement.setText((String) session.getAttribute("lnEn"));
+			
 			Element fnArElement = userData.addElement("fnAr");
-			if (fnAr != null) {
-				fnArElement.setText(fnAr);
-			}
-			String lnAr = (String) session.getAttribute("lnAr");
-			Element lnArEnElement = userData.addElement("lnAr");
-			if (lnAr != null) {
-				lnArEnElement.setText(lnAr);
-			}
-
+			fnArElement.setText((String) session.getAttribute("fnAr"));
+			Element lnArElement = userData.addElement("lnAr");
+			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userData.addElement("userTypeNoElement");
-
-			String userTypeNo = (String) session.getAttribute("userTypeNo");
-			LOGGER.info("userTypeNo :"+userTypeNo);
-			if (userTypeNo != null) {
-				userTypeNoElement.setText(userTypeNo);
-			}
-
+			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));			
+			
 		}
 		else {
 			//
@@ -397,7 +377,7 @@ LOGGER.info("status="+session.getAttribute("status"));
 
 	private void removeBookmark(Element bookmarkResultEle) {
 
-		String activeflag = "F";
+		String activeflag = "N";
 		LOGGER.info("removeBookmark()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
@@ -461,23 +441,31 @@ LOGGER.info("status="+session.getAttribute("status"));
     }
 	
 	public void redirectToLoginPage(RequestContext context) throws IOException {
-		LOGGER.info("--------------nonLoggedIn Started------------");
-		
-		
-//			final String RELAY_URL = "relayURL";
-			PropertiesFileReader prop = null;
-			prop = new PropertiesFileReader(context, "dashboard.properties");
-			properties = prop.getPropertiesFile();
-			RequestHeaderUtils rhu = new RequestHeaderUtils(context);
-			String relayURL = rhu.getRequestURL();
-			LOGGER.info("---relayURL url---" + relayURL);
-			String url = properties.getProperty("login") + "?relayURL=" + relayURL;
-			LOGGER.info("---Login url---" + url);
-			HttpServletResponse response = context.getResponse();
-			response.sendRedirect(url);
+		LOGGER.info("--------------redirectToLoginPage Started------------");
 	
+		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
+		String relayURL = rhu.getRequestURL();
 		
-		LOGGER.info("--------------nonLoggedIn Ended------------");
+		 URL netUrl = new URL(relayURL);
+		    String host = netUrl.getHost();
+		    
+		    if(host != "stauth.hukoomi.gov.qa") {
+		    	
+//				final String RELAY_URL = "relayURL";
+				PropertiesFileReader prop = null;
+				prop = new PropertiesFileReader(context, "dashboard.properties");
+				properties = prop.getPropertiesFile();
+				LOGGER.info("---relayURL url---" + relayURL);
+				String url = properties.getProperty("login") + "?relayURL=" + relayURL;
+				LOGGER.info("---Login url---" + url);
+				HttpServletResponse response = context.getResponse();
+				response.sendRedirect(url);
+		
+			
+			LOGGER.info("--------------redirectToLoginPage Ended------------");
+		    }
+	
+
 		
 	}
 }
