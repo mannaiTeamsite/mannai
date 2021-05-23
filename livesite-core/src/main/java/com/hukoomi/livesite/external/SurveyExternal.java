@@ -65,6 +65,10 @@ public class SurveyExternal {
      */
     public static final String ACTION_POLLS_AND_SURVEY = "pollsandsurvey";
     /**
+     * Constant for action dashboard polls and survey.
+     */
+    public static final String DASHBOARD = "Dashboard";
+    /**
      * Constant for action survey listing.
      */
     public static final String ACTION_SURVEY_LISTING = "listing";
@@ -1124,7 +1128,7 @@ public class SurveyExternal {
         
         String pollAction = context.getParameterString(POLL_ACTION);
         logger.debug(POLL_ACTION + " >>>" +pollAction+ "<<<");   
-        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
+        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction) || DASHBOARD.equalsIgnoreCase(pollAction)) {
             
             String surveyGroup = context.getParameterString(SURVEY_GROUP);
             logger.debug(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
@@ -1135,7 +1139,7 @@ public class SurveyExternal {
             String surveyGroupConfig = context.getParameterString(SURVEY_GROUP_CONFIG);
             logger.debug(SURVEY_GROUP_CONFIG + " >>>" +surveyGroupConfig+ "<<<");
             if (!ESAPIValidator.checkNull(surveyGroupConfig)) {
-                surveyBO.setGroup(getContentName(surveyGroupConfig));
+                surveyBO.setSurveyGroupConfig(getContentName(surveyGroupConfig));
             }
             
             String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
@@ -1152,7 +1156,7 @@ public class SurveyExternal {
             logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
             validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY, surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
             if(errorList.isEmpty()) {
-                surveyBO.setGroupCategory(validData);
+                surveyBO.setSurveyGroupConfigCategory(validData);
             }else {
                 logger.debug(errorList.getError(SURVEY_GROUP_CONFIG_CATEGORY));
                 return false;

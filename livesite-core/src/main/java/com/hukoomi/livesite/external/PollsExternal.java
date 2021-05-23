@@ -100,6 +100,10 @@ public class PollsExternal {
      */
     public static final String ACTION_POLLS_AND_SURVEY = "pollsandsurvey";
     /**
+     * Constant for action dashboard polls and survey.
+     */
+    public static final String DASHBOARD = "Dashboard";
+    /**
      * Constant for action current polls.
      */
     public static final String ACTION_CURRENT_POLLS = "current";
@@ -340,19 +344,15 @@ public class PollsExternal {
                     .prepareStatement(getVotedOptions.toString());
             prepareStatement.setArray(1, connection.createArrayOf(BIGINT,
                     pollIds.toString().split(",")));
-            logger.info("Log 1");
             if (pollsBO.getUserId() != null
                     && !"".equals(pollsBO.getUserId())) {
                 prepareStatement.setString(2, pollsBO.getUserId());
-                logger.info("Log 2");
             } else if (pollsBO.getIpAddress() != null
                     && !"".equals(pollsBO.getIpAddress())) {
                 prepareStatement.setString(2, pollsBO.getIpAddress());
-                logger.info("Log 3");
             }
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
-                logger.info("Log 4");
                 votedOptions.put(rs.getLong(POLL_ID),
                         rs.getLong("OPTION_ID"));
             }
@@ -1177,7 +1177,7 @@ public class PollsExternal {
             }
         }
         
-        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
+        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction) || DASHBOARD.equalsIgnoreCase(pollAction)) {
             
             String pollsGroup = context.getParameterString(POLLS_GROUP);
             logger.debug(POLLS_GROUP + " >>>" +pollsGroup+ "<<<");
@@ -1185,10 +1185,10 @@ public class PollsExternal {
                 pollsBO.setGroup(getContentName(pollsGroup));
             }
             
-            String pollsGroupConfig = context.getParameterString(POLLS_GROUP);
+            String pollsGroupConfig = context.getParameterString(POLLS_GROUP_CONFIG);
             logger.debug(POLLS_GROUP_CONFIG + " >>>" +pollsGroupConfig+ "<<<");
             if (!ESAPIValidator.checkNull(pollsGroupConfig)) {
-                pollsBO.setGroup(getContentName(pollsGroupConfig));
+                pollsBO.setPollGroupConfig(getContentName(pollsGroupConfig));
             }
             
             String pollGroupCategory = context.getParameterString(POLL_GROUP_CATEGORY);
