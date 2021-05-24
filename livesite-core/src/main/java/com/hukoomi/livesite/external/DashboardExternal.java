@@ -189,7 +189,7 @@ public class DashboardExternal {
 		if (status != null && status.equals("valid")) {
 
 			Element userTypeElement = userdata.addElement("userType");
-			userTypeElement.setText("personal");
+			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userdata.addElement("fnEn");
 			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userdata.addElement("lnEn");
@@ -220,41 +220,18 @@ public class DashboardExternal {
 		String status = (String) session.getAttribute("status");
 		if (status != null && status.equals("valid")) {
 			Element userTypeElement = userData.addElement("userType");
-			String userType = (String) session.getAttribute("userType");
-
-			if (userType != null) {
-				userTypeElement.setText(userType);
-			}
-
-			String fnEn = (String) session.getAttribute("fnEn");
+			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userData.addElement("fnEn");
-			if (fnEn != null) {
-				fnEnElement.setText(fnEn);
-			}
-			String lnEn = (String) session.getAttribute("lnEn");
+			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userData.addElement("lnEn");
-			if (lnEn != null) {
-				lnEnElement.setText(lnEn);
-			}
+			lnEnElement.setText((String) session.getAttribute("lnEn"));
 			
-			String fnAr = (String) session.getAttribute("fnAr");
 			Element fnArElement = userData.addElement("fnAr");
-			if (fnAr != null) {
-				fnArElement.setText(fnAr);
-			}
-			String lnAr = (String) session.getAttribute("lnAr");
-			Element lnArEnElement = userData.addElement("lnAr");
-			if (lnAr != null) {
-				lnArEnElement.setText(lnAr);
-			}
-
+			fnArElement.setText((String) session.getAttribute("fnAr"));
+			Element lnArElement = userData.addElement("lnAr");
+			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userData.addElement("userTypeNoElement");
-
-			String userTypeNo = (String) session.getAttribute("userTypeNo");
-			LOGGER.info("userTypeNo :"+userTypeNo);
-			if (userTypeNo != null) {
-				userTypeNoElement.setText(userTypeNo);
-			}
+			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
 
 		}
 		else {
@@ -290,11 +267,10 @@ public class DashboardExternal {
 
 		postgre = new Postgre(context);
 		HttpSession session = context.getRequest().getSession();
-String status=(String) session.getAttribute("status");
-LOGGER.info("status="+session.getAttribute("status"));
+			String status=(String) session.getAttribute("status");
+			LOGGER.info("Dashboard status="+session.getAttribute("status"));
 		if (status != null && status.equals("valid")) {
-			userID = "0";
-//userID = (String) session.getAttribute("userId");
+			userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
 
@@ -397,7 +373,7 @@ LOGGER.info("status="+session.getAttribute("status"));
 
 	private void removeBookmark(Element bookmarkResultEle) {
 
-		String activeflag = "F";
+		String activeflag = "N";
 		LOGGER.info("removeBookmark()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
