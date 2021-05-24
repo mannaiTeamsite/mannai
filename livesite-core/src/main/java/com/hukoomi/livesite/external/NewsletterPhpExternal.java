@@ -81,6 +81,13 @@ public class NewsletterPhpExternal {
 
     /** preference updated response status. */
     private static final String STATUS_ALREADY_SUBSCRIBED = "AlreadySubscribed";
+    
+    /** confirmation mail element. */
+    private static final String CONFIRMATION_EMAIL = "ConfirmationEmail";
+    /** 
+     * Unsubscribe confirmation mail element. 
+     */
+    private static final String UNSUBSCRIPTION_CONFIRMATION_EMAIL = "UnsubConfirmationEmail";
 
     /** Contact us properties key. */
     private static final String CONTACT_FROM_MAIL = "sentFrom";
@@ -106,7 +113,7 @@ public class NewsletterPhpExternal {
     /** Postgre Object variable. */
     Postgre postgre = null;
     
-    DashboardSettingsExternal settingExternal = new DashboardSettingsExternal();
+    /* DashboardSettingsExternal settingExternal = null; */
 
     @SuppressWarnings("deprecation")
     public Document subscribeToNewsletter(final RequestContext context) {
@@ -115,6 +122,8 @@ public class NewsletterPhpExternal {
         HttpSession session = context.getRequest().getSession();
 
         postgre = new Postgre(context);
+        
+        /* settingExternal = new DashboardSettingsExternal(); */
 
         Document memberdetail = null;
         ValidationUtils util = new ValidationUtils();
@@ -131,7 +140,7 @@ public class NewsletterPhpExternal {
         String persona = context.getParameterString(PERSONA);
         if(uid !=null && !uid.equals("")) {
             
-            persona = settingExternal.getPersonaForUser(uid,postgre);
+            persona = getPersonaForUser(uid,postgre);
             logger.debug("NewsletterPhpExternal : dashboard persona "+persona);
         }
 
@@ -163,7 +172,7 @@ public class NewsletterPhpExternal {
                     if (subscriberMasterDataInsert
                             && subscriberPreferenceDataInsert) {
                         sendConfirmationMail(email, pageLang,
-                                confirmationToken, context);
+                                confirmationToken, CONFIRMATION_EMAIL, "",context);
                         memberdetail = getDocument(email,
                                 CONFIRMATION_SENT);
                     }
@@ -205,7 +214,7 @@ public class NewsletterPhpExternal {
                                             email);
                                     sendConfirmationMail(email,
                                             pageLang,
-                                            confirmationToken, context);
+                                            confirmationToken, CONFIRMATION_EMAIL, "", context);
                                     logger.info(
                                             "Confirmation Mail Sent For Preference Update !");
                                     memberdetail = getDocument(email,
@@ -382,12 +391,12 @@ public class NewsletterPhpExternal {
      * @param preferenceId
      * @return
      */
-    private String generateConfirmationToken(double subscriberId,
+    public String generateConfirmationToken(double subscriberId,
             double preferenceId, String email) {
         logger.info("NewsletterPhpExternal : generateConfirmationToken()");
         String confirmationToken = RandomStringUtils
                 .randomAlphanumeric(10);
-
+        logger.debug("NewsletterPhpExternal :ConfirmationToken()" +confirmationToken);
         boolean tokenExist = isConfirmationTokenExist(confirmationToken);
 
         if (tokenExist) {
@@ -430,7 +439,7 @@ public class NewsletterPhpExternal {
      * @return
      */
     private boolean isConfirmationTokenExist(String confirmationToken) {
-        logger.info("NewsletterPhpExternal : isConfirmationTokenExist()");
+        logger.info("NewsletterPhpExternal : isConfirmationTokenExist()"+confirmationToken);
         boolean tokenExist = false;
         String tokenCheckQuery = "SELECT TOKEN FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE TOKEN = ?";
         Connection connection = null;
@@ -527,9 +536,9 @@ public class NewsletterPhpExternal {
     /**
      * @param email
      */
-    private void sendConfirmationMail(String email, String pageLanguage,
-            String confirmationToken,
-            RequestContext context) {
+    public void sendConfirmationMail(String email, String pageLanguage,
+            String confirmationToken, String emailElement,
+            String unsubReason, RequestContext context) {
         logger.info("NewsletterPhpExternal : sendConfirmationMail()");
 
         try {
@@ -538,6 +547,7 @@ public class NewsletterPhpExternal {
             String from = mailPropertiesFile
                     .getProperty(CONTACT_FROM_MAIL);
             String to = email;
+            String messageHtmlName = "";
             logger.info("sent To :" + to);
             String host = mailPropertiesFile
                     .getProperty(CONTACT_MAIL_HOST);
@@ -561,15 +571,26 @@ public class NewsletterPhpExternal {
                     "phplist.properties");
             subject = propertiesFile
                     .getProperty("messageSubject_" + pageLanguage);
-
-            String messageHtmlName = "newsletter-confirmation-mail-"
-                    + pageLanguage + ".html";
+            if(emailElement.equals(CONFIRMATION_EMAIL)) {
+                 messageHtmlName = "newsletter-confirmation-mail-"
+                        + pageLanguage + ".html";
+            }else if(emailElement.equals(UNSUBSCRIPTION_CONFIRMATION_EMAIL)){
+                 messageHtmlName = "newsletter-unsubscription-mail-"
+                        + pageLanguage + ".html";               
+            }
+            
             String message = getHtmlFile(messageHtmlName, context);
+            if(!unsubReason.equals("")) {                
+                message = message.replace("<token>", confirmationToken)
+                        .replace("<lang>", pageLanguage)
+                        .replace("<reason>", unsubReason);
+                
+            }
+            else {
             message = message.replace("<token>", confirmationToken)
                     .replace("<lang>", pageLanguage);
-
+            }
             logger.info("Confirmation Mail HTML :" + message);
-
 
             if (pageLanguage.equals("ar")) {
                 msg.setSubject(subject, CHAR_SET);
@@ -779,6 +800,38 @@ public class NewsletterPhpExternal {
                 context, propertyFile);
         return propertyFileReader.getPropertiesFile();
 
+    }
+    
+    /**
+     * This method is used to retrieve person setting for the user from database.
+     *
+     * @return returns the persona value  
+     */
+    public String getPersonaForUser(String userId, Postgre postgre) {
+        logger.info("DashboardSettingsExternal : getPersonaForUser()");
+        String personaValue = null;
+        String personaQuery = "SELECT * FROM persona_settings WHERE user_id = ? AND active = True";
+        logger.debug("personaQuery : " + personaQuery);
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection.prepareStatement(personaQuery);
+            prepareStatement.setString(1, userId);
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+                personaValue = rs.getString("persona_value");
+                logger.debug("Persona Value :" + personaValue);
+            }
+        } catch (Exception e) {
+            logger.error("Exception in getPersonaForUser", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+
+        return personaValue;
     }
 
     /**
