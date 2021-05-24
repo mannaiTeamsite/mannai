@@ -189,7 +189,7 @@ public class DashboardExternal {
 		if (status != null && status.equals("valid")) {
 
 			Element userTypeElement = userdata.addElement("userType");
-			userTypeElement.setText("personal");
+			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userdata.addElement("fnEn");
 			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userdata.addElement("lnEn");
@@ -220,7 +220,7 @@ public class DashboardExternal {
 		String status = (String) session.getAttribute("status");
 		if (status != null && status.equals("valid")) {
 			Element userTypeElement = userData.addElement("userType");
-			userTypeElement.setText("personal");
+			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userData.addElement("fnEn");
 			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userData.addElement("lnEn");
@@ -267,11 +267,10 @@ public class DashboardExternal {
 
 		postgre = new Postgre(context);
 		HttpSession session = context.getRequest().getSession();
-String status=(String) session.getAttribute("status");
-LOGGER.info("Dashboard status="+session.getAttribute("status"));
+			String status=(String) session.getAttribute("status");
+			LOGGER.info("Dashboard status="+session.getAttribute("status"));
 		if (status != null && status.equals("valid")) {
-			userID = "0";
-//userID = (String) session.getAttribute("userId");
+			userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
 
