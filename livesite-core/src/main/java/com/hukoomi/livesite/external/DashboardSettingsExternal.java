@@ -15,6 +15,7 @@ import java.util.StringJoiner;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang.RandomStringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -69,6 +70,11 @@ public class DashboardSettingsExternal {
      */
     public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
     /**
+     * Constant for action update persona settings.
+     */
+    public static final String ACTION_UNSUBSCRIBE_NONLOGGED =
+            "unsubscribeNonLogged";
+    /**
      * Constant for action update Language switch.
      */
     public static final String ACTION_LANG_ONOFF = "langOnOff";
@@ -109,10 +115,33 @@ public class DashboardSettingsExternal {
      * phpList unsubscription reason 
      */
     private static final String UNSUBSCRIBE_REASON = "unsubscribe_reason";
-    /** 
-     * phpList language Switch value 
+    /**
+     * Email email for unsubscription
+     */
+    private static final String ELEMENT_EMAIL = "email";
+    /**
+     * phpList language Switch value
      */
     private static final String LANG_SWITCH = "lang_switch";
+    /**
+     * Unsubscribe confirmation mail element.
+     */
+    private static final String UNSUBSCRIPTION_CONFIRMATION_EMAIL =
+            "UnsubConfirmationEmail";
+    /**
+     * Parameter to get subscriberID.
+     */
+    private static final String USING_EMAIL =
+            "usingEmail";
+    /**
+     * Parameter to get subscriberID..
+     */
+    private static final String USING_UID =
+            "usingUID";
+    /** 
+     * pending status constant. 
+     */
+    private static final String STATUS_PENDING = "Pending";
     /**
      * Constant for status success.
      */
@@ -164,9 +193,11 @@ public class DashboardSettingsExternal {
     /**
      * Constant for table name.
      */
-    public static final String NEWSLETTER_PREFERENCE = "newsletter_preference";
-    
-    
+    public static final String NEWSLETTER_PREFERENCE =
+            "newsletter_preference";
+
+     NewsletterPhpExternal phpExternal = null; 
+
     /**
      * This method will be called from Component External for fetching and updating the persona settings.
      * 
@@ -182,14 +213,39 @@ public class DashboardSettingsExternal {
         DashboardSettingsBO settingsBO = new DashboardSettingsBO();
         Document doc = DocumentHelper.createDocument();
         Element responseElem = doc.addElement("dashboard-settings");
+        double subscriberId = 0;
+        double preferenceId = 0;
+        final String SETTINGS_ACTION = "settingsAction";
+        String langSwitch = context.getParameterString(LANG_SWITCH);
+        String language = context.getParameterString(SWITCH_LANGUAGE);
+        String email = context.getParameterString(ELEMENT_EMAIL);
+        String unsubreason = context.getParameterString("unsubscribe_reason");
         
+        phpExternal = new NewsletterPhpExternal();
+
         HttpServletRequest request = context.getRequest();
-        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
-        if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
-            postgre = new Postgre(context);
-            mysql = new MySql(context);
-            String langSwitch = context.getParameterString(LANG_SWITCH);
-            String language = context.getParameterString(SWITCH_LANGUAGE);
+        logger.debug("Session Status : "
+                + request.getSession().getAttribute("status"));
+        String settingsAction =
+                context.getParameterString(SETTINGS_ACTION);
+        postgre = new Postgre(context);
+        mysql = new MySql(context);
+        if (ACTION_UNSUBSCRIBE_NONLOGGED
+                .equalsIgnoreCase(settingsAction)) {
+            logger.info("Unsubscribe Non Logged");
+            
+            subscriberId = getSubscriberID(email,USING_EMAIL);
+            String confirmationToken =
+                    generateConfirmationToken(
+                            subscriberId, preferenceId, email);
+            phpExternal.sendConfirmationMail(email, "en",
+                    confirmationToken,
+                    UNSUBSCRIPTION_CONFIRMATION_EMAIL, unsubreason, context);
+
+        }
+        if (request.getSession().getAttribute("status") != null && "valid"
+                .equals(request.getSession().getAttribute("status"))) {            
+            
             if (validateInput(context, settingsBO)) {
                 logger.info("Input data validation is successfull");
                 logger.debug("settingsBO : "+settingsBO);
@@ -263,172 +319,191 @@ public class DashboardSettingsExternal {
         }
     }
     
-        /**
-         * @author Pramesh
-         * @param userId
-         * @param langSwitch
-         * @param language
-         * @return
-         */
-        private String switchDashboardLanguage(String userId,String langSwitch,String language) {
-            logger.info("DashboardSettingsExternal : switchDashboardLanguage()");
-             
-            String status = ""; 
-            int subscriberID = getSubscriberID(userId);
-            String updatePreferenceQuery = "";
-            
-            Connection connection = null;
-            PreparedStatement prepareStatement = null;
-            ResultSet rs = null;
-            String prefStatus = "";
-            
-            if(langSwitch.equals(LANGUAGE_ON)) {
-                prefStatus = "Active";
-                updatePreferenceQuery = 
-                        "UPDATE NEWSLETTER_PREFERENCE SET STATUS = ? WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
-            }else if(langSwitch.equals(LANGUAGE_OFF)) {
-                prefStatus = "InActive";
-                updatePreferenceQuery = 
-                        "UPDATE NEWSLETTER_PREFERENCE SET STATUS = ? WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
-            }            
-            
-            try {
-                connection = postgre.getConnection();
-                prepareStatement = connection
-                        .prepareStatement(updatePreferenceQuery);
-                
-                prepareStatement.setString(1, prefStatus);
-                prepareStatement.setInt(2,subscriberID);
-                prepareStatement.setString(3, language);                
+    /**
+     * @author Pramesh
+     * @param userId
+     * @param langSwitch
+     * @param language
+     * @return
+     */
+    private String switchDashboardLanguage(
+            String userId, String langSwitch, String language
+    ) {
+        logger.info(
+                "DashboardSettingsExternal : switchDashboardLanguage()");
+
+        String status = "";
+        double subscriberID = getSubscriberID(userId,USING_UID);
+        String updatePreferenceQuery = "";
+
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        String prefStatus = "";
+
+        if (langSwitch.equals(LANGUAGE_ON)) {
+            prefStatus = "Active";
+            updatePreferenceQuery =
+                    "UPDATE NEWSLETTER_PREFERENCE SET STATUS = ? WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
+        } else if (langSwitch.equals(LANGUAGE_OFF)) {
+            prefStatus = "InActive";
+            updatePreferenceQuery =
+                    "UPDATE NEWSLETTER_PREFERENCE SET STATUS = ? WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ?";
+        }
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement =
+                    connection.prepareStatement(updatePreferenceQuery);
+
+            prepareStatement.setString(1, prefStatus);
+            prepareStatement.setDouble(2, subscriberID);
+            prepareStatement.setString(3, language);
+            rs = prepareStatement.executeQuery();
+
+            while (rs.next()) {
+                status = STATUS_SUCCESS;
+                updatePhpLanguageList(getList(userId, language),
+                        subscriberID, langSwitch);
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception in unsubscribePostgreUser", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+
+        logger.debug(
+                "switchDashboardLanguage() : update preference status "
+                        + status);
+
+        return status;
+    }
+
+    private String updatePhpLanguageList(
+            List<String> listName, double subscriberID, String langSwitch
+    ) {
+        logger.info("DashboardSettingsExternal : updatePhpLanguageList()");
+
+        String status = "";
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        String phpQuery = "";
+        String subscriberemail = getSubscriberEmail(subscriberID);
+        if (langSwitch.equals(LANGUAGE_ON)) {
+            phpQuery =
+                    "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED) VALUES ((SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?),(SELECT ID FROM PHPLIST_LIST WHERE NAME = ?),LOCALTIMESTAMP)";
+
+        } else if (langSwitch.equals(LANGUAGE_OFF)) {
+
+            phpQuery =
+                    "DELETE FROM PHPLIST_LISTUSER WHERE USERID = ? and LISTID = (SELECT ID FROM PHPLIST_LIST WHERE NAME = ?)";
+        }
+
+        try {
+            connection = mysql.getConnection();
+            prepareStatement = connection.prepareStatement(phpQuery);
+
+            Iterator<String> iteratorName = listName.iterator();
+            while (iteratorName.hasNext()) {
+                prepareStatement.setString(1, subscriberemail);
+                prepareStatement.setString(2, iteratorName.next());
                 rs = prepareStatement.executeQuery();
-
-                while (rs.next()) {
-                    status = STATUS_SUCCESS;
-                    updatePhpLanguageList(getList(userId,language),subscriberID,langSwitch);
-                }
-               
-            } catch (Exception e) {
-                logger.error("Exception in unsubscribePostgreUser", e);
-            } finally {
-                postgre.releaseConnection(connection, prepareStatement, rs);
             }
-            
-            logger.debug("switchDashboardLanguage() : update preference status "+status);
-            
-            
-            return status;
+
+        } catch (Exception e) {
+            logger.error("Exception in unsubscribePhpUser", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
-        private String updatePhpLanguageList(List<String> listName, int subscriberID, String langSwitch ) {
-            logger.info("DashboardSettingsExternal : updatePhpLanguageList()");
-            
-            String status = "";            
-            Connection connection = null;
-            PreparedStatement prepareStatement = null;
-            ResultSet rs = null;
-            String phpQuery = "";
-            String subscriberemail = getSubscriberEmail(subscriberID);
-            if(langSwitch.equals(LANGUAGE_ON)) {
-                phpQuery="INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED) VALUES ((SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?),(SELECT ID FROM PHPLIST_LIST WHERE NAME = ?),LOCALTIMESTAMP)";
-                
-            }else if(langSwitch.equals(LANGUAGE_OFF)) {
-                
-                phpQuery = "DELETE FROM PHPLIST_LISTUSER WHERE USERID = ? and LISTID = (SELECT ID FROM PHPLIST_LIST WHERE NAME = ?)";
-            }
-            
-            try {
-                connection = mysql.getConnection();
-                prepareStatement = connection
-                        .prepareStatement(phpQuery); 
-                
-                Iterator<String> iteratorName = listName.iterator();
-                while(iteratorName.hasNext()) {
-                    prepareStatement.setString(1, subscriberemail);
-                    prepareStatement.setString(2, iteratorName.next());                    
-                    rs = prepareStatement.executeQuery();
-                }
 
-                
-            } catch (Exception e) {
-                logger.error("Exception in unsubscribePhpUser", e);
-            } finally {
-                postgre.releaseConnection(connection, prepareStatement, rs);
+        return status;
+    }
+
+    private List<String> getList(String userId, String language) {
+        logger.info("DashboardSettingsExternal : getList()");
+
+        String listName = "";
+        double subscriberID = getSubscriberID(userId,USING_UID);
+        String getListQuery = "";
+
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        List<String> list = new ArrayList<String>();
+        getListQuery =
+                "SELECT PERSONA FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? and LANGUAGE = ?";
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection.prepareStatement(getListQuery);
+
+            prepareStatement.setDouble(1, subscriberID);
+            prepareStatement.setString(2, language);
+            rs = prepareStatement.executeQuery();
+
+            while (rs.next()) {
+                listName = rs.getString("PERSONA") + "_" + language;
+                list.add(listName);
             }
-            
-            return status;
+
+        } catch (Exception e) {
+            logger.error("Exception in unsubscribePostgreUser", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
-        
-        private List<String> getList(String userId,String language) {
-            logger.info("DashboardSettingsExternal : getList()");
-             
-            String listName = ""; 
-            int subscriberID = getSubscriberID(userId);
-            String getListQuery = "";            
-            
-            Connection connection = null;
-            PreparedStatement prepareStatement = null;
-            ResultSet rs = null;
-            
-            List<String> list = new ArrayList<String>();
-            getListQuery = "SELECT PERSONA FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? and LANGUAGE = ?";       
-           
-            try {
-                connection = postgre.getConnection();
-                prepareStatement = connection
-                        .prepareStatement(getListQuery);
-                   
-                prepareStatement.setInt(1,subscriberID);
-                prepareStatement.setString(2, language);                
-                rs = prepareStatement.executeQuery();
 
-                while (rs.next()) {
-                    listName = rs.getString("PERSONA")+"_"+language;
-                   list.add(listName);
-                }
-                
+        logger.debug("getList() : size " + list.size());
 
-            } catch (Exception e) {
-                logger.error("Exception in unsubscribePostgreUser", e);
-            } finally {
-                postgre.releaseConnection(connection, prepareStatement, rs);
-            }
-            
-            logger.debug("getList() : size "+list.size());
-            
-            return list;
-        }
-    
+        return list;
+    }
+
     /**
      * @author Pramesh
      * @param userId
      * @return
      * 
-     * This method unssubscribes dashboard user and update status
+     *         This method unssubscribes dashboard user and update status
      */
-    private String unsubscribeDashboardUser(String userId, String unsubReason) {
-        logger.info("DashboardSettingsExternal : unsubscribeDashboardUser()");
-        
-        String unsubStatus = "";        
-        String status = "";        
-        int blacklistID = 1;        
-        int subscriberID = getSubscriberID(userId);
+    private String
+            unsubscribeDashboardUser(String userId, String unsubReason) {
+        logger.info(
+                "DashboardSettingsExternal : unsubscribeDashboardUser()");
+
+        String unsubStatus = "";
+        String status = "";
+        int blacklistID = 1;
+        int subscriberID = getSubscriberID(userId,USING_UID);
         String subscriberemail = getSubscriberEmail(subscriberID);
-        
-        String updateMasterQuery = "UPDATE NEWSLETTER_MASTER SET STATUS = \"Unsubscribed\" and UNSUBSCRIBED_REASON = ? WHERE UID = ?";
-        String updatePreferenceQuery = "UPDATE NEWSLETTER_PREFERENCE SET STATUS = \"InActive\" WHERE SUBSCRIBER_ID = ?";
-        String updatePhpQuery = "UPDATE PHPLIST_USER_USER SET BLACKLISTED = ? WHERE ID = (SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?)";  
-        status = unsubscribePostgreUser(updateMasterQuery, userId, NEWSLETTER_MASTER,unsubReason );
-        logger.debug("unsubscribeDashboardUser() : update master status "+status);
-        if(status.equals(STATUS_SUCCESS)) {
-            
-            status = unsubscribePostgreUser(updatePreferenceQuery, Integer.toString(subscriberID), NEWSLETTER_PREFERENCE,unsubReason);
-        }       
-        logger.debug("unsubscribeDashboardUser() : update preference status "+status);
-        
-        if(status.equals(STATUS_SUCCESS)) {
-            
-            unsubStatus = unsubscribePhpUser(updatePhpQuery,subscriberemail);
+
+        String updateMasterQuery =
+                "UPDATE NEWSLETTER_MASTER SET STATUS = \"Unsubscribed\" and UNSUBSCRIBED_REASON = ? WHERE UID = ?";
+        String updatePreferenceQuery =
+                "UPDATE NEWSLETTER_PREFERENCE SET STATUS = \"InActive\" WHERE SUBSCRIBER_ID = ?";
+        String updatePhpQuery =
+                "UPDATE PHPLIST_USER_USER SET BLACKLISTED = ? WHERE ID = (SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?)";
+        status = unsubscribePostgreUser(updateMasterQuery, userId,
+                NEWSLETTER_MASTER, unsubReason);
+        logger.debug("unsubscribeDashboardUser() : update master status "
+                + status);
+        if (status.equals(STATUS_SUCCESS)) {
+
+            status = unsubscribePostgreUser(updatePreferenceQuery,
+                    Integer.toString(subscriberID), NEWSLETTER_PREFERENCE,
+                    unsubReason);
         }
-        
+        logger.debug(
+                "unsubscribeDashboardUser() : update preference status "
+                        + status);
+
+        if (status.equals(STATUS_SUCCESS)) {
+
+            unsubStatus =
+                    unsubscribePhpUser(updatePhpQuery, subscriberemail);
+        }
+
         return unsubStatus;
     }
     
@@ -439,32 +514,32 @@ public class DashboardSettingsExternal {
      * @param tabName
      * @return
      * 
-     * This method is used to update unsubscribed user 
+     *         This method is used to update unsubscribed user
      */
-    private String unsubscribePostgreUser(String Query, String userId, String tabName, String unsubReason) {
-        logger.info("DashboardSettingsExternal : unsubscribePostgreUser()");
-        
+    private String unsubscribePostgreUser(
+            String Query, String userId, String tabName, String unsubReason
+    ) {
+        logger.info(
+                "DashboardSettingsExternal : unsubscribePostgreUser()");
+
         String status = "";
-        
+
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
 
-        
         try {
             connection = postgre.getConnection();
-            prepareStatement = connection
-                    .prepareStatement(Query);
-            if(tabName.equals(NEWSLETTER_PREFERENCE)) {                
-                
+            prepareStatement = connection.prepareStatement(Query);
+            if (tabName.equals(NEWSLETTER_PREFERENCE)) {
+
                 prepareStatement.setInt(1, Integer.parseInt(userId));
-            }
-            else {
-                
+            } else {
+
                 prepareStatement.setString(1, unsubReason);
                 prepareStatement.setString(2, userId);
             }
-            
+
             rs = prepareStatement.executeQuery();
 
             while (rs.next()) {
@@ -476,10 +551,10 @@ public class DashboardSettingsExternal {
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
-        
+
         return status;
     }
-    
+
     /**
      * @author Pramesh
      * @param Query
@@ -488,22 +563,20 @@ public class DashboardSettingsExternal {
      */
     private String unsubscribePhpUser(String Query, String email) {
         logger.info("DashboardSettingsExternal : unsubscribePhpUser()");
-        
+
         String status = "";
         int blacklistID = 1;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
 
-        
         try {
             connection = mysql.getConnection();
-            prepareStatement = connection
-                    .prepareStatement(Query);          
-                
+            prepareStatement = connection.prepareStatement(Query);
+
             prepareStatement.setInt(1, blacklistID);
             prepareStatement.setString(2, email);
-            
+
             rs = prepareStatement.executeQuery();
 
             while (rs.next()) {
@@ -515,21 +588,22 @@ public class DashboardSettingsExternal {
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
-        
+
         return status;
     }
-    
+
     /**
      * @author pramesh
      * @param subscriberId
      * @return
      * 
-     * This method get the subscriber email based on subscriber id
+     *         This method get the subscriber email based on subscriber id
      */
     private String getSubscriberEmail(double subscriberId) {
         logger.info("NewsletterConfirmation : getSubscriberEmail");
         boolean subscriberPreferenceDataInsert = false;
-        String addSubscriberPreferencesQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_ID = ?";
+        String addSubscriberPreferencesQuery =
+                "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_ID = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         String subscriberEmail = "";
@@ -540,10 +614,10 @@ public class DashboardSettingsExternal {
                     .prepareStatement(addSubscriberPreferencesQuery);
             prepareStatement.setDouble(1, subscriberId);
 
-            rs = prepareStatement.executeQuery();   
+            rs = prepareStatement.executeQuery();
             while (rs.next()) {
-            
-                subscriberEmail =  rs.getString(SUBSCRIBER_EMAIL);
+
+                subscriberEmail = rs.getString(SUBSCRIBER_EMAIL);
             }
         } catch (Exception e) {
             logger.error("Exception in updateMasterTable", e);
@@ -553,18 +627,27 @@ public class DashboardSettingsExternal {
 
         return subscriberEmail;
     }
-    
+
     /**
      * @author Pramesh
      * @param userId
-     * @return
-     * This method is used to fetch subscriberID using UID
+     * @return This method is used to fetch subscriberID using UID
      */
-    private int getSubscriberID(String userId) {
+    private int getSubscriberID(String userId, String condition) {
         logger.info("DashboardSettingsExternal : getSubscriberID()");
+        
+        String subscriberIDQuery = "";
+        
+        if(condition.equals(USING_UID)) {
+            subscriberIDQuery =
+                    "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE UID = ?";
+            
+        }else if(condition.equals(USING_EMAIL)) {
+             subscriberIDQuery =
+                    "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+            
+        }
        
-
-        String subscriberIDQuery = "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE UID = ?";
         int subscriberID = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -572,18 +655,16 @@ public class DashboardSettingsExternal {
 
         try {
             connection = postgre.getConnection();
-            prepareStatement = connection
-                    .prepareStatement(subscriberIDQuery);
+            prepareStatement =
+                    connection.prepareStatement(subscriberIDQuery);
             prepareStatement.setString(1, userId);
             rs = prepareStatement.executeQuery();
-            
+
             while (rs.next()) {
                 subscriberID = rs.getInt(1);
             }
 
-            
-            logger.debug(
-                    "subscriberID : " + subscriberID);
+            logger.debug("subscriberID : " + subscriberID);
 
         } catch (Exception e) {
             logger.error("Exception in subscriberID", e);
@@ -1222,4 +1303,84 @@ public class DashboardSettingsExternal {
         return isPersonaSettingExists;
     }
     
+    /**
+     * @param subscriber_id
+     * @param preferenceId
+     * @return
+     */
+    public String generateConfirmationToken(double subscriberId,
+            double preferenceId, String email) {
+        logger.info("DashboardSettingsExternal : generateConfirmationToken()");
+        String confirmationToken = RandomStringUtils
+                .randomAlphanumeric(10);
+        logger.debug("DashboardSettingsExternal :ConfirmationToken()" +confirmationToken);
+        boolean tokenExist = isConfirmationTokenExist(confirmationToken);
+
+        if (tokenExist) {
+            generateConfirmationToken(subscriberId, preferenceId, email);
+        } else {
+            String addGeneratedTokenQuery = "INSERT INTO NEWSLETTER_CONFIRMATION_TOKEN (TOKEN, SUBSCRIBER_ID, PREFERENCE_ID, GENERATED_DATE, CONFIRMATION_STATUS, SUBSCRIBER_EMAIL) VALUES(?,?,?,LOCALTIMESTAMP,?,?)";
+            Connection connection = null;
+            PreparedStatement prepareStatement = null;
+
+            try {
+                connection = postgre.getConnection();
+                prepareStatement = connection
+                        .prepareStatement(addGeneratedTokenQuery);
+
+                prepareStatement.setString(1, confirmationToken);
+                prepareStatement.setDouble(2, subscriberId);
+                prepareStatement.setDouble(3, preferenceId);
+                prepareStatement.setString(4, STATUS_PENDING);
+                prepareStatement.setString(5, email);
+                int result = prepareStatement.executeUpdate();
+
+                if (result != 0) {
+                    logger.info("Token Generated and Added !");
+                } else {
+                    logger.info("Token Not Generated and Not Added !");
+            }
+            } catch (Exception e) {
+                logger.error("Exception in generateConfirmationToken", e);
+            } finally {
+                postgre.releaseConnection(connection, prepareStatement,
+                        null);
+            }
+        }
+
+        return confirmationToken;
+    }
+    /**
+     * @param confirmationToken
+     * @return
+     */
+    private boolean isConfirmationTokenExist(String confirmationToken) {
+        logger.info("DashboardSettingsExternal : isConfirmationTokenExist()"+confirmationToken);
+        boolean tokenExist = false;
+        String tokenCheckQuery = "SELECT TOKEN FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE TOKEN = ?";
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(tokenCheckQuery);
+            prepareStatement.setString(1, confirmationToken);
+
+            ResultSet resultSet = prepareStatement.executeQuery();
+
+            if (resultSet.next()) {
+                logger.info("Token already Exist !");
+                tokenExist = true;
+            } else {
+                logger.info("Token Doesn't Exist !");
+            }
+        } catch (Exception e) {
+            logger.error("Exception in isConfirmationTokenExist", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
+        return tokenExist;
+    }
+
 }
