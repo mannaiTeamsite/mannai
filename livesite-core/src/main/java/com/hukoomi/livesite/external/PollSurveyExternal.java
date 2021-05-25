@@ -43,6 +43,31 @@ public class PollSurveyExternal {
      */
     private static final String POLL_NODE = "/content/root/detail/polls";
     /**
+     * Constant for Poll Group Title. 
+     */
+    private static final String POLL_GROUP_TITLE = "/content/root/detail/group-title";  
+    /**
+     * Constant for Poll Group Description. 
+     */
+    private static final String POLL_GROUP_DESCRIPTION = "/content/root/detail/polls-group-description";
+    /**
+     * Constant for Poll Group Button Label. 
+     */
+    private static final String POLL_GROUP_BUTTON_LABEL = "/content/root/detail/group-button-label";
+    /**
+     * Constant for Survey Group Title. 
+     */
+    private static final String SURVEY_GROUP_TITLE = "/content/root/details/group-title";  
+    /**
+     * Constant for Survey Group Description. 
+     */
+    private static final String SURVEY_GROUP_DESCRIPTION = "/content/root/details/group-description";
+    /**
+     * Constant for Survey Group Button Label. 
+     */
+    private static final String SURVEY_GROUP_BUTTON_LABEL = "/content/root/details/group-button-label";
+   
+    /**
      * Constant for Poll node. 
      */
     private static final String POLL_GROUP_CONFIG_NODE = "/content/root/configuration/polls-field";
@@ -316,6 +341,9 @@ public class PollSurveyExternal {
                             pollsBO.getGroupCategory(), pollsBO.getLang(),
                             pollGroupDCRName);
                     logger.debug("Poll Group Doc :" + document.asXML());
+                    
+                    //Set Group details to response
+                    setPollGroupDetailsToResponse(pollSurveyElem, document);
         
                     String pollIds = fetchIds(document, POLL_NODE, context,
                             pollsBO.getCategory(), pollsBO.getLang());
@@ -382,6 +410,9 @@ public class PollSurveyExternal {
                             surveyBO.getGroupCategory(), surveyBO.getLang(),
                             surveyGroupDCRName);
                     logger.debug("Survey Group Doc :" + document.asXML());
+                    
+                    //Set Group details to response
+                    setSurveyGroupDetailsToResponse(pollSurveyElem, document);
         
                     String surveyIds = fetchIds(document, SURVEY_NODE, context,
                             BOTH_SURVEY_CATEGORY, surveyBO.getLang());
@@ -563,7 +594,58 @@ public class PollSurveyExternal {
             logger.error("Exception in fetchIds", e);
         }
         return contentIds.toString();
-
+    }
+    
+    
+    /**
+     * This method is used to set the poll group details from document.
+     * 
+     * @param pollSurveyElem Element object.
+     * @param doc Document object.
+     */
+    @SuppressWarnings("unchecked")
+    public void setPollGroupDetailsToResponse(Element pollSurveyElem, Document doc) {
+        logger.info("PollSurveyExternal : setPollGroupDetailsToResponse");
+        
+        try {
+            if(doc != null) {
+                String groupTitle = doc.selectSingleNode(POLL_GROUP_TITLE).getText();
+                String groupDesc = doc.selectSingleNode(POLL_GROUP_DESCRIPTION).getText();
+                String groupBtnLabel = doc.selectSingleNode(POLL_GROUP_BUTTON_LABEL).getText();
+                Element pollGroupDetailsElem = pollSurveyElem.addElement("PollGroupDetails");
+                pollGroupDetailsElem.addElement("group-title").setText(groupTitle);
+                pollGroupDetailsElem.addElement("group-desc").setText(groupDesc);
+                pollGroupDetailsElem.addElement("group-btn-label").setText(groupBtnLabel);
+            }
+        } catch (Exception e) {
+            logger.error("Exception in setPollGroupDetailsToResponse", e);
+        }
+    }
+    
+    
+    /**
+     * This method is used to set the survey group details from document.
+     * 
+     * @param pollSurveyElem Element object.
+     * @param doc Document object.
+     */
+    @SuppressWarnings("unchecked")
+    public void setSurveyGroupDetailsToResponse(Element pollSurveyElem, Document doc) {
+        logger.info("PollSurveyExternal : setSurveyGroupDetailsToResponse");
+        
+        try {
+            if(doc != null) {
+                String groupTitle = doc.selectSingleNode(SURVEY_GROUP_TITLE).getText();
+                String groupDesc = doc.selectSingleNode(SURVEY_GROUP_DESCRIPTION).getText();
+                String groupBtnLabel = doc.selectSingleNode(SURVEY_GROUP_BUTTON_LABEL).getText();
+                Element pollGroupDetailsElem = pollSurveyElem.addElement("SurveyGroupDetails");
+                pollGroupDetailsElem.addElement("group-title").setText(groupTitle);
+                pollGroupDetailsElem.addElement("group-desc").setText(groupDesc);
+                pollGroupDetailsElem.addElement("group-btn-label").setText(groupBtnLabel);
+            }
+        } catch (Exception e) {
+            logger.error("Exception in setSurveyGroupDetailsToResponse", e);
+        }
     }
     
     

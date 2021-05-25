@@ -1136,10 +1136,22 @@ public class SurveyExternal {
                 surveyBO.setGroup(getContentName(surveyGroup));
             }
             
-            String surveyGroupConfig = context.getParameterString(SURVEY_GROUP_CONFIG);
-            logger.debug(SURVEY_GROUP_CONFIG + " >>>" +surveyGroupConfig+ "<<<");
-            if (!ESAPIValidator.checkNull(surveyGroupConfig)) {
-                surveyBO.setSurveyGroupConfig(getContentName(surveyGroupConfig));
+            if(DASHBOARD.equalsIgnoreCase(pollAction)) {
+                String surveyGroupConfig = context.getParameterString(SURVEY_GROUP_CONFIG);
+                logger.debug(SURVEY_GROUP_CONFIG + " >>>" +surveyGroupConfig+ "<<<");
+                if (!ESAPIValidator.checkNull(surveyGroupConfig)) {
+                    surveyBO.setSurveyGroupConfig(getContentName(surveyGroupConfig));
+                }
+                
+                String surveyGroupConfigCategory = context.getParameterString(SURVEY_GROUP_CONFIG_CATEGORY);
+                logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
+                validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY, surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+                if(errorList.isEmpty()) {
+                    surveyBO.setSurveyGroupConfigCategory(validData);
+                }else {
+                    logger.debug(errorList.getError(SURVEY_GROUP_CONFIG_CATEGORY));
+                    return false;
+                }
             }
             
             String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
@@ -1149,16 +1161,6 @@ public class SurveyExternal {
                 surveyBO.setGroupCategory(validData);
             }else {
                 logger.debug(errorList.getError(SURVEY_GROUP_CATEGORY));
-                return false;
-            }
-            
-            String surveyGroupConfigCategory = context.getParameterString(SURVEY_GROUP_CONFIG_CATEGORY);
-            logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
-            validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY, surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
-            if(errorList.isEmpty()) {
-                surveyBO.setSurveyGroupConfigCategory(validData);
-            }else {
-                logger.debug(errorList.getError(SURVEY_GROUP_CONFIG_CATEGORY));
                 return false;
             }
             

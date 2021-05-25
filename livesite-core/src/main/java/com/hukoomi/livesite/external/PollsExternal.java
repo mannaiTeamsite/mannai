@@ -1185,10 +1185,22 @@ public class PollsExternal {
                 pollsBO.setGroup(getContentName(pollsGroup));
             }
             
-            String pollsGroupConfig = context.getParameterString(POLLS_GROUP_CONFIG);
-            logger.debug(POLLS_GROUP_CONFIG + " >>>" +pollsGroupConfig+ "<<<");
-            if (!ESAPIValidator.checkNull(pollsGroupConfig)) {
-                pollsBO.setPollGroupConfig(getContentName(pollsGroupConfig));
+            if(DASHBOARD.equalsIgnoreCase(pollAction)) {
+                String pollsGroupConfig = context.getParameterString(POLLS_GROUP_CONFIG);
+                logger.debug(POLLS_GROUP_CONFIG + " >>>" +pollsGroupConfig+ "<<<");
+                if (!ESAPIValidator.checkNull(pollsGroupConfig)) {
+                    pollsBO.setPollGroupConfig(getContentName(pollsGroupConfig));
+                }
+                
+                String pollGroupConfigCategory = context.getParameterString(POLL_GROUP_CONFIG_CATEGORY);
+                logger.debug(POLL_GROUP_CONFIG_CATEGORY + " >>>" +pollGroupConfigCategory+ "<<<");
+                validData  = ESAPI.validator().getValidInput(POLL_GROUP_CONFIG_CATEGORY, pollGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+                if(errorList.isEmpty()) {
+                    pollsBO.setPollGroupConfigCategory(validData);
+                }else {
+                    logger.debug(errorList.getError(POLL_GROUP_CONFIG_CATEGORY));
+                    return false;
+                }
             }
             
             String pollGroupCategory = context.getParameterString(POLL_GROUP_CATEGORY);
@@ -1198,16 +1210,6 @@ public class PollsExternal {
                 pollsBO.setGroupCategory(validData);
             }else {
                 logger.debug(errorList.getError(POLL_GROUP_CATEGORY));
-                return false;
-            }
-            
-            String pollGroupConfigCategory = context.getParameterString(POLL_GROUP_CONFIG_CATEGORY);
-            logger.debug(POLL_GROUP_CONFIG_CATEGORY + " >>>" +pollGroupConfigCategory+ "<<<");
-            validData  = ESAPI.validator().getValidInput(POLL_GROUP_CONFIG_CATEGORY, pollGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
-            if(errorList.isEmpty()) {
-                pollsBO.setPollGroupConfigCategory(validData);
-            }else {
-                logger.debug(errorList.getError(POLL_GROUP_CONFIG_CATEGORY));
                 return false;
             }
             
