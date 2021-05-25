@@ -102,16 +102,14 @@ public class NewsletterUnsubscription extends HttpServlet{
             
             Cookie confirmationCookie = new Cookie("unsubscriptionStatus",
                     "unSubscriptionSuccess:"+subscriberemail);
-            response.addCookie(confirmationCookie);
-            /* rd.forward(request, response); */
+            response.addCookie(confirmationCookie);            
             }
             
         }else{            
            
             Cookie confirmationCookie = new Cookie("unsubscriptionStatus",
                     "unsubscribe");
-            response.addCookie(confirmationCookie);
-            /* rd.forward(request, response); */
+            response.addCookie(confirmationCookie);            
             
         }
         
@@ -134,20 +132,20 @@ public class NewsletterUnsubscription extends HttpServlet{
         String status = "";
         int blacklistID = 1;
         
-        int phpID = getPhpID(email);
+        /* int phpID = getPhpID(email); */
         
         String updateMasterQuery =
                 "UPDATE NEWSLETTER_MASTER SET STATUS = ? , UNSUBSCRIBED_REASON = ? WHERE SUBSCRIBER_ID = ?";
         String updatePreferenceQuery =
                 "UPDATE NEWSLETTER_PREFERENCE SET STATUS = ? WHERE SUBSCRIBER_ID = ?";
         String updatePhpQuery =
-                "UPDATE PHPLIST_USER_USER SET BLACKLISTED = ? WHERE ID = ?";
-        status = unsubscribeMasterUser(updateMasterQuery, subscriberID,
-                 unsubReason, STATUS_UNSUBSCRIBED);
+                "UPDATE PHPLIST_USER_USER SET BLACKLISTED = ? WHERE EMAIL = ?";
+        status = unsubscribePostgreUser(updateMasterQuery, subscriberID,
+                 unsubReason, STATUS_UNSUBSCRIBED, NEWSLETTER_MASTER);
         logger.debug("unsubscribeDashboardUser() : update master status "+ status);
         if (status.equals(STATUS_SUCCESS)) {            
-            status = unsubscribeUserPreference(updatePreferenceQuery,
-                    subscriberID,STATUS_INACTIVE);
+            status = unsubscribePostgreUser(updatePreferenceQuery,
+                    subscriberID,unsubReason,STATUS_INACTIVE, NEWSLETTER_PREFERENCE);
         }
         logger.debug(
                 "unsubscribeDashboardUser() : update preference status "+ status);
@@ -155,7 +153,7 @@ public class NewsletterUnsubscription extends HttpServlet{
         if (status.equals(STATUS_SUCCESS)) {
 
             unsubStatus =
-                    unsubscribePhpUser(updatePhpQuery, phpID);
+                    unsubscribePhpUser(updatePhpQuery, email , unsubReason );
         }
 
         return unsubStatus;
@@ -170,8 +168,8 @@ public class NewsletterUnsubscription extends HttpServlet{
      * 
      *         This method is used to update unsubscribed user
      */
-    private String unsubscribeMasterUser(
-            String Query, double subscriberId, String unsubReason, String status) {
+    private String unsubscribePostgreUser(
+            String Query, double subscriberId, String unsubReason, String status , String tabName) {
         logger.info(
                 "NewsletterUnsubscription : unsubscribeMasterUser()");
 
@@ -184,10 +182,18 @@ public class NewsletterUnsubscription extends HttpServlet{
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(Query);
+            
+            if (tabName.equals(NEWSLETTER_PREFERENCE)) {
+
+                prepareStatement.setString(1, status);
+                prepareStatement.setDouble(2, subscriberId);   
+            } else {
+
+                prepareStatement.setString(1, status);
+                prepareStatement.setString(2, unsubReason);
+                prepareStatement.setDouble(3, subscriberId);
            
-            prepareStatement.setString(1, status);
-            prepareStatement.setString(2, unsubReason);
-            prepareStatement.setDouble(3, subscriberId);            
+            }     
 
             int count = prepareStatement.executeUpdate();
 
@@ -196,7 +202,7 @@ public class NewsletterUnsubscription extends HttpServlet{
             }
 
         } catch (Exception e) {
-            logger.error("Exception in unsubscribeMasterUser", e);
+            logger.error("Exception in unsubscribePostgreUser", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
@@ -204,75 +210,39 @@ public class NewsletterUnsubscription extends HttpServlet{
         return rsstatus;
     }
     
-    /**
-     * @author Pramesh
-     * @param Query
-     * @param userId
-     * @param tabName
-     * @return
-     * 
-     *         This method is used to update unsubscribed user
-     */
-    private String unsubscribeUserPreference(
-            String Query, double subscriberId, String status
-    ) {
-        logger.info(
-                "NewsletterUnsubscription : unsubscribeUserPreference()");
-
-        String rsstatus = "";
-
-        Connection connection = null;
-        PreparedStatement prepareStatement = null;
-        ResultSet rs = null;
-
-        try {
-            connection = postgre.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
-             
-            prepareStatement.setString(1, status);
-            prepareStatement.setDouble(2, subscriberId);            
-
-            int count = prepareStatement.executeUpdate();
-
-            if(count > 0) {
-                rsstatus = STATUS_SUCCESS;
-            }
-
-        } catch (Exception e) {
-            logger.error("Exception in unsubscribeUserPreference", e);
-        } finally {
-            postgre.releaseConnection(connection, prepareStatement, rs);
-        }
-
-        return rsstatus;
-    }
-
-    /**
+     /**
      * @author Pramesh
      * @param Query
      * @param userId
      * @return
      */
-    private String unsubscribePhpUser(String Query, int phpID) {
-        logger.info("NewsletterUnsubscription : unsubscribePhpUser() "+ phpID);
+    private String unsubscribePhpUser(String Query, String email, String unsubReason) {
+        logger.info("NewsletterUnsubscription : unsubscribePhpUser() ");
 
         String status = "";
         int blacklistID = 1;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
-
+        String updatePhpBlacklist =
+                "INSERT INTO PHPLIST_USER_BLACKLIST (EMAIL, ADDED) VALUES (?,LOCALTIMESTAMP)";
+        String updatePhpBlacklistData =
+                "INSERT INTO PHPLIST_USER_BLACKLIST_DATA (EMAIL, NAME, DATA) VALUES (?,?,?)";
         try {
             connection = mysql.getConnection();
             prepareStatement = connection.prepareStatement(Query);
 
             prepareStatement.setInt(1, blacklistID);
-            prepareStatement.setInt(2, phpID);
+            prepareStatement.setString(2, email);
 
             int count = prepareStatement.executeUpdate();
 
-            if(count > 0) {
-                status = STATUS_SUCCESS;
+            if(count > 0) {                
+                status = updatePhpBlacklist(updatePhpBlacklist,email,"");
+                if(status.equals(STATUS_SUCCESS)) {
+                    
+                    status = updatePhpBlacklist(updatePhpBlacklistData,email,unsubReason);
+                }
             }
 
         } catch (Exception e) {
@@ -290,36 +260,71 @@ public class NewsletterUnsubscription extends HttpServlet{
      * @param userId
      * @return
      */
-    private int getPhpID(String email) {
-        logger.info("NewsletterUnsubscription : getPhpID()");
+    private String updatePhpBlacklist(String Query, String email, String unsubReason) {
+        logger.info("NewsletterUnsubscription : updatePhpBlacklist() ");
 
-        String status = "";
-        int phpID = 0;
+        String status = "";        
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
-        String query = "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?";
 
         try {
             connection = mysql.getConnection();
-            prepareStatement = connection.prepareStatement(query);
+            prepareStatement = connection.prepareStatement(Query);
+            if(!"".equals(unsubReason)) {
+                prepareStatement.setString(1, email);
+                prepareStatement.setString(2, "reason");
+                prepareStatement.setString(3, unsubReason);
+                
+            }else {                
+                prepareStatement.setString(1, email);
+            }
+            
 
-            prepareStatement.setString(1, email);
+            int count = prepareStatement.executeUpdate();
 
-            rs = prepareStatement.executeQuery();
-
-            while(rs.next()) {
-                phpID = rs.getInt(1);;
+            if(count > 0) {
+                status = STATUS_SUCCESS;
             }
 
         } catch (Exception e) {
-            logger.error("Exception in unsubscribePhpUser", e);
+            logger.error("Exception in updatePhpBlacklist", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
-        return phpID;
+        return status;
     }
+    
+    /**
+     * @author Pramesh
+     * @param Query
+     * @param userId
+     * @return
+     */
+    /*
+     * private int getPhpID(String email) {
+     * logger.info("NewsletterUnsubscription : getPhpID()");
+     * 
+     * String status = ""; int phpID = 0; Connection connection = null;
+     * PreparedStatement prepareStatement = null; ResultSet rs = null;
+     * String query = "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?";
+     * 
+     * try { connection = mysql.getConnection(); prepareStatement =
+     * connection.prepareStatement(query);
+     * 
+     * prepareStatement.setString(1, email);
+     * 
+     * rs = prepareStatement.executeQuery();
+     * 
+     * while(rs.next()) { phpID = rs.getInt(1);; }
+     * 
+     * } catch (Exception e) {
+     * logger.error("Exception in unsubscribePhpUser", e); } finally {
+     * postgre.releaseConnection(connection, prepareStatement, rs); }
+     * 
+     * return phpID; }
+     */
     
     /**
      * @author pramesh

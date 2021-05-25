@@ -77,16 +77,8 @@ public class DashboardSettingsExternal {
     /**
      * Constant for action update Language switch.
      */
-    public static final String ACTION_LANG_ONOFF = "langOnOff";
+    public static final String ACTION_LANG_ONOFF = "langOnOff";    
     
-    /**
-     * Constant for action update language english.
-     
-    public static final String ACTION_ENGLISH_ONOFF = "englishOnOff";*/
-    /**
-     * Constant for action update language arabic.
-     
-    public static final String ACTION_ARABIC_ONOFF = "arabicOnOff";*/
     /**
      * Constant for language arabic.
      */
@@ -147,6 +139,10 @@ public class DashboardSettingsExternal {
      */
     public static final String STATUS_SUCCESS = "success";
     /**
+     * Constant for status unsubscribed.
+     */
+    public static final String STATUS_UNSUBSCRIBED = "Unsubscribed";
+    /**
      * Constant for status failed.
      */
     public static final String STATUS_FAILED = "failed";
@@ -195,6 +191,7 @@ public class DashboardSettingsExternal {
      */
     public static final String NEWSLETTER_PREFERENCE =
             "newsletter_preference";
+   
 
      NewsletterPhpExternal phpExternal = null; 
 
@@ -220,7 +217,7 @@ public class DashboardSettingsExternal {
         String language = context.getParameterString(SWITCH_LANGUAGE);
         String email = context.getParameterString(ELEMENT_EMAIL);
         String unsubreason = context.getParameterString("unsubscribe_reason");
-        
+        String subStatus = "";
         phpExternal = new NewsletterPhpExternal();
 
         HttpServletRequest request = context.getRequest();
@@ -235,13 +232,41 @@ public class DashboardSettingsExternal {
             logger.info("Unsubscribe Non Logged");
             
             subscriberId = getSubscriberID(email,USING_EMAIL);
-            String confirmationToken =
-                    generateConfirmationToken(
-                            subscriberId, preferenceId, email);
-            phpExternal.sendConfirmationMail(email, "en",
-                    confirmationToken,
-                    UNSUBSCRIPTION_CONFIRMATION_EMAIL, unsubreason, context);
-
+            boolean bool = phpExternal.isEmailAlreadyExist(email);
+            if(bool) {
+                
+                subStatus = getSubscriptionStatus(email);
+                if(subStatus.equals("Subscribed")) {
+                    
+                    String confirmationToken =
+                            generateConfirmationToken(
+                                    subscriberId, preferenceId, email);
+                    phpExternal.sendConfirmationMail(email, "en",
+                            confirmationToken,
+                            UNSUBSCRIPTION_CONFIRMATION_EMAIL, unsubreason, context);
+                    createTopicsResponseDoc(responseElem, null, null,
+                            "",
+                            STATUS_SUCCESS, "");
+                    
+                }else if (subStatus.equals("Pending")) {
+                    
+                    createTopicsResponseDoc(responseElem, null, null,
+                            "",
+                            STATUS_PENDING, "");
+                }else if(subStatus.equals("Unsubscribed")) {
+                    createTopicsResponseDoc(responseElem, null, null,
+                            "",
+                            STATUS_UNSUBSCRIBED, "");
+                    
+                }
+                
+            }else {
+                
+                createTopicsResponseDoc(responseElem, null, null,
+                        "",
+                        STATUS_NOT_SUBSCRIBED, "");
+            }
+            
         }
         if (request.getSession().getAttribute("status") != null && "valid"
                 .equals(request.getSession().getAttribute("status"))) {            
@@ -275,17 +300,7 @@ public class DashboardSettingsExternal {
                         logger.info("Switch Language Action");                      
                         switchDashboardLanguage(settingsBO.getUserId(),langSwitch,language);
                 }
-                /*
-                 * else if (ACTION_ENGLISH_ONOFF
-                 * .equalsIgnoreCase(settingsBO.getAction())) {
-                 * logger.info("English Language Action");
-                 * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
-                 * LANGUAGE_ENGLISH); } else if (ACTION_ARABIC_ONOFF
-                 * .equalsIgnoreCase(settingsBO.getAction())) {
-                 * logger.info("Arabic Language Action");
-                 * switchDashboardLanguage(settingsBO.getUserId(),langSwitch,
-                 * LANGUAGE_ARABIC); }
-                 */
+                
             }else {
                 logger.info("Invalid input parameter");
                 createResponseDoc(responseElem, settingsBO.getAction(), settingsBO.getAction(), settingsBO.getPersona(), STATUS_FAILED, "Invalid input parameter");
@@ -907,7 +922,8 @@ public class DashboardSettingsExternal {
         
         Map<String, String> subscriptionDetails = new HashMap<String, String>();
         
-        String subscriptionDetailsQuery = "SELECT SUBSCRIBER_ID, SUBSCRIBER_EMAIL, STATUS, SUBSCRIBED_DATE, UID FROM NEWSLETTER_MASTER WHERE UID = ?"; 
+        String subscriptionDetailsQuery = 
+                "SELECT SUBSCRIBER_ID, SUBSCRIBER_EMAIL, STATUS, SUBSCRIBED_DATE, UID FROM NEWSLETTER_MASTER WHERE UID = ?"; 
         logger.info(
                 "subscriptionDetailsQuery : " + subscriptionDetailsQuery);
         
