@@ -471,7 +471,7 @@ public class NewsletterPhpExternal {
      * @param email
      * @return
      */
-    private String getSubscriptionStatus(String email) {
+    public String getSubscriptionStatus(String email) {
         logger.info("NewsletterPhpExternal : getSubscriptionStatus()");
         String subscriptionStatus = null;
         String getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
@@ -690,7 +690,7 @@ public class NewsletterPhpExternal {
     /**
      * @param email
      */
-    private boolean isEmailAlreadyExist(String email) {
+    public boolean isEmailAlreadyExist(String email) {
         logger.info("NewsletterPhpExternal : isEmailAlreadyExist()");
         boolean emailsExistStatus = false;
         String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
