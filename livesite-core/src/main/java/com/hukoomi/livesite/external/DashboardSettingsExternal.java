@@ -232,10 +232,10 @@ public class DashboardSettingsExternal {
             logger.info("Unsubscribe Non Logged");
             
             subscriberId = getSubscriberID(email,USING_EMAIL);
-            boolean bool = phpExternal.isEmailAlreadyExist(email);
+            boolean bool = isEmailAlreadyExist(email);
             if(bool) {
                 
-                subStatus = getSubscriptionStatus(email);
+                subStatus = getSubscriptionStatus(email,ACTION_UNSUBSCRIBE);
                 if(subStatus.equals("Subscribed")) {
                     
                     String confirmationToken =
@@ -889,7 +889,7 @@ public class DashboardSettingsExternal {
         // String subscriptionStatus = getSubscriptionStatus(
         // settingsBO.getUserId());
         String subscriptionStatus = getSubscriptionStatus(
-                settingsBO.getUserId());
+                settingsBO.getUserId(), TOPICS);
         String topics = "";
 
         if ("Subscribed".equals(subscriptionStatus)) {
@@ -1038,10 +1038,16 @@ public class DashboardSettingsExternal {
      * 
      * @return
      */
-    private String getSubscriptionStatus(String userId) {
+    private String getSubscriptionStatus(String userId, String action) {
         logger.info("DashboardSettingsExternal : getSubscriptionStatus()");
         String subscriptionStatus = null;
-        String getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE UID = ?";
+        String getSubscriptionStatusQuery = "";
+        if(action.equals(TOPICS)) {
+            getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE UID = ?";
+        }else {
+            getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+        }
+        
         Connection connection = null;
         PreparedStatement prepareStatement = null;
 
@@ -1052,8 +1058,10 @@ public class DashboardSettingsExternal {
             prepareStatement.setString(1, userId);
 
             ResultSet resultSet = prepareStatement.executeQuery();
-            resultSet.next();
-            subscriptionStatus = resultSet.getString(1);
+            while(resultSet.next())
+            {
+                subscriptionStatus = resultSet.getString(1);
+            }            
 
         } catch (Exception e) {
             logger.error("Exception in getSubscriptionStatus", e);
@@ -1397,6 +1405,39 @@ public class DashboardSettingsExternal {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
         return tokenExist;
+    }
+    
+    /**
+     * @param email
+     */
+    public boolean isEmailAlreadyExist(String email) {
+        logger.info("NewsletterPhpExternal : isEmailAlreadyExist()");
+        boolean emailsExistStatus = false;
+        String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(emailCheckQuery);
+            prepareStatement.setString(1, email);
+
+            ResultSet resultSet = prepareStatement.executeQuery();
+
+            if (resultSet.next()) {
+                logger.info("Email Already Exist !");
+                emailsExistStatus = true;
+            } else {
+                logger.info("Email Doesn't Exist !");
+                emailsExistStatus = false;
+            }
+        } catch (Exception e) {
+            logger.error("Exception in isEmailAlreadyExist", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
+        return emailsExistStatus;
     }
 
 }
