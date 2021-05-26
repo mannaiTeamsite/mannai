@@ -1107,19 +1107,21 @@ public class SurveyExternal {
             
             if(persona == null || "".equals(persona)) {
                 Cookie[] cookies = request.getCookies();
-                for(int i = 0 ; i < cookies.length;  i++) {
-                    Cookie cookie = cookies[i];
-                    String name = cookie.getName();
-                    String personaValue = null;
-                    if(name != null && "persona".equalsIgnoreCase(name)) {
-                        personaValue = cookie.getValue();
-                        logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
-                        validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
-                        if(errorList.isEmpty()) {
-                            surveyBO.setPersona(validData);
-                        }else {
-                            logger.debug(errorList.getError(PERSONA));
-                            return false;
+                if(cookies != null) {
+                    for(int i = 0 ; i < cookies.length;  i++) {
+                        Cookie cookie = cookies[i];
+                        String name = cookie.getName();
+                        String personaValue = null;
+                        if(name != null && "persona".equalsIgnoreCase(name)) {
+                            personaValue = cookie.getValue();
+                            logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
+                            validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                            if(errorList.isEmpty()) {
+                                surveyBO.setPersona(validData);
+                            }else {
+                                logger.debug(errorList.getError(PERSONA));
+                                return false;
+                            }
                         }
                     }
                 }
