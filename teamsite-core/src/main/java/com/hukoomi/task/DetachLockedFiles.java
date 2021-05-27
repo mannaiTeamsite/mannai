@@ -41,8 +41,6 @@ public class DetachLockedFiles implements CSURLExternalTask {
     public void execute(CSClient client, CSExternalTask task, Hashtable params) throws CSException {
         logger.info("Initiate Detaching Locked Files from workflow");
         HashMap<String, String> statusMap = new HashMap<>();
-        statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-        statusMap.put(TRANSITION_COMMENT, "Successfully completed task: Detached Locked Files");
         try {
             CSAreaRelativePath[] files = task.getFiles();
             List<CSAreaRelativePath> filesToDetach = new ArrayList<>();
@@ -64,19 +62,14 @@ public class DetachLockedFiles implements CSURLExternalTask {
                 task.detachFiles(filesToDetach.toArray(detachFiles));
                 task.getWorkflow().setVariable("removedFiles", filesToDetach.toString());
             }
+            statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+            statusMap.put(TRANSITION_COMMENT, "Successfully completed task: Detached Locked Files");
             logger.info("Detaching Locked Files from workflow completed");
-            //task.chooseTransition(statusMap.get(TRANSITION),statusMap.get(TRANSITION_COMMENT));
-        } catch (CSAuthorizationException ex){
-            logger.error("Authorization Exception occurred while detaching the files from task", ex);
-        } catch (CSExpiredSessionException ex) {
-            logger.error("Session Expired occurred while detaching the files from task", ex);
-        } catch (CSRemoteException ex) {
-            logger.error("Client Services Remote Exception occurred while detaching the files from task", ex);
-        } catch (CSObjectNotFoundException ex) {
-            logger.error("Object Not found while detaching the files from task", ex);
+            task.chooseTransition(statusMap.get(TRANSITION),statusMap.get(TRANSITION_COMMENT));
         } catch (CSException ex) {
             logger.error("Common Services Exception occurred while detaching the files from task", ex);
+        } catch (Exception e){
+            logger.error("Exception in DetachLockedFiles : ", e);
         }
-        task.chooseTransition(statusMap.get(TRANSITION),statusMap.get(TRANSITION_COMMENT));
     }
 }
