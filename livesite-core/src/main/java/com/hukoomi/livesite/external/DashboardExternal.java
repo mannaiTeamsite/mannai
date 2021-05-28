@@ -1,6 +1,8 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -454,9 +456,23 @@ public class DashboardExternal {
 		LOGGER.info("---relayURL url---" + relayURL);
 		String url = properties.getProperty("login") + "?relayURL=" + relayURL;
 		LOGGER.info("---Login url---" + url);
-
-		HttpServletResponse response = context.getResponse();
-		response.sendRedirect(url);
+		String domain = "";
+		URI uri;
+		try {
+			uri = new URI(relayURL);
+			domain = uri.getHost();
+			LOGGER.info("Domain:" + domain);
+		} catch (URISyntaxException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String livesiteDomain = properties.getProperty("domain");
+		LOGGER.info("livesiteDomain:" + livesiteDomain);
+		if(domain == livesiteDomain ) {
+			HttpServletResponse response = context.getResponse();
+			response.sendRedirect(url);
+		}
+		
 		Document doc = DocumentHelper.createDocument();
 
 		LOGGER.info("--------------nonLoggedIn Ended------------");
