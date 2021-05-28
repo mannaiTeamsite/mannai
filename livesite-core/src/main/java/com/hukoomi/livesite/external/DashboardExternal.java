@@ -444,7 +444,7 @@ public class DashboardExternal {
 		return check;
 	}
 
-	public Document redirectToLoginPage(RequestContext context) throws IOException {
+	public void redirectToLoginPage(RequestContext context) throws IOException {
 		LOGGER.info("--------------nonLoggedIn Started------------");
 
 //			final String RELAY_URL = "relayURL";
@@ -468,15 +468,15 @@ public class DashboardExternal {
 		}
 		String livesiteDomain = properties.getProperty("domain");
 		LOGGER.info("livesiteDomain:" + livesiteDomain);
-		if(domain == livesiteDomain ) {
+		if(domain.equalsIgnoreCase(livesiteDomain)) {
 			HttpServletResponse response = context.getResponse();
 			response.sendRedirect(url);
 		}
 		
-		Document doc = DocumentHelper.createDocument();
+		
 
 		LOGGER.info("--------------nonLoggedIn Ended------------");
-		return doc;
+		
 
 	}
 }
