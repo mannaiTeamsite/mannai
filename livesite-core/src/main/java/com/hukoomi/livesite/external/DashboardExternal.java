@@ -83,9 +83,9 @@ public class DashboardExternal {
 			session.setAttribute("exp", getValue(jwtParsedToken, "exp"));
 			session.setAttribute("usertypeNo", getValue(jwtParsedToken, "type"));
 			session.setAttribute("userId", getValue(jwtParsedToken, "uid"));
-			
+
 			LOGGER.info("UserId : " + getValue(jwtParsedToken, "uid"));
-			
+
 			String userTypeStr = getValue(jwtParsedToken, "type");
 			LOGGER.info("userType JWT : " + userTypeStr);
 			if (userTypeStr != null && !"".equals(userTypeStr)) {
@@ -194,7 +194,7 @@ public class DashboardExternal {
 			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userdata.addElement("lnEn");
 			lnEnElement.setText((String) session.getAttribute("lnEn"));
-			
+
 			Element fnArElement = userdata.addElement("fnAr");
 			fnArElement.setText((String) session.getAttribute("fnAr"));
 			Element lnArElement = userdata.addElement("lnAr");
@@ -225,7 +225,7 @@ public class DashboardExternal {
 			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userData.addElement("lnEn");
 			lnEnElement.setText((String) session.getAttribute("lnEn"));
-			
+
 			Element fnArElement = userData.addElement("fnAr");
 			fnArElement.setText((String) session.getAttribute("fnAr"));
 			Element lnArElement = userData.addElement("lnAr");
@@ -233,17 +233,16 @@ public class DashboardExternal {
 			Element userTypeNoElement = userData.addElement("userTypeNoElement");
 			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
 
+		} else {
+			try {
+				redirectToLoginPage(context);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+			LOGGER.info("session invalid");
 		}
-		else {
-			//
-//						try {
-//							redirectToLoginPage(context);
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							LOGGER.info("Error"+e);
-//						}
-						LOGGER.info("session invalid");
-					}
 		LOGGER.info("Bookmark doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
@@ -253,7 +252,6 @@ public class DashboardExternal {
 	public Document getDashboardbookmark(RequestContext context) {
 		LOGGER.info("getDashboardbookmark()====> Starts");
 
-		
 		pagetitle = context.getParameterString("page_title");
 
 		pageurl = context.getParameterString("page_url");
@@ -267,9 +265,11 @@ public class DashboardExternal {
 
 		postgre = new Postgre(context);
 		HttpSession session = context.getRequest().getSession();
-			String status=(String) session.getAttribute("status");
-			LOGGER.info("Dashboard status="+session.getAttribute("status"));
+		// String status = "valid";
+		String status = (String) session.getAttribute("status");
+		LOGGER.info("Dashboard status=" + session.getAttribute("status"));
 		if (status != null && status.equals("valid")) {
+			// userID = "69119";
 			userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
@@ -277,9 +277,9 @@ public class DashboardExternal {
 			table = context.getParameterString("bookmark").trim();
 			boolean isExist = false;
 			LOGGER.info("locale:" + locale);
-			
+
 			isExist = isBookmarkPresent();
-			
+
 			LOGGER.info("table:" + table);
 
 			if (!"".equals(table) && !"".equals(userID)) {
@@ -299,13 +299,13 @@ public class DashboardExternal {
 			}
 			LOGGER.info("session valid");
 		} else {
-//
-//			try {
-//				redirectToLoginPage(context);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				LOGGER.info("Error"+e);
-//			}
+
+			try {
+				redirectToLoginPage(context);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				LOGGER.info("Error" + e);
+			}
 			LOGGER.info("session invalid");
 		}
 		LOGGER.info("getDashboardbookmark()====> ends");
@@ -355,6 +355,7 @@ public class DashboardExternal {
 						ele5.setText(ctype);
 						Element ele6 = ele.addElement("category");
 						ele6.setText(categoryType);
+
 						LOGGER.info("Result:" + pageTitle + ":" + pageURL);
 					}
 					i++;
@@ -381,79 +382,85 @@ public class DashboardExternal {
 				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
 				+ "' and content_type='" + contenttype + "'";
 		LOGGER.info("updateQuery:" + updateQuery);
+
 		int result = 0;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(updateQuery);
 				result = prepareStatement.executeUpdate();
 
+				LOGGER.info("caling get bookmark");
 				Element bmm = bookmarkResultEle.addElement("bmm");
 				getBookmark(bmm, "bmm");
+				LOGGER.info("bmm" + bmm.asXML());
 				Element bmd = bookmarkResultEle.addElement("bmd");
 				getBookmark(bmd, "bmd");
+				LOGGER.info("bmd" + bmd.asXML());
 				Element bms = bookmarkResultEle.addElement("bms");
 				getBookmark(bms, "bms");
+				LOGGER.info("bms" + bms.asXML());
+			}
+		} catch (SQLException ex) {
+			LOGGER.error("Exception on update Query:", ex);
+		} finally {
+			postgre.releaseConnection(connection, prepareStatement, null);
+		}
 
+		LOGGER.info("removeBookmark()====> ends");
+
+	}
+
+	public boolean isBookmarkPresent() {
+		boolean check = false;
+		LOGGER.info("isBookmarkPresent()====> Starts");
+		Connection connection = getConnection();
+		PreparedStatement prepareStatement = null;
+		String searchQuery = "select active from" + " " + table + " " + "where" + " " + "locale='" + locale
+				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
+				+ "' and content_type='" + contenttype + "'";
+		ResultSet resultSet = null;
+		try {
+			if (connection != null) {
+				prepareStatement = connection.prepareStatement(searchQuery);
+				resultSet = prepareStatement.executeQuery();
+
+				while (resultSet.next()) {
+					isBookmarked = resultSet.getString(1);
+
+					if (!"".equals(isBookmarked)) {
+						check = true;
+						LOGGER.info("check:" + check);
+					}
+				}
 			}
 		} catch (SQLException ex) {
 			LOGGER.error("Exception on Select Query:", ex);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, null);
+			postgre.releaseConnection(connection, prepareStatement, resultSet);
 		}
-		LOGGER.info("removeBookmark()====> ends");
-
+		LOGGER.info("getBookmark()====> ends");
+		return check;
 	}
-	public boolean isBookmarkPresent() {
-        boolean check=false;
-        LOGGER.info("isBookmarkPresent()====> Starts");
-        Connection connection = getConnection();
-        PreparedStatement prepareStatement = null;
-        String searchQuery = "select active from" + " " +
-                table + " " + "where" + " " + "locale='"+ locale +"' and user_id='"
-                + userID+"' and page_title='"+pagetitle+ "' and page_url='"+pageurl+"' and content_type='"+contenttype+"'";
-        ResultSet resultSet = null;
-        try {
-            if(connection != null){
-                prepareStatement = connection.prepareStatement(searchQuery);
-                resultSet = prepareStatement.executeQuery();
 
-                while(resultSet.next()){
-                    isBookmarked = resultSet.getString(1);
-
-                    if(!"".equals(isBookmarked))
-                    {
-                        check=true;
-                        LOGGER.info("check:" + check);
-                    }
-                }
-            }
-        } catch (SQLException ex) {
-        	LOGGER.error("Exception on Select Query:",ex);
-        }finally {
-            postgre.releaseConnection(connection, prepareStatement, resultSet);
-        }
-        LOGGER.info("getBookmark()====> ends");
-        return check;
-    }
-	
-	public void redirectToLoginPage(RequestContext context) throws IOException {
+	public Document redirectToLoginPage(RequestContext context) throws IOException {
 		LOGGER.info("--------------nonLoggedIn Started------------");
-		
-		
+
 //			final String RELAY_URL = "relayURL";
-			PropertiesFileReader prop = null;
-			prop = new PropertiesFileReader(context, "dashboard.properties");
-			properties = prop.getPropertiesFile();
-			RequestHeaderUtils rhu = new RequestHeaderUtils(context);
-			String relayURL = rhu.getRequestURL();
-			LOGGER.info("---relayURL url---" + relayURL);
-			String url = properties.getProperty("login") + "?relayURL=" + relayURL;
-			LOGGER.info("---Login url---" + url);
-			HttpServletResponse response = context.getResponse();
-			response.sendRedirect(url);
-	
-		
+		PropertiesFileReader prop = null;
+		prop = new PropertiesFileReader(context, "dashboard.properties");
+		properties = prop.getPropertiesFile();
+		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
+		String relayURL = rhu.getRequestURL();
+		LOGGER.info("---relayURL url---" + relayURL);
+		String url = properties.getProperty("login") + "?relayURL=" + relayURL;
+		LOGGER.info("---Login url---" + url);
+
+		HttpServletResponse response = context.getResponse();
+		response.sendRedirect(url);
+		Document doc = DocumentHelper.createDocument();
+
 		LOGGER.info("--------------nonLoggedIn Ended------------");
-		
+		return doc;
+
 	}
 }
