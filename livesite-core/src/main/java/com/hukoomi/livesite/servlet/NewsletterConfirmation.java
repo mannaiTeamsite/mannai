@@ -13,7 +13,9 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import com.hukoomi.bo.PhpListUserBO;
 import com.hukoomi.utils.MySqlForServlet;
 import com.hukoomi.utils.PostgreForServlet;
 
@@ -55,6 +58,10 @@ public class NewsletterConfirmation extends HttpServlet {
     
     /** external parameter. */
     private static final String STATUS_SUCCESS = "Success";
+    
+    /** external parameter. */
+    private static final String STATUS_FAILED = "Failed";
+
 
     /** Postgre Object variable. */
     PostgreForServlet postgre = null;
@@ -122,7 +129,7 @@ public class NewsletterConfirmation extends HttpServlet {
         logger.info("NewsletterConfirmation : doGet()");
         postgre = new PostgreForServlet();
         mysql = new MySqlForServlet();
-
+        PhpListUserBO pluBO = null;
         PrintWriter writer = response.getWriter();
         String token = request.getParameter("token");
         String pageLang = request.getParameter("lang");
@@ -145,7 +152,8 @@ public class NewsletterConfirmation extends HttpServlet {
             String status="";
             String subStatus="";
             String uptpostgreData = "";
-            int userId;
+            String syncStatus = "";
+            int userId = 0;
             status = phpSubscriberExists(subscriberemail,listid);
             try {
                 if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
@@ -162,7 +170,48 @@ public class NewsletterConfirmation extends HttpServlet {
                     userId = getSubscriberID(subscriberemail);
                     updateSubscriberPersona(userId,listid);
                     uptpostgreData=STATUS_SUCCESS;
-                }                
+                } 
+                if (uptpostgreData.equals(STATUS_SUCCESS) && status.equals(STATUS_NOTFOUND)) {
+                    String getPhpUser = "SELECT ID, EMAIL, CONFIRMED, BLACKLISTED, OPTEDIN, BOUNCECOUNT, "
+                            + "ENTERED, MODIFIED, UNIQID, UUID, HTMLEMAIL, SUBSCRIBEPAGE, RSSFREQUENCY, PASSWORD, "
+                            + "PASSWORDCHANGED, DISABLED, EXTRADATA, FOREIGNKEY FROM PHPLIST_USER_USER WHERE ID = ? ";
+                    
+                    String updateSyncUserQuery = "INSERT INTO PHPLIST_USER_USER (ID, EMAIL, CONFIRMED, BLACKLISTED,"
+                            + " OPTEDIN, BOUNCECOUNT, ENTERED, MODIFIED, UNIQID, UUID, HTMLEMAIL, SUBSCRIBEPAGE, RSSFREQUENCY, "
+                            + "PASSWORD, PASSWORDCHANGED, DISABLED, EXTRADATA, FOREIGNKEY)"
+                            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    
+                    String getUserList ="SELECT USERID, LISTID, ENTERED, MODIFIED FROM PHPLIST_LISTUSER WHERE ENTERED = "
+                            + "(SELECT MAX(ENTERED) FROM PHPLIST_LISTUSER WHERE USERID = ? AND LISTID = ?)";
+                    
+                    String updateSyncListQuery="INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
+                    
+                    pluBO = getsyncphpData(getPhpUser,userId,listid,"USERDATA");
+                    syncStatus = updatesyncphpData(updateSyncUserQuery,pluBO,"USERDATA");
+                    logger.debug("NewsletterConfirmation : syncstatus user table"+syncStatus);
+                    /* int userid = getphpUserID(subscriberemail); */
+                    logger.debug("NewsletterConfirmation : getphpUserID "+userId+" listid "+listid);
+                    if(syncStatus.equals(STATUS_SUCCESS)) {                        
+                        pluBO = getsyncphpData(getUserList,userId,listid,"LISTDATA");
+                        syncStatus = updatesyncphpData(updateSyncListQuery,pluBO,"LISTDATA");
+                    }
+                    
+                }
+                logger.debug("NewsletterConfirmation : syncstatus >>>>>"+syncStatus);
+                if (uptpostgreData.equals(STATUS_SUCCESS) && status.equals(STATUS_PERSONA_NOTFOUND)) {
+                    
+                    String getUserList ="SELECT USERID, LISTID, ENTERED, MODIFIED FROM PHPLIST_LISTUSER WHERE ENTERED = "
+                            + "(SELECT MAX(ENTERED) FROM PHPLIST_LISTUSER WHERE USERID = ? AND LISTID = ?)";
+                    
+                    String updateSyncListQuery="INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
+                    
+                    /* int userid = getphpUserID(subscriberemail); */
+                    pluBO = getsyncphpData(getUserList,userId,listid, "LISTDATA");
+                    syncStatus = updatesyncphpData(updateSyncListQuery,pluBO,"LISTDATA");
+                    logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>"+syncStatus);
+                }
+                    
+            
                
             } catch (NoSuchAlgorithmException e) {            
                 logger.error("NewsletterConfirmation : doGet() >>>>"+e);
@@ -507,6 +556,42 @@ public class NewsletterConfirmation extends HttpServlet {
         return status;
     }
     
+    /**
+     * @author pramesh
+     * @param email
+     * @param listid
+     * @return
+     * 
+     * This method get the checks if Subsscriber status and updates
+     */
+    /*
+     * private int getphpUserID(String email) {
+     * logger.info("NewsletterConfirmation : getphpUserID"); boolean
+     * subscriberPreferenceDataInsert = false; String
+     * checkSubscriberEmailQuery =
+     * "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ? "; Connection
+     * connection = null; PreparedStatement prepareStatement = null; int
+     * phpUserID =0; ResultSet rs = null; String status=""; try {
+     * connection = mysql.getConnection(); prepareStatement = connection
+     * .prepareStatement(checkSubscriberEmailQuery);
+     * prepareStatement.setString(1, email);
+     * 
+     * rs = prepareStatement.executeQuery();
+     * 
+     * if (rs.next()) { logger.info("Subscriber Already Exist !");
+     * phpUserID = rs.getInt(PHP_USER_ID);
+     * 
+     * } else { logger.info("Subscriber Doesn't Exist !");
+     * 
+     * }
+     * 
+     * 
+     * } catch (Exception e) {
+     * logger.error("Exception in phpSubscriberExists", e); } finally {
+     * mysql.releaseConnection(connection, prepareStatement, null); }
+     * 
+     * return phpUserID; }
+     */
     /**
      * @author pramesh
      * @param subscriberId
@@ -936,5 +1021,131 @@ public class NewsletterConfirmation extends HttpServlet {
         doGet(request, response);
 
     }
+    
+    public PhpListUserBO getsyncphpData(String query, int userid, int listid, String tabName) {
+        
+        logger.info("NewsletterConfirmation : getsyncphpData");      
+        
+        PreparedStatement prepareStatement = null;      
+      
+        Connection connection = null;
+        ResultSet rs = null;       
+        PhpListUserBO pluBO = null;
+        try {
+            connection = mysql.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(query);
+            if(tabName.equals("USERDATA")) {
+                prepareStatement.setInt(1, userid);
+            }else if(tabName.equals("LISTDATA")){
+                prepareStatement.setInt(1, userid);
+                prepareStatement.setInt(2, listid);
+            }
+            
+            
+            logger.debug("query : " + query);
+            rs = prepareStatement.executeQuery();
+            while(rs.next()) { 
+                
+                if(tabName.equals("USERDATA")) {
+                    pluBO = new PhpListUserBO();
+                    pluBO.setId(rs.getInt("ID"));
+                    pluBO.setEmail(rs.getString("EMAIL"));
+                    pluBO.setConfirmed(rs.getInt("CONFIRMED"));
+                    pluBO.setBlacklisted(rs.getInt("BLACKLISTED"));
+                    pluBO.setOptedin(rs.getInt("OPTEDIN"));
+                    pluBO.setBouncecount(rs.getInt("BOUNCECOUNT"));
+                    pluBO.setEntered(rs.getDate("ENTERED"));
+                    pluBO.setModified(rs.getDate("MODIFIED"));
+                    pluBO.setUniqid(rs.getString("UNIQID"));
+                    pluBO.setUuid(rs.getString("UUID"));
+                    pluBO.setHtmlemail(rs.getInt("HTMLEMAIL"));
+                    pluBO.setSubscribepage(rs.getInt("SUBSCRIBEPAGE"));
+                    pluBO.setRssfrequency(rs.getString("RSSFREQUENCY"));
+                    pluBO.setPassword(rs.getString("PASSWORD"));
+                    pluBO.setPasswordchanged(rs.getDate("PASSWORDCHANGED"));
+                    pluBO.setDisabled(rs.getInt("DISABLED"));
+                    pluBO.setExtradata(rs.getString("EXTRADATA"));
+                    pluBO.setForeignkey(rs.getString("FOREIGNKEY"));
+                    
+                }else {
+                    
+                    pluBO = new PhpListUserBO();
+                    pluBO.setUserid(rs.getInt("USERID"));
+                    pluBO.setListid(rs.getInt("LISTID"));
+                    pluBO.setEntered(rs.getDate("ENTERED"));
+                    pluBO.setModified(rs.getDate("MODIFIED"));
+                }
+                
+            }
+           
+        } catch (Exception e) {
+            logger.error("Exception in getsyncphpData", e);
+        } finally {
+            mysql.releaseConnection(connection, prepareStatement, null);
+        }   
+     
+        return pluBO;
+        
+    }
+    
+    private String updatesyncphpData(String query, PhpListUserBO pluBO, String tabName) {
+        logger.info("NewsletterConfirmation : updatesyncphpData");  
+        logger.info("PhpListUserBO "+pluBO.getId()+" "+pluBO.getEmail()+ " "+pluBO.getEntered()); 
+       
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        String syncStatus = "";
+        ResultSet rs = null;
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(query);
+            if(tabName.equals("USERDATA")) {
+                
+                prepareStatement.setInt(1, pluBO.getId() );
+                prepareStatement.setString(2, pluBO.getEmail());
+                prepareStatement.setInt(3,pluBO.getConfirmed());
+                prepareStatement.setInt(4, pluBO.getBlacklisted());
+                prepareStatement.setInt(5, pluBO.getOptedin());
+                prepareStatement.setInt(6, pluBO.getBouncecount());
+                prepareStatement.setDate(7, pluBO.getEntered());
+                prepareStatement.setDate(8, pluBO.getModified());
+                prepareStatement.setString(9, pluBO.getUniqid());
+                prepareStatement.setString(10, pluBO.getUuid());
+                prepareStatement.setInt(11, pluBO.getHtmlemail());
+                prepareStatement.setInt(12, pluBO.getSubscribepage());
+                prepareStatement.setString(13, pluBO.getRssfrequency());
+                prepareStatement.setString(14, pluBO.getPassword());
+                prepareStatement.setDate(15, pluBO.getPasswordchanged());
+                prepareStatement.setInt(16, pluBO.getDisabled());
+                prepareStatement.setString(17, pluBO.getExtradata());
+                prepareStatement.setString(18, pluBO.getForeignkey());
+                
+            }else if(tabName.equals("LISTDATA")){
+                
+                prepareStatement.setInt(1, pluBO.getUserid() );
+                prepareStatement.setInt(2, pluBO.getListid() );
+                prepareStatement.setDate(3, pluBO.getEntered());
+                prepareStatement.setDate(4, pluBO.getModified());
+            }
+            
+            int rowCount = prepareStatement.executeUpdate();   
+            if(rowCount > 0) {
+                syncStatus = STATUS_SUCCESS;
+            }else {
+                syncStatus = STATUS_FAILED;
+            }
+        } catch (Exception e) {
+            logger.error("Exception in getSubscriberPersona", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }        
+      
+        
+        return syncStatus;
+    }
+    
+    
 
 }

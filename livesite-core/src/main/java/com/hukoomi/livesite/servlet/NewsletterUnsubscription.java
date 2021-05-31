@@ -129,6 +129,7 @@ public class NewsletterUnsubscription extends HttpServlet{
                 "NewsletterUnsubscription : unsubscribeDashboardUser()");
 
         String unsubStatus = "";
+        String syncStatus = "";
         String status = "";
         int blacklistID = 1;
         
@@ -154,6 +155,28 @@ public class NewsletterUnsubscription extends HttpServlet{
 
             unsubStatus =
                     unsubscribePhpUser(updatePhpQuery, email , unsubReason );
+        }
+        
+        if(unsubStatus.equals(STATUS_SUCCESS)) {
+            
+            String syncPhpQuery =
+                    "UPDATE PHPLIST_USER_USER SET BLACKLISTED = ? WHERE EMAIL = ?";
+            String syncPhpBlacklist =
+                    "INSERT INTO PHPLIST_USER_BLACKLIST (EMAIL, ADDED) VALUES (?,LOCALTIMESTAMP)";
+            String syncPhpBlacklistData =
+                    "INSERT INTO PHPLIST_USER_BLACKLIST_DATA (EMAIL, NAME, DATA) VALUES (?,?,?)";
+            
+            syncStatus = syncUnsubscribeData(syncPhpQuery, email, unsubReason,"USERDATA");
+            
+            if(syncStatus.equals(STATUS_SUCCESS)) {
+                
+                syncStatus = syncUnsubscribeData(syncPhpBlacklist, email, unsubReason,"USERBLACKLIST");
+            }
+            if(syncStatus.equals(STATUS_SUCCESS)) {
+                
+                syncStatus = syncUnsubscribeData(syncPhpBlacklistData, email, unsubReason,"BLACKLISTDATA");
+            }
+            
         }
 
         return unsubStatus;
@@ -289,6 +312,52 @@ public class NewsletterUnsubscription extends HttpServlet{
 
         } catch (Exception e) {
             logger.error("Exception in updatePhpBlacklist", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+
+        return status;
+    }
+    
+    private String syncUnsubscribeData(String Query, String email, String unsubReason, String param) {
+        logger.info("NewsletterUnsubscription : syncUnsubscribeData() ");
+
+        String status = "";
+        int blacklistID = 1;
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+       
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection.prepareStatement(Query);
+            
+            if(param.equals("USERDATA")) {
+                
+                prepareStatement.setInt(1, blacklistID);
+                prepareStatement.setString(2, email);
+            }
+            else if (param.equals("USERBLACKLIST")) {
+                
+                prepareStatement.setString(1, email);
+                
+            }else if (param.equals("BLACKLISTDATA")) {
+                
+                prepareStatement.setString(1, email);
+                prepareStatement.setString(2, "reason");
+                prepareStatement.setString(3, unsubReason);
+                
+            }
+
+            int count = prepareStatement.executeUpdate();
+
+            if(count > 0) {               
+                
+                    status = STATUS_SUCCESS;              
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception in unsubscribePhpUser", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
