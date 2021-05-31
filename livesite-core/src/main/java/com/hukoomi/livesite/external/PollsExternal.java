@@ -1028,12 +1028,23 @@ public class PollsExternal {
         final String POLL_CATEGORY = "pollCategory";
         final String SOLR_POLL_CATEGORY = "solrPollCategory";
         final String PERSONA = "persona";
+        final String BASEQUERY = "baseQuery";
+        final String FIELDQUERY = "fieldQuery";
+        final String START = "start";
+        final String SORT = "sort";
+        final String SOLRCORE = "solrCore";
         
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         ValidationErrorList errorList = new ValidationErrorList();
         HttpServletRequest request = context.getRequest();
         String validData  = "";
         String userId = null;
+        
+        logger.debug(BASEQUERY + " >>>"+context.getParameterString(BASEQUERY)+"<<<");
+        logger.debug(FIELDQUERY + " >>>"+context.getParameterString(FIELDQUERY)+"<<<");
+        logger.debug(START + " >>>"+context.getParameterString(START)+"<<<");
+        logger.debug(SORT + " >>>"+context.getParameterString(SORT)+"<<<");
+        logger.debug(SOLRCORE + " >>>"+context.getParameterString(SOLRCORE)+"<<<");
         
         String pollAction = context.getParameterString(POLL_ACTION);
         logger.debug(POLL_ACTION + " >>>"+pollAction+"<<<");
