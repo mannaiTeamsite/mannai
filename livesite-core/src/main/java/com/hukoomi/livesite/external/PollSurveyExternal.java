@@ -576,6 +576,7 @@ public class PollSurveyExternal {
                 String contentName = getContentName(contentPath);
                 logger.debug("contentName : " + contentName);
                 
+                logger.debug("category : " + category);
                 if(BOTH_SURVEY_CATEGORY.equals(category)) {
                     contentType = getContentType(contentPath);
                     logger.debug("contentType : " + contentType);
