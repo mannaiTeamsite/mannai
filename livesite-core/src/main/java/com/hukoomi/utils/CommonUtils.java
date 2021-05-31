@@ -324,7 +324,7 @@ public class CommonUtils {
         if(parameter == null || parameter.isBlank()){
             return "";
         }
-        return parameter.replaceAll("[^a-zA-Z0-9- \\\"*:~!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
+        return parameter.replaceAll("[^a-zA-Z0-9- \\\"*+:~!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
     }
 
     /*
