@@ -54,13 +54,13 @@ public class DashboardExternal {
 
 				setSessionAttributes(jwtParsedToken, request, "valid");
 			} catch (ExpiredJwtException e) {
-				LOGGER.info("Token Expired");
+				LOGGER.error("Token Expired");
 				setSessionAttributes(jwtParsedToken, request, "Token Expired");
 			} catch (SignatureException e) {
-				LOGGER.info("Signature Exception");
+				LOGGER.error("Signature Exception");
 				setSessionAttributes(jwtParsedToken, request, "Signature Exception");
 			} catch (Exception e) {
-				LOGGER.info("Some other exception in JWT parsing" + e);
+				LOGGER.error("Some other exception in JWT parsing" + e);
 				setSessionAttributes(jwtParsedToken, request, "Some other exception in JWT parsing");
 			}
 	}
@@ -161,7 +161,7 @@ public class DashboardExternal {
 		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
 		String relayURL = rhu.getCookie(RELAY_URL);
 		String url = properties.getProperty("logout") + "?relayURL=" + relayURL;
-		LOGGER.info("---Logout url---" + url);
+		
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect(url);
 		LOGGER.info("--------------doLogout Ended------------");
@@ -256,7 +256,7 @@ public class DashboardExternal {
 			try {
 				redirectToLoginPage(context);
 			} catch (IOException e) {
-				LOGGER.info(e);
+				LOGGER.error(e);
 
 			}
 
@@ -327,7 +327,7 @@ public class DashboardExternal {
 			try {
 				redirectToLoginPage(context);
 			} catch (IOException e) {
-				LOGGER.info("Error" + e);
+				LOGGER.error("Error" + e);
 			}
 			LOGGER.info("session invalid");
 		}
@@ -489,11 +489,11 @@ public class DashboardExternal {
 			domain = uri.getHost();
 			
 		} catch (URISyntaxException e) {
-			LOGGER.info(e);
+			LOGGER.error(e);
 			
 		}
 		String livesiteDomain = properties.getProperty("domain");
-		LOGGER.info("livesiteDomain:" + livesiteDomain);
+		
 		if (domain.equalsIgnoreCase(livesiteDomain)) {
 			HttpServletResponse response = context.getResponse();
 			response.sendRedirect(url);
