@@ -43,6 +43,7 @@ public class DashboardExternal {
 	private static final Logger LOGGER = Logger.getLogger(DashboardExternal.class);
 	Postgre postgre = null;
 
+	/** Decrypting the token and setting session. */
 	public void dashboardServices(RequestContext context, String accessToken) {
 		String jwtParsedToken = null;
 		HttpServletRequest request = context.getRequest();
@@ -64,6 +65,7 @@ public class DashboardExternal {
 			}
 	}
 
+	/** Setting the user info in session. */
 	private void setSessionAttributes(String jwtParsedToken, HttpServletRequest request, String status) {
 		LOGGER.info("--------------setSessionAttributes is called------------");
 		HttpSession session = request.getSession(true);
@@ -85,11 +87,8 @@ public class DashboardExternal {
 			session.setAttribute("exp", getValue(jwtParsedToken, "exp"));
 			session.setAttribute("usertypeNo", getValue(jwtParsedToken, "type"));
 			session.setAttribute("userId", getValue(jwtParsedToken, "uid"));
-
-			LOGGER.info("UserId : " + getValue(jwtParsedToken, "uid"));
-
 			String userTypeStr = getValue(jwtParsedToken, "type");
-			LOGGER.info("userType JWT : " + userTypeStr);
+
 			if (userTypeStr != null && !"".equals(userTypeStr)) {
 				int userType = Integer.parseInt(userTypeStr);
 
@@ -99,11 +98,9 @@ public class DashboardExternal {
 					session.setAttribute("userType", "business");
 				}
 			}
-			LOGGER.info("userType : " + session.getAttribute("userType"));
 
 		}
 
-		LOGGER.info("Expiry Date" + session.getAttribute("exp"));
 		LOGGER.info("--------------setSessionAttributes is Ended------------");
 	}
 
@@ -117,6 +114,7 @@ public class DashboardExternal {
 		return status;
 	}
 
+	/** Removing the session values on logout. */
 	public void removeSessionAttr(RequestContext context) {
 		LOGGER.info("--------------removeSessionAttr is Ended------------");
 
@@ -143,8 +141,15 @@ public class DashboardExternal {
 
 		LOGGER.info("--------------removeSessionAttr is Ended------------" + session.getAttribute("status"));
 	}
-
+	
 	public Document doLogout(RequestContext context) throws IOException {
+		/**
+		 * This method will be called from Component External for logout.
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("--------------doLogout Started------------");
 		final String RELAY_URL = "relayURL";
 		Document doc = DocumentHelper.createDocument();
@@ -164,7 +169,13 @@ public class DashboardExternal {
 	}
 
 	public Document getDashboardContent(RequestContext context) {
-
+		/**
+		 * This method will be called from Component External for Fetching user data after login
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
 		HttpSession session = context.getRequest().getSession();
 
@@ -205,14 +216,20 @@ public class DashboardExternal {
 			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
 		}
 
-		LOGGER.info("Final doc" + doc.asXML());
+		
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 
 	}
 
 	public Document getMyDataContent(RequestContext context) {
-
+		/**
+		 * This method will be called from Component External for Fetching user data after login
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
 		HttpSession session = context.getRequest().getSession();
 
@@ -239,8 +256,8 @@ public class DashboardExternal {
 			try {
 				redirectToLoginPage(context);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.info(e);
+
 			}
 
 			LOGGER.info("session invalid");
@@ -252,6 +269,13 @@ public class DashboardExternal {
 	}
 
 	public Document getDashboardbookmark(RequestContext context) {
+		/**
+		 * This method will be called from Component External for Fetching bookmark
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("getDashboardbookmark()====> Starts");
 
 		pagetitle = context.getParameterString("page_title");
@@ -267,11 +291,9 @@ public class DashboardExternal {
 
 		postgre = new Postgre(context);
 		HttpSession session = context.getRequest().getSession();
-		// String status = "valid";
 		String status = (String) session.getAttribute("status");
 		LOGGER.info("Dashboard status=" + session.getAttribute("status"));
 		if (status != null && status.equals("valid")) {
-			// userID = "69119";
 			userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
@@ -305,7 +327,6 @@ public class DashboardExternal {
 			try {
 				redirectToLoginPage(context);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				LOGGER.info("Error" + e);
 			}
 			LOGGER.info("session invalid");
@@ -375,6 +396,13 @@ public class DashboardExternal {
 	}
 
 	private void removeBookmark(Element bookmarkResultEle) {
+		/**
+		 * This method will be called from Component External for removing the bookmark
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document.
+		 */
 
 		String activeflag = "N";
 		LOGGER.info("removeBookmark()====> Starts");
@@ -446,8 +474,6 @@ public class DashboardExternal {
 
 	public void redirectToLoginPage(RequestContext context) throws IOException {
 		LOGGER.info("--------------nonLoggedIn Started------------");
-
-//			final String RELAY_URL = "relayURL";
 		PropertiesFileReader prop = null;
 		prop = new PropertiesFileReader(context, "dashboard.properties");
 		properties = prop.getPropertiesFile();
@@ -461,22 +487,19 @@ public class DashboardExternal {
 		try {
 			uri = new URI(relayURL);
 			domain = uri.getHost();
-			LOGGER.info("Domain:" + domain);
+			
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.info(e);
+			
 		}
 		String livesiteDomain = properties.getProperty("domain");
 		LOGGER.info("livesiteDomain:" + livesiteDomain);
-		if(domain.equalsIgnoreCase(livesiteDomain)) {
+		if (domain.equalsIgnoreCase(livesiteDomain)) {
 			HttpServletResponse response = context.getResponse();
 			response.sendRedirect(url);
 		}
-		
-		
 
 		LOGGER.info("--------------nonLoggedIn Ended------------");
-		
 
 	}
 }
