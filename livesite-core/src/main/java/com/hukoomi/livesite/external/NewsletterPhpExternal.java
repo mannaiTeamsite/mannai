@@ -88,7 +88,7 @@ public class NewsletterPhpExternal {
 	/** initialization of error variable. */
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
-    
+ 
 	/** confirmation mail element. */
 	private static final String CONFIRMATION_EMAIL = "ConfirmationEmail";
 	/**
