@@ -74,12 +74,16 @@ public class NewsletterTask implements CSURLExternalTask {
     public static final String NEWSLETTER_DESCRIPTION_PATH = "/root/detail/newsletter-description";
     public static final String NEWSLETTER_CATEGOTY_PATH = "/root/detail/newsletter-category/newsletter-category-field";
     public static final String TEMPLATE = "newsletter_template";
+    public static final String HTML_PATH = "html_path";
+    public static final String HTML_GENERATION_LOCATION = "generate_html_location";
     public static final String MAIL_ENCODING = "UTF-8";
     public static final String MAIL_MIME_TYPE = "text/html";
     Properties properties;
     String lang = "";
     String title = "";
     Document data = DocumentHelper.createDocument();
+    String genrateHtmlLocation = "";
+    String htmlTemplatePath = "";
 
     @Override
     public void execute(CSClient client, CSExternalTask task,
@@ -114,7 +118,15 @@ public class NewsletterTask implements CSURLExternalTask {
         HashMap<String, String> statusMap = new HashMap<>();
         loadProperties(client, task, "newsletter.properties");
         String strTemplate = properties.getProperty(TEMPLATE);
-        logger.info("strTemplate - " + strTemplate);
+        logger.info("strTemplate : " + strTemplate);
+
+        htmlTemplatePath = properties.getProperty(HTML_PATH);
+        logger.info("htmlPath : " + htmlTemplatePath);
+
+        genrateHtmlLocation = properties
+                .getProperty(HTML_GENERATION_LOCATION);
+        logger.info("htmlPath : " + genrateHtmlLocation);
+
         CSVPath templateVpath = new CSVPath(strTemplate);
         CSSimpleFile xslTemplateFile = (CSSimpleFile) (client
                 .getFile(templateVpath));
@@ -186,27 +198,32 @@ public class NewsletterTask implements CSURLExternalTask {
                         .getText();
                 dcrDescElement.setText(dcrDescription);
 
-
                 if ("Events".equals(dctType)) {
                     Element dcrOrgElement = dcrElement
                             .addElement("organizer");
                     String dcrorganaizer = "";
                     if (lang.equals("ar")) {
-                        dcrorganaizer = dcrDocument.selectSingleNode(
-                                "/root/settings/organizers/label-ar")
-                                .getText();
-                    } else {
-                        dcrorganaizer = dcrDocument.selectSingleNode(
-                                "/root/settings/organizers/label-en")
-                                .getText();
+                        Node organizer = dcrDocument.selectSingleNode(
+                                "/root/settings/organizers/label-ar");
+                        if (organizer != null) {
+                            dcrorganaizer = organizer.getText();
+                        }
                     }
+                    Node organizer = dcrDocument.selectSingleNode(
+                            "/root/settings/organizers/label-en");
+                    if (organizer != null) {
+                        dcrorganaizer = organizer.getText();
+                    }
+
                     dcrOrgElement.setText(dcrorganaizer);
 
                     Element dateElement = dcrElement.addElement("date");
+
                     String dcrDate = dcrDocument
                             .selectSingleNode(
                                     "/root/event-date/start-date")
                             .getText();
+
                     dateElement.setText(dcrDate);
 
                     Element imgElement = dcrElement.addElement("image");
@@ -222,20 +239,23 @@ public class NewsletterTask implements CSURLExternalTask {
                                     "/root/information/original-dcr-name")
                                     .getText();
                     readMoreLink.setText(originalDcrName);
+
                 } else if ("News".equals(dctType)) {
                     Element sourceElement = dcrElement
                             .addElement("source");
                     String source = "";
                     if (lang.equals("ar")) {
-                        source = dcrDocument
-                                .selectSingleNode(
-                                        "/root/settings/channels/label-ar")
-                                .getText();
-                    } else {
-                        source = dcrDocument
-                                .selectSingleNode(
-                                        "/root/settings/channels/label-en")
-                                .getText();
+                        Node sourceEle = dcrDocument.selectSingleNode(
+                                "/root/settings/channels/label-ar");
+                        if (sourceEle != null) {
+                            source = sourceEle.getText();
+                        }
+
+                    }
+                    Node sourceEle = dcrDocument.selectSingleNode(
+                            "/root/settings/channels/label-en");
+                    if (sourceEle != null) {
+                        source = sourceEle.getText();
                     }
 
                     sourceElement.setText(source);
@@ -260,22 +280,8 @@ public class NewsletterTask implements CSURLExternalTask {
                                     .getText();
 
                     readMoreLink.setText(originalDcrName);
+
                 } else if ("Blogs".equals(dctType)) {
-                    Element dcrOrgElement = dcrElement
-                            .addElement("organizer");
-                    String dcrorganaizer = "";
-                    if (lang.equals("ar")) {
-                        dcrorganaizer = dcrDocument
-                                .selectSingleNode(
-                                        "/root/settings/channels/label-ar")
-                                .getText();
-                    } else {
-                        dcrorganaizer = dcrDocument
-                                .selectSingleNode(
-                                        "/root/settings/channels/label-en")
-                                .getText();
-                    }
-                    dcrOrgElement.setText(dcrorganaizer);
 
                     Element dateElement = dcrElement.addElement("date");
                     String dcrDate = dcrDocument
@@ -299,6 +305,12 @@ public class NewsletterTask implements CSURLExternalTask {
                             .getText();
                     dateElement.setText(dcrDate);
 
+                    Element topicElement = dcrElement.addElement("topics");
+                    String topics = dcrDocument
+                            .selectSingleNode("/root/settings/topics")
+                            .getText();
+                    topicElement.setText(topics);
+
                     Element readMoreLink = dcrElement
                             .addElement("readMore");
                     String originalDcrName = "/" + lang + "/article/"
@@ -315,22 +327,31 @@ public class NewsletterTask implements CSURLExternalTask {
                             .addElement("serviceProvider");
                     String serviceProvider = "";
                     if (lang.equals("ar")) {
-                        serviceMode = dcrDocument.selectSingleNode(
-                                "/root/settings/service-mode/label-ar")
-                                .getText();
-                        serviceProvider = dcrDocument.selectSingleNode(
-                                "/root/settings/service-entities/label-ar")
-                                .getText();
-                    } else {
-                        serviceMode = dcrDocument.selectSingleNode(
-                                "/root/settings/service-mode/label-en")
-                                .getText();
-                        serviceProvider = dcrDocument.selectSingleNode(
-                                "/root/settings/service-entities/label-en")
-                                .getText();
+                        Node serviceModeEle = dcrDocument.selectSingleNode(
+                                "/root/settings/service-mode/label-ar");
+                        if (serviceModeEle != null) {
+                            serviceMode = serviceModeEle.getText();
+                        }
+
+                        Node serviceProviderEle = dcrDocument
+                                .selectSingleNode(
+                                        "/root/settings/service-entities/label-ar");
+                        if (serviceProviderEle != null) {
+                            serviceProvider = serviceProviderEle.getText();
+                        }
                     }
-                    logger.info("Service Mode : " + serviceMode);
-                    logger.info("Service Provider : " + serviceProvider);
+
+                    Node serviceModeEle = dcrDocument.selectSingleNode(
+                            "/root/settings/service-mode/label-en");
+                    if (serviceModeEle != null) {
+                        serviceMode = serviceModeEle.getText();
+                    }
+
+                    Node serviceProviderEle = dcrDocument.selectSingleNode(
+                            "/root/settings/service-entities/label-en");
+                    if (serviceProviderEle != null) {
+                        serviceProvider = serviceProviderEle.getText();
+                    }
 
                     serviceModeElement.setText(serviceMode);
                     serviceProviderElement.setText(serviceProvider);
@@ -352,16 +373,11 @@ public class NewsletterTask implements CSURLExternalTask {
             try {
                 logger.info("data not null.");
 
-                // String mailContentXml = serializeDomElementToString(data, MAIL_ENCODING,
-                // true);
-                String vPath = task.getArea().getRootDir().getVPath()
-                        .toString();
                 logger.debug("Data : " + data.asXML());
-                transformToMailDataSource(vPath, data.asXML(),
-                        xslTemplateFile);
+                transformToMailDataSource(data.asXML(), xslTemplateFile);
 
-                String htmlfilePath = "html/newsletter-html/" + lang + "/"
-                        + title + "_" + lang + ".html";
+                String htmlfilePath = htmlTemplatePath + lang + "/" + title
+                        + ".html";
 
                 logger.debug("filePath1 : " + htmlfilePath);
 
@@ -382,19 +398,16 @@ public class NewsletterTask implements CSURLExternalTask {
         return statusMap;
     }
 
-    private DataSource transformToMailDataSource(String vPath,
-            String xmlMailContent, CSSimpleFile xslTemplateFile)
+    private DataSource transformToMailDataSource(String xmlMailContent,
+            CSSimpleFile xslTemplateFile)
             throws CSException, UnsupportedEncodingException,
             FileNotFoundException, TransformerException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             logger.info("transformToMailDataSource");
 
-            logger.info("vPath : " + vPath);
-
             File fout = new File(
-                    "/iwmnt/default/main/Hukoomi/WORKAREA/default/html/newsletter-html/"
-                            + lang + "/" + title + "_" + lang + ".html");
+                    genrateHtmlLocation + lang + "/" + title + ".html");
             fout.createNewFile();
             FileOutputStream oFile = new FileOutputStream(fout, false);
             logger.info("xmlMailContent- " + xmlMailContent);
