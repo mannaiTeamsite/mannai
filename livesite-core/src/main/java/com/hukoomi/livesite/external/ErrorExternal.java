@@ -24,19 +24,23 @@ public class ErrorExternal {
 		RequestHeaderUtils req = new RequestHeaderUtils(context);
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
 		 logger.info("Component Type"+compType);
+		 
 		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
 		{
 			
 			 String brokenLink = req.getReferer();
 			 String language = context.getParameterString(LOCALE);
 			 String statusCode = context.getParameterString(STATUS);
-			   String contentPage = req.getRequestURL();
+			 
+			 logger.info("Error Status"+statusCode);
+			 String contentPage = req.getRequestURL();
 			
-			CommonUtils cu = new CommonUtils();
+			CommonUtils cu = new CommonUtils(context);
 			cu.logBrokenLink(brokenLink, contentPage, language, statusCode);
 			 
 		}
-        Document doc = getErrorDCRContent(context);  
+		Document doc = getErrorDCRContent(context);  
+		 logger.info("ErrorBannerDoc"+doc.asXML());
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
