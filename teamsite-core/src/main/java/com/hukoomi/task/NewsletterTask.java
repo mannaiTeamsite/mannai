@@ -306,9 +306,22 @@ public class NewsletterTask implements CSURLExternalTask {
                     dateElement.setText(dcrDate);
 
                     Element topicElement = dcrElement.addElement("topics");
-                    String topics = dcrDocument
-                            .selectSingleNode("/root/settings/topics")
-                            .getText();
+                    String topics = "";
+                    if (lang.equals("ar")) {
+                        Node topicsEle = dcrDocument.selectSingleNode(
+                                "/root/settings/topics/label-ar");
+                        if (topicsEle != null) {
+                            topics = topicsEle.getText();
+                        }
+                    }
+                    Node topicsEle = dcrDocument.selectSingleNode(
+                            "/root/settings/topics/label-en");
+                    if (topicsEle != null) {
+                        topics = topicsEle.getText();
+                    }
+
+
+
                     topicElement.setText(topics);
 
                     Element readMoreLink = dcrElement
