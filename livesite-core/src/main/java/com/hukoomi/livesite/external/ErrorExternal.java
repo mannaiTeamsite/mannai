@@ -1,21 +1,22 @@
 package com.hukoomi.livesite.external;
 
 
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import com.hukoomi.utils.CommonUtils;
-
-
+import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class ErrorExternal {
 	
 	 private final Logger logger = Logger.getLogger(ErrorExternal.class);
-	 
+	 private Properties properties = null;
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
 		final String COMPONENT_TYPE = "componentType";
@@ -23,7 +24,7 @@ public class ErrorExternal {
 		 final String STATUS = "error_code";
 		RequestHeaderUtils req = new RequestHeaderUtils(context);
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
-		 logger.info("Component Type"+compType);
+		 logger.info("Component Type"+compType);		 
 		 
 		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
 		{
@@ -34,9 +35,15 @@ public class ErrorExternal {
 			 
 			 logger.info("Error Status"+statusCode);
 			 String contentPage = req.getRequestURL();
+			 PropertiesFileReader prop = null;
+				prop = new PropertiesFileReader(context, "dashboard.properties");
+				properties = prop.getPropertiesFile();
+			 String errorpage = properties.getProperty("domain");
+			 if(!errorpage.equals(contentPage)) {
+				 CommonUtils cu = new CommonUtils(context);
+					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
+			 }
 			
-			CommonUtils cu = new CommonUtils(context);
-			cu.logBrokenLink(brokenLink, contentPage, language, statusCode);
 			 
 		}
 		Document doc = getErrorDCRContent(context);  
