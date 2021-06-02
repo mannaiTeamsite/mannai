@@ -7,11 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.activation.DataSource;
 import javax.xml.transform.TransformerException;
@@ -70,6 +75,10 @@ public class NewsletterTask implements CSURLExternalTask {
      * Success transition comment
      */
     public static final String SUCCESS_TRANSITION_COMMENT = "Newsletter HTML Generated Successfully";
+    /**
+     * DCR Type Meta data name
+     */
+    public static final String META_DATA_NAME_DCR_TYPE = "TeamSite/Templating/DCR/Type";
 
     public static final String NEWSLETTER_DESCRIPTION_PATH = "/root/detail/newsletter-description";
     public static final String NEWSLETTER_CATEGOTY_PATH = "/root/detail/newsletter-category/newsletter-category-field";
@@ -81,7 +90,7 @@ public class NewsletterTask implements CSURLExternalTask {
     Properties properties;
     String lang = "";
     String title = "";
-    Document data = DocumentHelper.createDocument();
+
     String genrateHtmlLocation = "";
     String htmlTemplatePath = "";
 
@@ -102,7 +111,14 @@ public class NewsletterTask implements CSURLExternalTask {
             logger.debug("File Name : " + fileName);
 
             CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
-            statusMap = processNewsletterDCR(client, task, taskSimpleFile);
+            String dcrType = taskSimpleFile
+                    .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
+                    .getValue();
+            logger.info("DCR Type : " + dcrType);
+            if ("Content/Newsletter".equals(dcrType)) {
+                statusMap = processNewsletterDCR(client, task,
+                        taskSimpleFile);
+            }
         }
 
         task.chooseTransition(statusMap.get(TRANSITION),
@@ -131,7 +147,12 @@ public class NewsletterTask implements CSURLExternalTask {
         CSSimpleFile xslTemplateFile = (CSSimpleFile) (client
                 .getFile(templateVpath));
 
+        Document data = DocumentHelper.createDocument();
+
+        logger.info("Data : " + data.asXML());
+
         Element rootElement = data.addElement("root");
+
         // title
 
         Document document = getTaskDocument(taskSimpleFile);
@@ -418,10 +439,35 @@ public class NewsletterTask implements CSURLExternalTask {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             logger.info("transformToMailDataSource");
+            StringBuffer baseDir = new StringBuffer(genrateHtmlLocation)
+                    .append(lang);
+            logger.info("baseDir : " + baseDir);
 
-            File fout = new File(
-                    genrateHtmlLocation + lang + "/" + title + ".html");
+            Path directory = Path.of(baseDir.toString());
+
+            String baseFilePermission = properties
+                    .getProperty("filePermissions", "rwxr-xr-x");
+            Set<PosixFilePermission> baseFilePermissions = PosixFilePermissions
+                    .fromString(baseFilePermission);
+            /*
+             * String baseDirPermissions = properties .getProperty("dirPermissions",
+             * "rwxr-xr-x");
+             * 
+             * 
+             * logger.info("Permission for file : " + baseFilePermission); logger.info(
+             * "Permission for directory : " + baseDirPermissions);
+             * 
+             * Set<PosixFilePermission> baseDirPermission = PosixFilePermissions
+             * .fromString(baseDirPermissions); if (Files.notExists(directory)) {
+             * Files.createDirectory(directory, PosixFilePermissions
+             * .asFileAttribute(baseDirPermission)); }
+             * 
+             *
+             */
+
+            File fout = new File(baseDir + "/" + title + ".html");
             fout.createNewFile();
+
             FileOutputStream oFile = new FileOutputStream(fout, false);
             logger.info("xmlMailContent- " + xmlMailContent);
             ByteArrayInputStream inputStream = new ByteArrayInputStream(
@@ -431,6 +477,10 @@ public class NewsletterTask implements CSURLExternalTask {
                     outputStream);
             logger.info("After outputStream- " + outputStream.toString());
             outputStream.writeTo(oFile);
+            Files.setPosixFilePermissions(
+                    Path.of(directory + "/" + title + ".html"),
+                    baseFilePermissions);
+
         } catch (IOException ex) {
             logger.error("Exception in transformToMailDataSource: ", ex);
         }
@@ -480,7 +530,7 @@ public class NewsletterTask implements CSURLExternalTask {
 
             }
         } catch (Exception e) {
-
+            logger.error("Exception in getDcrDocument: ", e);
         }
         return document;
     }
