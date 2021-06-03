@@ -1,6 +1,8 @@
 package com.hukoomi.livesite.external;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -38,13 +40,17 @@ public class ErrorExternal {
 			 PropertiesFileReader prop = null;
 				prop = new PropertiesFileReader(context, "dashboard.properties");
 				properties = prop.getPropertiesFile();
-			 String errorpage = properties.getProperty("errorPage");
-			 if(!errorpage.equals(contentPage)) {
+			 String errorpagePath = properties.getProperty("errorpagePath");
+			 String path = "";
+				try {
+					 path = new URL(contentPage).getPath();
+				} catch (MalformedURLException e) {
+					logger.debug(e);
+				}						 
+			 if(!errorpagePath.equals(path) || contentPage != null) {
 				 CommonUtils cu = new CommonUtils(context);
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
-			 }
-			
-			 
+			 }			 
 		}
 		Document doc = getErrorDCRContent(context);  
 		 logger.info("ErrorBannerDoc"+doc.asXML());
