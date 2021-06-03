@@ -1,21 +1,24 @@
 package com.hukoomi.livesite.external;
 
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import com.hukoomi.utils.CommonUtils;
-
-
+import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class ErrorExternal {
 	
 	 private final Logger logger = Logger.getLogger(ErrorExternal.class);
-	 
+	 private Properties properties = null;
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
 		final String COMPONENT_TYPE = "componentType";
@@ -23,20 +26,35 @@ public class ErrorExternal {
 		 final String STATUS = "error_code";
 		RequestHeaderUtils req = new RequestHeaderUtils(context);
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
-		 logger.info("Component Type"+compType);
+		 logger.info("Component Type"+compType);		 
+		 
 		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
 		{
 			
-			 String brokenLink = req.getReferer();
+			 String brokenLink = req.getRequestURL();
 			 String language = context.getParameterString(LOCALE);
 			 String statusCode = context.getParameterString(STATUS);
-			   String contentPage = req.getRequestURL();
-			
-			CommonUtils cu = new CommonUtils();
-			cu.logBrokenLink(brokenLink, contentPage, language, statusCode);
 			 
+			 logger.info("Error Status"+statusCode);
+			 String contentPage = req.getReferer(); 
+			 PropertiesFileReader prop = null;
+				prop = new PropertiesFileReader(context, "dashboard.properties");
+				properties = prop.getPropertiesFile();
+			 String errorpagePathEn = properties.getProperty("errorPageEn");
+			 String errorpagePathAr = properties.getProperty("errorPageAr");
+			 String path = "";
+				try {
+					 path = new URL(contentPage).getPath();
+				} catch (MalformedURLException e) {
+					logger.debug(e);
+				}						 
+			 if((!errorpagePathEn.equals(path) || !errorpagePathAr.equals(path)) && contentPage != null) {
+				 CommonUtils cu = new CommonUtils(context);
+					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
+			 }			 
 		}
-        Document doc = getErrorDCRContent(context);  
+		Document doc = getErrorDCRContent(context);  
+		 logger.info("ErrorBannerDoc"+doc.asXML());
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
