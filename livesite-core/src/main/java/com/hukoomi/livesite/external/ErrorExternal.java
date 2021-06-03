@@ -40,14 +40,15 @@ public class ErrorExternal {
 			 PropertiesFileReader prop = null;
 				prop = new PropertiesFileReader(context, "dashboard.properties");
 				properties = prop.getPropertiesFile();
-			 String errorpagePath = properties.getProperty("errorpagePath");
+			 String errorpagePathEn = properties.getProperty("errorPageEn");
+			 String errorpagePathAr = properties.getProperty("errorPageAr");
 			 String path = "";
 				try {
 					 path = new URL(contentPage).getPath();
 				} catch (MalformedURLException e) {
 					logger.debug(e);
 				}						 
-			 if(!errorpagePath.equals(path) || contentPage != null) {
+			 if((!errorpagePathEn.equals(path) || !errorpagePathAr.equals(path)) && contentPage != null) {
 				 CommonUtils cu = new CommonUtils(context);
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 			 }			 
