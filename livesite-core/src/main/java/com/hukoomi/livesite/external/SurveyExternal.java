@@ -65,6 +65,10 @@ public class SurveyExternal {
      */
     public static final String ACTION_POLLS_AND_SURVEY = "pollsandsurvey";
     /**
+     * Constant for action dashboard polls and survey.
+     */
+    public static final String DASHBOARD = "Dashboard";
+    /**
      * Constant for action survey listing.
      */
     public static final String ACTION_SURVEY_LISTING = "listing";
@@ -561,7 +565,7 @@ public class SurveyExternal {
                     (lang != null && !"".equals(lang)) ) {
                 String dynamicSurveyQuery = "SELECT DISTINCT SURVEY_MASTER_ID FROM DYNAMIC_SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ? ";
     
-                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery.toString());
+                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery);
                     
                 prepareStatement = connection.prepareStatement(dynamicSurveyQuery);
                 prepareStatement.setLong(1, Long.parseLong(surveyId));
@@ -611,7 +615,7 @@ public class SurveyExternal {
             if(questionId != null && surveyMasterId != null  ) {
                 String dynamicSurveyQuery = "SELECT SURVEY_QUESTION_ID FROM dynamic_survey_question WHERE SURVEY_MASTER_ID = ? AND QUESTION_ID = ? ";
     
-                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery.toString());
+                logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery);
                     
                 prepareStatement = connection.prepareStatement(dynamicSurveyQuery);
                 prepareStatement.setLong(1, surveyMasterId);
@@ -980,8 +984,10 @@ public class SurveyExternal {
         final String SURVEY_ID = "surveyId";
         final String TOTAL_QUESTIONS = "totalQuestions";
         final String SURVEY_GROUP = "SurveyGroup";
+        final String SURVEY_GROUP_CONFIG = "SurveyGroupConfig";
         final String SURVEY_CATEGORY = "surveyCategory";
         final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
+        final String SURVEY_GROUP_CONFIG_CATEGORY = "surveyGroupConfigCategory";
         final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
         final String PERSONA = "persona";
 
@@ -990,8 +996,6 @@ public class SurveyExternal {
         HttpServletRequest request = context.getRequest();
         String validData  = "";
         String userId = null;
-        
-        //TODO: Field length needs to be validated against content model and database. 
         
         String surveyAction = context.getParameterString(SURVEY_ACTION);
         logger.debug(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
@@ -1103,19 +1107,21 @@ public class SurveyExternal {
             
             if(persona == null || "".equals(persona)) {
                 Cookie[] cookies = request.getCookies();
-                for(int i = 0 ; i < cookies.length;  i++) {
-                    Cookie cookie = cookies[i];
-                    String name = cookie.getName();
-                    String personaValue = null;
-                    if(name != null && "persona".equalsIgnoreCase(name)) {
-                        personaValue = cookie.getValue();
-                        logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
-                        validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
-                        if(errorList.isEmpty()) {
-                            surveyBO.setPersona(validData);
-                        }else {
-                            logger.debug(errorList.getError(PERSONA));
-                            return false;
+                if(cookies != null) {
+                    for(int i = 0 ; i < cookies.length;  i++) {
+                        Cookie cookie = cookies[i];
+                        String name = cookie.getName();
+                        String personaValue = null;
+                        if(name != null && "persona".equalsIgnoreCase(name)) {
+                            personaValue = cookie.getValue();
+                            logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
+                            validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                            if(errorList.isEmpty()) {
+                                surveyBO.setPersona(validData);
+                            }else {
+                                logger.debug(errorList.getError(PERSONA));
+                                return false;
+                            }
                         }
                     }
                 }
@@ -1124,12 +1130,30 @@ public class SurveyExternal {
         
         String pollAction = context.getParameterString(POLL_ACTION);
         logger.debug(POLL_ACTION + " >>>" +pollAction+ "<<<");   
-        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction)) {
+        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction) || DASHBOARD.equalsIgnoreCase(pollAction)) {
             
             String surveyGroup = context.getParameterString(SURVEY_GROUP);
             logger.debug(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
             if (!ESAPIValidator.checkNull(surveyGroup)) {
                 surveyBO.setGroup(getContentName(surveyGroup));
+            }
+            
+            if(DASHBOARD.equalsIgnoreCase(pollAction)) {
+                String surveyGroupConfig = context.getParameterString(SURVEY_GROUP_CONFIG);
+                logger.debug(SURVEY_GROUP_CONFIG + " >>>" +surveyGroupConfig+ "<<<");
+                if (!ESAPIValidator.checkNull(surveyGroupConfig)) {
+                    surveyBO.setSurveyGroupConfig(getContentName(surveyGroupConfig));
+                }
+                
+                String surveyGroupConfigCategory = context.getParameterString(SURVEY_GROUP_CONFIG_CATEGORY);
+                logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
+                validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY, surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+                if(errorList.isEmpty()) {
+                    surveyBO.setSurveyGroupConfigCategory(validData);
+                }else {
+                    logger.debug(errorList.getError(SURVEY_GROUP_CONFIG_CATEGORY));
+                    return false;
+                }
             }
             
             String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);

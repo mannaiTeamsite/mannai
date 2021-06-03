@@ -35,9 +35,46 @@ public class PollSurveyExternal {
      */
     private static final String CONTENT = "Content";
     /**
+     * Constant for Content. 
+     */
+    private static final String DASHBOARD = "Dashboard";
+    /**
      * Constant for Poll node. 
      */
     private static final String POLL_NODE = "/content/root/detail/polls";
+    /**
+     * Constant for Poll Group Title. 
+     */
+    private static final String POLL_GROUP_TITLE = "/content/root/detail/group-title";  
+    /**
+     * Constant for Poll Group Description. 
+     */
+    private static final String POLL_GROUP_DESCRIPTION = "/content/root/detail/polls-group-description";
+    /**
+     * Constant for Poll Group Button Label. 
+     */
+    private static final String POLL_GROUP_BUTTON_LABEL = "/content/root/detail/group-button-label";
+    /**
+     * Constant for Survey Group Title. 
+     */
+    private static final String SURVEY_GROUP_TITLE = "/content/root/details/group-title";  
+    /**
+     * Constant for Survey Group Description. 
+     */
+    private static final String SURVEY_GROUP_DESCRIPTION = "/content/root/details/group-description";
+    /**
+     * Constant for Survey Group Button Label. 
+     */
+    private static final String SURVEY_GROUP_BUTTON_LABEL = "/content/root/details/group-button-label";
+   
+    /**
+     * Constant for Poll node. 
+     */
+    private static final String POLL_GROUP_CONFIG_NODE = "/content/root/configuration/polls-field";
+    /**
+     * Constant for Poll node. 
+     */
+    private static final String SURVEY_GROUP_CONFIG_NODE = "/content/root/configuration/survey-field";
     /**
      * Constant for Survey node. 
      */
@@ -97,6 +134,8 @@ public class PollSurveyExternal {
                 }else {
                     doc.addElement("PollResult").addElement(PollsExternal.RESULT);
                 }
+            }else if ("dashboard".equalsIgnoreCase(inputAction)) {
+                doc = getDashboardGroupData(context);
             } else {
                 doc = getGroupData(context);
             }
@@ -248,6 +287,181 @@ public class PollSurveyExternal {
 
         return doc;
     }
+    
+    
+    /**
+     * This method is used to create document containing Polls and Survey data.
+     * 
+     * @param context Request Context object.
+     * 
+     * @return doc Returns final document containing Polls and Survey data.
+     * 
+     * @deprecated
+     */
+    @Deprecated(since = "", forRemoval = false)
+    public Document getDashboardGroupData(RequestContext context) {
+        Document doc = null;
+        Document pollDoc = null;
+        votedPolls = new LinkedHashSet<String>();
+        try {
+            PollsExternal pollsExt = new PollsExternal();
+            SurveyExternal surveyExt = new SurveyExternal();
+            PollsBO pollsBO = new PollsBO();
+            boolean isPollInputValid = pollsExt.setBO(context, pollsBO);
+            logger.debug("PollsBO : " + pollsBO);
+            
+            SurveyBO surveyBO = new SurveyBO();
+            boolean isSurveyInputValid = surveyExt.setBO(context, surveyBO);
+            logger.debug("SurveyBO : " + surveyBO);
+
+            String solarCore = "portal-en";
+            if ("ar".equalsIgnoreCase(pollsBO.getLang())) {
+                solarCore = "portal-ar";
+            }
+
+            doc = DocumentHelper.createDocument();
+            Element pollSurveyElem = doc.addElement("PollSurveyesponse");
+            Element pollGroupElem = null;
+            Element surveyGroupElem = null;
+
+         // PollGroup Processing
+            String pollGroupConfig = pollsBO.getPollGroupConfig();
+            logger.debug("pollGroupConfig : " + pollGroupConfig);
+            if(pollGroupConfig != null && !"".equals(pollGroupConfig)) {
+                if(isPollInputValid) {
+                    Document pollGroupConfigdoc = fetchGroupDoc(context, DASHBOARD,
+                            pollsBO.getPollGroupConfigCategory(), pollsBO.getLang(),
+                            pollGroupConfig);
+                    logger.debug("Polls Group Config Doc :" + pollGroupConfigdoc.asXML());
+                    
+                    String pollGroupDCRName = getPollGroupDCRName(pollGroupConfigdoc, POLL_GROUP_CONFIG_NODE, context,
+                            pollsBO.getCategory(), pollsBO.getLang(), pollsBO.getPersona());
+                    
+                    Document document = fetchGroupDoc(context, CONTENT,
+                            pollsBO.getGroupCategory(), pollsBO.getLang(),
+                            pollGroupDCRName);
+                    logger.debug("Poll Group Doc :" + document.asXML());
+                    
+                    //Set Group details to response
+                    setPollGroupDetailsToResponse(pollSurveyElem, document);
+        
+                    String pollIds = fetchIds(document, POLL_NODE, context,
+                            pollsBO.getCategory(), pollsBO.getLang());
+                    logger.debug("pollIds : " + pollIds);
+                    if (pollIds != null && !"".equals(pollIds.trim())) {
+        
+                        Document pollsSolrDoc = fetchDocument(context, pollIds,
+                                pollsBO.getSolrCategory(), solarCore);
+                        logger.debug("pollsSolrDoc : " + pollsSolrDoc.asXML());
+        
+                        String activePollIds = pollsExt
+                                .getPollIdSFromDoc(pollsSolrDoc);
+                        logger.debug("activePollIds : " + activePollIds);
+        
+                        if (activePollIds != null && !"".equals(activePollIds.trim())) {
+                            pollGroupElem = pollSurveyElem
+                                    .addElement("PollGroupResponse");
+                            pollsBO.setPollId(activePollIds);
+        
+                            String votedPollIds = pollsExt.checkResponseData(
+                                    pollsBO, postgre);
+                            Map<String, List<Map<String, String>>> response = null;
+                            if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
+                                pollsBO.setPollId(votedPollIds);
+                                response = pollsExt.getPollResponse(pollsBO,
+                                        postgre, votedPolls);
+                            }
+        
+                            Map<Long, Long> votedOptions = null;
+    
+                            if (votedPolls.isEmpty() != true) {
+                                votedOptions = pollsExt.getVotedOption(postgre,
+                                        votedPolls, pollsBO);
+                                logger.info("Voted Polls : "
+                                        + votedOptions.toString());
+                            }
+    
+                            pollDoc = pollsExt.addResultToXml(pollsSolrDoc,
+                                    response, votedOptions);
+                            pollGroupElem.add(pollDoc.getRootElement());
+                        }
+                    }
+                }else {
+                    logger.info("Poll Input is invalid");
+                }
+            }else {
+                logger.debug("Polls Group Config is not set");
+            }
+
+         // SurveyGroup Processing
+            String surveyGroupConfig = surveyBO.getSurveyGroupConfig();
+            logger.debug("surveyGroupConfig : " + surveyGroupConfig);
+            if(surveyGroupConfig != null && !"".equals(surveyGroupConfig)) {
+                if(isSurveyInputValid) {
+                    Document surveyGroupConfigdoc = fetchGroupDoc(context, DASHBOARD,
+                            surveyBO.getSurveyGroupConfigCategory(), surveyBO.getLang(),
+                            surveyGroupConfig);
+                    logger.debug("Survey Group Config Doc :" + surveyGroupConfigdoc.asXML());
+                    
+                    String surveyGroupDCRName = getSurveyGroupDCRName(surveyGroupConfigdoc, SURVEY_GROUP_CONFIG_NODE, context,
+                            surveyBO.getCategory(), surveyBO.getLang(), surveyBO.getPersona());
+                    
+                    Document document = fetchGroupDoc(context, CONTENT,
+                            surveyBO.getGroupCategory(), surveyBO.getLang(),
+                            surveyGroupDCRName);
+                    logger.debug("Survey Group Doc :" + document.asXML());
+                    
+                    //Set Group details to response
+                    setSurveyGroupDetailsToResponse(pollSurveyElem, document);
+        
+                    String surveyIds = fetchIds(document, SURVEY_NODE, context,
+                            BOTH_SURVEY_CATEGORY, surveyBO.getLang());
+                    logger.debug("surveyIds : " + surveyIds);
+                    if (surveyIds != null && !"".equals(surveyIds.trim())) {
+                        Document surveySolrDoc = fetchDocument(context, surveyIds,
+                                BOTH_SURVEY_CATEGORY, solarCore);
+                        logger.debug("surveySolrDoc : " + surveySolrDoc.asXML());
+    
+                        // Extract Survey Ids from document
+                        ArrayList surveyArr = new ArrayList();
+                        ArrayList dynamicSurveyArr = new ArrayList();
+                        surveyExt.getSurveyIdsFromDoc(surveySolrDoc, surveyArr, dynamicSurveyArr);
+                        logger.debug("Survey SurveyIds from doc : " + surveyArr);
+                        logger.debug("Dynamic Survey SurveyIds from doc : " + dynamicSurveyArr);
+    
+                        if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {
+                        //if (StringUtils.isNotBlank(surveyId)) {
+                            // Get Submission status
+                            ArrayList submittedSurveyIds = surveyExt
+                                .getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
+                                        postgre, surveyBO);
+                            logger.debug("No. of Submitted Survey Ids : " + submittedSurveyIds.size());
+    
+                            // Add Status code to document
+                            if (submittedSurveyIds != null && !submittedSurveyIds.isEmpty()) {
+                                document = surveyExt.addStatusToXml(surveySolrDoc,
+                                        submittedSurveyIds);
+                            }
+                        }
+    
+                        surveyGroupElem = pollSurveyElem
+                                .addElement("SurveyGroupResponse");
+                        surveyGroupElem.add(surveySolrDoc.getRootElement());
+                    }
+                }else {
+                    logger.debug("Survey Input is invalid");
+                }
+            }else {
+                logger.debug("Survey Group Config is not set");
+            }
+
+            logger.debug("Final Document  : " + doc.asXML());
+        } catch (Exception e) {
+            logger.error("Exception in getGroupData",  e);
+        }
+
+        return doc;
+    }
 
     /**
      * This method is used to fetch solr document.
@@ -362,6 +576,7 @@ public class PollSurveyExternal {
                 String contentName = getContentName(contentPath);
                 logger.debug("contentName : " + contentName);
                 
+                logger.debug("category : " + category);
                 if(BOTH_SURVEY_CATEGORY.equals(category)) {
                     contentType = getContentType(contentPath);
                     logger.debug("contentType : " + contentType);
@@ -380,6 +595,173 @@ public class PollSurveyExternal {
             logger.error("Exception in fetchIds", e);
         }
         return contentIds.toString();
+    }
+    
+    
+    /**
+     * This method is used to set the poll group details from document.
+     * 
+     * @param pollSurveyElem Element object.
+     * @param doc Document object.
+     */
+    @SuppressWarnings("unchecked")
+    public void setPollGroupDetailsToResponse(Element pollSurveyElem, Document doc) {
+        logger.info("PollSurveyExternal : setPollGroupDetailsToResponse");
+        
+        try {
+            if(doc != null) {
+                String groupTitle = doc.selectSingleNode(POLL_GROUP_TITLE).getText();
+                String groupDesc = doc.selectSingleNode(POLL_GROUP_DESCRIPTION).getText();
+                String groupBtnLabel = doc.selectSingleNode(POLL_GROUP_BUTTON_LABEL).getText();
+                Element pollGroupDetailsElem = pollSurveyElem.addElement("PollGroupDetails");
+                pollGroupDetailsElem.addElement("group-title").setText(groupTitle);
+                pollGroupDetailsElem.addElement("group-desc").setText(groupDesc);
+                pollGroupDetailsElem.addElement("group-btn-label").setText(groupBtnLabel);
+            }
+        } catch (Exception e) {
+            logger.error("Exception in setPollGroupDetailsToResponse", e);
+        }
+    }
+    
+    
+    /**
+     * This method is used to set the survey group details from document.
+     * 
+     * @param pollSurveyElem Element object.
+     * @param doc Document object.
+     */
+    @SuppressWarnings("unchecked")
+    public void setSurveyGroupDetailsToResponse(Element pollSurveyElem, Document doc) {
+        logger.info("PollSurveyExternal : setSurveyGroupDetailsToResponse");
+        
+        try {
+            if(doc != null) {
+                String groupTitle = doc.selectSingleNode(SURVEY_GROUP_TITLE).getText();
+                String groupDesc = doc.selectSingleNode(SURVEY_GROUP_DESCRIPTION).getText();
+                String groupBtnLabel = doc.selectSingleNode(SURVEY_GROUP_BUTTON_LABEL).getText();
+                Element pollGroupDetailsElem = pollSurveyElem.addElement("SurveyGroupDetails");
+                pollGroupDetailsElem.addElement("group-title").setText(groupTitle);
+                pollGroupDetailsElem.addElement("group-desc").setText(groupDesc);
+                pollGroupDetailsElem.addElement("group-btn-label").setText(groupBtnLabel);
+            }
+        } catch (Exception e) {
+            logger.error("Exception in setSurveyGroupDetailsToResponse", e);
+        }
+    }
+    
+    
+    /**
+     * This method is used to get the poll group name for the user persona from the config DCR.
+     * 
+     * @param doc Document object.
+     * @param nodeInput Node Input.
+     * @param context Request Context object.
+     * @param category Catgory name.
+     * @param locale Locale.
+     * @param persona Persona of the end user.
+     * 
+     * @return Returns ids.
+     */
+    @SuppressWarnings("unchecked")
+    public String getPollGroupDCRName(Document doc, String nodeInput,
+            RequestContext context, String category, String locale, String persona) {
+        logger.info("PollSurveyExternal : getPollGroupDCRName");
+        logger.debug("\nnodeInput : " + nodeInput + "\ncategory : "
+                + category + "\nlocal : " + locale + "\npersona : " + persona);
+        
+        String contentName =  null;
+        try {
+            List<Node> nodes = doc.selectNodes(nodeInput);
+            logger.debug("nodes size : " + nodes.size());
+            //String contentType = category;
+            String personaPollGroupDCR = null;
+            
+            for (Node node : nodes) {
+                Node isDefaultNode = node.selectSingleNode("isdefault");
+                String isDefault  = isDefaultNode.getText();
+                //Node personaNode = node.selectSingleNode("persona");
+                Node personaNode = node.selectSingleNode("value");
+                String personaValue  = personaNode.getText();
+                Node pollsNode = node.selectSingleNode("polls");
+                String pollsGroupPath  = pollsNode.getText();
+                logger.debug("isDefault : " + isDefault);
+                logger.debug("personaValue : " + personaValue);
+                logger.debug("pollsGroupPath : " + pollsGroupPath);
+                
+                if(persona != null && persona.equals(personaValue)) {
+                    personaPollGroupDCR = pollsGroupPath;
+                }else if(isDefault != null && "yes".equalsIgnoreCase(isDefault)) {
+                    personaPollGroupDCR = pollsGroupPath; 
+                }else {
+                    logger.debug("No Default configured");
+                }
+            }
+            
+            logger.debug("Matching personaPollGroupDCR : " + personaPollGroupDCR);
+            contentName = getContentName(personaPollGroupDCR);
+            logger.debug("contentName : " + contentName);
+            
+        } catch (Exception e) {
+            logger.error("Exception in getPollGroupDCRName", e);
+        }
+        return contentName;
+
+    }
+    
+    /**
+     * This method is used to get the survey group name for the user persona from the config DCR.
+     * 
+     * @param doc Document object.
+     * @param nodeInput Node Input.
+     * @param context Request Context object.
+     * @param category Catgory name.
+     * @param locale Locale.
+     * @param persona Persona of the end user.
+     * 
+     * @return Returns ids.
+     */
+    @SuppressWarnings("unchecked")
+    public String getSurveyGroupDCRName(Document doc, String nodeInput,
+            RequestContext context, String category, String locale, String persona) {
+        logger.info("PollSurveyExternal : getSurveyGroupDCRName");
+        logger.debug("\nnodeInput : " + nodeInput + "\ncategory : "
+                + category + "\nlocal : " + locale + "\npersona : " + persona);
+        
+        String contentName =  null;
+        try {
+            List<Node> nodes = doc.selectNodes(nodeInput);
+            logger.debug("nodes size : " + nodes.size());
+            //String contentType = category;
+            String personaSurveyGroupDCR = null;
+            
+            for (Node node : nodes) {
+                Node isDefaultNode = node.selectSingleNode("isdefault");
+                String isDefault  = isDefaultNode.getText();
+                //Node personaNode = node.selectSingleNode("persona");
+                Node personaNode = node.selectSingleNode("value");
+                String personaValue  = personaNode.getText();
+                Node surveyNode = node.selectSingleNode("survey");
+                String surveyNodeGroupPath  = surveyNode.getText();
+                logger.debug("isDefault : " + isDefault);
+                logger.debug("personaValue : " + personaValue);
+                logger.debug("surveyNodeGroupPath : " + surveyNodeGroupPath);
+                
+                if(persona != null && persona.equals(personaValue)) {
+                    personaSurveyGroupDCR = surveyNodeGroupPath;
+                }else if(isDefault != null && "yes".equalsIgnoreCase(isDefault)) {
+                    personaSurveyGroupDCR = surveyNodeGroupPath; 
+                }else {
+                    logger.debug("No Default configured");
+                }
+            }
+            
+            logger.debug("Matching personaSurveyGroupDCR : " + personaSurveyGroupDCR);
+            contentName = getContentName(personaSurveyGroupDCR);
+            logger.debug("contentName : " + contentName);
+        } catch (Exception e) {
+            logger.error("Exception in getSurveyGroupDCRName", e);
+        }
+        return contentName;
 
     }
 

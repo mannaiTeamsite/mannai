@@ -13,7 +13,9 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
+import com.hukoomi.bo.PhpListUserBO;
 import com.hukoomi.utils.MySqlForServlet;
 import com.hukoomi.utils.PostgreForServlet;
 
@@ -52,6 +55,13 @@ public class NewsletterConfirmation extends HttpServlet {
 
     /** confirmed status constant. */
     private static final String STATUS_CONFIRMED = "Confirmed";
+    
+    /** external parameter. */
+    private static final String STATUS_SUCCESS = "Success";
+    
+    /** external parameter. */
+    private static final String STATUS_FAILED = "Failed";
+
 
     /** Postgre Object variable. */
     PostgreForServlet postgre = null;
@@ -98,6 +108,18 @@ public class NewsletterConfirmation extends HttpServlet {
     private static final String STATUS_PERSONA_NOTFOUND =
             "personaNOTFOUND";
     
+    /** phpList response status. */
+    private static final String SESSION_FAILED =
+            "sessionfailed";
+    
+    /** phpList response status. */
+    private static final String SUBSCRIBED_SUCCESSFULLY =
+            "subscribedSuccessfully";
+    
+    /** phpList response status. */
+    private static final String SUBSCRIBED_UNSUCCESSFULL =
+            "subscribedUnsuccessfull";
+    
     /** Postgre Object variable. */
     MySqlForServlet mysql = null;
 
@@ -107,7 +129,7 @@ public class NewsletterConfirmation extends HttpServlet {
         logger.info("NewsletterConfirmation : doGet()");
         postgre = new PostgreForServlet();
         mysql = new MySqlForServlet();
-
+        PhpListUserBO pluBO = null;
         PrintWriter writer = response.getWriter();
         String token = request.getParameter("token");
         String pageLang = request.getParameter("lang");
@@ -128,33 +150,76 @@ public class NewsletterConfirmation extends HttpServlet {
             String persona = getSubscriberPersona(subscriberId,preferenceId);
             int listid = getSubscriberListID(persona);
             String status="";
-            int uniqueid;
+            String subStatus="";
+            String uptpostgreData = "";
+            String syncStatus = "";
+            int userId = 0;
             status = phpSubscriberExists(subscriberemail,listid);
             try {
                 if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
                     
-                     uniqueid = createSubscriberPhplist(subscriberemail);
-                    if(uniqueid>0) {                
-                       updateSubscriberPersona(uniqueid,listid);
+                    subStatus = createSubscriberPhplist(subscriberemail);
+                    if(!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) { 
+                        userId = getSubscriberID(subscriberemail);
+                       updateSubscriberPersona(userId,listid);
                     }
-                    
+                    uptpostgreData=STATUS_SUCCESS;
                 }
                 if(!status.equals("") && status.equals(STATUS_PERSONA_NOTFOUND))
                 {
-                    uniqueid = getSubscriberID(subscriberemail);
-                    updateSubscriberPersona(uniqueid,listid);
+                    userId = getSubscriberID(subscriberemail);
+                    updateSubscriberPersona(userId,listid);
+                    uptpostgreData=STATUS_SUCCESS;
+                } 
+                if (uptpostgreData.equals(STATUS_SUCCESS) && status.equals(STATUS_NOTFOUND)) {
+                    String getPhpUser = "SELECT ID, EMAIL, CONFIRMED, BLACKLISTED, OPTEDIN, BOUNCECOUNT, "
+                            + "ENTERED, MODIFIED, UNIQID, UUID, HTMLEMAIL, SUBSCRIBEPAGE, RSSFREQUENCY, PASSWORD, "
+                            + "PASSWORDCHANGED, DISABLED, EXTRADATA, FOREIGNKEY FROM PHPLIST_USER_USER WHERE ID = ? ";
+                    
+                    String updateSyncUserQuery = "INSERT INTO PHPLIST_USER_USER (ID, EMAIL, CONFIRMED, BLACKLISTED,"
+                            + " OPTEDIN, BOUNCECOUNT, ENTERED, MODIFIED, UNIQID, UUID, HTMLEMAIL, SUBSCRIBEPAGE, RSSFREQUENCY, "
+                            + "PASSWORD, PASSWORDCHANGED, DISABLED, EXTRADATA, FOREIGNKEY)"
+                            + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                    
+                    String getUserList ="SELECT USERID, LISTID, ENTERED, MODIFIED FROM PHPLIST_LISTUSER WHERE ENTERED = "
+                            + "(SELECT MAX(ENTERED) FROM PHPLIST_LISTUSER WHERE USERID = ? AND LISTID = ?)";
+                    
+                    String updateSyncListQuery="INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
+                    
+                    pluBO = getsyncphpData(getPhpUser,userId,listid,"USERDATA");
+                    syncStatus = updatesyncphpData(updateSyncUserQuery,pluBO,"USERDATA");
+                    logger.debug("NewsletterConfirmation : syncstatus user table"+syncStatus);
+                    /* int userid = getphpUserID(subscriberemail); */
+                    logger.debug("NewsletterConfirmation : getphpUserID "+userId+" listid "+listid);
+                    if(syncStatus.equals(STATUS_SUCCESS)) {                        
+                        pluBO = getsyncphpData(getUserList,userId,listid,"LISTDATA");
+                        syncStatus = updatesyncphpData(updateSyncListQuery,pluBO,"LISTDATA");
+                    }
+                    
                 }
-                /*
-                 * int uniqueid = createSubscriberPhplist(subscriberemail);
-                 * if(uniqueid>0) { status=
-                 * updateSubscriberPersona(uniqueid,listid); }
-                 */
-                logger.debug("NewsletterConfirmation : doGet() >>>><<<<");
+                logger.debug("NewsletterConfirmation : syncstatus >>>>>"+syncStatus);
+                if (uptpostgreData.equals(STATUS_SUCCESS) && status.equals(STATUS_PERSONA_NOTFOUND)) {
+                    
+                    String getUserList ="SELECT USERID, LISTID, ENTERED, MODIFIED FROM PHPLIST_LISTUSER WHERE ENTERED = "
+                            + "(SELECT MAX(ENTERED) FROM PHPLIST_LISTUSER WHERE USERID = ? AND LISTID = ?)";
+                    
+                    String updateSyncListQuery="INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
+                    
+                    /* int userid = getphpUserID(subscriberemail); */
+                    pluBO = getsyncphpData(getUserList,userId,listid, "LISTDATA");
+                    syncStatus = updatesyncphpData(updateSyncListQuery,pluBO,"LISTDATA");
+                    logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>"+syncStatus);
+                }
+                    
+            
+               
             } catch (NoSuchAlgorithmException e) {            
                 logger.error("NewsletterConfirmation : doGet() >>>>"+e);
             } catch (IOException e) {            
                 logger.error("NewsletterConfirmation : doGet() <<<<"+e);
             }
+
+            if (uptpostgreData.equals(STATUS_SUCCESS)) {
             String tokenType = getTokenType(subscriberId);
             boolean tokenStatusUpdate = false;
             boolean masterDataUpdate = false;
@@ -186,6 +251,12 @@ public class NewsletterConfirmation extends HttpServlet {
             response.addCookie(confirmationCookie);
             rd.forward(request, response);
         }
+    } else {
+        Cookie confirmationCookie = new Cookie("confirmationStatus",
+                "technicalIssue");
+        response.addCookie(confirmationCookie);
+        rd.forward(request, response);
+    }
        
     } else {
         Cookie confirmationCookie = new Cookie("confirmationStatus",
@@ -193,7 +264,7 @@ public class NewsletterConfirmation extends HttpServlet {
         response.addCookie(confirmationCookie);
         rd.forward(request, response);
     }
-        writer.flush();
+
     }
 
     /**
@@ -487,6 +558,42 @@ public class NewsletterConfirmation extends HttpServlet {
     
     /**
      * @author pramesh
+     * @param email
+     * @param listid
+     * @return
+     * 
+     * This method get the checks if Subsscriber status and updates
+     */
+    /*
+     * private int getphpUserID(String email) {
+     * logger.info("NewsletterConfirmation : getphpUserID"); boolean
+     * subscriberPreferenceDataInsert = false; String
+     * checkSubscriberEmailQuery =
+     * "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ? "; Connection
+     * connection = null; PreparedStatement prepareStatement = null; int
+     * phpUserID =0; ResultSet rs = null; String status=""; try {
+     * connection = mysql.getConnection(); prepareStatement = connection
+     * .prepareStatement(checkSubscriberEmailQuery);
+     * prepareStatement.setString(1, email);
+     * 
+     * rs = prepareStatement.executeQuery();
+     * 
+     * if (rs.next()) { logger.info("Subscriber Already Exist !");
+     * phpUserID = rs.getInt(PHP_USER_ID);
+     * 
+     * } else { logger.info("Subscriber Doesn't Exist !");
+     * 
+     * }
+     * 
+     * 
+     * } catch (Exception e) {
+     * logger.error("Exception in phpSubscriberExists", e); } finally {
+     * mysql.releaseConnection(connection, prepareStatement, null); }
+     * 
+     * return phpUserID; }
+     */
+    /**
+     * @author pramesh
      * @param subscriberId
      * @return
      * 
@@ -512,7 +619,7 @@ public class NewsletterConfirmation extends HttpServlet {
                 subscriberEmail =  rs.getString(SUBSCRIBER_EMAIL);
             }
         } catch (Exception e) {
-            logger.error("Exception in updateMasterTable", e);
+            logger.error("Exception in getSubscriberEmail", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
@@ -671,27 +778,35 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method is to add subscriber to phpList 
      */
-    private int createSubscriberPhplist(final String email)
+    private String createSubscriberPhplist(final String email)
             throws IOException, NoSuchAlgorithmException {
         logger.info("createSubscriberPhplist:Enter");       
         Properties properties =
                 postgre.loadProperties("phplist.properties");
         String base64Token = getphpListToken();
-        authorizationHeader =
-                "Basic " + base64Token;
-        baseUrl = properties.getProperty(BASE_URL);
-        int unique_id = 0;
-        try {            
+        String status="";
+        if(!base64Token.equals(SESSION_FAILED)) {
             
-                    unique_id =
-                            createSubscriber(email,authorizationHeader);
-                    logger.debug("unique_id: " + unique_id);
+            authorizationHeader =
+                    "Basic " + base64Token;
+            baseUrl = properties.getProperty(BASE_URL);
+            /* int unique_id = 0; */
+            try {            
+                
+                status =
+                                createSubscriber(email,authorizationHeader);
+                        logger.debug("status: " + status);
 
-        } catch (Exception e) {
-            logger.error("exception:", e);
-        }
+            } catch (Exception e) {
+                logger.error("exception: createSubscriberPhplist", e);
+            }
+            
+        }else {
+            
+            status = SESSION_FAILED;
+        }      
 
-        return unique_id;
+        return status;
     }
     
     /**
@@ -703,11 +818,14 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method makes service call to add subscriber to phpList
      */
-    private int createSubscriber(final String email,String authHeader)
+    private String createSubscriber(final String email,String authHeader)
             throws NoSuchAlgorithmException {
         logger.info("createsubscriber:Enter");
         InputStream is = null;
         String requestJSON = "";
+        StringBuilder response = new StringBuilder();
+        int statusCode=0;
+        String status = "";
         try {
             // Create connection
             Properties properties =
@@ -744,28 +862,35 @@ public class NewsletterConfirmation extends HttpServlet {
             is = httpConnection.getInputStream();
             BufferedReader rd =
                     new BufferedReader(new InputStreamReader(is));
-            StringBuilder response = new StringBuilder();
+            
             String line;
             while ((line = rd.readLine()) != null) {
                 response.append(line);
                 response.append('\r');
             }
             rd.close();
-            return getResponseValue(response.toString(),PHP_USER_ID);
-        } catch (IOException ioe) {
-            int statusCode=0;
+            statusCode = httpConnection.getResponseCode();
+        } catch (IOException ioe) {            
             try {
                 statusCode = httpConnection.getResponseCode();
                 logger.debug("statusCode: " + statusCode);
-                return statusCode;
+                status = SUBSCRIBED_UNSUCCESSFULL;
+                
             } catch (IOException e) {
                 logger.error("Exception in subscriber creation: ", e);
             }
             httpConnection.disconnect();
             logger.error("Exception in subscriber creation: ", ioe);
-            return statusCode;
+            
         }
-
+        logger.debug("createsubscriber: statuscode" + statusCode);
+        /* return getResponseValue(response.toString(),PHP_USER_ID); */
+        if(statusCode==201) {
+            status = SUBSCRIBED_SUCCESSFULLY;
+        }else {
+            status = SUBSCRIBED_UNSUCCESSFULL;
+        }
+        return status;
     }
     
     /**
@@ -782,7 +907,8 @@ public class NewsletterConfirmation extends HttpServlet {
         String requestJSON = "";
         InputStream is = null;
         String adminID= "";
-        String adminPWD= "";        
+        String adminPWD= ""; 
+        int statusCode=0;
         Properties properties =
                   postgre.loadProperties("phplist.properties"); 
         baseUrl = properties.getProperty(BASE_URL);
@@ -791,45 +917,67 @@ public class NewsletterConfirmation extends HttpServlet {
         String endpoint = baseUrl +
           "/api/v2/sessions";       
          
-        URL url = new URL(endpoint);
-        httpConnection = (HttpURLConnection) url.openConnection();
-        httpConnection.setRequestMethod("POST");
-        httpConnection.setRequestProperty("Content-Type",
-                "application/json");
-        httpConnection.setDoOutput(true);       
-        requestJSON = "{ \"login_name\" : \"" + adminID
-                + "\", \"password\" : \""
-                + adminPWD + "\" }";
-        
-        logger.debug("requestJSON: " + requestJSON);
-        httpConnection.setRequestProperty("Content-Length",
-                Integer.toString(requestJSON.getBytes().length));
-        httpConnection.setRequestProperty("Content-Language", "en-US");
-        httpConnection.setUseCaches(false);
-        httpConnection.setDoOutput(true);
-
-        // Send request
-        DataOutputStream wr =
-                new DataOutputStream(httpConnection.getOutputStream());
-        wr.writeBytes(requestJSON);
-        wr.close();
-
-        // Get Response
-        is = httpConnection.getInputStream();
-        BufferedReader rd =
-                new BufferedReader(new InputStreamReader(is));
         StringBuilder response = new StringBuilder();
-        String line;
-        while ((line = rd.readLine()) != null) {
-            response.append(line);
-            response.append('\r');
+        
+        try {
+            URL url = new URL(endpoint);
+            httpConnection = (HttpURLConnection) url.openConnection();
+            httpConnection.setRequestMethod("POST");
+            httpConnection.setRequestProperty("Content-Type",
+                    "application/json");
+            httpConnection.setDoOutput(true);       
+            requestJSON = "{ \"login_name\" : \"" + adminID
+                    + "\", \"password\" : \""
+                    + adminPWD + "\" }";
+            
+            logger.debug("requestJSON: " + requestJSON);
+            httpConnection.setRequestProperty("Content-Length",
+                    Integer.toString(requestJSON.getBytes().length));
+            httpConnection.setRequestProperty("Content-Language", "en-US");
+            httpConnection.setUseCaches(false);
+            httpConnection.setDoOutput(true);
+
+            // Send request
+            DataOutputStream wr =
+                    new DataOutputStream(httpConnection.getOutputStream());
+            wr.writeBytes(requestJSON);
+            wr.close();
+
+            // Get Response
+            is = httpConnection.getInputStream();
+            BufferedReader rd =
+                    new BufferedReader(new InputStreamReader(is));
+            /* response = new StringBuilder(); */
+            String line;
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append('\r');
+            }
+            rd.close();
+            logger.debug(
+                    "Response in getphpListToken() " + response.toString());
+            statusCode = httpConnection.getResponseCode();
+        } catch (IOException e) {           
+            
+            try {
+                statusCode = httpConnection.getResponseCode();
+                logger.debug("statusCode: " + statusCode);
+                
+            } catch (IOException ioe) {
+                logger.error("Exception in session creation: getphpListToken ", ioe);
+            }
+            httpConnection.disconnect();
+            logger.error("Exception in session creation: getphpListToken ", e);
+         
+            return (SESSION_FAILED);
         }
-        rd.close();
-        logger.debug(
-                "Response in getphpListToken() " + response.toString());
-        return getToken(response.toString());
-        
-        
+        logger.debug("statusCode: " + statusCode);
+        if(statusCode==201) {
+            token = getToken(response.toString());
+        }else {
+            token = SESSION_FAILED;
+        }
+       return token;
     }
     
     /**
@@ -873,5 +1021,131 @@ public class NewsletterConfirmation extends HttpServlet {
         doGet(request, response);
 
     }
+    
+    public PhpListUserBO getsyncphpData(String query, int userid, int listid, String tabName) {
+        
+        logger.info("NewsletterConfirmation : getsyncphpData");      
+        
+        PreparedStatement prepareStatement = null;      
+      
+        Connection connection = null;
+        ResultSet rs = null;       
+        PhpListUserBO pluBO = null;
+        try {
+            connection = mysql.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(query);
+            if(tabName.equals("USERDATA")) {
+                prepareStatement.setInt(1, userid);
+            }else if(tabName.equals("LISTDATA")){
+                prepareStatement.setInt(1, userid);
+                prepareStatement.setInt(2, listid);
+            }
+            
+            
+            logger.debug("query : " + query);
+            rs = prepareStatement.executeQuery();
+            while(rs.next()) { 
+                
+                if(tabName.equals("USERDATA")) {
+                    pluBO = new PhpListUserBO();
+                    pluBO.setId(rs.getInt("ID"));
+                    pluBO.setEmail(rs.getString("EMAIL"));
+                    pluBO.setConfirmed(rs.getInt("CONFIRMED"));
+                    pluBO.setBlacklisted(rs.getInt("BLACKLISTED"));
+                    pluBO.setOptedin(rs.getInt("OPTEDIN"));
+                    pluBO.setBouncecount(rs.getInt("BOUNCECOUNT"));
+                    pluBO.setEntered(rs.getDate("ENTERED"));
+                    pluBO.setModified(rs.getDate("MODIFIED"));
+                    pluBO.setUniqid(rs.getString("UNIQID"));
+                    pluBO.setUuid(rs.getString("UUID"));
+                    pluBO.setHtmlemail(rs.getInt("HTMLEMAIL"));
+                    pluBO.setSubscribepage(rs.getInt("SUBSCRIBEPAGE"));
+                    pluBO.setRssfrequency(rs.getString("RSSFREQUENCY"));
+                    pluBO.setPassword(rs.getString("PASSWORD"));
+                    pluBO.setPasswordchanged(rs.getDate("PASSWORDCHANGED"));
+                    pluBO.setDisabled(rs.getInt("DISABLED"));
+                    pluBO.setExtradata(rs.getString("EXTRADATA"));
+                    pluBO.setForeignkey(rs.getString("FOREIGNKEY"));
+                    
+                }else {
+                    
+                    pluBO = new PhpListUserBO();
+                    pluBO.setUserid(rs.getInt("USERID"));
+                    pluBO.setListid(rs.getInt("LISTID"));
+                    pluBO.setEntered(rs.getDate("ENTERED"));
+                    pluBO.setModified(rs.getDate("MODIFIED"));
+                }
+                
+            }
+           
+        } catch (Exception e) {
+            logger.error("Exception in getsyncphpData", e);
+        } finally {
+            mysql.releaseConnection(connection, prepareStatement, null);
+        }   
+     
+        return pluBO;
+        
+    }
+    
+    private String updatesyncphpData(String query, PhpListUserBO pluBO, String tabName) {
+        logger.info("NewsletterConfirmation : updatesyncphpData");  
+        logger.info("PhpListUserBO "+pluBO.getId()+" "+pluBO.getEmail()+ " "+pluBO.getEntered()); 
+       
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        String syncStatus = "";
+        ResultSet rs = null;
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(query);
+            if(tabName.equals("USERDATA")) {
+                
+                prepareStatement.setInt(1, pluBO.getId() );
+                prepareStatement.setString(2, pluBO.getEmail());
+                prepareStatement.setInt(3,pluBO.getConfirmed());
+                prepareStatement.setInt(4, pluBO.getBlacklisted());
+                prepareStatement.setInt(5, pluBO.getOptedin());
+                prepareStatement.setInt(6, pluBO.getBouncecount());
+                prepareStatement.setDate(7, pluBO.getEntered());
+                prepareStatement.setDate(8, pluBO.getModified());
+                prepareStatement.setString(9, pluBO.getUniqid());
+                prepareStatement.setString(10, pluBO.getUuid());
+                prepareStatement.setInt(11, pluBO.getHtmlemail());
+                prepareStatement.setInt(12, pluBO.getSubscribepage());
+                prepareStatement.setString(13, pluBO.getRssfrequency());
+                prepareStatement.setString(14, pluBO.getPassword());
+                prepareStatement.setDate(15, pluBO.getPasswordchanged());
+                prepareStatement.setInt(16, pluBO.getDisabled());
+                prepareStatement.setString(17, pluBO.getExtradata());
+                prepareStatement.setString(18, pluBO.getForeignkey());
+                
+            }else if(tabName.equals("LISTDATA")){
+                
+                prepareStatement.setInt(1, pluBO.getUserid() );
+                prepareStatement.setInt(2, pluBO.getListid() );
+                prepareStatement.setDate(3, pluBO.getEntered());
+                prepareStatement.setDate(4, pluBO.getModified());
+            }
+            
+            int rowCount = prepareStatement.executeUpdate();   
+            if(rowCount > 0) {
+                syncStatus = STATUS_SUCCESS;
+            }else {
+                syncStatus = STATUS_FAILED;
+            }
+        } catch (Exception e) {
+            logger.error("Exception in getSubscriberPersona", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }        
+      
+        
+        return syncStatus;
+    }
+    
+    
 
 }
