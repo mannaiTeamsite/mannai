@@ -1,6 +1,8 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,6 +43,7 @@ public class DashboardExternal {
 	private static final Logger LOGGER = Logger.getLogger(DashboardExternal.class);
 	Postgre postgre = null;
 
+	/** Decrypting the token and setting session. */
 	public void dashboardServices(RequestContext context, String accessToken) {
 		String jwtParsedToken = null;
 		HttpServletRequest request = context.getRequest();
@@ -51,17 +54,18 @@ public class DashboardExternal {
 
 				setSessionAttributes(jwtParsedToken, request, "valid");
 			} catch (ExpiredJwtException e) {
-				LOGGER.info("Token Expired");
+				LOGGER.error("Token Expired");
 				setSessionAttributes(jwtParsedToken, request, "Token Expired");
 			} catch (SignatureException e) {
-				LOGGER.info("Signature Exception");
+				LOGGER.error("Signature Exception");
 				setSessionAttributes(jwtParsedToken, request, "Signature Exception");
 			} catch (Exception e) {
-				LOGGER.info("Some other exception in JWT parsing" + e);
+				LOGGER.error("Some other exception in JWT parsing" + e);
 				setSessionAttributes(jwtParsedToken, request, "Some other exception in JWT parsing");
 			}
 	}
 
+	/** Setting the user info in session. */
 	private void setSessionAttributes(String jwtParsedToken, HttpServletRequest request, String status) {
 		LOGGER.info("--------------setSessionAttributes is called------------");
 		HttpSession session = request.getSession(true);
@@ -83,11 +87,8 @@ public class DashboardExternal {
 			session.setAttribute("exp", getValue(jwtParsedToken, "exp"));
 			session.setAttribute("usertypeNo", getValue(jwtParsedToken, "type"));
 			session.setAttribute("userId", getValue(jwtParsedToken, "uid"));
-			
-			LOGGER.info("UserId : " + getValue(jwtParsedToken, "uid"));
-			
 			String userTypeStr = getValue(jwtParsedToken, "type");
-			LOGGER.info("userType JWT : " + userTypeStr);
+
 			if (userTypeStr != null && !"".equals(userTypeStr)) {
 				int userType = Integer.parseInt(userTypeStr);
 
@@ -97,11 +98,9 @@ public class DashboardExternal {
 					session.setAttribute("userType", "business");
 				}
 			}
-			LOGGER.info("userType : " + session.getAttribute("userType"));
 
 		}
 
-		LOGGER.info("Expiry Date" + session.getAttribute("exp"));
 		LOGGER.info("--------------setSessionAttributes is Ended------------");
 	}
 
@@ -115,6 +114,7 @@ public class DashboardExternal {
 		return status;
 	}
 
+	/** Removing the session values on logout. */
 	public void removeSessionAttr(RequestContext context) {
 		LOGGER.info("--------------removeSessionAttr is Ended------------");
 
@@ -141,8 +141,15 @@ public class DashboardExternal {
 
 		LOGGER.info("--------------removeSessionAttr is Ended------------" + session.getAttribute("status"));
 	}
-
+	
 	public Document doLogout(RequestContext context) throws IOException {
+		/**
+		 * This method will be called from Component External for logout.
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("--------------doLogout Started------------");
 		final String RELAY_URL = "relayURL";
 		Document doc = DocumentHelper.createDocument();
@@ -154,7 +161,7 @@ public class DashboardExternal {
 		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
 		String relayURL = rhu.getCookie(RELAY_URL);
 		String url = properties.getProperty("logout") + "?relayURL=" + relayURL;
-		LOGGER.info("---Logout url---" + url);
+		
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect(url);
 		LOGGER.info("--------------doLogout Ended------------");
@@ -162,7 +169,13 @@ public class DashboardExternal {
 	}
 
 	public Document getDashboardContent(RequestContext context) {
-
+		/**
+		 * This method will be called from Component External for Fetching user data after login
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
 		HttpSession session = context.getRequest().getSession();
 
@@ -189,12 +202,12 @@ public class DashboardExternal {
 		if (status != null && status.equals("valid")) {
 
 			Element userTypeElement = userdata.addElement("userType");
-			userTypeElement.setText("personal");
+			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userdata.addElement("fnEn");
 			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userdata.addElement("lnEn");
 			lnEnElement.setText((String) session.getAttribute("lnEn"));
-			
+
 			Element fnArElement = userdata.addElement("fnAr");
 			fnArElement.setText((String) session.getAttribute("fnAr"));
 			Element lnArElement = userdata.addElement("lnAr");
@@ -203,14 +216,20 @@ public class DashboardExternal {
 			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
 		}
 
-		LOGGER.info("Final doc" + doc.asXML());
+		
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 
 	}
 
 	public Document getMyDataContent(RequestContext context) {
-
+		/**
+		 * This method will be called from Component External for Fetching user data after login
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
 		HttpSession session = context.getRequest().getSession();
 
@@ -220,53 +239,29 @@ public class DashboardExternal {
 		String status = (String) session.getAttribute("status");
 		if (status != null && status.equals("valid")) {
 			Element userTypeElement = userData.addElement("userType");
-			String userType = (String) session.getAttribute("userType");
-
-			if (userType != null) {
-				userTypeElement.setText(userType);
-			}
-
-			String fnEn = (String) session.getAttribute("fnEn");
+			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userData.addElement("fnEn");
-			if (fnEn != null) {
-				fnEnElement.setText(fnEn);
-			}
-			String lnEn = (String) session.getAttribute("lnEn");
+			fnEnElement.setText((String) session.getAttribute("fnEn"));
 			Element lnEnElement = userData.addElement("lnEn");
-			if (lnEn != null) {
-				lnEnElement.setText(lnEn);
-			}
-			
-			String fnAr = (String) session.getAttribute("fnAr");
+			lnEnElement.setText((String) session.getAttribute("lnEn"));
+
 			Element fnArElement = userData.addElement("fnAr");
-			if (fnAr != null) {
-				fnArElement.setText(fnAr);
-			}
-			String lnAr = (String) session.getAttribute("lnAr");
-			Element lnArEnElement = userData.addElement("lnAr");
-			if (lnAr != null) {
-				lnArEnElement.setText(lnAr);
-			}
-
+			fnArElement.setText((String) session.getAttribute("fnAr"));
+			Element lnArElement = userData.addElement("lnAr");
+			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userData.addElement("userTypeNoElement");
+			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
 
-			String userTypeNo = (String) session.getAttribute("userTypeNo");
-			LOGGER.info("userTypeNo :"+userTypeNo);
-			if (userTypeNo != null) {
-				userTypeNoElement.setText(userTypeNo);
+		} else {
+			try {
+				redirectToLoginPage(context);
+			} catch (IOException e) {
+				LOGGER.error(e);
+
 			}
 
+			LOGGER.info("session invalid");
 		}
-		else {
-			//
-//						try {
-//							redirectToLoginPage(context);
-//						} catch (IOException e) {
-//							// TODO Auto-generated catch block
-//							LOGGER.info("Error"+e);
-//						}
-						LOGGER.info("session invalid");
-					}
 		LOGGER.info("Bookmark doc" + doc.asXML());
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
@@ -274,9 +269,15 @@ public class DashboardExternal {
 	}
 
 	public Document getDashboardbookmark(RequestContext context) {
+		/**
+		 * This method will be called from Component External for Fetching bookmark
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document generated from solr query.
+		 */
 		LOGGER.info("getDashboardbookmark()====> Starts");
 
-		
 		pagetitle = context.getParameterString("page_title");
 
 		pageurl = context.getParameterString("page_url");
@@ -290,20 +291,19 @@ public class DashboardExternal {
 
 		postgre = new Postgre(context);
 		HttpSession session = context.getRequest().getSession();
-String status=(String) session.getAttribute("status");
-LOGGER.info("status="+session.getAttribute("status"));
+		String status = (String) session.getAttribute("status");
+		LOGGER.info("Dashboard status=" + session.getAttribute("status"));
 		if (status != null && status.equals("valid")) {
-			userID = "0";
-//userID = (String) session.getAttribute("userId");
+			userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
 
 			table = context.getParameterString("bookmark").trim();
 			boolean isExist = false;
 			LOGGER.info("locale:" + locale);
-			
+
 			isExist = isBookmarkPresent();
-			
+
 			LOGGER.info("table:" + table);
 
 			if (!"".equals(table) && !"".equals(userID)) {
@@ -323,13 +323,12 @@ LOGGER.info("status="+session.getAttribute("status"));
 			}
 			LOGGER.info("session valid");
 		} else {
-//
-//			try {
-//				redirectToLoginPage(context);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				LOGGER.info("Error"+e);
-//			}
+
+			try {
+				redirectToLoginPage(context);
+			} catch (IOException e) {
+				LOGGER.error("Error" + e);
+			}
 			LOGGER.info("session invalid");
 		}
 		LOGGER.info("getDashboardbookmark()====> ends");
@@ -379,6 +378,7 @@ LOGGER.info("status="+session.getAttribute("status"));
 						ele5.setText(ctype);
 						Element ele6 = ele.addElement("category");
 						ele6.setText(categoryType);
+
 						LOGGER.info("Result:" + pageTitle + ":" + pageURL);
 					}
 					i++;
@@ -396,8 +396,15 @@ LOGGER.info("status="+session.getAttribute("status"));
 	}
 
 	private void removeBookmark(Element bookmarkResultEle) {
+		/**
+		 * This method will be called from Component External for removing the bookmark
+		 * 
+		 * @param context The parameter context object passed from Component.
+		 *
+		 * @return doc return the solr response document.
+		 */
 
-		String activeflag = "F";
+		String activeflag = "N";
 		LOGGER.info("removeBookmark()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
@@ -405,79 +412,94 @@ LOGGER.info("status="+session.getAttribute("status"));
 				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
 				+ "' and content_type='" + contenttype + "'";
 		LOGGER.info("updateQuery:" + updateQuery);
+
 		int result = 0;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(updateQuery);
 				result = prepareStatement.executeUpdate();
 
+				LOGGER.info("caling get bookmark");
 				Element bmm = bookmarkResultEle.addElement("bmm");
 				getBookmark(bmm, "bmm");
+				LOGGER.info("bmm" + bmm.asXML());
 				Element bmd = bookmarkResultEle.addElement("bmd");
 				getBookmark(bmd, "bmd");
+				LOGGER.info("bmd" + bmd.asXML());
 				Element bms = bookmarkResultEle.addElement("bms");
 				getBookmark(bms, "bms");
+				LOGGER.info("bms" + bms.asXML());
+			}
+		} catch (SQLException ex) {
+			LOGGER.error("Exception on update Query:", ex);
+		} finally {
+			postgre.releaseConnection(connection, prepareStatement, null);
+		}
 
+		LOGGER.info("removeBookmark()====> ends");
+
+	}
+
+	public boolean isBookmarkPresent() {
+		boolean check = false;
+		LOGGER.info("isBookmarkPresent()====> Starts");
+		Connection connection = getConnection();
+		PreparedStatement prepareStatement = null;
+		String searchQuery = "select active from" + " " + table + " " + "where" + " " + "locale='" + locale
+				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
+				+ "' and content_type='" + contenttype + "'";
+		ResultSet resultSet = null;
+		try {
+			if (connection != null) {
+				prepareStatement = connection.prepareStatement(searchQuery);
+				resultSet = prepareStatement.executeQuery();
+
+				while (resultSet.next()) {
+					isBookmarked = resultSet.getString(1);
+
+					if (!"".equals(isBookmarked)) {
+						check = true;
+						LOGGER.info("check:" + check);
+					}
+				}
 			}
 		} catch (SQLException ex) {
 			LOGGER.error("Exception on Select Query:", ex);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, null);
+			postgre.releaseConnection(connection, prepareStatement, resultSet);
 		}
-		LOGGER.info("removeBookmark()====> ends");
-
+		LOGGER.info("getBookmark()====> ends");
+		return check;
 	}
-	public boolean isBookmarkPresent() {
-        boolean check=false;
-        LOGGER.info("isBookmarkPresent()====> Starts");
-        Connection connection = getConnection();
-        PreparedStatement prepareStatement = null;
-        String searchQuery = "select active from" + " " +
-                table + " " + "where" + " " + "locale='"+ locale +"' and user_id='"
-                + userID+"' and page_title='"+pagetitle+ "' and page_url='"+pageurl+"' and content_type='"+contenttype+"'";
-        ResultSet resultSet = null;
-        try {
-            if(connection != null){
-                prepareStatement = connection.prepareStatement(searchQuery);
-                resultSet = prepareStatement.executeQuery();
 
-                while(resultSet.next()){
-                    isBookmarked = resultSet.getString(1);
-
-                    if(!"".equals(isBookmarked))
-                    {
-                        check=true;
-                        LOGGER.info("check:" + check);
-                    }
-                }
-            }
-        } catch (SQLException ex) {
-        	LOGGER.error("Exception on Select Query:",ex);
-        }finally {
-            postgre.releaseConnection(connection, prepareStatement, resultSet);
-        }
-        LOGGER.info("getBookmark()====> ends");
-        return check;
-    }
-	
 	public void redirectToLoginPage(RequestContext context) throws IOException {
 		LOGGER.info("--------------nonLoggedIn Started------------");
+		PropertiesFileReader prop = null;
+		prop = new PropertiesFileReader(context, "dashboard.properties");
+		properties = prop.getPropertiesFile();
+		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
+		String relayURL = rhu.getRequestURL();
+		LOGGER.info("---relayURL url---" + relayURL);
+		String url = properties.getProperty("login") + "?relayURL=" + relayURL;
+		LOGGER.info("---Login url---" + url);
+		String domain = "";
+		URI uri;
+		try {
+			uri = new URI(relayURL);
+			domain = uri.getHost();
+			
+		} catch (URISyntaxException e) {
+			LOGGER.error(e);
+			
+		}
+		String livesiteDomain = properties.getProperty("domain");
 		
-		
-//			final String RELAY_URL = "relayURL";
-			PropertiesFileReader prop = null;
-			prop = new PropertiesFileReader(context, "dashboard.properties");
-			properties = prop.getPropertiesFile();
-			RequestHeaderUtils rhu = new RequestHeaderUtils(context);
-			String relayURL = rhu.getRequestURL();
-			LOGGER.info("---relayURL url---" + relayURL);
-			String url = properties.getProperty("login") + "?relayURL=" + relayURL;
-			LOGGER.info("---Login url---" + url);
+		if (domain.equalsIgnoreCase(livesiteDomain)) {
 			HttpServletResponse response = context.getResponse();
 			response.sendRedirect(url);
-	
-		
+		}
+
 		LOGGER.info("--------------nonLoggedIn Ended------------");
-		
+
 	}
 }

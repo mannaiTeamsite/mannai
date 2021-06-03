@@ -134,6 +134,7 @@ public class WeatherApi {
         final String CITY = "City";
         final String ELEMENT = "Elem";
         final String WEATHER = "weather";
+        final String WEATHER_CODE = "weatherCode";
         final String WEATHER_AR = "weatherAr";
         final String dayEn = "dayEn";
         final String dayAr = "dayAr";
@@ -210,6 +211,12 @@ public class WeatherApi {
                         day4.put(elem, weatherData.get(3));
                     }
                     if (elem.equalsIgnoreCase(WEATHER_AR)) {
+                        day1.put(elem, weatherData.get(0));
+                        day2.put(elem, weatherData.get(1));
+                        day3.put(elem, weatherData.get(2));
+                        day4.put(elem, weatherData.get(3));
+                    }
+                    if (elem.equalsIgnoreCase(WEATHER_CODE)) {
                         day1.put(elem, weatherData.get(0));
                         day2.put(elem, weatherData.get(1));
                         day3.put(elem, weatherData.get(2));

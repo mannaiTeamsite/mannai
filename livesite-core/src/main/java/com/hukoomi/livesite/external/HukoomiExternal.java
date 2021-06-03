@@ -1,28 +1,26 @@
 package com.hukoomi.livesite.external;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
+import com.hukoomi.livesite.solr.SolrQueryBuilder;
+import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.SolrQueryUtil;
+import com.hukoomi.utils.UserInfoSession;
+import com.interwoven.livesite.common.web.CookieUtils;
+import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 
-import com.hukoomi.livesite.solr.SolrQueryBuilder;
-import com.hukoomi.utils.CommonUtils;
-import com.hukoomi.utils.SolrQueryUtil;
-import com.hukoomi.utils.UserInfoSession;
-import com.interwoven.livesite.runtime.RequestContext;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 public class HukoomiExternal {
 	/** Logger object to check the flow of the code. */
 	private final Logger logger = Logger.getLogger(HukoomiExternal.class);
 	/** Default query to fetch all solr content. */
 	public static final String DEFAULT_QUERY = "*:*";
+	/** Constant for cookie name. */
+	private static final String DEFAULT_COOKIE = "persona";
 
 	/**
 	 * This method will be called from Component External for solr Content fetching.
@@ -61,9 +59,43 @@ public class HukoomiExternal {
 			logger.debug("fieldQuery : " + fieldQuery);
 			sqb.addFields(fields);
 		}
+
+		String highlighterVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlighter",""));
+		logger.debug("highlighter: " +highlighterVal);
+		if(StringUtils.isNotBlank(highlighterVal)){
+			logger.debug("fieldQuery highlighter : " +fieldQuery);
+			sqb.addHlTag(highlighterVal);
+		}
+
+		String highlightTagVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightTag",""));
+		logger.debug("highlightTag: "+highlightTagVal);
+		if(StringUtils.isNotBlank(highlightTagVal)){
+			logger.debug("fieldQuery highlightTag"+fieldQuery);
+			sqb.addHlHtmlTag(highlightTagVal);
+		}
+
+		String highlightFieldVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightField",""));
+		logger.debug("highlightFieldVal: "+highlightFieldVal);
+		if(StringUtils.isNotBlank(highlightFieldVal)){
+			logger.debug("fieldQuery highlightFieldVal"+fieldQuery);
+			sqb.addHlField(highlightFieldVal);
+		}
+
+		String cookieName = context.getParameterString("cookieName",DEFAULT_COOKIE);
+		if(cookieName != null && !cookieName.equalsIgnoreCase("")){
+			logger.debug("Cookie Name : " + cookieName);
+			String personaCookieValue = CookieUtils.getValue(context.getRequest(), cookieName);
+			if (personaCookieValue != null && !personaCookieValue.equalsIgnoreCase("")) {
+				logger.debug("Persona Cookie Value: "+personaCookieValue);
+				sqb.addDismaxBq(personaCookieValue);
+			}
+		}
+
 		String query = sqb.build();
 		logger.debug("Landing Query : " + query);
-		Document doc = squ.doJsonQuery(query, "SolrResponse");
+		Document doc;
+		doc = squ.doJsonQuery(query, "SolrResponse");
+
 		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
