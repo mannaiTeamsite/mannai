@@ -165,7 +165,7 @@ public class NewsletterPhpExternal {
 
 		if (validateLanguage(subscriptionLang)
 				&& validateMailID(xssUtils.stripXSS(email))) {
-			if(gRecaptchaResponse!= null || !gRecaptchaResponse.equals("")) {
+			if(gRecaptchaResponse!= null && !gRecaptchaResponse.equals("")) {
 				GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
 				verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
 				logger.debug("Recapcha verification status:" + verify);
