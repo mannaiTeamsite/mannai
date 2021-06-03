@@ -29,16 +29,16 @@ public class ErrorExternal {
 		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
 		{
 			
-			 String brokenLink = req.getReferer();
+			 String brokenLink = req.getRequestURL();
 			 String language = context.getParameterString(LOCALE);
 			 String statusCode = context.getParameterString(STATUS);
 			 
 			 logger.info("Error Status"+statusCode);
-			 String contentPage = req.getRequestURL();
+			 String contentPage = req.getReferer(); 
 			 PropertiesFileReader prop = null;
 				prop = new PropertiesFileReader(context, "dashboard.properties");
 				properties = prop.getPropertiesFile();
-			 String errorpage = properties.getProperty("domain");
+			 String errorpage = properties.getProperty("errorPage");
 			 if(!errorpage.equals(contentPage)) {
 				 CommonUtils cu = new CommonUtils(context);
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
