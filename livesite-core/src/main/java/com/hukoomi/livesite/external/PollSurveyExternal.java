@@ -126,7 +126,7 @@ public class PollSurveyExternal {
 
             if ("vote".equalsIgnoreCase(inputAction)) {
                 PollsBO pollsBO = new PollsBO();
-                boolean isInputValid = pollsExt.setBO(context, pollsBO);
+                boolean isInputValid = pollsExt.setBO(context, pollsBO, postgre);
                 if(isInputValid) {
                     logger.debug("PollsBO : " + pollsBO);
                     doc = pollsExt.processVotePoll(pollsBO, postgre,
@@ -166,11 +166,11 @@ public class PollSurveyExternal {
             PollsExternal pollsExt = new PollsExternal();
             SurveyExternal surveyExt = new SurveyExternal();
             PollsBO pollsBO = new PollsBO();
-            boolean isPollInputValid = pollsExt.setBO(context, pollsBO);
+            boolean isPollInputValid = pollsExt.setBO(context, pollsBO, postgre);
             logger.debug("PollsBO : " + pollsBO);
             
             SurveyBO surveyBO = new SurveyBO();
-            boolean isSurveyInputValid = surveyExt.setBO(context, surveyBO);
+            boolean isSurveyInputValid = surveyExt.setBO(context, surveyBO, postgre);
             logger.debug("SurveyBO : " + surveyBO);
 
             String solarCore = "portal-en";
@@ -307,11 +307,11 @@ public class PollSurveyExternal {
             PollsExternal pollsExt = new PollsExternal();
             SurveyExternal surveyExt = new SurveyExternal();
             PollsBO pollsBO = new PollsBO();
-            boolean isPollInputValid = pollsExt.setBO(context, pollsBO);
+            boolean isPollInputValid = pollsExt.setBO(context, pollsBO, postgre);
             logger.debug("PollsBO : " + pollsBO);
             
             SurveyBO surveyBO = new SurveyBO();
-            boolean isSurveyInputValid = surveyExt.setBO(context, surveyBO);
+            boolean isSurveyInputValid = surveyExt.setBO(context, surveyBO, postgre);
             logger.debug("SurveyBO : " + surveyBO);
 
             String solarCore = "portal-en";

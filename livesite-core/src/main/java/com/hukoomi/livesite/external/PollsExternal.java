@@ -140,7 +140,7 @@ public class PollsExternal {
 
         PollsBO pollsBO = new PollsBO();
         postgre = new Postgre(context);
-        boolean isValidInput = setBO(context, pollsBO);
+        boolean isValidInput = setBO(context, pollsBO, postgre);
         logger.info("isValidInput : " + isValidInput);
         if (isValidInput) {
 
@@ -1010,7 +1010,7 @@ public class PollsExternal {
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
-    public boolean setBO(final RequestContext context, PollsBO pollsBO) {
+    public boolean setBO(final RequestContext context, PollsBO pollsBO, Postgre postgreObj) {
 
         final String POLL_ACTION = "pollAction";
         final String LOCALE = "locale";
@@ -1248,7 +1248,7 @@ public class PollsExternal {
             String persona = null;
             if(userId != null && !"".equals(userId)) {
                 DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
-                persona = dsExt.getPersonaForUser(userId, postgre);
+                persona = dsExt.getPersonaForUser(userId, postgreObj);
                 logger.debug("Persona from DB >>>" +persona+ "<<<");
                 pollsBO.setPersona(persona);
             }
