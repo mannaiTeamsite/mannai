@@ -513,12 +513,16 @@ public class PollSurveyExternal {
         logger.debug("\ndcrcategory : " + dcrcategory + "\ncategory : "
                 + category + "\nlocal : " + locale + "\nrecord : "
                 + record);
-        DetailExternal detailExt = new DetailExternal();
-        context.setParameterString("dcrcategory", dcrcategory);
-        context.setParameterString("category", category);
-        context.setParameterString("locale", locale);
-        context.setParameterString("record", record);
-        doc = detailExt.getContentDetail(context);
+        try {
+            DetailExternal detailExt = new DetailExternal();
+            context.setParameterString("dcrcategory", dcrcategory);
+            context.setParameterString("category", category);
+            context.setParameterString("locale", locale);
+            context.setParameterString("record", record);
+            doc = detailExt.getContentDetail(context);
+        } catch (Exception e) {
+            logger.error("Exception in fetchGroupDoc", e);
+        }
         return doc;
     }
 
