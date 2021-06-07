@@ -308,8 +308,8 @@ public class DashboardSettingsExternal {
         }else {
             logger.info("Invalid session - Redirecting to Login Page");
             try {
-                //DashboardExternal de = new DashboardExternal();
-                //de.redirectToLoginPage(context);
+                DashboardExternal de = new DashboardExternal();
+                de.redirectToLoginPage(context);
             } catch (Exception e) {
                 logger.error("Exception in performDashboardSettingsAction - Redirecting to Login Page", e);
             }
