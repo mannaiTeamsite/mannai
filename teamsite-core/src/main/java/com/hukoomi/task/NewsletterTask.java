@@ -19,7 +19,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.activation.DataSource;
-import javax.xml.transform.TransformerException;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -253,6 +252,16 @@ public class NewsletterTask implements CSURLExternalTask {
                             .getText();
                     imgElement.setText(dcrImage);
 
+                    Element locationNameElement = dcrElement
+                            .addElement("locationName");
+                    Node location = dcrDocument.selectSingleNode(
+                            "/root/location/location-name");
+                    String locationName = "";
+                    if (location != null) {
+                        locationName = location.getText();
+                    }
+                    locationNameElement.setText(locationName);
+
                     Element readMoreLink = dcrElement
                             .addElement("readMore");
                     String originalDcrName = "/" + lang + "/event/"
@@ -302,7 +311,7 @@ public class NewsletterTask implements CSURLExternalTask {
 
                     readMoreLink.setText(originalDcrName);
 
-                } else if ("Blogs".equals(dctType)) {
+                } else if ("Blog".equals(dctType)) {
 
                     Element dateElement = dcrElement.addElement("date");
                     String dcrDate = dcrDocument
@@ -435,7 +444,7 @@ public class NewsletterTask implements CSURLExternalTask {
     private DataSource transformToMailDataSource(String xmlMailContent,
             CSSimpleFile xslTemplateFile)
             throws CSException, UnsupportedEncodingException,
-            FileNotFoundException, TransformerException {
+            FileNotFoundException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             logger.info("transformToMailDataSource");
@@ -449,21 +458,20 @@ public class NewsletterTask implements CSURLExternalTask {
                     .getProperty("filePermissions", "rwxr-xr-x");
             Set<PosixFilePermission> baseFilePermissions = PosixFilePermissions
                     .fromString(baseFilePermission);
-            /*
-             * String baseDirPermissions = properties .getProperty("dirPermissions",
-             * "rwxr-xr-x");
-             * 
-             * 
-             * logger.info("Permission for file : " + baseFilePermission); logger.info(
-             * "Permission for directory : " + baseDirPermissions);
-             * 
-             * Set<PosixFilePermission> baseDirPermission = PosixFilePermissions
-             * .fromString(baseDirPermissions); if (Files.notExists(directory)) {
-             * Files.createDirectory(directory, PosixFilePermissions
-             * .asFileAttribute(baseDirPermission)); }
-             * 
-             *
-             */
+
+            String baseDirPermissions = properties
+                    .getProperty("dirPermissions", "rwxr-xr-x");
+
+            logger.info("Permission for file : " + baseFilePermission);
+            logger.info(
+                    "Permission for directory : " + baseDirPermissions);
+
+            Set<PosixFilePermission> baseDirPermission = PosixFilePermissions
+                    .fromString(baseDirPermissions);
+            if (Files.notExists(directory)) {
+                Files.createDirectory(directory, PosixFilePermissions
+                        .asFileAttribute(baseDirPermission));
+            }
 
             File fout = new File(baseDir + "/" + title + ".html");
             fout.createNewFile();
@@ -482,7 +490,10 @@ public class NewsletterTask implements CSURLExternalTask {
                     baseFilePermissions);
 
         } catch (IOException ex) {
-            logger.error("Exception in transformToMailDataSource: ", ex);
+            logger.info("Exception in transformToMailDataSource: ", ex);
+        }
+        catch (Exception e) {
+            logger.info("Exception in transformToMailDataSource: ", e);
         }
         return new javax.mail.util.ByteArrayDataSource(
                 outputStream.toByteArray(), MAIL_MIME_TYPE);
