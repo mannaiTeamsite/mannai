@@ -145,7 +145,7 @@ public class SurveyExternal {
         postgre = new Postgre(context);
         DetailExternal detailExt = new DetailExternal();
         surveyBO = new SurveyBO();
-        boolean isInputValid = setBO(context, surveyBO);
+        boolean isInputValid = setBO(context, surveyBO, postgre);
         logger.debug("SurveyBO : " + surveyBO);
 
         Document document = DocumentHelper.createDocument();
@@ -973,7 +973,7 @@ public class SurveyExternal {
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
-    public boolean setBO(final RequestContext context, SurveyBO surveyBO) {
+    public boolean setBO(final RequestContext context, SurveyBO surveyBO, Postgre postgreObj) {
 
         final String POLL_ACTION = "pollAction";
         final String SURVEY_ACTION = "surveyAction";
@@ -1100,7 +1100,7 @@ public class SurveyExternal {
             String persona = null;
             if(userId != null && !"".equals(userId)) {
                 DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
-                persona = dsExt.getPersonaForUser(userId, postgre);
+                persona = dsExt.getPersonaForUser(userId, postgreObj);
                 logger.debug("Persona from DB >>>" +persona+ "<<<");
                 surveyBO.setPersona(persona);
             }
