@@ -174,7 +174,7 @@ public class CommentsEngine {
             String blogUrl, String ip) {
         if (userName.length() > 100) {
             return false;
-        } else if (comments.length() > 150) {
+        } else if (comments.length() > 300) {
             return false;
         } else {
             ValidationErrorList errorList = new ValidationErrorList();
