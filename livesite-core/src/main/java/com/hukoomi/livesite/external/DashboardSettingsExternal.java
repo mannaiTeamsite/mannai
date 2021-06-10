@@ -111,6 +111,11 @@ public class DashboardSettingsExternal {
      * Email email for unsubscription
      */
     private static final String ELEMENT_EMAIL = "email";
+    
+    /**
+     * Email email for unsubscription
+     */
+    private static final String ELEMENT_UNSUB_LANG = "lang";
     /**
      * phpList language Switch value
      */
@@ -215,7 +220,8 @@ public class DashboardSettingsExternal {
         final String SETTINGS_ACTION = "settingsAction";
         String langSwitch = context.getParameterString(LANG_SWITCH);
         String language = context.getParameterString(SWITCH_LANGUAGE);
-        String email = context.getParameterString(ELEMENT_EMAIL);
+        String email = context.getParameterString(ELEMENT_EMAIL);        
+        String pageLang = context.getParameterString("lang");
         String unsubreason = context.getParameterString("unsubscribe_reason");
         String subStatus = "";
         phpExternal = new NewsletterPhpExternal();
@@ -229,7 +235,7 @@ public class DashboardSettingsExternal {
         mysql = new MySql(context);
         if (ACTION_UNSUBSCRIBE_NONLOGGED
                 .equalsIgnoreCase(settingsAction)) {
-            logger.info("Unsubscribe Non Logged");
+            logger.info("Unsubscribe Non Logged"+pageLang);
             
             subscriberId = getSubscriberID(email,USING_EMAIL);
             boolean bool = isEmailAlreadyExist(email);
@@ -266,7 +272,7 @@ public class DashboardSettingsExternal {
                         "",
                         STATUS_NOT_SUBSCRIBED, "");
             }
-            
+            return doc;
         }
         if (request.getSession().getAttribute("status") != null && "valid"
                 .equals(request.getSession().getAttribute("status"))) {            
