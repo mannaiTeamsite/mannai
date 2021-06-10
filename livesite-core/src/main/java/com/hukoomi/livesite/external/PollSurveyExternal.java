@@ -521,7 +521,7 @@ public class PollSurveyExternal {
             context.setParameterString("record", record);
             doc = detailExt.getContentDetail(context);
         } catch (Exception e) {
-            logger.error("Exception in fetchGroupDoc", e);
+            logger.info(e.getMessage() +" for "+category+" - "+record);
         }
         return doc;
     }
