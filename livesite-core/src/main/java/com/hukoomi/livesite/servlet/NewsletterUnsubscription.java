@@ -86,7 +86,7 @@ public class NewsletterUnsubscription extends HttpServlet{
         logger.debug("token "+token+" lang "+pageLang+" unsubReason "+unsubReason);  
         RequestDispatcher rd = request
                 .getRequestDispatcher(
-                        "/portal-" + pageLang + "/home.page");          
+                        "/portal-" + pageLang + "/visitor-student.page");          
         
         subscriberID= getSubscriberID(token);
         subscriberemail = getSubscriberEmail(subscriberID);
