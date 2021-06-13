@@ -843,7 +843,7 @@ public class NewsletterConfirmation extends HttpServlet {
            
                 
                 requestJSON = "{ \"email\" : \"" + email
-                        + "\", \"confirmed\": true,\"blacklisted\" : false, \"html_email\" : false, \"disabled\": false}";                
+                        + "\", \"confirmed\": true,\"blacklisted\" : false, \"html_email\" : true, \"disabled\": false}";                
                 
             logger.debug("requestJSON: " + requestJSON);
             httpConnection.setRequestProperty("Content-Length",
