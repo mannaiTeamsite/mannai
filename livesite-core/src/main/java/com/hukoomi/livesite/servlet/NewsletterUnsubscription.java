@@ -105,6 +105,9 @@ public class NewsletterUnsubscription extends HttpServlet{
             
             Cookie confirmationCookie = new Cookie("unsubscriptionStatus",
                     "unSubscriptionSuccess:"+subscriberemail);
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0);
             response.addCookie(confirmationCookie);            
             }
             
@@ -112,6 +115,9 @@ public class NewsletterUnsubscription extends HttpServlet{
             logger.debug("token null"); 
             Cookie confirmationCookie = new Cookie("unsubscriptionStatus",
                     "unsubscribe");
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0);
             response.addCookie(confirmationCookie);            
             
         }

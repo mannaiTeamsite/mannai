@@ -243,17 +243,26 @@ public class NewsletterConfirmation extends HttpServlet {
                     && preferenceDataUpdate) {
                 Cookie confirmationCookie = new Cookie("confirmationStatus",
                         "confirmed");
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                response.setDateHeader("Expires", 0);
                 response.addCookie(confirmationCookie);
                 rd.forward(request, response);
         }else {
             Cookie confirmationCookie = new Cookie("confirmationStatus",
                     "notConfirmed");
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0);
             response.addCookie(confirmationCookie);
             rd.forward(request, response);
         }
     } else {
         Cookie confirmationCookie = new Cookie("confirmationStatus",
                 "technicalIssue");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0);
         response.addCookie(confirmationCookie);
         rd.forward(request, response);
     }
@@ -261,6 +270,9 @@ public class NewsletterConfirmation extends HttpServlet {
     } else {
         Cookie confirmationCookie = new Cookie("confirmationStatus",
                 "alreadyConfirmed");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0);
         response.addCookie(confirmationCookie);
         rd.forward(request, response);
     }
