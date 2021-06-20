@@ -11,6 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -22,9 +24,11 @@ import javax.activation.DataSource;
 
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
+import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
 
 import com.hukoomi.utils.TSPropertiesFileReader;
 import com.interwoven.cssdk.access.CSAuthorizationException;
@@ -54,6 +58,12 @@ public class NewsletterTask implements CSURLExternalTask {
      * XPath to the language selection
      */
     public static final String LANG_PATH = "/root/information/language/value";
+
+    /**
+     * XPath to the filename selection
+     */
+    public static final String HTML_FILE_NAME = "/root/information/original-dcr-name";
+
     /**
      * XPath to the Title path
      */
@@ -87,11 +97,13 @@ public class NewsletterTask implements CSURLExternalTask {
     public static final String MAIL_ENCODING = "UTF-8";
     public static final String MAIL_MIME_TYPE = "text/html";
     Properties properties;
-    String lang = "";
-    String title = "";
 
+    String title = "";
+    String htmlName = "";
     String genrateHtmlLocation = "";
     String htmlTemplatePath = "";
+    String baseUrl = "";
+    String dcrName = "";
 
     @Override
     public void execute(CSClient client, CSExternalTask task,
@@ -140,7 +152,28 @@ public class NewsletterTask implements CSURLExternalTask {
 
         genrateHtmlLocation = properties
                 .getProperty(HTML_GENERATION_LOCATION);
-        logger.info("htmlPath : " + genrateHtmlLocation);
+        logger.info("genrateHtmlLocation : " + genrateHtmlLocation);
+
+        baseUrl = properties.getProperty("labels_dcr_base_url");
+        logger.info("baseUrl : " + baseUrl);
+
+        dcrName = properties.getProperty("labels_dcr_name");
+        logger.info("dcrName : " + dcrName);
+
+        // Social Media Links
+        String facebook = properties.getProperty("facebook_link");
+        String twitter = properties.getProperty("twitter_link");
+        String linkedin = properties.getProperty("linkedin_link");
+        String youtube = properties.getProperty("youtube_link");
+
+        // Footer Links
+        String contactUsLink = properties.getProperty("contact_us_link");
+        String privacyPolicyLink = properties
+                .getProperty("privacy_policy_link");
+        String newsletterUnsubscribeLink = properties
+                .getProperty("newsletter_unsubscribe_link");
+
+
 
         CSVPath templateVpath = new CSVPath(strTemplate);
         CSSimpleFile xslTemplateFile = (CSSimpleFile) (client
@@ -152,9 +185,39 @@ public class NewsletterTask implements CSURLExternalTask {
 
         Element rootElement = data.addElement("root");
 
-        // title
+        Document labels = getLabelDCRFile(dcrName);
+        logger.info("Labels from DCR : " + labels.asXML());
+        rootElement.add(labels.getRootElement());
+
+        // Add Social Media Links To Document
+        Element socialMediaElement = rootElement
+                .addElement("social-media");
+
+        Element facebookLinkElement = socialMediaElement
+                .addElement("facebook");
+        facebookLinkElement.setText(facebook);
+
+        Element twitterLinkElement = socialMediaElement
+                .addElement("twitter");
+        twitterLinkElement.setText(twitter);
+
+        Element linkedinLinkElement = socialMediaElement
+                .addElement("linkedin");
+        linkedinLinkElement.setText(linkedin);
+
+        Element youtubeLinkElement = socialMediaElement
+                .addElement("youtube");
+        youtubeLinkElement.setText(youtube);
+
+
 
         Document document = getTaskDocument(taskSimpleFile);
+
+        // HTML filename
+        htmlName = document.selectSingleNode(HTML_FILE_NAME)
+                .getText();
+        logger.info("HTML File Name : " + htmlName);
+
         title = document.selectSingleNode(TITLE_PATH).getText();
         logger.info("title - " + title);
         Element titleElement = rootElement.addElement("title");
@@ -166,10 +229,29 @@ public class NewsletterTask implements CSURLExternalTask {
         Element descElement = rootElement.addElement("description");
         descElement.setText(desc);
         // lang
-        lang = document.selectSingleNode(LANG_PATH).getText();
+        String lang = document.selectSingleNode(LANG_PATH).getText();
         Element langElement = rootElement.addElement("lang");
         logger.info("lang - " + lang);
         langElement.setText(lang);
+
+        // Add Footer Links To Document
+        Element footerLinksElement = rootElement
+                .addElement("footer-links");
+
+        Element contactUsLinkElement = footerLinksElement
+                .addElement("contactUs");
+        contactUsLinkElement
+                .setText(contactUsLink.replace("_lang_", lang));
+
+        Element privacyPolicyLinkElement = footerLinksElement
+                .addElement("privacyPolicy");
+        privacyPolicyLinkElement
+                .setText(privacyPolicyLink.replace("_lang_", lang));
+
+        Element newsletterUnsubscribeLinkElement = footerLinksElement
+                .addElement("newsletterUnsubscribe");
+        newsletterUnsubscribeLinkElement.setText(
+                newsletterUnsubscribeLink.replace("_lang_", lang));
 
         List<Node> categoryList = document
                 .selectNodes(NEWSLETTER_CATEGOTY_PATH);
@@ -213,9 +295,15 @@ public class NewsletterTask implements CSURLExternalTask {
                 dcrTitleElement.setText(dcrTitle);
 
                 Element dcrDescElement = dcrElement.addElement("desc");
-                String dcrDescription = dcrDocument
-                        .selectSingleNode("/root/detail/description")
-                        .getText();
+                String dcrDescription = "";
+                if (dcrDocument.selectSingleNode(
+                        "/root/page-details/description") != null) {
+                    dcrDescription = dcrDocument
+                            .selectSingleNode(
+                                    "/root/page-details/description")
+                            .getText();
+                }
+
                 dcrDescElement.setText(dcrDescription);
 
                 if ("Events".equals(dctType)) {
@@ -244,7 +332,7 @@ public class NewsletterTask implements CSURLExternalTask {
                                     "/root/event-date/start-date")
                             .getText();
 
-                    dateElement.setText(dcrDate);
+                    dateElement.setText(changeDateFormat(dcrDate, lang));
 
                     Element imgElement = dcrElement.addElement("image");
                     String dcrImage = dcrDocument
@@ -300,7 +388,7 @@ public class NewsletterTask implements CSURLExternalTask {
                     String dcrDate = dcrDocument
                             .selectSingleNode("/root/information/date")
                             .getText();
-                    dateElement.setText(dcrDate);
+                    dateElement.setText(changeDateFormat(dcrDate, lang));
 
                     Element readMoreLink = dcrElement
                             .addElement("readMore");
@@ -317,7 +405,7 @@ public class NewsletterTask implements CSURLExternalTask {
                     String dcrDate = dcrDocument
                             .selectSingleNode("/root/information/date")
                             .getText();
-                    dateElement.setText(dcrDate);
+                    dateElement.setText(changeDateFormat(dcrDate, lang));
 
                     Element readMoreLink = dcrElement
                             .addElement("readMore");
@@ -333,7 +421,7 @@ public class NewsletterTask implements CSURLExternalTask {
                     String dcrDate = dcrDocument
                             .selectSingleNode("/root/information/date")
                             .getText();
-                    dateElement.setText(dcrDate);
+                    dateElement.setText(changeDateFormat(dcrDate, lang));
 
                     Element topicElement = dcrElement.addElement("topics");
                     String topics = "";
@@ -349,8 +437,6 @@ public class NewsletterTask implements CSURLExternalTask {
                     if (topicsEle != null) {
                         topics = topicsEle.getText();
                     }
-
-
 
                     topicElement.setText(topics);
 
@@ -417,9 +503,11 @@ public class NewsletterTask implements CSURLExternalTask {
                 logger.info("data not null.");
 
                 logger.debug("Data : " + data.asXML());
-                transformToMailDataSource(data.asXML(), xslTemplateFile);
+                transformToMailDataSource(data.asXML(), xslTemplateFile,
+                        lang);
 
-                String htmlfilePath = htmlTemplatePath + lang + "/" + title
+                String htmlfilePath = htmlTemplatePath + lang + "/"
+                        + htmlName
                         + ".html";
 
                 logger.debug("filePath1 : " + htmlfilePath);
@@ -441,10 +529,125 @@ public class NewsletterTask implements CSURLExternalTask {
         return statusMap;
     }
 
+    private Document getLabelDCRFile(
+            String dcrName) {
+        String dcrPath = baseUrl + dcrName;
+        logger.info("dcrPath : " + dcrPath);
+        File inputFile = new File(dcrPath);
+        SAXReader reader = new SAXReader();
+        Document document = null;
+        try {
+            document = reader.read(inputFile);
+            logger.info("Root element :"
+                    + document.getRootElement().getName());
+            logger.info(
+                    "Labels XML Document :" + document.asXML());
+        } catch (DocumentException e) {
+            logger.error("Exception in getDCRFile: ", e);
+        }
+        return document;
+    }
+
+    private String changeDateFormat(String dcrDate, String lang) {
+        String convertedDate = "";
+
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter
+                    .ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime date = LocalDateTime.parse(dcrDate, formatter);
+
+            String monthName = getMonthName(date.getMonthValue(), lang);
+            convertedDate = date.getDayOfMonth() + " " + monthName + ", "
+                    + date.getYear();
+
+        } catch (Exception e) {
+            logger.info("Exception in changeDateFormat: ", e);
+        }
+        logger.info("ConvertDate in changeDateFormat: " + convertedDate);
+        return convertedDate;
+    }
+
+    private static String getMonthName(Integer month, String locale) {
+        String monthName = "";
+        if (("1").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u064A\u0646\u0627\u064A\u0631";
+            } else {
+                monthName = "Jan";
+            }
+        } else if (("2").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0641\u0628\u0631\u0627\u064A\u0631";
+            } else {
+                monthName = "Feb";
+            }
+        } else if (("3").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0645\u0627\u0631\u0633";
+            } else {
+                monthName = "Mar";
+            }
+        } else if (("4").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0623\u0628\u0631\u064A\u0644";
+            } else {
+                monthName = "Apr";
+            }
+        } else if (("5").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0645\u0627\u064A\u0648";
+            } else {
+                monthName = "May";
+            }
+        } else if (("6").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u064A\u0648\u0646\u064A\u0648";
+            } else {
+                monthName = "Jun";
+            }
+        } else if (("7").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u064A\u0648\u0644\u064A\u0648";
+            } else {
+                monthName = "Jul";
+            }
+        } else if (("8").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0623\u063A\u0633\u0637\u0633";
+            } else {
+                monthName = "Aug";
+            }
+        } else if (("9").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0633\u0628\u062A\u0645\u0628\u0631";
+            } else {
+                monthName = "Sep";
+            }
+        } else if (("10").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0623\u0643\u062A\u0648\u0628\u0631";
+            } else {
+                monthName = "Oct";
+            }
+        } else if (("11").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u0646\u0648\u0641\u0645\u0628\u0631";
+            } else {
+                monthName = "Nov";
+            }
+        } else if (("12").equals(month.toString())) {
+            if ("ar".equals(locale)) {
+                monthName = "\u062F\u064A\u0633\u0645\u0628\u0631";
+            } else {
+                monthName = "Dec";
+            }
+        }
+        return monthName;
+    }
+
     private DataSource transformToMailDataSource(String xmlMailContent,
-            CSSimpleFile xslTemplateFile)
-            throws CSException, UnsupportedEncodingException,
-            FileNotFoundException {
+            CSSimpleFile xslTemplateFile, String lang) throws CSException,
+            UnsupportedEncodingException, FileNotFoundException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try {
             logger.info("transformToMailDataSource");
@@ -473,9 +676,11 @@ public class NewsletterTask implements CSURLExternalTask {
                         .asFileAttribute(baseDirPermission));
             }
 
-            File fout = new File(baseDir + "/" + title + ".html");
+            File fout = new File(baseDir + "/" + htmlName + ".html");
+            if (fout.exists()) {
+                fout.delete();
+            }
             fout.createNewFile();
-
             FileOutputStream oFile = new FileOutputStream(fout, false);
             logger.info("xmlMailContent- " + xmlMailContent);
             ByteArrayInputStream inputStream = new ByteArrayInputStream(
@@ -486,13 +691,12 @@ public class NewsletterTask implements CSURLExternalTask {
             logger.info("After outputStream- " + outputStream.toString());
             outputStream.writeTo(oFile);
             Files.setPosixFilePermissions(
-                    Path.of(directory + "/" + title + ".html"),
+                    Path.of(directory + "/" + htmlName + ".html"),
                     baseFilePermissions);
 
         } catch (IOException ex) {
             logger.info("Exception in transformToMailDataSource: ", ex);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             logger.info("Exception in transformToMailDataSource: ", e);
         }
         return new javax.mail.util.ByteArrayDataSource(
