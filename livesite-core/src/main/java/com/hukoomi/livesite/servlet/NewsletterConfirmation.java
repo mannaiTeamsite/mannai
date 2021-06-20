@@ -845,7 +845,7 @@ public class NewsletterConfirmation extends HttpServlet {
             Properties properties =
                     postgre.loadProperties("phplist.properties"); 
           //baseUrl = properties.getProperty(BASE_URL);
-            baseUrl = "http://"+httpServletAddress+"phplist";
+            baseUrl = "http://"+httpServletAddress+"/phplist";
             logger.info("Phplist baseUrl "+baseUrl);
           String endpoint = baseUrl +
             "/api/v2/subscribers";       
