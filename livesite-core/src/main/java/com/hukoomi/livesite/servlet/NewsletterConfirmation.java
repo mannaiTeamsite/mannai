@@ -133,6 +133,7 @@ public class NewsletterConfirmation extends HttpServlet {
         PrintWriter writer = response.getWriter();
         String token = request.getParameter("token");
         String pageLang = request.getParameter("lang");
+        String httpServletAddress = request.getLocalAddr();
         RequestDispatcher rd = request
                 .getRequestDispatcher(
                         "/portal-" + pageLang + "/home.page");
@@ -158,7 +159,7 @@ public class NewsletterConfirmation extends HttpServlet {
             try {
                 if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
                     
-                    subStatus = createSubscriberPhplist(subscriberemail);
+                    subStatus = createSubscriberPhplist(subscriberemail, httpServletAddress);
                     if(!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) { 
                         userId = getSubscriberID(subscriberemail);
                        updateSubscriberPersona(userId,listid);
@@ -790,9 +791,9 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method is to add subscriber to phpList 
      */
-    private String createSubscriberPhplist(final String email)
+    private String createSubscriberPhplist(final String email, String httpServletAddress)
             throws IOException, NoSuchAlgorithmException {
-        logger.info("createSubscriberPhplist:Enter");       
+        logger.info("createSubscriberPhplist:Enter"+httpServletAddress);       
         Properties properties =
                 postgre.loadProperties("phplist.properties");
         String base64Token = getphpListToken();
@@ -806,7 +807,7 @@ public class NewsletterConfirmation extends HttpServlet {
             try {            
                 
                 status =
-                                createSubscriber(email,authorizationHeader);
+                                createSubscriber(email,authorizationHeader,httpServletAddress);
                         logger.debug("status: " + status);
 
             } catch (Exception e) {
@@ -830,7 +831,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method makes service call to add subscriber to phpList
      */
-    private String createSubscriber(final String email,String authHeader)
+    private String createSubscriber(final String email,String authHeader,String httpServletAddress)
             throws NoSuchAlgorithmException {
         logger.info("createsubscriber:Enter");
         InputStream is = null;
@@ -838,11 +839,14 @@ public class NewsletterConfirmation extends HttpServlet {
         StringBuilder response = new StringBuilder();
         int statusCode=0;
         String status = "";
+       
         try {
             // Create connection
             Properties properties =
                     postgre.loadProperties("phplist.properties"); 
-          baseUrl = properties.getProperty(BASE_URL);
+          //baseUrl = properties.getProperty(BASE_URL);
+            baseUrl = "http://"+httpServletAddress+"phplist";
+            logger.info("Phplist baseUrl "+baseUrl);
           String endpoint = baseUrl +
             "/api/v2/subscribers";       
             URL url = new URL(endpoint);
