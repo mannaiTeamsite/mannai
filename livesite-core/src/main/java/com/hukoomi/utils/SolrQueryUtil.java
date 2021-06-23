@@ -103,6 +103,46 @@ public class SolrQueryUtil {
                         logger.error("ID need to be present in the response to show the highlight functionality.");
                     }
                 }
+                if(resultDocs.isEmpty()){
+                    List<Node> suggestionNodeList = document.selectNodes("//suggestion");
+                    String queryStr = "";
+                    String originalWordStr = "";
+                    /*if(query.contains("q=title:*")) {
+                        queryStr = query.split("q=title:*")[1];
+                    } else */
+                    if(query.contains("q=title:")){
+                        queryStr = query.split("q=title:")[1];
+                    } else{
+                        queryStr = query.split("q=")[1];
+                    }
+
+                    if(queryStr.contains("*&fl")){
+                        originalWordStr = queryStr.substring(1,queryStr.indexOf("*&fl"));
+                    } else {
+                        originalWordStr = queryStr.substring(0, queryStr.indexOf("&fl"));
+                    }
+                    logger.info("Original wordStr: " + originalWordStr);
+
+                    String correctWordStr = "";
+                    if(suggestionNodeList.size() > 1) {
+                        int maxFreq = 0;
+                        int freqVal;
+                        for (Node node : suggestionNodeList) {
+                            freqVal = Integer.parseInt(node.selectSingleNode("freq").getText());
+                            if (freqVal > maxFreq) {
+                                maxFreq = freqVal;
+                                correctWordStr = node.selectSingleNode("word").getText();
+                            }
+                        }
+                    }else{
+                        correctWordStr = suggestionNodeList.get(0).selectSingleNode("word").getText();
+                    }
+                    logger.info("Corrected wordStr: " + correctWordStr);
+                    String newQuery = query.replaceAll(originalWordStr, correctWordStr);
+                    document = doJsonQuery(newQuery, xmlRootName);
+                    document.getRootElement().addElement("OriginalWord").addText(originalWordStr);
+                    document.getRootElement().addElement("CorrectedWord").addText(correctWordStr);
+                }
             }
         } catch (Exception e) {
             logger.error(SOLR_EXCEPTION, e);
