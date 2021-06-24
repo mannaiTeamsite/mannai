@@ -1162,7 +1162,7 @@ public class PollsExternal {
             String persona = null;
             if(userId != null && !"".equals(userId)) {
                 DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
-                persona = dsExt.getPersonaForUser(userId, postgre);
+                persona = dsExt.getPersonaForUser(userId, postgreObj);
                 logger.debug("Persona from DB >>>" +persona+ "<<<");
                 pollsBO.setPersona(persona);
             }
