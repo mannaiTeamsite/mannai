@@ -308,11 +308,11 @@ public class DashboardSettingsExternal {
                     status= unsubscribeDashboardUser(settingsBO.getUserId(),unsubReason);
                     if(status.equals(STATUS_SUCCESS)) {
                         
-                        createTopicsResponseDoc(responseElem, null, null,
+                        createUnsubscribeResponseDoc(responseElem, null, null,
                                 "",
                                 STATUS_SUCCESS, "");
                     }else {
-                        createTopicsResponseDoc(responseElem, null, null,
+                        createUnsubscribeResponseDoc(responseElem, null, null,
                                 "",
                                 STATUS_ALREADY_UNSUBSCRIBED, "");
                     }
@@ -1220,6 +1220,44 @@ public class DashboardSettingsExternal {
 
         Element newsletterResponseElem = responseElem
                 .addElement("newsletter-settings");
+
+        newsletterResponseElem.addElement(STATUS).setText(status);
+        newsletterResponseElem.addElement(TOPICS).setText(topics);
+        newsletterResponseElem.addElement(USER_ID).setText(userId);
+        newsletterResponseElem.addElement(PERSONA).setText(persona);
+        newsletterResponseElem.addElement(ERROR).setText(error);
+
+    }
+    
+    /**
+     * @author Pramesh
+     * 
+     *         This method is used to send unsubscription response document based on
+     *         the input.
+     * 
+     * @param responseElem
+     * @param action
+     * @param userId
+     * @param persona
+     * @param status
+     * @param error
+     */
+    private void createUnsubscribeResponseDoc(Element responseElem,
+            String topics, String userId, String persona, String status,
+            String error) {
+        if (topics == null)
+            topics = "";
+        if (userId == null)
+            userId = "";
+        if (persona == null)
+            persona = "";
+        if (status == null)
+            status = "";
+        if (error == null)
+            error = "";
+
+        Element newsletterResponseElem = responseElem
+                .addElement("unsubscribe-settings");
 
         newsletterResponseElem.addElement(STATUS).setText(status);
         newsletterResponseElem.addElement(TOPICS).setText(topics);
