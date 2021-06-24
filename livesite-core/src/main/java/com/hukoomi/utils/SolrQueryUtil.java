@@ -74,7 +74,6 @@ public class SolrQueryUtil {
             returnObject.put(xmlRootName, new JSONObject(jsonResponse));
             returnXML = XML.toString(returnObject);
             logger.info("XML data after conversion: " + returnXML);
-//            System.out.println(returnXML);
             document = Dom4jUtils.newDocument(returnXML);
             Node highlightNode = document.getRootElement().selectSingleNode("highlighting");
             if (highlightNode != null) {
@@ -107,9 +106,6 @@ public class SolrQueryUtil {
                     List<Node> suggestionNodeList = document.selectNodes("//suggestion");
                     String queryStr = "";
                     String originalWordStr = "";
-                    /*if(query.contains("q=title:*")) {
-                        queryStr = query.split("q=title:*")[1];
-                    } else */
                     if(query.contains("q=title:")){
                         queryStr = query.split("q=title:")[1];
                     } else{
