@@ -1,17 +1,14 @@
 package com.hukoomi.livesite.external;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -349,11 +346,9 @@ public class DashboardSettingsExternal {
     public void processTopicsOperations(Element responseElem,
             DashboardSettingsBO settingsBO, String topics) {
 
-        if (isTopicsExist(settingsBO.getUserId())) {
-            updateTopicsData(responseElem, settingsBO, topics);
-        } else {
-            insertTopicsData(responseElem, settingsBO, topics);
-        }
+        boolean postgreDataInsertStatus = insertTopicsData(responseElem,
+                settingsBO, topics);
+
     }
     
     /**
@@ -889,14 +884,16 @@ public class DashboardSettingsExternal {
     }
     
     
+
     /**
      * @author Arbaj
      * @param topics
      */
-    public void insertTopicsData(Element responseElem,
+    public boolean insertTopicsData(Element responseElem,
             DashboardSettingsBO settingsBO,
             String topics) {
         logger.info("DashboardSettingsExternal : insertTopicsData()");
+        boolean postgreDataInsertStatus = false;
         Connection connection = postgre.getConnection();
         PreparedStatement prepareStatement = null;
         String personaSettingsQuery = null;
@@ -906,6 +903,8 @@ public class DashboardSettingsExternal {
                 settingsBO.getUserId());
         logger.debug("subscriptionDetailsMap : "
                 + subscriptionDetails.toString());
+
+        deleteTopicsData(settingsBO);
 
         try {
             personaSettingsQuery = "INSERT INTO NEWSLETTER_INTEREST (SUBSCRIBER_ID, UID, TOPIC_INTEREST_NAME, STATUS) VALUES (?, ?, ?, ?)";
@@ -922,10 +921,10 @@ public class DashboardSettingsExternal {
                 prepareStatement.addBatch();
             }
 
-            int result = prepareStatement.executeUpdate();
+            int result[] = prepareStatement.executeBatch();
             String personaValue = getPersonaForUser(settingsBO.getUserId(),
                     postgre);
-            if (result == 0) {
+            if (result.length == 0) {
                 logger.info(
                         "Newsletter interest topics insertion failed");
                 createTopicsResponseDoc(responseElem, null, null,
@@ -938,6 +937,7 @@ public class DashboardSettingsExternal {
                 createTopicsResponseDoc(responseElem, null, null,
                         personaValue,
                         STATUS_SUCCESS, "");
+                postgreDataInsertStatus = true;
             }
         } catch (Exception e) {
             logger.error("Exception in insertTopicsData", e);
@@ -948,89 +948,42 @@ public class DashboardSettingsExternal {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
 
+        return postgreDataInsertStatus;
+
     }
 
 
     /**
-     * @author Arbaj
-     * @param topics
+     * 
      */
-    public void updateTopicsData(Element responseElem,
-            DashboardSettingsBO settingsBO,
-            String topics) {
-        logger.info("DashboardSettingsExternal : updateTopicsData()");
-
+    private boolean deleteTopicsData(DashboardSettingsBO settingsBO) {
+        logger.info("DashboardSettingsExternal : deleteTopicsData()");
+        boolean deleteStatus = false;
         Connection connection = postgre.getConnection();
         PreparedStatement prepareStatement = null;
         String personaSettingsQuery = null;
-        String inputTopicsArray[] = topics.split(",");
-        List<String> databaseTopicsList = Arrays.asList(
-                getTopicsInterest(settingsBO.getUserId()).split(","));
-
-        logger.debug("Input Topics : " + inputTopicsArray.toString());
-        logger.debug("Database Topics : " + databaseTopicsList.toString());
-
-        Map<String, String> subscriptionDetails = getSubscriptionDetails(
-                settingsBO.getUserId());
 
         try {
-            personaSettingsQuery = "UPDATE NEWSLETTER_INTEREST SET SUBSCRIBER_ID = ? , TOPIC_INTEREST_NAME= ?, STATUS = ? WHERE UID = ?";
+            personaSettingsQuery = "DELETE FROM NEWSLETTER_INTEREST WHERE UID = ?";
             prepareStatement = connection
                     .prepareStatement(personaSettingsQuery);
-
-            for (int index = 0; index < inputTopicsArray.length; index++) {
-                // If topic is not available in Database, inserting it
-                if (!databaseTopicsList
-                        .contains(inputTopicsArray[index])) {
-                    insertTopicsData(responseElem, settingsBO,
-                            inputTopicsArray[index]);
-                }
-                // If topic is already available in database
-                else if (databaseTopicsList
-                        .contains(inputTopicsArray[index])) {
-                    prepareStatement.setDouble(1, Double.parseDouble(
-                            subscriptionDetails.get("subscriberId")));
-                    prepareStatement.setString(2, inputTopicsArray[index]);
-                    prepareStatement.setString(3, STATUS_ACTIVE);
-                    prepareStatement.setString(4,
-                            subscriptionDetails.get("userId"));
-                    prepareStatement.addBatch();
-                }
-                // If topic is available in database but removed from frontend request,
-                // updating status
-                else {
-                    prepareStatement.setDouble(1, Double.parseDouble(
-                            subscriptionDetails.get("subscriberId")));
-                    prepareStatement.setString(2, inputTopicsArray[index]);
-                    prepareStatement.setString(3, STATUS_INACTIVE);
-                    prepareStatement.setString(4,
-                            subscriptionDetails.get("userId"));
-                    prepareStatement.addBatch();
-                }
-
-            }
+            prepareStatement.setString(1, settingsBO.getUserId());
 
             int result = prepareStatement.executeUpdate();
-            String personaValue = getPersonaForUser(settingsBO.getUserId(),
-                    postgre);
+
             if (result == 0) {
-                logger.info("Newsletter interest topics insertion failed");
-                createTopicsResponseDoc(responseElem, null, null,
-                        personaValue, STATUS_FAILED,
-                        "Newsletter interest topics insertion failed");
+                logger.info("Newsletter interest topics deletion failed");
             } else {
                 logger.info(
-                        "Newsletter interest topics inserted successfully!");
-                createTopicsResponseDoc(responseElem, null, null,
-                        personaValue, STATUS_SUCCESS, "");
+                        "Newsletter interest topics deleted successfully!");
+                deleteStatus = true;
             }
         } catch (Exception e) {
             logger.error("Exception in updateTopicsData", e);
-            createTopicsResponseDoc(responseElem, null, null, null,
-                    STATUS_FAILED, "Exception in updateTopicsData");
         } finally {
             postgre.releaseConnection(connection, prepareStatement, null);
         }
+        return deleteStatus;
     }
 
     /**
