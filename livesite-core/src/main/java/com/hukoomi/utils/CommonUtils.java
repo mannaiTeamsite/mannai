@@ -337,7 +337,7 @@ public class CommonUtils {
     public String getURLPrefix(RequestContext context){
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         String hostname = requestHeaderUtils.getForwardedHost();
-        if(hostname.isBlank() || hostname.equals("")){
+        if(hostname.isBlank() || hostname.equals("") || !hostname.matches("(dev\\.|stg\\.)?hukoomi\\.gov\\.qa")){
             hostname = "hukoomi.gov.qa";
         }
         String urlScheme = "https";
