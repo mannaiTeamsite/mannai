@@ -163,6 +163,7 @@ public class NewsletterTask implements CSURLExternalTask {
         // Social Media Links
         String facebook = properties.getProperty("facebook_link");
         String twitter = properties.getProperty("twitter_link");
+        String instagram = properties.getProperty("instagram_link");
         String linkedin = properties.getProperty("linkedin_link");
         String youtube = properties.getProperty("youtube_link");
 
@@ -172,6 +173,9 @@ public class NewsletterTask implements CSURLExternalTask {
                 .getProperty("privacy_policy_link");
         String newsletterUnsubscribeLink = properties
                 .getProperty("newsletter_unsubscribe_link");
+
+        // Base URl
+        String baseUrlLink = properties.getProperty("base_url");
 
 
 
@@ -184,6 +188,9 @@ public class NewsletterTask implements CSURLExternalTask {
         logger.info("Data : " + data.asXML());
 
         Element rootElement = data.addElement("root");
+
+        Element baseUrlElement = rootElement.addElement("baseURL");
+        baseUrlElement.setText(baseUrlLink);
 
         Document labels = getLabelDCRFile(dcrName);
         logger.info("Labels from DCR : " + labels.asXML());
@@ -200,6 +207,10 @@ public class NewsletterTask implements CSURLExternalTask {
         Element twitterLinkElement = socialMediaElement
                 .addElement("twitter");
         twitterLinkElement.setText(twitter);
+
+        Element instagramLinkElement = socialMediaElement
+                .addElement("instagram");
+        instagramLinkElement.setText(instagram);
 
         Element linkedinLinkElement = socialMediaElement
                 .addElement("linkedin");
@@ -316,12 +327,13 @@ public class NewsletterTask implements CSURLExternalTask {
                         if (organizer != null) {
                             dcrorganaizer = organizer.getText();
                         }
-                    }
+                    } else {
                     Node organizer = dcrDocument.selectSingleNode(
                             "/root/settings/organizers/label-en");
                     if (organizer != null) {
                         dcrorganaizer = organizer.getText();
                     }
+                }
 
                     dcrOrgElement.setText(dcrorganaizer);
 
@@ -369,12 +381,13 @@ public class NewsletterTask implements CSURLExternalTask {
                             source = sourceEle.getText();
                         }
 
-                    }
+                    } else {
                     Node sourceEle = dcrDocument.selectSingleNode(
                             "/root/settings/channels/label-en");
                     if (sourceEle != null) {
                         source = sourceEle.getText();
                     }
+                }
 
                     sourceElement.setText(source);
 
@@ -431,12 +444,13 @@ public class NewsletterTask implements CSURLExternalTask {
                         if (topicsEle != null) {
                             topics = topicsEle.getText();
                         }
-                    }
+                    } else {
                     Node topicsEle = dcrDocument.selectSingleNode(
                             "/root/settings/topics/label-en");
                     if (topicsEle != null) {
                         topics = topicsEle.getText();
                     }
+                }
 
                     topicElement.setText(topics);
 
@@ -468,7 +482,7 @@ public class NewsletterTask implements CSURLExternalTask {
                         if (serviceProviderEle != null) {
                             serviceProvider = serviceProviderEle.getText();
                         }
-                    }
+                    } else {
 
                     Node serviceModeEle = dcrDocument.selectSingleNode(
                             "/root/settings/service-mode/label-en");
@@ -476,11 +490,13 @@ public class NewsletterTask implements CSURLExternalTask {
                         serviceMode = serviceModeEle.getText();
                     }
 
+
                     Node serviceProviderEle = dcrDocument.selectSingleNode(
                             "/root/settings/service-entities/label-en");
                     if (serviceProviderEle != null) {
                         serviceProvider = serviceProviderEle.getText();
                     }
+                }
 
                     serviceModeElement.setText(serviceMode);
                     serviceProviderElement.setText(serviceProvider);
