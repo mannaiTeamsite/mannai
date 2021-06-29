@@ -24,6 +24,7 @@ import com.hukoomi.bo.DashboardSettingsBO;
 import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.MySql;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -91,11 +92,11 @@ public class DashboardSettingsExternal {
     /**
      * Constant for language switch.
      */
-    public static final String LANGUAGE_ON = "On";
+    public static final String LANGUAGE_ON = "on";
     /**
      * Constant for language switch.
      */
-    public static final String LANGUAGE_OFF = "Off";
+    public static final String LANGUAGE_OFF = "off";
     /** 
      * phpList subscriber email 
      */
@@ -214,6 +215,7 @@ public class DashboardSettingsExternal {
     public Document performDashboardSettingsAction(final RequestContext context) {
         logger.info("DashboardSettingsExternal : performPersonaSettingsAction()");
         DashboardSettingsBO settingsBO = new DashboardSettingsBO();
+        XssUtils xssUtils = new XssUtils();
         Document doc = DocumentHelper.createDocument();
         Element responseElem = doc.addElement("dashboard-settings");
         double subscriberId = 0;
@@ -221,13 +223,15 @@ public class DashboardSettingsExternal {
         final String SETTINGS_ACTION = "settingsAction";
         String langSwitch = context.getParameterString(LANG_SWITCH);
         String language = context.getParameterString(SWITCH_LANGUAGE);
-        String email = context.getParameterString(ELEMENT_EMAIL);        
+        //String email = context.getParameterString(ELEMENT_EMAIL);
+        String email = xssUtils
+                .stripXSS(context.getParameterString(ELEMENT_EMAIL));
         String pageLang = context.getParameterString("lang");
         String unsubreason = context.getParameterString("unsubscribe_reason");
         String subStatus = "";
         String status="";
         phpExternal = new NewsletterPhpExternal();
-
+        logger.info("DashboardSettingsExternal : langSwitch "+langSwitch+" language "+language+" pageLang "+pageLang);
         HttpServletRequest request = context.getRequest();
         logger.debug("Session Status : "
                 + request.getSession().getAttribute("status"));
@@ -274,6 +278,7 @@ public class DashboardSettingsExternal {
                         "",
                         STATUS_NOT_SUBSCRIBED, "");
             }
+            logger.debug("Final Result :" + doc.asXML());
             return doc;
         }
         if (request.getSession().getAttribute("status") != null && "valid"
@@ -1210,7 +1215,7 @@ public class DashboardSettingsExternal {
             error = "";
 
         Element newsletterResponseElem = responseElem
-                .addElement("unsubscribe-settings");
+                .addElement("newsletter-settings");
 
         newsletterResponseElem.addElement(STATUS).setText(status);
         newsletterResponseElem.addElement(TOPICS).setText(topics);
