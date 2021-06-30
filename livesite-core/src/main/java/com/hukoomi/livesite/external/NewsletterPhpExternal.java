@@ -243,7 +243,7 @@ public class NewsletterPhpExternal {
 	                    String confirmationToken =
 	                            generateConfirmationToken(
 	                                    subscriberId, preferenceId, email);
-	                    sendConfirmationMail(email, "en",
+	                    sendConfirmationMail(email, pageLang,
 	                            confirmationToken,
 	                            UNSUBSCRIPTION_CONFIRMATION_EMAIL, unsubreason, context);
 	                    createTopicsResponseDoc(responseElem, null, null,
@@ -660,7 +660,7 @@ public class NewsletterPhpExternal {
 			} else if (emailElement.equals(UNSUBSCRIPTION_CONFIRMATION_EMAIL)) {
 				messageHtmlName = "newsletter-unsubscription-mail-" + pageLanguage + ".html";
 			}
-
+			logger.info("NewsletterPhpExternal : messageHtmlName "+messageHtmlName);
 			String message = getHtmlFile(messageHtmlName, context);
 			if (!unsubReason.equals("")) {
 				message = message.replace("<token>", confirmationToken).replace("<lang>", pageLanguage)

@@ -254,7 +254,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      * @return
      */
     private String unsubscribePhpUser(String Query, String email, String unsubReason) {
-        logger.info("NewsletterUnsubscription : unsubscribePhpUser() ");
+        logger.info("NewsletterUnsubscription : unsubscribePhpUser() "+unsubReason);
 
         String status = "";
         int blacklistID = 1;
