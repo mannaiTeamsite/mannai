@@ -227,7 +227,7 @@ public class DashboardSettingsExternal {
         final String SETTINGS_ACTION = "settingsAction";
         String langSwitch = context.getParameterString(LANG_SWITCH);
         String language = context.getParameterString(SWITCH_LANGUAGE);
-        //String email = context.getParameterString(ELEMENT_EMAIL);
+        
         String email = xssUtils
                 .stripXSS(context.getParameterString(ELEMENT_EMAIL));
         String pageLang = context.getParameterString("lang");
