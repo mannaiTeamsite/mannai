@@ -580,6 +580,7 @@ public class DashboardSettingsExternal {
         logger.info("DashboardSettingsExternal : insertPhpTopicsData()");
 
         boolean bool = false;
+        boolean delbool = false;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null; 
@@ -600,12 +601,14 @@ public class DashboardSettingsExternal {
         phpTopicsDeleteQuery =
                     "DELETE FROM PHPLIST_LISTUSER WHERE USERID = (SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?) AND LISTID = ? ";
        
+        delbool = deletePhpTopicsData(phpTopicsDeleteQuery, subscriberemail, phpTopics);
         
         try {
             connection = mysql.getConnection();
             prepareStatement = connection.prepareStatement(phpTopicsInsertQuery);
 
             Iterator<String> iteratorName = topics.iterator();
+            if(delbool) {
             while (iteratorName.hasNext()) {
                 listname = iteratorName.next();
                 logger.info("DashboardSettingsExternal : insertPhpTopicsData()" + listname);
@@ -618,7 +621,7 @@ public class DashboardSettingsExternal {
             {
                 bool= true;
             }
-            
+            }
 
         } catch (Exception e) {
             logger.error("Exception in insertPhpTopicsData", e);
@@ -718,7 +721,7 @@ public class DashboardSettingsExternal {
 
             while (rs.next()) {
                 if(module.equals(TOPICS)) {                    
-                    topicList = rs.getString("TOPIC");
+                    topicList = rs.getString("TOPIC_INTEREST_NAME");
                     list.add(topicList);     
                     
                 }else if(module.equals(SWITCH)){
