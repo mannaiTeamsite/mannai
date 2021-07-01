@@ -178,6 +178,14 @@ public class DashboardSettingsExternal {
      */
     public static final String TOPICS = "topics";
     /**
+     * Constant for settings-action.
+     */
+    public static final String CATEGORY_TOPICS = "Topics";
+    /**
+     * Constant for settings-action.
+     */
+    public static final String SWITCH = "switch";
+    /**
      * Constant for error.
      */
     public static final String ERROR = "error";
@@ -227,11 +235,15 @@ public class DashboardSettingsExternal {
         final String SETTINGS_ACTION = "settingsAction";
         String langSwitch = context.getParameterString(LANG_SWITCH);
         String language = context.getParameterString(SWITCH_LANGUAGE);
-        
+        //String email = context.getParameterString(ELEMENT_EMAIL);
+        //String pageLang = context.getParameterString("lang");
+        //String unsubreason = context.getParameterString("unsubscribe_reason");
         String email = xssUtils
                 .stripXSS(context.getParameterString(ELEMENT_EMAIL));
-        String pageLang = context.getParameterString("lang");
-        String unsubreason = context.getParameterString("unsubscribe_reason");
+        String pageLang = xssUtils
+                .stripXSS(context.getParameterString("lang"));
+        String unsubreason = xssUtils
+                .stripXSS(context.getParameterString("unsubscribe_reason"));
         String subStatus = "";
         String status="";
         phpExternal = new NewsletterPhpExternal();
@@ -371,7 +383,8 @@ public class DashboardSettingsExternal {
         
         if(postgreDataInsertStatus) {
             
-            //boolean sqlDataInsertStatus = insertPhpTopicsData();
+            boolean sqlDataInsertStatus = insertPhpTopicsData(settingsBO);
+            logger.debug("processTopicsOperations : boolean" + sqlDataInsertStatus);
         }
 
     }
@@ -426,7 +439,7 @@ public class DashboardSettingsExternal {
 
             if(count > 0) {    
                
-                status = updatePhpLanguageList(getList(userId, lang),
+                status = updatePhpLanguageList(getList(userId, lang,SWITCH),
                         subscriberID, langSwitch);
             }
             if(status.equals(STATUS_SUCCESS))
@@ -503,6 +516,13 @@ public class DashboardSettingsExternal {
         return status;
     }
 
+    /**
+     * @param listName
+     * @param subscriberID
+     * @param langSwitch
+     * This method is used to update the user list based on language on/off
+     * @return
+     */
     private String updatePhpLanguageList(
             List<String> listName, double subscriberID, String langSwitch
     ) {
@@ -537,7 +557,7 @@ public class DashboardSettingsExternal {
                 prepareStatement.setString(1, subscriberemail);
                 prepareStatement.setString(2, listname);                 
                 count = prepareStatement.executeUpdate();
-                count++;
+                
             }
             if(count>0)
             {
@@ -554,11 +574,114 @@ public class DashboardSettingsExternal {
         logger.info("DashboardSettingsExternal : updatePhpLanguageList()"+status);
         return status;
     }
+    
+    
+    private boolean insertPhpTopicsData(DashboardSettingsBO settingsBO) {
+        logger.info("DashboardSettingsExternal : insertPhpTopicsData()");
 
-    private List<String> getList(String userId, String language) {
+        boolean bool = false;
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null; 
+        int count = 0;
+        String listname = "";
+        String phpTopicsInsertQuery = "";
+        String phpTopicsDeleteQuery = "";
+        double subscriberId = 0; 
+        subscriberId = getSubscriberID(settingsBO.getUserId(), USING_UID);
+        String subscriberemail = getSubscriberEmail(subscriberId);
+        List<String> topics = getList(settingsBO.getUserId(),"",TOPICS);
+        List<Integer> phpTopics = getPhpList(settingsBO.getUserId());
+       
+        phpTopicsInsertQuery =
+                    "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED) VALUES ((SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?),(SELECT ID FROM PHPLIST_LIST WHERE NAME = ?),LOCALTIMESTAMP)";
+
+      
+        phpTopicsDeleteQuery =
+                    "DELETE FROM PHPLIST_LISTUSER WHERE USERID = (SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?) AND LISTID = ? ";
+       
+        
+        try {
+            connection = mysql.getConnection();
+            prepareStatement = connection.prepareStatement(phpTopicsInsertQuery);
+
+            Iterator<String> iteratorName = topics.iterator();
+            while (iteratorName.hasNext()) {
+                listname = iteratorName.next();
+                logger.info("DashboardSettingsExternal : insertPhpTopicsData()" + listname);
+                prepareStatement.setString(1, subscriberemail);
+                prepareStatement.setString(2, listname);                 
+                count = prepareStatement.executeUpdate();
+               
+            }
+            if(count>0)
+            {
+                bool= true;
+            }
+            
+
+        } catch (Exception e) {
+            logger.error("Exception in insertPhpTopicsData", e);
+            bool= false;
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement,rs);
+        }
+        logger.info("DashboardSettingsExternal : insertPhpTopicsData() boolean" + bool);
+        return bool;
+    }
+    
+    private boolean deletePhpTopicsData(String query, String subscriberemail, List<Integer> topicList) {
+        logger.info("DashboardSettingsExternal : deletePhpTopicsData()");
+
+        boolean bool = false;
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null; 
+        int count = 0;
+        int topicID = 0;
+        
+        
+        try {
+            connection = mysql.getConnection();
+            prepareStatement = connection.prepareStatement(query);
+
+            Iterator<Integer> iteratorID = topicList.iterator();
+            while (iteratorID.hasNext()) {
+                topicID = iteratorID.next();
+                logger.info("DashboardSettingsExternal : insertPhpTopicsData()" + topicID);
+                prepareStatement.setString(1, subscriberemail);
+                prepareStatement.setInt(2, topicID);                 
+                count = prepareStatement.executeUpdate();
+               
+            }
+            if(count>0)
+            {
+                bool= true;
+            }
+            
+
+        } catch (Exception e) {
+            logger.error("Exception in deletePhpTopicsData", e);
+            bool= false;
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement,rs);
+        }
+        logger.info("DashboardSettingsExternal : deletePhpTopicsData() boolean" + bool);
+        return bool;
+    }
+
+    /**
+     * @param userId
+     * @param language
+     * @param module
+     * This method is used to get the Topics selected by User from Postgre
+     * @return
+     */
+    private List<String> getList(String userId, String language, String module) {
         logger.info("DashboardSettingsExternal : getList()");
 
         String listName = "";
+        String topicList = "";
         double subscriberID = getSubscriberID(userId,USING_UID);
         String getListQuery = "";
 
@@ -567,20 +690,42 @@ public class DashboardSettingsExternal {
         ResultSet rs = null;
 
         List<String> list = new ArrayList<String>();
-        getListQuery =
-                "SELECT PERSONA FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? and LANGUAGE = ?";
+        if(module.equals(TOPICS)) {
+            getListQuery =
+                    "SELECT TOPIC_INTEREST_NAME FROM NEWSLETTER_INTEREST WHERE UID = ? ";
+            
+            
+        }else if(module.equals(SWITCH)){
+            
+            getListQuery =
+                    "SELECT PERSONA FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? and LANGUAGE = ?";
+        }        
 
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(getListQuery);
-
-            prepareStatement.setDouble(1, subscriberID);
-            prepareStatement.setString(2, language);
+            if(module.equals(TOPICS)) {
+                
+                prepareStatement.setString(1, userId);                
+                
+            }else if(module.equals(SWITCH)){
+                
+                prepareStatement.setDouble(1, subscriberID);
+                prepareStatement.setString(2, language);
+            }     
+            
             rs = prepareStatement.executeQuery();
 
             while (rs.next()) {
-                listName = rs.getString("PERSONA") + "-" + language;
-                list.add(listName);
+                if(module.equals(TOPICS)) {                    
+                    topicList = rs.getString("TOPIC");
+                    list.add(topicList);     
+                    
+                }else if(module.equals(SWITCH)){
+                    listName = rs.getString("PERSONA") + "-" + language;
+                    list.add(listName);
+                }  
+                
             }
 
         } catch (Exception e) {
@@ -590,6 +735,54 @@ public class DashboardSettingsExternal {
         }
 
         logger.debug("getList() : size " + list.size());
+
+        return list;
+    }
+    
+    /**
+     * @param userId
+     * This method is used to get the Topics selected by User from SQL
+     * @return
+     */
+    private List<Integer> getPhpList(String userId) {
+        logger.info("DashboardSettingsExternal : getPhpList()");
+
+        String listName = "";
+        int phpList = 0;
+        double subscriberID = getSubscriberID(userId,USING_UID);
+        String subscriberemail = getSubscriberEmail(subscriberID);
+        String getListQuery = "";
+        
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        List<Integer> list = new ArrayList<Integer>();
+       
+            getListQuery =
+                    "SELECT ID FROM PHPLIST_LIST WHERE ID IN (SELECT LISTID FROM PHPLIST_LISTUSER WHERE USERID = (SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?) AND CATEGORY= ?)";
+            
+        try {
+            connection = mysql.getConnection();
+            prepareStatement = connection.prepareStatement(getListQuery);
+            prepareStatement.setString(1, subscriberemail);               
+            prepareStatement.setString(2, CATEGORY_TOPICS);    
+            rs = prepareStatement.executeQuery();
+
+            while (rs.next()) {
+                   
+                phpList = rs.getInt("ID");
+                list.add(phpList);     
+          
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception in getPhpList", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+
+        logger.debug("getPhpList() : size " + list.size());
 
         return list;
     }
@@ -938,57 +1131,7 @@ public class DashboardSettingsExternal {
         return subscriberID;
     }
     
-    /**
-     * @author Pramesh
-     * @param userId
-     * @return This method is used to fetch subscriberID using UID and EMAIL
-     */
-    private List<Integer> getSubscriberIDS(String userId, String condition) {
-        logger.info("DashboardSettingsExternal : getSubscriberID()");
-        
-        String subscriberIDQuery = "";
-        
-        if(condition.equals(USING_UID)) {
-            subscriberIDQuery =
-                    "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE UID = ?";
-            
-        }else if(condition.equals(USING_EMAIL)) {
-             subscriberIDQuery =
-                    "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
-            
-        }
-       
-        List<Integer> subscriberID = new ArrayList<>();
-        //int[] subscriberID;
-        Connection connection = null;
-        PreparedStatement prepareStatement = null;
-        ResultSet rs = null;
-        int count= 0;
-
-        try {
-            connection = postgre.getConnection();
-            prepareStatement =
-                    connection.prepareStatement(subscriberIDQuery);
-            prepareStatement.setString(1, userId);
-            rs = prepareStatement.executeQuery();
-
-            while (rs.next()) {
-                subscriberID.add(rs.getInt(1));
-                //subscriberID[count] = rs.getInt(1);
-                logger.debug("subscriberID : " + subscriberID.get(count));
-                count++;
-                
-            }
-
-            //logger.debug("subscriberID : " + subscriberID);
-
-        } catch (Exception e) {
-            logger.error("Exception in subscriberID", e);
-        } finally {
-            postgre.releaseConnection(connection, prepareStatement, rs);
-        }
-        return subscriberID;
-    }
+    
     
     
 
