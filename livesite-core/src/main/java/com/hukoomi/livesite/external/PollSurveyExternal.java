@@ -694,8 +694,10 @@ public class PollSurveyExternal {
                 
                 if(persona != null && persona.equals(personaValue)) {
                     personaPollGroupDCR = pollsGroupPath;
+                    break;
                 }else if(isDefault != null && "yes".equalsIgnoreCase(isDefault)) {
                     personaPollGroupDCR = pollsGroupPath; 
+                    break;
                 }else {
                     logger.debug("No Default configured");
                 }
