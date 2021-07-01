@@ -214,6 +214,8 @@ public class DashboardExternal {
 			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userdata.addElement("userTypeNoElement");
 			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
+			Element emailElement = userdata.addElement("email");
+			emailElement.setText((String) session.getAttribute("email"));
 		}
 
 		
