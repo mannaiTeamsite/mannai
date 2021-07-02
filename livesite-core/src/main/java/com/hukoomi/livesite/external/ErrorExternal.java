@@ -35,23 +35,44 @@ public class ErrorExternal {
 			 String language = context.getParameterString(LOCALE);
 			 String statusCode = context.getParameterString(STATUS);
 			 
-			 logger.info("Error Status"+statusCode);
+			 logger.info("Error Status "+statusCode);
 			 String contentPage = req.getReferer(); 
+			 if(!contentPage.isEmpty() && contentPage != "" && contentPage != null) {
+				 
+			
 			 PropertiesFileReader prop = null;
-				prop = new PropertiesFileReader(context, "dashboard.properties");
+				prop = new PropertiesFileReader(context, "error.properties");
 				properties = prop.getPropertiesFile();
 			 String errorpagePathEn = properties.getProperty("errorPageEn");
+			 logger.info("errorpagePathEn  "+errorpagePathEn);
 			 String errorpagePathAr = properties.getProperty("errorPageAr");
-			 String path = "";
+			 logger.info("errorpagePathAr  "+errorpagePathAr);
+			 String domain = properties.getProperty("domain");
+			 logger.info("Domain  "+domain);
+			 logger.info("Actual broken link  "+req.getForwardedHost());
+			 String contentPage_path = "";
 				try {
-					 path = new URL(contentPage).getPath();
+					 contentPage_path = new URL(contentPage).getPath();
+					 logger.info("contentPage_path  "+contentPage_path);
 				} catch (MalformedURLException e) {
 					logger.debug(e);
-				}						 
-			 if((!errorpagePathEn.equals(path) || !errorpagePathAr.equals(path)) && contentPage != null) {
+				}
+				String broken_link_path = "";
+				try {
+					broken_link_path = new URL(brokenLink).getPath();
+					 logger.info(" broken_link_path  "+broken_link_path);
+				} catch (MalformedURLException e) {
+					logger.debug(e);
+				}			
+			 if((!errorpagePathEn.equals(contentPage_path) && !errorpagePathAr.equals(contentPage_path)) && !errorpagePathEn.equals(broken_link_path) && !errorpagePathAr.equals(broken_link_path)) {
 				 CommonUtils cu = new CommonUtils(context);
+				 brokenLink = domain+broken_link_path;
+				 logger.info("brokenLink  "+brokenLink);
+				 contentPage = domain+contentPage_path;
+				 logger.info("contentPage  "+contentPage);
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
-			 }			 
+			 }	
+			 }
 		}
 		Document doc = getErrorDCRContent(context);  
 		 logger.info("ErrorBannerDoc"+doc.asXML());
