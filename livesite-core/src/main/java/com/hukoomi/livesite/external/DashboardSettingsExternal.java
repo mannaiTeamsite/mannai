@@ -1157,6 +1157,13 @@ public class DashboardSettingsExternal {
             topics = getTopicsInterest(settingsBO.getUserId());
 
 
+
+            createTopicsResponseDoc(responseElem, topics,
+                    settingsBO.getUserId(), settingsBO.getPersona(),
+                    STATUS_SUBSCRIBED, "");
+
+            getLangSwitchDetails(settingsBO.getUserId());
+
             createTopicsResponseDoc(responseElem, topics,
                     settingsBO.getUserId(), settingsBO.getPersona(),
                     STATUS_SUBSCRIBED, "");
@@ -1170,6 +1177,45 @@ public class DashboardSettingsExternal {
                     settingsBO.getUserId(), settingsBO.getPersona(),
                     STATUS_NOT_SUBSCRIBED, "");
         }
+
+    }
+
+    /**
+     * @param userId
+     */
+    private String getLangSwitchDetails(String userId) {
+
+        logger.info("DashboardSettingsExternal : getLangSwitchDetails()");
+
+        StringJoiner switchDetails = new StringJoiner(",");
+
+        String switchDetailsQuery = "SELECT ENGLISH_SWITCH, ARABIC_SWITCH FROM NEWSLETTER_MASTER WHERE UID = ?";
+        logger.info(
+                "switchDetailsQuery : " + switchDetailsQuery);
+
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(switchDetailsQuery);
+            prepareStatement.setString(1, userId);
+            rs = prepareStatement.executeQuery();
+
+            while (rs.next()) {
+                switchDetails.add(rs.getString(1));
+                switchDetails.add(rs.getString(2));
+            }
+
+        } catch (Exception e) {
+            logger.error("Exception in getSubscriptionDetails", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+
+        return switchDetails.toString();
 
     }
 
