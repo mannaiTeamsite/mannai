@@ -199,6 +199,7 @@ public class DashboardExternal {
 		Element userdata = rootElement.addElement("user-data");
 		String status = (String) session.getAttribute("status");
 		LOGGER.info("status=" + session.getAttribute("status"));
+                LOGGER.info("email=" + session.getAttribute("email"));
 		if (status != null && status.equals("valid")) {
 
 			Element userTypeElement = userdata.addElement("userType");

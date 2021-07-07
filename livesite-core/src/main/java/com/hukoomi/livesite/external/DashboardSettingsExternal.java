@@ -1308,11 +1308,11 @@ public class DashboardSettingsExternal {
                     settingsBO.getUserId(), settingsBO.getPersona(),
                     STATUS_SUBSCRIBED, "");
 
-            getLangSwitchDetails(settingsBO.getUserId());
+            String languageSwitchDetails = getLangSwitchDetails(
+                    settingsBO.getUserId());
 
-            createTopicsResponseDoc(responseElem, topics,
-                    settingsBO.getUserId(), settingsBO.getPersona(),
-                    STATUS_SUBSCRIBED, "");
+            createLanguageSwitchDetailsDoc(responseElem,
+                    languageSwitchDetails);
 
         } else if ("Pending".equals(subscriptionStatus)) {
             createTopicsResponseDoc(responseElem, topics,
@@ -1323,6 +1323,27 @@ public class DashboardSettingsExternal {
                     settingsBO.getUserId(), settingsBO.getPersona(),
                     STATUS_NOT_SUBSCRIBED, "");
         }
+
+    }
+
+    /**
+     * @param responseElem
+     * @param languageSwitchDetails
+     */
+    private void createLanguageSwitchDetailsDoc(Element responseElem,
+            String languageSwitchDetails) {
+        if (languageSwitchDetails == null)
+            languageSwitchDetails = "";
+
+        Element newsletterResponseElem = responseElem
+                .addElement("langauge-switch-settings");
+
+        String language[] = languageSwitchDetails.split(",");
+
+        newsletterResponseElem.addElement("english-switch")
+                .setText(language[0]);
+        newsletterResponseElem.addElement("arabic-switch")
+                .setText(language[1]);
 
     }
 
@@ -1351,12 +1372,24 @@ public class DashboardSettingsExternal {
             rs = prepareStatement.executeQuery();
 
             while (rs.next()) {
-                switchDetails.add(rs.getString(1));
-                switchDetails.add(rs.getString(2));
+                String englishSwitch = rs.getString(1);
+                String arabicSwitch = rs.getString(2);
+                if (englishSwitch == null) {
+                    switchDetails.add("on");
+                } else {
+                    switchDetails.add(englishSwitch);
+                }
+
+                if (arabicSwitch == null) {
+                    switchDetails.add("on");
+                } else {
+                    switchDetails.add(arabicSwitch);
+                }
+
             }
 
         } catch (Exception e) {
-            logger.error("Exception in getSubscriptionDetails", e);
+            logger.error("Exception in getLangSwitchDetails", e);
         } finally {
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
