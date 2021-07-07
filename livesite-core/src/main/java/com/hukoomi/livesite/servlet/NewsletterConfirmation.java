@@ -796,7 +796,7 @@ public class NewsletterConfirmation extends HttpServlet {
         logger.info("createSubscriberPhplist:Enter"+httpServletAddress);       
         Properties properties =
                 postgre.loadProperties("phplist.properties");
-        String base64Token = getphpListToken();
+        String base64Token = getphpListToken(httpServletAddress);
         String status="";
         if(!base64Token.equals(SESSION_FAILED)) {
             
@@ -916,7 +916,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @throws IOException
      * This method id used to get session token for phpList
      */
-    private String getphpListToken()
+    private String getphpListToken(String httpServletAddress)
             throws NoSuchAlgorithmException, IOException {
         logger.info("getConnection:Enter");  
         String token="";
@@ -927,7 +927,9 @@ public class NewsletterConfirmation extends HttpServlet {
         int statusCode=0;
         Properties properties =
                   postgre.loadProperties("phplist.properties"); 
-        baseUrl = properties.getProperty(BASE_URL);
+        baseUrl = "http://"+httpServletAddress+"/phplist";
+        logger.info("Phplist baseUrl "+baseUrl);      
+        //baseUrl = properties.getProperty(BASE_URL);
         adminID = properties.getProperty(ADMIN_ID);
         adminPWD = properties.getProperty(ADMIN_PWD);
         String endpoint = baseUrl +
