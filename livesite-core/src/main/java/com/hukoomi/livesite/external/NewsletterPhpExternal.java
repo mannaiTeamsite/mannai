@@ -85,6 +85,9 @@ public class NewsletterPhpExternal {
 	/** preference updated response status. */
 	private static final String STATUS_ALREADY_SUBSCRIBED = "AlreadySubscribed";
 
+        /** preference updated response status. */
+        private static final String STATUS_ALREADY_UNSUBSCRIBED = "AlreadyUnsubscribed";
+
 	/** initialization of error variable. */
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
@@ -176,6 +179,11 @@ public class NewsletterPhpExternal {
     */
    public static final String ERROR = "error";
 
+   /**
+    * UID variable.
+    */
+   private String uid = null;
+
 	/* DashboardSettingsExternal settingExternal = null; */
 
 	@SuppressWarnings("deprecation")
@@ -197,7 +205,7 @@ public class NewsletterPhpExternal {
 		String pageLang = xssUtils
                 .stripXSS(context.getParameterString("lang"));
 		
-		String uid = null;
+
 		if (session.getAttribute("status") == "valid") {
 			uid = (String) session.getAttribute("uid");
 		}
@@ -283,7 +291,11 @@ public class NewsletterPhpExternal {
 			}
 			
 			if (verify) {
-				if (!isEmailAlreadyExist(email)) {
+                            if (uid != null && !uid.equals("")
+                                    && getSubscriptionStatusByUid(uid)) {
+                                memberdetail = getDocument(email,
+                                            STATUS_ALREADY_SUBSCRIBED);
+                            } else if (!isEmailAlreadyExist(email)) {
 					//double subscriberId = generateSubscriberId();
 				     subscriberId = generateSubscriberId();
 					boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email,
@@ -306,7 +318,12 @@ public class NewsletterPhpExternal {
 						String subscriptionStatus = getSubscriptionStatus(email);
 						if (STATUS_PENDING.equals(subscriptionStatus)) {
 							memberdetail = getDocument(email, STATUS_ALREADY_PENDING);
-						} else {
+                                                    } else if (STATUS_UNSUBSCRIBED
+                                                            .equals(subscriptionStatus)) {
+                                                        memberdetail = getDocument(
+                                                                email,
+                                                                STATUS_ALREADY_UNSUBSCRIBED);
+                                                    } else {
 							String preferenceStatus = checkPrefernceStatus(email, persona, subscriptionLang);
 							if (STATUS_ACTIVE.equals(preferenceStatus)) {
 								memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
@@ -348,9 +365,47 @@ public class NewsletterPhpExternal {
 	}
 
 	/**
-	 * @param email
-	 * @return
-	 */
+         * @param uid2
+         * @return
+         */
+        private boolean getSubscriptionStatusByUid(String uid) {
+            logger.info(
+                    "NewsletterPhpExternal : getSubscriptionStatusByUid()");
+            boolean emailsExistStatus = false;
+
+            String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE UID = ?";
+
+            Connection connection = null;
+            PreparedStatement prepareStatement = null;
+
+            try {
+                connection = postgre.getConnection();
+                prepareStatement = connection
+                        .prepareStatement(emailCheckQuery);
+                prepareStatement.setString(1, uid);
+
+                ResultSet resultSet = prepareStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    logger.info("Email Already Exist !");
+                    emailsExistStatus = true;
+                } else {
+                    logger.info("Email Doesn't Exist !");
+                    emailsExistStatus = false;
+                }
+            } catch (Exception e) {
+                logger.error("Exception in getSubscriptionStatusByUid", e);
+            } finally {
+                postgre.releaseConnection(connection, prepareStatement,
+                        null);
+            }
+            return emailsExistStatus;
+        }
+
+        /**
+         * @param email
+         * @return
+         */
 	private double getSubcriberId(String email) {
 		double subscriberId = 0;
 
@@ -768,14 +823,16 @@ public class NewsletterPhpExternal {
 	public boolean isEmailAlreadyExist(String email) {
 		logger.info("NewsletterPhpExternal : isEmailAlreadyExist()");
 		boolean emailsExistStatus = false;
-		String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+
+                String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(emailCheckQuery);
-			prepareStatement.setString(1, email);
+                        prepareStatement.setString(1, email);
 
 			ResultSet resultSet = prepareStatement.executeQuery();
 
