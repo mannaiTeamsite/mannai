@@ -189,6 +189,11 @@ public class DashboardSettingsExternal {
      * Constant for error.
      */
     public static final String ERROR = "error";
+    
+    /**
+     * Constant for error.
+     */
+    public static final String EMAIL = "email";
     /**
      * Constant for status subscried.
      */
@@ -323,17 +328,18 @@ public class DashboardSettingsExternal {
                 } else if (ACTION_UNSUBSCRIBE
                         .equalsIgnoreCase(settingsBO.getAction())) {
                     logger.info("Unsubscribe Action");  
+                    String subemail= getSubscriberEmail(settingsBO.getUserId());
                     String unsubReason = context.getParameterString("UNSUBSCRIBE_REASON");
                     status= unsubscribeDashboardUser(settingsBO.getUserId(),unsubReason);
                     if(status.equals(STATUS_SUCCESS)) {
                         
                         createUnsubscribeResponseDoc(responseElem, null, null,
                                 "",
-                                STATUS_SUCCESS, "");
+                                STATUS_SUCCESS, "",subemail);
                     }else {
                         createUnsubscribeResponseDoc(responseElem, null, null,
                                 "",
-                                STATUS_FAILURE, "");
+                                STATUS_FAILURE, "",subemail);
                     }
                     
                 } else if (ACTION_LANG_ONOFF
@@ -344,11 +350,11 @@ public class DashboardSettingsExternal {
                             
                             createUnsubscribeResponseDoc(responseElem, null, null,
                                     "",
-                                    STATUS_SUCCESS, "");
+                                    STATUS_SUCCESS, "","");
                         }else {
                             createUnsubscribeResponseDoc(responseElem, null, null,
                                     "",
-                                    STATUS_FAILURE, "");
+                                    STATUS_FAILURE, "","");
                         }
                 }
                 
@@ -1087,6 +1093,42 @@ public class DashboardSettingsExternal {
 
         return subscriberEmail;
     }
+    
+    /**
+     * @author pramesh
+     * @param uid
+     * @return
+     * 
+     * This method get the subscriber email based on uid
+     */
+    private String getSubscriberEmail(String uid) {
+        logger.info("DashboardSettingsExternal : getSubscriberEmail Using UID");
+        boolean subscriberPreferenceDataInsert = false;
+        String addSubscriberPreferencesQuery =
+                "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE UID = ?";
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        String subscriberEmail = "";
+        ResultSet rs = null;
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(addSubscriberPreferencesQuery);
+            prepareStatement.setString(1, uid);
+
+            rs = prepareStatement.executeQuery();
+            while (rs.next()) {
+
+                subscriberEmail = rs.getString(SUBSCRIBER_EMAIL);
+            }
+        } catch (Exception e) {
+            logger.error("Exception in updateMasterTable", e);            
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
+
+        return subscriberEmail;
+    }
 
     /**
      * @author Pramesh
@@ -1529,7 +1571,7 @@ public class DashboardSettingsExternal {
      */
     private void createUnsubscribeResponseDoc(Element responseElem,
             String topics, String userId, String persona, String status,
-            String error) {
+            String error,String email) {
         if (topics == null)
             topics = "";
         if (userId == null)
@@ -1540,6 +1582,8 @@ public class DashboardSettingsExternal {
             status = "";
         if (error == null)
             error = "";
+        if (email == null)
+            email = "";
 
         Element newsletterResponseElem = responseElem
                 .addElement("newsletter-settings");
@@ -1548,6 +1592,7 @@ public class DashboardSettingsExternal {
         newsletterResponseElem.addElement(TOPICS).setText(topics);
         newsletterResponseElem.addElement(USER_ID).setText(userId);
         newsletterResponseElem.addElement(PERSONA).setText(persona);
+        newsletterResponseElem.addElement(EMAIL).setText(email);
         newsletterResponseElem.addElement(ERROR).setText(error);
 
     }
