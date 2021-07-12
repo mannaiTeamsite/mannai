@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -476,6 +478,13 @@ public class CommonUtils {
     public void logBrokenLink(String brokenLink, String contentPage, String language, String statusCode){
         logger.debug("Logging Broken link in Database");
         ValidationErrorList errorList = new ValidationErrorList();
+        
+        try {
+        	brokenLink = new URL(brokenLink).getPath();
+			 
+		} catch (MalformedURLException e) {
+			logger.debug(e);
+		}
         if (!ESAPIValidator.checkNull(brokenLink)) {
             brokenLink  = ESAPI.validator().getValidInput("brokenLink", brokenLink, ESAPIValidator.URL, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
@@ -484,6 +493,12 @@ public class CommonUtils {
                 return;
             }
         }
+        try {
+        	contentPage = new URL(contentPage).getPath();
+			 
+		} catch (MalformedURLException e) {
+			logger.debug(e);
+		}
         if (!ESAPIValidator.checkNull(contentPage)) {
             contentPage  = ESAPI.validator().getValidInput("contentPage", contentPage, ESAPIValidator.URL, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
@@ -508,6 +523,7 @@ public class CommonUtils {
                 return;
             }
         }
+        if(contentPage != null && brokenLink != null) {
         logger.info("Logging the Broken link with status: " + statusCode + ", for URL: " + brokenLink + ", present on: " + contentPage + " for language: " + language);
         PreparedStatement statement = null;
         Connection connection = null;
@@ -538,6 +554,7 @@ public class CommonUtils {
             logger.info("Releasing Database Connection.");
             database.releaseConnection(connection, statement, null);
             logger.info("Released Database Connection.");
+        }
         }
     }
 }
