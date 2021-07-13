@@ -38,37 +38,30 @@ public class ErrorExternal {
 			 logger.info("Error Status "+statusCode);
 			 String contentPage = req.getReferer(); 
 			 if(!contentPage.isEmpty() && contentPage != "" && contentPage != null) {
-				 
-			
-			 PropertiesFileReader prop = null;
-				prop = new PropertiesFileReader(context, "error.properties");
-				properties = prop.getPropertiesFile();
-			 String errorpagePathEn = properties.getProperty("errorPageEn");
-			 logger.info("errorpagePathEn  "+errorpagePathEn);
+							
+			 String errorpagePathEn = properties.getProperty("errorPageEn");			
 			 String errorpagePathAr = properties.getProperty("errorPageAr");
-			 logger.info("errorpagePathAr  "+errorpagePathAr);
-			 String domain = properties.getProperty("domain");
-			 logger.info("Domain  "+domain);
-			 logger.info("Actual broken link  "+req.getForwardedHost());
-			 String contentPage_path = "";
+			 String contentPagePath = "";
 				try {
-					 contentPage_path = new URL(contentPage).getPath();
-					 logger.info("contentPage_path  "+contentPage_path);
+					 contentPagePath = new URL(contentPage).getPath();
+					 
 				} catch (MalformedURLException e) {
 					logger.debug(e);
 				}
-				String broken_link_path = "";
+				String brokenLinkPath = "";
 				try {
-					broken_link_path = new URL(brokenLink).getPath();
-					 logger.info(" broken_link_path  "+broken_link_path);
+					brokenLinkPath = new URL(brokenLink).getPath();
+					 
 				} catch (MalformedURLException e) {
 					logger.debug(e);
 				}			
-			 if((!errorpagePathEn.equals(contentPage_path) && !errorpagePathAr.equals(contentPage_path)) && !errorpagePathEn.equals(broken_link_path) && !errorpagePathAr.equals(broken_link_path)) {
+			 if((!errorpagePathEn.equals(contentPagePath) && !errorpagePathAr.equals(contentPagePath)) && !errorpagePathEn.equals(brokenLinkPath) && !errorpagePathAr.equals(brokenLinkPath)) {
 				 CommonUtils cu = new CommonUtils(context);
-				 brokenLink = domain+broken_link_path;
+				 String domain = cu.getURLPrefix(context);
+				 
+				 brokenLink = domain+brokenLinkPath;
 				 logger.info("brokenLink  "+brokenLink);
-				 contentPage = domain+contentPage_path;
+				 contentPage = domain+contentPagePath;
 				 logger.info("contentPage  "+contentPage);
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 			 }	
