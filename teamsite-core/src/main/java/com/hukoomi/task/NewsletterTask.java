@@ -307,13 +307,33 @@ public class NewsletterTask implements CSURLExternalTask {
 
                 Element dcrDescElement = dcrElement.addElement("desc");
                 String dcrDescription = "";
+                String seoDescription = "";
+                String detailDescription = "";
+                
                 if (dcrDocument.selectSingleNode(
                         "/root/page-details/description") != null) {
-                    dcrDescription = dcrDocument
+                    seoDescription = dcrDocument
                             .selectSingleNode(
                                     "/root/page-details/description")
                             .getText();
                 }
+
+                if (dcrDocument.selectSingleNode(
+                        "/root/detail/description") != null) {
+                    detailDescription = dcrDocument
+                            .selectSingleNode("/root/detail/description")
+                            .getText();
+                }
+
+                if (seoDescription != "" || !"".equals(seoDescription)) {
+                    dcrDescription = seoDescription;
+                } else {
+                    dcrDescription = detailDescription
+                            .replaceAll("<[^>]*>", "");
+                }
+
+                
+
 
                 dcrDescElement.setText(dcrDescription);
 
