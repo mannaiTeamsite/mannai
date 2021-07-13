@@ -12,6 +12,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -91,10 +92,10 @@ public class BookmarkExternal {
             logger.info("session valid");
         }
         else {
-            // bookmarkResultEle.setText(status);
-            bookmarkResultEle = bookmarkResultEle.addElement("session");
-            bookmarkResultEle.setText("Session invalid");
+
             logger.info("session invalid");
+            context.getResponse().setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            bookmarkResultEle.setText("404 Forbidden");
         }
         logger.info("bookmarkSearch====> ends");
         return bookmarkSearchDoc;
