@@ -24,8 +24,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -326,7 +328,17 @@ public class CommonUtils {
         if(parameter == null || parameter.isBlank()){
             return "";
         }
-        return parameter.replaceAll("[^a-zA-Z0-9- \\\"*+%:~!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
+        String scriptRemovalRegex = "<script>(.*)</script>";
+        try {
+            logger.info("Decoding Parameter prior to script tag removal");
+            parameter = URLDecoder.decode(parameter,"UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Error while decoding parameter",e);
+        }
+        parameter = parameter.replaceAll(scriptRemovalRegex,"");
+        parameter = parameter.replaceAll("[^a-zA-Z0-9- \\\"*+%:~!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
+        logger.info("Sanitized Parameter: " + parameter);
+        return parameter;
     }
 
     /*
