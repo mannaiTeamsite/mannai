@@ -99,7 +99,7 @@ public class LastViewedExternal {
         else {
             context.getResponse().setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             lastviewedResultEle = lastviewedResultEle.addElement("session");
-            lastviewedResultEle.setText("404 Forbidden");
+            lastviewedResultEle.setText("Session Invalid");
             logger.info("session invalid");
         }
         logger.info("LastViewedSearch====> ends");

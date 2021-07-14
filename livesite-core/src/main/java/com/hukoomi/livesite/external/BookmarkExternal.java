@@ -96,7 +96,7 @@ public class BookmarkExternal {
             logger.info("session invalid");
             context.getResponse().setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             bookmarkResultEle = bookmarkResultEle.addElement("session");
-            bookmarkResultEle.setText("404 Forbidden");
+            bookmarkResultEle.setText("Session Invalid");
         }
         logger.info("bookmarkSearch====> ends");
         return bookmarkSearchDoc;
