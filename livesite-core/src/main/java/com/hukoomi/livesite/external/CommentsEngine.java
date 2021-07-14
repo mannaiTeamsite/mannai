@@ -1,9 +1,5 @@
 package com.hukoomi.livesite.external;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -114,7 +110,8 @@ public class CommentsEngine {
                             context.getParameterString("username"));
                     String gRecaptchaResponse = xssUtils.stripXSS(
                             context.getParameterString("recaptcha"));
-                    if (validateCommentData(comments, userName, blogUrl,
+                    if (validateCommentData(context, comments, userName,
+                            blogUrl,
                             ip)) {
                         GoogleRecaptchaUtil captchUtil =
                                 new GoogleRecaptchaUtil();
@@ -170,11 +167,19 @@ public class CommentsEngine {
      * @param ip
      * @return
      */
-    private boolean validateCommentData(String comments, String userName,
+    private boolean validateCommentData(RequestContext context,
+            String comments, String userName,
             String blogUrl, String ip) {
-        if (userName.length() > 100) {
+
+        Properties propertiesFile = CommentsEngine.loadProperties(context);
+        int userNameLength = Integer
+                .parseInt(propertiesFile.getProperty("USERNAME_LENGTH"));
+        int commentsLength = Integer
+                .parseInt(propertiesFile.getProperty("COMMENTS_LENGTH"));
+
+        if (userName.length() > userNameLength) {
             return false;
-        } else if (comments.length() > 300) {
+        } else if (comments.length() > commentsLength) {
             return false;
         } else {
             ValidationErrorList errorList = new ValidationErrorList();

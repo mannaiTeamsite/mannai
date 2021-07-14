@@ -240,9 +240,6 @@ public class DashboardSettingsExternal {
         final String SETTINGS_ACTION = "settingsAction";
         String langSwitch = context.getParameterString(LANG_SWITCH);
         String language = context.getParameterString(SWITCH_LANGUAGE);
-        //String email = context.getParameterString(ELEMENT_EMAIL);
-        //String pageLang = context.getParameterString("lang");
-        //String unsubreason = context.getParameterString("unsubscribe_reason");
         String email = xssUtils
                 .stripXSS(context.getParameterString(ELEMENT_EMAIL));
         String pageLang = xssUtils
@@ -1334,14 +1331,11 @@ public class DashboardSettingsExternal {
             DashboardSettingsBO settingsBO) {
         logger.info("DashboardSettingsExternal : getTopicSettings()");
         getSubscriptionDetails(settingsBO.getUserId());
-        // String subscriptionStatus = getSubscriptionStatus(
-        // settingsBO.getUserId());
         String subscriptionStatus = getSubscriptionStatus(
                 settingsBO.getUserId(), TOPICS);
         String topics = "";
 
         if ("Subscribed".equals(subscriptionStatus)) {
-            // String topics = getTopicsInterest(settingsBO.getUserId());
             topics = getTopicsInterest(settingsBO.getUserId());
 
 
@@ -1671,8 +1665,6 @@ public class DashboardSettingsExternal {
         }
         
         HttpServletRequest request = context.getRequest();
-       // logger.debug("Session Status : "+request.getSession().getAttribute("status"));
-       // if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
             
         if(request.getSession().getAttribute("userId") != null && !"".equals(request.getSession().getAttribute("userId"))) {
                 String userId = request.getSession().getAttribute("userId").toString();
@@ -1695,9 +1687,8 @@ public class DashboardSettingsExternal {
             }else {
                 logger.debug("UserType from session is null.");
             }
-        //}
-        //settingsBO.setUserId("0");
         
+
         if (ACTION_UPDATE_PERSONA.equalsIgnoreCase(settingsAction)) {
             String persona = context.getParameterString(PERSONA);
             logger.debug(PERSONA + " >>>"+persona+"<<<");
