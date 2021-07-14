@@ -143,6 +143,7 @@ public class SolrQueryBuilder {
             if(!isHeader) {
                 this.baseQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
                         .getParameterString("baseQuery", DEFAULT_QUERY), UTF));
+                context.setParameterString("baseQuery",this.baseQuery);
             } else{
                 this.baseQuery = DEFAULT_QUERY;
             }
@@ -158,6 +159,7 @@ public class SolrQueryBuilder {
             if(!isHeader) {
                 this.fieldQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
                         .getParameterString("fieldQuery", ""), UTF));
+                context.setParameterString("fieldQuery",this.fieldQuery);
             } else {
                 this.fieldQuery = "";
             }
