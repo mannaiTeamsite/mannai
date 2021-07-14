@@ -35,6 +35,7 @@ public class HukoomiExternal {
 		CommonUtils commonUtils = new CommonUtils();
 		String fieldQuery = "";
 		String fq = commonUtils.sanitizeSolrQuery(context.getParameterString("fieldQuery", ""));
+		context.setParameterString("fieldQuery", fq);
 		try {
 			fieldQuery = URLDecoder.decode(fq, "UTF-8");
 			logger.debug("fieldQuery Query : " + fieldQuery);
@@ -42,6 +43,7 @@ public class HukoomiExternal {
 			logger.warn("Unable to decode fieldQuery=" + fq, e);
 		}
 		String category = commonUtils.sanitizeSolrQuery(context.getParameterString("solrcategory", ""));
+		context.setParameterString("solrcategory", category);
 		logger.debug("category : " + category);
 		if (StringUtils.isNotBlank(category)) {
 			if (StringUtils.isNotBlank(fieldQuery)) {
@@ -54,6 +56,7 @@ public class HukoomiExternal {
 		}
 
 		String fields = commonUtils.sanitizeSolrQuery(context.getParameterString("fields", ""));
+		context.setParameterString("fields", fields);
 		logger.debug("fields : " + fields);
 		if (StringUtils.isNotBlank(fields)) {
 			logger.debug("fieldQuery : " + fieldQuery);
