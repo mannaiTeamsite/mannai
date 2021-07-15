@@ -846,7 +846,7 @@ public class NewsletterConfirmation extends HttpServlet {
             Properties properties =
                     postgre.loadProperties("phplist.properties"); 
             baseUrl = properties.getProperty(BASE_URL);
-            baseUrl.replace(servletAddress, httpServletAddress);
+            baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
             logger.info("Phplist baseUrl from properties: "+baseUrl);            
           String endpoint = baseUrl +
             "/api/v2/subscribers";       
@@ -930,7 +930,7 @@ public class NewsletterConfirmation extends HttpServlet {
         Properties properties =
                   postgre.loadProperties("phplist.properties");
         baseUrl = properties.getProperty(BASE_URL);
-        baseUrl.replace(servletAddress, httpServletAddress);
+        baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
         logger.info("Phplist baseUrl from properties : "+baseUrl);        
         adminID = properties.getProperty(ADMIN_ID);
         adminPWD = properties.getProperty(ADMIN_PWD);
