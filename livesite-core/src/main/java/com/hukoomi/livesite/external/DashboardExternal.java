@@ -199,6 +199,7 @@ public class DashboardExternal {
 		Element userdata = rootElement.addElement("user-data");
 		String status = (String) session.getAttribute("status");
 		LOGGER.info("status=" + session.getAttribute("status"));
+                LOGGER.info("email=" + session.getAttribute("email"));
 		if (status != null && status.equals("valid")) {
 
 			Element userTypeElement = userdata.addElement("userType");
@@ -214,6 +215,8 @@ public class DashboardExternal {
 			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userdata.addElement("userTypeNoElement");
 			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
+			Element emailElement = userdata.addElement("email");
+			emailElement.setText((String) session.getAttribute("email"));
 		}
 
 		

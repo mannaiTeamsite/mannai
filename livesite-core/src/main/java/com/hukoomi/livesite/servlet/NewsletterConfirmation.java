@@ -13,9 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -133,6 +131,7 @@ public class NewsletterConfirmation extends HttpServlet {
         PrintWriter writer = response.getWriter();
         String token = request.getParameter("token");
         String pageLang = request.getParameter("lang");
+        String httpServletAddress = request.getLocalAddr();
         RequestDispatcher rd = request
                 .getRequestDispatcher(
                         "/portal-" + pageLang + "/home.page");
@@ -158,7 +157,7 @@ public class NewsletterConfirmation extends HttpServlet {
             try {
                 if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
                     
-                    subStatus = createSubscriberPhplist(subscriberemail);
+                    subStatus = createSubscriberPhplist(subscriberemail, httpServletAddress);
                     if(!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) { 
                         userId = getSubscriberID(subscriberemail);
                        updateSubscriberPersona(userId,listid);
@@ -189,7 +188,7 @@ public class NewsletterConfirmation extends HttpServlet {
                     pluBO = getsyncphpData(getPhpUser,userId,listid,"USERDATA");
                     syncStatus = updatesyncphpData(updateSyncUserQuery,pluBO,"USERDATA");
                     logger.debug("NewsletterConfirmation : syncstatus user table"+syncStatus);
-                    /* int userid = getphpUserID(subscriberemail); */
+
                     logger.debug("NewsletterConfirmation : getphpUserID "+userId+" listid "+listid);
                     if(syncStatus.equals(STATUS_SUCCESS)) {                        
                         pluBO = getsyncphpData(getUserList,userId,listid,"LISTDATA");
@@ -205,7 +204,6 @@ public class NewsletterConfirmation extends HttpServlet {
                     
                     String updateSyncListQuery="INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
                     
-                    /* int userid = getphpUserID(subscriberemail); */
                     pluBO = getsyncphpData(getUserList,userId,listid, "LISTDATA");
                     syncStatus = updatesyncphpData(updateSyncListQuery,pluBO,"LISTDATA");
                     logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>"+syncStatus);
@@ -243,17 +241,26 @@ public class NewsletterConfirmation extends HttpServlet {
                     && preferenceDataUpdate) {
                 Cookie confirmationCookie = new Cookie("confirmationStatus",
                         "confirmed");
+                response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+                response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+                response.setDateHeader("Expires", 0);
                 response.addCookie(confirmationCookie);
                 rd.forward(request, response);
         }else {
             Cookie confirmationCookie = new Cookie("confirmationStatus",
                     "notConfirmed");
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0);
             response.addCookie(confirmationCookie);
             rd.forward(request, response);
         }
     } else {
         Cookie confirmationCookie = new Cookie("confirmationStatus",
                 "technicalIssue");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0);
         response.addCookie(confirmationCookie);
         rd.forward(request, response);
     }
@@ -261,6 +268,9 @@ public class NewsletterConfirmation extends HttpServlet {
     } else {
         Cookie confirmationCookie = new Cookie("confirmationStatus",
                 "alreadyConfirmed");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+        response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+        response.setDateHeader("Expires", 0);
         response.addCookie(confirmationCookie);
         rd.forward(request, response);
     }
@@ -556,42 +566,7 @@ public class NewsletterConfirmation extends HttpServlet {
         return status;
     }
     
-    /**
-     * @author pramesh
-     * @param email
-     * @param listid
-     * @return
-     * 
-     * This method get the checks if Subsscriber status and updates
-     */
-    /*
-     * private int getphpUserID(String email) {
-     * logger.info("NewsletterConfirmation : getphpUserID"); boolean
-     * subscriberPreferenceDataInsert = false; String
-     * checkSubscriberEmailQuery =
-     * "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ? "; Connection
-     * connection = null; PreparedStatement prepareStatement = null; int
-     * phpUserID =0; ResultSet rs = null; String status=""; try {
-     * connection = mysql.getConnection(); prepareStatement = connection
-     * .prepareStatement(checkSubscriberEmailQuery);
-     * prepareStatement.setString(1, email);
-     * 
-     * rs = prepareStatement.executeQuery();
-     * 
-     * if (rs.next()) { logger.info("Subscriber Already Exist !");
-     * phpUserID = rs.getInt(PHP_USER_ID);
-     * 
-     * } else { logger.info("Subscriber Doesn't Exist !");
-     * 
-     * }
-     * 
-     * 
-     * } catch (Exception e) {
-     * logger.error("Exception in phpSubscriberExists", e); } finally {
-     * mysql.releaseConnection(connection, prepareStatement, null); }
-     * 
-     * return phpUserID; }
-     */
+
     /**
      * @author pramesh
      * @param subscriberId
@@ -778,23 +753,23 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method is to add subscriber to phpList 
      */
-    private String createSubscriberPhplist(final String email)
+    private String createSubscriberPhplist(final String email, String httpServletAddress)
             throws IOException, NoSuchAlgorithmException {
-        logger.info("createSubscriberPhplist:Enter");       
+        logger.info("createSubscriberPhplist:Enter"+httpServletAddress);       
         Properties properties =
                 postgre.loadProperties("phplist.properties");
-        String base64Token = getphpListToken();
+        String base64Token = getphpListToken(httpServletAddress);
         String status="";
         if(!base64Token.equals(SESSION_FAILED)) {
             
             authorizationHeader =
                     "Basic " + base64Token;
             baseUrl = properties.getProperty(BASE_URL);
-            /* int unique_id = 0; */
+
             try {            
                 
                 status =
-                                createSubscriber(email,authorizationHeader);
+                                createSubscriber(email,authorizationHeader,httpServletAddress);
                         logger.debug("status: " + status);
 
             } catch (Exception e) {
@@ -818,7 +793,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      * This method makes service call to add subscriber to phpList
      */
-    private String createSubscriber(final String email,String authHeader)
+    private String createSubscriber(final String email,String authHeader,String httpServletAddress)
             throws NoSuchAlgorithmException {
         logger.info("createsubscriber:Enter");
         InputStream is = null;
@@ -826,11 +801,15 @@ public class NewsletterConfirmation extends HttpServlet {
         StringBuilder response = new StringBuilder();
         int statusCode=0;
         String status = "";
+        String servletAddress = "<servletaddress>";
+       
         try {
             // Create connection
             Properties properties =
                     postgre.loadProperties("phplist.properties"); 
-          baseUrl = properties.getProperty(BASE_URL);
+            baseUrl = properties.getProperty(BASE_URL);
+            baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
+            logger.info("Phplist baseUrl from properties: "+baseUrl);            
           String endpoint = baseUrl +
             "/api/v2/subscribers";       
             URL url = new URL(endpoint);
@@ -843,7 +822,7 @@ public class NewsletterConfirmation extends HttpServlet {
            
                 
                 requestJSON = "{ \"email\" : \"" + email
-                        + "\", \"confirmed\": true,\"blacklisted\" : false, \"html_email\" : false, \"disabled\": false}";                
+                        + "\", \"confirmed\": true,\"blacklisted\" : false, \"html_email\" : true, \"disabled\": false}";                
                 
             logger.debug("requestJSON: " + requestJSON);
             httpConnection.setRequestProperty("Content-Length",
@@ -900,7 +879,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @throws IOException
      * This method id used to get session token for phpList
      */
-    private String getphpListToken()
+    private String getphpListToken(String httpServletAddress)
             throws NoSuchAlgorithmException, IOException {
         logger.info("getConnection:Enter");  
         String token="";
@@ -909,9 +888,12 @@ public class NewsletterConfirmation extends HttpServlet {
         String adminID= "";
         String adminPWD= ""; 
         int statusCode=0;
+        String servletAddress = "<servletaddress>";
         Properties properties =
-                  postgre.loadProperties("phplist.properties"); 
+                  postgre.loadProperties("phplist.properties");
         baseUrl = properties.getProperty(BASE_URL);
+        baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
+        logger.info("Phplist baseUrl from properties : "+baseUrl);        
         adminID = properties.getProperty(ADMIN_ID);
         adminPWD = properties.getProperty(ADMIN_PWD);
         String endpoint = baseUrl +
@@ -947,7 +929,7 @@ public class NewsletterConfirmation extends HttpServlet {
             is = httpConnection.getInputStream();
             BufferedReader rd =
                     new BufferedReader(new InputStreamReader(is));
-            /* response = new StringBuilder(); */
+
             String line;
             while ((line = rd.readLine()) != null) {
                 response.append(line);

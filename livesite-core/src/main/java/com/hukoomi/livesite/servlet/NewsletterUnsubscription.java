@@ -67,6 +67,9 @@ public class NewsletterUnsubscription extends HttpServlet{
     private static final String STATUS_INACTIVE = "InActive";
     /** Unsubscribed status constant. */
     private static final String STATUS_UNSUBSCRIBED = "Unsubscribed";
+    
+    /** confirmed status constant. */
+    private static final String STATUS_CONFIRMED = "Confirmed";
 
     public void doGet(HttpServletRequest request,
             HttpServletResponse response)
@@ -92,8 +95,8 @@ public class NewsletterUnsubscription extends HttpServlet{
         subscriberemail = getSubscriberEmail(subscriberID);
         
         logger.debug("NewsletterUnsubscription subscriberID "+subscriberID+" subscriberemail "+subscriberemail);  
-        if(token != null && !token.equals("")) {
-            
+        if(token != null) {
+            logger.debug("token not null");  
             status = unsubscribeDashboardUser(token,
                     unsubReason,subscriberID,subscriberemail);
             logger.debug("NewsletterUnsubscription : unsubscription in DB completed"+status);  
@@ -102,13 +105,19 @@ public class NewsletterUnsubscription extends HttpServlet{
             
             Cookie confirmationCookie = new Cookie("unsubscriptionStatus",
                     "unSubscriptionSuccess:"+subscriberemail);
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0);
             response.addCookie(confirmationCookie);            
             }
             
         }else{            
-           
+            logger.debug("token null"); 
             Cookie confirmationCookie = new Cookie("unsubscriptionStatus",
                     "unsubscribe");
+            response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+            response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+            response.setDateHeader("Expires", 0);
             response.addCookie(confirmationCookie);            
             
         }
@@ -132,6 +141,7 @@ public class NewsletterUnsubscription extends HttpServlet{
         String syncStatus = "";
         String status = "";
         int blacklistID = 1;
+        boolean tokenStatusUpdate = false;
         
         /* int phpID = getPhpID(email); */
         
@@ -177,6 +187,10 @@ public class NewsletterUnsubscription extends HttpServlet{
                 syncStatus = syncUnsubscribeData(syncPhpBlacklistData, email, unsubReason,"BLACKLISTDATA");
             }
             
+        }
+        if(syncStatus.equals(STATUS_SUCCESS)) {
+            tokenStatusUpdate = updateTokenStatus(token,
+                    STATUS_CONFIRMED);
         }
 
         return unsubStatus;
@@ -240,7 +254,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      * @return
      */
     private String unsubscribePhpUser(String Query, String email, String unsubReason) {
-        logger.info("NewsletterUnsubscription : unsubscribePhpUser() ");
+        logger.info("NewsletterUnsubscription : unsubscribePhpUser() "+unsubReason);
 
         String status = "";
         int blacklistID = 1;
@@ -468,6 +482,42 @@ public class NewsletterUnsubscription extends HttpServlet{
             postgre.releaseConnection(connection, prepareStatement, rs);
         }
         return subscriberID;
+    }
+    
+    /**
+     * @author pramesh
+     * @param token
+     * @param statusConfirmed
+     * @return
+     */
+    private boolean updateTokenStatus(String token, String status) {
+        logger.info("NewsletterConfirmation : updateTokenStatus()");
+        boolean updateTokenStatus = false;
+        String updateTokenStatusQuery = "UPDATE NEWSLETTER_CONFIRMATION_TOKEN SET CONFIRMATION_STATUS = ? WHERE TOKEN = ?";
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(updateTokenStatusQuery);
+            prepareStatement.setString(1, status);
+            prepareStatement.setString(2, token);
+
+            int result = prepareStatement.executeUpdate();
+            if (result != 0) {
+                logger.info("Token Status Updated !");
+                updateTokenStatus = true;
+            } else {
+                logger.info("Token Status Not Updated !");
+            }
+        } catch (Exception e) {
+            logger.error("Exception in updateTokenStatus", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
+
+        return updateTokenStatus;
     }
 
 }

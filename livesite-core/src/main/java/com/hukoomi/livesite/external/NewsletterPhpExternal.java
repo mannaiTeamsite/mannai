@@ -85,6 +85,9 @@ public class NewsletterPhpExternal {
 	/** preference updated response status. */
 	private static final String STATUS_ALREADY_SUBSCRIBED = "AlreadySubscribed";
 
+        /** preference updated response status. */
+        private static final String STATUS_ALREADY_UNSUBSCRIBED = "AlreadyUnsubscribed";
+
 	/** initialization of error variable. */
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
@@ -119,6 +122,67 @@ public class NewsletterPhpExternal {
 
 	/** Postgre Object variable. */
 	Postgre postgre = null;
+	
+	/**
+    * Constant for action update unsubscribe settings.
+    */
+   public static final String ACTION_UNSUBSCRIBE_NONLOGGED =
+           "unsubscribeNonLogged";
+   
+   /**
+    * Parameter to get subscriberID.
+    */
+   private static final String USING_EMAIL =
+           "usingEmail";
+   /**
+    * Constant for action update persona settings.
+    */
+   public static final String ACTION_UNSUBSCRIBE = "unsubscribe";
+   /**
+    * Constant for status not subscried.
+    */
+   public static final String STATUS_NOT_SUBSCRIBED = "notSubscribed";
+   
+   /**
+    * Constant for status unsubscribed.
+    */
+   public static final String STATUS_UNSUBSCRIBED = "Unsubscribed";
+   
+   /**
+    * Constant for status success.
+    */
+   public static final String STATUS_SUCCESS = "success";
+   
+   /**
+    * Constant for settings-action.
+    */
+   public static final String TOPICS = "topics";
+   
+   /**
+    * Parameter to get subscriberID..
+    */
+   private static final String USING_UID =
+           "usingUID";
+   
+   /**
+    * Constant for status.
+    */
+   public static final String STATUS = "status";
+   
+   /**
+    * Constant for user-id.
+    */
+   public static final String USER_ID = "user-id";
+   
+   /**
+    * Constant for error.
+    */
+   public static final String ERROR = "error";
+
+   /**
+    * UID variable.
+    */
+   private String uid = null;
 
 	/* DashboardSettingsExternal settingExternal = null; */
 
@@ -133,13 +197,15 @@ public class NewsletterPhpExternal {
 		/* settingExternal = new DashboardSettingsExternal(); */
 
 		Document memberdetail = null;
+		Document doc = DocumentHelper.createDocument();
+		Element responseElem = doc.addElement("dashboard-settings");
 		ValidationUtils util = new ValidationUtils();
 		XssUtils xssUtils = new XssUtils();
 		boolean verify = false;
 		String pageLang = xssUtils
                 .stripXSS(context.getParameterString("lang"));
 		
-		String uid = null;
+
 		if (session.getAttribute("status") == "valid") {
 			uid = (String) session.getAttribute("uid");
 		}
@@ -162,7 +228,58 @@ public class NewsletterPhpExternal {
 
 		logger.info("User Details From Front End :-> email : " + email + " subcription language : " + subscriptionLang
 				+ " persona : " + persona);
-
+		///Added code for unsubscription start
+		final String SETTINGS_ACTION = "settingsAction";
+		String settingsAction =
+                context.getParameterString(SETTINGS_ACTION);
+		double subscriberId = 0;
+		double preferenceId = 0;
+		String unsubreason = context.getParameterString("unsubscribe_reason");
+	    String subStatus = "";
+		
+		 if (ACTION_UNSUBSCRIBE_NONLOGGED
+	                .equalsIgnoreCase(settingsAction)) {
+	            logger.info("Unsubscribe Non Logged"+pageLang);
+	            
+	            subscriberId = getSubscriberID(email,USING_EMAIL);
+	            boolean bool = isEmailAlreadyExist(email);
+	            if(bool) {
+	                
+	                subStatus = getSubscriptionStatus(email,ACTION_UNSUBSCRIBE);
+	                if(subStatus.equals("Subscribed")) {
+	                    
+	                    String confirmationToken =
+	                            generateConfirmationToken(
+	                                    subscriberId, preferenceId, email);
+	                    sendConfirmationMail(email, pageLang,
+	                            confirmationToken,
+	                            UNSUBSCRIPTION_CONFIRMATION_EMAIL, unsubreason, context);
+	                    createTopicsResponseDoc(responseElem, null, null,
+	                            "",
+	                            STATUS_SUCCESS, "");
+	                    
+	                }else if (subStatus.equals("Pending")) {
+	                    
+	                    createTopicsResponseDoc(responseElem, null, null,
+	                            "",
+	                            STATUS_PENDING, "");
+	                }else if(subStatus.equals("Unsubscribed")) {
+	                    createTopicsResponseDoc(responseElem, null, null,
+	                            "",
+	                            STATUS_UNSUBSCRIBED, "");
+	                    
+	                }
+	                
+	            }else {
+	                
+	                createTopicsResponseDoc(responseElem, null, null,
+	                        "",
+	                        STATUS_NOT_SUBSCRIBED, "");
+	            }
+	            return doc;
+	        }
+		
+		///Added code for unsubscription end
 		if (validateLanguage(subscriptionLang)
 				&& validateMailID(xssUtils.stripXSS(email))) {
 			if(gRecaptchaResponse!= null && !gRecaptchaResponse.equals("")) {
@@ -174,13 +291,19 @@ public class NewsletterPhpExternal {
 			}
 			
 			if (verify) {
-				if (!isEmailAlreadyExist(email)) {
-					double subscriberId = generateSubscriberId();
+                            if (uid != null && !uid.equals("")
+                                    && getSubscriptionStatusByUid(uid)) {
+                                memberdetail = getDocument(email,
+                                            STATUS_ALREADY_SUBSCRIBED);
+                            } else if (!isEmailAlreadyExist(email)) {
+					//double subscriberId = generateSubscriberId();
+				     subscriberId = generateSubscriberId();
 					boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email,
 							STATUS_PENDING);
 					boolean subscriberPreferenceDataInsert = addSubscriberPreferences(subscriberId, subscriptionLang,
 							persona, STATUS_PENDING);
-					double preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+					//double preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+					 preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
 					String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
 					if (subscriberMasterDataInsert && subscriberPreferenceDataInsert) {
 						sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
@@ -195,17 +318,24 @@ public class NewsletterPhpExternal {
 						String subscriptionStatus = getSubscriptionStatus(email);
 						if (STATUS_PENDING.equals(subscriptionStatus)) {
 							memberdetail = getDocument(email, STATUS_ALREADY_PENDING);
-						} else {
+                                                    } else if (STATUS_UNSUBSCRIBED
+                                                            .equals(subscriptionStatus)) {
+                                                        memberdetail = getDocument(
+                                                                email,
+                                                                STATUS_ALREADY_UNSUBSCRIBED);
+                                                    } else {
 							String preferenceStatus = checkPrefernceStatus(email, persona, subscriptionLang);
 							if (STATUS_ACTIVE.equals(preferenceStatus)) {
 								memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
 							} else if (STATUS_PENDING.equals(preferenceStatus)) {
 								memberdetail = getDocument(email, CONFIRMATION_PENDING);
 							} else {
-								double subscriberId = getSubcriberId(email);
+								//double subscriberId = getSubcriberId(email);
+							     subscriberId = getSubcriberId(email);
 								boolean preferenceUpdateStatus = updateSubscriberPreference(subscriberId,
 										subscriptionLang, persona, STATUS_PENDING);
-								double preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+								//double preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+								 preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
 								if (preferenceUpdateStatus) {
 									String confirmationToken = generateConfirmationToken(subscriberId, preferenceId,
 											email);
@@ -235,9 +365,47 @@ public class NewsletterPhpExternal {
 	}
 
 	/**
-	 * @param email
-	 * @return
-	 */
+         * @param uid2
+         * @return
+         */
+        private boolean getSubscriptionStatusByUid(String uid) {
+            logger.info(
+                    "NewsletterPhpExternal : getSubscriptionStatusByUid()");
+            boolean emailsExistStatus = false;
+
+            String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE UID = ?";
+
+            Connection connection = null;
+            PreparedStatement prepareStatement = null;
+
+            try {
+                connection = postgre.getConnection();
+                prepareStatement = connection
+                        .prepareStatement(emailCheckQuery);
+                prepareStatement.setString(1, uid);
+
+                ResultSet resultSet = prepareStatement.executeQuery();
+
+                if (resultSet.next()) {
+                    logger.info("Email Already Exist !");
+                    emailsExistStatus = true;
+                } else {
+                    logger.info("Email Doesn't Exist !");
+                    emailsExistStatus = false;
+                }
+            } catch (Exception e) {
+                logger.error("Exception in getSubscriptionStatusByUid", e);
+            } finally {
+                postgre.releaseConnection(connection, prepareStatement,
+                        null);
+            }
+            return emailsExistStatus;
+        }
+
+        /**
+         * @param email
+         * @return
+         */
 	private double getSubcriberId(String email) {
 		double subscriberId = 0;
 
@@ -547,7 +715,7 @@ public class NewsletterPhpExternal {
 			} else if (emailElement.equals(UNSUBSCRIPTION_CONFIRMATION_EMAIL)) {
 				messageHtmlName = "newsletter-unsubscription-mail-" + pageLanguage + ".html";
 			}
-
+			logger.info("NewsletterPhpExternal : messageHtmlName "+messageHtmlName);
 			String message = getHtmlFile(messageHtmlName, context);
 			if (!unsubReason.equals("")) {
 				message = message.replace("<token>", confirmationToken).replace("<lang>", pageLanguage)
@@ -655,14 +823,16 @@ public class NewsletterPhpExternal {
 	public boolean isEmailAlreadyExist(String email) {
 		logger.info("NewsletterPhpExternal : isEmailAlreadyExist()");
 		boolean emailsExistStatus = false;
-		String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+
+                String emailCheckQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(emailCheckQuery);
-			prepareStatement.setString(1, email);
+                        prepareStatement.setString(1, email);
 
 			ResultSet resultSet = prepareStatement.executeQuery();
 
@@ -823,5 +993,131 @@ public class NewsletterPhpExternal {
 		}
 
 	}
+	
+	/**
+     * @author Arbaj
+     * 
+     *         This method is used to get subscription status for Newsletter.
+     * 
+     * @param userId
+     * 
+     * @return
+     */
+    private String getSubscriptionStatus(String userId, String action) {
+        logger.info("DashboardSettingsExternal : getSubscriptionStatus()");
+        String subscriptionStatus = null;
+        String getSubscriptionStatusQuery = "";
+        if(action.equals(TOPICS)) {
+            getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE UID = ?";
+        }else {
+            getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+        }
+        
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement = connection
+                    .prepareStatement(getSubscriptionStatusQuery);
+            prepareStatement.setString(1, userId);
+
+            ResultSet resultSet = prepareStatement.executeQuery();
+            while(resultSet.next())
+            {
+                subscriptionStatus = resultSet.getString(1);
+            }            
+
+        } catch (Exception e) {
+            logger.error("Exception in getSubscriptionStatus", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, null);
+        }
+        return subscriptionStatus;
+    }
+    
+    /**
+     * @author Pramesh
+     * @param userId
+     * @return This method is used to fetch subscriberID using UID
+     */
+    private int getSubscriberID(String userId, String condition) {
+        logger.info("DashboardSettingsExternal : getSubscriberID()");
+        
+        String subscriberIDQuery = "";
+        
+        if(condition.equals(USING_UID)) {
+            subscriberIDQuery =
+                    "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE UID = ?";
+            
+        }else if(condition.equals(USING_EMAIL)) {
+             subscriberIDQuery =
+                    "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
+            
+        }
+       
+        int subscriberID = 0;
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+
+        try {
+            connection = postgre.getConnection();
+            prepareStatement =
+                    connection.prepareStatement(subscriberIDQuery);
+            prepareStatement.setString(1, userId);
+            rs = prepareStatement.executeQuery();
+
+            while (rs.next()) {
+                subscriberID = rs.getInt(1);
+            }
+
+            logger.debug("subscriberID : " + subscriberID);
+
+        } catch (Exception e) {
+            logger.error("Exception in subscriberID", e);
+        } finally {
+            postgre.releaseConnection(connection, prepareStatement, rs);
+        }
+        return subscriberID;
+    }
+    
+    /**
+     * @author Arbaj
+     * 
+     *         This method is used to create the topics response document based on
+     *         the input.
+     * 
+     * @param responseElem
+     * @param action
+     * @param userId
+     * @param persona
+     * @param status
+     * @param error
+     */
+    private void createTopicsResponseDoc(Element responseElem,
+            String topics, String userId, String persona, String status,
+            String error) {
+        if (topics == null)
+            topics = "";
+        if (userId == null)
+            userId = "";
+        if (persona == null)
+            persona = "";
+        if (status == null)
+            status = "";
+        if (error == null)
+            error = "";
+
+        Element newsletterResponseElem = responseElem
+                .addElement("newsletter-settings");
+
+        newsletterResponseElem.addElement(STATUS).setText(status);
+        newsletterResponseElem.addElement(TOPICS).setText(topics);
+        newsletterResponseElem.addElement(USER_ID).setText(userId);
+        newsletterResponseElem.addElement(PERSONA).setText(persona);
+        newsletterResponseElem.addElement(ERROR).setText(error);
+
+    }
 
 }

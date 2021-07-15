@@ -513,12 +513,16 @@ public class PollSurveyExternal {
         logger.debug("\ndcrcategory : " + dcrcategory + "\ncategory : "
                 + category + "\nlocal : " + locale + "\nrecord : "
                 + record);
-        DetailExternal detailExt = new DetailExternal();
-        context.setParameterString("dcrcategory", dcrcategory);
-        context.setParameterString("category", category);
-        context.setParameterString("locale", locale);
-        context.setParameterString("record", record);
-        doc = detailExt.getContentDetail(context);
+        try {
+            DetailExternal detailExt = new DetailExternal();
+            context.setParameterString("dcrcategory", dcrcategory);
+            context.setParameterString("category", category);
+            context.setParameterString("locale", locale);
+            context.setParameterString("record", record);
+            doc = detailExt.getContentDetail(context);
+        } catch (Exception e) {
+            logger.info(e.getMessage() +" for "+category+" - "+record);
+        }
         return doc;
     }
 
@@ -690,8 +694,10 @@ public class PollSurveyExternal {
                 
                 if(persona != null && persona.equals(personaValue)) {
                     personaPollGroupDCR = pollsGroupPath;
+                    break;
                 }else if(isDefault != null && "yes".equalsIgnoreCase(isDefault)) {
                     personaPollGroupDCR = pollsGroupPath; 
+                    break;
                 }else {
                     logger.debug("No Default configured");
                 }
