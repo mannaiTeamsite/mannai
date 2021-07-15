@@ -13,9 +13,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -190,7 +188,7 @@ public class NewsletterConfirmation extends HttpServlet {
                     pluBO = getsyncphpData(getPhpUser,userId,listid,"USERDATA");
                     syncStatus = updatesyncphpData(updateSyncUserQuery,pluBO,"USERDATA");
                     logger.debug("NewsletterConfirmation : syncstatus user table"+syncStatus);
-                    /* int userid = getphpUserID(subscriberemail); */
+
                     logger.debug("NewsletterConfirmation : getphpUserID "+userId+" listid "+listid);
                     if(syncStatus.equals(STATUS_SUCCESS)) {                        
                         pluBO = getsyncphpData(getUserList,userId,listid,"LISTDATA");
@@ -206,7 +204,6 @@ public class NewsletterConfirmation extends HttpServlet {
                     
                     String updateSyncListQuery="INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
                     
-                    /* int userid = getphpUserID(subscriberemail); */
                     pluBO = getsyncphpData(getUserList,userId,listid, "LISTDATA");
                     syncStatus = updatesyncphpData(updateSyncListQuery,pluBO,"LISTDATA");
                     logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>"+syncStatus);
@@ -569,42 +566,7 @@ public class NewsletterConfirmation extends HttpServlet {
         return status;
     }
     
-    /**
-     * @author pramesh
-     * @param email
-     * @param listid
-     * @return
-     * 
-     * This method get the checks if Subsscriber status and updates
-     */
-    /*
-     * private int getphpUserID(String email) {
-     * logger.info("NewsletterConfirmation : getphpUserID"); boolean
-     * subscriberPreferenceDataInsert = false; String
-     * checkSubscriberEmailQuery =
-     * "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ? "; Connection
-     * connection = null; PreparedStatement prepareStatement = null; int
-     * phpUserID =0; ResultSet rs = null; String status=""; try {
-     * connection = mysql.getConnection(); prepareStatement = connection
-     * .prepareStatement(checkSubscriberEmailQuery);
-     * prepareStatement.setString(1, email);
-     * 
-     * rs = prepareStatement.executeQuery();
-     * 
-     * if (rs.next()) { logger.info("Subscriber Already Exist !");
-     * phpUserID = rs.getInt(PHP_USER_ID);
-     * 
-     * } else { logger.info("Subscriber Doesn't Exist !");
-     * 
-     * }
-     * 
-     * 
-     * } catch (Exception e) {
-     * logger.error("Exception in phpSubscriberExists", e); } finally {
-     * mysql.releaseConnection(connection, prepareStatement, null); }
-     * 
-     * return phpUserID; }
-     */
+
     /**
      * @author pramesh
      * @param subscriberId
@@ -803,7 +765,7 @@ public class NewsletterConfirmation extends HttpServlet {
             authorizationHeader =
                     "Basic " + base64Token;
             baseUrl = properties.getProperty(BASE_URL);
-            /* int unique_id = 0; */
+
             try {            
                 
                 status =
@@ -967,7 +929,7 @@ public class NewsletterConfirmation extends HttpServlet {
             is = httpConnection.getInputStream();
             BufferedReader rd =
                     new BufferedReader(new InputStreamReader(is));
-            /* response = new StringBuilder(); */
+
             String line;
             while ((line = rd.readLine()) != null) {
                 response.append(line);
