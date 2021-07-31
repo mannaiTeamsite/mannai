@@ -60,25 +60,29 @@ public class SolrQueryUtil {
      * @param xmlRootName root node name for Solr Query results document.
      * @return document solr query result document.
      */
-    public Document doJsonQuery(final String query, final String xmlRootName) {
+    public Document doJsonQuery(String query, final String xmlRootName) {
         Document document = DocumentHelper.createDocument();
         logger.debug("SOLR Execute Query:" + query);
+        if(query.contains("category:(") || !query.contains("category:*")){
+            query = query.replaceFirst("/spell","/select");
+        }
+        logger.debug("SOLR Final Execute Query:" + query);
         try {
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response = restTemplate.getForEntity(query, String.class);
             JSONObject returnObject = new JSONObject();
             String returnXML = "";
-            logger.info("Json Response: " + response.getBody());
+            logger.debug("Json Response: " + response.getBody());
             String jsonResponse = response.getBody().replaceAll("\"(\\d+)\":", "\"doc-$1\":");
-            logger.info("Json After Id Tag replacement: " + jsonResponse);
+            logger.debug("Json After Id Tag replacement: " + jsonResponse);
             returnObject.put(xmlRootName, new JSONObject(jsonResponse));
             returnXML = XML.toString(returnObject);
-            logger.info("XML data after conversion: " + returnXML);
+            logger.debug("XML data after conversion: " + returnXML);
             document = Dom4jUtils.newDocument(returnXML);
+            List<Node> resultDocs = document.selectNodes("//docs");
             Node highlightNode = document.getRootElement().selectSingleNode("highlighting");
             if (highlightNode != null) {
                 logger.info("Highlighting Text Query available in the Response");
-                List<Node> resultDocs = document.selectNodes("//docs");
                 for (Node resultDoc : resultDocs) {
                     Node documentIDNode = resultDoc.selectSingleNode("id");
                     if (documentIDNode != null) {
@@ -102,25 +106,31 @@ public class SolrQueryUtil {
                         logger.error("ID need to be present in the response to show the highlight functionality.");
                     }
                 }
-                if(resultDocs.isEmpty()){
-                    List<Node> suggestionNodeList = document.selectNodes("//suggestion");
-                    String queryStr = "";
-                    String originalWordStr = "";
-                    if(query.contains("q=title:")){
-                        queryStr = query.split("q=title:")[1];
-                    } else{
-                        queryStr = query.split("q=")[1];
-                    }
+            }
+            if(resultDocs.isEmpty()) {
+                logger.info("Document: " + document.asXML());
+                logger.info("Query: " + query);
+                List<Node> suggestionNodeList = document.selectNodes("//suggestion");
+                String queryStr = "";
+                String originalWordStr = "";
+                if (query.contains("q=title:")) {
+                    queryStr = query.split("q=title:")[1];
+                } else if (query.contains("q=")) {
+                    queryStr = query.split("q=")[1];
+                }
 
-                    if(queryStr.contains("*&fl")){
-                        originalWordStr = queryStr.substring(1,queryStr.indexOf("*&fl"));
-                    } else {
-                        originalWordStr = queryStr.substring(0, queryStr.indexOf("&fl"));
-                    }
-                    logger.info("Original wordStr: " + originalWordStr);
+                if (queryStr.contains("*&fl")) {
+                    originalWordStr = queryStr.substring(1, queryStr.indexOf("*&fl"));
+                } else if (queryStr.contains("&fl")) {
+                    originalWordStr = queryStr.substring(0, queryStr.indexOf("&fl"));
+                } else if (queryStr.contains("&")) {
+                    originalWordStr = queryStr.substring(0, queryStr.indexOf("&"));
+                }
+                logger.info("Original wordStr: " + originalWordStr);
 
-                    String correctWordStr = "";
-                    if(suggestionNodeList.size() > 1) {
+                String correctWordStr = originalWordStr;
+                if (suggestionNodeList.size() > 0) {
+                    if (suggestionNodeList.size() > 1) {
                         int maxFreq = 0;
                         int freqVal;
                         for (Node node : suggestionNodeList) {
@@ -130,11 +140,12 @@ public class SolrQueryUtil {
                                 correctWordStr = node.selectSingleNode("word").getText();
                             }
                         }
-                    }else{
+                    } else {
                         correctWordStr = suggestionNodeList.get(0).selectSingleNode("word").getText();
                     }
                     logger.info("Corrected wordStr: " + correctWordStr);
                     String newQuery = query.replaceAll(originalWordStr, correctWordStr);
+                    logger.info("New Query: " + newQuery);
                     document = doJsonQuery(newQuery, xmlRootName);
                     document.getRootElement().addElement("OriginalWord").addText(originalWordStr);
                     document.getRootElement().addElement("CorrectedWord").addText(correctWordStr);
