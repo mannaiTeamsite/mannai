@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.workflow.CSExternalTask;
+import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 
 /**
  * Postgre is a database util class, which provides methods to load 
@@ -89,6 +90,7 @@ public class PostgreTSConnection {
 		 String schema = properties.getProperty("schema");
 		 userName = properties.getProperty("username");
 		 password = properties.getProperty("password");
+		 password = IREncryptionUtil.decrypt(password);
 
 		 connectionStr = "jdbc:" + database + "://" + host + ":" + port+ "/" + schema;
 		 logger.debug("Connection String : " + connectionStr);
