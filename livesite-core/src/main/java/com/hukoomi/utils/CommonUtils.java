@@ -335,8 +335,10 @@ public class CommonUtils {
         } catch (UnsupportedEncodingException e) {
             logger.error("Error while decoding parameter",e);
         }
+
         parameter = parameter.replaceAll(scriptRemovalRegex,"");
         parameter = parameter.replaceAll("[^a-zA-Z0-9- \\\"*+%:~!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
+        parameter = ESAPI.encoder().encodeForHTML(parameter);
         logger.info("Sanitized Parameter: " + parameter);
         return parameter;
     }
