@@ -1,19 +1,17 @@
 package com.hukoomi.livesite.external;
 
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Properties;
-
+import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.RequestHeaderUtils;
+import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import com.hukoomi.utils.CommonUtils;
-import com.hukoomi.utils.PropertiesFileReader;
-import com.hukoomi.utils.RequestHeaderUtils;
-import com.interwoven.livesite.runtime.RequestContext;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
 
 public class ErrorExternal {
 	
@@ -76,7 +74,8 @@ public class ErrorExternal {
 		logger.info("ErrorExternal : getStatus ---- Started");              
         Document doc = DocumentHelper.createDocument();    
         Element statusElement = doc.addElement("status");
-		statusElement.setText(context.getParameterString("error_code"));
+		CommonUtils cu = new CommonUtils(context);
+		statusElement.setText(cu.sanitizeSolrQuery(context.getParameterString("error_code")));
         logger.info("ErrorExternal : getStatus ---- Ended");
 		return doc;		
 	}
@@ -88,8 +87,9 @@ public class ErrorExternal {
         final String GENERAL_ERROR = "general_error";
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("content");
-        String status = reqcontext.getParameterString(STATUS);
-        String generalError = reqcontext.getParameterString(GENERAL_ERROR);
+		CommonUtils cu = new CommonUtils(reqcontext);
+        String status = cu.sanitizeSolrQuery(reqcontext.getParameterString(STATUS));
+        String generalError = cu.sanitizeSolrQuery(reqcontext.getParameterString(GENERAL_ERROR));
         Element statusElement = root.addElement("status");
       		statusElement.setText(status);
        String dcrPath = reqcontext.getParameterString("dcrPath")+"/error-"+status.replace("\"", "");
@@ -100,14 +100,13 @@ public class ErrorExternal {
        if(dcrPath.equals("")){
            return doc;
        }
-        CommonUtils commonUtils = new CommonUtils(reqcontext);
         Document data = null;
-        if (commonUtils.isPathExists(dcrPath)) {
+        if (cu.isPathExists(dcrPath)) {
         	 logger.info("DCR Path: " + dcrPath);
-              data = commonUtils.readDCR(dcrPath);
+              data = cu.readDCR(dcrPath);
         }else {
         	logger.info("generalError Path: " + generalError);
-             data = commonUtils.readDCR(generalError);
+             data = cu.readDCR(generalError);
         }
         
         if (data == null) {
