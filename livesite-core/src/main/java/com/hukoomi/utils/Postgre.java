@@ -9,6 +9,7 @@ import java.util.Properties;
 import org.apache.log4j.Logger;
 
 import com.interwoven.livesite.runtime.RequestContext;
+import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 
 
 /**
@@ -84,8 +85,11 @@ public class Postgre {
         String database = properties.getProperty("database");
         String schema = properties.getProperty("schema");
         userName = properties.getProperty("username");
+        //password = properties.getProperty("password");
+        
         password = properties.getProperty("password");
-
+        password = IREncryptionUtil.decrypt(password);
+        
         connectionStr = "jdbc:" + database + "://" + host + ":" + port
                 + "/" + schema;
 

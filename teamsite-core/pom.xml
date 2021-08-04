@@ -236,6 +236,11 @@
     		<artifactId>commons-lang</artifactId>
     		<version>2.6</version>
 	</dependency>
+	 <dependency>
+		<groupId>com.interwoven.wcm.service.iwovregistry</groupId>
+		<artifactId>configiface</artifactId>
+		<version>16.6.1.0.0</version>
+	</dependency>
   </dependencies>
     <reporting>
         <plugins>
