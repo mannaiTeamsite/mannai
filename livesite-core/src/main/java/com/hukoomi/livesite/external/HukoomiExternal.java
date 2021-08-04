@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
+import org.owasp.esapi.ESAPI;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
@@ -98,10 +99,19 @@ public class HukoomiExternal {
 		logger.debug("Landing Query : " + query);
 		Document doc;
 		doc = squ.doJsonQuery(query, "SolrResponse");
-
+		logger.info("Context FieldQuery: " + context.getParameterString("fieldQuery"));
+		logger.info("Context BaseQuery: " + context.getParameterString("baseQuery"));
+		logger.info("Current FieldQuery: " + fq);
 		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
+			String baseQuery = ESAPI.encoder().encodeForHTML(commonUtils.sanitizeSolrQuery(context.getParameterString("baseQuery")));
+			String sanitizedfieldQuery = ESAPI.encoder().encodeForHTML(commonUtils.sanitizeSolrQuery(fq));
+			logger.info("Sanitized BaseQuery: " + baseQuery);
+			logger.info("Sanitized FieldQuery: " + sanitizedfieldQuery);
+			doc.getRootElement().addElement("baseQuery").addText(baseQuery);
+			doc.getRootElement().addElement("fieldQuery").addText(sanitizedfieldQuery);
+
 		}
 		logger.debug("Before calling : " + doc);
 		
