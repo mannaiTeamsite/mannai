@@ -189,7 +189,7 @@ public class PollSurveyExternal {
                 logger.debug("pollGroupName : " + pollGroupName);
                 Document document = fetchGroupDoc(context, CONTENT,
                         pollsBO.getGroupCategory(), pollsBO.getLang(),
-                        pollGroupName);
+                        pollGroupName, "true");
                 logger.debug("Polls Group Doc :" + document.asXML());
     
                 String pollIds = fetchIds(document, POLL_NODE, context,
@@ -241,7 +241,7 @@ public class PollSurveyExternal {
                 logger.debug("surveyGroupName : " + surveyGroupName);
                 Document document = fetchGroupDoc(context, CONTENT,
                         surveyBO.getGroupCategory(), surveyBO.getLang(),
-                        surveyGroupName);
+                        surveyGroupName, "true");
                 logger.debug("Survey Group Doc :" + document.asXML());
     
                 String surveyIds = fetchIds(document, SURVEY_NODE, context,
@@ -331,7 +331,7 @@ public class PollSurveyExternal {
                 if(isPollInputValid) {
                     Document pollGroupConfigdoc = fetchGroupDoc(context, DASHBOARD,
                             pollsBO.getPollGroupConfigCategory(), pollsBO.getLang(),
-                            pollGroupConfig);
+                            pollGroupConfig, "true");
                     logger.debug("Polls Group Config Doc :" + pollGroupConfigdoc.asXML());
                     
                     String pollGroupDCRName = getPollGroupDCRName(pollGroupConfigdoc, POLL_GROUP_CONFIG_NODE, context,
@@ -339,7 +339,7 @@ public class PollSurveyExternal {
                     
                     Document document = fetchGroupDoc(context, CONTENT,
                             pollsBO.getGroupCategory(), pollsBO.getLang(),
-                            pollGroupDCRName);
+                            pollGroupDCRName, "true");
                     logger.debug("Poll Group Doc :" + document.asXML());
                     
                     //Set Group details to response
@@ -400,7 +400,7 @@ public class PollSurveyExternal {
                 if(isSurveyInputValid) {
                     Document surveyGroupConfigdoc = fetchGroupDoc(context, DASHBOARD,
                             surveyBO.getSurveyGroupConfigCategory(), surveyBO.getLang(),
-                            surveyGroupConfig);
+                            surveyGroupConfig, "true");
                     logger.debug("Survey Group Config Doc :" + surveyGroupConfigdoc.asXML());
                     
                     String surveyGroupDCRName = getSurveyGroupDCRName(surveyGroupConfigdoc, SURVEY_GROUP_CONFIG_NODE, context,
@@ -408,7 +408,7 @@ public class PollSurveyExternal {
                     
                     Document document = fetchGroupDoc(context, CONTENT,
                             surveyBO.getGroupCategory(), surveyBO.getLang(),
-                            surveyGroupDCRName);
+                            surveyGroupDCRName, "true");
                     logger.debug("Survey Group Doc :" + document.asXML());
                     
                     //Set Group details to response
@@ -507,7 +507,7 @@ public class PollSurveyExternal {
      */
     public Document fetchGroupDoc(RequestContext context,
             String dcrcategory, String category, String locale,
-            String record) {
+            String record, String ignoreDCRNotFoundError) {
         logger.info("PollSurveyExternal : fetchGroupDoc");
         Document doc = null;
         logger.debug("\ndcrcategory : " + dcrcategory + "\ncategory : "
@@ -519,6 +519,7 @@ public class PollSurveyExternal {
             context.setParameterString("category", category);
             context.setParameterString("locale", locale);
             context.setParameterString("record", record);
+            context.setParameterString("ignoreDCRNotFoundError", ignoreDCRNotFoundError);
             doc = detailExt.getContentDetail(context);
         } catch (Exception e) {
             logger.info(e.getMessage() +" for "+category+" - "+record);
@@ -587,7 +588,7 @@ public class PollSurveyExternal {
                 }
 
                 Document document = fetchGroupDoc(context, CONTENT,
-                        contentType, locale, contentName);
+                        contentType, locale, contentName, "true");
 
                 if (document != null) {
                     String id = document.selectSingleNode(ID_NODE)
