@@ -113,8 +113,7 @@ public class PostgreForServlet {
         String port = properties.getProperty("port");
         String database = properties.getProperty("database");
         String schema = properties.getProperty("schema");
-        userName = properties.getProperty("username");
-        //password = properties.getProperty("password");
+        userName = properties.getProperty("username");        
         password = properties.getProperty("password");
         password = IREncryptionUtil.decrypt(password);
 

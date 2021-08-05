@@ -110,8 +110,7 @@ public class MySqlForServlet {
         String port = properties.getProperty("mysql_port");
         String database = properties.getProperty("mysql_database");
         String schema = properties.getProperty("mysql_schema");
-        userName = properties.getProperty("mysql_username");
-        //password = properties.getProperty("mysql_password");
+        userName = properties.getProperty("mysql_username");        
         password = properties.getProperty("mysql_password");
         password = IREncryptionUtil.decrypt(password);
 
