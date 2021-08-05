@@ -68,7 +68,7 @@ public class RequestHeaderUtils {
         String requestURL = "";
         if(context.getRequest().getRequestURL() != null )
         	requestURL = context.getRequest().getRequestURL().toString();      
-        logger.debug("HTTP status code ="+requestURL);
+        logger.debug("Request URL ="+requestURL);
         logger.debug("getReferer()====> End");
        return requestURL;
     }

@@ -492,12 +492,7 @@ public class CommonUtils {
         logger.debug("Logging Broken link in Database");
         ValidationErrorList errorList = new ValidationErrorList();
         
-        try {
-        	brokenLink = new URL(brokenLink).getPath();
-			 
-		} catch (MalformedURLException e) {
-			logger.debug(e);
-		}
+       
         if (!ESAPIValidator.checkNull(brokenLink)) {
             brokenLink  = ESAPI.validator().getValidInput("brokenLink", brokenLink, ESAPIValidator.URL, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
@@ -506,12 +501,7 @@ public class CommonUtils {
                 return;
             }
         }
-        try {
-        	contentPage = new URL(contentPage).getPath();
-			 
-		} catch (MalformedURLException e) {
-			logger.debug(e);
-		}
+        
         if (!ESAPIValidator.checkNull(contentPage)) {
             contentPage  = ESAPI.validator().getValidInput("contentPage", contentPage, ESAPIValidator.URL, 255, false, true, errorList);
             if(!errorList.isEmpty()) {

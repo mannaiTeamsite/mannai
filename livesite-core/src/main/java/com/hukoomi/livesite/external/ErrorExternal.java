@@ -2,6 +2,7 @@ package com.hukoomi.livesite.external;
 
 
 import com.hukoomi.utils.CommonUtils;
+
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.log4j.Logger;
@@ -15,8 +16,8 @@ import java.util.Properties;
 
 public class ErrorExternal {
 	
-	 private final Logger logger = Logger.getLogger(ErrorExternal.class);
-	 private Properties properties = null;
+	 private final static Logger logger = Logger.getLogger(ErrorExternal.class);
+
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
 		final String COMPONENT_TYPE = "componentType";
@@ -35,10 +36,9 @@ public class ErrorExternal {
 			 
 			 logger.info("Error Status "+statusCode);
 			 String contentPage = req.getReferer(); 
-			 if(!contentPage.isEmpty() && contentPage != "" && contentPage != null) {
-							
-			 String errorpagePathEn = properties.getProperty("errorPageEn");			
-			 String errorpagePathAr = properties.getProperty("errorPageAr");
+			 
+			 String errorpagePathEn = "/en/error.page";			
+			 String errorpagePathAr = "/ar/error.page";
 			 String contentPagePath = "";
 				try {
 					 contentPagePath = new URL(contentPage).getPath();
@@ -63,7 +63,7 @@ public class ErrorExternal {
 				 logger.info("contentPage  "+contentPage);
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 			 }	
-			 }
+			 
 		}
 		Document doc = getErrorDCRContent(context);  
 		 logger.info("ErrorBannerDoc"+doc.asXML());
@@ -116,9 +116,5 @@ public class ErrorExternal {
         root.add(detailedElement);
         return doc;
     }
-	
-	
-	
-         
-                                    
+                                
 }
