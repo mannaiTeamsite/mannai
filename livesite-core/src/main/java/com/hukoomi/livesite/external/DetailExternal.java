@@ -22,8 +22,10 @@ public class DetailExternal {
     @SuppressWarnings("deprecation")
     public Document getContentDetail(final RequestContext context) {
         CommonUtils commonUtils = new CommonUtils();
+        String ignoreDCRNotFoundError = context.getParameterString("ignoreDCRNotFoundError","false");
         Document detailDocument = commonUtils.getDCRContent(context);
-        if(detailDocument == null) {
+        //if(detailDocument == null) {
+        if(detailDocument == null && ignoreDCRNotFoundError.equals("false")) {
             commonUtils.throwDCRNotFoundError(context, "No Content Record found");
         }
         if(!context.getParameterString("detail-page","true").equals("true")){
