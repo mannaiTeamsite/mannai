@@ -12,6 +12,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
+import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 
 import org.apache.log4j.Logger;
 
@@ -113,7 +114,9 @@ public class PostgreForServlet {
         String database = properties.getProperty("database");
         String schema = properties.getProperty("schema");
         userName = properties.getProperty("username");
+        //password = properties.getProperty("password");
         password = properties.getProperty("password");
+        password = IREncryptionUtil.decrypt(password);
 
         connectionStr = "jdbc:" + database + "://" + host + ":" + port
                 + "/" + schema;
