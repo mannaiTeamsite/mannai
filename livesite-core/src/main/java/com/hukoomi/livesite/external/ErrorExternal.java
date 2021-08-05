@@ -17,9 +17,7 @@ import java.util.Properties;
 public class ErrorExternal {
 	
 	 private final static Logger logger = Logger.getLogger(ErrorExternal.class);
-	 
-	 
-	 
+
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
 		final String COMPONENT_TYPE = "componentType";
@@ -118,9 +116,5 @@ public class ErrorExternal {
         root.add(detailedElement);
         return doc;
     }
-	
-	
-	
-         
-                                    
+                                
 }
