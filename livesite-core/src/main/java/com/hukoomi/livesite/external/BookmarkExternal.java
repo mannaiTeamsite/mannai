@@ -4,6 +4,7 @@ import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.commons.lang.WordUtils;
 import org.apache.log4j.Logger;
@@ -45,6 +46,9 @@ public class BookmarkExternal {
         CommonUtils commonUtils = new CommonUtils();
         Document bookmarkSearchDoc = DocumentHelper.createDocument();
         Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
+        
+       
+        
         String status="valid";
         postgre = new Postgre(context);
         HttpSession session = context.getRequest().getSession();
