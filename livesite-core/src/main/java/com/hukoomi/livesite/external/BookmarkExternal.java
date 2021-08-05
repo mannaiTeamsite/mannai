@@ -46,9 +46,6 @@ public class BookmarkExternal {
         CommonUtils commonUtils = new CommonUtils();
         Document bookmarkSearchDoc = DocumentHelper.createDocument();
         Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
-        
-       
-        
         String status="valid";
         postgre = new Postgre(context);
         HttpSession session = context.getRequest().getSession();
