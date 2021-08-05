@@ -69,6 +69,34 @@
 						</configuration>
 					</execution>
 					<execution>
+						<id>livesite_install_configiface</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/livesite/lib/configiface.jar</file>
+							<groupId>com.interwoven.wcm.service.iwovregistry</groupId>
+							<artifactId>configiface</artifactId>
+							<version>16.6.1.0.0</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+					<execution>
+						<id>teamsite_install_configiface</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/teamsite/lib/configiface.jar</file>
+							<groupId>com.interwoven.wcm.service.iwovregistry</groupId>
+							<artifactId>configiface</artifactId>
+							<version>16.6.1.0.0</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>
+					<execution>
 						<id>teamsite_install_cssdk-sci</id>
 						<phase>package</phase>
 						<goals>

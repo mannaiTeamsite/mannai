@@ -2,7 +2,7 @@ package com.hukoomi.livesite.external;
 
 
 import com.hukoomi.utils.CommonUtils;
-import com.hukoomi.utils.PropertiesFileReader;
+
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.log4j.Logger;
