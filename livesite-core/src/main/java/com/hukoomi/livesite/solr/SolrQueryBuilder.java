@@ -35,6 +35,10 @@ public class SolrQueryBuilder {
     private String baseUrl;
     /** baseQuery String that
      * will hold search string
+     * of crawl query url. */
+    private String crawlUrl;
+    /** baseQuery String that
+     * will hold search string
      * of solr query url. */
     private String baseQuery;
     /** rows int that
@@ -56,6 +60,11 @@ public class SolrQueryBuilder {
      * of results fetched by the
      * solr query url. */
     private String fields;
+    /** Declare enableMLT boolean that
+     * will define whether to set mlt_fl
+     * of results fetched by the
+     * solr query url. */
+    private String crawlFields;
     /** Declare enableMLT boolean that
      * will define whether to set mlt_fl
      * of results fetched by the
@@ -134,8 +143,12 @@ public class SolrQueryBuilder {
         logger.debug("Solr Host: " + solrHost);
         final String solrCore = context.getParameterString("solrCore");
         logger.debug("Solr Core: " + solrCore);
+        final String nutchCore = context.getParameterString("nutchCore");
+        logger.debug("Nutch Core: " + nutchCore);
         this.baseUrl = solrHost + "/" + solrCore;
         logger.debug("Solr Base URL: " + baseUrl);
+        this.crawlUrl = solrHost + "/" + nutchCore;
+        logger.debug("Crawl Base URL: " + crawlUrl);
         this.requestHandler = context.getParameterString("requestHandler",
                 properties.getProperty("requestHandler"));
         logger.debug("Solr Request Handler: " + requestHandler);
@@ -296,6 +309,17 @@ public class SolrQueryBuilder {
     }
 
     /**
+     * Add fields to solr query url.
+     * @param fieldsValue fields params to solr query
+     *
+     * @return this set fields to solr url.
+     */
+    public SolrQueryBuilder addCrawlFields(final String fieldsValue) {
+        this.crawlFields = fieldsValue;
+        return this;
+    }
+
+    /**
      * Set MLT field in solr query.
      *
      * @return this set mlt_ft solr attribute.
@@ -423,6 +447,24 @@ public class SolrQueryBuilder {
         }
         logger.debug("Generated Solr Query: " + sb.toString());
         return sb.toString();
+    }
+
+    public String crawlBuild(){
+
+        StringBuilder sb = new StringBuilder(this.crawlUrl);
+
+        sb.append("/" + this.requestHandler);
+
+        sb.append("?q=" + (StringUtils.isNotBlank(this.baseQuery)
+                ? this.baseQuery : DEFAULT_QUERY));
+
+        if (StringUtils.isNotBlank(crawlFields)) {
+            sb.append("&fl=" + this.crawlFields);
+        }
+        sb.append("&rows=" + Integer.toString(this.rows));
+        logger.debug("Generated Crawl Query: " + sb.toString());
+        return sb.toString();
+
     }
 
     /**

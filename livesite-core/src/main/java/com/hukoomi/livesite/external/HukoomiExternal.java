@@ -64,6 +64,14 @@ public class HukoomiExternal {
 			sqb.addFields(fields);
 		}
 
+		String crawlFields = commonUtils.sanitizeSolrQuery(context.getParameterString("crawlFields", ""));
+		context.setParameterString("crawlFields", crawlFields);
+		logger.debug("crawlFields : " + crawlFields);
+		if (StringUtils.isNotBlank(crawlFields)) {
+			logger.debug("fieldQuery : " + fieldQuery);
+			sqb.addCrawlFields(crawlFields);
+		}
+
 		String highlighterVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlighter",""));
 		logger.debug("highlighter: " +highlighterVal);
 		if(StringUtils.isNotBlank(highlighterVal)){
@@ -102,6 +110,12 @@ public class HukoomiExternal {
 		logger.info("Context FieldQuery: " + context.getParameterString("fieldQuery"));
 		logger.info("Context BaseQuery: " + context.getParameterString("baseQuery"));
 		logger.info("Current FieldQuery: " + fq);
+
+		String nutchQuery = sqb.crawlBuild();
+		logger.debug("Crawl Query : " + nutchQuery);
+		Document nutchDoc;
+		nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse");
+
 		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
@@ -109,9 +123,11 @@ public class HukoomiExternal {
 			String sanitizedfieldQuery = ESAPI.encoder().encodeForHTML(commonUtils.sanitizeSolrQuery(fq));
 			logger.info("Sanitized BaseQuery: " + baseQuery);
 			logger.info("Sanitized FieldQuery: " + sanitizedfieldQuery);
-			doc.getRootElement().addElement("baseQuery").addText(baseQuery);
-			doc.getRootElement().addElement("fieldQuery").addText(sanitizedfieldQuery);
-
+			root.addElement("baseQuery").addText(baseQuery);
+			root.addElement("fieldQuery").addText(sanitizedfieldQuery);
+			if(nutchDoc != null && nutchDoc.getRootElement() != null) {
+				root.add(nutchDoc.getRootElement());
+			}
 		}
 		logger.debug("Before calling : " + doc);
 		
