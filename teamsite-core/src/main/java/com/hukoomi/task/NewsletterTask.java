@@ -364,7 +364,7 @@ public class NewsletterTask implements CSURLExternalTask {
                                     "/root/event-date/start-date")
                             .getText();
 
-                    dateElement.setText(changeDateFormat(dcrDate, lang));
+                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
 
                     Element imgElement = dcrElement.addElement("image");
                     String dcrImage = dcrDocument
@@ -421,7 +421,7 @@ public class NewsletterTask implements CSURLExternalTask {
                     String dcrDate = dcrDocument
                             .selectSingleNode("/root/information/date")
                             .getText();
-                    dateElement.setText(changeDateFormat(dcrDate, lang));
+                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
 
                     Element readMoreLink = dcrElement
                             .addElement("readMore");
@@ -438,7 +438,7 @@ public class NewsletterTask implements CSURLExternalTask {
                     String dcrDate = dcrDocument
                             .selectSingleNode("/root/information/date")
                             .getText();
-                    dateElement.setText(changeDateFormat(dcrDate, lang));
+                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
 
                     Element readMoreLink = dcrElement
                             .addElement("readMore");
@@ -454,7 +454,7 @@ public class NewsletterTask implements CSURLExternalTask {
                     String dcrDate = dcrDocument
                             .selectSingleNode("/root/information/date")
                             .getText();
-                    dateElement.setText(changeDateFormat(dcrDate, lang));
+                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
 
                     Element topicElement = dcrElement.addElement("topics");
                     String topics = "";
@@ -583,8 +583,9 @@ public class NewsletterTask implements CSURLExternalTask {
         }
         return document;
     }
-
-    private String changeDateFormat(String dcrDate, String lang) {
+    
+    private String changeDateFormat(CSClient client, CSExternalTask
+            task,String dcrDate, String lang) {
         String convertedDate = "";
 
         try {
@@ -592,7 +593,7 @@ public class NewsletterTask implements CSURLExternalTask {
                     .ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime date = LocalDateTime.parse(dcrDate, formatter);
 
-            String monthName = getMonthName(date.getMonthValue(), lang);
+            String monthName = getMonthName(client,task,date.getMonthValue(), lang);
             convertedDate = date.getDayOfMonth() + " " + monthName + ", "
                     + date.getYear();
 
@@ -601,86 +602,18 @@ public class NewsletterTask implements CSURLExternalTask {
         }
         logger.info("ConvertDate in changeDateFormat: " + convertedDate);
         return convertedDate;
-    }
-
-    private static String getMonthName(Integer month, String locale) {
+    }   
+    
+    private String getMonthName(CSClient client,
+            CSExternalTask task,Integer month, String locale) {
         String monthName = "";
-        if (("1").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u064A\u0646\u0627\u064A\u0631";
-            } else {
-                monthName = "Jan";
-            }
-        } else if (("2").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0641\u0628\u0631\u0627\u064A\u0631";
-            } else {
-                monthName = "Feb";
-            }
-        } else if (("3").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0645\u0627\u0631\u0633";
-            } else {
-                monthName = "Mar";
-            }
-        } else if (("4").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0623\u0628\u0631\u064A\u0644";
-            } else {
-                monthName = "Apr";
-            }
-        } else if (("5").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0645\u0627\u064A\u0648";
-            } else {
-                monthName = "May";
-            }
-        } else if (("6").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u064A\u0648\u0646\u064A\u0648";
-            } else {
-                monthName = "Jun";
-            }
-        } else if (("7").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u064A\u0648\u0644\u064A\u0648";
-            } else {
-                monthName = "Jul";
-            }
-        } else if (("8").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0623\u063A\u0633\u0637\u0633";
-            } else {
-                monthName = "Aug";
-            }
-        } else if (("9").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0633\u0628\u062A\u0645\u0628\u0631";
-            } else {
-                monthName = "Sep";
-            }
-        } else if (("10").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0623\u0643\u062A\u0648\u0628\u0631";
-            } else {
-                monthName = "Oct";
-            }
-        } else if (("11").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u0646\u0648\u0641\u0645\u0628\u0631";
-            } else {
-                monthName = "Nov";
-            }
-        } else if (("12").equals(month.toString())) {
-            if ("ar".equals(locale)) {
-                monthName = "\u062F\u064A\u0633\u0645\u0628\u0631";
-            } else {
-                monthName = "Dec";
-            }
-        }
+        String monthParam= "";
+        loadProperties(client, task, "newsletter.properties");
+        monthParam = month.toString()+"_"+locale;
+        logger.info("Month Param "+monthParam);
+        monthName = properties.getProperty(monthParam);        
         return monthName;
     }
-
     private DataSource transformToMailDataSource(String xmlMailContent,
             CSSimpleFile xslTemplateFile, String lang) throws CSException,
             UnsupportedEncodingException, FileNotFoundException {
