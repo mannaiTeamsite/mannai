@@ -32,6 +32,7 @@ import org.json.JSONObject;
 
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
+import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 
 public class ReviewComment extends HttpServlet {
 
@@ -151,8 +152,9 @@ public class ReviewComment extends HttpServlet {
         Connection connection = null;
         JSONArray arrayComments = new JSONArray();
         try {
-            String userName = dbProperties.getProperty("username");
+            String userName = dbProperties.getProperty("username");            
             String password = dbProperties.getProperty("password");
+            password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
 
@@ -186,8 +188,9 @@ public class ReviewComment extends HttpServlet {
         Connection connection = null;
         boolean isDataUpdated = false;
         try {
-            String userName = dbProperties.getProperty("username");
+            String userName = dbProperties.getProperty("username");            
             String password = dbProperties.getProperty("password");
+            password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
             LOGGER.debug("BlogTask : after getConnection");
@@ -267,8 +270,9 @@ public class ReviewComment extends HttpServlet {
         JSONArray arrayComments = new JSONArray();
         String getComment ="";
         try {
-            String userName = dbProperties.getProperty("username");
+            String userName = dbProperties.getProperty("username");            
             String password = dbProperties.getProperty("password");
+            password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
             if (blogId > 0) {
@@ -332,8 +336,9 @@ public class ReviewComment extends HttpServlet {
         String titleQuery ="";
         String blogTitle="";
         try {
-            String userName = dbProperties.getProperty("username");
+            String userName = dbProperties.getProperty("username");            
             String password = dbProperties.getProperty("password");
+            password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
            
@@ -378,8 +383,9 @@ public class ReviewComment extends HttpServlet {
         String emailQuery ="";
         String useremailID="";
         try {
-            String userName = dbProperties.getProperty("username");
+            String userName = dbProperties.getProperty("username");            
             String password = dbProperties.getProperty("password");
+            password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
            
