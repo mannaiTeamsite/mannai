@@ -6,12 +6,9 @@
 <%@ page import="com.interwoven.cssdk.filesys.CSSimpleFile"%>
 <%@ page import="com.interwoven.cssdk.filesys.CSVPath"%>
 <%@ page import="com.interwoven.cssdk.filesys.CSExtendedAttribute"%>
-<%@ page import="com.interwoven.cssdk.access.CSGroup"%>
-<%@ page import="com.interwoven.ui.teamsite.auth.CSClientContext"%>				
 <%@ page import="java.util.Map"%>
 <%@ page import="java.util.List"%>
 <%@ page import="java.util.Arrays"%>
-<%@ page import="java.io.*"%>
 <%@page import="org.apache.log4j.Level"%>
 <%@page import="org.apache.log4j.Logger"%>
 <%@ taglib uri="/WEB-INF/tlds/context.tld" prefix="context"%>
@@ -26,8 +23,7 @@
 		String secDCRPath		= request.getParameter("secDCRName");
 		String priDCRExistStatus	= request.getParameter("priDCRExistStatus");
 		String secDCRExistStatus	= request.getParameter("secDCRExistStatus");
-		String serviceEntity	= request.getParameter("serviceEntity");
-		logger.error("priDCRPath[" + priDCRPath + "] secDCRPath[" + secDCRPath + "] priDCRExistStatus[" + priDCRExistStatus + "] secDCRExistStatus[" + secDCRExistStatus + "] serviceEntity[" + serviceEntity + "]");
+		logger.error("priDCRPath[" + priDCRPath + "] secDCRPath[" + secDCRPath + "] priDCRExistStatus[" + priDCRExistStatus + "] secDCRExistStatus[" + secDCRExistStatus + "]");
 		
 		CSVPath priDCRVPath		= new CSVPath(priDCRPath);
 		CSSimpleFile priDCR	= (CSSimpleFile) client.getFile(priDCRVPath);	
@@ -85,27 +81,8 @@
 		}
 		
 		logger.error("EXT ATT - 5");
-		String command = "curl 'http://localhost:8984/solr/portal-en/dataimport?command=full-import&clean=true&commit=true'";
-                Process p = Runtime.getRuntime().exec(command);
-		logger.error("curl response - "+p.getInputStream());
-		logger.error("----End of Metadata---- ");
 		
-		logger.debug("----Start of setGroup ---- ");
-
-      
-		logger.debug("serviceEntity : "+serviceEntity);
-		if (null != serviceEntity) {
-
-			CSGroup clientGroup = client.getGroup(serviceEntity, true);
-			
-			if( null != clientGroup.getName()){
-				logger.debug("clientGroup : "+clientGroup.getName());
-				priDCR.setGroup(clientGroup);
-				secDCR.setGroup(clientGroup);
-			}
-		}
-
-        logger.debug("----End of setGroup---- ");
+		logger.error("----End of Metadata---- ");
 	} catch (Exception e) {
 		logger.error("Exception occured while settin the Extended Attributes", e);
 	}
