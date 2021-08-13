@@ -119,12 +119,19 @@ public class HukoomiExternal {
 		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
-			String baseQuery = ESAPI.encoder().encodeForHTML(commonUtils.sanitizeSolrQuery(context.getParameterString("baseQuery")));
-			String sanitizedfieldQuery = ESAPI.encoder().encodeForHTML(commonUtils.sanitizeSolrQuery(fq));
+			String baseQuery = commonUtils.sanitizeSolrQuery(context.getParameterString("baseQuery"));
+			String arabicRegEx = "^[a-zA-Z-_0-9.@\\/\\u0621-\\u064A\\u0660-\\u0669 ]+$";
+			if(!baseQuery.matches(arabicRegEx)){
+				baseQuery = ESAPI.encoder().encodeForHTML(baseQuery);
+			}
+			String sanitizedFieldQuery = commonUtils.sanitizeSolrQuery(fq);
+			if(!sanitizedFieldQuery.matches(arabicRegEx)){
+				sanitizedFieldQuery = ESAPI.encoder().encodeForHTML(sanitizedFieldQuery);
+			}
 			logger.info("Sanitized BaseQuery: " + baseQuery);
-			logger.info("Sanitized FieldQuery: " + sanitizedfieldQuery);
+			logger.info("Sanitized FieldQuery: " + sanitizedFieldQuery);
 			root.addElement("baseQuery").addText(baseQuery);
-			root.addElement("fieldQuery").addText(sanitizedfieldQuery);
+			root.addElement("fieldQuery").addText(sanitizedFieldQuery);
 			if(nutchDoc != null && nutchDoc.getRootElement() != null) {
 				root.add(nutchDoc.getRootElement());
 			}
