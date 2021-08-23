@@ -1,0 +1,467 @@
+
+/**************** 1366 ******************/
+@media(max-width:1366px){
+  
+
+}
+/************** 1366 close ***************/
+
+
+/**************** 1200 ******************/
+@media(max-width:1200px){
+    .custom_container{
+       max-width: 95%;
+   }
+   
+     
+}
+/*************** 1200 close **************/
+
+/**************** 1150 ******************/
+@media(max-width:1150px){
+    .amir_component .banner_section .amir_detail {
+        width: 100%;
+        margin: 126px 0 0 0;
+    }
+    .amir_component .work_exp_section figure {
+        width: 423px;
+        height: 354px;
+    }
+    .amir_component .work_exp_section figure img{
+        height: 354px;
+    }
+     
+}
+/*************** 1150 close **************/
+
+
+/**************** 1024 ******************/
+@media(max-width:1024px){
+    /* .flag_component .banner_section .flag_img{
+        height: 100%;
+    } */
+    /* .flag_component figure, figure img{
+        width: 100% !important;
+    } */
+    .commn-para{
+        max-width: 100% !important;
+    }
+    .card_wrap{
+        width: 100% !important;
+    }
+    .amir_component .work_exp_section figure {
+        width: 100%;
+    }
+    .amir_component .about_section .sheikh-img {
+        width: 400px;
+        height: 410px;
+    }
+    .amir_component .about_section .sheikh-img img {
+        height: 410px;
+    }
+    .amir_component .about_section .detail_col h1 span {
+        width: 100%;
+        font-size: 34px;
+    }
+    .amir_component .banner_section .sub-title {
+        font-size: 34px;
+        margin-bottom: 20px;
+    }
+    .amir_component .banner_section .content_title {
+        font-size: 16px;
+        margin-top: 18px;
+    }
+    .amir_component .duties_section h2 {
+        font-size: 34px;
+        margin: 0 0 35px 0;
+    }
+    hr {
+        margin: 35px 0;
+    }
+    .amir_component .about_section .detail_col {
+        padding: 60px 30px;
+    }   
+    .amir_component .work_exp_section h2 {
+        width: 100%;
+        font-size: 34px;
+        margin-bottom: 35px;
+    }
+    .amir_component .work_exp_section h2 span {
+        display: inline-block;
+    }
+
+}
+
+/************** 1024 close **************/
+
+/**************** 950 ******************/
+@media(max-width: 950px){
+    .amir_component .banner_section .amir_detail .name {
+        font-size: 17px;
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    .amir_component .banner_section .amir_detail .by {
+        font-size: 15px;
+    }
+}
+/**************** 950 close ******************/
+
+/**************** 819 ******************/
+@media (max-width: 1024px){
+    .amir_component .about_section .sheikh-img {
+        width: 370px;
+        height: 380px;
+    }
+    .amir_component .about_section .sheikh-img img{
+        height: 380px;
+    }
+}
+/**************** 819 close******************/
+
+
+/**************** 768 ******************/
+@media(max-width:768px){
+    body{
+        overflow-x: hidden;
+    }
+    header{
+       position: fixed;
+    }
+
+    /* grid media */
+    .flex-row {
+        flex-flow: wrap;
+    }
+    .flex_col_sm_5 {
+        width: 100%;
+        padding: 0 10px;
+    }
+    .flex_col_sm_9 {
+        width: 100%;
+        padding: 0 10px;
+    }
+    .flex_col_sm_7 {
+        width: 100%;
+        padding: 0 10px;
+    }
+    .flex_col_sm_8 {
+        width: 100%;
+        padding: 0 10px;
+    }
+    .flex_col_sm_3 {
+        width: 100%;
+        padding: 0 10px;
+    }
+
+ 
+
+    .flex-col-sm-4 {
+        width: 100%;
+        padding: 0 10px;
+    }
+    .flex_col_xs_6{
+        width: 50%;
+    }
+    /* grid media CLOSE */
+    
+
+    .mob-text-center {
+        text-align: center;
+    }
+    hr {
+        margin: 40px 0;
+    }
+   
+
+    .amir_component .banner_section .details{
+        width: 100%;
+    }
+    .amir_component .banner_section .amir_detail{
+        width: 100%;
+    }
+    .amir_component .duties_section ul li span {
+        max-width: 100%;
+    }
+    .amir_component .about_section .sheikh-img{
+        width: 100%;
+    }
+    .amir_component .about_section .detail_col {
+        padding: 30px 15px;
+    }
+    .amir_component .about_section .detail_col h1 span {
+        width: 100%;
+        font-size: 32px;
+        margin: 9px 0 20px 0;
+    }
+    .amir_component .work_exp_section figure{
+        width: 100%;
+        margin-bottom: 32px;
+    }
+    .amir_component .about_section .sheikh-img img, .amir_component .work_exp_section figure img{
+        object-fit: cover;
+        border-radius: 12px;
+    }
+    .amir_component .work_exp_section .exp_card li{
+        max-width: 100%;
+    }
+    .amir_component .banner_section .amir_detail{
+        margin: 50px 0 70px;
+    }
+    .amir_component .acadmic_section .qualification_card_row .qualification_card {
+        width: 50%;
+    }
+    .amir_component .acadmic_section .qualification_card_row .qualification_card span {
+        width: 100%;
+        font-size: 16px;
+    }
+    .amir_component .acadmic_section .qualification_card_row {
+        margin: 20px auto;
+        width: 100%;
+    }
+    .amir_component .acadmic_section {
+        padding: 160px 0 40px;
+    }
+    .amir_component .acadmic_section h3{
+        font-size: 22px;
+    }
+    .amir_component .honors_section h2{
+        font-size: 22px;
+        max-width: 100%;
+    }
+    .tourist_component .banner_section .banner_container{
+        left: 20px;
+        max-width: 420px;
+    }
+    .tourist_component .banner_section .banner_container h1{
+        font-size: 28px;
+        line-height: 32px;
+    }
+    .tourist_component .search_section .srch_wrap .search_btn{
+        right: 15px;
+    }
+    .tourist_component .search_section .tags_wrapper{
+        padding-bottom: 20px;
+    }
+    .tourist_component .search_section .tags_wrapper li{
+        margin: 0 14px 14px 0;
+    }
+    .tourist_component .search_section .tags_wrapper li a{
+        line-height: 20px;
+    }
+    .tourist_component .news_section .left_col, .tourist_component .news_section .right_col {
+        width: 100%;
+    }
+    .tourist_component .news_section .cards_wrapper .news_card {
+        width: 160px;
+    }
+    .tourist_component .news_section .cards_wrapper .news_card span {
+        max-width: 100%;
+    }
+    .tourist_component .news_section .right_col .slider_wrap {
+        width: 100%;
+    }
+    .view_all_wrap::before {
+        width: 30px;
+        height: 30px;
+        right: -42px;
+    }
+    .tourist_component .blog_section .video_thumb {
+        width: 100%;
+        margin-bottom: 12px;
+    }
+    .tourist_component .blog_section .blog_img figure {
+        width: 100%;
+        margin: 12px 0;
+    }
+    .tourist_component .opinion_section .card_wrap{
+        max-width: 100%;
+        min-height: auto;
+        margin: 0 auto 30px;
+    }
+    h3, input{
+        max-width: 100% !important;
+    }
+
+    /* paragraphs */
+    .tourist_component .subscription_section .note{
+        max-width: 100%;
+    }
+    .tourist_component .subscription_section .reviews_wrapper p {
+        max-width: 85%;
+    }
+    .tourist_component .know_section .info_card_wrap .info_card{
+        width: 100%;
+    }
+    .tourist_component .services_section .service_card {
+        max-width: 100%;
+    }
+    .tourist_component .subscription_section .sample_card .sample_img {
+        width: 100%;
+    }
+    .owl-prev{
+        left: 0;
+    }
+    .owl-next{
+        right: 0;
+    }
+}
+
+/*************** 768 close *************/
+
+@media(max-width:700px){
+    .flex_col_sm_6 {
+        width: 100%;
+        padding: 0 10px;
+    }
+}
+
+
+
+/**************** 640 ******************/
+@media(max-width:640px){
+    .flex-dir-col{
+        flex-direction: column-reverse;
+    }
+
+    .commn-para {
+        font-size: 15px;
+    }
+    hr {
+        margin: 15px 0;
+    }
+    .card_fill {
+        width: 25px;
+        height: 15px;
+    }
+
+
+    .amir_component .content_wrap {
+        padding: 0 0 20px;
+    }
+
+
+    .amir_component .banner_section .amir_detail .name {
+        width: 100%;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .amir_component .acadmic_section .qualification_card_row .qualification_card {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    .amir_component .acadmic_section .qualification_card_row .qualification_card .icon {
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 20px;
+        display: inline-block;
+    }
+
+
+    .amir_component .banner_section .sub-title {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+    .amir_component .banner_section .content_title {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    .amir_component .duties_section {
+        padding-top: 20px;
+    }
+    .amir_component .duties_section h2 {
+        font-size: 22px;
+        margin: 0 0 22px 0;
+    }
+    .amir_component .duties_section ul li::before {
+        width: 12px;
+        height: 12px;
+    }
+    .amir_component .duties_section ul li {
+        margin-bottom: 20px;
+        padding-left: 22px;
+    }
+    .amir_component .duties_section ul li span {
+        font-size: 15px;
+      
+    }
+    .amir_component .about_section .detail_col h1 {
+        font-size: 16px;
+    }
+    .amir_component .about_section .detail_col h1 span {
+        font-size: 22px;
+        margin: 5px 0 10px 0;
+    }
+    .amir_component .about_section .detail_col .commn-para {
+        font-size: 15px;
+        margin-bottom: 15px;
+    }
+    .amir_component .about_section .detail_col {
+        padding: 30px 15px 0;
+    }
+    .amir_component .work_exp_section h2 {
+        width: 100%;
+        font-size: 22px;
+        margin-bottom: 30px;
+    }
+    .amir_component .work_exp_section .exp_card li {
+        padding: 20px;
+        margin-bottom: 30px;
+        min-height: 180px;
+    }
+    .amir_component .work_exp_section .exp_card li h3 {
+        font-size: 16px;
+    }
+    .amir_component .work_exp_section .exp_card li .timeline {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+    .amir_component .work_exp_section .exp_card li .commn-para {
+        font-size: 15px;
+    }
+    .amir_component .acadmic_section h3 {
+        font-size: 22px;
+    }
+    .amir_component .acadmic_section .qualification_card_row .qualification_card span {
+        font-size: 16px;
+    }
+    .amir_component .honors_section h2 {
+        font-size: 22px;
+        margin-bottom: 20px;
+    }
+    .amir_component .honors_section .honors_detail span {
+        font-size: 14px;
+    }
+    .amir_component .honors_section {
+        padding: 40px 0;
+    }
+    .amir_component .work_exp_section{
+        margin: 10px 0 0 0;
+    }
+
+    .tourist_component .news_section .right_col .more_news .wheather_card, .tourist_component .news_section .right_col .more_news .prayer_card {
+        width: 100%;
+    }
+    .tourist_component .subscription_section .reviews_wrapper p {
+        max-width: 70%;
+    }
+
+    .flex_col_xs_6{
+        width: 100%;
+    }
+}
+
+/************** 640 close **************/
+
+/************** 375 **************/
+@media (max-width: 375px){
+    .amir_component .banner_section .amir_detail .name {
+        font-size: 15px;
+        margin-bottom: 10px;
+    }
+    .amir_component .banner_section .amir_detail .by {
+        font-size: 13px;
+    }
+}
+/************** 375 close **************/
