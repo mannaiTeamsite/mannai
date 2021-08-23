@@ -187,6 +187,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      */
     private static final String TRANSITION_COMMENT = "TRANSITION_COMMENT";
     /**
+     * Last modifier name for page
+     */
+    public static final String META_LAST_MODIFIER = "TeamSite/Metadata/LastModifier";
+    /**
      * Postgre class instance variable
      */
     PostgreTSConnection postgre = null;
@@ -990,6 +994,12 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         boolean isDataUpdated = false;
         PreparedStatement preparedStatement = null;
 
+        String taskName = "";
+        String modifier = "";
+        String author = "";
+        String commentOnModifier = "";
+        String reviewer = "" ;
+        String approver = "" ;
         String reviewDate = "";
         String approveDate = "";
         String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
@@ -1001,6 +1011,21 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             entityVal = "";
 
         try {
+            
+            taskName = taskObj.getName();
+            logger.info("Task Name : " + taskName);
+            
+            author = taskSimpleFile.getCreator().getName();
+            logger.info("Content author : " + author);
+            
+            modifier = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+            logger.info("Content modifier : " + modifier);
+            
+            reviewer = taskObj.getWorkflow().getVariable("WF_Reviewer");
+            logger.info("Workflow Reviewer : " + reviewer );
+
+            approver = taskObj.getWorkflow().getVariable("WF_Approver");
+            logger.info("Workflow Approver : " + approver );
 
             reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
             logger.info("Review Date : " + reviewDate );
@@ -1026,12 +1051,26 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             }else if(taskSimpleFile.getRevisionNumber() > 0){
                 fileStatus = "MODIFY";
             }
+            
+            if((getContentCategory(taskSimpleFile).equals("sites/portal-en") 
+                    || getContentCategory(taskSimpleFile).equals("sites/portal-ar")) 
+                    && getTaskFilePath(taskSimpleFile).endsWith(".page")) {
+                if(modifier != null && !"".equals(modifier) 
+                       // && taskName != null && "Approval Pending DB".equals(taskName) 
+                        && modifier.equals(approver)) {
+                    commentOnModifier = "Updated content on behalf of "+author + System.lineSeparator();
+                }
+            }
 
             CSWorkflow workflow = taskObj.getWorkflow();
             CSComment[] comments = workflow.getComments();
             StringBuilder commentsToLogInDB = new StringBuilder();
             for(CSComment comment : comments) {
                 commentsToLogInDB.append("["+ comment.getCreationDate() +"] "+ comment.getCreator() + ": "+ comment.getComment() + System.lineSeparator());
+            }
+            
+            if(!"".equals(commentOnModifier)) {
+                commentsToLogInDB.append("[").append(DateUtils.parseDate(approveDate, dateFormats)).append("] ").append("tsadmin").append(": ").append(commentOnModifier);
             }
             commentStr = commentsToLogInDB.toString();
 
