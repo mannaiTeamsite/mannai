@@ -1,0 +1,79 @@
+@import'variable';
+
+
+.white_bg_single{
+    background-color: var(--white);
+}
+
+.solid_white_five{
+    background-color: var(--white-five);
+}
+
+
+.solid_white_two{
+    background-color: var(--white-two);
+}
+
+.wave_white_bg{
+    background-image: url(../images/about_wave_10.svg);
+}
+
+.gray_bg_leave{
+    background-color: var(--white-five);
+    background-image: url('../images/ic_about_hero_section_bg.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+
+    @media(max-width:1024px){
+        background-image: none;
+    }
+}
+
+.marron_solid{
+    background-color: var(--berry);
+}
+
+
+.wave_white_maroon{
+    background-image: url('../images/ic_about_updated_everyday_bg.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    @media(max-width:1024px){
+        background-image: none;
+    }
+}
+
+
+.wave_maroon_white{
+    background-image: url('../images/ic_amir_highness_bg_small.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    position: relative;
+    @media(max-width:1024px){
+        background-image: none;
+    }
+}
+
+
+.wave_blue_white{
+    background-image: url('../images/wave_blue_white.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    @media(max-width:1024px){
+        background-image: none;
+    }
+}
+
+.wave_darkwhite_maroon{
+    background-image: url('../images/wave_darkwhite_maroon.svg');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    @media(max-width:1024px){
+        background-image: none;
+    }
+}
