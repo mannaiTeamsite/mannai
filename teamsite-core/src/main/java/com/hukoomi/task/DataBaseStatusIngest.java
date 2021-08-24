@@ -376,7 +376,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             
             if((getContentCategory(taskSimpleFile).equals("sites/portal-en") 
                     || getContentCategory(taskSimpleFile).equals("sites/portal-ar")) 
-                    && getTaskFilePath(taskSimpleFile).endsWith(".page") 
+                    //&& getTaskFilePath(taskSimpleFile).endsWith(".page") 
                     && taskName != null && "Review Pending DB".equals(taskName)) {
                 CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
                 csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, author);

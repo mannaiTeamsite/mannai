@@ -1053,8 +1053,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             }
             
             if((getContentCategory(taskSimpleFile).equals("sites/portal-en") 
-                    || getContentCategory(taskSimpleFile).equals("sites/portal-ar")) 
-                    && getTaskFilePath(taskSimpleFile).endsWith(".page")) {
+                    || getContentCategory(taskSimpleFile).equals("sites/portal-ar"))) {
+                    //&& getTaskFilePath(taskSimpleFile).endsWith(".page")) {
                 if(modifier != null && !"".equals(modifier) 
                        // && taskName != null && "Approval Pending DB".equals(taskName) 
                         && modifier.equals(approver)) {
