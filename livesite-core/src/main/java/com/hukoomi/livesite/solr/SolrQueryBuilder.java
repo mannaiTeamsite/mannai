@@ -462,7 +462,14 @@ public class SolrQueryBuilder {
             sb.append("&fl=" + this.crawlFields);
         }
         sb.append("&rows=" + Integer.toString(this.rows));
-        logger.debug("Generated Crawl Query: " + sb.toString());
+        if (this.start > 0) {
+            sb.append("&start=" + Integer.toString(this.start));
+        }
+
+        if (StringUtils.isNotBlank(this.sort)) {
+            sb.append("&sort=" + this.sort);
+        }
+        logger.debug("Generated Solr Query: " + sb.toString());
         return sb.toString();
 
     }
