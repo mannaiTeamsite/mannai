@@ -28,6 +28,7 @@ import com.hukoomi.utils.PostgreTSConnection;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
+import com.interwoven.cssdk.filesys.CSExtendedAttribute;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
 import org.dom4j.io.SAXReader;
 
@@ -996,6 +997,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
 
         String taskName = "";
         String modifier = "";
+        String modifierMetaData = "";
         String author = "";
         String commentOnModifier = "";
         String reviewer = "" ;
@@ -1018,8 +1020,17 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             author = taskSimpleFile.getCreator().getName();
             logger.info("Content author : " + author);
             
-            modifier = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
-            logger.info("Content modifier : " + modifier);
+            modifier = taskSimpleFile.getLastModifier().getName();
+            logger.info("Last Modified By: " + modifier);
+            
+            if(StringUtils.isNotBlank(modifier)) {
+                CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
+                csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
+                taskSimpleFile.setExtendedAttributes(csEAArray);
+            }
+            
+            modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+            logger.info("EA Modifier : " + modifierMetaData);
             
             reviewer = taskObj.getWorkflow().getVariable("WF_Reviewer");
             logger.info("Workflow Reviewer : " + reviewer );
@@ -1052,14 +1063,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
                 fileStatus = "MODIFY";
             }
             
-            if((getContentCategory(taskSimpleFile).equals("sites/portal-en") 
-                    || getContentCategory(taskSimpleFile).equals("sites/portal-ar"))) {
-                    //&& getTaskFilePath(taskSimpleFile).endsWith(".page")) {
-                if(modifier != null && !"".equals(modifier) 
-                       // && taskName != null && "Approval Pending DB".equals(taskName) 
-                        && modifier.equals(approver)) {
-                    commentOnModifier = "Updated content on behalf of "+author + System.lineSeparator();
-                }
+            if(StringUtils.equals(modifier, approver)) {
+                commentOnModifier = "Updated content on behalf of "+author + System.lineSeparator();
             }
 
             CSWorkflow workflow = taskObj.getWorkflow();
