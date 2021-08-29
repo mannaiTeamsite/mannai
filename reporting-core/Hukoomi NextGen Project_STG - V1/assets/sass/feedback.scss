@@ -1,0 +1,272 @@
+#feedback, #thankyou{
+    .modal-dialog{
+        max-width: 500px !important;
+    }
+    .modal-body{
+        @media screen and (min-width: 1366px){
+            padding: 2.5em   
+        }
+        
+    }
+
+}
+#thankyou{
+    .captcha{
+        max-width: 304px;
+        margin: 20px auto;
+        text-align: left;
+        label{
+            font-size: 18px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: var(--purple-brown);
+            margin-bottom: 0;
+        }
+    }
+        .g-recaptcha{
+            max-width: 304px;
+            margin: 0 auto;
+            & > div{
+                margin: 0 auto;
+            }
+        }
+        .not_valid{
+            font-size: 14px;
+            color: red;
+        }
+}
+#feedback{
+    .captcha{
+        // max-width: 304px;
+        // margin: 20px auto;
+        // text-align: left;
+        label{
+            font-size: 18px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: var(--purple-brown);
+            margin-bottom: 0;
+        }
+    }
+        .g-recaptcha{
+            // max-width: 304px;
+            // margin: 0 auto;
+            // & > div{
+            //     margin: 0 auto;
+            // }
+        }
+        .not_valid{
+            font-size: 14px;
+            color: red;
+        }
+}
+.feedback_form{
+    .close_feedback{
+        position: relative;
+        // padding: 0 0 0 15px;
+        font-size: 16px;
+        font-weight: 600;
+        font-stretch: normal;
+        font-style: normal;
+        line-height: normal;
+        letter-spacing: normal;
+        color: var(--slate-grey);
+        cursor: pointer;
+        float: right;
+        padding: 0 0 0 15px;
+        span{
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            position: relative;
+            margin: 4px 0;
+            &:after{
+                content: '';
+                width: 12px;
+                height: 2px;
+                background-color: var(--rouge);
+                position: absolute;
+                left: 0px;
+                transform: rotate(45deg);
+                top: 10px;
+            }
+            &:before{
+                content: '';
+                width: 12px;
+                height: 2px;
+                background-color: var(--rouge);
+                position: absolute;
+                left: 0px;
+                transform: rotate(-45deg);
+                top: 10px;
+            }
+        }
+    }
+    fieldset{
+        clear: both;
+        legend{
+            display: none !important;
+        }
+        label{
+            font-size: 18px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: normal;
+            letter-spacing: normal;
+            color: var(--purple-brown);
+            margin-bottom: 0;
+        }
+        textarea{
+            width: 100%;
+            border-radius: 6px;
+            border: solid 1px #c7c7c7;
+            background-color: var(--white);
+            padding: 12px;
+            box-sizing: border-box;
+            color: #000000;
+            resize: none;
+        }
+        .send_feedback_btn{
+            border-radius: 13px;
+            background-color: var(--rouge);
+            border-style: hidden;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.38;
+            letter-spacing: 0.23px;
+            text-align: center;
+            color: var(--white);
+        }
+    }
+}
+.ar{
+    .feedback_form{
+        .close_feedback{
+            float: left;
+        }
+        fieldset{
+            text-align: right;
+        }
+    }
+}
+
+.thankyou_form{
+    text-align: center;
+        p{
+            display: block !important;
+            font-size: 18px;
+                font-weight: 700;
+                font-stretch: normal;
+                font-style: normal;
+                line-height: normal;
+                letter-spacing: normal;
+                color: var(--purple-brown);
+                margin-bottom: 20px;
+        }
+        .send_feedback_btn{
+            border-radius: 13px;
+            background-color: var(--rouge);
+            border-style: hidden;
+            padding: 12px 30px;
+            font-size: 16px;
+            font-weight: 700;
+            font-stretch: normal;
+            font-style: normal;
+            line-height: 1.38;
+            letter-spacing: 0.23px;
+            text-align: center;
+            color: var(--white);
+        }
+}
+.ar{
+    .thankyou_form{
+       text-align: center;
+    }
+}
+
+.understand{
+    display: flex;
+    align-items: center;
+    position: relative;
+    flex: none;
+    p{
+        font-size: 14px;
+        font-weight: 600;
+        letter-spacing: normal;
+        color: var(--purple-brown);
+        margin: 0;
+    }
+    .like{
+        margin-left: 24px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        .like_btn{
+            margin: 0 5px;
+            button{
+                position: relative;
+                width: 49px;
+                height: 31px;
+                text-align: center;
+                background-color: var(--white-five);
+                font-weight: 700;
+                font-size: 15px;
+                line-height: 1.8;
+                color: var(--rouge-two);
+                display: inline-block;
+                border-radius: 16px;
+                border: 2px solid transparent;
+                transition: 0.3s ease-in-out all;
+                cursor: pointer;
+                padding: 0;
+                margin-bottom: 0;
+                &:first-child{
+                    margin-right: 18px;
+                }
+               
+            }
+            input[type='radio']{
+                position: absolute;
+                width: 0;
+                height: 0;
+                opacity: 0;
+                &:checked{
+                    +label{
+                        border: 2px solid var(--rouge);
+                    }
+                }
+            }
+           
+        }
+        &.light{
+            .like_btn{
+                button{
+                    background-color: var(--white);
+                }
+            }
+            
+        }
+        
+    }
+}
+
+[type="radio"] + label:before, 
+[type="radio"] + label:after{
+display: none;
+}
+
+.bottom_understand{
+    legend{
+        display: none;
+    }
+}
