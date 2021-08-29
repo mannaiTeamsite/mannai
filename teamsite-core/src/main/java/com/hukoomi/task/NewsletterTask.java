@@ -130,6 +130,11 @@ public class NewsletterTask implements CSURLExternalTask {
                 statusMap = processNewsletterDCR(client, task,
                         taskSimpleFile);
             }
+            else {
+                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT,
+                        SUCCESS_TRANSITION_COMMENT);
+            }
         }
 
         task.chooseTransition(statusMap.get(TRANSITION),
