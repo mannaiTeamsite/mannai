@@ -1,0 +1,1125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report xmlns="http://www.eclipse.org/birt/2005/design" version="3.2.23" id="1">
+    <property name="createdBy">Eclipse BIRT Designer Version 4.8.0.v201905290745</property>
+    <property name="layoutPreference">auto layout</property>
+    <list-property name="libraries">
+        <structure>
+            <property name="fileName">ThemesReportItems3.rptlibrary</property>
+            <property name="namespace">ThemesReportItems3</property>
+        </structure>
+    </list-property>
+    <data-sources>
+        <data-mart-data-source name="NewDataMartDataSource" id="9">
+            <property name="datamartURL">Data Objects/DevDB</property>
+            <property name="datamartVersion">-1</property>
+            <property name="accessType">transient</property>
+        </data-mart-data-source>
+        <data-mart-data-source name="NewDataMartDataSource1" id="475">
+            <property name="datamartURL">Hukoomi NextGen Project_Dev/Data Objects/ContentFeedbackReport DS</property>
+            <property name="datamartVersion">-1</property>
+            <property name="accessType">transient</property>
+            <list-property name="paramBindings">
+                <structure>
+                    <property name="paramName">Page Name</property>
+                </structure>
+                <structure>
+                    <property name="paramName">Language</property>
+                </structure>
+                <structure>
+                    <property name="paramName">Start Date</property>
+                </structure>
+                <structure>
+                    <property name="paramName">End Date</property>
+                </structure>
+                <structure>
+                    <property name="paramName">Entity</property>
+                </structure>
+                <structure>
+                    <property name="paramName">Topic</property>
+                </structure>
+            </list-property>
+        </data-mart-data-source>
+        <data-mart-data-source name="NewDataMartDataSource2" id="476">
+            <property name="datamartURL">Hukoomi NextGen Project_Dev/Data Objects/DevDB</property>
+            <property name="datamartVersion">-1</property>
+            <property name="accessType">transient</property>
+        </data-mart-data-source>
+        <data-mart-data-source name="NewDataMartDataSource3" id="517">
+            <property name="datamartURL">Data Objects/ProdDB1</property>
+            <property name="datamartVersion">-1</property>
+            <property name="accessType">transient</property>
+        </data-mart-data-source>
+        <data-mart-data-source name="NewDataMartDataSource4" id="547">
+            <property name="datamartURL">Data Objects/ProdDB_DS</property>
+            <property name="datamartVersion">-1</property>
+            <property name="accessType">transient</property>
+            <list-property name="paramBindings">
+                <structure>
+                    <property name="paramName">Start Date</property>
+                    <simple-property-list name="expression">
+                        <value type="javascript">"2020-01-01 00:00:00.000+0000"</value>
+                    </simple-property-list>
+                </structure>
+                <structure>
+                    <property name="paramName">End Date</property>
+                    <simple-property-list name="expression">
+                        <value type="javascript">"2021-12-31 00:00:00.000+0000"</value>
+                    </simple-property-list>
+                </structure>
+                <structure>
+                    <property name="paramName">Language</property>
+                    <simple-property-list name="expression">
+                        <value type="javascript">"en"</value>
+                    </simple-property-list>
+                </structure>
+                <structure>
+                    <property name="paramName">Report Type</property>
+                    <simple-property-list name="expression">
+                        <value type="javascript">"Content Report"</value>
+                    </simple-property-list>
+                </structure>
+                <structure>
+                    <property name="paramName">Content_Type</property>
+                    <simple-property-list name="expression">
+                        <value type="javascript">"-All-"</value>
+                    </simple-property-list>
+                </structure>
+                <structure>
+                    <property name="paramName">Content_Entity</property>
+                    <simple-property-list name="expression">
+                        <value type="javascript">"-All-"</value>
+                    </simple-property-list>
+                </structure>
+            </list-property>
+        </data-mart-data-source>
+        <data-mart-data-source name="NewDataMartDataSource5" id="688">
+            <property name="datamartURL">Data Objects/DB_Filter_Source</property>
+            <property name="datamartVersion">-1</property>
+            <property name="accessType">transient</property>
+        </data-mart-data-source>
+        <data-mart-data-source name="NewDataMartDataSource6" id="690">
+            <property name="datamartURL">Data Objects/Reports_DB_Filter_Source</property>
+            <property name="datamartVersion">-1</property>
+            <property name="accessType">transient</property>
+        </data-mart-data-source>
+    </data-sources>
+    <data-sets>
+        <data-mart-data-set name="NewDataMartDataSource4::ContentReport_Bar Chart Data Set" id="686">
+            <property name="dataSource">NewDataMartDataSource4</property>
+            <property name="dataObject">ContentReport_Bar Chart Data Set</property>
+        </data-mart-data-set>
+        <data-mart-data-set name="NewDataMartDataSource6::PollDetails Data Set-Filters" id="691">
+            <property name="dataSource">NewDataMartDataSource6</property>
+            <property name="dataObject">PollDetails Data Set-Filters</property>
+        </data-mart-data-set>
+    </data-sets>
+    <body>
+        <extended-item extensionName="Chart" name="Column Chart - ContentReport_Bar Chart Data Set_91023ce6-4080-4e23-8684-f3f337ad7b61" id="687">
+            <xml-property name="xmlRepresentation"><![CDATA[<ActuateChart version="2.6.1">
+ <ChartWithAxes version="2.6.1" type="Column Chart" subType="Stacked" orientation="1">
+  <block>
+   <children _type="TitleBlock" visible="true" auto="false">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <label>
+     <caption value="Monthly Content Type">
+      <font name="arial" size="12.0" bold="true" italic="false" underline="false"/>
+      <color _body=",255,0,0,0"/>
+     </caption>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+   </children>
+   <children _type="Plot">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+   </children>
+   <children _type="Legend" visible="true" orientation="1" position="3">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+    <separator>
+     <color _nil="1"/>
+    </separator>
+    <title visible="true">
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+   </children>
+   <outline>
+    <color _nil="1"/>
+   </outline>
+  </block>
+  <extendedProperties name="enable.area.alt" value="false"/>
+  <extendedProperties name="enable.drill.category" value="true"/>
+  <extendedProperties name="enable.drill.series" value="true"/>
+  <extendedProperties name="jschart.range.selector" value="false"/>
+  <extendedProperties name="jschart.navigator" value="false"/>
+  <extendedProperties name="jschart.scroll" value="true"/>
+  <extendedProperties name="keep.hierarchy.category" value="false"/>
+  <extendedProperties name="keep.hierarchy.series" value="false"/>
+  <extendedProperties name="enable.data.summarize" value="false"/>
+  <extendedProperties name="jschart.client.script" value="beforeGeneration:function(o){if(o&amp;&amp;o.chart&amp;&amp;o.chart.renderTo){var r=document.getElementById(o.chart.renderTo);if(r.parentNode&amp;&amp;r.parentNode.id){var b=r.parentNode.id;var v=actuate.getViewer(b);if(v){v.enableGlobalFilter(o);}}}}"/>
+  <extendedProperties name="jschart.glass.style" value="false"/>
+  <extendedProperties name="jschart.zoom" value="xy"/>
+  <extendedProperties name="jschart.series.shadow" value="false"/>
+  <sampleData>
+   <baseSampleData dataSetRepresentation="QWER"/>
+   <orthogonalSampleData dataSetRepresentation="QWER" seriesDefinitionIndex="0"/>
+  </sampleData>
+  <interactivity enable="true" legendBehavior="1"/>
+  <emptyMessage visible="true">
+   <caption value="This chart contains no data."/>
+   <background _body=",64,127,127,127"/>
+   <outline>
+    <color _body=",128,127,127,127"/>
+   </outline>
+  </emptyMessage>
+  <axes type="2" gapWidth="0.5" labelPosition="1" staggered="false" interval="1" categoryAxis="true">
+   <title visible="false">
+    <caption value="">
+     <font size="14.0" bold="false" italic="false" underline="false"/>
+     <color _body=",255,51,51,51"/>
+    </caption>
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </title>
+   <associatedAxes type="0" labelPosition="2" primaryAxis="true" percent="false">
+    <title visible="false">
+     <caption value="">
+      <font bold="false" italic="false" underline="false"/>
+      <color _body=",255,0,0,0"/>
+     </caption>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+    <seriesDefinitions>
+     <query definition="row[&quot;TRIM_CONTENT_TYPE&quot;]"/>
+     <series _type="BarSeries" seriesIdentifier="TRIM_CONTENT_TYPE" stacked="true">
+      <label>
+       <caption value="TRIM_CONTENT_TYPE"/>
+       <background _nil="1"/>
+       <outline>
+        <color _nil="1"/>
+       </outline>
+      </label>
+      <dataDefinition definition="row[&quot;TRIM_CONTENT_TYPE&quot;]">
+       <grouping enabled="true" aggregateExpression="Count"/>
+      </dataDefinition>
+      <triggers condition="6">
+       <action type="1">
+        <value _type="TooltipValue" text="" delay="0"/>
+       </action>
+      </triggers>
+      <curveFitting _nil="1"/>
+     </series>
+    </seriesDefinitions>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <label visible="true">
+     <caption>
+      <font size="10.0" bold="false" italic="false" underline="false" rotation="0.0"/>
+      <color _body=",255,51,51,51"/>
+     </caption>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+    <majorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </majorGrid>
+    <minorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </minorGrid>
+    <scale step="0.0" stepNumber="1"/>
+    <origin>
+     <value _nil="1"/>
+    </origin>
+   </associatedAxes>
+   <seriesDefinitions sorting="0">
+    <query definition=""/>
+    <series seriesIdentifier="PUBLISH_MONYEAR">
+     <label>
+      <caption value="PUBLISH_MONYEAR"/>
+      <background _nil="1"/>
+      <outline>
+       <color _nil="1"/>
+      </outline>
+     </label>
+     <dataDefinition definition="row[&quot;PUBLISH_MONYEAR&quot;]"/>
+     <curveFitting _nil="1"/>
+    </series>
+    <grouping enabled="true" groupingInterval="0.0"/>
+   </seriesDefinitions>
+   <lineAttributes>
+    <color _nil="1"/>
+   </lineAttributes>
+   <label visible="true">
+    <caption>
+     <font size="10.0" bold="false" italic="false" underline="false" rotation="0.0"/>
+     <color _body=",255,51,51,51"/>
+    </caption>
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </label>
+   <majorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </majorGrid>
+   <minorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </minorGrid>
+   <origin>
+    <value _nil="1"/>
+   </origin>
+  </axes>
+  <rotation>
+   <angles/>
+  </rotation>
+ </ChartWithAxes>
+</ActuateChart>
+]]></xml-property>
+            <property name="outputFormat">JS</property>
+            <list-property name="filter">
+                <structure>
+                    <property name="operator">in</property>
+                    <expression name="expr">dataSetRow["CONTENT_TYPE"]</expression>
+                    <simple-property-list name="value1">
+                        <value type="constant">Content/Attractions</value>
+                        <value type="constant">Content/Articles</value>
+                    </simple-property-list>
+                    <property name="filterTarget">DataSet</property>
+                    <property name="updateAggregation">true</property>
+                </structure>
+            </list-property>
+            <property name="height">165pt</property>
+            <property name="width">828pt</property>
+            <property name="dataSet">NewDataMartDataSource4::ContentReport_Bar Chart Data Set</property>
+            <list-property name="boundDataColumns">
+                <structure>
+                    <property name="name">PUBLISH_MONYEAR</property>
+                    <text-property name="displayName">PUBLISH_MONYEAR</text-property>
+                    <expression name="expression">dataSetRow["PUBLISH_MONYEAR"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+                <structure>
+                    <property name="name">TRIM_CONTENT_TYPE</property>
+                    <text-property name="displayName">TRIM_CONTENT_TYPE</text-property>
+                    <expression name="expression">dataSetRow["TRIM_CONTENT_TYPE"]</expression>
+                    <property name="dataType">string</property>
+                </structure>
+            </list-property>
+            <list-property name="userProperties">
+                <structure>
+                    <property name="name">copyHyperlink</property>
+                    <property name="type">string</property>
+                </structure>
+                <structure>
+                    <property name="name">createdBy</property>
+                    <property name="type">string</property>
+                </structure>
+            </list-property>
+            <property name="copyHyperlink">true</property>
+            <property name="createdBy">dashboard</property>
+        </extended-item>
+    </body>
+    <property name="dashboardView">
+        <dashboard id="2">
+            <list-property name="userProperties">
+                <structure>
+                    <property name="name">dashboardTheme</property>
+                    <property name="type">string</property>
+                </structure>
+                <structure>
+                    <property name="name">enableGlobalFilter</property>
+                    <property name="type">boolean</property>
+                </structure>
+                <structure>
+                    <property name="name">dashboardLayout</property>
+                    <property name="type">string</property>
+                </structure>
+            </list-property>
+            <property name="dashboardTheme">ThemesReportItems3.Classic:Light</property>
+            <property name="enableGlobalFilter">false</property>
+            <property name="dashboardLayout">freeForm</property>
+            <property name="activeTab">992565c2-7f14-4c72-aa3b-b6d7b928dc754111</property>
+            <property name="tabs">
+                <tab-element name="992565c2-7f14-4c72-aa3b-b6d7b928dc754111" id="330">
+                    <list-property name="userProperties">
+                        <structure>
+                            <property name="name">responsiveView</property>
+                            <property name="type">boolean</property>
+                        </structure>
+                        <structure>
+                            <property name="name">tabTheme</property>
+                            <property name="type">string</property>
+                        </structure>
+                    </list-property>
+                    <property name="responsiveView">true</property>
+                    <property name="tabTheme">ThemesReportItems3.Classic:Light</property>
+                    <property name="title">Poll Details / تفاصيل الاستفاءات</property>
+                    <property name="freeFormGadgets">
+                        <gadget name="80f7e2c2-a000-4081-a4c5-1575c02f898e4111" id="331">
+                            <property name="x">10px</property>
+                            <property name="y">11px</property>
+                            <property name="zIndex">1</property>
+                            <property name="isVisible">false</property>
+                            <property name="height">150px</property>
+                            <property name="width">750px</property>
+                            <property name="caption">
+                                <gadget-caption id="333">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">"Lato"</property>
+                                    <property name="fontSize">24pt</property>
+                                    <property name="fontWeight">bold</property>
+                                    <property name="color">#000000</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <current-selections id="332"/>
+                            </property>
+                            <property name="subscribeTo">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">Gadget_2a4fab52-30af-44ee-a271-1bf5a8d61d373111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="gadget">Gadget_830e5dbc-3ebb-4b6c-80b5-026539ccca133111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="gadget">Gadget_3af3328c-33cf-45ad-b4e5-4455668595e03111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="gadget">Gadget_2f35413d-36a2-4567-a72f-9526d23ad2a53111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="gadget">Gadget_3b87c914-3654-4f52-9cc0-627167aa91f12111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="gadget">Gadget_cbd694dc-059a-4fc7-99e7-86c16e4c28793111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="gadget">Gadget_32d19976-a475-4fd6-a215-d5094de4c3083111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_3af3328c-33cf-45ad-b4e5-4455668595e03111" id="334">
+                            <property name="x">0px</property>
+                            <property name="y">18px</property>
+                            <property name="title">Poll Language / لغة الاستفتاء</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">3</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">41px</property>
+                            <property name="width">221px</property>
+                            <property name="caption">
+                                <gadget-caption id="336">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">sans-serif</property>
+                                    <property name="fontSize">10pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <dropdown-data-selector id="335">
+                                    <property name="dataSet">NewDataMartDataSource6::PollDetails Data Set-Filters</property>
+                                    <property name="sortDirection">asc</property>
+                                    <simple-property-list name="columnNames">
+                                        <value>lang</value>
+                                        <value>lang</value>
+                                    </simple-property-list>
+                                    <simple-property-list name="selectedValues">
+                                        <value>ar</value>
+                                    </simple-property-list>
+                                    <property name="allowTyping">false</property>
+                                    <property name="autoSuggest">false</property>
+                                    <property name="listLimit">1000</property>
+                                </dropdown-data-selector>
+                            </property>
+                            <property name="observers">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">80f7e2c2-a000-4081-a4c5-1575c02f898e4111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">Language</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111" id="337">
+                            <property name="x">-0.24609375px</property>
+                            <property name="y">197.76953125px</property>
+                            <property name="title">Report - DailyContentStatus</property>
+                            <property name="externalGadgetURI">^/Report Designs/DailyContentStatus.rptdesign</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">14</property>
+                            <property name="showScrollBar">true</property>
+                            <property name="height">415px</property>
+                            <property name="width">1369px</property>
+                            <property name="caption">
+                                <gadget-caption id="339">
+                                    <property name="showCaption">false</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">"Lato"</property>
+                                    <property name="fontSize">18pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <data-view id="338">
+                                    <list-property name="userProperties">
+                                        <structure>
+                                            <property name="name">showViewerToolbar</property>
+                                            <property name="type">boolean</property>
+                                        </structure>
+                                    </list-property>
+                                    <property name="showViewerToolbar">true</property>
+                                    <property name="gadgetType">viewer</property>
+                                    <property name="externalContentRef">
+                                        <external-element-ref>
+                                            <property name="sourceFile">/Applications/Hukoomi NextGen Project/Report Designs/PollDetails.rptdesign</property>
+                                        </external-element-ref>
+                                    </property>
+                                    <property name="paramSettings">
+                                        <param-setting>
+                                            <property name="paramName">Language</property>
+                                            <property name="displayText">-All-</property>
+                                            <expression name="value">-All-</expression>
+                                            <property name="isHidden">true</property>
+                                            <expression name="defaultValue" type="javascript">-All-</expression>
+                                        </param-setting>
+                                        <param-setting>
+                                            <property name="paramName">Start Date</property>
+                                            <property name="displayText">null</property>
+                                            <expression name="value">2020-01-01 00:00:00.000+0000</expression>
+                                            <property name="isHidden">true</property>
+                                            <expression name="defaultValue" type="javascript">2020-01-01 00:00:00.000+0000</expression>
+                                        </param-setting>
+                                        <param-setting>
+                                            <property name="paramName">End Date</property>
+                                            <property name="displayText">null</property>
+                                            <expression name="value">2020-12-31 00:00:00.000+0000</expression>
+                                            <property name="isHidden">true</property>
+                                            <expression name="defaultValue" type="javascript">2020-12-31 00:00:00.000+0000</expression>
+                                        </param-setting>
+                                        <param-setting>
+                                            <property name="paramName">Question</property>
+                                            <property name="displayText">-All-</property>
+                                            <expression name="value">-All-</expression>
+                                            <property name="isHidden">true</property>
+                                            <expression name="defaultValue" type="javascript">-All-</expression>
+                                        </param-setting>
+                                        <param-setting>
+                                            <property name="paramName">Entity</property>
+                                            <property name="displayText">-All-</property>
+                                            <expression name="value">-All-</expression>
+                                            <property name="isHidden">true</property>
+                                            <expression name="defaultValue" type="javascript">-All-</expression>
+                                        </param-setting>
+                                        <param-setting>
+                                            <property name="paramName">Persona</property>
+                                            <property name="displayText">-All-</property>
+                                            <expression name="value">-All-</expression>
+                                            <property name="isHidden">true</property>
+                                            <expression name="defaultValue" type="javascript">-All-</expression>
+                                        </param-setting>
+                                        <param-setting>
+                                            <property name="paramName">Topic</property>
+                                            <property name="displayText">-All-</property>
+                                            <expression name="value">-All-</expression>
+                                            <property name="isHidden">true</property>
+                                            <expression name="defaultValue" type="javascript">-All-</expression>
+                                        </param-setting>
+                                    </property>
+                                </data-view>
+                            </property>
+                            <property name="subscribeTo">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_2a4fab52-30af-44ee-a271-1bf5a8d61d373111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_830e5dbc-3ebb-4b6c-80b5-026539ccca133111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_2a4fab52-30af-44ee-a271-1bf5a8d61d373111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_830e5dbc-3ebb-4b6c-80b5-026539ccca133111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_2a4fab52-30af-44ee-a271-1bf5a8d61d373111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_830e5dbc-3ebb-4b6c-80b5-026539ccca133111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Language</property>
+                                            <property name="gadget">Gadget_3af3328c-33cf-45ad-b4e5-4455668595e03111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_2a4fab52-30af-44ee-a271-1bf5a8d61d373111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_830e5dbc-3ebb-4b6c-80b5-026539ccca133111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Question</property>
+                                            <property name="gadget">Gadget_2f35413d-36a2-4567-a72f-9526d23ad2a53111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Entity</property>
+                                            <property name="gadget">Gadget_3b87c914-3654-4f52-9cc0-627167aa91f12111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Persona</property>
+                                            <property name="gadget">Gadget_32d19976-a475-4fd6-a215-d5094de4c3083111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Topic</property>
+                                            <property name="gadget">Gadget_cbd694dc-059a-4fc7-99e7-86c16e4c28793111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_2f35413d-36a2-4567-a72f-9526d23ad2a53111" id="340">
+                            <property name="x">737.6666660308838px</property>
+                            <property name="y">16px</property>
+                            <property name="title">Poll Question / عنوان  الاستفتاء</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">5</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">35px</property>
+                            <property name="width">243px</property>
+                            <property name="caption">
+                                <gadget-caption id="342">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">sans-serif</property>
+                                    <property name="fontSize">10pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <dropdown-data-selector id="341">
+                                    <property name="dataSet">NewDataMartDataSource6::PollDetails Data Set-Filters</property>
+                                    <property name="sortDirection">asc</property>
+                                    <simple-property-list name="columnNames">
+                                        <value>question</value>
+                                        <value>question</value>
+                                    </simple-property-list>
+                                    <simple-property-list name="selectedValues">
+                                        <value>-All-</value>
+                                    </simple-property-list>
+                                    <property name="allowTyping">false</property>
+                                    <property name="autoSuggest">false</property>
+                                    <property name="listLimit">1000</property>
+                                </dropdown-data-selector>
+                            </property>
+                            <property name="observers">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">80f7e2c2-a000-4081-a4c5-1575c02f898e4111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">Question</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_2a4fab52-30af-44ee-a271-1bf5a8d61d373111" id="343">
+                            <property name="x">233.6666660308838px</property>
+                            <property name="y">16px</property>
+                            <property name="title">Start Date / تاريخ البدء</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">6</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">41px</property>
+                            <property name="width">247px</property>
+                            <property name="caption">
+                                <gadget-caption id="345">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">sans-serif</property>
+                                    <property name="fontSize">10pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <calendar-data-selector id="344">
+                                    <structure name="dateTimeFormat">
+                                        <property name="category">Short Date</property>
+                                        <property name="pattern">Short Date</property>
+                                    </structure>
+                                    <property name="operator">eq</property>
+                                    <property name="dataType">date</property>
+                                    <simple-property-list name="selectedValues">
+                                        <value>2021-01-01</value>
+                                    </simple-property-list>
+                                    <property name="defaultDate">2020-12-01</property>
+                                    <property name="startDate">2020-01-01</property>
+                                    <property name="endDate">2021-12-31</property>
+                                    <property name="autoRange">false</property>
+                                    <property name="displayOperationFields">false</property>
+                                </calendar-data-selector>
+                            </property>
+                            <property name="observers">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">80f7e2c2-a000-4081-a4c5-1575c02f898e4111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">Start Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_830e5dbc-3ebb-4b6c-80b5-026539ccca133111" id="346">
+                            <property name="x">485.6666660308838px</property>
+                            <property name="y">17.333328247070312px</property>
+                            <property name="title">End Date / تاريخ الانتهاء</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">7</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">41px</property>
+                            <property name="width">235px</property>
+                            <property name="caption">
+                                <gadget-caption id="348">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">sans-serif</property>
+                                    <property name="fontSize">10pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <calendar-data-selector id="347">
+                                    <structure name="dateTimeFormat">
+                                        <property name="category">Short Date</property>
+                                        <property name="pattern">Short Date</property>
+                                    </structure>
+                                    <property name="operator">eq</property>
+                                    <property name="dataType">date</property>
+                                    <simple-property-list name="selectedValues">
+                                        <value>2021-12-31</value>
+                                    </simple-property-list>
+                                    <property name="defaultDate">2020-12-01</property>
+                                    <property name="startDate">2020-01-01</property>
+                                    <property name="endDate">2021-12-31</property>
+                                    <property name="autoRange">false</property>
+                                    <property name="displayOperationFields">false</property>
+                                </calendar-data-selector>
+                            </property>
+                            <property name="observers">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">80f7e2c2-a000-4081-a4c5-1575c02f898e4111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                        <event-object>
+                                            <property name="appliedTo">End Date</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_cbd694dc-059a-4fc7-99e7-86c16e4c28793111" id="349">
+                            <property name="x">-0.33333396911621094px</property>
+                            <property name="y">107.33332824707031px</property>
+                            <property name="title">Topics / الموضوع</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">8</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">53px</property>
+                            <property name="width">220px</property>
+                            <property name="caption">
+                                <gadget-caption id="351">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">sans-serif</property>
+                                    <property name="fontSize">10pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <dropdown-data-selector id="350">
+                                    <property name="dataSet">NewDataMartDataSource6::PollDetails Data Set-Filters</property>
+                                    <property name="sortDirection">asc</property>
+                                    <simple-property-list name="columnNames">
+                                        <value>topics</value>
+                                        <value>topics</value>
+                                    </simple-property-list>
+                                    <simple-property-list name="selectedValues">
+                                        <value>-All-</value>
+                                    </simple-property-list>
+                                    <property name="allowTyping">false</property>
+                                    <property name="autoSuggest">false</property>
+                                    <property name="listLimit">1000</property>
+                                </dropdown-data-selector>
+                            </property>
+                            <property name="observers">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">80f7e2c2-a000-4081-a4c5-1575c02f898e4111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">Topic</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_32d19976-a475-4fd6-a215-d5094de4c3083111" id="352">
+                            <property name="x">233.6666660308838px</property>
+                            <property name="y">105px</property>
+                            <property name="title">Persona / شخصية المستخدم</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">9</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">55px</property>
+                            <property name="width">236px</property>
+                            <property name="caption">
+                                <gadget-caption id="354">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">sans-serif</property>
+                                    <property name="fontSize">10pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <dropdown-data-selector id="353">
+                                    <property name="dataSet">NewDataMartDataSource6::PollDetails Data Set-Filters</property>
+                                    <property name="sortDirection">asc</property>
+                                    <simple-property-list name="columnNames">
+                                        <value>persona</value>
+                                        <value>persona</value>
+                                    </simple-property-list>
+                                    <simple-property-list name="selectedValues">
+                                        <value>-All-</value>
+                                    </simple-property-list>
+                                    <property name="allowTyping">false</property>
+                                    <property name="autoSuggest">false</property>
+                                    <property name="listLimit">1000</property>
+                                </dropdown-data-selector>
+                            </property>
+                            <property name="observers">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">80f7e2c2-a000-4081-a4c5-1575c02f898e4111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">Persona</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_3b87c914-3654-4f52-9cc0-627167aa91f12111" id="355">
+                            <property name="x">989.6666660308838px</property>
+                            <property name="y">17.333328247070312px</property>
+                            <property name="title">Entity / الجهة</property>
+                            <property name="showTitle">false</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">10</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">24px</property>
+                            <property name="width">231px</property>
+                            <property name="caption">
+                                <gadget-caption id="357">
+                                    <property name="showCaption">true</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">sans-serif</property>
+                                    <property name="fontSize">10pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <dropdown-data-selector id="356">
+                                    <property name="dataSet">NewDataMartDataSource6::PollDetails Data Set-Filters</property>
+                                    <property name="sortDirection">asc</property>
+                                    <simple-property-list name="columnNames">
+                                        <value>service_entities</value>
+                                        <value>service_entities</value>
+                                    </simple-property-list>
+                                    <simple-property-list name="selectedValues">
+                                        <value>-All-</value>
+                                    </simple-property-list>
+                                    <property name="allowTyping">false</property>
+                                    <property name="autoSuggest">false</property>
+                                    <property name="listLimit">1000</property>
+                                </dropdown-data-selector>
+                            </property>
+                            <property name="observers">
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_filter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="gadget">80f7e2c2-a000-4081-a4c5-1575c02f898e4111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                                <event-subscriber>
+                                    <property name="eventName">SELECT_EVENT:SEMANTIC_parameter</property>
+                                    <property name="eventObjects">
+                                        <event-object>
+                                            <property name="appliedTo">Entity</property>
+                                            <property name="gadget">Gadget_b29cff9f-3c69-4a8d-9a54-4e372fbb826e3111</property>
+                                            <property name="dirty">false</property>
+                                        </event-object>
+                                    </property>
+                                </event-subscriber>
+                            </property>
+                        </gadget>
+                        <gadget name="Gadget_50946086-cdb0-45a4-8673-77b8774f88b5" id="692">
+                            <property name="x">1277.6666660308838px</property>
+                            <property name="y">17.333328247070312px</property>
+                            <property name="title">Report - Back Button-En</property>
+                            <property name="externalGadgetURI">/Applications/Hukoomi NextGen Project/Report Designs/ReportsForDashboard/Back Button-En.rptdesign</property>
+                            <property name="showTitle">true</property>
+                            <property name="showBorder">false</property>
+                            <property name="zIndex">15</property>
+                            <property name="showScrollBar">false</property>
+                            <property name="height">41px</property>
+                            <property name="width">73px</property>
+                            <property name="caption">
+                                <gadget-caption id="693">
+                                    <property name="showCaption">false</property>
+                                    <property name="horizontalAlignment">left</property>
+                                    <property name="fontFamily">"Lato"</property>
+                                    <property name="fontSize">18pt</property>
+                                    <property name="fontWeight">normal</property>
+                                    <property name="fontStyle">normal</property>
+                                    <property name="color">#353535</property>
+                                    <property name="textUnderline">none</property>
+                                </gadget-caption>
+                            </property>
+                            <property name="content">
+                                <data-view id="694">
+                                    <list-property name="userProperties">
+                                        <structure>
+                                            <property name="name">showViewerToolbar</property>
+                                            <property name="type">boolean</property>
+                                        </structure>
+                                    </list-property>
+                                    <property name="showViewerToolbar">false</property>
+                                    <property name="gadgetType">viewer</property>
+                                    <property name="externalContentRef">
+                                        <external-element-ref>
+                                            <property name="sourceFile">/Applications/Hukoomi NextGen Project/Report Designs/ReportsForDashboard/Back Button-Ar.rptdesign</property>
+                                        </external-element-ref>
+                                    </property>
+                                </data-view>
+                            </property>
+                        </gadget>
+                    </property>
+                </tab-element>
+            </property>
+        </dashboard>
+    </property>
+</report>

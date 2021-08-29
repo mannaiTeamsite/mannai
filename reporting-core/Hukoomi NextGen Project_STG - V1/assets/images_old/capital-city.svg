@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="72" height="72" viewBox="0 0 72 72">
+    <defs>
+        <path id="prefix__a" d="M0 32.599L35.991 32.599 35.991 0 0 0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <circle cx="36" cy="36" r="36" fill="#8A1538"/>
+        <g transform="translate(18 19)">
+            <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16.542 31.927h-3.27v-2.544c0-.969.726-1.696 1.695-1.696.97 0 1.696.727 1.696 1.696v2.544h-.12zM6.851 2.489L6.851 5.275"/>
+            <mask id="prefix__b" fill="#fff">
+                <use xlink:href="#prefix__a"/>
+            </mask>
+            <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.67 9.515L9.032 9.515 9.032 5.275 4.67 5.275zM4.67 13.755L11.454 13.755 11.454 9.515 4.67 9.515zM31.443 5.397h-3.634v-1.09c0-.97.848-1.818 1.816-1.818.97 0 1.818.848 1.818 1.817v1.09zM29.747.551L29.747 2.489M15.209 8.91L17.996 8.91M15.21 18.359V7.819c0-1.332 1.09-2.301 2.302-2.301 1.332 0 2.301 1.09 2.301 2.302v8.843M21.872 19.692L21.872 16.057 13.634 18.965 13.634 21.421M9.031 31.927L27.323 31.927 27.323 24.174 9.031 24.174z" mask="url(#prefix__b)"/>
+            <path stroke="#FFF" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.575 24.174L11.575 22.115 15.209 21.388 17.632 20.903 20.297 20.298 23.811 19.692 23.811 24.174M25.87 24.174L25.87 5.397 33.623 5.397 33.623 32.048 35.44 32.048M.551 32.048L2.853 32.048 2.853 13.877 10.121 13.877 10.121 19.692" mask="url(#prefix__b)"/>
+        </g>
+    </g>
+</svg>

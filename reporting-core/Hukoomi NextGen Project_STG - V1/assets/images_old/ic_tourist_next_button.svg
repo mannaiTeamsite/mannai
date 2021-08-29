@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ic_tourist_next_button</title>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="03-tourist" transform="translate(-357.000000, -481.000000)">
+            <g id="banner">
+                <g id="Group-8" transform="translate(265.000000, 219.000000)">
+                    <g id="Group-2" transform="translate(0.000000, 262.000000)">
+                        <g id="ic_tourist_next_button" transform="translate(107.000000, 15.000000) rotate(-90.000000) translate(-107.000000, -15.000000) translate(92.000000, 0.000000)">
+                            <circle id="Oval" stroke="#D0D0D0" fill="#FFFFFF" cx="15" cy="15" r="14.5"></circle>
+                            <path d="M15.8560854,15.3960411 L12.8388493,18.8358073 C12.6469167,19.0547309 12.3357307,19.0547309 12.1438913,18.8358073 C11.9520362,18.6170783 11.9520362,18.2623211 12.1438913,18.0436099 L14.8136794,14.9999425 L12.1439689,11.9563813 C11.9521139,11.7375638 11.9521139,11.382842 12.1439689,11.1641131 C12.3358239,10.9452956 12.6469943,10.9452956 12.838927,11.1641131 L15.8561631,14.6039323 C15.9520906,14.7133499 16,14.8566019 16,14.9999248 C16,15.1433184 15.9519974,15.2866767 15.8560854,15.3960411 Z" id="Path" stroke="#B51647" fill="#B51647" fill-rule="nonzero" transform="translate(14.000000, 15.000000) rotate(-180.000000) translate(-14.000000, -15.000000) "></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
