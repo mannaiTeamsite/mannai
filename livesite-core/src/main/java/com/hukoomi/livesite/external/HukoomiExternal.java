@@ -111,11 +111,13 @@ public class HukoomiExternal {
 		logger.info("Context BaseQuery: " + context.getParameterString("baseQuery"));
 		logger.info("Current FieldQuery: " + fq);
 
-		String nutchQuery = sqb.crawlBuild();
-		logger.debug("Crawl Query : " + nutchQuery);
-		Document nutchDoc;
-		nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse");
-
+		String nutchCore = context.getParameterString("nutchCore");
+		Document nutchDoc = null;
+		if (nutchCore != null) {
+			String nutchQuery = sqb.crawlBuild();
+			logger.debug("Crawl Query : " + nutchQuery);
+			nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse");
+		}
 		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
@@ -132,9 +134,10 @@ public class HukoomiExternal {
 			logger.info("Sanitized FieldQuery: " + sanitizedFieldQuery);
 			root.addElement("baseQuery").addText(baseQuery);
 			root.addElement("fieldQuery").addText(sanitizedFieldQuery);
-			if(nutchDoc != null && nutchDoc.getRootElement() != null) {
-				root.add(nutchDoc.getRootElement());
+			if (nutchDoc != null && nutchDoc.getRootElement() != null) {
+					root.add(nutchDoc.getRootElement());
 			}
+
 		}
 		logger.debug("Before calling : " + doc);
 		
