@@ -28,7 +28,6 @@ import com.hukoomi.utils.PostgreTSConnection;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
-import com.interwoven.cssdk.filesys.CSExtendedAttribute;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
 import org.dom4j.io.SAXReader;
 
@@ -187,10 +186,6 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      * Transition comment hashmap key
      */
     private static final String TRANSITION_COMMENT = "TRANSITION_COMMENT";
-    /**
-     * Last modifier name for page
-     */
-    public static final String META_LAST_MODIFIER = "TeamSite/Metadata/LastModifier";
     /**
      * Postgre class instance variable
      */
@@ -995,13 +990,6 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         boolean isDataUpdated = false;
         PreparedStatement preparedStatement = null;
 
-        String taskName = "";
-        String modifier = "";
-        String modifierMetaData = "";
-        String author = "";
-        String commentOnModifier = "";
-        String reviewer = "" ;
-        String approver = "" ;
         String reviewDate = "";
         String approveDate = "";
         String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
@@ -1013,30 +1001,6 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             entityVal = "";
 
         try {
-            
-            taskName = taskObj.getName();
-            logger.info("Task Name : " + taskName);
-            
-            author = taskSimpleFile.getCreator().getName();
-            logger.info("Content author : " + author);
-            
-            modifier = taskSimpleFile.getLastModifier().getName();
-            logger.info("Last Modified By: " + modifier);
-            
-            if(StringUtils.isNotBlank(modifier)) {
-                CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
-                csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
-                taskSimpleFile.setExtendedAttributes(csEAArray);
-            }
-            
-            modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
-            logger.info("EA Modifier : " + modifierMetaData);
-            
-            reviewer = taskObj.getWorkflow().getVariable("WF_Reviewer");
-            logger.info("Workflow Reviewer : " + reviewer );
-
-            approver = taskObj.getWorkflow().getVariable("WF_Approver");
-            logger.info("Workflow Approver : " + approver );
 
             reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
             logger.info("Review Date : " + reviewDate );
@@ -1062,20 +1026,12 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             }else if(taskSimpleFile.getRevisionNumber() > 0){
                 fileStatus = "MODIFY";
             }
-            
-            if(StringUtils.equals(modifier, approver)) {
-                commentOnModifier = "Updated content on behalf of "+author + System.lineSeparator();
-            }
 
             CSWorkflow workflow = taskObj.getWorkflow();
             CSComment[] comments = workflow.getComments();
             StringBuilder commentsToLogInDB = new StringBuilder();
             for(CSComment comment : comments) {
                 commentsToLogInDB.append("["+ comment.getCreationDate() +"] "+ comment.getCreator() + ": "+ comment.getComment() + System.lineSeparator());
-            }
-            
-            if(!"".equals(commentOnModifier)) {
-                commentsToLogInDB.append("[").append(DateUtils.parseDate(approveDate, dateFormats)).append("] ").append("tsadmin").append(": ").append(commentOnModifier);
             }
             commentStr = commentsToLogInDB.toString();
 

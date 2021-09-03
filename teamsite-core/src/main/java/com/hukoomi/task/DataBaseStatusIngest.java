@@ -91,7 +91,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
      */
     private static final String TASK_APPROVE_PENDING_DB = "Approval Pending DB";
     
-    
+    String commentOnModifier = "";
 
     PostgreTSConnection postgre = null;
 
@@ -151,7 +151,14 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                     isDBOperationWorkflowSuccess = insertWorkFlowData(taskSimpleFile, task);
                 }
                 logger.debug("DBOperationWorkflow : " + isDBOperationWorkflowSuccess);
-                if (isDBOperationWorkflowSuccess || isDBUpdationSuccess){
+                if (isDBUpdationSuccess){
+                    statusMap.put(TRANSITION, tName+" Success");
+                    if(StringUtils.isNotBlank(commentOnModifier)) {
+                        statusMap.put(TRANSITION_COMMENT, commentOnModifier+" "+DATA_INSERT_SUCCESS);
+                    }else {
+                        statusMap.put(TRANSITION_COMMENT, DATA_INSERT_SUCCESS);
+                    }
+                }else if (isDBOperationWorkflowSuccess){
                     statusMap.put(TRANSITION, tName+" Success");
                     statusMap.put(TRANSITION_COMMENT, DATA_INSERT_SUCCESS);
                 } else {
@@ -228,7 +235,6 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             String taskName = null;
             String modifierMetaData = null;
             String modifier = null;
-            String commentOnModifier = "";
             String reviewer = "" ;
             String approver = "" ;
             String reviewDate = "";
@@ -243,18 +249,12 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
 
             try {
                 
+                commentOnModifier = "";
                 taskName = taskObj.getName();
                 logger.info("Task Name : " + taskName);
                 
                 modifier = taskSimpleFile.getLastModifier().getName();
                 logger.info("Last Modified By: " + modifier);
-                
-                if(StringUtils.isNotBlank(modifier)  
-                        && StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName)) {
-                    CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
-                    csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
-                    taskSimpleFile.setExtendedAttributes(csEAArray);
-                }
                 
                 modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
                 logger.info("EA Modifier : " + modifierMetaData);
@@ -291,10 +291,18 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 }
                 
                 if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName) 
-                        && StringUtils.equals(modifier, reviewer)) {
-                        commentOnModifier = "Updated content on behalf of "+modifier + System.lineSeparator();
+                        && !StringUtils.equals(modifier, modifierMetaData)) {
+                        commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
+                        logger.info("commentOnModifier : " + commentOnModifier );
                 }
-
+                
+                if(StringUtils.isNotBlank(modifier)  
+                        && StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName)) {
+                    CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
+                    csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
+                    taskSimpleFile.setExtendedAttributes(csEAArray);
+                }
+                
                 CSWorkflow workflow = taskObj.getWorkflow();
                 CSComment[] comments = workflow.getComments();
                 StringBuilder commentsToLogInDB = new StringBuilder();
@@ -303,7 +311,9 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 }
                 
                 if(StringUtils.isNotBlank(commentOnModifier)) {
-                    commentsToLogInDB.append("[").append(reviewDate).append("] ").append(reviewer).append(": ").append(commentOnModifier);
+                    logger.info("reviewDate : " + reviewDate );
+                    logger.info("reviewer : " + reviewer );
+                    commentsToLogInDB.append("[").append(reviewDate).append("] ").append(commentOnModifier).append(System.lineSeparator());
                 }
                 
                 commentStr = commentsToLogInDB.toString();

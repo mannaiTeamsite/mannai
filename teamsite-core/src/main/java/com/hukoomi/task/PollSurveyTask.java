@@ -5,12 +5,15 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -24,12 +27,15 @@ import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
 import com.interwoven.cssdk.filesys.CSBranch;
 import com.interwoven.cssdk.filesys.CSEdition;
+import com.interwoven.cssdk.filesys.CSExtendedAttribute;
 import com.interwoven.cssdk.filesys.CSFile;
 import com.interwoven.cssdk.filesys.CSHole;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
 import com.interwoven.cssdk.filesys.impl.CSHoleImpl;
+import com.interwoven.cssdk.workflow.CSComment;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
+import com.interwoven.cssdk.workflow.CSWorkflow;
 
 /**
  * PollSurveyTask is the workflow task class for polls and survey master data
@@ -223,6 +229,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      * Options List array contains the list of field type which has options
      */
     ArrayList optionsList = new ArrayList<>();
+    /**
+     * Last modifier name for page
+     */
+    public static final String META_LAST_MODIFIER = "TeamSite/Metadata/LastModifier";
+    /**
+     * DCR Approve date
+     */
+    public static final String META_APPROVE_DATE = "TeamSite/Metadata/ApproveTime";
 
     /**
      * Overridden method from CSSDK
@@ -237,6 +251,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         logger.info("PollSurveyTask - execute");
         HashMap<String, String> statusMap = null;
         CSAreaRelativePath[] taskFileList = task.getFiles();
+        String commentOnModify = "";
         logger.debug("TaskFileList Length : " + taskFileList.length);
 
         postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
@@ -339,6 +354,11 @@ public class PollSurveyTask implements CSURLExternalTask {
                     }
                 }
                 
+                commentOnModify = updateComment((CSSimpleFile)file, task);
+                if(StringUtils.isNotBlank(commentOnModify)) {
+                    statusMap.put(TRANSITION_COMMENT, commentOnModify+" "+statusMap.get(TRANSITION_COMMENT));
+                }
+                
             } catch (Exception e) {
                 logger.error("Exception in execute: ", e);
             }
@@ -347,6 +367,7 @@ public class PollSurveyTask implements CSURLExternalTask {
         logger.info("transition : " + statusMap.get(TRANSITION));
         logger.info("transitionComment : "
                 + statusMap.get(TRANSITION_COMMENT));
+        
         task.chooseTransition(statusMap.get(TRANSITION),
                 statusMap.get(TRANSITION_COMMENT));
     }
@@ -2416,6 +2437,58 @@ public class PollSurveyTask implements CSURLExternalTask {
             postgre.releaseConnection(connection, queryStmt, rs);
         }
         return seqValue;
+    }
+    
+    /**
+     * Method updates the workflow transition comment
+     *
+     * @param taskSimpleFile    file path
+     * @param taskObj content
+     * @return Returns comment on modification on behalf of publisher
+     */
+    public String updateComment(CSSimpleFile taskSimpleFile, CSExternalTask taskObj) throws CSException{
+        logger.debug("PollSurveyTask : updateComment");
+
+        String taskName = "";
+        String modifier = "";
+        String modifierMetaData = "";
+        String approver = "" ;
+        String approveDate = "";
+        String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
+        String commentOnModifier = "";
+
+        try {
+            
+            taskName = taskObj.getName();
+            logger.info("Task Name : " + taskName);
+            
+            modifier = taskSimpleFile.getLastModifier().getName();
+            logger.info("Last Modified By: " + modifier);
+            
+            modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+            logger.info("EA Modifier : " + modifierMetaData);
+            
+            approver = taskObj.getWorkflow().getVariable("WF_Approver");
+            logger.info("Workflow Approver : " + approver );
+
+            approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            logger.info("Approve Date : " + approveDate );
+
+            if(!StringUtils.equals(modifier, modifierMetaData)) {
+                commentOnModifier = modifier+": Updated content on behalf of "+modifierMetaData+".";
+                logger.info("commentOnModifier : " + commentOnModifier );
+            }
+            
+            if(StringUtils.isNotBlank(modifier)) {
+                CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
+                csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
+                taskSimpleFile.setExtendedAttributes(csEAArray);
+            }
+           
+        } catch (Exception e) {
+            logger.error("Exception in updateData: ", e);
+        } 
+        return commentOnModifier;
     }
 
 }
