@@ -28,9 +28,9 @@ Below are the Git commands often used while making changes to Git Repo.
 	-- | --
 	Teamsite Functions and Workflows Specific External Java class | teamsite-core/src
 	Livesite Components External Java class | livesite-core/src
-	Callout JSP files and CGI Files | livesite-core/src/iw-cc	
-	Inline Perl files and CGI Files | livesite-core/src/httpd/iw-bin
-	DCT specific JS Files | livesite-core/src/httpd/iw
+	Callout JSP files and CGI Files | teamsite-core/src/iw-cc	
+	Inline Perl files and CGI Files | teamsite-core/src/httpd/iw-bin
+	DCT specific JS Files | teamsite-core/src/httpd/iw
 	
 	- `git checkout <new-branch-name|story-name>`
     

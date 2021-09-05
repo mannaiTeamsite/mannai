@@ -138,9 +138,10 @@ public class HukoomiExternal {
 			logger.info("Sanitized FieldQuery: " + sanitizedFieldQuery);
 			root.addElement("baseQuery").addText(baseQuery);
 			root.addElement("fieldQuery").addText(sanitizedFieldQuery);
-			if(nutchDoc != null && nutchDoc.getRootElement() != null) {
-				root.add(nutchDoc.getRootElement());
+			if (nutchDoc != null && nutchDoc.getRootElement() != null) {
+					root.add(nutchDoc.getRootElement());
 			}
+
 		}
 		logger.debug("Before calling : " + doc);
 		

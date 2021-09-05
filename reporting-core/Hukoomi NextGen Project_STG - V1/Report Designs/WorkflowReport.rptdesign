@@ -14,6 +14,10 @@
             <property name="fileName">/ThemesReportItems31.rptlibrary</property>
             <property name="namespace">ThemesReportItems31</property>
         </structure>
+        <structure>
+            <property name="fileName">Report Libraries/DataSourcelibrary.rptlibrary</property>
+            <property name="namespace">DataSourcelibrary</property>
+        </structure>
     </list-property>
     <method name="onContentUpdate"><![CDATA[// Get the Viewer's current UI Options
 var uiOptions = this.getViewer().getUIOptions();
@@ -117,36 +121,8 @@ if (!this.getViewer().isInteractive())
         </scalar-parameter>
     </parameters>
     <data-sources>
-        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="ProdDB2 Data Source" id="1073">
-            <list-property name="privateDriverProperties">
-                <ex-property>
-                    <name>metadataBidiFormatStr</name>
-                    <value>ILYNN</value>
-                </ex-property>
-                <ex-property>
-                    <name>ssl</name>
-                    <value>False</value>
-                </ex-property>
-                <ex-property>
-                    <name>disabledMetadataBidiFormatStr</name>
-                </ex-property>
-                <ex-property>
-                    <name>contentBidiFormatStr</name>
-                    <value>ILYNN</value>
-                </ex-property>
-                <ex-property>
-                    <name>disabledContentBidiFormatStr</name>
-                </ex-property>
-                <ex-property>
-                    <name>PostgresSupportSP</name>
-                    <value>true</value>
-                </ex-property>
-            </list-property>
-            <property name="odaDriverClass">org.postgresql.Driver</property>
-            <property name="odaURL">jdbc:postgresql://172.16.167.37:5432/postgres</property>
-            <property name="odaUser">authdb@psql-authdb-prod-we-001</property>
-            <encrypted-property name="odaPassword" encryptionID="jce">d416e341c8432c66c980c6e5c9acf855a3128883584932cc</encrypted-property>
-        </oda-data-source>
+        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="DB2 Data Source" id="1872"
+ extends="DataSourcelibrary.DB2 Data Source"/>
     </data-sources>
     <data-sets>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="WorkflowDetails Data Set" id="8">
@@ -506,196 +482,169 @@ if (!this.getViewer().isInteractive())
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">ProdDB2 Data Source</property>
+            <property name="dataSource">DB2 Data Source</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
                     <property name="name">WORKFLOW_ID</property>
                     <property name="nativeName">WORKFLOW_ID</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">WORKFLOW_USER</property>
                     <property name="nativeName">WORKFLOW_USER</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">CATEGORY</property>
                     <property name="nativeName">CATEGORY</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">CONTENT_PATH</property>
                     <property name="nativeName">CONTENT_PATH</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">LANG</property>
                     <property name="nativeName">LANG</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">WORKFLOW_START_DATE</property>
                     <property name="nativeName">WORKFLOW_START_DATE</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
                     <property name="name">WORKFLOW_END_DATE</property>
                     <property name="nativeName">WORKFLOW_END_DATE</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">8</property>
                     <property name="name">WORKFLOW_REVIEWER</property>
                     <property name="nativeName">WORKFLOW_REVIEWER</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">9</property>
                     <property name="name">REVIEW_DATE</property>
                     <property name="nativeName">REVIEW_DATE</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">10</property>
                     <property name="name">WORKFLOW_APPROVER</property>
                     <property name="nativeName">WORKFLOW_APPROVER</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">11</property>
                     <property name="name">APPROVAL_DATE</property>
                     <property name="nativeName">APPROVAL_DATE</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">12</property>
                     <property name="name">COUNT_REJECT_REVIEW</property>
                     <property name="nativeName">COUNT_REJECT_REVIEW</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">13</property>
                     <property name="name">COUNT_REJECT_APPROVE</property>
                     <property name="nativeName">COUNT_REJECT_APPROVE</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">14</property>
                     <property name="name">PUBLISH_DATE</property>
                     <property name="nativeName">PUBLISH_DATE</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">15</property>
                     <property name="name">WORKFLOW_STATUS</property>
                     <property name="nativeName">WORKFLOW_STATUS</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">16</property>
                     <property name="name">FILE_STATUS</property>
                     <property name="nativeName">FILE_STATUS</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">17</property>
                     <property name="name">WORKFLOW_COMMENTS</property>
                     <property name="nativeName">WORKFLOW_COMMENTS</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">18</property>
                     <property name="name">ENTITY</property>
                     <property name="nativeName">ENTITY</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">19</property>
                     <property name="name">NEW_WORKFLOW_USER</property>
                     <property name="nativeName">NEW_WORKFLOW_USER</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">20</property>
                     <property name="name">NEW_WORKFLOW_USER_LABEL</property>
                     <property name="nativeName">NEW_WORKFLOW_USER_LABEL</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">21</property>
                     <property name="name">NEW_CATEGORY</property>
                     <property name="nativeName">NEW_CATEGORY</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">22</property>
                     <property name="name">NEW_CATEGORY_LABEL</property>
                     <property name="nativeName">NEW_CATEGORY_LABEL</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">23</property>
                     <property name="name">NEW_LANG</property>
                     <property name="nativeName">NEW_LANG</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">24</property>
                     <property name="name">NEW_LANG_LABEL</property>
                     <property name="nativeName">NEW_LANG_LABEL</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">25</property>
                     <property name="name">T_WORKFLOW_ID</property>
                     <property name="nativeName">T_WORKFLOW_ID</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">26</property>
                     <property name="name">T_LANG</property>
                     <property name="nativeName">T_LANG</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">27</property>
                     <property name="name">MAX_PUBLISH_DATE</property>
                     <property name="nativeName">MAX_PUBLISH_DATE</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[/* 
@@ -1127,49 +1076,43 @@ ORDER BY B."WORKFLOW_ID" ASC			]]></xml-property>
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">ProdDB2 Data Source</property>
+            <property name="dataSource">DB2 Data Source</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
                     <property name="name">WORKFLOW_USER</property>
                     <property name="nativeName">WORKFLOW_USER</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">WORKFLOW_USER_LABEL</property>
                     <property name="nativeName">WORKFLOW_USER_LABEL</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">CATEGORY</property>
                     <property name="nativeName">CATEGORY</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">CATEGORY_LABEL</property>
                     <property name="nativeName">CATEGORY_LABEL</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">LANG</property>
                     <property name="nativeName">LANG</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">LANG_LABEL</property>
                     <property name="nativeName">LANG_LABEL</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[SELECT case when "WORKFLOW_USER" is not null then "WORKFLOW_USER" 

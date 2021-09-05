@@ -14,6 +14,10 @@
             <property name="fileName">/ThemesReportItems31.rptlibrary</property>
             <property name="namespace">ThemesReportItems31</property>
         </structure>
+        <structure>
+            <property name="fileName">Report Libraries/DataSourcelibrary.rptlibrary</property>
+            <property name="namespace">DataSourcelibrary</property>
+        </structure>
     </list-property>
     <method name="onContentUpdate"><![CDATA[// Get the Viewer's current UI Options
 var uiOptions = this.getViewer().getUIOptions();
@@ -53,7 +57,7 @@ if (!this.getViewer().isInteractive())
             <property name="dataType">string</property>
             <property name="distinct">true</property>
             <simple-property-list name="defaultValue">
-                <value type="javascript">var datestring = "1/1/2021"; new Date(datestring);</value>
+                <value type="javascript">var datestring = "1/1/2020"; new Date(datestring);</value>
             </simple-property-list>
             <list-property name="selectionList"/>
             <property name="paramType">simple</property>
@@ -156,36 +160,8 @@ if (!this.getViewer().isInteractive())
         </scalar-parameter>
     </parameters>
     <data-sources>
-        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="ProdDB1 Data Source" id="1624">
-            <list-property name="privateDriverProperties">
-                <ex-property>
-                    <name>metadataBidiFormatStr</name>
-                    <value>ILYNN</value>
-                </ex-property>
-                <ex-property>
-                    <name>ssl</name>
-                    <value>False</value>
-                </ex-property>
-                <ex-property>
-                    <name>disabledMetadataBidiFormatStr</name>
-                </ex-property>
-                <ex-property>
-                    <name>contentBidiFormatStr</name>
-                    <value>ILYNN</value>
-                </ex-property>
-                <ex-property>
-                    <name>disabledContentBidiFormatStr</name>
-                </ex-property>
-                <ex-property>
-                    <name>PostgresSupportSP</name>
-                    <value>true</value>
-                </ex-property>
-            </list-property>
-            <property name="odaDriverClass">org.postgresql.Driver</property>
-            <property name="odaURL">jdbc:postgresql://psql-rundb-prod-we-001-c.postgres.database.azure.com:5432/citus</property>
-            <property name="odaUser">citus</property>
-            <encrypted-property name="odaPassword" encryptionID="jce">8e0ba8bedeab06098dc695de59470ef8</encrypted-property>
-        </oda-data-source>
+        <oda-data-source extensionID="org.eclipse.birt.report.data.oda.jdbc" name="DB1 Data Source" id="1872"
+ extends="DataSourcelibrary.DB1 Data Source"/>
     </data-sources>
     <data-sets>
         <oda-data-set extensionID="org.eclipse.birt.report.data.oda.jdbc.JdbcSelectDataSet" name="PollDetails Data Set_Chart" id="91">
@@ -318,63 +294,55 @@ if (!this.getViewer().isInteractive())
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">ProdDB1 Data Source</property>
+            <property name="dataSource">DB1 Data Source</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
                     <property name="name">poll_id</property>
                     <property name="nativeName">poll_id</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">option_id</property>
                     <property name="nativeName">option_id</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">pollcount</property>
                     <property name="nativeName">pollcount</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">totalresponse</property>
                     <property name="nativeName">totalresponse</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">pollpct</property>
                     <property name="nativeName">pollpct</property>
                     <property name="dataType">integer</property>
-                    <property name="nativeDataType">4</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">option_label</property>
                     <property name="nativeName">option_label</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
                     <property name="name">option_value</property>
                     <property name="nativeName">option_value</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">8</property>
                     <property name="name">lang</property>
                     <property name="nativeName">lang</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[
@@ -742,28 +710,25 @@ ORDER BY a.poll_id ASC, a.option_id ASC
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">ProdDB1 Data Source</property>
+            <property name="dataSource">DB1 Data Source</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
                     <property name="name">pollcount</property>
                     <property name="nativeName">pollcount</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">2</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">lang</property>
                     <property name="nativeName">lang</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">poll_id</property>
                     <property name="nativeName">poll_id</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[
@@ -1378,154 +1343,133 @@ where a.poll_id =?
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">ProdDB1 Data Source</property>
+            <property name="dataSource">DB1 Data Source</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
                     <property name="name">user_id</property>
                     <property name="nativeName">user_id</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">poll_resp_lang</property>
                     <property name="nativeName">poll_resp_lang</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">ip_address</property>
                     <property name="nativeName">ip_address</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">user_agent</property>
                     <property name="nativeName">user_agent</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">voted_on</property>
                     <property name="nativeName">voted_on</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">voted_from</property>
                     <property name="nativeName">voted_from</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
                     <property name="name">poll_id</property>
                     <property name="nativeName">poll_id</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">8</property>
                     <property name="name">lang</property>
                     <property name="nativeName">lang</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">9</property>
                     <property name="name">lang_label</property>
                     <property name="nativeName">lang_label</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">10</property>
                     <property name="name">start_date</property>
                     <property name="nativeName">start_date</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">11</property>
                     <property name="name">end_date</property>
                     <property name="nativeName">end_date</property>
                     <property name="dataType">date-time</property>
-                    <property name="nativeDataType">93</property>
                 </structure>
                 <structure>
                     <property name="position">12</property>
                     <property name="name">status</property>
                     <property name="nativeName">status</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">13</property>
                     <property name="name">channel_value</property>
                     <property name="nativeName">channel_value</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">14</property>
                     <property name="name">channel</property>
                     <property name="nativeName">channel</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">15</property>
                     <property name="name">question</property>
                     <property name="nativeName">question</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">16</property>
                     <property name="name">persona</property>
                     <property name="nativeName">persona</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">17</property>
                     <property name="name">persona_label</property>
                     <property name="nativeName">persona_label</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">18</property>
                     <property name="name">entity</property>
                     <property name="nativeName">entity</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">19</property>
                     <property name="name">entity_label</property>
                     <property name="nativeName">entity_label</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">20</property>
                     <property name="name">topics</property>
                     <property name="nativeName">topics</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">21</property>
                     <property name="name">topics_label</property>
                     <property name="nativeName">topics_label</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[select * from (SELECT 
@@ -1980,12 +1924,12 @@ where D.lang = COALESCE(NULLIF(?, '-All-'), d.lang)
                     <structure>
                         <property name="position">4</property>
                         <property name="name">start_date</property>
-                        <property name="dataType">date</property>
+                        <property name="dataType">date-time</property>
                     </structure>
                     <structure>
                         <property name="position">5</property>
                         <property name="name">end_date</property>
-                        <property name="dataType">date</property>
+                        <property name="dataType">date-time</property>
                     </structure>
                     <structure>
                         <property name="position">6</property>
@@ -2014,77 +1958,67 @@ where D.lang = COALESCE(NULLIF(?, '-All-'), d.lang)
                     </structure>
                 </list-property>
             </structure>
-            <property name="dataSource">ProdDB1 Data Source</property>
+            <property name="dataSource">DB1 Data Source</property>
             <list-property name="resultSet">
                 <structure>
                     <property name="position">1</property>
                     <property name="name">poll_id</property>
                     <property name="nativeName">poll_id</property>
                     <property name="dataType">decimal</property>
-                    <property name="nativeDataType">-5</property>
                 </structure>
                 <structure>
                     <property name="position">2</property>
                     <property name="name">lang</property>
                     <property name="nativeName">lang</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">3</property>
                     <property name="name">lang_label</property>
                     <property name="nativeName">lang_label</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">4</property>
                     <property name="name">start_date</property>
                     <property name="nativeName">start_date</property>
-                    <property name="dataType">date</property>
-                    <property name="nativeDataType">93</property>
+                    <property name="dataType">date-time</property>
                 </structure>
                 <structure>
                     <property name="position">5</property>
                     <property name="name">end_date</property>
                     <property name="nativeName">end_date</property>
-                    <property name="dataType">date</property>
-                    <property name="nativeDataType">93</property>
+                    <property name="dataType">date-time</property>
                 </structure>
                 <structure>
                     <property name="position">6</property>
                     <property name="name">question</property>
                     <property name="nativeName">question</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">7</property>
                     <property name="name">channel</property>
                     <property name="nativeName">channel</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">8</property>
                     <property name="name">persona</property>
                     <property name="nativeName">persona</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">9</property>
                     <property name="name">entity</property>
                     <property name="nativeName">entity</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
                 <structure>
                     <property name="position">10</property>
                     <property name="name">topics</property>
                     <property name="nativeName">topics</property>
                     <property name="dataType">string</property>
-                    <property name="nativeDataType">12</property>
                 </structure>
             </list-property>
             <xml-property name="queryText"><![CDATA[(select poll_id, lang,
@@ -3772,17 +3706,249 @@ order by poll_id, start_date, end_date
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <property name="textAlign">center</property>
-                        <label id="1872">
-                            <text-property name="text">click here to view the chart</text-property>
-                            <list-property name="action">
+                        <extended-item extensionName="Chart" id="241">
+                            <xml-property name="xmlRepresentation"><![CDATA[<ActuateChart version="2.6.1">
+ <ChartWithAxes version="2.6.1" type="Bar Chart" subType="Side-by-side" orientation="0">
+  <block>
+   <children _type="TitleBlock" visible="false">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <label>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+   </children>
+   <children _type="Plot">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+   </children>
+   <children _type="Legend" visible="false">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+    <separator>
+     <color _nil="1"/>
+    </separator>
+    <title>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+   </children>
+   <bounds _body="0.0,0.0,211.5,130.0"/>
+   <outline>
+    <color _nil="1"/>
+   </outline>
+  </block>
+  <extendedProperties name="enable.area.alt" value="false"/>
+  <extendedProperties name="enable.drill.category" value="true"/>
+  <extendedProperties name="enable.drill.series" value="true"/>
+  <extendedProperties name="jschart.series.shadow" value="false"/>
+  <sampleData>
+   <baseSampleData dataSetRepresentation="6,4,12,8,10"/>
+   <orthogonalSampleData dataSetRepresentation="5,4,12" seriesDefinitionIndex="0"/>
+  </sampleData>
+  <emptyMessage>
+   <caption value="This chart contains no data."/>
+   <background _body=",64,127,127,127"/>
+   <outline>
+    <color _body=",128,127,127,127"/>
+   </outline>
+  </emptyMessage>
+  <axes type="0">
+   <title visible="false">
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </title>
+   <associatedAxes primaryAxis="true">
+    <title visible="false">
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+    <seriesDefinitions>
+     <query definition="row[&quot;option_value&quot;]">
+      <grouping/>
+     </query>
+     <series _type="BarSeries" seriesIdentifier="Series 1" stacked="false" riser="0">
+      <label visible="true">
+       <caption>
+        <font name="SansSerif" size="9.0"/>
+       </caption>
+       <background _nil="1"/>
+       <outline>
+        <color _nil="1"/>
+       </outline>
+      </label>
+      <dataDefinition definition="row[&quot;pollpct&quot;]">
+       <grouping/>
+      </dataDefinition>
+      <dataPoint separator=" - ">
+       <components type="2"/>
+       <components type="1"/>
+      </dataPoint>
+      <triggers condition="6">
+       <action type="1">
+        <value _type="TooltipValue" text="" delay="200"/>
+       </action>
+      </triggers>
+      <curveFitting _nil="1"/>
+     </series>
+    </seriesDefinitions>
+    <lineAttributes visible="false">
+     <color _nil="1"/>
+    </lineAttributes>
+    <label visible="false">
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+    <majorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </majorGrid>
+    <minorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </minorGrid>
+    <origin>
+     <value _nil="1"/>
+    </origin>
+   </associatedAxes>
+   <seriesDefinitions>
+    <query definition=""/>
+    <series seriesIdentifier="">
+     <label>
+      <background _nil="1"/>
+      <outline>
+       <color _nil="1"/>
+      </outline>
+     </label>
+     <dataDefinition definition="row[&quot;poll_id&quot;]"/>
+     <curveFitting _nil="1"/>
+    </series>
+    <grouping enabled="true" groupType="0"/>
+   </seriesDefinitions>
+   <lineAttributes visible="false">
+    <color _nil="1"/>
+   </lineAttributes>
+   <label visible="false">
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </label>
+   <majorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </majorGrid>
+   <minorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </minorGrid>
+   <origin>
+    <value _nil="1"/>
+   </origin>
+  </axes>
+  <rotation>
+   <angles/>
+  </rotation>
+ </ChartWithAxes>
+</ActuateChart>
+]]></xml-property>
+                            <property name="outputFormat">JS</property>
+                            <property name="inheritColumns">false</property>
+                            <property name="height">102pt</property>
+                            <property name="width">138.75pt</property>
+                            <property name="dataSet">PollDetails Data Set_Chart</property>
+                            <list-property name="paramBindings">
                                 <structure>
-                                    <property name="linkType">hyperlink</property>
-                                    <property name="toolTip">hukoomi login</property>
-                                    <expression name="uri" type="constant">https://hukoomi.gov.qa/en/</expression>
-                                    <property name="targetWindow">_parent</property>
+                                    <property name="paramName">param_1</property>
+                                    <simple-property-list name="expression">
+                                        <value>row["poll_id"]</value>
+                                    </simple-property-list>
+                                </structure>
+                                <structure>
+                                    <property name="paramName">param_2</property>
+                                    <simple-property-list name="expression">
+                                        <value>row["lang"]</value>
+                                    </simple-property-list>
                                 </structure>
                             </list-property>
-                        </label>
+                            <list-property name="boundDataColumns">
+                                <structure>
+                                    <property name="name">poll_id</property>
+                                    <text-property name="displayName">poll_id</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["poll_id"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">pollcount</property>
+                                    <text-property name="displayName">pollcount</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["pollcount"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">totalresponse</property>
+                                    <text-property name="displayName">totalresponse</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["totalresponse"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">pollpct</property>
+                                    <text-property name="displayName">pollpct</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["pollpct"]</expression>
+                                    <property name="dataType">integer</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">option_label</property>
+                                    <text-property name="displayName">option_label</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["option_label"]</expression>
+                                    <property name="dataType">string</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">option_value</property>
+                                    <text-property name="displayName">option_value</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["option_value"]</expression>
+                                    <property name="dataType">string</property>
+                                </structure>
+                            </list-property>
+                        </extended-item>
                     </cell>
                 </row>
             </detail>
@@ -4697,17 +4863,249 @@ order by poll_id, start_date, end_date
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <property name="textAlign">center</property>
-                        <label id="1873">
-                            <text-property name="text">click here to view the chart</text-property>
-                            <list-property name="action">
+                        <extended-item extensionName="Chart" id="364">
+                            <xml-property name="xmlRepresentation"><![CDATA[<ActuateChart version="2.6.1">
+ <ChartWithAxes version="2.6.1" type="Bar Chart" subType="Side-by-side" orientation="0">
+  <block>
+   <children _type="TitleBlock" visible="false">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <label>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+   </children>
+   <children _type="Plot">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+   </children>
+   <children _type="Legend" visible="false">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+    <separator>
+     <color _nil="1"/>
+    </separator>
+    <title>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+   </children>
+   <bounds _body="0.0,0.0,211.5,130.0"/>
+   <outline>
+    <color _nil="1"/>
+   </outline>
+  </block>
+  <extendedProperties name="enable.area.alt" value="false"/>
+  <extendedProperties name="enable.drill.category" value="true"/>
+  <extendedProperties name="enable.drill.series" value="true"/>
+  <extendedProperties name="jschart.series.shadow" value="false"/>
+  <sampleData>
+   <baseSampleData dataSetRepresentation="6,4,12,8,10"/>
+   <orthogonalSampleData dataSetRepresentation="5,4,12" seriesDefinitionIndex="0"/>
+  </sampleData>
+  <emptyMessage>
+   <caption value="This chart contains no data."/>
+   <background _body=",64,127,127,127"/>
+   <outline>
+    <color _body=",128,127,127,127"/>
+   </outline>
+  </emptyMessage>
+  <axes type="0">
+   <title visible="false">
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </title>
+   <associatedAxes primaryAxis="true">
+    <title visible="false">
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+    <seriesDefinitions>
+     <query definition="row[&quot;option_value&quot;]">
+      <grouping/>
+     </query>
+     <series _type="BarSeries" seriesIdentifier="Series 1" stacked="false" riser="0">
+      <label visible="true">
+       <caption>
+        <font name="SansSerif" size="9.0"/>
+       </caption>
+       <background _nil="1"/>
+       <outline>
+        <color _nil="1"/>
+       </outline>
+      </label>
+      <dataDefinition definition="row[&quot;pollpct&quot;]">
+       <grouping/>
+      </dataDefinition>
+      <dataPoint separator=" - ">
+       <components type="2"/>
+       <components type="1"/>
+      </dataPoint>
+      <triggers condition="6">
+       <action type="1">
+        <value _type="TooltipValue" text="" delay="200"/>
+       </action>
+      </triggers>
+      <curveFitting _nil="1"/>
+     </series>
+    </seriesDefinitions>
+    <lineAttributes visible="false">
+     <color _nil="1"/>
+    </lineAttributes>
+    <label visible="false">
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+    <majorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </majorGrid>
+    <minorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </minorGrid>
+    <origin>
+     <value _nil="1"/>
+    </origin>
+   </associatedAxes>
+   <seriesDefinitions>
+    <query definition=""/>
+    <series seriesIdentifier="">
+     <label>
+      <background _nil="1"/>
+      <outline>
+       <color _nil="1"/>
+      </outline>
+     </label>
+     <dataDefinition definition="row[&quot;poll_id&quot;]"/>
+     <curveFitting _nil="1"/>
+    </series>
+    <grouping enabled="true" groupType="0"/>
+   </seriesDefinitions>
+   <lineAttributes visible="false">
+    <color _nil="1"/>
+   </lineAttributes>
+   <label visible="false">
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </label>
+   <majorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </majorGrid>
+   <minorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </minorGrid>
+   <origin>
+    <value _nil="1"/>
+   </origin>
+  </axes>
+  <rotation>
+   <angles/>
+  </rotation>
+ </ChartWithAxes>
+</ActuateChart>
+]]></xml-property>
+                            <property name="outputFormat">JS</property>
+                            <property name="inheritColumns">false</property>
+                            <property name="height">102pt</property>
+                            <property name="width">138.75pt</property>
+                            <property name="dataSet">PollDetails Data Set_Chart</property>
+                            <list-property name="paramBindings">
                                 <structure>
-                                    <property name="linkType">hyperlink</property>
-                                    <property name="toolTip">hukoomi login</property>
-                                    <expression name="uri" type="constant">https://hukoomi.gov.qa/en/</expression>
-                                    <property name="targetWindow">_parent</property>
+                                    <property name="paramName">param_1</property>
+                                    <simple-property-list name="expression">
+                                        <value>row["poll_id"]</value>
+                                    </simple-property-list>
+                                </structure>
+                                <structure>
+                                    <property name="paramName">param_2</property>
+                                    <simple-property-list name="expression">
+                                        <value>row["lang"]</value>
+                                    </simple-property-list>
                                 </structure>
                             </list-property>
-                        </label>
+                            <list-property name="boundDataColumns">
+                                <structure>
+                                    <property name="name">poll_id</property>
+                                    <text-property name="displayName">poll_id</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["poll_id"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">pollcount</property>
+                                    <text-property name="displayName">pollcount</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["pollcount"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">totalresponse</property>
+                                    <text-property name="displayName">totalresponse</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["totalresponse"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">pollpct</property>
+                                    <text-property name="displayName">pollpct</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["pollpct"]</expression>
+                                    <property name="dataType">integer</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">option_label</property>
+                                    <text-property name="displayName">option_label</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["option_label"]</expression>
+                                    <property name="dataType">string</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">option_value</property>
+                                    <text-property name="displayName">option_value</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["option_value"]</expression>
+                                    <property name="dataType">string</property>
+                                </structure>
+                            </list-property>
+                        </extended-item>
                     </cell>
                 </row>
             </detail>
@@ -5284,17 +5682,249 @@ order by poll_id, start_date, end_date
                         <property name="borderTopStyle">solid</property>
                         <property name="borderTopWidth">thin</property>
                         <property name="textAlign">center</property>
-                        <label id="1874">
-                            <text-property name="text">click here to view the chart</text-property>
-                            <list-property name="action">
+                        <extended-item extensionName="Chart" id="468">
+                            <xml-property name="xmlRepresentation"><![CDATA[<ActuateChart version="2.6.1">
+ <ChartWithAxes version="2.6.1" type="Bar Chart" subType="Side-by-side" orientation="0">
+  <block>
+   <children _type="TitleBlock" visible="false">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <label>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+   </children>
+   <children _type="Plot">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+   </children>
+   <children _type="Legend" visible="false">
+    <outline>
+     <color _nil="1"/>
+    </outline>
+    <clientArea>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </clientArea>
+    <separator>
+     <color _nil="1"/>
+    </separator>
+    <title>
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+   </children>
+   <bounds _body="0.0,0.0,211.5,130.0"/>
+   <outline>
+    <color _nil="1"/>
+   </outline>
+  </block>
+  <extendedProperties name="enable.area.alt" value="false"/>
+  <extendedProperties name="enable.drill.category" value="true"/>
+  <extendedProperties name="enable.drill.series" value="true"/>
+  <extendedProperties name="jschart.series.shadow" value="false"/>
+  <sampleData>
+   <baseSampleData dataSetRepresentation="6,4,12,8,10"/>
+   <orthogonalSampleData dataSetRepresentation="5,4,12" seriesDefinitionIndex="0"/>
+  </sampleData>
+  <emptyMessage>
+   <caption value="This chart contains no data."/>
+   <background _body=",64,127,127,127"/>
+   <outline>
+    <color _body=",128,127,127,127"/>
+   </outline>
+  </emptyMessage>
+  <axes type="0">
+   <title visible="false">
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </title>
+   <associatedAxes primaryAxis="true">
+    <title visible="false">
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </title>
+    <seriesDefinitions>
+     <query definition="row[&quot;option_value&quot;]">
+      <grouping/>
+     </query>
+     <series _type="BarSeries" seriesIdentifier="Series 1" stacked="false" riser="0">
+      <label visible="true">
+       <caption>
+        <font name="SansSerif" size="9.0"/>
+       </caption>
+       <background _nil="1"/>
+       <outline>
+        <color _nil="1"/>
+       </outline>
+      </label>
+      <dataDefinition definition="row[&quot;pollpct&quot;]">
+       <grouping/>
+      </dataDefinition>
+      <dataPoint separator=" - ">
+       <components type="2"/>
+       <components type="1"/>
+      </dataPoint>
+      <triggers condition="6">
+       <action type="1">
+        <value _type="TooltipValue" text="" delay="200"/>
+       </action>
+      </triggers>
+      <curveFitting _nil="1"/>
+     </series>
+    </seriesDefinitions>
+    <lineAttributes visible="false">
+     <color _nil="1"/>
+    </lineAttributes>
+    <label visible="false">
+     <background _nil="1"/>
+     <outline>
+      <color _nil="1"/>
+     </outline>
+    </label>
+    <majorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </majorGrid>
+    <minorGrid>
+     <lineAttributes>
+      <color _nil="1"/>
+     </lineAttributes>
+     <tickAttributes>
+      <color _nil="1"/>
+     </tickAttributes>
+    </minorGrid>
+    <origin>
+     <value _nil="1"/>
+    </origin>
+   </associatedAxes>
+   <seriesDefinitions>
+    <query definition=""/>
+    <series seriesIdentifier="">
+     <label>
+      <background _nil="1"/>
+      <outline>
+       <color _nil="1"/>
+      </outline>
+     </label>
+     <dataDefinition definition="row[&quot;poll_id&quot;]"/>
+     <curveFitting _nil="1"/>
+    </series>
+    <grouping enabled="true" groupType="0"/>
+   </seriesDefinitions>
+   <lineAttributes visible="false">
+    <color _nil="1"/>
+   </lineAttributes>
+   <label visible="false">
+    <background _nil="1"/>
+    <outline>
+     <color _nil="1"/>
+    </outline>
+   </label>
+   <majorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </majorGrid>
+   <minorGrid>
+    <lineAttributes>
+     <color _nil="1"/>
+    </lineAttributes>
+    <tickAttributes>
+     <color _nil="1"/>
+    </tickAttributes>
+   </minorGrid>
+   <origin>
+    <value _nil="1"/>
+   </origin>
+  </axes>
+  <rotation>
+   <angles/>
+  </rotation>
+ </ChartWithAxes>
+</ActuateChart>
+]]></xml-property>
+                            <property name="outputFormat">JS</property>
+                            <property name="inheritColumns">false</property>
+                            <property name="height">102pt</property>
+                            <property name="width">138.75pt</property>
+                            <property name="dataSet">PollDetails Data Set_Chart</property>
+                            <list-property name="paramBindings">
                                 <structure>
-                                    <property name="linkType">hyperlink</property>
-                                    <property name="toolTip">hukoomi login</property>
-                                    <expression name="uri" type="constant">https://hukoomi.gov.qa/en/</expression>
-                                    <property name="targetWindow">_parent</property>
+                                    <property name="paramName">param_1</property>
+                                    <simple-property-list name="expression">
+                                        <value>row["poll_id"]</value>
+                                    </simple-property-list>
+                                </structure>
+                                <structure>
+                                    <property name="paramName">param_2</property>
+                                    <simple-property-list name="expression">
+                                        <value>row["lang"]</value>
+                                    </simple-property-list>
                                 </structure>
                             </list-property>
-                        </label>
+                            <list-property name="boundDataColumns">
+                                <structure>
+                                    <property name="name">poll_id</property>
+                                    <text-property name="displayName">poll_id</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["poll_id"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">pollcount</property>
+                                    <text-property name="displayName">pollcount</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["pollcount"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">totalresponse</property>
+                                    <text-property name="displayName">totalresponse</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["totalresponse"]</expression>
+                                    <property name="dataType">decimal</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">pollpct</property>
+                                    <text-property name="displayName">pollpct</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["pollpct"]</expression>
+                                    <property name="dataType">integer</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">option_label</property>
+                                    <text-property name="displayName">option_label</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["option_label"]</expression>
+                                    <property name="dataType">string</property>
+                                </structure>
+                                <structure>
+                                    <property name="name">option_value</property>
+                                    <text-property name="displayName">option_value</text-property>
+                                    <expression name="expression" type="javascript">dataSetRow["option_value"]</expression>
+                                    <property name="dataType">string</property>
+                                </structure>
+                            </list-property>
+                        </extended-item>
                     </cell>
                     <cell id="504">
                         <property name="style">rep-table-td</property>
