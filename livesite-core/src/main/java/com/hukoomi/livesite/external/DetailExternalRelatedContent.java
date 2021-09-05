@@ -175,7 +175,7 @@ public Document getContentDetail(final RequestContext context) {
             }
         }
         Document relatedDoc = squ.doJsonQuery(fq + "&rows=" + rows
-                        + "&sort=" + sortVal, root);
+                        + "&sort=" + sortVal, root, false);
         detailDocument.getRootElement().add(relatedDoc.getRootElement());
     }
 

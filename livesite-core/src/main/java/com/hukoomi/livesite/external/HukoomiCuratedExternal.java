@@ -147,7 +147,7 @@ public class HukoomiCuratedExternal {
                 String query = sqb.build();
                 logger.debug("Landing Query : " + query);
                 curDoc = squ.doJsonQuery(
-                        query, "CuratedContent");
+                        query, "CuratedContent", true);
                 root = curDoc.getRootElement();
                 logger.debug("curDoc : " + curDoc);
                 logger.debug("Content Type : "

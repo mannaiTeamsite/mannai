@@ -60,11 +60,11 @@ public class SolrQueryUtil {
      * @param xmlRootName root node name for Solr Query results document.
      * @return document solr query result document.
      */
-    public Document doJsonQuery(String query, final String xmlRootName) {
+    public Document doJsonQuery(String query, final String xmlRootName, boolean checkSpell) {
         Document document = DocumentHelper.createDocument();
         logger.debug("SOLR Execute Query:" + query);
-        if(query.contains("category:(") || !query.contains("category:*")){
-            query = query.replaceFirst("/spell","/select");
+        if(query.contains("category:null") || !checkSpell) {
+            query = query.replaceFirst("/spell", "/select");
         }
         logger.debug("SOLR Final Execute Query:" + query);
         try {
@@ -72,12 +72,12 @@ public class SolrQueryUtil {
             ResponseEntity<String> response = restTemplate.getForEntity(query, String.class);
             JSONObject returnObject = new JSONObject();
             String returnXML = "";
-            logger.debug("Json Response: " + response.getBody());
+//            logger.debug("Json Response: " + response.getBody());
             String jsonResponse = response.getBody().replaceAll("\"(\\d+)\":", "\"doc-$1\":");
-            logger.debug("Json After Id Tag replacement: " + jsonResponse);
+//            logger.debug("Json After Id Tag replacement: " + jsonResponse);
             returnObject.put(xmlRootName, new JSONObject(jsonResponse));
             returnXML = XML.toString(returnObject);
-            logger.debug("XML data after conversion: " + returnXML);
+//            logger.debug("XML data after conversion: " + returnXML);
             document = Dom4jUtils.newDocument(returnXML);
             List<Node> resultDocs = document.selectNodes("//docs");
             Node highlightNode = document.getRootElement().selectSingleNode("highlighting");
@@ -107,8 +107,8 @@ public class SolrQueryUtil {
                     }
                 }
             }
-            if(resultDocs.isEmpty()) {
-                logger.info("Document: " + document.asXML());
+            if(resultDocs.isEmpty() && checkSpell) {
+                logger.info("Result Docs is empty");
                 logger.info("Query: " + query);
                 List<Node> suggestionNodeList = document.selectNodes("//suggestion");
                 String queryStr = "";
@@ -146,7 +146,7 @@ public class SolrQueryUtil {
                     logger.info("Corrected wordStr: " + correctWordStr);
                     String newQuery = query.replaceAll(originalWordStr, correctWordStr);
                     logger.info("New Query: " + newQuery);
-                    document = doJsonQuery(newQuery, xmlRootName);
+                    document = doJsonQuery(newQuery, xmlRootName, false);
                     document.getRootElement().addElement("OriginalWord").addText(originalWordStr);
                     document.getRootElement().addElement("CorrectedWord").addText(correctWordStr);
                 }

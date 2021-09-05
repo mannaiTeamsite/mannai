@@ -423,7 +423,14 @@ public class CommonUtils {
         context.getPageScopeData().put(PARAM_LOCALE,docLocale);
         logger.info("PageScope Locale : " + docLocale);
         logger.info("Current PageScopeData: "+context.getPageScopeData().toString());
-        String description = sanitizeMetadataField(getValueFromXML("/content/root/page-details/description", dcr));
+        String description = getValueFromXML("/content/root/page-details/description", dcr);
+        if(StringUtils.isBlank(description)){
+            description = getValueFromXML("/content/root/detail/description", dcr);
+            if(StringUtils.isNotBlank(description) && description.length()>300){
+                description = description.substring(0, 300);
+            }
+        }
+        description = sanitizeMetadataField(description);
         context.getPageScopeData().put(RuntimePage.PAGESCOPE_DESCRIPTION, description);
         logger.info("Set PageScope Meta Description to : " + description);
         String keywords = sanitizeMetadataField(getValueFromXML("/content/root/page-details/keywords", dcr));
@@ -469,7 +476,16 @@ public class CommonUtils {
         String referer = requestHeader.getReferer();
         if(StringUtils.isNotBlank(referer) && context.isRuntime()){
             logger.info("The user was redirected to the page via a broken link source. Logging the incident in Database.");
-            logBrokenLink(requestHeader.getRequestURL(),referer,locale,"404");
+            String urlPrefix = getURLPrefix(context);
+            String paramLocale = context.getParameterString(PARAM_LOCALE, "en");
+            String brokenPageLink = context.getPageLink(".");
+            String dcrName = context.getParameterString("record");
+            logger.info("Requested Page Link " + brokenPageLink);
+            String prettyURLforBrokenLink = urlPrefix + getPrettyURLForPage(brokenPageLink, paramLocale, dcrName);
+            logger.info("Logging Broken Link " + prettyURLforBrokenLink);
+
+            logBrokenLink(prettyURLforBrokenLink,referer,locale,"404");
+
         }
         try {
             context.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);

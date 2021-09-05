@@ -75,6 +75,19 @@ public class SolrQueryBuilder {
      * of results fetched by the
      * solr query url. */
     private String sort;
+    /** recent String that
+     * will define recently visited
+     * sections by user to influence
+     * solr query */
+    private String recent;
+    /** Persona Boost
+     * Boost value to influence
+     * solr query by persona */
+    private String personaBoost;
+    /** Persona Boost
+     * Boost value to influence
+     * solr query by category */
+    private String categoryBoost;
     /** fieldQuery String that
      * will define field & its values
      * to be considered for the
@@ -143,8 +156,12 @@ public class SolrQueryBuilder {
         logger.debug("Solr Host: " + solrHost);
         final String solrCore = context.getParameterString("solrCore");
         logger.debug("Solr Core: " + solrCore);
-        final String nutchCore = context.getParameterString("nutchCore");
+        String nutchCore = context.getParameterString("nutchCore");
         logger.debug("Nutch Core: " + nutchCore);
+        if(StringUtils.isBlank(nutchCore)){
+            nutchCore = solrCore.replaceAll("portal","nutch");
+        }
+        logger.debug("Final Nutch Core: " + nutchCore);
         this.baseUrl = solrHost + "/" + solrCore;
         logger.debug("Solr Base URL: " + baseUrl);
         this.crawlUrl = solrHost + "/" + nutchCore;
@@ -238,6 +255,16 @@ public class SolrQueryBuilder {
         this.mltFl = commonUtils.sanitizeSolrQuery(context.getParameterString("mlt_fl",
                 properties.getProperty("mlt_fl")));
         logger.info("Solr Result mltFl: " + this.mltFl);
+
+        this.recent = context.getParameterString("recent");
+        logger.info("Recently Visited Sections: " + this.recent);
+        this.personaBoost = commonUtils.sanitizeSolrQuery(context.getParameterString("persona_boost",
+                properties.getProperty("persona_boost")));
+        logger.info("Boost for Persona: " + this.personaBoost);
+        this.categoryBoost = commonUtils.sanitizeSolrQuery(context.getParameterString("category_boost",
+                properties.getProperty("category_boost")));
+        logger.info("Boost for Persona: " + this.categoryBoost);
+
     }
 
     /**
@@ -384,7 +411,7 @@ public class SolrQueryBuilder {
      */
     public String build() {
         StringBuilder sb = new StringBuilder(this.baseUrl);
-
+        StringBuilder bq = new StringBuilder();
         sb.append("/" + this.requestHandler);
 
         sb.append("?q=" + (StringUtils.isNotBlank(this.baseQuery)
@@ -415,7 +442,16 @@ public class SolrQueryBuilder {
         }
 
         if(StringUtils.isNotBlank(personaCookieValue)){
-            sb.append("&bq=audience:*"+personaCookieValue+"*^0.9&defType=dismax");
+
+            bq.append(" audience:*"+personaCookieValue+"*^"+this.personaBoost);
+
+        }
+        if(StringUtils.isNotBlank(this.recent)){
+            bq.append(" category:("+this.recent+")^"+this.categoryBoost);
+        }
+
+        if(StringUtils.isNotBlank(bq.toString())){
+            sb.append("&defType=dismax&bq=").append(bq.toString());
         }
 
         if (StringUtils.isNotBlank(this.groupingField)) {
@@ -449,14 +485,18 @@ public class SolrQueryBuilder {
         return sb.toString();
     }
 
-    public String crawlBuild(){
+    public String crawlBuild(String updatedBaseQuery){
 
         StringBuilder sb = new StringBuilder(this.crawlUrl);
 
         sb.append("/" + this.requestHandler);
 
-        sb.append("?q=" + (StringUtils.isNotBlank(this.baseQuery)
-                ? this.baseQuery : DEFAULT_QUERY));
+        if(StringUtils.isNotBlank(updatedBaseQuery)){
+            sb.append("?q=" + updatedBaseQuery);
+        } else {
+            sb.append("?q=" + (StringUtils.isNotBlank(this.baseQuery)
+                    ? this.baseQuery : DEFAULT_QUERY));
+        }
 
         if (StringUtils.isNotBlank(crawlFields)) {
             sb.append("&fl=" + this.crawlFields);
@@ -466,9 +506,6 @@ public class SolrQueryBuilder {
             sb.append("&start=" + Integer.toString(this.start));
         }
 
-        if (StringUtils.isNotBlank(this.sort)) {
-            sb.append("&sort=" + this.sort);
-        }
         logger.debug("Generated Solr Query: " + sb.toString());
         return sb.toString();
 

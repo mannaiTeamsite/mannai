@@ -106,17 +106,23 @@ public class HukoomiExternal {
 		String query = sqb.build();
 		logger.debug("Landing Query : " + query);
 		Document doc;
-		doc = squ.doJsonQuery(query, "SolrResponse");
+		doc = squ.doJsonQuery(query, "SolrResponse", true);
+		Element root = doc.getRootElement();
 		logger.info("Context FieldQuery: " + context.getParameterString("fieldQuery"));
 		logger.info("Context BaseQuery: " + context.getParameterString("baseQuery"));
 		logger.info("Current FieldQuery: " + fq);
-
-		String nutchQuery = sqb.crawlBuild();
+		String correctedWord = "";
+		if(root.element("CorrectedWord") != null && StringUtils.isNotBlank(root.element("CorrectedWord").getText())){
+			logger.info("Word has been corrected in Portal Core");
+			correctedWord = root.element("CorrectedWord").getText();
+			logger.debug("Corrected word: " + correctedWord);
+			context.setParameterString("baseQuery", correctedWord);
+		}
+		String nutchQuery = sqb.crawlBuild(correctedWord);
 		logger.debug("Crawl Query : " + nutchQuery);
 		Document nutchDoc;
-		nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse");
+		nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse", false);
 
-		Element root = doc.getRootElement();
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
 			String baseQuery = commonUtils.sanitizeSolrQuery(context.getParameterString("baseQuery"));
@@ -140,7 +146,7 @@ public class HukoomiExternal {
 		
 		UserInfoSession inf = new UserInfoSession();		
 		doc = inf.getUserData(context, doc);
-		logger.info("Document" + doc.asXML());
+//		logger.info("Document" + doc.asXML());
 
 		return doc;
 

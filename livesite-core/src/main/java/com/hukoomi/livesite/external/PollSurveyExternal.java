@@ -494,7 +494,7 @@ public class PollSurveyExternal {
         String query = sqb.build();
         logger.debug("SQB Query : " + query);
 
-        doc = squ.doJsonQuery(query, "SolrResponse");
+        doc = squ.doJsonQuery(query, "SolrResponse", true);
         return doc;
     }
     
