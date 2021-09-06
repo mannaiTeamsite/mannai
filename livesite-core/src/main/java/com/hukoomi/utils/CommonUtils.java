@@ -424,13 +424,19 @@ public class CommonUtils {
         logger.info("PageScope Locale : " + docLocale);
         logger.info("Current PageScopeData: "+context.getPageScopeData().toString());
         String description = getValueFromXML("/content/root/page-details/description", dcr);
+        logger.info("Description for the item : " + description);
         if(StringUtils.isBlank(description)){
+            logger.info("SEO Description is blank, fetching the description from details");
             description = getValueFromXML("/content/root/detail/description", dcr);
-            if(StringUtils.isNotBlank(description) && description.length()>300){
-                description = description.substring(0, 300);
+            if(StringUtils.isNotBlank(description)){
+                description = description.replaceAll("<[^>]*>", "").replaceAll("\n", "").replaceAll("\r", "");
+                if(description.length()>300){
+                    description = description.substring(0, 300) + "...";
+                }
             }
         }
         description = sanitizeMetadataField(description);
+        logger.info("Generated Description : " + description);
         context.getPageScopeData().put(RuntimePage.PAGESCOPE_DESCRIPTION, description);
         logger.info("Set PageScope Meta Description to : " + description);
         String keywords = sanitizeMetadataField(getValueFromXML("/content/root/page-details/keywords", dcr));
