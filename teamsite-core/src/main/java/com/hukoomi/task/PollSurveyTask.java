@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -237,6 +239,10 @@ public class PollSurveyTask implements CSURLExternalTask {
      * DCR Approve date
      */
     public static final String META_APPROVE_DATE = "TeamSite/Metadata/ApproveTime";
+    /**
+     * Date Time format
+     */
+    private static final String DATE_TIME_FORMAT = "EEE MMM dd yyyy HH:mm:ss";
 
     /**
      * Overridden method from CSSDK
@@ -2465,13 +2471,17 @@ public class PollSurveyTask implements CSURLExternalTask {
             modifier = taskSimpleFile.getLastModifier().getName();
             logger.info("Last Modified By: " + modifier);
             
-            modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+            //modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+            modifierMetaData = taskObj.getWorkflow().getVariable(META_LAST_MODIFIER);
             logger.info("EA Modifier : " + modifierMetaData);
             
             approver = taskObj.getWorkflow().getVariable("WF_Approver");
             logger.info("Workflow Approver : " + approver );
 
-            approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+            taskObj.getWorkflow().setVariable(META_APPROVE_DATE, LocalDateTime.now().format(formatter));
+            //approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            approveDate = taskObj.getWorkflow().getVariable(META_APPROVE_DATE);
             logger.info("Approve Date : " + approveDate );
 
             if(!StringUtils.equals(modifier, modifierMetaData)) {
@@ -2480,9 +2490,10 @@ public class PollSurveyTask implements CSURLExternalTask {
             }
             
             if(StringUtils.isNotBlank(modifier)) {
-                CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
-                csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
-                taskSimpleFile.setExtendedAttributes(csEAArray);
+                //CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
+                //csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
+                //taskSimpleFile.setExtendedAttributes(csEAArray);
+                taskObj.getWorkflow().setVariable(META_LAST_MODIFIER, modifier);
             }
            
         } catch (Exception e) {

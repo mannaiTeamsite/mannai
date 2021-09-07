@@ -17,6 +17,8 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -90,6 +92,18 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
      * Approve Pending DB task name
      */
     private static final String TASK_APPROVE_PENDING_DB = "Approval Pending DB";
+    /**
+     * Date Time format
+     */
+    private static final String DATE_TIME_FORMAT = "EEE MMM dd yyyy HH:mm:ss";
+    /**
+     * Review Reject DB task name
+     */
+    private static final String TASK_REVIEW_REJECT_DB = "Review Reject DB";
+    /**
+     * Approval Reject DB task name
+     */
+    private static final String TASK_APPROVAL_REJECT_DB = "Approval Reject DB";
     
     String commentOnModifier = "";
 
@@ -256,7 +270,8 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 modifier = taskSimpleFile.getLastModifier().getName();
                 logger.info("Last Modified By: " + modifier);
                 
-                modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+                //modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+                modifierMetaData = taskObj.getWorkflow().getVariable(META_LAST_MODIFIER);
                 logger.info("EA Modifier : " + modifierMetaData);
                 
                 reviewer = taskObj.getWorkflow().getVariable("WF_Reviewer");
@@ -264,8 +279,12 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
 
                 approver = taskObj.getWorkflow().getVariable("WF_Approver");
                 logger.info("Workflow Approver : " + approver );
+                
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+                taskObj.getWorkflow().setVariable(META_REVIEW_DATE, LocalDateTime.now().format(formatter));
 
-                reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+                //reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+                reviewDate = taskObj.getWorkflow().getVariable(META_REVIEW_DATE);
                 logger.info("Review Date : " + reviewDate );
 
                 Timestamp reviewedDate = null;
@@ -274,7 +293,9 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 logger.info("reviewedDate : " + reviewedDate );
 
 
-                approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+                //taskObj.getWorkflow().setVariable(META_APPROVE_DATE, LocalDateTime.now().format(formatter));
+                //approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+                approveDate = taskObj.getWorkflow().getVariable(META_APPROVE_DATE);
                 logger.info("Approve Date : " + approveDate );
 
                 Timestamp approvalDate = null;
@@ -290,6 +311,14 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                     fileStatus = "MODIFY";
                 }
                 
+                if(StringUtils.equals(TASK_REVIEW_REJECT_DB, taskName)) {
+                    taskObj.getWorkflow().setVariable(META_REVIEW_REJECT_DATES, LocalDateTime.now().format(formatter));
+                }
+                
+                if(StringUtils.equals(TASK_APPROVAL_REJECT_DB, taskName)) {
+                    taskObj.getWorkflow().setVariable(META_APPROVE_REJECT_DATES, LocalDateTime.now().format(formatter));
+                }
+                
                 if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName) 
                         && !StringUtils.equals(modifier, modifierMetaData)) {
                         commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
@@ -298,9 +327,10 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 
                 if(StringUtils.isNotBlank(modifier)  
                         && StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName)) {
-                    CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
-                    csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
-                    taskSimpleFile.setExtendedAttributes(csEAArray);
+                    //CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
+                    //csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
+                    //taskSimpleFile.setExtendedAttributes(csEAArray);
+                    taskObj.getWorkflow().setVariable(META_LAST_MODIFIER, modifier);
                 }
                 
                 CSWorkflow workflow = taskObj.getWorkflow();
@@ -327,8 +357,10 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 preparedStatement = connection.prepareStatement(updateQuery);
                 preparedStatement.setTimestamp(1, reviewedDate);
                 preparedStatement.setTimestamp(2, approvalDate);
-                preparedStatement.setLong(3,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
-                preparedStatement.setLong(4,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+                //preparedStatement.setLong(3,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
+                preparedStatement.setLong(3,getRejectCount(taskObj.getWorkflow().getVariable(META_REVIEW_REJECT_DATES)));
+                //preparedStatement.setLong(4,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+                preparedStatement.setLong(4,getRejectCount(taskObj.getWorkflow().getVariable(META_APPROVE_REJECT_DATES)));
                 preparedStatement.setString(5,jobStatus);
                 preparedStatement.setString(6,fileStatus);
                 preparedStatement.setString(7,commentStr);
@@ -394,19 +426,23 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             
             if(StringUtils.isNotBlank(modifier)  
                     && StringUtils.equals(TASK_REVIEW_PENDING_DB, taskName)) {
-                CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
-                csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
-                taskSimpleFile.setExtendedAttributes(csEAArray);
+                //CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
+                //csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
+                //taskSimpleFile.setExtendedAttributes(csEAArray);
+                
+                task.getWorkflow().setVariable(META_LAST_MODIFIER, modifier);
             }
 
-            reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+            //reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+            reviewDate = task.getWorkflow().getVariable(META_REVIEW_DATE);
             logger.info("Review Date : " + reviewDate );
             Timestamp reviewedDate = null;
             if(reviewDate != null)
                 reviewedDate = new Timestamp(DateUtils.parseDate(reviewDate,dateFormats).getTime());
             logger.info("reviewedDate : " + reviewedDate );
 
-            approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            //approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            approveDate = task.getWorkflow().getVariable(META_APPROVE_DATE);
             logger.info("Approve Date : " + approveDate );
             Timestamp approvalDate = null;
             if(approveDate != null)
@@ -461,8 +497,10 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             preparedStatement.setTimestamp(8, reviewedDate);
             preparedStatement.setString(9, approver);
             preparedStatement.setTimestamp(10, approvalDate);
-            preparedStatement.setLong(11,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
-            preparedStatement.setLong(12,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+            //preparedStatement.setLong(11,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
+            preparedStatement.setLong(11,getRejectCount(task.getWorkflow().getVariable(META_REVIEW_REJECT_DATES)));
+            //preparedStatement.setLong(12,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+            preparedStatement.setLong(12,getRejectCount(task.getWorkflow().getVariable(META_APPROVE_REJECT_DATES)));
             //preparedStatement.setTimestamp(14, PublishDate);
             preparedStatement.setString(13,jobStatus);
             preparedStatement.setString(14,fileStatus);
