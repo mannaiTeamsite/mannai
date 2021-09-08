@@ -543,7 +543,7 @@ public class NewsletterTask implements CSURLExternalTask {
             try {
                 logger.info("data not null.");
 
-                logger.debug("Data : " + data.asXML());
+                logger.info("Data : " + data.asXML());
                 transformToMailDataSource(data.asXML(), xslTemplateFile,
                         lang);
 
@@ -551,7 +551,7 @@ public class NewsletterTask implements CSURLExternalTask {
                         + htmlName
                         + ".html";
 
-                logger.debug("filePath1 : " + htmlfilePath);
+                logger.info("filePath1 : " + htmlfilePath);
 
                 CSAreaRelativePath reportFile2 = new CSAreaRelativePath(
                         htmlfilePath);
