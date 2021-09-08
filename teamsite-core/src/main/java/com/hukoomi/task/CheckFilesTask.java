@@ -62,11 +62,11 @@ public class CheckFilesTask implements CSURLExternalTask {
     /**
      * Success transition message
      */
-    public static final String SUCCESS_TRANSITION = "task transition review";
+    public static final String SUCCESS_TRANSITION = "check file review";
     /**
      * Success transition comment
      */
-    public static final String SUCCESS_TRANSITION_COMMENT = "task to transition to review completed";
+    public static final String SUCCESS_TRANSITION_COMMENT = "task transition check files completed";
     
 
     @Override
