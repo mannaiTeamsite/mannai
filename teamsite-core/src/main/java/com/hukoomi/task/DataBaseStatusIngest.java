@@ -17,8 +17,11 @@ import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
@@ -104,6 +107,10 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
      * Approval Reject DB task name
      */
     private static final String TASK_APPROVAL_REJECT_DB = "Approval Reject DB";
+    /**
+     * Comment date format
+     */
+    private static final String COMMENT_DATE_FORMAT = "EEE MMM dd HH:mm:ss z yyyy";
     
     String commentOnModifier = "";
 
@@ -312,11 +319,23 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 }
                 
                 if(StringUtils.equals(TASK_REVIEW_REJECT_DB, taskName)) {
-                    taskObj.getWorkflow().setVariable(META_REVIEW_REJECT_DATES, LocalDateTime.now().format(formatter));
+                    String reviewRejectDates = taskObj.getWorkflow().getVariable(META_REVIEW_REJECT_DATES);
+                    if(reviewRejectDates == null) {
+                        reviewRejectDates = LocalDateTime.now().format(formatter);
+                    }else {
+                        reviewRejectDates = reviewRejectDates+" "+LocalDateTime.now().format(formatter);
+                    }
+                    taskObj.getWorkflow().setVariable(META_REVIEW_REJECT_DATES, reviewRejectDates);
                 }
                 
                 if(StringUtils.equals(TASK_APPROVAL_REJECT_DB, taskName)) {
-                    taskObj.getWorkflow().setVariable(META_APPROVE_REJECT_DATES, LocalDateTime.now().format(formatter));
+                    String approveRejectDates = taskObj.getWorkflow().getVariable(META_APPROVE_REJECT_DATES);
+                    if(approveRejectDates == null) {
+                        approveRejectDates = LocalDateTime.now().format(formatter);
+                    }else {
+                        approveRejectDates = approveRejectDates+" "+LocalDateTime.now().format(formatter);
+                    }
+                    taskObj.getWorkflow().setVariable(META_APPROVE_REJECT_DATES, approveRejectDates);
                 }
                 
                 if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName) 
@@ -342,8 +361,8 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 
                 if(StringUtils.isNotBlank(commentOnModifier)) {
                     logger.info("reviewDate : " + reviewDate );
-                    logger.info("reviewer : " + reviewer );
-                    commentsToLogInDB.append("[").append(reviewDate).append("] ").append(commentOnModifier).append(System.lineSeparator());
+                    String strRevDate = formatDateForComment(reviewDate, dateFormats, COMMENT_DATE_FORMAT);
+                    commentsToLogInDB.append("[").append(strRevDate).append("] ").append(commentOnModifier).append(System.lineSeparator());
                 }
                 
                 commentStr = commentsToLogInDB.toString();
@@ -386,6 +405,32 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             return isDataUpdated;
         }
 
+        /**
+         * Method formatDateForComment formats the inputDateStr to the output dateformat
+         *
+         * @param inputDateStr    input date string
+         * @param dateFormats input date formats string array
+         * @param outputDateformat output date format
+         * @return Returns formatted date
+         */
+        public String formatDateForComment(String inputDateStr, String[] dateFormats, String outputDateformat) {
+            String outputDateStr = "";
+            try {
+                Date inputDate = DateUtils.parseDate(inputDateStr, dateFormats);
+                SimpleDateFormat sdformat = new SimpleDateFormat(outputDateformat);
+                outputDateStr = sdformat.format(inputDate); 
+                logger.info("outputDateStr : " + outputDateStr );
+            } catch (ParseException e) {
+                logger.error("Parse Exception in formatDateForComment: ", e);
+            }finally {
+                if(!StringUtils.isNotBlank(outputDateStr)) {
+                    logger.info("Returning the input date not able to format input date." );
+                    outputDateStr = inputDateStr;
+                }
+            }
+            logger.info("Final outputDateStr : " + outputDateStr );
+            return outputDateStr;
+        }
 
     /**
      * Method inserts the content
