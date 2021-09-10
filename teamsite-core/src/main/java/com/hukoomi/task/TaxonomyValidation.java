@@ -5,12 +5,12 @@ import org.apache.log4j.xml.DOMConfigurator;
 //import com.interwoven.cssdk.filesys.CSAreaRelativePath;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
-import org.w3c.dom.*;
-import org.xml.sax.SAXException;
+//import org.w3c.dom.*;
+//import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+//import javax.xml.parsers.DocumentBuilder;
+//import javax.xml.parsers.DocumentBuilderFactory;
+//import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -23,7 +23,7 @@ public class TaxonomyValidation {
      */
     private final static Logger logger = Logger.getLogger(TaxonomyValidation.class);
 
-    public static void main(String[] args) {
+   /* public static void main(String[] args) {
         DOMConfigurator.configure("/usr/opentext/ApplicationContainer/standalone/deployments/iw-cc.war/WEB-INF/classes/log4j.xml");
         String str, strContent = "";
         String dcrType = "", taxonomyKey = "", labelEn ="", labelAr = "", taxonomyFirstVal = "", taxonomySecondVal = "" , taxonomyTagValue = "", taxonomyKeySub = "", labelEnSub = "", labelArSub = "";
@@ -219,7 +219,7 @@ public class TaxonomyValidation {
         } catch (Exception e){
             System.out.println("Exception: "+e);
         }
-    }
+    }*/
     private static void replaceString(String fileName, String oldStr, String rplStr){
         File DcrFile = new File(fileName);
         String s;

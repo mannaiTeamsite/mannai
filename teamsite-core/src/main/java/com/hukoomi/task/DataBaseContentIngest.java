@@ -979,7 +979,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
 
         try {
 
-            reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+            //reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+            reviewDate = taskObj.getWorkflow().getVariable(META_REVIEW_DATE);
             logger.info("Review Date : " + reviewDate );
 
             Timestamp reviewedDate = null;
@@ -988,7 +989,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.info("reviewedDate : " + reviewedDate );
 
 
-            approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            //approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            approveDate = taskObj.getWorkflow().getVariable(META_APPROVE_DATE);
             logger.info("Approve Date : " + approveDate );
 
             Timestamp approvalDate = null;
@@ -1026,8 +1028,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             preparedStatement.setTimestamp(1, PublishDate);
             preparedStatement.setTimestamp(2, reviewedDate);
             preparedStatement.setTimestamp(3, approvalDate);
-            preparedStatement.setLong(4,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
-            preparedStatement.setLong(5,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+            //preparedStatement.setLong(4,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
+            preparedStatement.setLong(4,getRejectCount(taskObj.getWorkflow().getVariable(META_REVIEW_REJECT_DATES)));
+            //preparedStatement.setLong(5,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+            preparedStatement.setLong(5,getRejectCount(taskObj.getWorkflow().getVariable(META_APPROVE_REJECT_DATES)));
             preparedStatement.setTimestamp(6, PublishDate);
             preparedStatement.setString(7,jobStatus);
             preparedStatement.setString(8,fileStatus);
@@ -1041,6 +1045,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.info("updateQuery result : " + result);
             if (result > 0) {
                 isDataUpdated = true;
+                taskObj.getWorkflow().deleteVariable(META_REVIEW_DATE);
+                taskObj.getWorkflow().deleteVariable(META_APPROVE_DATE);
+                taskObj.getWorkflow().deleteVariable(META_REVIEW_REJECT_DATES);
+                taskObj.getWorkflow().deleteVariable(META_APPROVE_REJECT_DATES);
             }
         }catch (NumberFormatException | SQLException e) {
             logger.error("NumberFormatException/SQL Exception in updateData: ", e);
