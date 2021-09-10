@@ -10,7 +10,6 @@ import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.LiveSiteDal;
 import com.interwoven.livesite.runtime.RequestContext;
 import com.interwoven.livesite.runtime.model.page.RuntimePage;
-import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -24,13 +23,12 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
@@ -282,8 +280,6 @@ public class CommonUtils {
                 image = ImageIO.read(new File(imageSourcePath));
             } catch (IOException ex) {
                 logger.error("Error while Retrieving Image File.",ex);
-            } catch (IllegalArgumentException ex) {
-                logger.error("Illegal Argument Exception while getting dimensions for Image", ex);
             }
             if(image != null) {
                 dimensions.put("width", image.getWidth());
@@ -328,18 +324,7 @@ public class CommonUtils {
         if(parameter == null || parameter.isBlank()){
             return "";
         }
-        String scriptRemovalRegex = "<script>(.*)</script>";
-        try {
-            logger.info("Decoding Parameter prior to script tag removal");
-            parameter = URLDecoder.decode(parameter,"UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            logger.error("Error while decoding parameter",e);
-        }
-
-        parameter = parameter.replaceAll(scriptRemovalRegex,"");
-        parameter = parameter.replaceAll("[^a-zA-Z0-9- \\\"*+%:~!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
-        logger.info("Sanitized Parameter: " + parameter);
-        return parameter;
+        return parameter.replaceAll("[^a-zA-Z0-9- \\\"*:~!_,.\\[\\]\\{\\}\\(\\)\\p{IsArabic}]","");
     }
 
     /*
@@ -352,7 +337,7 @@ public class CommonUtils {
     public String getURLPrefix(RequestContext context){
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         String hostname = requestHeaderUtils.getForwardedHost();
-        if(hostname.isBlank() || hostname.equals("") || !hostname.matches("(dev\\.|stg\\.)?hukoomi\\.gov\\.qa")){
+        if(hostname.isBlank() || hostname.equals("")){
             hostname = "hukoomi.gov.qa";
         }
         String urlScheme = "https";
@@ -410,7 +395,7 @@ public class CommonUtils {
      */
     public void generateSEOMetaTagsForDynamicContent(Document dcr, RequestContext context) {
         String urlPrefix = getURLPrefix(context);
-        String paramLocale = context.getParameterString(PARAM_LOCALE, "en");
+        String paramLocale = context.getParameterString("locale", "en");
         logger.info("paramLocale : " + paramLocale);
         String title = sanitizeMetadataField(getValueFromXML("/content/root/information/title", dcr));
         if(title.equals("")){
@@ -419,24 +404,11 @@ public class CommonUtils {
         }
         context.getPageScopeData().put(RuntimePage.PAGESCOPE_TITLE, title);
         logger.info("Set PageScope Title : " + title);
-        String docLocale = paramLocale.equals("ar") ? "ar_QA" :"en_US";
-        context.getPageScopeData().put(PARAM_LOCALE,docLocale);
-        logger.info("PageScope Locale : " + docLocale);
+        String locale = paramLocale.equals("ar") ? "ar_QA" :"en_US";
+        context.getPageScopeData().put("locale",locale);
+        logger.info("PageScope Locale : " + locale);
         logger.info("Current PageScopeData: "+context.getPageScopeData().toString());
-        String description = getValueFromXML("/content/root/page-details/description", dcr);
-        logger.info("Description for the item : " + description);
-        if(StringUtils.isBlank(description)){
-            logger.info("SEO Description is blank, fetching the description from details");
-            description = getValueFromXML("/content/root/detail/description", dcr);
-            if(StringUtils.isNotBlank(description)){
-                description = description.replaceAll("<[^>]*>", "").replaceAll("\n", "").replaceAll("\r", "");
-                if(description.length()>300){
-                    description = description.substring(0, 300) + "...";
-                }
-            }
-        }
-        description = sanitizeMetadataField(description);
-        logger.info("Generated Description : " + description);
+        String description = sanitizeMetadataField(getValueFromXML("/content/root/page-details/description", dcr));
         context.getPageScopeData().put(RuntimePage.PAGESCOPE_DESCRIPTION, description);
         logger.info("Set PageScope Meta Description to : " + description);
         String keywords = sanitizeMetadataField(getValueFromXML("/content/root/page-details/keywords", dcr));
@@ -478,21 +450,6 @@ public class CommonUtils {
      */
     public void throwDCRNotFoundError(RequestContext context, String message){
         logger.debug("DCR Not Found Responding with 404");
-        RequestHeaderUtils requestHeader = new RequestHeaderUtils(context);
-        String referer = requestHeader.getReferer();
-        if(StringUtils.isNotBlank(referer) && context.isRuntime()){
-            logger.info("The user was redirected to the page via a broken link source. Logging the incident in Database.");
-            String urlPrefix = getURLPrefix(context);
-            String paramLocale = context.getParameterString(PARAM_LOCALE, "en");
-            String brokenPageLink = context.getPageLink(".");
-            String dcrName = context.getParameterString("record");
-            logger.info("Requested Page Link " + brokenPageLink);
-            String prettyURLforBrokenLink = urlPrefix + getPrettyURLForPage(brokenPageLink, paramLocale, dcrName);
-            logger.info("Logging Broken Link " + prettyURLforBrokenLink);
-
-            logBrokenLink(prettyURLforBrokenLink,referer,locale,"404");
-
-        }
         try {
             context.getResponse().setStatus(HttpServletResponse.SC_NOT_FOUND);
             context.getResponse().sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -500,86 +457,208 @@ public class CommonUtils {
             logger.error(message, ex);
         }
         throw new DCRNotFoundException(message);
-    }
+    } 
+    
+    
+    public void logBrokenLink(String brokenLink, String contentPage, String language, String statusCode) {
+        this.logger.debug("Logging Broken link in Database");
+        
+        try {
+          brokenLink = (new URL(brokenLink)).getPath();
+        } catch (MalformedURLException e) {
+          this.logger.debug(e);
+        } 
+    
+        try {
+          contentPage = (new URL(contentPage)).getPath();
+        } catch (MalformedURLException e) {
+          this.logger.debug(e);
+        } 
+        
 
-    /*
-     * Log Broken Link to the Databse.
-     *
-     * @param String brokenLink The BrokenLink which has been reported
-     * @param String contentPage The Content Page/Referrer from where the broken link is present.
-     * @param String language The content Language of the portal where the BrokenLink has been reported.
-     * @param String statusCode The Error Status code to report the BrokenLink.
-     */
-    public void logBrokenLink(String brokenLink, String contentPage, String language, String statusCode){
-        logger.debug("Logging Broken link in Database");
-        ValidationErrorList errorList = new ValidationErrorList();
         
-       
-        if (!ESAPIValidator.checkNull(brokenLink)) {
-            brokenLink  = ESAPI.validator().getValidInput("brokenLink", brokenLink, ESAPIValidator.URL, 255, false, true, errorList);
-            if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("brokenLink"));
-                logger.error("Not a valid parameter brokenLink. The incident will not be logged.");
-                return;
-            }
+        if(brokenLink.equalsIgnoreCase("/en/error.page") && brokenLink.equalsIgnoreCase("/ar/error.page") && contentPage.equalsIgnoreCase("/ar/error.page") && contentPage.equalsIgnoreCase("/en/error.page")) {
+        int errorCount = getErrorCount( brokenLink,  contentPage,  language,  statusCode);
+        logger.info(errorCount);
+        if(errorCount < 1) {
+        	inserErrorResponse( 1,  brokenLink,  contentPage,  language,  statusCode);
+        	
+        }else {
+        	updateErrorCount( errorCount+1,  brokenLink,  contentPage,  language,  statusCode);
+        }        
         }
-        
-        if (!ESAPIValidator.checkNull(contentPage)) {
-            contentPage  = ESAPI.validator().getValidInput("contentPage", contentPage, ESAPIValidator.URL, 255, false, true, errorList);
-            if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("contentPage"));
-                logger.error("Not a valid parameter contentPage. The incident will not be logged.");
-                return;
-            }
-        }
-        if (!ESAPIValidator.checkNull(language)) {
-            language  = ESAPI.validator().getValidInput("language", language, ESAPIValidator.ALPHABET, 20, false, true, errorList);
-            if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("language"));
-                logger.error("Not a valid parameter language. The incident will not be logged.");
-                return;
-            }
-        }
-        if (!ESAPIValidator.checkNull(statusCode)) {
-            statusCode  = ESAPI.validator().getValidInput("statusCode", statusCode, ESAPIValidator.ALPHANUMERIC, 20, false, true, errorList);
-            if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("statusCode"));
-                logger.error("Not a valid parameter statusCode. The incident will not be logged.");
-                return;
-            }
-        }
-        if(contentPage != null && brokenLink != null) {
-        logger.info("Logging the Broken link with status: " + statusCode + ", for URL: " + brokenLink + ", present on: " + contentPage + " for language: " + language);
+      }
+      
+      public int getErrorCount(String brokenLink, String contentPage, String language, String statusCode) {
+        this.logger.debug("getErrorCount Broken link from the Database");
+  
+        int count = 0;
         PreparedStatement statement = null;
         Connection connection = null;
-        Postgre database = new Postgre(context);
+        Postgre database = new Postgre(this.context);
+        ResultSet resultSet = null;
         try {
-            logger.info("Logging of Broken Link in DB Started");
-            connection = database.getConnection();
-            String query = "INSERT INTO ERROR_RESPONSE ("
-                    + "BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON"
-                    + ") VALUES(?,?,?,?,LOCALTIMESTAMP)";
-
-            logger.info("Query to run: " + query);
-
-            statement = connection.prepareStatement(query);
-            statement.setString(1, brokenLink);
-            statement.setString(2, contentPage);
-            statement.setString(3, language);
-            statement.setString(4, statusCode);
-            int insertResponse = statement.executeUpdate();
-
-            if( insertResponse == 1) {
-                logger.info("Broken Link has been logged successfully.");
-            }
-            logger.info("Logging Broken link in Database completed");
+          this.logger.info("Get count of error");
+          connection = database.getConnection();
+          String query = "SELECT DISTINCT COUNT FROM ERROR_RESPONSE where LANGUAGE='" + language + "' and STATUS_CODE = '" + statusCode + "' and BROKEN_LINK = '" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
+          this.logger.info("Query to run : " + query);
+          
+          statement = connection.prepareStatement(query);
+          resultSet = statement.executeQuery();
+          while (resultSet.next())
+           count = resultSet.getInt("count");
+         
+          this.logger.info("getting count from Database completed");
         } catch (SQLException ex) {
-            logger.error("Error while logging broken link to the database.", ex);
+          this.logger.error("Error while fetching count from database.", ex);
+        } finally { 
+          this.logger.info("Releasing Database Connection");
+          database.releaseConnection(connection, statement, resultSet);
+          this.logger.info("Released Database Connection");
+        } 
+        return count;
+      }
+      
+      public int updateErrorCount(int count, String brokenLink, String contentPage, String language, String statusCode) {
+    	
+    	  
+        this.logger.debug("updateErrorCount Broken link in Database");
+        
+        
+        
+        int result = 0;
+        PreparedStatement prepareStatement = null;
+        Connection connection = null;
+        Postgre database = new Postgre(this.context);
+        try {
+          this.logger.info("Logging of Broken Link in DB Started");
+          connection = database.getConnection();
+          String query = "UPDATE ERROR_RESPONSE SET COUNT=" + count + ", STATUS='open', REPORTED_ON = 'LOCALTIMESTAMP' WHERE LANGUAGE='" + language + "' and STATUS_CODE='" + statusCode + "' and BROKEN_LINK='" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
+          this.logger.info("Query to run : " + query);
+          if (connection != null) {
+            prepareStatement = connection.prepareStatement(query);
+            result = prepareStatement.executeUpdate();
+          } else {
+            this.logger.info("Connection is null !");
+          } 
+          this.logger.info("updating count of Broken link in Database completed");
+        } catch (SQLException ex) {
+          this.logger.error("Error while updating count of broken link to the database.", ex);
         } finally {
-            logger.info("Releasing Database Connection.");
-            database.releaseConnection(connection, statement, null);
-            logger.info("Released Database Connection.");
-        }
-        }
+          this.logger.info("Releasing Database Connection");
+          database.releaseConnection(connection, prepareStatement, null);
+          this.logger.info("Released Database Connection");
+        } 
+        return result;
+      }
+      
+      
+      public int inserErrorResponse(int count, String brokenLink, String contentPage, String language, String statusCode) {
+          this.logger.debug("Inser Error Response Broken link in Database");
+          ValidationErrorList errorList = new ValidationErrorList();
+          if (!ESAPIValidator.checkNull(brokenLink)) {
+          	brokenLink  = ESAPI.validator().getValidInput("brokenLink", brokenLink, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+              if(!errorList.isEmpty()) {
+                  logger.info(errorList.getError("brokenLink"));
+                  logger.error("Not a valid parameter brokenLink. The incident will not be logged");
+                  return 0;
+              }
+          }
+          if (!ESAPIValidator.checkNull(contentPage)) {
+          	contentPage  = ESAPI.validator().getValidInput("contentPage", contentPage, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+              if(!errorList.isEmpty()) {
+                  logger.info(errorList.getError("contentPage"));
+                  logger.error("Not a valid parameter contentPage. The incident will not be logged.");
+                  return 0;
+              }
+          }
+          if (!ESAPIValidator.checkNull(language)) {
+          	language  = ESAPI.validator().getValidInput("language", language, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+              if(!errorList.isEmpty()) {
+                  logger.info(errorList.getError("language"));
+                  logger.error("Not a valid parameter language. The incident will not be logged.");
+                  return 0;
+              }
+          }
+          if (!ESAPIValidator.checkNull(statusCode)) {
+          	statusCode  = ESAPI.validator().getValidInput("statusCode", statusCode, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+              if(!errorList.isEmpty()) {
+                  logger.info(errorList.getError("statusCode"));
+                  logger.error("Not a valid parameter statusCode. The incident will not be logged.");
+                  return 0;
+              }
+          }
+          int insertResponse = 0;
+          if (contentPage != null && brokenLink != null) {
+              this.logger.info("Logging the Broken link with status: " + statusCode + ", for URL: " + brokenLink + ", present on: " + contentPage + " for language: " + language);
+              PreparedStatement statement = null;
+              Connection connection = null;
+              Postgre database = new Postgre(this.context);
+              try {
+                this.logger.info("Logging of Broken Link in DB Started");
+                connection = database.getConnection();
+                String query = "INSERT INTO ERROR_RESPONSE (BROKEN_LINK, CONTENT_PAGE, LANGUAGE, STATUS_CODE, REPORTED_ON,COUNT,STATUS) VALUES(?,?,?,?,LOCALTIMESTAMP,?,?)";
+                this.logger.info("Query to run: " + query);
+                statement = connection.prepareStatement(query);
+                statement.setString(1, brokenLink);
+                statement.setString(2, contentPage);
+                statement.setString(3, language);
+                statement.setString(4, statusCode);
+                statement.setInt(5, count);
+                statement.setString(6, "open");
+                 insertResponse = statement.executeUpdate();
+                if (insertResponse == 1)
+                  this.logger.info("Broken Link has been logged successfully."); 
+                this.logger.info("Logging Broken link in Database completed");
+              } catch (SQLException ex) {
+                this.logger.error("Error while logging broken link to the database.", ex);
+              } finally {
+                this.logger.info("Releasing Database Connection.");
+                database.releaseConnection(connection, statement, null);
+                this.logger.info("Released Database Connection.");
+              } 
+            }
+          return insertResponse;
     }
+      
+      
+      public int updateErrorStatus( String brokenLink, String contentPage, String language, String statusCode, String status) {
+          this.logger.debug("update Error Status in Database");
+          
+          ValidationErrorList errorList = new ValidationErrorList();
+         
+          if (!ESAPIValidator.checkNull(status)) {
+          	status  = ESAPI.validator().getValidInput("status", status, ESAPIValidator.ALPHANUMERIC, 255, false, true, errorList);
+              if(!errorList.isEmpty()) {
+                  logger.info(errorList.getError("status"));
+                  logger.error("Not a valid parameter status. The incident will not be logged.");
+                  return 0;
+              }
+          }
+          int result = 0;
+          PreparedStatement prepareStatement = null;
+          Connection connection = null;
+          Postgre database = new Postgre(this.context);
+          try {
+            this.logger.info("Logging of Broken Link in DB Started");
+            connection = database.getConnection();
+            String query = "UPDATE ERROR_RESPONSE SET STATUS = '"+status+"' WHERE LANGUAGE='" + language + "' and STATUS_CODE='" + statusCode + "' and BROKEN_LINK='" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
+            this.logger.info("Query to run: " + query);
+            if (connection != null) {
+              prepareStatement = connection.prepareStatement(query);
+              result = prepareStatement.executeUpdate();
+            } else {
+              this.logger.info("Connection is null !");
+            } 
+            this.logger.info("updating count of Broken link in Database completed");
+          } catch (SQLException ex) {
+            this.logger.error("Error while updating count of broken link to the database.", ex);
+          } finally {
+            this.logger.info("Releasing Database Connection.");
+            database.releaseConnection(connection, prepareStatement, null);
+            this.logger.info("Released Database Connection.");
+          } 
+          return result;
+        }
+     
 }
