@@ -425,7 +425,7 @@ public class SolrQueryBuilder {
             sb.append("&mlt.fl=" + this.mltFl);
         }
 
-        if (StringUtils.isNotBlank(this.fieldQuery)) {
+        if (StringUtils.isNotBlank(this.fieldQuery) && !this.fieldQuery.equals("category:All")) {
             sb.append("&fq=" + this.fieldQuery);
         }
 
