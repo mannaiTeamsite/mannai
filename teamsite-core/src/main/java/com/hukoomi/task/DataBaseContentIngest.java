@@ -1,35 +1,29 @@
 package com.hukoomi.task;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.sql.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-
-import com.interwoven.cssdk.filesys.CSHole;
-import com.interwoven.cssdk.filesys.CSVPath;
-import com.interwoven.cssdk.sci.filesys.CSPath;
-import com.interwoven.cssdk.workflow.*;
-import com.interwoven.cssdk.workflow.impl.CSWorkflowImpl;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentHelper;
-import org.dom4j.Node;
-
 import com.hukoomi.utils.PostgreTSConnection;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
+import com.interwoven.cssdk.filesys.CSHole;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
+import com.interwoven.cssdk.workflow.CSComment;
+import com.interwoven.cssdk.workflow.CSExternalTask;
+import com.interwoven.cssdk.workflow.CSURLExternalTask;
+import com.interwoven.cssdk.workflow.CSWorkflow;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+
+import java.io.File;
+import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.*;
 
 /**
  * DataBaseContentIngest is the workflow task class for dcr data
@@ -206,16 +200,11 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         HashMap<String, String> statusMap = null;
         CSAreaRelativePath[] taskFileList = task.getFiles();
         logger.debug("TaskFileList Length : " + taskFileList.length);
-        //task.getWorkflow().getId();
-        // CSWorkflow workFlow = new CSWorkflowImpl(task,)
         postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
         postgreLS = new PostgreTSConnection(client, task, LS_DB_PROPERTY_FILE);
         statusMap = new HashMap<>();
         statusMap.put(TRANSITION, SUCCESS_TRANSITION);
         statusMap.put(TRANSITION_COMMENT, "");
-        String Vpath = task.getArea().getRootDir().getVPath()
-                .toString();
-        CONTENT_TYPE_DCR = Vpath.substring(Vpath.indexOf("/default/"))+'/'+CONTENT_TYPE_DCR;
 
         for (CSAreaRelativePath taskFile : taskFileList) {
             try {
@@ -231,25 +220,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             }
         }
 
-        if(!statusMap.get(TRANSITION).contains("Failure")){
-            try {
-                FileWriter writer = new FileWriter("/usr/opentext/TeamSite/tmp/taxonomyFilesPublished.txt", true);
-                BufferedWriter bufferedWriter = new BufferedWriter(writer);
-                for (CSAreaRelativePath tFile : taskFileList) {
-                    logger.info("tFile with path: "+tFile.toString());
-                    if (tFile.toString().contains("Taxonomy/")) {
-                        bufferedWriter.write(tFile.toString());
-                        bufferedWriter.newLine();
-                    }
-                }
-                bufferedWriter.close();
-                writer.close();
-            } catch (IOException e) {
-                logger.error("IOException in DataBaseContentIngest: "+e);
-            } catch (Exception e){
-                logger.error("Exception in DataBaseContentIngest: "+e);
-            }
-        }
+
 
         logger.debug("transition : " + statusMap.get(TRANSITION));
         logger.debug("transitionComment : "
@@ -278,19 +249,15 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             if (dcrType != null) {
                 logger.debug("File DCR Type : " + dcrType);
                 Document document = getTaskDocument(taskSimpleFile);
-                /*if(dcrType.contains("Content/")) {
-                    isDBOperationContentSuccess = insertData(taskSimpleFile, document);
-                }
-                else if(dcrType.contains("Taxonomy/")){
-                */
                 if(dcrType.contains("Taxonomy/")){
                     isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document, postgre);
+                    logger.info("Inserted Taxonomy data to Auth DB: " + isDBOperationContentSuccess);
                     isDBOperationContentSuccess = insertTaxonomyData(taskSimpleFile, document, postgreLS);
+                    logger.info("Inserted Taxonomy data to Runtime DB: " + isDBOperationContentSuccess);
                 }else {
                     isDBOperationContentSuccess = insertData(taskSimpleFile, document);
                 }
             }
-            //isDBOperationWorkflowSuccess = insertWorkFlowData(taskSimpleFile, task);
             isDBOperationWorkflowSuccess = updateWorkflowData(taskSimpleFile, task);
             logger.debug(
                     "DBOperationContent : " + isDBOperationContentSuccess);
@@ -300,11 +267,15 @@ public class DataBaseContentIngest implements CSURLExternalTask {
                 statusMap.put(TRANSITION, SUCCESS_TRANSITION);
                 statusMap.put(TRANSITION_COMMENT, DATA_INSERT_SUCCESS);
             } else {
-                statusMap.put(TRANSITION, FAILURE_TRANSITION);
+                /*statusMap.put(TRANSITION, FAILURE_TRANSITION);
+                statusMap.put(TRANSITION_COMMENT, DATA_INSERT_FAILURE);*/
+                statusMap.put(TRANSITION, SUCCESS_TRANSITION);
                 statusMap.put(TRANSITION_COMMENT, DATA_INSERT_FAILURE);
             }
         } catch (Exception e) {
-            statusMap.put(TRANSITION, FAILURE_TRANSITION);
+            //statusMap.put(TRANSITION, FAILURE_TRANSITION);
+            statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+            statusMap.put(TRANSITION_COMMENT, DATA_INSERT_FAILURE);
             logger.error("Exception : ", e);
         }
         return statusMap;
@@ -398,39 +369,46 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             String category = taskSimpleFile.getExtendedAttribute(META_DATA_NAME_DCR_TYPE).getValue();
             logger.debug(" orig category : " + category);
             category = category.replaceAll("\\s+", "");
-            //category = StringUtils.equalsIgnoreCase(category,"news") ? category.substring(0,category.lastIndexOf("s")) : category;
-            logger.debug(" category for url : " + category);
+            logger.debug(" small letter category : " + category);
+            String vPathWA = taskSimpleFile.getArea().getRootDir().getVPath().toString();
+            vPathWA = vPathWA.replaceFirst("/(.*)default/","/default/");
+            logger.info("VPath for the WorkArea: " + vPathWA);
+            String contentMappingDCR = vPathWA + "/" + CONTENT_TYPE_DCR;
+            logger.info("Content Mapping DCR: " + contentMappingDCR);
+            File contentMappingFile = new File(contentMappingDCR);
+            if(contentMappingFile.exists()) {
+                SAXReader reader = new SAXReader();
+                Document doc = reader.read(contentMappingFile);
+                String catDetail = "";
 
-            File file = new File(CONTENT_TYPE_DCR);
-            SAXReader reader = new SAXReader();
-            Document doc = reader.read(file);
-            String catDetail = "";
-
-            if(!doc.selectNodes("master/master-data/Key-Label").isEmpty()) {
-                logger.info("Taxonomy Master Key-Label ");
-                List<Node> labels = doc.selectNodes("master/master-data/Key-Label");
-                String catVal = "";
-                for (Node label : labels) {
-                    catVal = label.selectSingleNode("Value").getText();
-                    logger.info("Taxonomy Value : " + catVal);
-                    if (catVal.equals(category)) {
-                        catDetail = label.selectSingleNode("Detail").getText();
-                        logger.info("Taxonomy Detail : " + catDetail);
-                        break;
+                if (!doc.selectNodes("master/master-data/Key-Label").isEmpty()) {
+                    logger.info("Taxonomy Master Key-Label ");
+                    List<Node> labels = doc.selectNodes("master/master-data/Key-Label");
+                    String catVal = "";
+                    for (Node label : labels) {
+                        catVal = label.selectSingleNode("Value").getText();
+                        logger.info("Taxonomy Value : " + catVal);
+                        if (catVal.equals(category)) {
+                            catDetail = label.selectSingleNode("Detail").getText();
+                            logger.info("Taxonomy Detail : " + catDetail);
+                            break;
+                        }
                     }
                 }
+                if (catDetail.isEmpty())
+                    catDetail = category;
+                logger.debug(" category for url : " + catDetail);
+                Url = "/" + getLang(taskSimpleFile) + "/"
+                        + catDetail + "/"
+                        + getDCRValue(document, DCR_NAME);
+            } else {
+                logger.info("Category Mapping File "+ contentMappingDCR +" does not exist");
+                Url = "/" + getLang(taskSimpleFile) + "/"
+                        + category + "/"
+                        + getDCRValue(document, DCR_NAME);
             }
-            if(catDetail.isEmpty())
-                catDetail = category;
-            logger.debug(" category for url : " + catDetail);
-            Url = "/" + getLang(taskSimpleFile) + "/"
-                    + catDetail + "/"
-                    + getDCRValue(document, DCR_NAME);
-
-        }catch(CSException e){
-            logger.error("CSException in getCategoryBasedUrl : ", e);
-        }catch (Exception e){
-            logger.error("Exception in getCategoryBasedUrl : ", e);
+        }catch(CSException | DocumentException e){
+            logger.error("Exception occured in getCategoryBasedUrl : ", e);
         }
         logger.debug("Url :"+ Url);
         return Url;
@@ -511,7 +489,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
     public boolean insertData(CSSimpleFile taskSimpleFile, Document document)
             throws SQLException, CSException {
         logger.debug("DataBaseContentIngest : insertData");
-		String DcrId = getDCRValue(document, ID_PATH);
+        String DcrId = getDCRValue(document, ID_PATH);
         if(DcrId == null)
             return true;
         Connection connection = null;
@@ -576,7 +554,6 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             //  preparedStatement.setTimestamp(13, getSqlDate(getDCRValue(document, MODIFIED_DATE_PATH)));
             preparedStatement.setTimestamp(13, getModificationDate(taskSimpleFile));
             preparedStatement.setLong(14, version);
-            //preparedStatement.setString(15, "Submitted");
             preparedStatement.setString(15,fileStatus);
             preparedStatement.setString(16, getDCRValue(document, SERVICE_TYPE));
             preparedStatement.setString(17, getDCRValue(document, SERVICE_MODE));
@@ -752,7 +729,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             preparedStatement.setString(4, dcr);
 
             logger.info("insertData preparedStatement : " + preparedStatement);
-           // result = preparedStatement.executeUpdate();
+            // result = preparedStatement.executeUpdate();
             result = preparedStatement.executeQuery();
 
             logger.info("selectQuery result : " + result.toString());
@@ -827,7 +804,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
     public boolean taxonomyInsertQuery(String lang, String type,String key,String label,String dcr,PostgreTSConnection postgreConnection ){
         logger.debug("DataBaseContentIngest : insertTaxonomyData");
         Connection connection = null;
-		boolean isDataInserted = false;
+        boolean isDataInserted = false;
         PreparedStatement preparedStatement = null;
         try {
 
@@ -992,7 +969,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
 
         String reviewDate = "";
         String approveDate = "";
-        String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
+        String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy","EEE MMM dd HH:mm:ss zzz yyyy"};
         String jobStatus = "PUBLISHED";
         String fileStatus  = "";
         String commentStr = "";
@@ -1002,7 +979,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
 
         try {
 
-            reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+            //reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
+            reviewDate = taskObj.getWorkflow().getVariable(META_REVIEW_DATE);
             logger.info("Review Date : " + reviewDate );
 
             Timestamp reviewedDate = null;
@@ -1011,7 +989,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.info("reviewedDate : " + reviewedDate );
 
 
-            approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            //approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
+            approveDate = taskObj.getWorkflow().getVariable(META_APPROVE_DATE);
             logger.info("Approve Date : " + approveDate );
 
             Timestamp approvalDate = null;
@@ -1049,8 +1028,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             preparedStatement.setTimestamp(1, PublishDate);
             preparedStatement.setTimestamp(2, reviewedDate);
             preparedStatement.setTimestamp(3, approvalDate);
-            preparedStatement.setLong(4,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
-            preparedStatement.setLong(5,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+            //preparedStatement.setLong(4,getRejectCount(taskSimpleFile.getExtendedAttribute(META_REVIEW_REJECT_DATES).getValue() ));
+            preparedStatement.setLong(4,getRejectCount(taskObj.getWorkflow().getVariable(META_REVIEW_REJECT_DATES)));
+            //preparedStatement.setLong(5,getRejectCount(taskSimpleFile.getExtendedAttribute(META_APPROVE_REJECT_DATES).getValue() ));
+            preparedStatement.setLong(5,getRejectCount(taskObj.getWorkflow().getVariable(META_APPROVE_REJECT_DATES)));
             preparedStatement.setTimestamp(6, PublishDate);
             preparedStatement.setString(7,jobStatus);
             preparedStatement.setString(8,fileStatus);
@@ -1064,6 +1045,10 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.info("updateQuery result : " + result);
             if (result > 0) {
                 isDataUpdated = true;
+                taskObj.getWorkflow().deleteVariable(META_REVIEW_DATE);
+                taskObj.getWorkflow().deleteVariable(META_APPROVE_DATE);
+                taskObj.getWorkflow().deleteVariable(META_REVIEW_REJECT_DATES);
+                taskObj.getWorkflow().deleteVariable(META_APPROVE_REJECT_DATES);
             }
         }catch (NumberFormatException | SQLException e) {
             logger.error("NumberFormatException/SQL Exception in updateData: ", e);
@@ -1087,6 +1072,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         return rejectCount;
     }
 
+
+
     /**
      * Method to get the DCR value for the input node name
      *
@@ -1095,13 +1082,13 @@ public class DataBaseContentIngest implements CSURLExternalTask {
      * @return string node value.
      */
     public String getDCRValue(Document document, String nodeName) {
-        logger.debug("DB Content Ingest Task : getDCRValue");
+        logger.info("DB Content Ingest Task : getDCRValue");
         String dcrValue = null;
         if(document.selectSingleNode(nodeName) != null) {
             dcrValue = document.selectSingleNode(nodeName).getText();
-            logger.debug(nodeName + " Exists");
+            logger.info(nodeName + " Exists");
         }
-        logger.debug(nodeName + " : " + dcrValue);
+        logger.info(nodeName + " : " + dcrValue);
         return dcrValue;
     }
 
