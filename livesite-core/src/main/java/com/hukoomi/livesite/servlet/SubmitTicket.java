@@ -89,6 +89,7 @@ public class SubmitTicket extends HttpServlet {
     private static final String STARTTLS_ENABLE = "false";
     /** character set Constant */
     private static final String CHAR_SET = "UTF-8";
+   
 
     /**
      * @see HttpServlet#doPost(HttpServletRequest request,
@@ -214,10 +215,16 @@ public class SubmitTicket extends HttpServlet {
     public StringBuilder createTicket(String json,
             String httpServletAddress) throws IOException {
         StringBuilder resp = new StringBuilder();
+        String BASE_URL = "baseUrl";
+        String baseUrl;
+        String servletAddress = "<servletaddress>";
+        Properties propertiesFile =
+                loadProperties("customerserviceconfig.properties");
+        baseUrl = propertiesFile.getProperty(BASE_URL);
+        baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
         String responseLine = null;
-        URL url = null;
-        url = new URL("http://" + httpServletAddress + ":"
-                + "8082/api/contact/center/ticket");
+                     
+        URL url = new URL(baseUrl);
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         try {
 
