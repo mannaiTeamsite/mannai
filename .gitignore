@@ -26,11 +26,11 @@ teamsite-core/.classpath
 teamsite-core/.project
 teamsite-core/.settings/
 
-ContactService/.classpath
-ContactService/.project
-ContactService/.settings/
-ContactService/target/classes/
-ContactService/target/test-classes/
+contact-service/.classpath
+contact-service/.project
+contact-service/.settings/
+contact-service/target/classes/
+contact-service/target/test-classes/
 
 
 
