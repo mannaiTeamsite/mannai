@@ -1,11 +1,15 @@
 package com.hukoomi.livesite.servlet;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -46,11 +50,18 @@ public class QueryTicket extends HttpServlet {
             String ticketNo = xssUtils.stripXSS(data.getString("ticketNumber"));
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
+            String BASE_URL = "baseUrl";
+            String baseUrl;
+            String servletAddress = "<servletaddress>";
             if (ticketNo.length() <= 20) {
                 String httpServletAddress = request.getLocalAddr();
-                URL url = null;
-                url = new URL("http://" + httpServletAddress
-                        + ":8082/api/contact/center/ticket/" + ticketNo);
+                Properties propertiesFile =
+                        loadProperties("customerserviceconfig.properties");
+                baseUrl = propertiesFile.getProperty(BASE_URL);
+                baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
+                
+                URL url = new URL(baseUrl+"/"+ticketNo);
+                LOGGER.debug(" url::" + url);
                 HttpURLConnection con =
                         (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
@@ -86,6 +97,43 @@ public class QueryTicket extends HttpServlet {
         }
 
 
+    }
+    /**
+     * This method will be used to load the configuration properties.
+     *
+     * @param context The parameter context object passed from Component.
+     * @throws IOException
+     * @throws MalformedURLException
+     *
+     */
+    private static Properties
+            loadProperties(final String propertiesFileName) {
+        LOGGER.info("Loading Properties File from Request Context.");
+        Properties propFile = new Properties();
+        if (propertiesFileName != null && !propertiesFileName.equals("")) {
+            String root =
+                    "/usr/opentext/LiveSiteDisplayServices/runtime/web/iw/config/properties";
+            InputStream inputStream;
+            try {
+                inputStream = new FileInputStream(
+                        root + "/" + propertiesFileName);
+                propFile.load(inputStream);
+                LOGGER.info("Properties File Loaded");
+            } catch (MalformedURLException e) {
+                LOGGER.error(
+                        "Malformed URL Exception while loading Properties file : ",
+                        e);
+            } catch (IOException e) {
+                LOGGER.error(
+                        "IO Exception while loading Properties file : ",
+                        e);
+            }
+
+        } else {
+            LOGGER.info("Invalid / Empty properties file name.");
+        }
+        LOGGER.info("Finish Loading Properties File.");
+        return propFile;
     }
 
 }
