@@ -221,7 +221,7 @@
 	</dependency>
 	<!-- Added as part Newsletter workflow changes  -->
 	<dependency>
-		<groupId>com.opentext.teamsite.commons</groupId>
+		<groupId>com.opentext.livesite.commons</groupId>
 		<artifactId>livesite</artifactId>
 		<version>16.6.1.0.0</version>
 	</dependency>
