@@ -137,7 +137,21 @@
 							<version>16.6.1.0.0</version>
 							<packaging>jar</packaging>
 						</configuration>
-					</execution>							
+					</execution>
+					<execution>
+						<id>teamsite_install_livesite</id>
+						<phase>package</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<file>resources/teamsite/lib/livesite.jar</file>
+							<groupId>com.opentext.teamsite.commons</groupId>
+							<artifactId>livesite</artifactId>
+							<version>16.6.1.0.0</version>
+							<packaging>jar</packaging>
+						</configuration>
+					</execution>													
 				</executions>
 			</plugin>
 		</plugins>
