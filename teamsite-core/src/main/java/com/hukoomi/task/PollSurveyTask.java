@@ -243,6 +243,15 @@ public class PollSurveyTask implements CSURLExternalTask {
      * Date Time format
      */
     private static final String DATE_TIME_FORMAT = "EEE MMM dd yyyy HH:mm:ss";
+    /**
+     * Insert Master Data task name
+     */
+    private static final String TASK_INSERT_MASTER_DATA = "Insert Master Data";
+    /**
+     * Comment Map holds comments for each file
+     */
+    HashMap<String, String>  commentsMap  = new HashMap<String, String>();
+    
 
     /**
      * Overridden method from CSSDK
@@ -257,13 +266,16 @@ public class PollSurveyTask implements CSURLExternalTask {
         logger.info("PollSurveyTask - execute");
         HashMap<String, String> statusMap = null;
         CSAreaRelativePath[] taskFileList = task.getFiles();
-        String commentOnModify = "";
+        
         logger.debug("TaskFileList Length : " + taskFileList.length);
 
         postgre = new PostgreTSConnection(client, task, DB_PROPERTY_FILE);
         statusMap = new HashMap<>();
         statusMap.put(TRANSITION, SUCCESS_TRANSITION);
         statusMap.put(TRANSITION_COMMENT, "");
+        
+        getModifierComments(task, taskFileList);
+        logger.info("commentsMap : " + commentsMap );
         
         for (CSAreaRelativePath taskFilePath : taskFileList) {
             try {
@@ -360,9 +372,9 @@ public class PollSurveyTask implements CSURLExternalTask {
                     }
                 }
                 
-                commentOnModify = updateComment((CSSimpleFile)file, task);
-                if(StringUtils.isNotBlank(commentOnModify)) {
-                    statusMap.put(TRANSITION_COMMENT, commentOnModify+" "+statusMap.get(TRANSITION_COMMENT));
+                String commentOnModifier = updateComment((CSSimpleFile)file, task);
+                if(StringUtils.isNotBlank(commentOnModifier)) {
+                    statusMap.put(TRANSITION_COMMENT, commentOnModifier+" "+statusMap.get(TRANSITION_COMMENT));
                 }
                 
             } catch (Exception e) {
@@ -2480,14 +2492,18 @@ public class PollSurveyTask implements CSURLExternalTask {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
             taskObj.getWorkflow().setVariable(META_APPROVE_DATE, LocalDateTime.now().format(formatter));
+            logger.info("Set Approve Date as : " + taskObj.getWorkflow().getVariable(META_APPROVE_DATE));
             //approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
             approveDate = taskObj.getWorkflow().getVariable(META_APPROVE_DATE);
             logger.info("Approve Date : " + approveDate );
 
-            if(!StringUtils.equals(modifier, modifierMetaData)) {
+            /*if(!StringUtils.equals(modifier, modifierMetaData)) {
                 commentOnModifier = modifier+": Updated content on behalf of "+modifierMetaData+".";
                 logger.info("commentOnModifier : " + commentOnModifier );
-            }
+            }*/
+            
+            commentOnModifier = commentsMap.get(getCommentKey(taskSimpleFile));
+            logger.info("commentOnModifier : " + commentOnModifier );
             
             if(StringUtils.isNotBlank(modifier)) {
                 //CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
@@ -2501,5 +2517,95 @@ public class PollSurveyTask implements CSURLExternalTask {
         } 
         return commentOnModifier;
     }
+    
+    
+    /**
+     * Method to get the modifier comment for each task file.
+     *
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns path of file.
+     */
+    public void getModifierComments(CSExternalTask task, CSAreaRelativePath[] taskFileList) {
+        String fileLocation = "";
+        String lang = "";
+        try {
+            for (CSAreaRelativePath taskFile : taskFileList) {
+                try {
+                    CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea().getFile(taskFile);
+                    
+                    String fileName = taskSimpleFile.getName();
+                    logger.debug("File Name : " + fileName);
+                    
+                    String taskName = task.getName();
+                    logger.info("Task Name : " + taskName);
+                    
+                    String modifier = taskSimpleFile.getLastModifier().getName();
+                    logger.info("Last Modified By: " + modifier);
+                    
+                    String modifierMetaData = task.getWorkflow().getVariable(META_LAST_MODIFIER);
+                    logger.info("EA Modifier : " + modifierMetaData);
+                    
+                    if(StringUtils.equals(TASK_INSERT_MASTER_DATA, taskName) 
+                            && !StringUtils.equals(modifier, modifierMetaData)) {
+                            String commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
+                            logger.info("commentOnModifier : " + commentOnModifier );
+                            commentsMap.put(getCommentKey(taskSimpleFile), commentOnModifier);
+                    }
 
+                } catch (Exception e) {
+                    logger.error("Exception in getModifierComments: ", e);
+                }
+            }
+            logger.debug("lang : " + lang);
+        } catch (Exception e) {
+            logger.error("Exception in getModifierComments: ", e);
+        }
+    }
+    
+    /**
+     * Method to get the comment message key.
+     *
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns comments key for the file.
+     */
+    public String getCommentKey(CSSimpleFile taskSimpleFile) {
+        String commentsKey = "";
+        String fileName = "";
+        String lang = "";
+        try {
+            fileName = taskSimpleFile.getName();
+            lang = getLang(taskSimpleFile);
+            if(StringUtils.isNotBlank(lang)) {
+                commentsKey = fileName +"_"+ lang;
+            }else {
+                commentsKey = fileName;
+            }
+            logger.debug("commentsKey : " + commentsKey);
+        } catch (Exception e) {
+            logger.error("Exception in getCommentKey: ", e);
+        }
+        return commentsKey;
+    }
+
+    /**
+     * Method to get the lang of the input file.
+     *
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns lang of the input file.
+     */
+    public String getLang(CSSimpleFile taskSimpleFile) {
+        String fileLocation = "";
+        String lang = "";
+        try {
+            fileLocation = taskSimpleFile.getVPath().toString();
+            logger.debug("fileLocation : " + fileLocation);
+            if(StringUtils.contains(fileLocation,"/data/") && StringUtils.contains(fileLocation,"Content")) {
+                lang = fileLocation.substring(fileLocation.indexOf("/data/") + 6, fileLocation.lastIndexOf("/"));
+            }
+            logger.debug("lang : " + lang);
+        } catch (Exception e) {
+            logger.error("Exception in getLang: ", e);
+        }
+        return lang;
+    }
 }

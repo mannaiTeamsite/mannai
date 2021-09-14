@@ -112,9 +112,16 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
      */
     private static final String COMMENT_DATE_FORMAT = "EEE MMM dd HH:mm:ss z yyyy";
     
-    String commentOnModifier = "";
-
+    /**
+     * Comment Map holds comments for each file
+     */
+    HashMap<String, String>  commentsMap  = new HashMap<String, String>();
+    
+    /**
+     * PostgreTSConnection object reference
+     */
     PostgreTSConnection postgre = null;
+    
 
     /**
      * Overridden method from CSSDK
@@ -137,6 +144,11 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
         statusMap.put(TRANSITION, taskName+" Success");
         statusMap.put(TRANSITION_COMMENT, "");
 
+        getModifierComments(task, taskFileList);
+        logger.info("commentsMap : " + commentsMap );
+        
+        updateRejectDates(task);
+        
         for (CSAreaRelativePath taskFile : taskFileList) {
             try {
                 CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea().getFile(taskFile);
@@ -174,6 +186,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 logger.debug("DBOperationWorkflow : " + isDBOperationWorkflowSuccess);
                 if (isDBUpdationSuccess){
                     statusMap.put(TRANSITION, tName+" Success");
+                    String commentOnModifier = commentsMap.get(getCommentKey(taskSimpleFile));
                     if(StringUtils.isNotBlank(commentOnModifier)) {
                         statusMap.put(TRANSITION_COMMENT, commentOnModifier+" "+DATA_INSERT_SUCCESS);
                     }else {
@@ -270,7 +283,6 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
 
             try {
                 
-                commentOnModifier = "";
                 taskName = taskObj.getName();
                 logger.info("Task Name : " + taskName);
                 
@@ -288,7 +300,10 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                 logger.info("Workflow Approver : " + approver );
                 
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
-                taskObj.getWorkflow().setVariable(META_REVIEW_DATE, LocalDateTime.now().format(formatter));
+                if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName)) {
+                    taskObj.getWorkflow().setVariable(META_REVIEW_DATE, LocalDateTime.now().format(formatter));
+                    logger.info("Set Review Date as : " + taskObj.getWorkflow().getVariable(META_REVIEW_DATE));
+                }
 
                 //reviewDate = taskSimpleFile.getExtendedAttribute(META_REVIEW_DATE).getValue();
                 reviewDate = taskObj.getWorkflow().getVariable(META_REVIEW_DATE);
@@ -318,32 +333,15 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                     fileStatus = "MODIFY";
                 }
                 
-                if(StringUtils.equals(TASK_REVIEW_REJECT_DB, taskName)) {
-                    String reviewRejectDates = taskObj.getWorkflow().getVariable(META_REVIEW_REJECT_DATES);
-                    if(reviewRejectDates == null) {
-                        reviewRejectDates = LocalDateTime.now().format(formatter);
-                    }else {
-                        reviewRejectDates = reviewRejectDates+" "+LocalDateTime.now().format(formatter);
-                    }
-                    taskObj.getWorkflow().setVariable(META_REVIEW_REJECT_DATES, reviewRejectDates);
-                }
-                
-                if(StringUtils.equals(TASK_APPROVAL_REJECT_DB, taskName)) {
-                    String approveRejectDates = taskObj.getWorkflow().getVariable(META_APPROVE_REJECT_DATES);
-                    if(approveRejectDates == null) {
-                        approveRejectDates = LocalDateTime.now().format(formatter);
-                    }else {
-                        approveRejectDates = approveRejectDates+" "+LocalDateTime.now().format(formatter);
-                    }
-                    taskObj.getWorkflow().setVariable(META_APPROVE_REJECT_DATES, approveRejectDates);
-                }
-                
-                if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName) 
+                /*if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName) 
                         && !StringUtils.equals(modifier, modifierMetaData)) {
                         commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
                         logger.info("commentOnModifier : " + commentOnModifier );
-                }
+                }*/
                 
+                String commentOnModifier = commentsMap.get(getCommentKey(taskSimpleFile));
+                logger.info("commentOnModifier : " + commentOnModifier );
+                        
                 if(StringUtils.isNotBlank(modifier)  
                         && StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName)) {
                     //CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
@@ -617,10 +615,10 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
     }
 
     /**
-     * Method to get the task file path.
+     * Method to get the lang of the input file.
      *
      * @param taskSimpleFile Task file of CSSimpleFile object
-     * @return Returns path of file.
+     * @return Returns lang of the input file.
      */
     public String getLang(CSSimpleFile taskSimpleFile) {
         String fileLocation = "";
@@ -638,6 +636,12 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
         return lang;
     }
 
+    /**
+     * Method to get the reject count using the reject dates.
+     *
+     * @param rejectDateString concatenated reject dates
+     * @return Returns reject count.
+     */
     public int getRejectCount(String rejectDateString){
         int rejectCount = 0;
         rejectDateString = rejectDateString != null ? rejectDateString : "";
@@ -646,6 +650,110 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
         rejectCount = rejectDateString.replaceAll("\\s+","").length() / 20;
         logger.info(" Reject Count : " + rejectCount );
         return rejectCount;
+    }
+    
+    /**
+     * Method to get the modifier comment for each task file.
+     *
+     * @param task CSExternalTask object
+     * @param taskFileList Task file list of CSAreaRelativePath object
+     */
+    public void getModifierComments(CSExternalTask task, CSAreaRelativePath[] taskFileList) {
+        String lang = "";
+        try {
+            for (CSAreaRelativePath taskFile : taskFileList) {
+                try {
+                    CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea().getFile(taskFile);
+                    
+                    String fileName = taskSimpleFile.getName();
+                    logger.debug("File Name : " + fileName);
+                    
+                    String taskName = task.getName();
+                    logger.info("Task Name : " + taskName);
+                    
+                    String modifier = taskSimpleFile.getLastModifier().getName();
+                    logger.info("Last Modified By: " + modifier);
+                    
+                    //modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
+                    String modifierMetaData = task.getWorkflow().getVariable(META_LAST_MODIFIER);
+                    logger.info("EA Modifier : " + modifierMetaData);
+                    
+                    if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName) 
+                            && !StringUtils.equals(modifier, modifierMetaData)) {
+                            String commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
+                            logger.info("commentOnModifier : " + commentOnModifier );
+                            commentsMap.put(getCommentKey(taskSimpleFile), commentOnModifier);
+                    }
+
+                } catch (Exception e) {
+                    logger.error("Exception in getModifierComments: ", e);
+                }
+            }
+            logger.debug("lang : " + lang);
+        } catch (Exception e) {
+            logger.error("Exception in getModifierComments: ", e);
+        }
+    }
+    
+    /**
+     * Method to updates the reject dates for the task.
+     *
+     * @param task CSExternalTask object
+     */
+    public void updateRejectDates(CSExternalTask task) {
+        try {
+            
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
+            
+            if(StringUtils.equals(TASK_REVIEW_REJECT_DB, task.getName())) {
+                String reviewRejectDates = task.getWorkflow().getVariable(META_REVIEW_REJECT_DATES);
+                if(reviewRejectDates == null) {
+                    reviewRejectDates = LocalDateTime.now().format(formatter);
+                }else {
+                    reviewRejectDates = reviewRejectDates+" "+LocalDateTime.now().format(formatter);
+                }
+                task.getWorkflow().setVariable(META_REVIEW_REJECT_DATES, reviewRejectDates);
+                logger.info("Updated Reveiew Reject Dates : " + task.getWorkflow().getVariable(META_REVIEW_REJECT_DATES) );
+            }
+            
+            if(StringUtils.equals(TASK_APPROVAL_REJECT_DB, task.getName())) {
+                String approveRejectDates = task.getWorkflow().getVariable(META_APPROVE_REJECT_DATES);
+                if(approveRejectDates == null) {
+                    approveRejectDates = LocalDateTime.now().format(formatter);
+                }else {
+                    approveRejectDates = approveRejectDates+" "+LocalDateTime.now().format(formatter);
+                }
+                task.getWorkflow().setVariable(META_APPROVE_REJECT_DATES, approveRejectDates);
+                logger.info("Updated Approve Reject Dates : " + task.getWorkflow().getVariable(META_APPROVE_REJECT_DATES) );
+            }
+        } catch (Exception e) {
+            logger.error("Exception in getModifierComments: ", e);
+        }
+    }
+    
+    /**
+     * Method to get the comment message key.
+     *
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns comments key for the file.
+     */
+    public String getCommentKey(CSSimpleFile taskSimpleFile) {
+        String commentsKey = "";
+        String fileName = "";
+        String lang = "";
+        try {
+            fileName = taskSimpleFile.getName();
+            lang = getLang(taskSimpleFile);
+            if(StringUtils.isNotBlank(lang)) {
+                commentsKey = fileName +"_"+ lang;
+            }else {
+                commentsKey = fileName;
+            }
+            logger.debug("commentsKey : " + commentsKey);
+        } catch (Exception e) {
+            logger.error("Exception in getCommentKey: ", e);
+        }
+        return commentsKey;
     }
 
 }
