@@ -180,6 +180,7 @@
 		<artifactId>livesite-service</artifactId>
 		<version>16.6.1.0.0</version>
 	</dependency>
+	
 	<dependency>
 		<groupId>log4j</groupId>
 		<artifactId>log4j</artifactId>
@@ -218,6 +219,13 @@
 		<artifactId>cssdkjava</artifactId>
 		<version>16.6.1.0.0</version>
 	</dependency>
+	<!-- Added as part Newsletter workflow changes  -->
+	<dependency>
+		<groupId>com.opentext.teamsite.commons</groupId>
+		<artifactId>livesite</artifactId>
+		<version>16.6.1.0.0</version>
+	</dependency>
+	<!-- Added as part Newsletter workflow changes  -->
 	<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 	<dependency>
     		<groupId>commons-io</groupId>
