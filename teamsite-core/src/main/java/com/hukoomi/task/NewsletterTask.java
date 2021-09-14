@@ -38,11 +38,13 @@ import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.common.CSRemoteException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
 import com.interwoven.cssdk.filesys.CSFile;
+import com.interwoven.cssdk.filesys.CSHole;
 import com.interwoven.cssdk.filesys.CSSimpleFile;
 import com.interwoven.cssdk.filesys.CSVPath;
 import com.interwoven.cssdk.transform.XSLTransformer;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
+
 
 public class NewsletterTask implements CSURLExternalTask {
 
@@ -118,23 +120,34 @@ public class NewsletterTask implements CSURLExternalTask {
 
         for (CSAreaRelativePath taskFilePath : taskFileList) {
             CSFile file = task.getArea().getFile(taskFilePath);
-            String fileName = file.getName();
-            logger.debug("File Name : " + fileName);
+            
+            if(file.getKind() != CSHole.KIND) {
+                String fileName = file.getName();
+                logger.debug("File Name : " + fileName);
 
-            CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
-            String dcrType = taskSimpleFile
-                    .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
-                    .getValue();
-            logger.info("DCR Type : " + dcrType);
-            if ("Content/Newsletter".equals(dcrType)) {
-                statusMap = processNewsletterDCR(client, task,
-                        taskSimpleFile);
-            }
-            else {
+                CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
+                String dcrType = taskSimpleFile
+                        .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
+                        .getValue();
+                logger.info("DCR Type : " + dcrType);
+                if ("Content/Newsletter".equals(dcrType)) {
+                    statusMap = processNewsletterDCR(client, task,
+                            taskSimpleFile);
+                }
+                else {
+                    statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+                    statusMap.put(TRANSITION_COMMENT,
+                            SUCCESS_TRANSITION_COMMENT);
+                }
+                
+            }else {
                 statusMap.put(TRANSITION, SUCCESS_TRANSITION);
                 statusMap.put(TRANSITION_COMMENT,
                         SUCCESS_TRANSITION_COMMENT);
+                
             }
+            
+            
         }
 
         task.chooseTransition(statusMap.get(TRANSITION),

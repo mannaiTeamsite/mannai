@@ -1,0 +1,33 @@
+<configuration scan="false">
+	<property name="logPattern" value="%d{HH:mm:ss.SSS} %-4relative [%thread] %-5level %logger{35} - %msg%n"/>
+	<property name="logEncoding" value="UTF-8"/>
+	<property name="logDirectory" value="./logs/"/>
+	<property name="file_base_name" value="hukoomi"/>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>${logEncoding}</charset>
+			<pattern>${logPattern}</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${logDirectory}${file_base_name}.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+			<fileNamePattern>${logDirectory}%d{yyyy-MM}/${file_base_name}_%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+			<maxFileSize>10MB</maxFileSize>
+			<totalSizeCap>20GB</totalSizeCap>
+			<maxHistory>60</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>${logEncoding}</charset>
+			<pattern>${logPattern}</pattern>
+		</encoder>
+	</appender>
+	<logger name="com.apress" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</logger>
+	<root level="INFO">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+	</root>
+</configuration>
