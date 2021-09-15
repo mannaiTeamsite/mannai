@@ -1,0 +1,537 @@
+{
+  "model": {
+    "keys": {
+      "callID": {
+        "name": "{http://schemas.hp.com/SM/7}CallID",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterKeysType",
+        "value": {
+          "value": "SD8152691",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "query": null,
+      "updatecounter": null
+    },
+    "instance": {
+      "callID": {
+        "value": "SD8152691",
+        "type": "String",
+        "mandatory": null,
+        "readonly": null
+      },
+      "serviceRecipient": {
+        "name": "{http://schemas.hp.com/SM/7}ServiceRecipient",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "YAHIA KHALIFA^ICT171",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "urgency": {
+        "name": "{http://schemas.hp.com/SM/7}Urgency",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "3",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "openTime": {
+        "name": "{http://schemas.hp.com/SM/7}OpenTime",
+        "declaredType": "com.hp.schemas.sm._7.common.DateTimeType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": 1607650020000,
+          "type": "DateTime",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "updateTime": {
+        "name": "{http://schemas.hp.com/SM/7}UpdateTime",
+        "declaredType": "com.hp.schemas.sm._7.common.DateTimeType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": 1607680711000,
+          "type": "DateTime",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "openedBy": {
+        "name": "{http://schemas.hp.com/SM/7}OpenedBy",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "HUKOOMI  TL YAHIA KHALIFA",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "description": {
+        "type": "Array",
+        "description": [
+          {
+            "value": "Dear Team -",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          },
+          {
+            "value": "",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          },
+          {
+            "value": "                         Please remove the attached trees.",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          }
+        ]
+      },
+      "affectedService": null,
+      "callOwner": {
+        "name": "{http://schemas.hp.com/SM/7}CallOwner",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "HUKOOMI  TL YAHIA KHALIFA",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "status": {
+        "name": "{http://schemas.hp.com/SM/7}Status",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "Dispatched",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "notifyBy": {
+        "name": "{http://schemas.hp.com/SM/7}NotifyBy",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "Email/SMS",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "solution": null,
+      "assignmentGroup": {
+        "type": "Array",
+        "assignmentGroup": [
+          {
+            "value": "CONTACT CENTER",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          }
+        ]
+      },
+      "category": {
+        "name": "{http://schemas.hp.com/SM/7}Category",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "incident",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "callerDepartment": {
+        "name": "{http://schemas.hp.com/SM/7}CallerDepartment",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "ICTQATAR/QGCC/ICTQATAR/OUTBOUND",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "callerLocation": null,
+      "closeTime": null,
+      "closedBy": null,
+      "knowledgeCandidate": {
+        "name": "{http://schemas.hp.com/SM/7}KnowledgeCandidate",
+        "declaredType": "com.hp.schemas.sm._7.common.BooleanType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": false,
+          "type": "Boolean",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "priority": {
+        "name": "{http://schemas.hp.com/SM/7}Priority",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "4",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "serviceContract": null,
+      "siteCategory": null,
+      "totalLossOfService": null,
+      "area": null,
+      "subarea": null,
+      "problemType": null,
+      "failedEntitlement": null,
+      "phase": {
+        "name": "{http://schemas.hp.com/SM/7}Phase",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "Work In Progress",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "causeCode": null,
+      "closureCode": null,
+      "company": {
+        "name": "{http://schemas.hp.com/SM/7}Company",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "MOTC-GOV-OPS",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "reportedByContact": null,
+      "reportedByDifferentContact": null,
+      "reportedByPhone": null,
+      "reportedByExtension": null,
+      "reportedByFax": null,
+      "contactEmail": {
+        "name": "{http://schemas.hp.com/SM/7}ContactEmail",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "YZakarya@contactcenter.gov.qa",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "locationFullName": null,
+      "contactFirstName": {
+        "name": "{http://schemas.hp.com/SM/7}ContactFirstName",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "(QGCC _ OPS  MANAGER)",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "contactLastName": {
+        "name": "{http://schemas.hp.com/SM/7}ContactLastName",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "YAHIA KHALIFA",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "contactTimeZone": null,
+      "enteredByESS": null,
+      "nextSLABreach": null,
+      "contact": {
+        "name": "{http://schemas.hp.com/SM/7}Contact",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "YAHIA KHALIFA^ICT171",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "contactPhone": {
+        "name": "{http://schemas.hp.com/SM/7}ContactPhone",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "77226775",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "update": {
+        "type": "Array",
+        "update": [
+          {
+            "value": "11/12/20 12:58:31 Qatar (Washim Ahmed):",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          },
+          {
+            "value": "Related Incident IM644731 has been updated.",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          },
+          {
+            "value": "The Incident Status Changed from Open to Work In Progress",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          },
+          {
+            "value": "11/12/20 12:58:30 Qatar (Washim Ahmed):",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          },
+          {
+            "value": "Related Incident IM644731 has been updated.",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          },
+          {
+            "value": "Individual reassignment from NONE to wahmed0486",
+            "type": "String",
+            "mandatory": null,
+            "readonly": null
+          }
+        ]
+      },
+      "impact": {
+        "name": "{http://schemas.hp.com/SM/7}Impact",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "4",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "neededByTime": null,
+      "approvalStatus": null,
+      "folder": null,
+      "subscriptionItem": null,
+      "contactFullName": {
+        "name": "{http://schemas.hp.com/SM/7}ContactFullName",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "HUKOOMI  TL YAHIA KHALIFA",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "affectedCI": null,
+      "title": {
+        "name": "{http://schemas.hp.com/SM/7}Title",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "remove  trees",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "assignee": {
+        "name": "{http://schemas.hp.com/SM/7}Assignee",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "YZakarya",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "callOrigin": {
+        "name": "{http://schemas.hp.com/SM/7}CallOrigin",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "Email",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "contactCompanyName": null,
+      "contactEID": null,
+      "contactIdType": null,
+      "contactMobilePhone": null,
+      "contactQID": null,
+      "external": {
+        "name": "{http://schemas.hp.com/SM/7}External",
+        "declaredType": "com.hp.schemas.sm._7.common.BooleanType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": false,
+          "type": "Boolean",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "contactPassportNumber": null,
+      "serviceCategory": {
+        "name": "{http://schemas.hp.com/SM/7}ServiceCategory",
+        "declaredType": "com.hp.schemas.sm._7.common.StringType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": "HP SERVICE MANAGER",
+          "type": "String",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "location": null,
+      "attachments": null,
+      "query": null,
+      "uniquequery": "incident.id=\"SD8152691\"",
+      "recordid": "SD8152691 - incident - Dear Team -",
+      "updatecounter": null,
+      "slabreached": {
+        "name": "{http://schemas.hp.com/SM/7}SLABreached",
+        "declaredType": "com.hp.schemas.sm._7.common.BooleanType",
+        "scope": "com.hp.schemas.sm._7.ContactCenterInstanceType",
+        "value": {
+          "value": false,
+          "type": "Boolean",
+          "mandatory": null,
+          "readonly": null
+        },
+        "nil": false,
+        "typeSubstituted": false,
+        "globalScope": false
+      },
+      "slaagreementID": null
+    },
+    "messages": null,
+    "query": null
+  },
+  "messages": null,
+  "status": "SUCCESS",
+  "message": "Success",
+  "schemaRevisionDate": 1584565200000,
+  "schemaRevisionLevel": 0,
+  "returnCode": 0,
+  "query": null,
+  "handle": null,
+  "count": null,
+  "more": null,
+  "start": null
+}
