@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.StringJoiner;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateUtils;
@@ -250,7 +251,11 @@ public class PollSurveyTask implements CSURLExternalTask {
     /**
      * Comment Map holds comments for each file
      */
-    HashMap<String, String>  commentsMap  = new HashMap<String, String>();
+    HashMap<String, String>  commentsMap  = null;
+    /**
+     * Last modifier Map holds last modifier information for each file
+     */
+    HashMap<String, String> lastModifierMap = null;
     
 
     /**
@@ -274,13 +279,16 @@ public class PollSurveyTask implements CSURLExternalTask {
         statusMap.put(TRANSITION, SUCCESS_TRANSITION);
         statusMap.put(TRANSITION_COMMENT, "");
         
-        getModifierComments(task, taskFileList);
-        logger.info("commentsMap : " + commentsMap );
+        commentsMap  = new HashMap<String, String>();
+        lastModifierMap = new HashMap<String, String>();
+        
+        processWorkFlowInputs(task, taskFileList);
         
         for (CSAreaRelativePath taskFilePath : taskFileList) {
             try {
                 
                 CSFile file = task.getArea().getFile(taskFilePath);
+                CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea().getFile(taskFilePath);
                 String fileName = file.getName();
                 logger.debug("File Name : " + fileName);
                 
@@ -334,7 +342,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                     
                 }else {
                 
-                    CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
+                    //CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
     
                     String dcrType = taskSimpleFile
                             .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
@@ -372,7 +380,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                     }
                 }
                 
-                String commentOnModifier = updateComment((CSSimpleFile)file, task);
+                postProcessWorkFlowInputs((CSSimpleFile)file, task);
+                String commentOnModifier = commentsMap.get(getMapKey(taskSimpleFile));
                 if(StringUtils.isNotBlank(commentOnModifier)) {
                     statusMap.put(TRANSITION_COMMENT, commentOnModifier+" "+statusMap.get(TRANSITION_COMMENT));
                 }
@@ -381,6 +390,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                 logger.error("Exception in execute: ", e);
             }
         }
+        
+        task.getWorkflow().setVariable(META_LAST_MODIFIER, getLastModifierString());
 
         logger.info("transition : " + statusMap.get(TRANSITION));
         logger.info("transitionComment : "
@@ -2458,107 +2469,102 @@ public class PollSurveyTask implements CSURLExternalTask {
     }
     
     /**
-     * Method updates the workflow transition comment
+     * Method to process the workflow inputs.
+     *
+     * @param task CSExternalTask object
+     * @param taskFileList Task file list of CSAreaRelativePath object
+     */
+    public void processWorkFlowInputs(CSExternalTask task, CSAreaRelativePath[] taskFileList) {
+        logger.info("In processWorkFlowInputs");
+        try {
+            
+            String lastModifierStr = task.getWorkflow().getVariable(META_LAST_MODIFIER);
+            updateLastModifierMap(lastModifierStr);
+            
+            updateModifierComments(task, taskFileList);
+            logger.info("commentsMap : " + commentsMap );
+            
+        } catch (Exception e) {
+            logger.error("Exception in HashMap<String, String> lastModifierMap = new HashMap<String, String>();: ", e);
+        }
+    }
+    
+    /**
+     * Method post process the workflow inputs
      *
      * @param taskSimpleFile    file path
      * @param taskObj content
      * @return Returns comment on modification on behalf of publisher
      */
-    public String updateComment(CSSimpleFile taskSimpleFile, CSExternalTask taskObj) throws CSException{
-        logger.debug("PollSurveyTask : updateComment");
+    public void postProcessWorkFlowInputs(CSSimpleFile taskSimpleFile, CSExternalTask taskObj) throws CSException{
+        logger.debug("PollSurveyTask : postProcessWorkFlowInputs");
 
-        String taskName = "";
         String modifier = "";
-        String modifierMetaData = "";
-        String approver = "" ;
-        String approveDate = "";
-        String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
         String commentOnModifier = "";
+        String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
 
         try {
             
-            taskName = taskObj.getName();
-            logger.info("Task Name : " + taskName);
             
-            modifier = taskSimpleFile.getLastModifier().getName();
-            logger.info("Last Modified By: " + modifier);
-            
-            //modifierMetaData = taskSimpleFile.getExtendedAttribute(META_LAST_MODIFIER).getValue();
-            modifierMetaData = taskObj.getWorkflow().getVariable(META_LAST_MODIFIER);
-            logger.info("EA Modifier : " + modifierMetaData);
-            
-            approver = taskObj.getWorkflow().getVariable("WF_Approver");
-            logger.info("Workflow Approver : " + approver );
-
+            //update the approve date
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
             taskObj.getWorkflow().setVariable(META_APPROVE_DATE, LocalDateTime.now().format(formatter));
             logger.info("Set Approve Date as : " + taskObj.getWorkflow().getVariable(META_APPROVE_DATE));
-            //approveDate = taskSimpleFile.getExtendedAttribute(META_APPROVE_DATE).getValue();
-            approveDate = taskObj.getWorkflow().getVariable(META_APPROVE_DATE);
-            logger.info("Approve Date : " + approveDate );
-
-            /*if(!StringUtils.equals(modifier, modifierMetaData)) {
-                commentOnModifier = modifier+": Updated content on behalf of "+modifierMetaData+".";
-                logger.info("commentOnModifier : " + commentOnModifier );
-            }*/
             
-            commentOnModifier = commentsMap.get(getCommentKey(taskSimpleFile));
-            logger.info("commentOnModifier : " + commentOnModifier );
             
+            //update last modifer info
+            modifier = taskSimpleFile.getLastModifier().getName();
+            logger.info("Last Modified By: " + modifier);
             if(StringUtils.isNotBlank(modifier)) {
-                //CSExtendedAttribute[] csEAArray = new CSExtendedAttribute[1];
-                //csEAArray[0] = new CSExtendedAttribute(META_LAST_MODIFIER, modifier);
-                //taskSimpleFile.setExtendedAttributes(csEAArray);
-                taskObj.getWorkflow().setVariable(META_LAST_MODIFIER, modifier);
+                lastModifierMap.put(getMapKey(taskSimpleFile), modifier);
             }
-           
+            
         } catch (Exception e) {
-            logger.error("Exception in updateData: ", e);
+            logger.error("Exception in postProcessWorkFlowInputs: ", e);
         } 
-        return commentOnModifier;
     }
     
     
     /**
-     * Method to get the modifier comment for each task file.
+     * Method to updates the modifier comment for each task file in Map.
      *
-     * @param taskSimpleFile Task file of CSSimpleFile object
-     * @return Returns path of file.
+     * @param task CSExternalTask object
+     * @param taskFileList Task file list of CSAreaRelativePath object
      */
-    public void getModifierComments(CSExternalTask task, CSAreaRelativePath[] taskFileList) {
-        String fileLocation = "";
-        String lang = "";
+    public void updateModifierComments(CSExternalTask task, CSAreaRelativePath[] taskFileList) {
         try {
+            logger.info("updateModifierComments file count : "+taskFileList.length);
             for (CSAreaRelativePath taskFile : taskFileList) {
                 try {
                     CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea().getFile(taskFile);
                     
-                    String fileName = taskSimpleFile.getName();
-                    logger.debug("File Name : " + fileName);
-                    
                     String taskName = task.getName();
                     logger.info("Task Name : " + taskName);
+                    
+                    String fileName = taskSimpleFile.getName();
+                    logger.info("File Name : " + fileName);
+                    String lang = getLang(taskSimpleFile);
+                    logger.info("Lang : " + lang);
                     
                     String modifier = taskSimpleFile.getLastModifier().getName();
                     logger.info("Last Modified By: " + modifier);
                     
-                    String modifierMetaData = task.getWorkflow().getVariable(META_LAST_MODIFIER);
+                    String modifierMetaData = lastModifierMap.get(getMapKey(taskSimpleFile));
                     logger.info("EA Modifier : " + modifierMetaData);
                     
                     if(StringUtils.equals(TASK_INSERT_MASTER_DATA, taskName) 
                             && !StringUtils.equals(modifier, modifierMetaData)) {
-                            String commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
-                            logger.info("commentOnModifier : " + commentOnModifier );
-                            commentsMap.put(getCommentKey(taskSimpleFile), commentOnModifier);
+                        String commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
+                        logger.info("commentOnModifier : " + commentOnModifier +"for file "+fileName+" lang "+lang);
+                        commentsMap.put(getMapKey(taskSimpleFile), commentOnModifier);
                     }
-
+                    
                 } catch (Exception e) {
-                    logger.error("Exception in getModifierComments: ", e);
+                    logger.error("Exception in updateModifierComments: ", e);
                 }
             }
-            logger.debug("lang : " + lang);
         } catch (Exception e) {
-            logger.error("Exception in getModifierComments: ", e);
+            logger.error("Exception in updateModifierComments: ", e);
         }
     }
     
@@ -2568,23 +2574,23 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param taskSimpleFile Task file of CSSimpleFile object
      * @return Returns comments key for the file.
      */
-    public String getCommentKey(CSSimpleFile taskSimpleFile) {
-        String commentsKey = "";
+    public String getMapKey(CSSimpleFile taskSimpleFile) {
+        String mapKey = "";
         String fileName = "";
         String lang = "";
         try {
             fileName = taskSimpleFile.getName();
             lang = getLang(taskSimpleFile);
             if(StringUtils.isNotBlank(lang)) {
-                commentsKey = fileName +"_"+ lang;
+                mapKey = fileName +"_"+ lang;
             }else {
-                commentsKey = fileName;
+                mapKey = fileName;
             }
-            logger.debug("commentsKey : " + commentsKey);
+            logger.debug("MapKey : " + mapKey);
         } catch (Exception e) {
-            logger.error("Exception in getCommentKey: ", e);
+            logger.error("Exception in getMapKey: ", e);
         }
-        return commentsKey;
+        return mapKey;
     }
 
     /**
@@ -2607,5 +2613,55 @@ public class PollSurveyTask implements CSURLExternalTask {
             logger.error("Exception in getLang: ", e);
         }
         return lang;
+    }
+    
+    /**
+     * Method to update the map of last modifier for each task files.
+     *
+     * @param lastModifierStr Concatenated string of last modifiers
+     * @return Returns map of last modifier for each task file.
+     */
+    public HashMap<String, String> updateLastModifierMap(String lastModifierStr) {
+        logger.info("In updateLastModifierMap");
+        try {
+            if(StringUtils.isNotBlank(lastModifierStr)){
+                String[] lastModifierArray = StringUtils.split(lastModifierStr, ",");
+                logger.info("Total number of last modifer info (input): " + lastModifierArray.length);
+                if(lastModifierArray.length > 0) {
+                    for(String lastModifier : lastModifierArray) {
+                        String[] lmArr = StringUtils.split(lastModifier, ":");
+                        lastModifierMap.put(lmArr[0], lmArr[1]);
+                    }
+                }
+            }
+            logger.info("Created lastModifierMap : " + lastModifierMap);
+        } catch (Exception e) {
+            logger.error("Exception in updateLastModifierMap: ", e);
+        }
+        return lastModifierMap;
+    }
+    
+    
+    /**
+     * Method to get the map of last modifier for each task files.
+     *
+     * @param lastModifierMap map of last modifier for each task file.
+     * @return Returns concatenated string of ylast modifiers.
+     */
+    public String getLastModifierString() {
+        logger.info("In getLastModifierString");
+        StringJoiner lastModifierSJ = new StringJoiner(",");
+        try {
+            if(lastModifierMap != null && !lastModifierMap.isEmpty()){
+                logger.info("Total number of last modifer info (output): " + lastModifierMap.size());
+                for (Map.Entry<String, String> lmset : lastModifierMap.entrySet()) {
+                    lastModifierSJ.add(lmset.getKey()+":"+lmset.getValue());
+               }
+            }
+            logger.info("Created lastModifierStr : " + lastModifierSJ.toString());
+        } catch (Exception e) {
+            logger.error("Exception in getLastModifierAsString: ", e);
+        }
+        return lastModifierSJ.toString();
     }
 }
