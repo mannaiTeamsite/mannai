@@ -451,7 +451,7 @@ public class SolrQueryBuilder {
         }
 
         if(StringUtils.isNotBlank(bq.toString())){
-            sb.append("&defType=dismax&bq=").append(bq.toString());
+            sb.append("&defType=edismax&bq=").append(bq.toString().trim());
         }
 
         if (StringUtils.isNotBlank(this.groupingField)) {

@@ -111,6 +111,7 @@ public class HukoomiExternal {
 		logger.info("Context FieldQuery: " + context.getParameterString("fieldQuery"));
 		logger.info("Context BaseQuery: " + context.getParameterString("baseQuery"));
 		logger.info("Current FieldQuery: " + fq);
+		logger.info("Current Category: " + category);
 		String correctedWord = "";
 		if(root.element("CorrectedWord") != null && StringUtils.isNotBlank(root.element("CorrectedWord").getText())){
 			logger.info("Word has been corrected in Portal Core");
@@ -118,10 +119,12 @@ public class HukoomiExternal {
 			logger.debug("Corrected word: " + correctedWord);
 			context.setParameterString("baseQuery", correctedWord);
 		}
-		String nutchQuery = sqb.crawlBuild(correctedWord);
-		logger.debug("Crawl Query : " + nutchQuery);
-		Document nutchDoc;
-		nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse", false);
+		Document nutchDoc = null;
+		if(category.equalsIgnoreCase("All")){
+			String nutchQuery = sqb.crawlBuild(correctedWord);
+			logger.debug("Crawl Query : " + nutchQuery);
+			nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse", false);
+		}
 
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
