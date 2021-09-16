@@ -220,7 +220,8 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             }
         }
 
-
+        //remove metadata
+        deleteMetaData(task);
 
         logger.debug("transition : " + statusMap.get(TRANSITION));
         logger.debug("transitionComment : "
@@ -1045,10 +1046,6 @@ public class DataBaseContentIngest implements CSURLExternalTask {
             logger.info("updateQuery result : " + result);
             if (result > 0) {
                 isDataUpdated = true;
-                taskObj.getWorkflow().deleteVariable(META_REVIEW_DATE);
-                taskObj.getWorkflow().deleteVariable(META_APPROVE_DATE);
-                taskObj.getWorkflow().deleteVariable(META_REVIEW_REJECT_DATES);
-                taskObj.getWorkflow().deleteVariable(META_APPROVE_REJECT_DATES);
             }
         }catch (NumberFormatException | SQLException e) {
             logger.error("NumberFormatException/SQL Exception in updateData: ", e);
@@ -1072,6 +1069,23 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         return rejectCount;
     }
 
+    /**
+     * Method to get the modifier comment for each task file.
+     *
+     * @param taskSimpleFile Task file of CSSimpleFile object
+     * @return Returns path of file.
+     */
+    public void deleteMetaData(CSExternalTask task) {
+        try {
+            task.getWorkflow().deleteVariable(META_REVIEW_DATE);
+            task.getWorkflow().deleteVariable(META_APPROVE_DATE);
+            task.getWorkflow().deleteVariable(META_REVIEW_REJECT_DATES);
+            task.getWorkflow().deleteVariable(META_APPROVE_REJECT_DATES);
+            logger.debug("Removed custom metadata from task");
+        } catch (Exception e) {
+            logger.error("Exception in deleteMetaData: ", e);
+        }
+    }
 
 
     /**
