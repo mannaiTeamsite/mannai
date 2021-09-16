@@ -490,7 +490,7 @@ public class SolrQueryBuilder {
         StringBuilder sb = new StringBuilder(this.crawlUrl);
 
         sb.append("/" + this.requestHandler);
-
+        logger.info("Running Nutch Query for: " + updatedBaseQuery);
         if(StringUtils.isNotBlank(updatedBaseQuery)){
             sb.append("?q=" + updatedBaseQuery);
         } else {
@@ -506,6 +506,8 @@ public class SolrQueryBuilder {
             sb.append("&start=" + Integer.toString(this.start));
         }
 
+        // Exclude URLs for XML files from the result
+        sb.append("&fq=-url:(\"*.xml\")");
         logger.debug("Generated Solr Query: " + sb.toString());
         return sb.toString();
 
