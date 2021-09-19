@@ -2577,15 +2577,8 @@ public class PollSurveyTask implements CSURLExternalTask {
         String lang = "";
         try {
             
-            if (file.getKind() == CSHole.KIND) {
-                CSHoleImpl taskHoleFile = (CSHoleImpl) file;
-                fileName = taskHoleFile.getName();
-                lang = getLang(taskHoleFile);
-            }else {
-                CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
-                fileName = taskSimpleFile.getName();
-                lang = getLang(taskSimpleFile);
-            }
+            fileName = file.getName();
+            lang = getLang(file);
             
             if(StringUtils.isNotBlank(lang)) {
                 mapKey = fileName +"_"+ lang;
