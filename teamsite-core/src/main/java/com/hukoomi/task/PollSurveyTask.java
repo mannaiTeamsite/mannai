@@ -282,13 +282,12 @@ public class PollSurveyTask implements CSURLExternalTask {
         commentsMap  = new HashMap<String, String>();
         lastModifierMap = new HashMap<String, String>();
         
-        processWorkFlowInputs(task, taskFileList);
+        processWorkFlowInputs(task);
         
         for (CSAreaRelativePath taskFilePath : taskFileList) {
             try {
                 
                 CSFile file = task.getArea().getFile(taskFilePath);
-                CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea().getFile(taskFilePath);
                 String fileName = file.getName();
                 logger.debug("File Name : " + fileName);
                 
@@ -342,7 +341,7 @@ public class PollSurveyTask implements CSURLExternalTask {
                     
                 }else {
                 
-                    //CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
+                    CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
     
                     String dcrType = taskSimpleFile
                             .getExtendedAttribute(META_DATA_NAME_DCR_TYPE)
@@ -380,8 +379,8 @@ public class PollSurveyTask implements CSURLExternalTask {
                     }
                 }
                 
-                postProcessWorkFlowInputs((CSSimpleFile)file, task);
-                String commentOnModifier = commentsMap.get(getMapKey(taskSimpleFile));
+                postProcessWorkFlowInputs(file, task);
+                String commentOnModifier = commentsMap.get(getMapKey(file));
                 if(StringUtils.isNotBlank(commentOnModifier)) {
                     statusMap.put(TRANSITION_COMMENT, commentOnModifier+" "+statusMap.get(TRANSITION_COMMENT));
                 }
@@ -2474,14 +2473,14 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param task CSExternalTask object
      * @param taskFileList Task file list of CSAreaRelativePath object
      */
-    public void processWorkFlowInputs(CSExternalTask task, CSAreaRelativePath[] taskFileList) {
+    public void processWorkFlowInputs(CSExternalTask task) {
         logger.info("In processWorkFlowInputs");
         try {
             
             String lastModifierStr = task.getWorkflow().getVariable(META_LAST_MODIFIER);
             updateLastModifierMap(lastModifierStr);
             
-            updateModifierComments(task, taskFileList);
+            updateModifierComments(task);
             logger.info("commentsMap : " + commentsMap );
             
         } catch (Exception e) {
@@ -2496,27 +2495,25 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param taskObj content
      * @return Returns comment on modification on behalf of publisher
      */
-    public void postProcessWorkFlowInputs(CSSimpleFile taskSimpleFile, CSExternalTask taskObj) throws CSException{
-        logger.debug("PollSurveyTask : postProcessWorkFlowInputs");
+    public void postProcessWorkFlowInputs(CSFile file, CSExternalTask taskObj) throws CSException{
+        logger.info("PollSurveyTask : postProcessWorkFlowInputs");
 
-        String modifier = "";
-        String commentOnModifier = "";
         String[] dateFormats =  {"EEE MMM dd yyyy HH:mm:ss","EEE MMM dd HH:mm:ss yyyy"};
 
         try {
             
+            String modifier = file.getLastModifier().getName();
+            String mapKey = getMapKey(file);
             
             //update the approve date
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
             taskObj.getWorkflow().setVariable(META_APPROVE_DATE, LocalDateTime.now().format(formatter));
             logger.info("Set Approve Date as : " + taskObj.getWorkflow().getVariable(META_APPROVE_DATE));
             
-            
             //update last modifer info
-            modifier = taskSimpleFile.getLastModifier().getName();
             logger.info("Last Modified By: " + modifier);
             if(StringUtils.isNotBlank(modifier)) {
-                lastModifierMap.put(getMapKey(taskSimpleFile), modifier);
+                lastModifierMap.put(mapKey, modifier);
             }
             
         } catch (Exception e) {
@@ -2529,39 +2526,39 @@ public class PollSurveyTask implements CSURLExternalTask {
      * Method to updates the modifier comment for each task file in Map.
      *
      * @param task CSExternalTask object
-     * @param taskFileList Task file list of CSAreaRelativePath object
      */
-    public void updateModifierComments(CSExternalTask task, CSAreaRelativePath[] taskFileList) {
+    public void updateModifierComments(CSExternalTask task) {
         try {
+            CSAreaRelativePath[] taskFileList = task.getFiles();
             logger.info("updateModifierComments file count : "+taskFileList.length);
+            
             for (CSAreaRelativePath taskFile : taskFileList) {
-                try {
-                    CSSimpleFile taskSimpleFile = (CSSimpleFile) task.getArea().getFile(taskFile);
+                
+                CSFile file = task.getArea().getFile(taskFile);
+                
+                String fileName = file.getName();
+                logger.info("File Name : " + fileName);
+                String mapKey = getMapKey(file);
+                logger.info("mapKey : " + mapKey);
+                String modifier = file.getLastModifier().getName();
+                logger.info("Last Modified By: " + modifier);
+                
+                String taskName = task.getName();
+                logger.info("Task Name : " + taskName);
+                
+                String lang = getLang(file);
+                logger.info("Lang : " + lang);
+                
+                String modifierMetaData = lastModifierMap.get(mapKey);
+                logger.info("EA Modifier : " + modifierMetaData);
                     
-                    String taskName = task.getName();
-                    logger.info("Task Name : " + taskName);
-                    
-                    String fileName = taskSimpleFile.getName();
-                    logger.info("File Name : " + fileName);
-                    String lang = getLang(taskSimpleFile);
-                    logger.info("Lang : " + lang);
-                    
-                    String modifier = taskSimpleFile.getLastModifier().getName();
-                    logger.info("Last Modified By: " + modifier);
-                    
-                    String modifierMetaData = lastModifierMap.get(getMapKey(taskSimpleFile));
-                    logger.info("EA Modifier : " + modifierMetaData);
-                    
-                    if(StringUtils.equals(TASK_INSERT_MASTER_DATA, taskName) 
-                            && !StringUtils.equals(modifier, modifierMetaData)) {
-                        String commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
-                        logger.info("commentOnModifier : " + commentOnModifier +"for file "+fileName+" lang "+lang);
-                        commentsMap.put(getMapKey(taskSimpleFile), commentOnModifier);
-                    }
-                    
-                } catch (Exception e) {
-                    logger.error("Exception in updateModifierComments: ", e);
+                if(StringUtils.equals(TASK_INSERT_MASTER_DATA, taskName) 
+                        && !StringUtils.equals(modifier, modifierMetaData)) {
+                    String commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
+                    logger.info("commentOnModifier : " + commentOnModifier +" for file "+fileName+" lang "+lang);
+                    commentsMap.put(mapKey, commentOnModifier);
                 }
+                
             }
         } catch (Exception e) {
             logger.error("Exception in updateModifierComments: ", e);
@@ -2574,36 +2571,45 @@ public class PollSurveyTask implements CSURLExternalTask {
      * @param taskSimpleFile Task file of CSSimpleFile object
      * @return Returns comments key for the file.
      */
-    public String getMapKey(CSSimpleFile taskSimpleFile) {
+    public String getMapKey(CSFile file) {
         String mapKey = "";
         String fileName = "";
         String lang = "";
         try {
-            fileName = taskSimpleFile.getName();
-            lang = getLang(taskSimpleFile);
+            
+            if (file.getKind() == CSHole.KIND) {
+                CSHoleImpl taskHoleFile = (CSHoleImpl) file;
+                fileName = taskHoleFile.getName();
+                lang = getLang(taskHoleFile);
+            }else {
+                CSSimpleFile taskSimpleFile = (CSSimpleFile) file;
+                fileName = taskSimpleFile.getName();
+                lang = getLang(taskSimpleFile);
+            }
+            
             if(StringUtils.isNotBlank(lang)) {
                 mapKey = fileName +"_"+ lang;
             }else {
                 mapKey = fileName;
             }
-            logger.debug("MapKey : " + mapKey);
+            logger.info("MapKey : " + mapKey);
         } catch (Exception e) {
             logger.error("Exception in getMapKey: ", e);
         }
         return mapKey;
     }
-
+    
     /**
      * Method to get the lang of the input file.
      *
      * @param taskSimpleFile Task file of CSSimpleFile object
      * @return Returns lang of the input file.
      */
-    public String getLang(CSSimpleFile taskSimpleFile) {
+    public String getLang(CSFile file) {
         String fileLocation = "";
         String lang = "";
         try {
-            fileLocation = taskSimpleFile.getVPath().toString();
+            fileLocation = file.getVPath().toString();
             logger.debug("fileLocation : " + fileLocation);
             if(StringUtils.contains(fileLocation,"/data/") && StringUtils.contains(fileLocation,"Content")) {
                 lang = fileLocation.substring(fileLocation.indexOf("/data/") + 6, fileLocation.lastIndexOf("/"));

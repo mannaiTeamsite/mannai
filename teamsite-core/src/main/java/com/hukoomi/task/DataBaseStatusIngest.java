@@ -685,7 +685,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
                     if(StringUtils.equals(TASK_APPROVE_PENDING_DB, taskName) 
                             && !StringUtils.equals(modifier, modifierMetaData)) {
                         String commentOnModifier = modifier+" : Updated content on behalf of "+modifierMetaData+".";
-                        logger.info("commentOnModifier : " + commentOnModifier +"for file "+fileName+" lang "+lang);
+                        logger.info("commentOnModifier : " + commentOnModifier +" for file "+fileName+" lang "+lang);
                         commentsMap.put(getMapKey(taskSimpleFile), commentOnModifier);
                     }
             }
