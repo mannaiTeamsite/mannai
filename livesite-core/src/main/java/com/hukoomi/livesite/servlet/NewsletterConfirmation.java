@@ -160,9 +160,12 @@ public class NewsletterConfirmation extends HttpServlet {
                     subStatus = createSubscriberPhplist(subscriberemail, httpServletAddress);
                     if(!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) { 
                         userId = getSubscriberID(subscriberemail);
-                       updateSubscriberPersona(userId,listid);
+                        updateSubscriberPersona(userId,listid);
+                        uptpostgreData=STATUS_SUCCESS;
+                    }else {
+                        uptpostgreData=STATUS_FAILED;
                     }
-                    uptpostgreData=STATUS_SUCCESS;
+                    
                 }
                 if(!status.equals("") && status.equals(STATUS_PERSONA_NOTFOUND))
                 {
