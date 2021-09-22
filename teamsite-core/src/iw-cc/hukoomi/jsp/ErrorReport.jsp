@@ -38,7 +38,7 @@
     <!--<link rel="stylesheet" href="https://devauth.hukoomi.gov.qa/iw/cci/meta/no-injection/iw-mount/default/main/Hukoomi/WORKAREA/default/assets/css/bootstrap.css">-->
 	<link rel="stylesheet" href="/iw-mount/default/main/Hukoomi/WORKAREA/default/assets/css/bootstrap.css">
     <link rel="stylesheet"  href="/iw-mount/default/main/Hukoomi/WORKAREA/default/assets/css/datatables.min.css"/>
- 
+
 
     <style>
       .table{
@@ -81,7 +81,6 @@
 	var dataArray = [];
 var errorId ="";
 var dbConfigPath = "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties/dbconfig.properties";
-
 $( document ).ready(function() {
     console.log( "ready!" );
 	getErrorResponse();
@@ -107,9 +106,7 @@ $( document ).ready(function() {
             console.log( "Sorry, there was a problem!" );
         }
     });
-
 		});
-
 });
 function getErrorResponse(){
 	$.ajax({
@@ -132,20 +129,11 @@ function getErrorResponse(){
         }
     });
 }
-
 function renderData(){
-
 var str = dataArray[1].statusData;
 console.log(str);
 var str_array = str.split(',');
 var str1 = "";
-for(var i = 0; i < str_array.length; i++) {
-   
-   str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
-   str1 += '<option value="'+str_array[i]+'">'+str_array[i]+'</option>';  
-}
-var str2 = '<select class="select">' + str1 + '</select>';
-	console.log(str2);
 
 	$('#table_blog_comments').DataTable( {
     data: dataArray,
@@ -157,11 +145,23 @@ var str2 = '<select class="select">' + str1 + '</select>';
         { data: 'language' },
         { data: 'status_code' },
         { data: 'count' },
-        { data: 'status' },
+       
         
 		{"data":null,
             "render": function(data, type, full, meta){
-
+				var str1 = "";
+				for(var i = 0; i < str_array.length; i++) {
+   
+					   str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+					   if(str_array[i].toUpperCase() == (full.status).toUpperCase()){
+						    str1 += '<option selected value="'+str_array[i]+'">'+str_array[i]+'</option>'; 
+					   }else{
+						   str1 += '<option value="'+str_array[i]+'">'+str_array[i]+'</option>'; 
+					   }
+					   
+					}
+					var str2 = '<select class="select">' + str1 + '</select>';
+						console.log(str2);
                     return str2;
                 
             }
@@ -187,18 +187,16 @@ var str2 = '<select class="select">' + str1 + '</select>';
 <body>
 
 <%
-
 //client = user_ctx.getCSClient();
 //logger.error(("User Triggering the Utility: "+ user_ctx.getCSClient().getCurrentUser().getName()+"<br/>");
 CSClient client = null;
 				client = user_ctx.getCSClient();
-
 %>
 <!--<input type= "text" value = <%= user_ctx.getCSClient().getCurrentUser().getName() %> >-->
 
 
  <div id="blog_comments">
-      
+
 
 
 <table class="table" id= "table_blog_comments">
@@ -211,15 +209,15 @@ CSClient client = null;
                 <th scope="col">Language</th>
                 <th scope="col">Status Code</th>
                 <th scope="col">Count</th>
-                <th scope="col">Current Status</th>
-                <th scope="col">Change Status</th>
+                <th scope="col">Status</th>
+               
               </tr>
             </thead>
 
-         
+
 
 
 </table>
 </div>
 </body>
-</html>
+</html> 
