@@ -212,7 +212,7 @@ public class ErrorReport extends HttpServlet {
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
            
-                getComment = "SELECT * FROM ERROR_RESPONSE";
+                getComment = "SELECT * FROM ERROR_RESPONSE ORDER BY RESPONSE_ID";
                 prepareStatement = connection.prepareStatement(getComment);
                 LOGGER.debug("getComment :" + getComment);
                 rs = prepareStatement.executeQuery();
