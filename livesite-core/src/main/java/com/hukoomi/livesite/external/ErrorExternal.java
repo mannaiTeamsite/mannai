@@ -3,6 +3,7 @@ package com.hukoomi.livesite.external;
 
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.log4j.Logger;
@@ -10,15 +11,22 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 
 public class ErrorExternal {
-	
+	private Properties properties = null;
 	 private final static Logger logger = Logger.getLogger(ErrorExternal.class);
 	 Postgre postgre = null;
 	public Document errorData(final RequestContext context) {
@@ -33,16 +41,72 @@ public class ErrorExternal {
 		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
 		{
 			
-			 String brokenLink = req.getRequestURL();
+			String brokenLink = req.getRequestURL();
+			 	 
+			 
 			 String language = context.getParameterString(LOCALE);
 			 String statusCode = context.getParameterString(STATUS);
 			 
 			 logger.info("Error Status "+statusCode);
 			 String contentPage = req.getReferer(); 
-			 
-				 CommonUtils cu = new CommonUtils(context);
+			 String brokenLinkPath = null;
+			 try {
+		        	brokenLinkPath = (new URL(brokenLink)).getPath();
+		        } catch (MalformedURLException e) {
+		          logger.debug(e);
+		        } 
+			 			 
+			 PropertiesFileReader prop = null;
+				prop = new PropertiesFileReader(context, "error.properties");
+				properties = prop.getPropertiesFile();
+			 String errorPageEn=properties.getProperty("errorPageEn");
+		        String errorPageAr=properties.getProperty("errorPageAr");
+		        String errorUrls=properties.getProperty("urls");
+		        
+				 if(brokenLinkPath.equalsIgnoreCase(errorPageEn) || brokenLinkPath.equalsIgnoreCase(errorPageAr)) {
+				 HttpServletRequest request = context.getRequest();
+				 brokenLink = contentPage;
+					Cookie cookie = null;
+					Cookie[] cookies = null;
+					
+					cookies = request.getCookies();
+					if (cookies != null) {
+						for (int i = 0; i < cookies.length; i++) {
+							cookie = cookies[i];
+							
+							if (cookie.getName().equals("relayURL")) {
+								contentPage = cookie.getValue();
+							}
+						}
+					}
+				 
+				 }
+				 try {
+					 contentPage = (new URL(contentPage)).getPath();
+			        } catch (MalformedURLException e) {
+			          logger.debug(e);
+			        } 
+				 int count = 0;
+				 CommonUtils cu = new CommonUtils();
+				 String urlPrefix = cu.getURLPrefix(context);
+				 contentPage = urlPrefix + contentPage;
+				 brokenLink = urlPrefix + brokenLink;
+				 String[] urls = errorUrls.split("\\s*,\\s*");
+				for(int i = 0; i<urls.length;i++ ) {
+					if(urls[i].equalsIgnoreCase(brokenLink)) {
+						count++;
+					}
+				}
+		
+				 
 				 logger.info("contentPage  "+contentPage);
+				 logger.info("brokenLink  "+brokenLink);
+				 
+				
+				if(count == 0) {
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
+				}
+					
 			 
 			 
 		}
@@ -163,8 +227,7 @@ public class ErrorExternal {
         		  statusElement.setText(resultSet.getString("status"));       	
      	  
           }
-           
-         
+                  
           logger.info("Fetching getErrorTable Content completed");
         } catch (SQLException ex) {
           logger.error("Error while fetching Error data from database.", ex);
@@ -179,21 +242,7 @@ public class ErrorExternal {
            
         
     }
-	public Document updateErrorResponse(RequestContext reqcontext) {
-		 Document doc = DocumentHelper.createDocument();
-		 String language = reqcontext.getParameterString("lang");
-		 postgre = new Postgre(reqcontext);
-		 String brokenLink = reqcontext.getParameterString("brokenLink");
-		 String contentPage = reqcontext.getParameterString("contentPage");
-		 String statusCode = reqcontext.getParameterString("statusCode");
-		 String status = reqcontext.getParameterString("status");
-		 
-		 logger.info(language +" : "+brokenLink+" : "+contentPage+" : "+statusCode+" : "+status);
-		 CommonUtils cu = new CommonUtils(reqcontext);
-		 cu.updateErrorStatus(  brokenLink,  contentPage,  language,  statusCode,  status);
-		
-		return doc;
-	}
+	
 	
 	
                                 

@@ -462,22 +462,7 @@ public class CommonUtils {
     
     public void logBrokenLink(String brokenLink, String contentPage, String language, String statusCode) {
         this.logger.debug("Logging Broken link in Database");
-        
-        try {
-          brokenLink = (new URL(brokenLink)).getPath();
-        } catch (MalformedURLException e) {
-          this.logger.debug(e);
-        } 
-    
-        try {
-          contentPage = (new URL(contentPage)).getPath();
-        } catch (MalformedURLException e) {
-          this.logger.debug(e);
-        } 
-        
 
-        
-        if(brokenLink.equalsIgnoreCase("/en/error.page") && brokenLink.equalsIgnoreCase("/ar/error.page") && contentPage.equalsIgnoreCase("/ar/error.page") && contentPage.equalsIgnoreCase("/en/error.page")) {
         int errorCount = getErrorCount( brokenLink,  contentPage,  language,  statusCode);
         logger.info(errorCount);
         if(errorCount < 1) {
@@ -486,7 +471,7 @@ public class CommonUtils {
         }else {
         	updateErrorCount( errorCount+1,  brokenLink,  contentPage,  language,  statusCode);
         }        
-        }
+        
       }
       
       public int getErrorCount(String brokenLink, String contentPage, String language, String statusCode) {
