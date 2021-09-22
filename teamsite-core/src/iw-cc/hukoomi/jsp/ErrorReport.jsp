@@ -133,7 +133,16 @@ function getErrorResponse(){
 }
 
 function renderData(){
-    
+	var str = 'Open, Closed, Reopend';
+var str_array = str.split(',');
+var str1 = "";
+for(var i = 0; i < str_array.length; i++) {
+   
+   str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+   str1 += '<option value="'+str_array[i]+'">'+str_array[i]+'</option>';  
+}
+var str2 = '<select class="select">' + str1 + '</select>';
+	console.log(str2);
 
 	$('#table_blog_comments').DataTable( {
     data: dataArray,
@@ -150,7 +159,7 @@ function renderData(){
 		{"data":null,
             "render": function(data, type, full, meta){
 
-                    return '<select class="select"><option vlaue="Open">Open</option><option value="closed">Closed</option></select>'
+                    return str2;
                 
             }
 		 }

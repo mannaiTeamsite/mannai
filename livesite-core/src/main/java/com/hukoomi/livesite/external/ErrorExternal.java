@@ -13,12 +13,7 @@ import org.dom4j.Element;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Arrays;
-import java.util.List;
+import java.sql.Array;
 import java.util.Properties;
 
 import javax.servlet.http.Cookie;
@@ -61,7 +56,8 @@ public class ErrorExternal {
 				properties = prop.getPropertiesFile();
 			 String errorPageEn=properties.getProperty("errorPageEn");
 		        String errorPageAr=properties.getProperty("errorPageAr");
-		        String errorUrls=properties.getProperty("urls");
+		        String errorStatusStr =properties.getProperty("urls");
+		    
 		        
 				 if(brokenLinkPath.equalsIgnoreCase(errorPageEn) || brokenLinkPath.equalsIgnoreCase(errorPageAr)) {
 				 HttpServletRequest request = context.getRequest();
@@ -86,23 +82,36 @@ public class ErrorExternal {
 			        } catch (MalformedURLException e) {
 			          logger.debug(e);
 			        } 
+				 try {
+					 brokenLink = (new URL(brokenLink)).getPath();
+			        } catch (MalformedURLException e) {
+			          logger.debug(e);
+			        } 
 				 int count = 0;
-				 CommonUtils cu = new CommonUtils();
+				
+				 
+				 logger.info("urls  "+errorStatusStr);
+				 
+				 
+				 String[] urlsArray = errorStatusStr.split(",");
+				
+				 for(var i = 0; i < urlsArray.length; i++) {
+				    
+				   if(urlsArray[i].equalsIgnoreCase(brokenLink)) {
+					   count++;
+				   }
+				    
+				 }
+				 
+				 CommonUtils cu = new CommonUtils(context);
 				 String urlPrefix = cu.getURLPrefix(context);
 				 contentPage = urlPrefix + contentPage;
 				 brokenLink = urlPrefix + brokenLink;
-				 String[] urls = errorUrls.split("\\s*,\\s*");
-				for(int i = 0; i<urls.length;i++ ) {
-					if(urls[i].equalsIgnoreCase(brokenLink)) {
-						count++;
-					}
-				}
-		
 				 
 				 logger.info("contentPage  "+contentPage);
 				 logger.info("brokenLink  "+brokenLink);
 				 
-				
+				 logger.info("count  "+count);
 				if(count == 0) {
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 				}
@@ -163,85 +172,7 @@ public class ErrorExternal {
     }
 	
 	
-	public Document errorResponse(RequestContext reqcontext) {
-		 Document doc = DocumentHelper.createDocument();
-		 String language = reqcontext.getParameterString("lang");
-		 
-		 postgre = new Postgre(reqcontext);
-	        Element errorResultEle = doc.addElement("result");
-	        getErrorTable(errorResultEle, language);
-		
-		return doc;
-	}
 	
-	private Connection getConnection() {
-        return postgre.getConnection();
-    }
-	
-	
-	
-	public void getErrorTable(Element errorResultEle, String language) {
-        logger.info("Fetching getErrorTable Content");
-       
-        	
-        
-        PreparedStatement statement = null;
-        Connection connection = null;
-       
-        ResultSet resultSet = null;
-        try {
-          logger.info("Get count of error");
-          connection = getConnection();
-          
-          String query = "SELECT * FROM ERROR_RESPONSE WHERE LANGUAGE = '"+language+"'";
-         logger.info("Query to run : " + query);
-          
-          statement = connection.prepareStatement(query);
-          resultSet = statement.executeQuery();
-          Element root = errorResultEle.addElement("content");
-          while (resultSet.next()) {
-        	  logger.info("result set  "+resultSet.getString("broken_link"));
-        	  Element errorData = root.addElement("errorData");
-          		 
-        		  
-        		  Element bokenLinkElement = errorData.addElement("broken_link");
-        		  bokenLinkElement.setText(resultSet.getString("broken_link"));
-        		  
-        		  Element contentPageElement = errorData.addElement("content_page");
-        		  contentPageElement.setText(resultSet.getString("content_page"));
-        		  
-        		  Element reportedElement = errorData.addElement("last_reported");
-        		  reportedElement.setText(resultSet.getDate("reported_on").toString());
-        		  
-        		  Element languageElement = errorData.addElement("language");
-        		  languageElement.setText(resultSet.getString("language"));
-        		  
-        		  Element statusCodeElement = errorData.addElement("status_code");
-        		  statusCodeElement.setText(resultSet.getString("status_code"));
-        		  
-        		  Element countElement = errorData.addElement("count");
-        		  int count = resultSet.getInt("count");
-        		  countElement.setText(String.valueOf(count));
-        		  
-        		  Element statusElement = errorData.addElement("status");
-        		  statusElement.setText(resultSet.getString("status"));       	
-     	  
-          }
-                  
-          logger.info("Fetching getErrorTable Content completed");
-        } catch (SQLException ex) {
-          logger.error("Error while fetching Error data from database.", ex);
-        } finally {
-         logger.info("Releasing Database Connection");
-          postgre.releaseConnection(connection, statement, resultSet);
-          logger.info("Released Database Connection");
-          
-        } 
-            
-        
-           
-        
-    }
 	
 	
 	

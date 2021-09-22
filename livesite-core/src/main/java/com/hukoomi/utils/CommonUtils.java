@@ -508,9 +508,7 @@ public class CommonUtils {
     	
     	  
         this.logger.debug("updateErrorCount Broken link in Database");
-        
-        
-        
+
         int result = 0;
         PreparedStatement prepareStatement = null;
         Connection connection = null;
@@ -518,7 +516,7 @@ public class CommonUtils {
         try {
           this.logger.info("Logging of Broken Link in DB Started");
           connection = database.getConnection();
-          String query = "UPDATE ERROR_RESPONSE SET COUNT=" + count + ", STATUS='open', REPORTED_ON = 'LOCALTIMESTAMP' WHERE LANGUAGE='" + language + "' and STATUS_CODE='" + statusCode + "' and BROKEN_LINK='" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
+          String query = "UPDATE ERROR_RESPONSE SET COUNT=" + count + ", STATUS='Open', REPORTED_ON = LOCALTIMESTAMP WHERE LANGUAGE='" + language + "' and STATUS_CODE='" + statusCode + "' and BROKEN_LINK='" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
           this.logger.info("Query to run : " + query);
           if (connection != null) {
             prepareStatement = connection.prepareStatement(query);
@@ -541,22 +539,9 @@ public class CommonUtils {
       public int inserErrorResponse(int count, String brokenLink, String contentPage, String language, String statusCode) {
           this.logger.debug("Inser Error Response Broken link in Database");
           ValidationErrorList errorList = new ValidationErrorList();
-          if (!ESAPIValidator.checkNull(brokenLink)) {
-          	brokenLink  = ESAPI.validator().getValidInput("brokenLink", brokenLink, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-              if(!errorList.isEmpty()) {
-                  logger.info(errorList.getError("brokenLink"));
-                  logger.error("Not a valid parameter brokenLink. The incident will not be logged");
-                  return 0;
-              }
-          }
-          if (!ESAPIValidator.checkNull(contentPage)) {
-          	contentPage  = ESAPI.validator().getValidInput("contentPage", contentPage, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-              if(!errorList.isEmpty()) {
-                  logger.info(errorList.getError("contentPage"));
-                  logger.error("Not a valid parameter contentPage. The incident will not be logged.");
-                  return 0;
-              }
-          }
+          
+          
+          
           if (!ESAPIValidator.checkNull(language)) {
           	language  = ESAPI.validator().getValidInput("language", language, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
               if(!errorList.isEmpty()) {
@@ -607,43 +592,6 @@ public class CommonUtils {
     }
       
       
-      public int updateErrorStatus( String brokenLink, String contentPage, String language, String statusCode, String status) {
-          this.logger.debug("update Error Status in Database");
-          
-          ValidationErrorList errorList = new ValidationErrorList();
-         
-          if (!ESAPIValidator.checkNull(status)) {
-          	status  = ESAPI.validator().getValidInput("status", status, ESAPIValidator.ALPHANUMERIC, 255, false, true, errorList);
-              if(!errorList.isEmpty()) {
-                  logger.info(errorList.getError("status"));
-                  logger.error("Not a valid parameter status. The incident will not be logged.");
-                  return 0;
-              }
-          }
-          int result = 0;
-          PreparedStatement prepareStatement = null;
-          Connection connection = null;
-          Postgre database = new Postgre(this.context);
-          try {
-            this.logger.info("Logging of Broken Link in DB Started");
-            connection = database.getConnection();
-            String query = "UPDATE ERROR_RESPONSE SET STATUS = '"+status+"' WHERE LANGUAGE='" + language + "' and STATUS_CODE='" + statusCode + "' and BROKEN_LINK='" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
-            this.logger.info("Query to run: " + query);
-            if (connection != null) {
-              prepareStatement = connection.prepareStatement(query);
-              result = prepareStatement.executeUpdate();
-            } else {
-              this.logger.info("Connection is null !");
-            } 
-            this.logger.info("updating count of Broken link in Database completed");
-          } catch (SQLException ex) {
-            this.logger.error("Error while updating count of broken link to the database.", ex);
-          } finally {
-            this.logger.info("Releasing Database Connection.");
-            database.releaseConnection(connection, prepareStatement, null);
-            this.logger.info("Released Database Connection.");
-          } 
-          return result;
-        }
+     
      
 }
