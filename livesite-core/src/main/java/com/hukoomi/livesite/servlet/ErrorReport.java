@@ -92,10 +92,7 @@ public class ErrorReport extends HttpServlet {
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");           
             data.put("path", xssUtils.stripXSS(request.getParameter("path")));
-          
-           
-            
-           
+            data.put("statusPath", xssUtils.stripXSS(request.getParameter("statusPath")));
             	dataArray = getErrorResponse(data);
             
                 data.put("success", "success");
@@ -192,19 +189,25 @@ public class ErrorReport extends HttpServlet {
     private JSONArray getErrorResponse(JSONObject data) {
         LOGGER.info("getErrorResponse");
         String propfilepath = data.getString("path");
+       
+        String errorStatuspath = data.getString("statusPath");
         
-        
+        LOGGER.info(errorStatuspath);
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         Properties dbProperties = loadProperties(propfilepath);
-     
+        Properties statusProperties = loadProperties(errorStatuspath);
+  
+        String statusData = statusProperties.getProperty("status");
+        LOGGER.info(statusData);
+        
         Connection connection = null;
         JSONArray arrayComments = new JSONArray();
         String getComment ="";
         try {
             String userName = dbProperties.getProperty("username");            
             String password = dbProperties.getProperty("password");
-            
+  
             password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
@@ -233,6 +236,8 @@ public class ErrorReport extends HttpServlet {
                     errorData.put("status_code", status_code);
                     errorData.put("count", count);
                     errorData.put("status", status);
+                    errorData.put("statusData", statusData);
+                   
                    
                     
                     arrayComments.put(errorData);

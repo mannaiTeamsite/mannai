@@ -81,6 +81,7 @@
 	var dataArray = [];
 var errorId ="";
 var dbConfigPath = "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties/dbconfig.properties";
+
 $( document ).ready(function() {
     console.log( "ready!" );
 	getErrorResponse();
@@ -116,8 +117,8 @@ function getErrorResponse(){
         url: '/iw-cc/ErrorReport',
         
         data: {
-            
-			"path" : dbConfigPath
+            "statusPath" : "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties/error.properties",
+			"path" : dbConfigPath			
 		},
         
         success: function (result) {
@@ -133,7 +134,9 @@ function getErrorResponse(){
 }
 
 function renderData(){
-	var str = 'Open, Closed, Reopend';
+
+var str = dataArray[1].statusData;
+console.log(str);
 var str_array = str.split(',');
 var str1 = "";
 for(var i = 0; i < str_array.length; i++) {
