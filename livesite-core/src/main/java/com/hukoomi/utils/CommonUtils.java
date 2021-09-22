@@ -541,7 +541,22 @@ public class CommonUtils {
           ValidationErrorList errorList = new ValidationErrorList();
           
           
-          
+          if (!ESAPIValidator.checkNull(brokenLink)) {
+            	brokenLink  = ESAPI.validator().getValidInput("brokenLink", brokenLink, ESAPIValidator.URL, 255, false, true, errorList);
+                if(!errorList.isEmpty()) {
+                    logger.info(errorList.getError("brokenLink"));
+                    logger.error("Not a valid parameter brokenLink. The incident will not be logged");
+                    return 0;
+                }
+            }
+            if (!ESAPIValidator.checkNull(contentPage)) {
+            	contentPage  = ESAPI.validator().getValidInput("contentPage", contentPage, ESAPIValidator.URL, 255, false, true, errorList);
+                if(!errorList.isEmpty()) {
+                    logger.info(errorList.getError("contentPage"));
+                    logger.error("Not a valid parameter contentPage. The incident will not be logged.");
+                    return 0;
+                }
+            }
           if (!ESAPIValidator.checkNull(language)) {
           	language  = ESAPI.validator().getValidInput("language", language, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
               if(!errorList.isEmpty()) {
