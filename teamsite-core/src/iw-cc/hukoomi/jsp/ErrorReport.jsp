@@ -87,13 +87,14 @@ $( document ).ready(function() {
 	$(document).on('change', '.select', function(){
     var $item = this.closest("tr") ;
     var $status = $(this).val() ;	
+    var $dataID  = $item.firstElementChild.dataset.id;
 	requestData = {
-		errorId:$item.firstElementChild.dataset.id,
+		errorId:$dataID,
 		status: $status,
 		"path" : dbConfigPath
 	}
 	 $.ajax({
-        type: "GET",
+        type: "POST",
         url: '/iw-cc/ErrorReport',
         enctype: 'multipart/form-data',
         data: JSON.stringify(requestData),
@@ -391,25 +392,25 @@ CSClient client = null;
           
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <div class="navbar-nav mr-auto col-sm-3">
-        <div class="form-group">
+        <div class="form-group" style="padding: 0 10px;">
             <label for="status">Status</label>
-            <select class="form-control" id="status">
+            <select class="form-control" id="status" style="width: 180px;">
            
               </select>
 			  </div>
-			   <div class="form-group">
-            </select>
+			   <div class="form-group" style="padding: 0 10px;">
+            
 			 <label for="language">Language</label>
-            <select class="form-control" id="language">
+            <select class="form-control" id="language" style="width: 180px;">
               <option>ALL</option>
             <option value="EN">EN</option>
             <option value="AR">AR</option>
             </select>
           </div>
-          <div class="form-group">
-          </select>
+          <div class="form-group" style="padding: 0 10px;">
+          
      <label for="statusCode">STatus Code</label>
-          <select class="form-control" id="status-code">
+          <select class="form-control " id="status-code" style="width: 180px;">
            
          
           </select>
@@ -429,7 +430,7 @@ CSClient client = null;
                 <th scope="col">Content Page</th>
                 <th scope="col">Reported On</th>
                 <th scope="col">Language</th>
-                <th scope="col">Status Code</th>
+                <th scope="col" style="width: 120px;">Status Code</th>
                 <th scope="col">Count</th>
                 <th scope="col">Status</th>
                
