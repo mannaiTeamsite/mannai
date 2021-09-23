@@ -93,7 +93,15 @@ public class ErrorReport extends HttpServlet {
             response.setCharacterEncoding("UTF-8");           
             data.put("path", xssUtils.stripXSS(request.getParameter("path")));
             data.put("statusPath", xssUtils.stripXSS(request.getParameter("statusPath")));
-            	dataArray = getErrorResponse(data);
+            data.put("language", xssUtils.stripXSS(request.getParameter("language")));
+            data.put("status", xssUtils.stripXSS(request.getParameter("status")));
+            data.put("statusCodeVal", xssUtils.stripXSS(request.getParameter("statusCodeVal")));
+            
+           
+            	dataArray = getErrorFilterResponse(data);
+            
+            
+            	
             
                 data.put("success", "success");
                 data.put("comments", dataArray);
@@ -186,11 +194,19 @@ public class ErrorReport extends HttpServlet {
      * @param data
      * @return
      */
-    private JSONArray getErrorResponse(JSONObject data) {
-        LOGGER.info("getErrorResponse");
+   
+    
+    
+    private JSONArray getErrorFilterResponse(JSONObject data) {
+        LOGGER.info("Filter getErrorResponse");
         String propfilepath = data.getString("path");
        
         String errorStatuspath = data.getString("statusPath");
+        
+        String lang = data.getString("language");
+        String statusCodeVal = data.getString("statusCodeVal");
+
+        String statusVal = data.getString("status");
         
         LOGGER.info(errorStatuspath);
         PreparedStatement prepareStatement = null;
@@ -199,6 +215,9 @@ public class ErrorReport extends HttpServlet {
         Properties statusProperties = loadProperties(errorStatuspath);
   
         String statusData = statusProperties.getProperty("status");
+        String statusCode = statusProperties.getProperty("statusCode");
+        
+        LOGGER.info(statusCode);
         LOGGER.info(statusData);
         
         Connection connection = null;
@@ -211,10 +230,35 @@ public class ErrorReport extends HttpServlet {
             password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
-           
-                getComment = "SELECT * FROM ERROR_RESPONSE ORDER BY RESPONSE_ID";
+            
+            getComment = "SELECT * FROM ERROR_RESPONSE ";
+            if(!lang.equalsIgnoreCase("ALL") || !statusVal.equalsIgnoreCase("ALL") || !statusCodeVal.equalsIgnoreCase("ALL")) {
+            	getComment += "WHERE "; 
+            	if(!lang.equalsIgnoreCase("ALL") ) {
+                	getComment += "LANGUAGE = '"+lang.toLowerCase()+"' ";
+                }
+            	if(!statusVal.equalsIgnoreCase("ALL") ) {
+            		if(!lang.equalsIgnoreCase("ALL") ) {
+            			getComment += "AND STATUS = '"+statusVal.toLowerCase()+"' ";
+            		}else {
+            			getComment += "STATUS = '"+statusVal.toLowerCase()+"' ";
+            		}
+                	
+                }
+            	if(!statusCodeVal.equalsIgnoreCase("ALL") ) {
+            		if(!statusVal.equalsIgnoreCase("ALL") || !lang.equalsIgnoreCase("ALL")) {
+            			getComment += "AND STATUS_CODE = '"+statusCodeVal.toLowerCase()+"' ";
+            		}else {
+            			getComment += "STATUS_CODE = '"+statusCodeVal.toLowerCase()+"' ";
+            		}
+                	
+                }
+
+            }
+            getComment += " ORDER BY RESPONSE_ID";
+
                 prepareStatement = connection.prepareStatement(getComment);
-                LOGGER.debug("getComment :" + getComment);
+                LOGGER.info("getComment :" + getComment);
                 rs = prepareStatement.executeQuery();
 
                 while (rs.next()) {
@@ -237,8 +281,8 @@ public class ErrorReport extends HttpServlet {
                     errorData.put("count", count);
                     errorData.put("status", status);
                     errorData.put("statusData", statusData);
-                   
-                   
+                    errorData.put("statusCode", statusCode);
+                    
                     
                     arrayComments.put(errorData);
                 }
@@ -253,7 +297,6 @@ public class ErrorReport extends HttpServlet {
         }
         return arrayComments;
     }
-    
     private String getConnectionString(Properties properties) {
         LOGGER.info("Postgre : getConnectionString()");
         String connectionStr = null;

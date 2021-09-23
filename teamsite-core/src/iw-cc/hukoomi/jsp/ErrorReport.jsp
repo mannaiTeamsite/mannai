@@ -93,27 +93,34 @@ $( document ).ready(function() {
 		"path" : dbConfigPath
 	}
 	 $.ajax({
-        type: "POST",
+        type: "GET",
         url: '/iw-cc/ErrorReport',
         enctype: 'multipart/form-data',
         data: JSON.stringify(requestData),
         processData: false,
         contentType: false,
         success: function (result) {
-            console.log( "Status Updated" );
+            console.log( result );
         },
         error: function (xhr, status, errorThrown) {
             console.log( "Sorry, there was a problem!" );
         }
     });
 		});
-});
-function getErrorResponse(){
-	$.ajax({
+  $('#status').change(function(){
+	
+  var $status = $(this).val() ;	
+  var $lang = $('#language').val();
+  var $statusCode = $('#status-code').val();
+  $.ajax({
         type: "GET",
         url: '/iw-cc/ErrorReport',
         
         data: {
+			"action":"filter",
+			language: $lang,
+      statusCodeVal: $statusCode,
+			status: $status,
             "statusPath" : "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties/error.properties",
 			"path" : dbConfigPath			
 		},
@@ -122,6 +129,99 @@ function getErrorResponse(){
             var obj = result;
 			//data = JSON.parse(obj);
 			dataArray = obj.comments;
+			
+			renderFilterData();
+        },
+        error: function (xhr, status, errorThrown) {
+            console.log( "Sorry, there was a problem!" );
+        }
+    });
+  
+});
+$('#language').change(function(){
+	var $lang = $(this).val() ;	
+	var $status = $('#status').val();
+  var $statusCode = $('#status-code').val();
+  $.ajax({
+        type: "GET",
+        url: '/iw-cc/ErrorReport',
+        
+        data: {
+			"action":"filter",
+			language: $lang,
+      statusCodeVal: $statusCode,
+			status: $status,
+            "statusPath" : "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties/error.properties",
+			"path" : dbConfigPath			
+		},
+        
+        success: function (result) {
+            var obj = result;
+			//data = JSON.parse(obj);
+			dataArray = obj.comments;
+			$('#table_blog_comments tbody').empty();
+			
+			renderFilterData();
+        },
+        error: function (xhr, status, errorThrown) {
+            console.log( "Sorry, there was a problem!" );
+        }
+    });
+  
+});
+$('#status-code').change(function(){
+	
+  var $statusCode = $(this).val() ;	
+  var $lang = $('#language').val();
+  var $status = $('#status').val();
+  $.ajax({
+        type: "GET",
+        url: '/iw-cc/ErrorReport',
+        
+        data: {
+			"action":"filter",
+			language: $lang,
+      statusCodeVal: $statusCode,
+			status: $status,
+            "statusPath" : "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties/error.properties",
+			"path" : dbConfigPath			
+		},
+        
+        success: function (result) {
+            var obj = result;
+			//data = JSON.parse(obj);
+			dataArray = obj.comments;
+			
+			renderFilterData();
+        },
+        error: function (xhr, status, errorThrown) {
+            console.log( "Sorry, there was a problem!" );
+        }
+    });
+  
+})
+
+
+});
+function getErrorResponse(){
+	$.ajax({
+        type: "GET",
+        url: '/iw-cc/ErrorReport',
+        
+        data: {
+			"action":"filter",
+			language: "ALL",
+      statusCodeVal: "ALL",
+			status: "ALL",
+            "statusPath" : "/iwmnt/default/main/Hukoomi/WORKAREA/default/iw/config/properties/error.properties",
+			"path" : dbConfigPath			
+		},
+        
+        success: function (result) {
+            var obj = result;
+			//data = JSON.parse(obj);
+			
+			dataArray = obj.comments;
 			renderData();
         },
         error: function (xhr, status, errorThrown) {
@@ -129,10 +229,101 @@ function getErrorResponse(){
         }
     });
 }
+
+function renderFilterData(){
+		var dataTable = $('#table_blog_comments').DataTable();
+	dataTable.destroy();
+	
+  
+	  var  str_array = [];
+    if(dataArray !== 'undefined' && dataArray.length > 0){
+        var str = dataArray[0].statusData;
+        console.log(str);
+        var str_array = str.split(',');
+    }
+
+	$('#table_blog_comments').DataTable( {
+    data: dataArray,
+    columns: [
+        { data: 'errorId' },
+        { data: 'broken_link' },
+        { data: 'content_page' },
+        { data: 'last_reported' },
+        { data: 'language' },
+        { data: 'status_code' },
+        { data: 'count' },
+       
+        
+		{"data":null,
+            "render": function(data, type, full, meta){
+              var str2 = "";
+              if(dataArray !== 'undefined' && dataArray.length > 0){
+				var str1 = "";
+				for(var i = 0; i < str_array.length; i++) {
+   
+					   str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+					   if(str_array[i].toUpperCase() == (full.status).toUpperCase()){
+						    str1 += '<option selected value="'+str_array[i]+'">'+str_array[i]+'</option>'; 
+					   }else{
+						   str1 += '<option value="'+str_array[i]+'">'+str_array[i]+'</option>'; 
+					   }
+					   
+					}
+					 str2 = '<select class="select">' + str1 + '</select>';
+						console.log(str2);
+                    return str2;
+                
+            }else{
+            return str2;
+          }
+          }
+		 }
+        
+    ],
+	createdRow : function (row, data, indice){
+		$(row).find("td:eq(0)").attr('data-id',data.errorId);
+		$(row).find("td:eq(0)").html(indice + 1);
+		$(row).find("td:eq(1)").html("<a href='"+data.broken_link+"'target = '_blank'>"+data.broken_link+"</a>");
+    $(row).find("td:eq(2)").html("<a href='"+data.content_page+"'target = '_blank'>"+data.content_page+"</a>");
+	},
+	searching: false,
+    ordering:  false
+} );
+
+}
+
+
+
 function renderData(){
-var str = dataArray[1].statusData;
+	
+if(dataArray !== 'undefined' && dataArray.length > 0){
+var str = dataArray[0].statusData;
 console.log(str);
 var str_array = str.split(',');
+
+
+$('#status').append('<option value = "ALL"  >ALL</option>');
+	length = str_array.length;
+	for(i=0;i<length;i++){
+  str_array[i] = str_array[i].replace(/^\s*/, "").replace(/\s*$/, "");
+	$('#status').append('<option  value = "'+str_array[i] +'"  >'+str_array[i] +'</option>');
+  }
+
+
+  $('#status-code').append('<option value = "ALL"  >ALL</option>');
+  
+  var strCode = dataArray[0].statusCode;
+  if(strCode != null && strCode != undefined){
+	  var str_Code = strCode.split(',');
+	code_length = str_Code.length;
+	for(i=0;i<code_length;i++){
+    str_Code[i] = str_Code[i].replace(/^\s*/, "").replace(/\s*$/, "");
+	$('#status-code').append('<option  value = "'+str_Code[i] +'"  >'+str_Code[i] +'</option>');
+  }
+  }
+  
+
+
 var str1 = "";
 
 	$('#table_blog_comments').DataTable( {
@@ -177,7 +368,7 @@ var str1 = "";
 	searching: false,
     ordering:  false
 } );
-	
+}
 }
 	</script>
 
@@ -196,7 +387,38 @@ CSClient client = null;
 
 
  <div id="blog_comments">
-
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <div class="navbar-nav mr-auto col-sm-3">
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status">
+           
+              </select>
+			  </div>
+			   <div class="form-group">
+            </select>
+			 <label for="language">Language</label>
+            <select class="form-control" id="language">
+              <option>ALL</option>
+            <option value="EN">EN</option>
+            <option value="AR">AR</option>
+            </select>
+          </div>
+          <div class="form-group">
+          </select>
+     <label for="statusCode">STatus Code</label>
+          <select class="form-control" id="status-code">
+           
+         
+          </select>
+        </div>
+          
+      </div>
+      
+    </div>
+  </nav>
 
 
 <table class="table" id= "table_blog_comments">

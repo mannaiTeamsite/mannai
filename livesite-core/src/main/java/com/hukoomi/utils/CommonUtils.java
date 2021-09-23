@@ -587,7 +587,7 @@ public class CommonUtils {
                 statement = connection.prepareStatement(query);
                 statement.setString(1, brokenLink);
                 statement.setString(2, contentPage);
-                statement.setString(3, language);
+                statement.setString(3, language.toLowerCase());
                 statement.setString(4, statusCode);
                 statement.setInt(5, count);
                 statement.setString(6, "open");
