@@ -547,6 +547,18 @@ public class NewsletterTask implements CSURLExternalTask {
                                     .getText();
 
                     readMoreLink.setText(originalDcrName);
+                } else {
+                    
+                    Node image = dcrDocument.selectSingleNode(
+                            "/root/information/image");
+                    if (image != null) {
+                        Element imgElement = dcrElement.addElement("image");
+                        String dcrImage = dcrDocument
+                                .selectSingleNode("/root/information/image")
+                                .getText();
+                        imgElement.setText(dcrImage);
+                    }                    
+                    
                 }
             }
         }
