@@ -409,7 +409,7 @@ CSClient client = null;
           </div>
           <div class="form-group" style="padding: 0 10px;">
           
-     <label for="statusCode">STatus Code</label>
+     <label for="statusCode">Status Code</label>
           <select class="form-control " id="status-code" style="width: 180px;">
            
          
