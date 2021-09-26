@@ -11,13 +11,11 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.Array;
-import java.util.Properties;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
 
 
 public class ErrorExternal {
@@ -33,7 +31,7 @@ public class ErrorExternal {
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
 		 logger.info("Component Type"+compType);		 
 		 
-		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
+		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime() && !req.getReferer().isBlank())
 		{
 			
 			String brokenLink = req.getRequestURL();
@@ -120,7 +118,8 @@ public class ErrorExternal {
 			 
 		}
 		Document doc = getErrorDCRContent(context);  
-		 logger.info("ErrorBannerDoc"+doc.asXML());
+	
+		
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
