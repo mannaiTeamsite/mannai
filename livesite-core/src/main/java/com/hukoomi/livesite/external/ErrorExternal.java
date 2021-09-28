@@ -2,7 +2,6 @@ package com.hukoomi.livesite.external;
 
 
 import com.hukoomi.utils.CommonUtils;
-import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -11,8 +10,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Properties;
@@ -21,86 +18,56 @@ import java.util.Properties;
 public class ErrorExternal {
 	private Properties properties = null;
 	 private final static Logger logger = Logger.getLogger(ErrorExternal.class);
-	 Postgre postgre = null;
+	
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
 		final String COMPONENT_TYPE = "componentType";
 		final String LOCALE = "locale";
-		 final String STATUS = "error_code";
+		final String STATUS = "error_code";
 		RequestHeaderUtils req = new RequestHeaderUtils(context);
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
-		 logger.info("Component Type"+compType);		 
-		 
-		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime() && !req.getReferer().isBlank())
-		{
-			
-			String brokenLink = req.getRequestURL();
-			 	 
-			 
-			 String language = context.getParameterString(LOCALE);
-			 String statusCode = context.getParameterString(STATUS);
-			 
-			 logger.info("Error Status "+statusCode);
-			 String contentPage = req.getReferer(); 
-			 String brokenLinkPath = null;
-			 try {
-		        	brokenLinkPath = (new URL(brokenLink)).getPath();
+		 String contentPage = req.getReferer(); 
+		 PropertiesFileReader prop = null;
+			prop = new PropertiesFileReader(context, "error.properties");
+			properties = prop.getPropertiesFile();
+			String errorPageEn=properties.getProperty("errorPageEn");
+	        String errorPageAr=properties.getProperty("errorPageAr");
+	        
+	        String brokenLink = req.getRequestURL();
+	        try {
+				 brokenLink = (new URL(brokenLink)).getPath();
 		        } catch (MalformedURLException e) {
 		          logger.debug(e);
 		        } 
-			 			 
-			 PropertiesFileReader prop = null;
-				prop = new PropertiesFileReader(context, "error.properties");
-				properties = prop.getPropertiesFile();
-			 String errorPageEn=properties.getProperty("errorPageEn");
-		        String errorPageAr=properties.getProperty("errorPageAr");
-		        String errorStatusStr =properties.getProperty("urls");
-		    
-		        
-				 if(brokenLinkPath.equalsIgnoreCase(errorPageEn) || brokenLinkPath.equalsIgnoreCase(errorPageAr)) {
-				 HttpServletRequest request = context.getRequest();
-				 brokenLink = contentPage;
-					Cookie cookie = null;
-					Cookie[] cookies = null;
-					
-					cookies = request.getCookies();
-					if (cookies != null) {
-						for (int i = 0; i < cookies.length; i++) {
-							cookie = cookies[i];
-							
-							if (cookie.getName().equals("relayURL")) {
-								contentPage = cookie.getValue();
-							}
-						}
-					}
-				 
-				 }
-				 try {
+		 logger.info("contentPage :"+contentPage); 
+		 logger.info("brokenLink :"+brokenLink); 
+		 
+		if(compType.equalsIgnoreCase("Banner") && context.isRuntime() && !contentPage.isBlank() && !brokenLink.equalsIgnoreCase(errorPageEn) && !brokenLink.equalsIgnoreCase(errorPageAr))
+		{			
+		 String language = context.getParameterString(LOCALE);
+			 String statusCode = context.getParameterString(STATUS);
+	        String errorURLStr =properties.getProperty("urls");
+	        logger.info("urls  "+errorURLStr);
+	        	try {
 					 contentPage = (new URL(contentPage)).getPath();
 			        } catch (MalformedURLException e) {
 			          logger.debug(e);
 			        } 
-				 try {
-					 brokenLink = (new URL(brokenLink)).getPath();
-			        } catch (MalformedURLException e) {
-			          logger.debug(e);
-			        } 
+				
 				 int count = 0;
+				if(!errorURLStr.isBlank()) {
+				   String[] urlsArray = errorURLStr.split(",");
+					
+					 for(var i = 0; i < urlsArray.length; i++) {
+					    
+					   if(urlsArray[i].equalsIgnoreCase(brokenLink)) {
+						   count++;
+					   }					    
+					 }
+				}
+				 				 
 				
-				 
-				 logger.info("urls  "+errorStatusStr);
-				 
-				 
-				 String[] urlsArray = errorStatusStr.split(",");
-				
-				 for(var i = 0; i < urlsArray.length; i++) {
-				    
-				   if(urlsArray[i].equalsIgnoreCase(brokenLink)) {
-					   count++;
-				   }
-				    
-				 }
-				 
+				if(count == 0) { 
 				 CommonUtils cu = new CommonUtils(context);
 				 String urlPrefix = cu.getURLPrefix(context);
 				 contentPage = urlPrefix + contentPage;
@@ -110,12 +77,9 @@ public class ErrorExternal {
 				 logger.info("brokenLink  "+brokenLink);
 				 
 				 logger.info("count  "+count);
-				if(count == 0) {
+				
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
-				}
-					
-			 
-			 
+				}			 
 		}
 		Document doc = getErrorDCRContent(context);  
 	
@@ -168,12 +132,5 @@ public class ErrorExternal {
         Element detailedElement = data.getRootElement();
         root.add(detailedElement);
         return doc;
-    }
-	
-	
-	
-	
-	
-	
-                                
+    }                               
 }
