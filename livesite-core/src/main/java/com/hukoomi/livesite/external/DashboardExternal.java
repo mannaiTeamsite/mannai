@@ -1,8 +1,10 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -19,6 +21,7 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.json.JSONObject;
 
+import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.JWTTokenUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
@@ -482,25 +485,23 @@ public class DashboardExternal {
 		properties = prop.getPropertiesFile();
 		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
 		String relayURL = rhu.getRequestURL();
-		LOGGER.info("---relayURL url---" + relayURL);
-		String url = properties.getProperty("login") + "?relayURL=" + relayURL;
-		LOGGER.info("---Login url---" + url);
-		String domain = "";
-		URI uri;
-		try {
-			uri = new URI(relayURL);
-			domain = uri.getHost();
-			
-		} catch (URISyntaxException e) {
-			LOGGER.error(e);
-			
-		}
-		String livesiteDomain = properties.getProperty("domain");
 		
-		if (domain.equalsIgnoreCase(livesiteDomain)) {
+	
+		 try {
+			 relayURL = (new URL(relayURL)).getPath();
+	        } catch (MalformedURLException e) {
+	        	LOGGER.debug(e);
+	        } 
+		
+		 CommonUtils cu = new CommonUtils();
+		 String urlPrefix = cu.getURLPrefix(context);
+		 relayURL = urlPrefix + relayURL;
+		 LOGGER.info("---relayURL url---" + relayURL);
+		 String url = properties.getProperty("login") + "?relayURL=" + relayURL;
+		 
 			HttpServletResponse response = context.getResponse();
 			response.sendRedirect(url);
-		}
+		
 
 		LOGGER.info("--------------nonLoggedIn Ended------------");
 

@@ -87,6 +87,7 @@ public class UserInfoSession {
 					lstMdfyElement.setText(request.getSession().getAttribute("lstMdfy").toString());
 					Element roleElement = userData.addElement("role");
 					roleElement.setText(request.getSession().getAttribute("role").toString());
+					
 				}
 				}
 				else {
