@@ -120,7 +120,7 @@ public class HukoomiExternal {
 			context.setParameterString("baseQuery", correctedWord);
 		}
 		Document nutchDoc = null;
-		if(category.equalsIgnoreCase("All")){
+		if(category.equalsIgnoreCase("All") || category.equalsIgnoreCase("*") || category.equalsIgnoreCase("")){
 			String nutchQuery = sqb.crawlBuild(correctedWord);
 			logger.debug("Crawl Query : " + nutchQuery);
 			nutchDoc = squ.doJsonQuery(nutchQuery, "NutchResponse", false);

@@ -48,7 +48,7 @@ public class SolrQueryUtil {
             logger.debug("SOLR Query Result XML:" + returnXML);
             document = Dom4jUtils.newDocument(returnXML);
         } catch (Exception e) {
-            logger.error(SOLR_EXCEPTION, e);
+            logger.error(SOLR_EXCEPTION + " For " + query, e);
         }
         return document;
     }
@@ -152,7 +152,7 @@ public class SolrQueryUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(SOLR_EXCEPTION, e);
+            logger.error(SOLR_EXCEPTION + " For " + query, e);
         }
         return document;
     }
@@ -172,7 +172,7 @@ public class SolrQueryUtil {
                     .getForEntity(query, String.class);
             responseBody = response.getBody();
         } catch (Exception e) {
-            logger.error(SOLR_EXCEPTION, e);
+            logger.error(SOLR_EXCEPTION + " For " + query, e);
         }
         return responseBody;
     }
