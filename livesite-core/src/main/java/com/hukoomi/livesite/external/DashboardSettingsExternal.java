@@ -24,6 +24,7 @@ import com.hukoomi.bo.DashboardSettingsBO;
 import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.MySql;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.UserInfoSession;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
@@ -252,8 +253,7 @@ public class DashboardSettingsExternal {
         logger.info("DashboardSettingsExternal : langSwitch "+langSwitch+
                 " language "+language+" pageLang "+pageLang);
         HttpServletRequest request = context.getRequest();
-        logger.debug("Session Status : "
-                + request.getSession().getAttribute("status"));
+        
         String settingsAction =
                 context.getParameterString(SETTINGS_ACTION);
         postgre = new Postgre(context);
@@ -300,8 +300,9 @@ public class DashboardSettingsExternal {
             logger.debug("Final Result :" + doc.asXML());
             return doc;
         }
-        if (request.getSession().getAttribute("status") != null && "valid"
-                .equals(request.getSession().getAttribute("status"))) {            
+        UserInfoSession ui = new UserInfoSession();
+		String valid = ui.getStatus(context);
+		if(valid.equalsIgnoreCase("valid")) {           
             
             if (validateInput(context, settingsBO)) {
                 logger.info("Input data validation is successfull");
