@@ -159,17 +159,33 @@ public class DashboardExternal {
 		 * @return doc return the solr response document generated from solr query.
 		 */
 		LOGGER.info("--------------doLogout Started------------");
-		final String RELAY_URL = "relayURL";
+		
 		Document doc = DocumentHelper.createDocument();
 		removeSessionAttr(context);
 
 		PropertiesFileReader prop = null;
 		prop = new PropertiesFileReader(context, "dashboard.properties");
 		properties = prop.getPropertiesFile();
-		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
-		String relayURL = rhu.getCookie(RELAY_URL);
-		String url = properties.getProperty("logout") + "?relayURL=" + relayURL;
 		
+
+		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
+		final String RELAY_URL = "relayURL";
+		String relayURL = rhu.getCookie(RELAY_URL);
+		
+	
+		 try {
+			 relayURL = (new URL(relayURL)).getPath();
+	        } catch (MalformedURLException e) {
+	        	LOGGER.debug(e);
+	        } 
+		
+		 CommonUtils cu = new CommonUtils();
+		 String urlPrefix = cu.getURLPrefix(context);
+		 relayURL = urlPrefix + relayURL;
+		
+		
+		String url = properties.getProperty("logout") + "?relayURL=" + relayURL;
+		LOGGER.info("logout url:"+url);
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect(url);
 		LOGGER.info("--------------doLogout Ended------------");
@@ -496,7 +512,8 @@ UserInfoSession ui = new UserInfoSession();
 		prop = new PropertiesFileReader(context, "dashboard.properties");
 		properties = prop.getPropertiesFile();
 		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
-		String relayURL = rhu.getRequestURL();
+		final String RELAY_URL = "relayURL";
+		String relayURL = rhu.getCookie(RELAY_URL);
 		
 	
 		 try {
