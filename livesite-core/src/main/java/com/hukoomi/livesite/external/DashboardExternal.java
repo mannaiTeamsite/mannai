@@ -2,8 +2,6 @@ package com.hukoomi.livesite.external;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -11,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,6 +25,7 @@ import com.hukoomi.utils.JWTTokenUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.UserInfoSession;
 import com.interwoven.livesite.runtime.RequestContext;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -51,11 +51,13 @@ public class DashboardExternal {
 		String jwtParsedToken = null;
 		HttpServletRequest request = context.getRequest();
 		JWTTokenUtil jwt = new JWTTokenUtil(context);
-		if (accessToken != null)
+		
 			try {
 				jwtParsedToken = jwt.parseJwt(accessToken);
 
 				setSessionAttributes(jwtParsedToken, request, "valid");
+				
+				
 			} catch (ExpiredJwtException e) {
 				LOGGER.error("Token Expired");
 				setSessionAttributes(jwtParsedToken, request, "Token Expired");
@@ -66,11 +68,14 @@ public class DashboardExternal {
 				LOGGER.error("Some other exception in JWT parsing" + e);
 				setSessionAttributes(jwtParsedToken, request, "Some other exception in JWT parsing");
 			}
-	}
+
+		}
+	
 
 	/** Setting the user info in session. */
 	private void setSessionAttributes(String jwtParsedToken, HttpServletRequest request, String status) {
 		LOGGER.info("--------------setSessionAttributes is called------------");
+	
 		HttpSession session = request.getSession(true);
 
 		session.setAttribute("status", status);
@@ -101,11 +106,11 @@ public class DashboardExternal {
 					session.setAttribute("userType", "business");
 				}
 			}
-
 		}
 
 		LOGGER.info("--------------setSessionAttributes is Ended------------");
 	}
+
 
 	private static String getValue(String response, String key) {
 		String status = "";
@@ -125,22 +130,22 @@ public class DashboardExternal {
 		HttpSession session = request.getSession(false);
 		if (session != null)
 			session.removeAttribute("status");
-		session.removeAttribute("unm");
-		session.removeAttribute("uid");
-		session.removeAttribute("fnEn");
-		session.removeAttribute("fnAr");
-		session.removeAttribute("lnEn");
-		session.removeAttribute("lnAr");
-		session.removeAttribute("QID");
-		session.removeAttribute("EID");
-		session.removeAttribute("mobile");
-		session.removeAttribute("email");
-		session.removeAttribute("lstMdfy");
-		session.removeAttribute("role");
-		session.removeAttribute("exp");
-		session.removeAttribute("userId");
-		session.removeAttribute("usertypeNo");
-		session.removeAttribute("userType");
+			session.removeAttribute("unm");
+			session.removeAttribute("uid");
+			session.removeAttribute("fnEn");
+			session.removeAttribute("fnAr");
+			session.removeAttribute("lnEn");
+			session.removeAttribute("lnAr");
+			session.removeAttribute("QID");
+			session.removeAttribute("EID");
+			session.removeAttribute("mobile");
+			session.removeAttribute("email");
+			session.removeAttribute("lstMdfy");
+			session.removeAttribute("role");
+			session.removeAttribute("exp");
+			session.removeAttribute("userId");
+			session.removeAttribute("usertypeNo");
+			session.removeAttribute("userType");
 
 		LOGGER.info("--------------removeSessionAttr is Ended------------" + session.getAttribute("status"));
 	}
@@ -154,17 +159,33 @@ public class DashboardExternal {
 		 * @return doc return the solr response document generated from solr query.
 		 */
 		LOGGER.info("--------------doLogout Started------------");
-		final String RELAY_URL = "relayURL";
+		
 		Document doc = DocumentHelper.createDocument();
 		removeSessionAttr(context);
 
 		PropertiesFileReader prop = null;
 		prop = new PropertiesFileReader(context, "dashboard.properties");
 		properties = prop.getPropertiesFile();
-		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
-		String relayURL = rhu.getCookie(RELAY_URL);
-		String url = properties.getProperty("logout") + "?relayURL=" + relayURL;
 		
+
+		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
+		final String RELAY_URL = "relayURL";
+		String relayURL = rhu.getCookie(RELAY_URL);
+		
+	
+		 try {
+			 relayURL = (new URL(relayURL)).getPath();
+	        } catch (MalformedURLException e) {
+	        	LOGGER.debug(e);
+	        } 
+		
+		 CommonUtils cu = new CommonUtils();
+		 String urlPrefix = cu.getURLPrefix(context);
+		 relayURL = urlPrefix + relayURL;
+		
+		
+		String url = properties.getProperty("logout") + "?relayURL=" + relayURL;
+		LOGGER.info("logout url:"+url);
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect(url);
 		LOGGER.info("--------------doLogout Ended------------");
@@ -180,7 +201,7 @@ public class DashboardExternal {
 		 * @return doc return the solr response document generated from solr query.
 		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
-		HttpSession session = context.getRequest().getSession();
+		
 
 		Document doc = DocumentHelper.createDocument();
 		Element rootElement = doc.addElement("result");
@@ -200,11 +221,10 @@ public class DashboardExternal {
 		bookmarkEle.add(bookmarkRoot);
 		LOGGER.info("After adding Bookmark" + doc.asXML());
 		Element userdata = rootElement.addElement("user-data");
-		String status = (String) session.getAttribute("status");
-		LOGGER.info("status=" + session.getAttribute("status"));
-                LOGGER.info("email=" + session.getAttribute("email"));
-		if (status != null && status.equals("valid")) {
-
+UserInfoSession ui = new UserInfoSession();
+		String valid = ui.getStatus(context);
+		if(valid.equalsIgnoreCase("valid")) {
+			HttpSession session = context.getRequest().getSession();
 			Element userTypeElement = userdata.addElement("userType");
 			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userdata.addElement("fnEn");
@@ -237,13 +257,17 @@ public class DashboardExternal {
 		 * @return doc return the solr response document generated from solr query.
 		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
-		HttpSession session = context.getRequest().getSession();
+		
 
 		Document doc = DocumentHelper.createDocument();
 		Element resultTelement = doc.addElement("result");
 		Element userData = resultTelement.addElement("userData");
-		String status = (String) session.getAttribute("status");
-		if (status != null && status.equals("valid")) {
+		
+UserInfoSession ui = new UserInfoSession();
+
+		String valid = ui.getStatus(context);
+		if(valid.equalsIgnoreCase("valid")) {
+			HttpSession session = context.getRequest().getSession();
 			Element userTypeElement = userData.addElement("userType");
 			userTypeElement.setText((String) session.getAttribute("userType"));
 			Element fnEnElement = userData.addElement("fnEn");
@@ -296,10 +320,14 @@ public class DashboardExternal {
 		Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
 
 		postgre = new Postgre(context);
+		
+		
+		UserInfoSession ui = new UserInfoSession();
+		
 		HttpSession session = context.getRequest().getSession();
-		String status = (String) session.getAttribute("status");
+		String valid = ui.getStatus(context);
 		LOGGER.info("Dashboard status=" + session.getAttribute("status"));
-		if (status != null && status.equals("valid")) {
+		if ( valid.equals("valid")) {
 			userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
@@ -484,7 +512,8 @@ public class DashboardExternal {
 		prop = new PropertiesFileReader(context, "dashboard.properties");
 		properties = prop.getPropertiesFile();
 		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
-		String relayURL = rhu.getRequestURL();
+		final String RELAY_URL = "relayURL";
+		String relayURL = rhu.getCookie(RELAY_URL);
 		
 	
 		 try {

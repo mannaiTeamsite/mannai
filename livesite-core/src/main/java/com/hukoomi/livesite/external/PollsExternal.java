@@ -17,7 +17,6 @@ import java.util.StringJoiner;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -31,6 +30,7 @@ import com.hukoomi.bo.PollsBO;
 import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.UserInfoSession;
 //import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
 
@@ -1066,9 +1066,9 @@ public class PollsExternal {
             return false;
         }
         
-        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
-        if (request.getSession().getAttribute("status") != null && "valid"
-                .equals(request.getSession().getAttribute("status"))) {
+UserInfoSession ui = new UserInfoSession();
+		String valid = ui.getStatus(context);
+		if(valid.equalsIgnoreCase("valid")) {
             
             if(request.getSession().getAttribute("userId") != null) {
                 userId = request.getSession().getAttribute("userId")
