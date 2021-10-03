@@ -112,7 +112,7 @@ public class HukoomiExternal {
 		logger.info("Context BaseQuery: " + context.getParameterString("baseQuery"));
 		logger.info("Current FieldQuery: " + fq);
 		logger.info("Current Category: " + category);
-		String correctedWord = "";
+		String correctedWord = context.getParameterString("baseQuery");
 		if(root.element("CorrectedWord") != null && StringUtils.isNotBlank(root.element("CorrectedWord").getText())){
 			logger.info("Word has been corrected in Portal Core");
 			correctedWord = root.element("CorrectedWord").getText();
