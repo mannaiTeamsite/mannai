@@ -10,6 +10,7 @@ import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.LiveSiteDal;
 import com.interwoven.livesite.runtime.RequestContext;
 import com.interwoven.livesite.runtime.model.page.RuntimePage;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -23,8 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -93,7 +92,7 @@ public class CommonUtils {
         if (isPathExists(path)) {
             logger.info("File Path exists: " + path);
             doc = this.liveSiteDal.readXmlFile(path);
-            logger.info("DCR Retrieved: " + doc.asXML());
+//            logger.info("DCR Retrieved: " + doc.asXML());
         } else {
             logger.error("DCR does not exist at path : " + path);
         }
@@ -388,6 +387,22 @@ public class CommonUtils {
     }
 
     /*
+     * Remove the HTML Tags present in content.
+     * This is used to remove HTML meta tags from content
+     * to use the content at the special places like SEO Metadata.
+     * Uses LiveSite StringUtil methods.
+     *
+     * @param String metadata
+     *
+     * @return String sanitized metadata
+     */
+    public String removeHTMLTags(String content){
+        if(StringUtils.isNotBlank(content)) {
+            content = content.replaceAll("\\<.*?>", "");
+        }
+        return content;
+    }
+    /*
      * Generate SEO Metatags in PageScope for Dynamic Content.
      *
      * @param Document DCR XML Dom4j Document
@@ -409,6 +424,9 @@ public class CommonUtils {
         logger.info("PageScope Locale : " + locale);
         logger.info("Current PageScopeData: "+context.getPageScopeData().toString());
         String description = sanitizeMetadataField(getValueFromXML("/content/root/page-details/description", dcr));
+        if(StringUtils.isBlank(description)){
+            description = sanitizeMetadataField(removeHTMLTags(getValueFromXML("/content/root/detail/description", dcr)));
+        }
         context.getPageScopeData().put(RuntimePage.PAGESCOPE_DESCRIPTION, description);
         logger.info("Set PageScope Meta Description to : " + description);
         String keywords = sanitizeMetadataField(getValueFromXML("/content/root/page-details/keywords", dcr));
