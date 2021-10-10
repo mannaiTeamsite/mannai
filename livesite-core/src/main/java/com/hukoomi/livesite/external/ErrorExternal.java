@@ -40,8 +40,7 @@ public class ErrorExternal {
 		        } catch (MalformedURLException e) {
 		          logger.debug(e);
 		        } 
-		 logger.info("contentPage :"+contentPage); 
-		 logger.info("brokenLink :"+brokenLink); 
+		 
 		 
 		if(compType.equalsIgnoreCase("Banner") && context.isRuntime() && !contentPage.isBlank() && !brokenLink.equalsIgnoreCase(errorPageEn) && !brokenLink.equalsIgnoreCase(errorPageAr))
 		{			
@@ -74,11 +73,7 @@ public class ErrorExternal {
 				 contentPage = urlPrefix + contentPage;
 				 brokenLink = urlPrefix + brokenLink;
 				 
-				 logger.info("contentPage  "+contentPage);
-				 logger.info("brokenLink  "+brokenLink);
-				 
-				 logger.info("count  "+count);
-				
+			
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 				}			 
 		}

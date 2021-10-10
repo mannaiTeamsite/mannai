@@ -65,15 +65,13 @@ public class JWTTokenUtil {
 
 		String strDate = null ;
 		String rsaSignPublicKey = properties.getProperty("RSASignaturePublicKey");
-		logger.info("rsaSignPublicKey :" + rsaSignPublicKey);
+		
 		String rsaPayloadPublicKey = properties.getProperty("RSAPayloadPublicKey");
 		PublicKey publicKey = getPublicKey(rsaSignPublicKey);
-		logger.info("rsaPayloadPublicKey :" + rsaPayloadPublicKey);
-		logger.info("publicKey :" + publicKey);
+		
 		String data = null;
 
 		Jws<Claims> jwt;
-		logger.info("Jwts object :" + Jwts.parser().setSigningKey(publicKey));
 		jwt = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwtString);
 		
 		Date exp = jwt.getBody().getExpiration();
@@ -81,15 +79,15 @@ public class JWTTokenUtil {
 			SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");  
 			strDate = formatter.format(exp); 
 		}
-		    logger.info("Expiration Date :"+exp);
+		   
 			String encryptedData = jwt.getBody().getSubject();
-			logger.info("encryptedData:" + encryptedData);
+			
 			publicKey = getPublicKey(rsaPayloadPublicKey);
 			data = decrypt(encryptedData, publicKey);
 			JSONObject jsonObj = new JSONObject(data);
 			jsonObj.put("exp", strDate);
 		    data = jsonObj.toString();
-		    logger.info("data:" + data);
+		   
 		
 		return data;
 	}
