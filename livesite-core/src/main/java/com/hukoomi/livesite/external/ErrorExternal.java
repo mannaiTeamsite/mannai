@@ -22,11 +22,14 @@ public class ErrorExternal {
 	
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
+		try {
 		final String COMPONENT_TYPE = "componentType";
 		final String LOCALE = "locale";
 		final String STATUS = "error_code";
 		RequestHeaderUtils req = new RequestHeaderUtils(context);
+		
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
+		 
 		 String contentPage = req.getReferer(); 
 		 PropertiesFileReader prop = null;
 			prop = new PropertiesFileReader(context, "error.properties");
@@ -40,8 +43,7 @@ public class ErrorExternal {
 		        } catch (MalformedURLException e) {
 		          logger.debug(e);
 		        } 
-		 
-		 
+ 
 		if(compType.equalsIgnoreCase("Banner") && context.isRuntime() && !contentPage.isBlank() && !brokenLink.equalsIgnoreCase(errorPageEn) && !brokenLink.equalsIgnoreCase(errorPageAr))
 		{			
 		 String language = context.getParameterString(LOCALE);
@@ -76,7 +78,10 @@ public class ErrorExternal {
 			
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 				}			 
+		}}catch(Exception e) {
+			logger.info("Exception occured did not log in db" + e);
 		}
+		
 		Document doc = getErrorDCRContent(context);  
 	
 		
