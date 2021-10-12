@@ -23,6 +23,7 @@ import org.json.JSONObject;
 import com.interwoven.livesite.runtime.RequestContext;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
@@ -62,14 +63,15 @@ public class JWTTokenUtil {
 	public String parseJwt(String jwtString)
 			throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,
 			BadPaddingException, NoSuchPaddingException, java.security.InvalidKeyException {
-
+		String data = null;
+		try {
 		String strDate = null ;
 		String rsaSignPublicKey = properties.getProperty("RSASignaturePublicKey");
 		
 		String rsaPayloadPublicKey = properties.getProperty("RSAPayloadPublicKey");
 		PublicKey publicKey = getPublicKey(rsaSignPublicKey);
 		
-		String data = null;
+		
 
 		Jws<Claims> jwt;
 		jwt = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwtString);
@@ -88,7 +90,9 @@ public class JWTTokenUtil {
 			jsonObj.put("exp", strDate);
 		    data = jsonObj.toString();
 		   
-		
+		} catch (Exception e) {
+			logger.error("Exception"+e);	
+		} 
 		return data;
 	}
 		 
