@@ -20,6 +20,7 @@ public class UserInfoSession {
 	
 	 private static final Logger LOGGER = Logger.getLogger(UserInfoSession.class);
 	public Document getUserData(RequestContext context, Document doc) {
+		try {
 		HttpServletRequest request = context.getRequest();
 			String valid = getStatus(context);
 			if(valid.equalsIgnoreCase("valid")) {
@@ -53,6 +54,9 @@ public class UserInfoSession {
 					roleElement.setText(request.getSession().getAttribute("role").toString());
 					
 					}}
+		}catch (Exception e) {
+			LOGGER.error("Exception"+e);	
+		} 
 		return doc;
 	}
 	
