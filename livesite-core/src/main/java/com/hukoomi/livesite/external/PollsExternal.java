@@ -12,11 +12,14 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -29,7 +32,9 @@ import org.owasp.esapi.ValidationErrorList;
 
 import com.hukoomi.bo.PollsBO;
 import com.hukoomi.utils.ESAPIValidator;
+import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 //import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -119,6 +124,30 @@ public class PollsExternal {
      * HashSet to collect Voted Poll Ids.
      */
     HashSet<String> votedPolls;
+    /**
+     * Http Servlet Request Object
+     */
+    HttpServletRequest request = null;
+    /**
+     * Http Servlet Response Object
+     */
+    HttpServletResponse response = null;
+    /**
+     * NLUID key
+     */
+    public static final String NLUID = "NLUID";
+    /**
+     * NLUID Cookie Expiry
+     */
+    public static final String NLUSERCOOKIEEXPIRY = "nlUserCookieExpiry";
+    /**
+     * Properties for non logged in user cookie
+     */
+    Properties nluseridProp =  null;
+    /**
+     * Properties for captcha config properties
+     */
+    Properties captchaconfigProp = null;
 
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -130,43 +159,45 @@ public class PollsExternal {
      * @deprecated
      */
     @Deprecated(since = "", forRemoval = false)
-    public Document performPollAction(final RequestContext context) {
+    public Document performPollAction(RequestContext context) {
 
         votedPolls = new LinkedHashSet<String>();
 
         logger.info("PollsExternal : performPollAction()");
-
+        
         Document doc = DocumentHelper.createDocument();
 
         PollsBO pollsBO = new PollsBO();
         postgre = new Postgre(context);
         boolean isValidInput = setBO(context, pollsBO, postgre);
         logger.info("isValidInput : " + isValidInput);
+        
+        logger.info("PollsExternal : Loading captchaconfig Properties....");
+        PropertiesFileReader captchapropertyFileReader = new PropertiesFileReader(
+                context, "captchaconfig.properties");
+        captchaconfigProp = captchapropertyFileReader
+                .getPropertiesFile();
+        logger.info("PollsExternal : captchaconfig Properties Loaded");
+        
         if (isValidInput) {
 
             logger.debug("PollsBO : " + pollsBO);
             HukoomiExternal he = new HukoomiExternal();
-
-            if (pollsBO.getAction() != null
-                    && "vote".equalsIgnoreCase(pollsBO.getAction())) {
-                doc = processVotePoll(pollsBO, postgre, votedPolls);
-            } else if (pollsBO.getAction() != null
-                    && "current".equalsIgnoreCase(pollsBO.getAction())) {
+            
+            if(StringUtils.equalsIgnoreCase("vote", pollsBO.getAction())) {
+                doc = processVotePoll(pollsBO, postgre, votedPolls, context);
+            } else if(StringUtils.equalsIgnoreCase("current", pollsBO.getAction())) {
                 doc = processCurrentPolls(context, he, pollsBO);
-            } else if (pollsBO.getAction() != null
-                    && "past".equalsIgnoreCase(pollsBO.getAction())) {
+            } else if(StringUtils.equalsIgnoreCase("past", pollsBO.getAction())) { 
                 doc = processPastPolls(context, he, pollsBO);
             }
         } else {
             logger.info("Invalid input parameter");
-            if (pollsBO.getAction() != null && ("current"
-                    .equalsIgnoreCase(pollsBO.getAction())
-                    || "past".equalsIgnoreCase(pollsBO.getAction()))) {
+            if (StringUtils.equalsIgnoreCase("current", pollsBO.getAction()) || StringUtils.equalsIgnoreCase("past", pollsBO.getAction())) {
                 Element pollResponseElem = doc.addElement("SolrResponse")
                         .addElement("response").addElement("numFound");
                 pollResponseElem.setText("0");
-            } else if (pollsBO.getAction() != null
-                    && "vote".equalsIgnoreCase(pollsBO.getAction())) {
+            } else if (StringUtils.equalsIgnoreCase("vote", pollsBO.getAction())) {
                 doc.addElement("PollResult").addElement(RESULT);
             }
         }
@@ -185,22 +216,53 @@ public class PollsExternal {
      * 
      */
     public Document processVotePoll(PollsBO pollsBO, Postgre postgre,
-            HashSet<String> votedPolls) {
-        if (!isPollVoted(pollsBO, postgre)) {
-            insertPollResponse(pollsBO, postgre);
-        }
-        // Fetch Result from DB for above poll_ids which were voted already by user
-        Map<String, List<Map<String, String>>> response = getPollResponse(
-                pollsBO, postgre, votedPolls);
-
+            HashSet<String> votedPolls, RequestContext context) {
+        logger.info("Polls External : processVotePoll");
         Map<Long, Long> votedOptions = null;
-
-        if (votedPolls.isEmpty() != true) {
-            votedOptions = getVotedOption(postgre, votedPolls, pollsBO);
-            logger.info("Voted Polls : " + votedOptions.toString());
+        boolean isCaptchaValid = true;
+        //logger.info("Check User Id : "+!StringUtils.isNotBlank(pollsBO.getUserId()));
+        //logger.info("Check nluser Id : "+!StringUtils.isNotBlank(pollsBO.getNLUID()));
+        if(!StringUtils.isNotBlank(pollsBO.getUserId()) && !StringUtils.isNotBlank(pollsBO.getNLUID())) {
+            String nlUID = UUID.randomUUID().toString();
+            logger.info(NLUID+" : " + nlUID);
+            pollsBO.setNLUID(nlUID);
+            Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
+            logger.info("nlUIDCookie : " + nlUIDCookie);
+            String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
+            logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
+            int nlUserCookieExpiry = 0;
+            if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
+                nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);
+                //logger.info("nlUserCookieExpiry : " + nlUserCookieExpiry);
+            }
+            nlUIDCookie.setMaxAge(nlUserCookieExpiry);
+            nlUIDCookie.setPath("/");
+            response.addCookie(nlUIDCookie);
+            logger.info("nlUIDCookie added to cookie");
         }
+        logger.info("Polls External : processVotePoll : isPollVoted");
+        Map<String, List<Map<String, String>>> responseMap = null;
+        if (!isPollVoted(pollsBO, postgre)) {
+            GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+            if (captchUtil.validateCaptcha(context,
+                    pollsBO.getCaptchaResponse())) {
+                isCaptchaValid = true;
+                insertPollResponse(pollsBO, postgre);
+                
+                // Fetch Result from DB for above poll_ids which were voted already by user
+                responseMap = getPollResponse(pollsBO, postgre, votedPolls);
 
-        return createPollResultDoc(pollsBO, response, votedOptions);
+                if (votedPolls.isEmpty() != true) {
+                    votedOptions = getVotedOption(postgre, votedPolls, pollsBO);
+                    logger.info("Voted Polls : " + votedOptions.toString());
+                }
+                
+            } else {
+                logger.info("Google Recaptcha is not valid");
+                isCaptchaValid = false;
+            }
+        }
+        return createPollResultDoc(pollsBO, responseMap, votedOptions, isCaptchaValid);
     }
 
     /**
@@ -209,7 +271,7 @@ public class PollsExternal {
      * @param pollsBO PollsBO object.
      * @param postgre Postgre object.
      * 
-     * @return Returns true if the poll is voted by the user or from the ip address
+     * @return Returns true if the poll is voted by the user or non logged-in user
      *         else returns false.
      * 
      */
@@ -218,17 +280,15 @@ public class PollsExternal {
 
         logger.info("isPollVoted()");
         logger.debug("isPollVoted - PollId : " + pollsBO.getPollId()
-                + "\nUserId : " + pollsBO.getUserId() + "\nIpAddress : "
-                + pollsBO.getIpAddress());
+                + "\nUserId : " + pollsBO.getUserId() + "\nNLUID : "
+                + pollsBO.getNLUID());
         StringBuilder checkVotedQuery = new StringBuilder(
                 "SELECT POLL_ID FROM POLL_RESPONSE WHERE POLL_ID = ? ");
 
-        if (pollsBO.getUserId() != null
-                && !"".equals(pollsBO.getUserId())) {
+        if (StringUtils.isNotBlank(pollsBO.getUserId())) {
             checkVotedQuery.append("AND USER_ID = ? ");
-        } else if (pollsBO.getIpAddress() != null
-                && !"".equals(pollsBO.getIpAddress())) {
-            checkVotedQuery.append("AND IP_ADDRESS = ? ");
+        } else {
+            checkVotedQuery.append("AND NLUID = ? ");
         }
         logger.debug("checkVotedQuery ::" + checkVotedQuery.toString());
         Connection connection = null;
@@ -241,12 +301,10 @@ public class PollsExternal {
                     .prepareStatement(checkVotedQuery.toString());
             prepareStatement.setBigDecimal(1,
                     new BigDecimal(pollsBO.getPollId()));
-            if (pollsBO.getUserId() != null
-                    && !"".equals(pollsBO.getUserId())) {
+            if (StringUtils.isNotBlank(pollsBO.getUserId())) {
                 prepareStatement.setString(2, pollsBO.getUserId());
-            } else if (pollsBO.getIpAddress() != null
-                    && !"".equals(pollsBO.getIpAddress())) {
-                prepareStatement.setString(2, pollsBO.getIpAddress());
+            } else {
+                prepareStatement.setString(2, pollsBO.getNLUID());
             }
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
@@ -283,7 +341,7 @@ public class PollsExternal {
         String pollIdSFromDoc = getPollIdSFromDoc(doc);
         logger.debug("past pollIdSFromDoc : " + pollIdSFromDoc);
 
-        if (pollIdSFromDoc != null && !"".equals(pollIdSFromDoc.trim())) {
+        if (StringUtils.isNotBlank(pollIdSFromDoc)) {
             pollsBO.setPollId(pollIdSFromDoc);
 
             // Fetch Result from DB for above poll_ids which were voted already by user
@@ -292,7 +350,7 @@ public class PollsExternal {
 
             Map<Long, Long> votedOptions = null;
 
-            if (votedPolls.isEmpty() != true) {
+            if (!votedPolls.isEmpty()) {
                 votedOptions = getVotedOption(postgre, votedPolls,
                         pollsBO);
                 logger.info("Voted Polls : " + votedOptions.toString());
@@ -324,14 +382,12 @@ public class PollsExternal {
         }
 
         StringBuilder getVotedOptions = new StringBuilder(
-                "SELECT POLL_ID,OPTION_ID FROM POLL_RESPONSE WHERE POLL_ID = ANY (?) ");
+                "SELECT POLL_ID, OPTION_ID FROM POLL_RESPONSE WHERE POLL_ID = ANY (?) ");
 
-        if (pollsBO.getUserId() != null
-                && !"".equals(pollsBO.getUserId())) {
+        if (StringUtils.isNotBlank(pollsBO.getUserId())) {
             getVotedOptions.append("AND USER_ID = ? ");
-        } else if (pollsBO.getIpAddress() != null
-                && !"".equals(pollsBO.getIpAddress())) {
-            getVotedOptions.append("AND IP_ADDRESS = ? ");
+        } else {
+            getVotedOptions.append("AND NLUID = ? ");
         }
         logger.info("checkVotedQuery ::" + getVotedOptions.toString());
         Connection connection = null;
@@ -344,12 +400,10 @@ public class PollsExternal {
                     .prepareStatement(getVotedOptions.toString());
             prepareStatement.setArray(1, connection.createArrayOf(BIGINT,
                     pollIds.toString().split(",")));
-            if (pollsBO.getUserId() != null
-                    && !"".equals(pollsBO.getUserId())) {
+            if (StringUtils.isNotBlank(pollsBO.getUserId())) {
                 prepareStatement.setString(2, pollsBO.getUserId());
-            } else if (pollsBO.getIpAddress() != null
-                    && !"".equals(pollsBO.getIpAddress())) {
-                prepareStatement.setString(2, pollsBO.getIpAddress());
+            } else {
+                prepareStatement.setString(2, pollsBO.getNLUID());
             }
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
@@ -380,14 +434,16 @@ public class PollsExternal {
      * @return Returns document which contains the current polls.
      * 
      */
-    private Document processCurrentPolls(final RequestContext context,
+    private Document processCurrentPolls(RequestContext context,
             HukoomiExternal he, PollsBO pollsBO) {
         Document doc;
         context.setParameterString("rows",
                 pollsBO.getCurrentPollsPerPage());
 
         doc = he.getLandingContent(context);
-
+        String siteKey = captchaconfigProp.getProperty("siteKey");
+        logger.debug("siteKey : " + siteKey);
+        doc.getRootElement().addAttribute("Sitekey", siteKey);
         logger.debug("current doc : " + doc.asXML());
 
         String pollIdSFromDoc = getPollIdSFromDoc(doc);
@@ -398,10 +454,13 @@ public class PollsExternal {
             // Extract poll_id from doc and check with database any of the poll has been
             // answered by user_id or ipAddress
             pollsBO.setPollId(pollIdSFromDoc);
-            String votedPollIds = checkResponseData(pollsBO, postgre);
-            pollsBO.setPollId(votedPollIds);
-
-            if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
+            String votedPollIds = "";
+            if(StringUtils.isNotBlank(pollsBO.getUserId()) || StringUtils.isNotBlank(pollsBO.getNLUID())) {
+                votedPollIds = checkResponseData(pollsBO, postgre);
+            }
+            
+            if(StringUtils.isNotBlank(votedPollIds)) {
+                pollsBO.setPollId(votedPollIds);
                 // Fetch Result from DB for above poll_ids which were voted already by user
                 Map<String, List<Map<String, String>>> response = getPollResponse(
                         pollsBO, postgre, votedPolls);
@@ -571,44 +630,55 @@ public class PollsExternal {
      */
     public Document createPollResultDoc(PollsBO pollsBO,
             Map<String, List<Map<String, String>>> response,
-            Map<Long, Long> votedOptions) {
+            Map<Long, Long> votedOptions, boolean isCaptchaValid) {
         Document document = null;
         try {
 
-            List<Map<String, String>> responseList = response
-                    .get(pollsBO.getPollId());
             document = DocumentHelper.createDocument();
             Element pollResultElem = document.addElement("PollResult");
-            Element resultElement = pollResultElem.addElement(RESULT);
+            
+            //Element nlUIDElement = pollResultElem.addElement("NLUID");
+            //nlUIDElement.setText(pollsBO.getNLUID());
+            
+            Element captchaResponseElement = pollResultElem.addElement("isCaptchaValid");
+            if(isCaptchaValid) {
+                captchaResponseElement.setText("Valid");
+                Element resultElement = pollResultElem.addElement(RESULT);
+                
+                List<Map<String, String>> responseList = response
+                        .get(pollsBO.getPollId());
 
-            Long optionVoted = votedOptions
-                    .get(Long.parseLong(pollsBO.getPollId()));
-            Long i = 1L;
-            for (Map<String, String> optMap : responseList) {
-                Element optionElement = resultElement.addElement("Option");
-                Element pollIDElem = optionElement.addElement(POLL_ID);
-                pollIDElem.setText(optMap.get(POLL_ID));
-                Element questionElem = optionElement.addElement(QUESTION);
-                questionElem.setText(optMap.get(QUESTION));
-                Element optLabelElem = optionElement
-                        .addElement(OPTION_LABEL);
-                optLabelElem.setText(optMap.get(OPTION_LABEL));
-                Element optValueElem = optionElement
-                        .addElement(OPTION_VALUE);
-                optValueElem.setText(optMap.get(OPTION_VALUE));
-                Element pollCountElem = optionElement
-                        .addElement(POLLCOUNT);
-                pollCountElem.setText(optMap.get(POLLCOUNT));
-                Element totRespElem = optionElement
-                        .addElement(TOTALRESPONSE);
-                totRespElem.setText(optMap.get(TOTALRESPONSE));
-                Element pollPercentElem = optionElement
-                        .addElement(POLLPCT);
-                if (i == optionVoted) {
-                    pollPercentElem.addAttribute("Voted", "true");
+                Long optionVoted = votedOptions
+                        .get(Long.parseLong(pollsBO.getPollId()));
+                Long i = 1L;
+                for (Map<String, String> optMap : responseList) {
+                    Element optionElement = resultElement.addElement("Option");
+                    Element pollIDElem = optionElement.addElement(POLL_ID);
+                    pollIDElem.setText(optMap.get(POLL_ID));
+                    Element questionElem = optionElement.addElement(QUESTION);
+                    questionElem.setText(optMap.get(QUESTION));
+                    Element optLabelElem = optionElement
+                            .addElement(OPTION_LABEL);
+                    optLabelElem.setText(optMap.get(OPTION_LABEL));
+                    Element optValueElem = optionElement
+                            .addElement(OPTION_VALUE);
+                    optValueElem.setText(optMap.get(OPTION_VALUE));
+                    Element pollCountElem = optionElement
+                            .addElement(POLLCOUNT);
+                    pollCountElem.setText(optMap.get(POLLCOUNT));
+                    Element totRespElem = optionElement
+                            .addElement(TOTALRESPONSE);
+                    totRespElem.setText(optMap.get(TOTALRESPONSE));
+                    Element pollPercentElem = optionElement
+                            .addElement(POLLPCT);
+                    if (i == optionVoted) {
+                        pollPercentElem.addAttribute("Voted", "true");
+                    }
+                    pollPercentElem.setText(optMap.get(POLLPCT));
+                    i++;
                 }
-                pollPercentElem.setText(optMap.get(POLLPCT));
-                i++;
+            }else {
+                captchaResponseElement.setText("Invalid");
             }
         } catch (Exception e) {
             logger.error("Exception in createPollResultDoc", e);
@@ -647,7 +717,7 @@ public class PollsExternal {
     public void insertPollResponse(PollsBO pollsBO, Postgre postgre) {
         logger.info("PollsExternal : insertPollResponse");
         String pollResponseQuery = "INSERT INTO POLL_RESPONSE (POLL_ID, "
-                + "OPTION_ID, USER_ID, IP_ADDRESS, LANG, VOTED_FROM, "
+                + "OPTION_ID, USER_ID, NLUID, LANG, VOTED_FROM, "
                 + "USER_AGENT, VOTED_ON, PERSONA) VALUES(?,?,?,?,?,?,?,LOCALTIMESTAMP,?)";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
@@ -661,7 +731,7 @@ public class PollsExternal {
             prepareStatement.setInt(2,
                     Integer.parseInt(pollsBO.getSelectedOption()));
             prepareStatement.setString(3, pollsBO.getUserId());
-            prepareStatement.setString(4, pollsBO.getIpAddress());
+            prepareStatement.setString(4, pollsBO.getNLUID());
             prepareStatement.setString(5, pollsBO.getLang());
             prepareStatement.setString(6, pollsBO.getVotedFrom());
             prepareStatement.setString(7, pollsBO.getUserAgent());
@@ -770,9 +840,9 @@ public class PollsExternal {
         if (pollsBO.getUserId() != null
                 && !"".equals(pollsBO.getUserId())) {
             checkVotedQuery.append("AND USER_ID = ? ");
-        } else if (pollsBO.getIpAddress() != null
-                && !"".equals(pollsBO.getIpAddress())) {
-            checkVotedQuery.append("AND IP_ADDRESS = ? ");
+        } else if (pollsBO.getNLUID() != null
+                && !"".equals(pollsBO.getNLUID())) {
+            checkVotedQuery.append("AND NLUID = ? ");
         }
         logger.debug("checkVotedQuery ::" + checkVotedQuery.toString());
         Connection connection = null;
@@ -785,12 +855,10 @@ public class PollsExternal {
                     .prepareStatement(checkVotedQuery.toString());
             prepareStatement.setArray(1,
                     connection.createArrayOf(BIGINT, pollIdsArr));
-            if (pollsBO.getUserId() != null
-                    && !"".equals(pollsBO.getUserId())) {
+            if (StringUtils.isNotBlank(pollsBO.getUserId())) {
                 prepareStatement.setString(2, pollsBO.getUserId());
-            } else if (pollsBO.getIpAddress() != null
-                    && !"".equals(pollsBO.getIpAddress())) {
-                prepareStatement.setString(2, pollsBO.getIpAddress());
+            } else if (StringUtils.isNotBlank(pollsBO.getNLUID())) {
+                prepareStatement.setString(2, pollsBO.getNLUID());
             }
             rs = prepareStatement.executeQuery();
             while (rs.next()) {
@@ -1034,9 +1102,18 @@ public class PollsExternal {
         final String SORT = "sort";
         final String SOLRCORE = "solrCore";
         
+        logger.info("PollsExternal : Loading nluserid Properties....");
+        PropertiesFileReader nluseridpropertyFileReader = new PropertiesFileReader(
+                context, "NLUserCookie.properties");
+        nluseridProp = nluseridpropertyFileReader
+                .getPropertiesFile();
+        logger.info("PollsExternal : nluserid Properties Loaded");
+        
+        request = context.getRequest();
+        response = context.getResponse();
+        
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         ValidationErrorList errorList = new ValidationErrorList();
-        HttpServletRequest request = context.getRequest();
         String validData  = "";
         String userId = null;
         
@@ -1045,6 +1122,8 @@ public class PollsExternal {
         logger.debug(START + " >>>"+context.getParameterString(START)+"<<<");
         logger.debug(SORT + " >>>"+context.getParameterString(SORT)+"<<<");
         logger.debug(SOLRCORE + " >>>"+context.getParameterString(SOLRCORE)+"<<<");
+        
+        HashMap<String, String> cookiesMap = getCookiesMap(request);
         
         String pollAction = context.getParameterString(POLL_ACTION);
         logger.debug(POLL_ACTION + " >>>"+pollAction+"<<<");
@@ -1100,6 +1179,17 @@ public class PollsExternal {
             return false;
         }
         
+        //String nlUID = context.getParameterString(NLUID);
+        String nlUID = cookiesMap.get(NLUID);
+        logger.debug(NLUID + " >>>"+nlUID+"<<<");
+        validData  = ESAPI.validator().getValidInput(NLUID, nlUID, ESAPIValidator.ALPHANUMERIC_HYPHEN, 36, true, true, errorList);
+        if(errorList.isEmpty()) {
+            pollsBO.setNLUID(validData);
+        }else {
+            logger.debug(errorList.getError(NLUID));
+            return false;
+        }
+        
         pollsBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
         
         if(ACTION_CURRENT_POLLS.equalsIgnoreCase(pollAction)) {
@@ -1138,6 +1228,11 @@ public class PollsExternal {
                 return false;
             }
             
+            
+            String captchaResponse = context.getParameterString("g-recaptcha-response");
+            logger.debug("captchaResponse >>>" +captchaResponse+ "<<<");
+            pollsBO.setCaptchaResponse(captchaResponse);
+            
             String option = context.getParameterString(OPTION);
             logger.debug(OPTION + " >>>" +option+ "<<<");
             validData  = ESAPI.validator().getValidInput(OPTION, option, ESAPIValidator.NUMERIC, 2, false, true, errorList);
@@ -1160,7 +1255,7 @@ public class PollsExternal {
             
             //Get Persona details from persona settings
             String persona = null;
-            if(userId != null && !"".equals(userId)) {
+            if(StringUtils.isNotBlank(userId)) {
                 DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
                 persona = dsExt.getPersonaForUser(userId, postgreObj);
                 logger.debug("Persona from DB >>>" +persona+ "<<<");
@@ -1246,7 +1341,7 @@ public class PollsExternal {
             
           //Get Persona details from persona settings
             String persona = null;
-            if(userId != null && !"".equals(userId)) {
+            if(StringUtils.isNotBlank(userId)) {
                 DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
                 persona = dsExt.getPersonaForUser(userId, postgreObj);
                 logger.debug("Persona from DB >>>" +persona+ "<<<");
@@ -1292,4 +1387,27 @@ public class PollsExternal {
         return contentPathArr[contentPathArr.length - 1];
     }
 
+    /**
+     * This method is used to get all cookies as map.
+     * 
+     * @param request HttpServletRequest object.
+     * 
+     * @return Returns cookies as string key value pair map.
+     */
+    public HashMap<String, String> getCookiesMap(HttpServletRequest request) {
+        Cookie[] cookies = null;
+        HashMap<String, String> cookieMap = new HashMap<String, String>();
+        try {
+            cookies = request.getCookies();
+            if (cookies != null) {
+                for (int i = 0; i < cookies.length; i++) {
+                    Cookie cookie = cookies[i];
+                    cookieMap.put(cookie.getName(), cookie.getValue());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cookieMap;
+    }
 }

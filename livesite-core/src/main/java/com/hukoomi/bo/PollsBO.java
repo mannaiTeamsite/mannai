@@ -32,6 +32,10 @@ public class PollsBO {
      */
     private String ipAddress;
     /**
+     * Non logged in user unique id
+     */
+    private String NLUID;
+    /**
      * Start date of the poll
      */
     private String startDate;
@@ -99,6 +103,10 @@ public class PollsBO {
      * Poll group config category name
      */
     private String pollGroupConfigCategory;
+    /**
+     * Polls google re-captcha response
+     */
+    private String captchaResponse;
     
     /**
      * Getter method to get poll action
@@ -206,6 +214,14 @@ public class PollsBO {
      */
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public String getNLUID() {
+        return NLUID;
+    }
+
+    public void setNLUID(String nLUID) {
+        NLUID = nLUID;
     }
 
     /**
@@ -458,7 +474,7 @@ public class PollsBO {
         this.topics = topics;
     }
 
-	 public String getPollGroupConfig() {
+     public String getPollGroupConfig() {
         return pollGroupConfig;
     }
 
@@ -473,11 +489,14 @@ public class PollsBO {
     public void setPollGroupConfigCategory(String pollGroupConfigCategory) {
         this.pollGroupConfigCategory = pollGroupConfigCategory;
     }
-    /**
-     * Overrides the toString method to print the business objects values
-     * 
-     * @return Returns string of all business objects values
-     */
+    public String getCaptchaResponse() {
+        return captchaResponse;
+    }
+
+    public void setCaptchaResponse(String captchaResponse) {
+        this.captchaResponse = captchaResponse;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -486,10 +505,10 @@ public class PollsBO {
                 .append(lang).append(", userId=").append(userId)
                 .append(", userAgent=").append(userAgent)
                 .append(", ipAddress=").append(ipAddress)
-                .append(", startDate=").append(startDate)
-                .append(", endDate=").append(endDate).append(", persona=")
-                .append(persona).append(", votedOn=").append(votedOn)
-                .append(", votedFrom=").append(votedFrom)
+                .append(", NLUID=").append(NLUID).append(", startDate=")
+                .append(startDate).append(", endDate=").append(endDate)
+                .append(", persona=").append(persona).append(", votedOn=")
+                .append(votedOn).append(", votedFrom=").append(votedFrom)
                 .append(", question=").append(question)
                 .append(", selectedOption=").append(selectedOption)
                 .append(", currentPollsPerPage=")
@@ -502,7 +521,9 @@ public class PollsBO {
                 .append(", topics=").append(topics)
                 .append(", pollGroupConfig=").append(pollGroupConfig)
                 .append(", pollGroupConfigCategory=")
-                .append(pollGroupConfigCategory).append("]");
+                .append(pollGroupConfigCategory)
+                .append(", captchaResponse=").append(captchaResponse)
+                .append("]");
         return builder.toString();
     }
 }
