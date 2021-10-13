@@ -1,53 +1,90 @@
 package com.hukoomi.livesite.external;
 
 
-import com.hukoomi.utils.CommonUtils;
-import com.hukoomi.utils.Postgre;
-import com.hukoomi.utils.RequestHeaderUtils;
-import com.interwoven.livesite.runtime.RequestContext;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Properties;
+
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.PropertiesFileReader;
+import com.hukoomi.utils.RequestHeaderUtils;
+import com.interwoven.livesite.runtime.RequestContext;
 
 
 public class ErrorExternal {
-	
+	private Properties properties = null;
 	 private final static Logger logger = Logger.getLogger(ErrorExternal.class);
-	 Postgre postgre = null;
+	
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
 		final String COMPONENT_TYPE = "componentType";
 		final String LOCALE = "locale";
-		 final String STATUS = "error_code";
+		final String STATUS = "error_code";
 		RequestHeaderUtils req = new RequestHeaderUtils(context);
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
-		 logger.info("Component Type"+compType);		 
+		 String contentPage = req.getReferer(); 
+		 PropertiesFileReader prop = null;
+			prop = new PropertiesFileReader(context, "error.properties");
+			properties = prop.getPropertiesFile();
+			String errorPageEn=properties.getProperty("errorPageEn");
+	        String errorPageAr=properties.getProperty("errorPageAr");
+	        
+	        String brokenLink = req.getRequestURL();
+	        try {
+				 brokenLink = (new URL(brokenLink)).getPath();
+		        } catch (MalformedURLException e) {
+		          logger.debug(e);
+		        } 
+		 logger.info("contentPage :"+contentPage); 
+		 logger.info("brokenLink :"+brokenLink); 
 		 
-		if(compType != null && compType.equalsIgnoreCase("Banner") && context.isRuntime())
-		{
-			
-			 String brokenLink = req.getRequestURL();
-			 String language = context.getParameterString(LOCALE);
+		if(compType.equalsIgnoreCase("Banner") && context.isRuntime() && !contentPage.isBlank() && !brokenLink.equalsIgnoreCase(errorPageEn) && !brokenLink.equalsIgnoreCase(errorPageAr))
+		{			
+		 String language = context.getParameterString(LOCALE);
 			 String statusCode = context.getParameterString(STATUS);
-			 
-			 logger.info("Error Status "+statusCode);
-			 String contentPage = req.getReferer(); 
-			 
+	        String errorURLStr =properties.getProperty("urls");
+	        logger.info("urls  "+errorURLStr);
+	        	try {
+					 contentPage = (new URL(contentPage)).getPath();
+			        } catch (MalformedURLException e) {
+			          logger.debug(e);
+			        } 
+				
+				 int count = 0;
+				if(!errorURLStr.isBlank()) {
+				   String[] urlsArray = errorURLStr.split(",");
+					
+					 for(var i = 0; i < urlsArray.length; i++) {
+					    
+					   if(urlsArray[i].equalsIgnoreCase(brokenLink)) {
+						   count++;
+					   }					    
+					 }
+				}
+				 				 
+				
+				if(count == 0) { 
 				 CommonUtils cu = new CommonUtils(context);
+				 String urlPrefix = cu.getURLPrefix(context);
+				 contentPage = urlPrefix + contentPage;
+				 brokenLink = urlPrefix + brokenLink;
+				 
 				 logger.info("contentPage  "+contentPage);
+				 logger.info("brokenLink  "+brokenLink);
+				 
+				 logger.info("count  "+count);
+				
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
-			 
-			 
+				}			 
 		}
 		Document doc = getErrorDCRContent(context);  
-		 logger.info("ErrorBannerDoc"+doc.asXML());
+	
+		
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
@@ -96,105 +133,5 @@ public class ErrorExternal {
         Element detailedElement = data.getRootElement();
         root.add(detailedElement);
         return doc;
-    }
-	
-	
-	public Document errorResponse(RequestContext reqcontext) {
-		 Document doc = DocumentHelper.createDocument();
-		 String language = reqcontext.getParameterString("lang");
-		 
-		 postgre = new Postgre(reqcontext);
-	        Element errorResultEle = doc.addElement("result");
-	        getErrorTable(errorResultEle, language);
-		
-		return doc;
-	}
-	
-	private Connection getConnection() {
-        return postgre.getConnection();
-    }
-	
-	
-	
-	public void getErrorTable(Element errorResultEle, String language) {
-        logger.info("Fetching getErrorTable Content");
-       
-        	
-        
-        PreparedStatement statement = null;
-        Connection connection = null;
-       
-        ResultSet resultSet = null;
-        try {
-          logger.info("Get count of error");
-          connection = getConnection();
-          
-          String query = "SELECT * FROM ERROR_RESPONSE WHERE LANGUAGE = '"+language+"'";
-         logger.info("Query to run : " + query);
-          
-          statement = connection.prepareStatement(query);
-          resultSet = statement.executeQuery();
-          Element root = errorResultEle.addElement("content");
-          while (resultSet.next()) {
-        	  logger.info("result set  "+resultSet.getString("broken_link"));
-        	  Element errorData = root.addElement("errorData");
-          		 
-        		  
-        		  Element bokenLinkElement = errorData.addElement("broken_link");
-        		  bokenLinkElement.setText(resultSet.getString("broken_link"));
-        		  
-        		  Element contentPageElement = errorData.addElement("content_page");
-        		  contentPageElement.setText(resultSet.getString("content_page"));
-        		  
-        		  Element reportedElement = errorData.addElement("last_reported");
-        		  reportedElement.setText(resultSet.getDate("reported_on").toString());
-        		  
-        		  Element languageElement = errorData.addElement("language");
-        		  languageElement.setText(resultSet.getString("language"));
-        		  
-        		  Element statusCodeElement = errorData.addElement("status_code");
-        		  statusCodeElement.setText(resultSet.getString("status_code"));
-        		  
-        		  Element countElement = errorData.addElement("count");
-        		  int count = resultSet.getInt("count");
-        		  countElement.setText(String.valueOf(count));
-        		  
-        		  Element statusElement = errorData.addElement("status");
-        		  statusElement.setText(resultSet.getString("status"));       	
-     	  
-          }
-           
-         
-          logger.info("Fetching getErrorTable Content completed");
-        } catch (SQLException ex) {
-          logger.error("Error while fetching Error data from database.", ex);
-        } finally {
-         logger.info("Releasing Database Connection");
-          postgre.releaseConnection(connection, statement, resultSet);
-          logger.info("Released Database Connection");
-          
-        } 
-            
-        
-           
-        
-    }
-	public Document updateErrorResponse(RequestContext reqcontext) {
-		 Document doc = DocumentHelper.createDocument();
-		 String language = reqcontext.getParameterString("lang");
-		 postgre = new Postgre(reqcontext);
-		 String brokenLink = reqcontext.getParameterString("brokenLink");
-		 String contentPage = reqcontext.getParameterString("contentPage");
-		 String statusCode = reqcontext.getParameterString("statusCode");
-		 String status = reqcontext.getParameterString("status");
-		 
-		 logger.info(language +" : "+brokenLink+" : "+contentPage+" : "+statusCode+" : "+status);
-		 CommonUtils cu = new CommonUtils(reqcontext);
-		 cu.updateErrorStatus(  brokenLink,  contentPage,  language,  statusCode,  status);
-		
-		return doc;
-	}
-	
-	
-                                
+    }                               
 }

@@ -30,6 +30,7 @@ import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.UserInfoSession;
 import com.hukoomi.utils.Validator;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -1097,8 +1098,9 @@ public class SurveyExternal {
             return false;
         }
         
-        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
-        if(request.getSession().getAttribute("status") != null && "valid".equals(request.getSession().getAttribute("status"))) {
+        UserInfoSession ui = new UserInfoSession();
+		String valid = ui.getStatus(context);
+		if(valid.equalsIgnoreCase("valid")) {
             if(request.getSession().getAttribute("userId") != null) {
                 userId = request.getSession().getAttribute("userId").toString();
                 

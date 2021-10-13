@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
@@ -36,6 +37,7 @@ import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
+import com.hukoomi.utils.UserInfoSession;
 //import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
 
@@ -1145,9 +1147,9 @@ public class PollsExternal {
             return false;
         }
         
-        logger.debug("Session Status : "+request.getSession().getAttribute("status"));
-        if (request.getSession().getAttribute("status") != null && "valid"
-                .equals(request.getSession().getAttribute("status"))) {
+UserInfoSession ui = new UserInfoSession();
+		String valid = ui.getStatus(context);
+		if(valid.equalsIgnoreCase("valid")) {
             
             if(request.getSession().getAttribute("userId") != null) {
                 userId = request.getSession().getAttribute("userId")
