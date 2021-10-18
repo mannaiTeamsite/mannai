@@ -29,6 +29,7 @@ import com.interwoven.livesite.runtime.RequestContext;
  * @author Vijayaragavamoorthy
  *
  */
+@SuppressWarnings("deprecation")
 public class PollSurveyExternal {
     /** Logger object to check the flow of the code. */
     private final Logger logger = Logger
@@ -115,9 +116,7 @@ public class PollSurveyExternal {
      * 
      * @return doc Returns the solr response document generated from solr query. 
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document getContent(final RequestContext context) {
         logger.info("PollSurveyExternal : getContent");
 
@@ -179,9 +178,7 @@ public class PollSurveyExternal {
      * 
      * @return doc Returns final document containing Polls and Survey data.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document getGroupData(RequestContext context) {
         Document doc = null;
         Document pollDoc = null;
@@ -325,9 +322,7 @@ public class PollSurveyExternal {
      * 
      * @return doc Returns final document containing Polls and Survey data.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document getDashboardGroupData(RequestContext context) {
         Document doc = null;
         Document pollDoc = null;

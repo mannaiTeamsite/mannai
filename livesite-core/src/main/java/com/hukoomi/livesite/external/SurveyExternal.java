@@ -43,6 +43,7 @@ import bsh.StringUtil;
  * @author Vijayaragavamoorthy
  *
  */
+@SuppressWarnings("deprecation")
 public class SurveyExternal {
     /** Logger object to check the flow of the code. */
     private static final Logger logger = Logger.getLogger(SurveyExternal.class);
@@ -154,9 +155,7 @@ public class SurveyExternal {
      * @return doc Returns the document by adding status about insert operation in
      *         database.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document submitSurvey(RequestContext context) {
         logger.info("SurveyExternal : submitSurvey");
         
@@ -512,9 +511,7 @@ public class SurveyExternal {
      * 
      * @return Returns boolean status about data insert operation.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean insertSurveyResponse(SurveyBO surveyBO,
             RequestContext context) {
         logger.info("SurveyExternal : insertSurveyResponse");
@@ -720,9 +717,7 @@ public class SurveyExternal {
      * 
      * @return Returns boolean status about data insert operation.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean insertDynamicSurveyResponse(SurveyBO surveyBO,
             RequestContext context) {
         logger.info("SurveyExternal : insertDynamicSurveyResponse");
@@ -839,9 +834,7 @@ public class SurveyExternal {
      * @return Returns true if all the answers are added to the batch else returns
      *         false
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean addSurveyAnswerstoBatch(int totalCount,
             final RequestContext context,
             PreparedStatement answersprepareStatement, Long responseId,
@@ -921,9 +914,7 @@ public class SurveyExternal {
      * @return Returns true if all the answers are added to the batch else returns
      *         false
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean addDynamicSurveyAnswerstoBatch(int totalCount,
             final RequestContext context,
             PreparedStatement answersprepareStatement, Long responseId,
@@ -1038,9 +1029,7 @@ public class SurveyExternal {
      * 
      * @return Returns SurveyBO Object.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public boolean setBO(final RequestContext context, SurveyBO surveyBO, Postgre postgreObj) {
 
         final String POLL_ACTION = "pollAction";

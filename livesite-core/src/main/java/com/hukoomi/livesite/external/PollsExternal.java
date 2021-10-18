@@ -47,6 +47,7 @@ import com.interwoven.livesite.runtime.RequestContext;
  * @author Vijayaragavamoorthy
  *
  */
+@SuppressWarnings("deprecation")
 public class PollsExternal {
 
     /** Logger object to check the flow of the code. */
@@ -158,9 +159,7 @@ public class PollsExternal {
      *
      * @return doc Returns the solr response document generated from solr query.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document performPollAction(RequestContext context) {
 
         votedPolls = new LinkedHashSet<String>();
@@ -883,10 +882,8 @@ public class PollsExternal {
      * 
      * @return Returns PollsBO Object.
      * 
-     * @deprecated
      */
-    /*@Deprecated(since = "", forRemoval = false)
-    public boolean setBO(final RequestContext context, PollsBO pollsBO) {
+    /*public boolean setBO(final RequestContext context, PollsBO pollsBO) {
 
         final String POLL_ACTION = "pollAction";
         final String LOCALE = "locale";
@@ -1077,9 +1074,7 @@ public class PollsExternal {
      * 
      * @return Returns PollsBO Object.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public boolean setBO(final RequestContext context, PollsBO pollsBO, Postgre postgreObj) {
 
         final String POLL_ACTION = "pollAction";
