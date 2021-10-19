@@ -216,10 +216,10 @@ public class DashboardExternal {
 
 		Element pollsSurvey = rootElement.addElement("polls-survey");
 		pollsSurvey.add(pollsrootElement);
-		LOGGER.info("After adding Polls" + doc.asXML());
+		
 		Element bookmarkEle = rootElement.addElement("bookmarks");
 		bookmarkEle.add(bookmarkRoot);
-		LOGGER.info("After adding Bookmark" + doc.asXML());
+		
 		Element userdata = rootElement.addElement("user-data");
 UserInfoSession ui = new UserInfoSession();
 		String valid = ui.getStatus(context);
@@ -292,7 +292,7 @@ UserInfoSession ui = new UserInfoSession();
 
 			LOGGER.info("session invalid");
 		}
-		LOGGER.info("Bookmark doc" + doc.asXML());
+		
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 

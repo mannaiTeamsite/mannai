@@ -120,6 +120,7 @@ public class HukoomiExternal {
 			context.setParameterString("baseQuery", correctedWord);
 		}
 		Document nutchDoc = null;
+
 		String lang = commonUtils.sanitizeSolrQuery(context
 				.getParameterString("lang", ""));
 		logger.debug("lang : " + lang);
