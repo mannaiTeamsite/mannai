@@ -53,7 +53,7 @@ public class ErrorExternal {
 	        	try {
 					 contentPage = (new URL(contentPage)).getPath();
 			        } catch (MalformedURLException e) {
-			          logger.debug(e);
+			         logger.error("Exception occured while getting url path"+e);
 			        } 
 				
 				 int count = 0;

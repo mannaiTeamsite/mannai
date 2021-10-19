@@ -46,7 +46,7 @@ public Document getContentDetail(final RequestContext context) {
     String relDCRNode = properties.getProperty("relDCRNode");
     logger.info("relDCRContent: " + relDCRContent);
     logger.info("relDCRNode: " + relDCRNode);
-    if (detailDocument.selectSingleNode(relDCRContent) != null) {
+    if (relDCRContent != null && detailDocument.selectSingleNode(relDCRContent) != null) {
         Document detailDoc = DocumentHelper.createDocument();
         Element docRoot = detailDoc.addElement("relatedDCRContent");
         Element rootEle = null;
