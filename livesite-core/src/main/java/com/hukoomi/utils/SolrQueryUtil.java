@@ -113,10 +113,10 @@ public class SolrQueryUtil {
                 List<Node> suggestionNodeList = document.selectNodes("//suggestion");
                 String queryStr = "";
                 String originalWordStr = "";
-                if (query.contains("q=title:")) {
-                    queryStr = query.split("q=title:")[1];
-                } else if (query.contains("q=")) {
-                    queryStr = query.split("q=")[1];
+                if (query.contains("?q=title:")) {
+                    queryStr = query.split("\\?q=title:")[1];
+                } else if (query.contains("?q=")) {
+                    queryStr = query.split("\\?q=")[1];
                 }
 
                 if (queryStr.contains("*&fl")) {

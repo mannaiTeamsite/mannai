@@ -64,7 +64,7 @@ public class HukoomiExternal {
 			sqb.addFields(fields);
 		}
 
-		String crawlFields = commonUtils.sanitizeSolrQuery(context.getParameterString("crawlFields", ""));
+		String crawlFields = commonUtils.sanitizeSolrQuery(context.getParameterString("crawlFields", "title,url,description"));
 		context.setParameterString("crawlFields", crawlFields);
 		logger.debug("crawlFields : " + crawlFields);
 		if (StringUtils.isNotBlank(crawlFields)) {

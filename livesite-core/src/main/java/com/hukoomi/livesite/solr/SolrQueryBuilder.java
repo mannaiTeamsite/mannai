@@ -88,6 +88,10 @@ public class SolrQueryBuilder {
      * Boost value to influence
      * solr query by category */
     private String categoryBoost;
+    /** Persona Boost
+     * Boost value to influence
+     * solr query by category */
+    private String queryBoost;
     /** fieldQuery String that
      * will define field & its values
      * to be considered for the
@@ -263,8 +267,10 @@ public class SolrQueryBuilder {
         logger.info("Boost for Persona: " + this.personaBoost);
         this.categoryBoost = commonUtils.sanitizeSolrQuery(context.getParameterString("category_boost",
                 properties.getProperty("category_boost")));
-        logger.info("Boost for Persona: " + this.categoryBoost);
-
+        logger.info("Boost for Category: " + this.categoryBoost);
+        this.queryBoost = commonUtils.sanitizeSolrQuery(context.getParameterString("query_boost",
+                properties.getProperty("query_boost")));
+        logger.info("Boost for Query: " + this.queryBoost);
     }
 
     /**
@@ -448,6 +454,9 @@ public class SolrQueryBuilder {
         }
         if(StringUtils.isNotBlank(this.recent)){
             bq.append(" category:("+this.recent+")^"+this.categoryBoost);
+        }
+        if(StringUtils.isNotBlank(this.baseQuery) && !this.baseQuery.equals(DEFAULT_QUERY)){
+            bq.append(" sort:(*"+this.baseQuery+"*)^"+this.queryBoost);
         }
 
         if(StringUtils.isNotBlank(bq.toString())){
