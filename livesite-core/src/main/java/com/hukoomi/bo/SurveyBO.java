@@ -40,6 +40,10 @@ public class SurveyBO {
      */
     private String ipAddress;
     /**
+     * Non logged in user unique id
+     */
+    private String NLUID;
+    /**
      * Start date of the survey
      */
     private String startDate;
@@ -242,6 +246,14 @@ public class SurveyBO {
      */
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public String getNLUID() {
+        return NLUID;
+    }
+
+    public void setNLUID(String nLUID) {
+        NLUID = nLUID;
     }
 
     /**
@@ -555,11 +567,6 @@ public class SurveyBO {
         this.surveyGroupConfigCategory = surveyGroupConfigCategory;
     }
 	
-    /**
-     * Overrides the toString method to print the business objects values
-     * 
-     * @return Returns string of all business objects values
-     */
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -570,10 +577,10 @@ public class SurveyBO {
                 .append(", lang=").append(lang).append(", userId=")
                 .append(userId).append(", userAgent=").append(userAgent)
                 .append(", ipAddress=").append(ipAddress)
-                .append(", startDate=").append(startDate)
-                .append(", endDate=").append(endDate).append(", persona=")
-                .append(persona).append(", takenOn=").append(takenOn)
-                .append(", takenFrom=").append(takenFrom)
+                .append(", NLUID=").append(NLUID).append(", startDate=")
+                .append(startDate).append(", endDate=").append(endDate)
+                .append(", persona=").append(persona).append(", takenOn=")
+                .append(takenOn).append(", takenFrom=").append(takenFrom)
                 .append(", totalQuestions=").append(totalQuestions)
                 .append(", captchaResponse=").append(captchaResponse)
                 .append(", group=").append(group).append(", title=")

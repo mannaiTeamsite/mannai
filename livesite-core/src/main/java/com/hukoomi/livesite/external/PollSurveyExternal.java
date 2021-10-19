@@ -5,8 +5,10 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringJoiner;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -17,6 +19,7 @@ import com.hukoomi.bo.PollsBO;
 import com.hukoomi.bo.SurveyBO;
 import com.hukoomi.livesite.solr.SolrQueryBuilder;
 import com.hukoomi.utils.Postgre;
+import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.SolrQueryUtil;
 import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -26,6 +29,7 @@ import com.interwoven.livesite.runtime.RequestContext;
  * @author Vijayaragavamoorthy
  *
  */
+@SuppressWarnings("deprecation")
 public class PollSurveyExternal {
     /** Logger object to check the flow of the code. */
     private final Logger logger = Logger
@@ -99,6 +103,11 @@ public class PollSurveyExternal {
      * HashSet to collect Voted Poll Ids.
      */
     HashSet<String> votedPolls;
+    /**
+     * Properties for captcha config properties
+     */
+    Properties captchaconfigProp = null;
+
     
     /**
      * This method will be called from Component External for solr Content fetching.
@@ -107,9 +116,7 @@ public class PollSurveyExternal {
      * 
      * @return doc Returns the solr response document generated from solr query. 
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document getContent(final RequestContext context) {
         logger.info("PollSurveyExternal : getContent");
 
@@ -119,6 +126,14 @@ public class PollSurveyExternal {
         PollsExternal pollsExt = new PollsExternal();
         try {
             postgre = new Postgre(context);
+            
+            logger.info("PollsExternal : Loading captchaconfig Properties....");
+            PropertiesFileReader captchapropertyFileReader = new PropertiesFileReader(
+                    context, "captchaconfig.properties");
+            captchaconfigProp = captchapropertyFileReader
+                    .getPropertiesFile();
+            logger.info("PollsExternal : captchaconfig Properties Loaded");
+            
             String inputAction = "";
             if(validate.isValidPattern(context.getParameterString("pollAction"), Validator.ALPHABET)) {
                 inputAction = context.getParameterString("pollAction");
@@ -130,14 +145,22 @@ public class PollSurveyExternal {
                 if(isInputValid) {
                     logger.debug("PollsBO : " + pollsBO);
                     doc = pollsExt.processVotePoll(pollsBO, postgre,
-                            votedPolls);
+                            votedPolls, context);
                 }else {
                     doc.addElement("PollResult").addElement(PollsExternal.RESULT);
                 }
             }else if ("dashboard".equalsIgnoreCase(inputAction)) {
                 doc = getDashboardGroupData(context);
+                String siteKey = captchaconfigProp.getProperty("siteKey");
+                logger.debug("siteKey : " + siteKey);
+                doc.getRootElement().addAttribute("Sitekey", siteKey);
+                logger.debug("current doc : " + doc.asXML());
             } else {
                 doc = getGroupData(context);
+                String siteKey = captchaconfigProp.getProperty("siteKey");
+                logger.debug("siteKey : " + siteKey);
+                doc.getRootElement().addAttribute("Sitekey", siteKey);
+                logger.debug("current doc : " + doc.asXML());
             }
             logger.debug("Final Document :" + doc.asXML());
         } catch (Exception e) {
@@ -155,9 +178,7 @@ public class PollSurveyExternal {
      * 
      * @return doc Returns final document containing Polls and Survey data.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document getGroupData(RequestContext context) {
         Document doc = null;
         Document pollDoc = null;
@@ -209,11 +230,13 @@ public class PollSurveyExternal {
                         pollGroupElem = pollSurveyElem
                                 .addElement("PollGroupResponse");
                         pollsBO.setPollId(activePollIds);
-    
-                        String votedPollIds = pollsExt.checkResponseData(
-                                pollsBO, postgre);
+                        String votedPollIds = "";
+                        if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                            votedPollIds = pollsExt.checkResponseData(
+                                    pollsBO, postgre);
+                        }
                         Map<String, List<Map<String, String>>> response = null;
-                        if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
+                        if (StringUtils.isNotBlank(votedPollIds)) {
                             pollsBO.setPollId(votedPollIds);
                             response = pollsExt.getPollResponse(pollsBO,
                                     postgre, votedPolls);
@@ -262,9 +285,12 @@ public class PollSurveyExternal {
                     if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {
                     //if (StringUtils.isNotBlank(surveyId)) {
                         // Get Submission status
-                        ArrayList submittedSurveyIds = surveyExt
-                            .getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
-                                    postgre, surveyBO);
+                        ArrayList submittedSurveyIds = new ArrayList();
+                        if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                            submittedSurveyIds = surveyExt
+                                    .getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
+                                            postgre, surveyBO);
+                        }
                         logger.debug("No. of Submitted Survey Ids : " + submittedSurveyIds.size());
 
                         // Add Status code to document
@@ -296,9 +322,7 @@ public class PollSurveyExternal {
      * 
      * @return doc Returns final document containing Polls and Survey data.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public Document getDashboardGroupData(RequestContext context) {
         Document doc = null;
         Document pollDoc = null;
@@ -362,11 +386,13 @@ public class PollSurveyExternal {
                             pollGroupElem = pollSurveyElem
                                     .addElement("PollGroupResponse");
                             pollsBO.setPollId(activePollIds);
-        
-                            String votedPollIds = pollsExt.checkResponseData(
-                                    pollsBO, postgre);
+                            String votedPollIds = "";
+                            if(StringUtils.isNotBlank(pollsBO.getUserId()) || StringUtils.isNotBlank(pollsBO.getNLUID())) {
+                                votedPollIds = pollsExt.checkResponseData(
+                                        pollsBO, postgre);
+                            }
                             Map<String, List<Map<String, String>>> response = null;
-                            if (votedPollIds != null && !"".equals(votedPollIds.trim())) {
+                            if (StringUtils.isNotBlank(votedPollIds)) {
                                 pollsBO.setPollId(votedPollIds);
                                 response = pollsExt.getPollResponse(pollsBO,
                                         postgre, votedPolls);
@@ -432,9 +458,12 @@ public class PollSurveyExternal {
                         if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {
                         //if (StringUtils.isNotBlank(surveyId)) {
                             // Get Submission status
-                            ArrayList submittedSurveyIds = surveyExt
-                                .getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
-                                        postgre, surveyBO);
+                            ArrayList submittedSurveyIds = new ArrayList();
+                            if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                                submittedSurveyIds = surveyExt
+                                        .getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
+                                                postgre, surveyBO);
+                            }
                             logger.debug("No. of Submitted Survey Ids : " + submittedSurveyIds.size());
     
                             // Add Status code to document

@@ -5,12 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
@@ -32,35 +35,34 @@ import com.hukoomi.utils.Validator;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
+import bsh.StringUtil;
+
 /**
  * SurveyExternal is the components external class.
  * 
  * @author Vijayaragavamoorthy
  *
  */
+@SuppressWarnings("deprecation")
 public class SurveyExternal {
     /** Logger object to check the flow of the code. */
-    private final Logger logger = Logger.getLogger(SurveyExternal.class);
+    private static final Logger logger = Logger.getLogger(SurveyExternal.class);
     /**
      * Postgre Object variable.
      */
     Postgre postgre = null;
-
     /**
      * ValidationUtils object.
      */
     Validator validate = new Validator();
-
     /**
      * Success Status constant.
      */
     private static final String SUCCESS = "Success";
-
     /**
      * Failed Status constant.
      */
     private static final String FAILED = "Failed";
-    
     /**
      * Constant for action polls and survey.
      */
@@ -81,33 +83,26 @@ public class SurveyExternal {
      * Constant for action survey submit.
      */
     public static final String ACTION_SURVEY_SUBIT = "submit";
-    
     /**
      * Constant for action survey submit.
      */
     public static final String ACTION_DYNAMIC_SURVEY_SUBIT = "dynamicsurveysubmit";
-
-
     /**
      * Submitted Status constant.
      */
     private static final String SUBMITTED = "Submitted";
-
     /**
      * Survey BO Object.
      */
     SurveyBO surveyBO = null;
-
     /**
      * Constant for BIGINT.
      */
     public static final String BIGINT = "BIGINT";
-
     /**
      * Constant for Survey Id.
      */
     public static final String SURVEYID = "SURVEY_ID";
-    
     /**
      * Constant for Survey Master Id.
      */
@@ -120,11 +115,34 @@ public class SurveyExternal {
      * Solr Categroy of survey.
      */
     public static final String CATEGORY_SURVEY = "survey";
-    
     /**
      * Solr Categroy of dynamic survey.
      */
     public static final String CATEGORY_DYNAMIC_SURVEY = "dynamic-survey";
+    /**
+     * Http Servlet Request Object
+     */
+    HttpServletRequest request = null;
+    /**
+     * Http Servlet Response Object
+     */
+    HttpServletResponse response = null;
+    /**
+     * NLUID key
+     */
+    public static final String NLUID = "NLUID";
+    /**
+     * NLUID Cookie Expiry
+     */
+    public static final String NLUSERCOOKIEEXPIRY = "nlUserCookieExpiry";
+    /**
+     * Properties for non logged in user cookie
+     */
+    Properties nluseridProp =  null;
+    /**
+     * Properties for captcha config properties
+     */
+    Properties captchaconfigProp = null;
     
 
     /**
@@ -137,26 +155,50 @@ public class SurveyExternal {
      * @return doc Returns the document by adding status about insert operation in
      *         database.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
-    public Document submitSurvey(final RequestContext context) {
+    public Document submitSurvey(RequestContext context) {
         logger.info("SurveyExternal : submitSurvey");
-
+        
         postgre = new Postgre(context);
         DetailExternal detailExt = new DetailExternal();
         surveyBO = new SurveyBO();
         boolean isInputValid = setBO(context, surveyBO, postgre);
         logger.debug("SurveyBO : " + surveyBO);
+        
+        logger.info("SurveyExternal : Loading captchaconfig Properties....");
+        PropertiesFileReader captchapropertyFileReader = new PropertiesFileReader(
+                context, "captchaconfig.properties");
+        captchaconfigProp = captchapropertyFileReader
+                .getPropertiesFile();
+        logger.info("SurveyExternal : captchaconfig Properties Loaded");
 
         Document document = DocumentHelper.createDocument();
         Element surveyResponseElem = document.addElement("SurveyResponse");
         Element surveyStatusElem = surveyResponseElem.addElement("Status");
         if (isInputValid) {
-            if (surveyBO.getAction() != null
-                    && !"".equals(surveyBO.getAction())) {
+            if (StringUtils.isNotBlank(surveyBO.getAction())) {
                 GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-                if (ACTION_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {
+                if (StringUtils.equalsIgnoreCase(ACTION_SURVEY_SUBIT, surveyBO.getAction())) {
+                    
+                    if(!StringUtils.isNotBlank(surveyBO.getUserId()) && !StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                        String nlUID = UUID.randomUUID().toString();
+                        logger.info(NLUID+" : " + nlUID);
+                        surveyBO.setNLUID(nlUID);
+                        Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
+                        logger.info("nlUIDCookie : " + nlUIDCookie);
+                        String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
+                        logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
+                        int nlUserCookieExpiry = 0;
+                        if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
+                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);
+                            //logger.info("nlUserCookieExpiry : " + nlUserCookieExpiry);
+                        }
+                        nlUIDCookie.setMaxAge(nlUserCookieExpiry);
+                        nlUIDCookie.setPath("/");
+                        response.addCookie(nlUIDCookie);
+                        logger.info("nlUIDCookie added to cookie");
+                    }
+                    
                     ArrayList surveyArr = new ArrayList();
                     surveyArr.add(surveyBO.getSurveyId());
                     ArrayList submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, null, postgre, surveyBO);
@@ -181,14 +223,8 @@ public class SurveyExternal {
                     } else {
                         surveyStatusElem.setText(SUBMITTED);
                     }
-                } else if (ACTION_SURVEY_DETAIL.equalsIgnoreCase(surveyBO.getAction())) {
-                    logger.info("SurveyExternal : Loading Properties....");
-                    PropertiesFileReader propertyFileReader = new PropertiesFileReader(
-                            context, "captchaconfig.properties");
-                    Properties properties = propertyFileReader
-                            .getPropertiesFile();
-                    logger.info("SurveyExternal : Properties Loaded");
-                    String siteKey = properties.getProperty("siteKey");
+                } else if (ACTION_SURVEY_DETAIL.equalsIgnoreCase(surveyBO.getAction())) {                    
+                    String siteKey = captchaconfigProp.getProperty("siteKey");
                     logger.debug("siteKey : " + siteKey);
                     document = detailExt.getContentDetail(context);
 
@@ -201,8 +237,10 @@ public class SurveyExternal {
                     if (StringUtils.isNotBlank(surveyId)) {
                         ArrayList surveyArr = new ArrayList();
                         surveyArr.add(surveyId);
-                        submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, 
+                        if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                            submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, 
                                 null, postgre, surveyBO);
+                        }
                         logger.debug("Submitted Survey Id : "
                                 + submittedSurveyIdArr);
                     }
@@ -215,6 +253,26 @@ public class SurveyExternal {
                 } else if (ACTION_SURVEY_LISTING.equalsIgnoreCase(surveyBO.getAction())) {
                     document = getSurveyList(context);
                 } else if (ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {
+                    
+                    if(!StringUtils.isNotBlank(surveyBO.getUserId()) && !StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                        String nlUID = UUID.randomUUID().toString();
+                        logger.info(NLUID+" : " + nlUID);
+                        surveyBO.setNLUID(nlUID);
+                        Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
+                        logger.info("nlUIDCookie : " + nlUIDCookie);
+                        String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
+                        logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
+                        int nlUserCookieExpiry = 0;
+                        if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
+                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);
+                            //logger.info("nlUserCookieExpiry : " + nlUserCookieExpiry);
+                        }
+                        nlUIDCookie.setMaxAge(nlUserCookieExpiry);
+                        nlUIDCookie.setPath("/");
+                        response.addCookie(nlUIDCookie);
+                        logger.info("nlUIDCookie added to cookie");
+                    }
+                    
                     ArrayList dynamicSurveyArr = new ArrayList();
                     dynamicSurveyArr.add(surveyBO.getSurveyId());
                     ArrayList submittedSurveyIdArr = getSubmittedSurveyIds(null, dynamicSurveyArr, postgre, surveyBO);
@@ -264,6 +322,11 @@ public class SurveyExternal {
 
         // Getting Survey Solr Document
         document = hukoomiExternal.getLandingContent(context);
+        
+        String siteKey = captchaconfigProp.getProperty("siteKey");
+        logger.debug("siteKey : " + siteKey);
+        document.getRootElement().addAttribute("Sitekey", siteKey);
+        
         logger.debug("Survey Listing Doc :" + document.asXML());
 
         // Extracting Survey Ids from Survey Document
@@ -277,8 +340,12 @@ public class SurveyExternal {
         //if (StringUtils.isNotBlank(surveyIds)) {
             // Checking for already submitted Surveys
             
-            ArrayList submittedSurveyIds = getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
-                postgre, surveyBO);
+            ArrayList submittedSurveyIds = new ArrayList();
+            if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                logger.info("Fetching Submitted Survey Ids : ");
+                submittedSurveyIds = getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
+                        postgre, surveyBO);
+            }
             logger.debug("No. of Submitted Survey Ids : " + submittedSurveyIds.size());
             
             // Add Status code to document
@@ -335,7 +402,8 @@ public class SurveyExternal {
         try {
             connection = postgre.getConnection();
             String userId = surveyBO.getUserId();
-            String ipAddress = surveyBO.getIpAddress();
+            //String ipAddress = surveyBO.getIpAddress();
+            String nluid = surveyBO.getNLUID();
             
             if(surveyArr != null && !surveyArr.isEmpty()) {
                 
@@ -345,10 +413,10 @@ public class SurveyExternal {
                         + "WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) "
                         + "AND SM.SUBMIT_TYPE = 'Single' ");
     
-                if(userId != null && !"".equals(userId)) {
+                if(StringUtils.isNotBlank(userId)) {
                     surveyQuery.append("AND USER_ID = ? ");
-                }else if(ipAddress != null && !"".equals(ipAddress)) {
-                    surveyQuery.append("AND IP_ADDRESS = ? ");
+                }else if(StringUtils.isNotBlank(nluid)) {
+                    surveyQuery.append("AND NLUID = ? ");
                 }
                 logger.debug("Survey Query : "+ surveyQuery.toString());
                     
@@ -356,10 +424,10 @@ public class SurveyExternal {
                         surveyQuery.toString());
                 prepareStatement.setArray(1,
                         connection.createArrayOf(BIGINT, surveyArr.toArray()));
-                if(userId != null && !"".equals(userId)) {
+                if(StringUtils.isNotBlank(userId)) {
                     prepareStatement.setString(2, surveyBO.getUserId());
-                }else if(ipAddress != null && !"".equals(ipAddress)) {
-                    prepareStatement.setString(2, surveyBO.getIpAddress());
+                }else if(StringUtils.isNotBlank(nluid)) {
+                    prepareStatement.setString(2, surveyBO.getNLUID());
                 }
                 rs = prepareStatement.executeQuery();
                 while (rs.next()) {
@@ -375,10 +443,10 @@ public class SurveyExternal {
                         + "WHERE DSM.SURVEY_MASTER_ID = DSR.SURVEY_MASTER_ID AND DSM.SURVEY_ID = ANY (?) "
                         + "AND DSM.SUBMIT_TYPE = 'Single' ");
     
-                if(userId != null && !"".equals(userId)) {
+                if(StringUtils.isNotBlank(userId)) {
                     dynamicSurveyQuery.append("AND USER_ID = ? ");
-                }else if(ipAddress != null && !"".equals(ipAddress)) {
-                    dynamicSurveyQuery.append("AND IP_ADDRESS = ? ");
+                }else if(StringUtils.isNotBlank(nluid)) {
+                    dynamicSurveyQuery.append("AND NLUID = ? ");
                 }
                 logger.debug("Dynamic Survey Query : "+ dynamicSurveyQuery.toString());
                     
@@ -386,10 +454,10 @@ public class SurveyExternal {
                         dynamicSurveyQuery.toString());
                 prepareStatement.setArray(1,
                         connection.createArrayOf(BIGINT, dynamicSurveyArr.toArray()));
-                if(userId != null && !"".equals(userId)) {
+                if(StringUtils.isNotBlank(userId)) {
                     prepareStatement.setString(2, surveyBO.getUserId());
-                }else if(ipAddress != null && !"".equals(ipAddress)) {
-                    prepareStatement.setString(2, surveyBO.getIpAddress());
+                }else if(StringUtils.isNotBlank(nluid)) {
+                    prepareStatement.setString(2, surveyBO.getNLUID());
                 }
                 rs = prepareStatement.executeQuery();
                 while (rs.next()) {
@@ -424,9 +492,9 @@ public class SurveyExternal {
             for (Node node : nodes) {
                 String category = node.selectSingleNode("category").getText();
                 
-                if(category != null && CATEGORY_SURVEY.equals(category)) {
+                if(StringUtils.equals(CATEGORY_SURVEY, category)) {
                     surveyArray.add(node.selectSingleNode("id").getText());
-                }else if(category != null && CATEGORY_DYNAMIC_SURVEY.equals(category)) {
+                }else if(StringUtils.equals(CATEGORY_DYNAMIC_SURVEY, category)) {
                     dynamicSurveyArray.add(node.selectSingleNode("id").getText());
                 }
             }
@@ -443,9 +511,7 @@ public class SurveyExternal {
      * 
      * @return Returns boolean status about data insert operation.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean insertSurveyResponse(SurveyBO surveyBO,
             RequestContext context) {
         logger.info("SurveyExternal : insertSurveyResponse");
@@ -471,7 +537,7 @@ public class SurveyExternal {
 
             String surveyResponseQuery = "INSERT INTO SURVEY_RESPONSE ("
                     + "RESPONSE_ID, SURVEY_ID, LANG, USER_ID, "
-                    + "IP_ADDRESS, USER_AGENT, SURVEY_TAKEN_ON, "
+                    + "NLUID, USER_AGENT, SURVEY_TAKEN_ON, "
                     + "SURVEY_TAKEN_FROM, PERSONA) VALUES(?, ?, ?, ?, ?, ?, "
                     + "LOCALTIMESTAMP, ?, ?)";
             connection.setAutoCommit(false);
@@ -482,7 +548,7 @@ public class SurveyExternal {
                     Long.parseLong(surveyBO.getSurveyId()));
             surveyprepareStatement.setString(3, surveyBO.getLang());
             surveyprepareStatement.setString(4, surveyBO.getUserId());
-            surveyprepareStatement.setString(5, surveyBO.getIpAddress());
+            surveyprepareStatement.setString(5, surveyBO.getNLUID());
             surveyprepareStatement.setString(6, surveyBO.getUserAgent());
             surveyprepareStatement.setString(7, surveyBO.getTakenFrom());
             surveyprepareStatement.setString(8, surveyBO.getPersona());
@@ -562,8 +628,7 @@ public class SurveyExternal {
             String surveyId = surveyBO.getSurveyId();
             String lang = surveyBO.getLang();
             
-            if((surveyId != null && !"".equals(surveyId)) && 
-                    (lang != null && !"".equals(lang)) ) {
+            if(StringUtils.isNotBlank(surveyId) && StringUtils.isNotBlank(lang)) {
                 String dynamicSurveyQuery = "SELECT DISTINCT SURVEY_MASTER_ID FROM DYNAMIC_SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ? ";
     
                 logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery);
@@ -652,9 +717,7 @@ public class SurveyExternal {
      * 
      * @return Returns boolean status about data insert operation.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean insertDynamicSurveyResponse(SurveyBO surveyBO,
             RequestContext context) {
         logger.info("SurveyExternal : insertDynamicSurveyResponse");
@@ -687,7 +750,7 @@ public class SurveyExternal {
 
             String surveyResponseQuery = "INSERT INTO DYNAMIC_SURVEY_RESPONSE ("
                     + "RESPONSE_ID, SURVEY_MASTER_ID, USER_ID, "
-                    + "IP_ADDRESS, USER_AGENT, SURVEY_TAKEN_ON, "
+                    + "NLUID, USER_AGENT, SURVEY_TAKEN_ON, "
                     + "SURVEY_TAKEN_FROM, PERSONA) VALUES(?, ?, ?, ?, ?, "
                     + "LOCALTIMESTAMP, ?, ?)";
             connection.setAutoCommit(false);
@@ -696,7 +759,7 @@ public class SurveyExternal {
             surveyprepareStatement.setLong(1, surveyBO.getResponseId());
             surveyprepareStatement.setLong(2, surveyBO.getSurveyMasterId());
             surveyprepareStatement.setString(3, surveyBO.getUserId());
-            surveyprepareStatement.setString(4, surveyBO.getIpAddress());
+            surveyprepareStatement.setString(4, surveyBO.getNLUID());
             surveyprepareStatement.setString(5, surveyBO.getUserAgent());
             surveyprepareStatement.setString(6, surveyBO.getTakenFrom());
             surveyprepareStatement.setString(7, surveyBO.getPersona());
@@ -771,9 +834,7 @@ public class SurveyExternal {
      * @return Returns true if all the answers are added to the batch else returns
      *         false
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean addSurveyAnswerstoBatch(int totalCount,
             final RequestContext context,
             PreparedStatement answersprepareStatement, Long responseId,
@@ -853,9 +914,7 @@ public class SurveyExternal {
      * @return Returns true if all the answers are added to the batch else returns
      *         false
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     private boolean addDynamicSurveyAnswerstoBatch(int totalCount,
             final RequestContext context,
             PreparedStatement answersprepareStatement, Long responseId,
@@ -875,8 +934,7 @@ public class SurveyExternal {
             String questionId = questionAnswerArr[0];
             String answer = questionAnswerArr[1];
             
-            if((questionId != null && !"".equals(questionId)) &&
-                    (answer != null && !"".equals(answer)) ) {
+            if( StringUtils.isNotBlank(questionId) && StringUtils.isNotBlank(answer) ) {
                 
                 surveyBO.setQuestionId(Long.parseLong(questionId));
             
@@ -927,7 +985,7 @@ public class SurveyExternal {
      */
     private int getIntValue(String inputStringValue) {
         int intValue = 0;
-        if (inputStringValue != null && !"".equals(inputStringValue)) {
+        if (StringUtils.isNotBlank(inputStringValue)) {
             intValue = Integer.parseInt(inputStringValue);
         }
         return intValue;
@@ -971,9 +1029,7 @@ public class SurveyExternal {
      * 
      * @return Returns SurveyBO Object.
      * 
-     * @deprecated
      */
-    @Deprecated(since = "", forRemoval = false)
     public boolean setBO(final RequestContext context, SurveyBO surveyBO, Postgre postgreObj) {
 
         final String POLL_ACTION = "pollAction";
@@ -991,12 +1047,23 @@ public class SurveyExternal {
         final String SURVEY_GROUP_CONFIG_CATEGORY = "surveyGroupConfigCategory";
         final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
         final String PERSONA = "persona";
-
+        
+        logger.info("SurveyExternal : Loading nluserid Properties....");
+        PropertiesFileReader nluseridpropertyFileReader = new PropertiesFileReader(
+                context, "NLUserCookie.properties");
+        nluseridProp = nluseridpropertyFileReader
+                .getPropertiesFile();
+        logger.info("SurveyExternal : nluserid Properties Loaded");
+        
+        request = context.getRequest();
+        response = context.getResponse();
+        
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         ValidationErrorList errorList = new ValidationErrorList();
-        HttpServletRequest request = context.getRequest();
         String validData  = "";
         String userId = null;
+        
+        HashMap<String, String> cookiesMap = getCookiesMap(request);
         
         String surveyAction = context.getParameterString(SURVEY_ACTION);
         logger.debug(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
@@ -1060,6 +1127,17 @@ public class SurveyExternal {
             return false;
         }
         
+        //String nlUID = context.getParameterString(NLUID);
+        String nlUID = cookiesMap.get(NLUID);
+        logger.debug(NLUID + " >>>"+nlUID+"<<<");
+        validData  = ESAPI.validator().getValidInput(NLUID, nlUID, ESAPIValidator.ALPHANUMERIC_HYPHEN, 36, true, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setNLUID(validData);
+        }else {
+            logger.debug(errorList.getError(NLUID));
+            return false;
+        }
+        
         surveyBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
         
         if(ACTION_SURVEY_SUBIT.equalsIgnoreCase(surveyAction) || 
@@ -1095,12 +1173,13 @@ public class SurveyExternal {
                 return false;
             }
             
-            surveyBO.setCaptchaResponse(
-                    context.getParameterString("g-recaptcha-response"));
+            String captchaResponse = context.getParameterString("g-recaptcha-response");
+            logger.debug("captchaResponse >>>" +captchaResponse+ "<<<");
+            surveyBO.setCaptchaResponse(captchaResponse);
             
           //Get Persona details from persona settings
             String persona = null;
-            if(userId != null && !"".equals(userId)) {
+            if(StringUtils.isNotBlank(userId)) {
                 DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
                 persona = dsExt.getPersonaForUser(userId, postgreObj);
                 logger.debug("Persona from DB >>>" +persona+ "<<<");
@@ -1204,5 +1283,29 @@ public class SurveyExternal {
     public String getContentName(String contentPath) {
         String[] contentPathArr = contentPath.split("/");
         return contentPathArr[contentPathArr.length - 1];
+    }
+    
+    /**
+     * This method is used to get all cookies as map.
+     * 
+     * @param request HttpServletRequest object.
+     * 
+     * @return Returns cookies as string key value pair map.
+     */
+    public HashMap<String, String> getCookiesMap(HttpServletRequest request) {
+        Cookie[] cookies = null;
+        HashMap<String, String> cookieMap = new HashMap<String, String>();
+        try {
+            cookies = request.getCookies();
+            if (cookies != null) {
+                for (int i = 0; i < cookies.length; i++) {
+                    Cookie cookie = cookies[i];
+                    cookieMap.put(cookie.getName(), cookie.getValue());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return cookieMap;
     }
 }
