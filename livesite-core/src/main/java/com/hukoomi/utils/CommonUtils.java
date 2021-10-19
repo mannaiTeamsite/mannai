@@ -426,6 +426,9 @@ public class CommonUtils {
         String description = sanitizeMetadataField(getValueFromXML("/content/root/page-details/description", dcr));
         if(StringUtils.isBlank(description)){
             description = sanitizeMetadataField(removeHTMLTags(getValueFromXML("/content/root/detail/description", dcr)));
+            if(description.length()>300){
+                description = description.substring(0, 300).trim();
+            }
         }
         context.getPageScopeData().put(RuntimePage.PAGESCOPE_DESCRIPTION, description);
         logger.info("Set PageScope Meta Description to : " + description);
