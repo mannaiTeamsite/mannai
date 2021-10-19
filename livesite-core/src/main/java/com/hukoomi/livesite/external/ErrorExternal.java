@@ -41,7 +41,7 @@ public class ErrorExternal {
 	        try {
 				 brokenLink = (new URL(brokenLink)).getPath();
 		        } catch (MalformedURLException e) {
-		          logger.error("Exception occured while getting url path"+e);
+		          logger.error("Exception occured while getting url path",e);
 		        } 
  
 		if(compType.equalsIgnoreCase("Banner") && context.isRuntime() && !contentPage.isBlank() && !brokenLink.equalsIgnoreCase(errorPageEn) && !brokenLink.equalsIgnoreCase(errorPageAr))
@@ -53,7 +53,7 @@ public class ErrorExternal {
 	        	try {
 					 contentPage = (new URL(contentPage)).getPath();
 			        } catch (MalformedURLException e) {
-			         logger.error("Exception occured while getting url path"+e);
+			         logger.error("Exception occured while getting url path",e);
 			        } 
 				
 				 int count = 0;
@@ -79,7 +79,7 @@ public class ErrorExternal {
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 				}			 
 		}}catch(Exception e) {
-			logger.error("Exception occured did not log in db" + e);
+			logger.error("Exception occured did not log in db" , e);
 		}
 		
 		Document doc = getErrorDCRContent(context);  

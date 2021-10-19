@@ -91,7 +91,7 @@ public class JWTTokenUtil {
 		    data = jsonObj.toString();
 		   
 		} catch (Exception e) {
-			logger.error("Exception"+e);	
+			logger.error("Exception",e);	
 		} 
 		return data;
 	}

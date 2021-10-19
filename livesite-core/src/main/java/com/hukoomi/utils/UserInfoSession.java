@@ -55,7 +55,7 @@ public class UserInfoSession {
 					
 					}}
 		}catch (Exception e) {
-			LOGGER.error("Exception"+e);	
+			LOGGER.error("Exception",e);	
 		} 
 		return doc;
 	}
@@ -100,7 +100,7 @@ public class UserInfoSession {
 			try {
 				expiryDate=formatter.parse(expDt);
 			} catch (ParseException e) {
-				LOGGER.debug("exception in parsing string to date : " + e);
+				LOGGER.error("exception in parsing string to date : " , e);
 			}  
 			
 			LOGGER.info("Expiry Date:"+expiryDate);
