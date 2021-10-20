@@ -804,14 +804,12 @@ public class NewsletterConfirmation extends HttpServlet {
         StringBuilder response = new StringBuilder();
         int statusCode=0;
         String status = "";
-        String servletAddress = "<servletaddress>";
-       
+        
         try {
             // Create connection
             Properties properties =
                     postgre.loadProperties("phplist.properties"); 
-            baseUrl = properties.getProperty(BASE_URL);
-            baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
+            baseUrl = properties.getProperty(BASE_URL);          
             logger.info("Phplist baseUrl from properties: "+baseUrl);            
           String endpoint = baseUrl +
             "/api/v2/subscribers";       
@@ -890,12 +888,10 @@ public class NewsletterConfirmation extends HttpServlet {
         InputStream is = null;
         String adminID= "";
         String adminPWD= ""; 
-        int statusCode=0;
-        String servletAddress = "<servletaddress>";
+        int statusCode=0;        
         Properties properties =
                   postgre.loadProperties("phplist.properties");
-        baseUrl = properties.getProperty(BASE_URL);
-        baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
+        baseUrl = properties.getProperty(BASE_URL);        
         logger.info("Phplist baseUrl from properties : "+baseUrl);        
         adminID = properties.getProperty(ADMIN_ID);
         adminPWD = properties.getProperty(ADMIN_PWD);

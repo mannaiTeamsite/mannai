@@ -135,7 +135,8 @@ public class MySqlForServlet {
             con = DriverManager.getConnection(connectionString, userName,
                     password);
         } catch (Exception e) {
-            logger.error("MySqlForServlet : getConnection()", e);
+        	logger.error("PHPList MySql DB Connection Failed");
+            logger.error("PHPList MySql DB : getConnection()", e);            
         }
         return con;
     }

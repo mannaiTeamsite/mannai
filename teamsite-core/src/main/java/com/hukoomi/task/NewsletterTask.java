@@ -22,6 +22,7 @@ import java.util.Set;
 
 import javax.activation.DataSource;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -44,6 +45,9 @@ import com.interwoven.cssdk.filesys.CSVPath;
 import com.interwoven.cssdk.transform.XSLTransformer;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
+
+import java.nio.charset.StandardCharsets;
+import java.net.URLEncoder;
 
 
 public class NewsletterTask implements CSURLExternalTask {
@@ -90,9 +94,25 @@ public class NewsletterTask implements CSURLExternalTask {
      * DCR Type Meta data name
      */
     public static final String META_DATA_NAME_DCR_TYPE = "TeamSite/Templating/DCR/Type";
+    
+    /**
+     * Charset for urlencoding
+     */
+    private static final String CHARSET = StandardCharsets.UTF_8.name();
+
+    private static final String[][] CHARACTERS = {
+        { "\\+", "%20" },
+        { "%21", "!"   },
+        { "%27", "'"   },
+        { "%28", "("   },
+        { "%29", ")"   },
+        { "%7E", "~"   }
+    };
 
     public static final String NEWSLETTER_DESCRIPTION_PATH = "/root/detail/newsletter-description";
+    public static final String NEWSLETTER_ROOT_CATEGOTY_PATH = "/root/detail/newsletter-category";
     public static final String NEWSLETTER_CATEGOTY_PATH = "/root/detail/newsletter-category/newsletter-category-field";
+    public static final String OTHER_NEWSLETTER_CATEGOTY_PATH = "/root/detail/newsletter-category/newsletter-other";
     public static final String TEMPLATE = "newsletter_template";
     public static final String HTML_PATH = "html_path";
     public static final String HTML_GENERATION_LOCATION = "generate_html_location";
@@ -132,7 +152,7 @@ public class NewsletterTask implements CSURLExternalTask {
                 logger.info("DCR Type : " + dcrType);
                 if ("Content/Newsletter".equals(dcrType)) {
                     statusMap = processNewsletterDCR(client, task,
-                            taskSimpleFile);
+                            taskSimpleFile, fileName);
                 }
                 else {
                     statusMap.put(TRANSITION, SUCCESS_TRANSITION);
@@ -155,7 +175,7 @@ public class NewsletterTask implements CSURLExternalTask {
     }
 
     public Map<String, String> processNewsletterDCR(CSClient client,
-            CSExternalTask task, CSSimpleFile taskSimpleFile)
+            CSExternalTask task, CSSimpleFile taskSimpleFile, String fileName)
             throws CSAuthorizationException, CSExpiredSessionException,
             CSRemoteException, CSException {
         logger.info("NewsletterTask: processNewsletterDCR()");
@@ -194,12 +214,30 @@ public class NewsletterTask implements CSURLExternalTask {
 
         // Base URl
         String baseUrlLink = properties.getProperty("base_url");
+        
+        //Newsletter link
+        String newsletterpath = properties.getProperty("web_path");
+        String shareitfb = properties.getProperty("shareit_fb");
+        String shareittwitter = properties.getProperty("shareit_twitter");
+        String shareitwhatsapp = properties.getProperty("shareit_whatsapp");        
+        
+        int max_char = Integer
+                .parseInt(properties.getProperty("max_char"));
+        
+        String encodedNewsletterUrl = encodeURIComponent(
+                baseUrlLink + newsletterpath + fileName + ".html");
+        
+        String nlllinkFB = shareitfb+encodedNewsletterUrl;
+        String nlltwitter = shareittwitter+encodedNewsletterUrl;
+        String nllwhatsapp = shareitwhatsapp+encodedNewsletterUrl;
 
-
+        logger.info("newsletterlinkFB : "+nlllinkFB);
 
         CSVPath templateVpath = new CSVPath(strTemplate);
         CSSimpleFile xslTemplateFile = (CSSimpleFile) (client
                 .getFile(templateVpath));
+        
+        //getTaskDocument(xslTemplateFile);
 
         Document data = DocumentHelper.createDocument();
 
@@ -281,287 +319,269 @@ public class NewsletterTask implements CSURLExternalTask {
                 .addElement("newsletterUnsubscribe");
         newsletterUnsubscribeLinkElement.setText(
                 newsletterUnsubscribeLink.replace("_lang_", lang));
+        
+        // Add Share Links To document starts
+        Element shareLinksElement = rootElement
+                .addElement("share-links");
+        
+        Element shareFBLinkElement = shareLinksElement
+                .addElement("facebook");
+        shareFBLinkElement
+                .setText(nlllinkFB.replace("_lang_", lang));        
+        
+        
+        Element shareTTLinkElement = shareLinksElement
+                .addElement("twitter");
+        shareTTLinkElement
+                .setText(nlltwitter.replace("_lang_", lang));
+        
+        Element shareWPLinkElement = shareLinksElement
+                .addElement("whatsapp");
+        shareWPLinkElement
+                .setText(nllwhatsapp.replace("_lang_", lang));
+        
+        // Add Share Links To document ends
 
-        List<Node> categoryList = document
-                .selectNodes(NEWSLETTER_CATEGOTY_PATH);
+        
+        // Add Categories
+        List<Node> categoryList = document.selectNodes(NEWSLETTER_ROOT_CATEGOTY_PATH);
 
-        for (Node node : categoryList) {
+        for (int i=0 ; i < categoryList.size(); i++) {
+        	Node selectnode = categoryList.get(i);
+        	if(selectnode.selectSingleNode("newsletter-category-field") != null) {
+        	Node node = selectnode.selectSingleNode("newsletter-category-field");
             Element categoryElement = rootElement.addElement("category");
             String dctType = node.selectSingleNode("category").getText();
+            logger.info("dctType - " + dctType);
             // DCT Type
             Element dctTypeElement = categoryElement.addElement("dctType");
             dctTypeElement.setText(dctType);
+            
             // Category Title
-            String dctTitle = node
-                    .selectSingleNode("newsletter-category-title")
-                    .getText();
-            Element dctTitleElement = categoryElement
-                    .addElement("categorytitle");
-            dctTitleElement.setText(dctTitle);
+            String dctTitle = node.selectSingleNode("newsletter-category-title").getText();
+            if(dctTitle != null) {
+                Element dctTitleElement = categoryElement.addElement("categorytitle");
+                dctTitleElement.setText(dctTitle);
+            }
             logger.info("dctTitle - " + dctTitle);
-
-            Element categoryDcrElement = categoryElement
-                    .addElement("category-dcr");
+            
+            //Column Layout 
+            Element columnLayoutElement = categoryElement.addElement("column-layout");
+            String dctColumnLayout = node.selectSingleNode("column-layout").getText();
+            int columnLayout = 0;
+            if(StringUtils.isNotBlank(dctColumnLayout)) {
+                logger.info("Column Layout - " + dctColumnLayout);
+                columnLayoutElement.setText(dctColumnLayout);
+                columnLayout = Integer.parseInt(dctColumnLayout);
+            }  
+            
             List<Node> category = node.selectNodes("category-dcr");
             int dcrCount = category.size();
-            Element dcrCountElement = categoryDcrElement
-                    .addElement("dcrCount");
-            dcrCountElement.setText(String.valueOf(dcrCount));
-
-            for (Node dcr : category) {
-
-                Element dcrElement = categoryDcrElement.addElement("dcr");
-                String dcrPath = dcr.getText();
-                logger.info("dcrPath - " + dcrPath);
-
-                Document dcrDocument = getDcrDocument(client, task,
-                        dcrPath);
-                Element dcrTitleElement = dcrElement.addElement("title");
-                String dcrTitle = dcrDocument
-                        .selectSingleNode("/root/information/title")
-                        .getText();
-                logger.info("dcrTitle - " + dcrTitle);
-                dcrTitleElement.setText(dcrTitle);
-
-                Element dcrDescElement = dcrElement.addElement("desc");
-                String dcrDescription = "";
-                String seoDescription = "";
-                String detailDescription = "";
-                
-                if (dcrDocument.selectSingleNode(
-                        "/root/page-details/description") != null) {
-                    seoDescription = dcrDocument
-                            .selectSingleNode(
-                                    "/root/page-details/description")
-                            .getText();
+            logger.info("dcrCount : " + dcrCount);
+            
+            int dcrDivCol = (int)(dcrCount / columnLayout);
+            logger.info("dcrDivCol : " + dcrDivCol);
+            int dcrMod = dcrCount % columnLayout;    
+            logger.info("dcrMod : " + dcrMod);
+            int rows = 0;
+            boolean isCloumnLayoutEven = true;
+            if(dcrMod == 0) {
+                rows = dcrDivCol;
+            }else {
+                rows = dcrDivCol + 1;
+                isCloumnLayoutEven = false;
+            }
+            logger.info("rows : " + rows);
+            
+            Element dcrCountElement = categoryElement.addElement("dcrCount");
+            dcrCountElement.setText(String.valueOf(dcrCount)); 
+            int counter=0;
+            for(int rowIndex = 0; rowIndex < rows; rowIndex++) {
+                logger.info("rowIndex : " + rowIndex);
+            
+                Element categoryDcrElement = categoryElement.addElement("category-dcr");
+                Element categroyDcrCountElement = categoryDcrElement.addElement("dcr-count");
+                if(rowIndex+1 == rows && dcrMod != 0) {
+                    categroyDcrCountElement.setText(String.valueOf(dcrMod));
+                }else {
+                    categroyDcrCountElement.setText(dctColumnLayout);
                 }
-
-                if (dcrDocument.selectSingleNode(
-                        "/root/detail/description") != null) {
-                    detailDescription = dcrDocument
-                            .selectSingleNode("/root/detail/description")
-                            .getText();
-                }
-
-                if (seoDescription != "" || !"".equals(seoDescription)) {
-                    dcrDescription = seoDescription;
-                } else {
-                    dcrDescription = detailDescription
-                            .replaceAll("<[^>]*>", "");
-                }
-
-                
-
-
-                dcrDescElement.setText(dcrDescription);
-
-                if ("Events".equals(dctType)) {
-                    Element dcrOrgElement = dcrElement
-                            .addElement("organizer");
-                    String dcrorganaizer = "";
-                    if (lang.equals("ar")) {
-                        Node organizer = dcrDocument.selectSingleNode(
-                                "/root/settings/organizers/label-ar");
-                        if (organizer != null) {
-                            dcrorganaizer = organizer.getText();
-                        }
-                    } else {
-                    Node organizer = dcrDocument.selectSingleNode(
-                            "/root/settings/organizers/label-en");
-                    if (organizer != null) {
-                        dcrorganaizer = organizer.getText();
-                    }
-                }
-
-                    dcrOrgElement.setText(dcrorganaizer);
-
-                    Element dateElement = dcrElement.addElement("date");
-
-                    String dcrDate = dcrDocument
-                            .selectSingleNode(
-                                    "/root/event-date/start-date")
-                            .getText();
-
-                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
-
-                    Element imgElement = dcrElement.addElement("image");
-                    String dcrImage = dcrDocument
-                            .selectSingleNode("/root/information/image")
-                            .getText();
-                    imgElement.setText(dcrImage);
-
-                    Element locationNameElement = dcrElement
-                            .addElement("locationName");
-                    Node location = dcrDocument.selectSingleNode(
-                            "/root/location/location-name");
-                    String locationName = "";
-                    if (location != null) {
-                        locationName = location.getText();
-                    }
-                    locationNameElement.setText(locationName);
-
-                    Element readMoreLink = dcrElement
-                            .addElement("readMore");
-                    String originalDcrName = "/" + lang + "/event/"
-                            + dcrDocument.selectSingleNode(
-                                    "/root/information/original-dcr-name")
-                                    .getText();
-                    readMoreLink.setText(originalDcrName);
-
-                } else if ("News".equals(dctType)) {
-                    Element sourceElement = dcrElement
-                            .addElement("source");
-                    String source = "";
-                    if (lang.equals("ar")) {
-                        Node sourceEle = dcrDocument.selectSingleNode(
-                                "/root/settings/channels/label-ar");
-                        if (sourceEle != null) {
-                            source = sourceEle.getText();
-                        }
-
-                    } else {
-                    Node sourceEle = dcrDocument.selectSingleNode(
-                            "/root/settings/channels/label-en");
-                    if (sourceEle != null) {
-                        source = sourceEle.getText();
-                    }
-                }
-
-                    sourceElement.setText(source);
-
-                    Element imgElement = dcrElement.addElement("image");
-                    String dcrImage = dcrDocument
-                            .selectSingleNode("/root/information/image")
-                            .getText();
-                    imgElement.setText(dcrImage);
-
-                    Element dateElement = dcrElement.addElement("date");
-                    String dcrDate = dcrDocument
-                            .selectSingleNode("/root/information/date")
-                            .getText();
-                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
-
-                    Element readMoreLink = dcrElement
-                            .addElement("readMore");
-                    String originalDcrName = "/" + lang + "/news/"
-                            + dcrDocument.selectSingleNode(
-                                    "/root/information/original-dcr-name")
-                                    .getText();
-
-                    readMoreLink.setText(originalDcrName);
-
-                } else if ("Blog".equals(dctType)) {
-
-                    Element dateElement = dcrElement.addElement("date");
-                    String dcrDate = dcrDocument
-                            .selectSingleNode("/root/information/date")
-                            .getText();
-                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
-
-                    Element readMoreLink = dcrElement
-                            .addElement("readMore");
-                    String originalDcrName = "/" + lang + "/blog/"
-                            + dcrDocument.selectSingleNode(
-                                    "/root/information/original-dcr-name")
-                                    .getText();
-
-                    readMoreLink.setText(originalDcrName);
-                } else if ("Articles".equals(dctType)) {
-
-                    Element dateElement = dcrElement.addElement("date");
-                    String dcrDate = dcrDocument
-                            .selectSingleNode("/root/information/date")
-                            .getText();
-                    dateElement.setText(changeDateFormat(client, task,dcrDate, lang));
-
-                    Element topicElement = dcrElement.addElement("topics");
-                    String topics = "";
-                    if (lang.equals("ar")) {
-                        Node topicsEle = dcrDocument.selectSingleNode(
-                                "/root/settings/topics/label-ar");
-                        if (topicsEle != null) {
-                            topics = topicsEle.getText();
-                        }
-                    } else {
-                    Node topicsEle = dcrDocument.selectSingleNode(
-                            "/root/settings/topics/label-en");
-                    if (topicsEle != null) {
-                        topics = topicsEle.getText();
-                    }
-                }
-
-                    topicElement.setText(topics);
-
-                    Element readMoreLink = dcrElement
-                            .addElement("readMore");
-                    String originalDcrName = "/" + lang + "/article/"
-                            + dcrDocument.selectSingleNode(
-                                    "/root/information/original-dcr-name")
-                                    .getText();
-
-                    readMoreLink.setText(originalDcrName);
-                } else if ("Services".equals(dctType)) {
-                    Element serviceModeElement = dcrElement
-                            .addElement("serviceMode");
-                    String serviceMode = "";
-                    Element serviceProviderElement = dcrElement
-                            .addElement("serviceProvider");
-                    String serviceProvider = "";
-                    if (lang.equals("ar")) {
-                        Node serviceModeEle = dcrDocument.selectSingleNode(
-                                "/root/settings/service-mode/label-ar");
-                        if (serviceModeEle != null) {
-                            serviceMode = serviceModeEle.getText();
-                        }
-
-                        Node serviceProviderEle = dcrDocument
-                                .selectSingleNode(
-                                        "/root/settings/service-entities/label-ar");
-                        if (serviceProviderEle != null) {
-                            serviceProvider = serviceProviderEle.getText();
-                        }
-                    } else {
-
-                    Node serviceModeEle = dcrDocument.selectSingleNode(
-                            "/root/settings/service-mode/label-en");
-                    if (serviceModeEle != null) {
-                        serviceMode = serviceModeEle.getText();
-                    }
-
-
-                    Node serviceProviderEle = dcrDocument.selectSingleNode(
-                            "/root/settings/service-entities/label-en");
-                    if (serviceProviderEle != null) {
-                        serviceProvider = serviceProviderEle.getText();
-                    }
-                }
-
-                    serviceModeElement.setText(serviceMode);
-                    serviceProviderElement.setText(serviceProvider);
-
-                    Element readMoreLink = dcrElement
-                            .addElement("readMore");
-                    String originalDcrName = "/" + lang + "/service/"
-                            + dcrDocument.selectSingleNode(
-                                    "/root/information/original-dcr-name")
-                                    .getText();
-
-                    readMoreLink.setText(originalDcrName);
-                } else {
+                 
+                for (int columnIndex = 0; columnIndex < columnLayout && dcrCount != 0; columnIndex++, dcrCount--) {
+                    logger.info("columnIndex : " + columnIndex);
+                    logger.info("dcrCount : " + dcrCount);
                     
-                    Node image = dcrDocument.selectSingleNode(
-                            "/root/information/image");
+                    Node dcr = category.get(counter);
+                    Element dcrElement = categoryDcrElement.addElement("dcr");
+                    String dcrPath = dcr.getText();
+                    logger.info("dcrPath - " + dcrPath);
+    
+                    Document dcrDocument = getDcrDocument(client, task, dcrPath);
+                    Element dcrTitleElement = dcrElement.addElement("title");
+                    String dcrTitle = dcrDocument.selectSingleNode("/root/information/title").getText();
+                    logger.info("dcrTitle - " + dcrTitle);
+                    dcrTitleElement.setText(dcrTitle);
+    
+                    Element dcrDescElement = dcrElement.addElement("desc");
+                    String dcrDescription = "";
+                    String seoDescription = "";
+                    String detailDescription = "";
+                    
+                    if (dcrDocument.selectSingleNode("/root/page-details/description") != null) {
+                        seoDescription = dcrDocument.selectSingleNode("/root/page-details/description").getText();
+                    }
+    
+                    if (dcrDocument.selectSingleNode("/root/detail/description") != null) {
+                        detailDescription = dcrDocument.selectSingleNode("/root/detail/description").getText();
+                    }
+    
+                    if (seoDescription != "" || !"".equals(seoDescription)) {
+                        dcrDescription = seoDescription;
+                    } else {
+                        dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
+                    }
+                    int maxLength = (dcrDescription.length() < max_char)?dcrDescription.length():max_char;
+                    dcrDescription = dcrDescription.substring(0, maxLength);               
+                    
+                    if(maxLength==max_char) {
+                        dcrDescription = dcrDescription + "...";
+                    }
+    
+                    dcrDescElement.setText(dcrDescription);                
+                        
+                    Node image = dcrDocument.selectSingleNode("/root/information/image");
                     if (image != null) {
                         Element imgElement = dcrElement.addElement("image");
-                        String dcrImage = dcrDocument
-                                .selectSingleNode("/root/information/image")
-                                .getText();
+                        String dcrImage = dcrDocument.selectSingleNode("/root/information/image").getText();
                         imgElement.setText(dcrImage);
-                    }                    
+                    }
                     
+                    Element readMoreLink = dcrElement
+                            .addElement("readMore");
+                    String originalDcrName = "/" + lang + "/"+dctType.toLowerCase()+"/"
+                            + dcrDocument.selectSingleNode(
+                                    "/root/information/original-dcr-name")
+                                    .getText();
+
+                    readMoreLink.setText(originalDcrName);
+                    counter++;
                 }
             }
-        }
+        	}//New if condition
+        	else if(selectnode.selectSingleNode("newsletter-other") != null){
+        		Node node = selectnode.selectSingleNode("newsletter-other");
+        		Element categoryElement = rootElement.addElement("category");
+                String dctType = node.selectSingleNode("category").getText();
+                
+                // DCT Type
+                Element dctTypeElement = categoryElement.addElement("dctType");
+                dctTypeElement.setText(dctType);
+                
+                // Category Title
+                String dctTitle = node.selectSingleNode("newsletter-category-title").getText();
+                if(dctTitle != null) {
+                    Element dctTitleElement = categoryElement.addElement("categorytitle");
+                    dctTitleElement.setText(dctTitle);
+                }
+                logger.info("dctTitle - " + dctTitle);
+                
+                //Column Layout 
+                Element columnLayoutElement = categoryElement.addElement("column-layout");
+                String dctColumnLayout = node.selectSingleNode("column-layout").getText();
+                int columnLayout = 0;
+                if(StringUtils.isNotBlank(dctColumnLayout)) {
+                    logger.info("Column Layout - " + dctColumnLayout);
+                    columnLayoutElement.setText(dctColumnLayout);
+                    columnLayout = Integer.parseInt(dctColumnLayout);
+                }  
+                
+                List<Node> category = node.selectNodes("newsletter-other-field");
+                int dcrCount = category.size();
+                logger.info("dcrCount : " + dcrCount);
+                
+                int dcrDivCol = (int)(dcrCount / columnLayout);
+                logger.info("dcrDivCol : " + dcrDivCol);
+                int dcrMod = dcrCount % columnLayout;    
+                logger.info("dcrMod : " + dcrMod);
+                int rows = 0;
+                boolean isCloumnLayoutEven = true;
+                if(dcrMod == 0) {
+                    rows = dcrDivCol;
+                }else {
+                    rows = dcrDivCol + 1;
+                    isCloumnLayoutEven = false;
+                }
+                logger.info("rows : " + rows);
+                
+                Element dcrCountElement = categoryElement.addElement("dcrCount");
+                dcrCountElement.setText(String.valueOf(dcrCount)); 
+                int counter=0;
+                for(int rowIndex = 0; rowIndex < rows; rowIndex++) {
+                    logger.info("rowIndex : " + rowIndex);
+                
+                    Element categoryDcrElement = categoryElement.addElement("category-dcr");
+                    Element categroyDcrCountElement = categoryDcrElement.addElement("dcr-count");
+                    if(rowIndex+1 == rows && dcrMod != 0) {
+                        categroyDcrCountElement.setText(String.valueOf(dcrMod));
+                    }else {
+                        categroyDcrCountElement.setText(dctColumnLayout);
+                    }
+                     
+                    for (int columnIndex = 0; columnIndex < columnLayout && dcrCount != 0; columnIndex++, dcrCount--) {
+                        logger.info("columnIndex : " + columnIndex);
+                        logger.info("dcrCount : " + dcrCount);
+                        
+                        Node dcr = category.get(counter);
+                        Element dcrElement = categoryDcrElement.addElement("dcr");
+                        String dcrPath = dcr.getText();
+                        logger.info("dcrPath - " + dcrPath);
+        
+                        //Document dcrDocument = getDcrDocument(client, task, dcrPath);
+                        Element dcrTitleElement = dcrElement.addElement("title");
+                        String dcrTitle = dcr.selectSingleNode("newsletter-dcr-title").getText();
+                        logger.info("other dcrTitle - " + dcrTitle);
+                        dcrTitleElement.setText(dcrTitle);
+        
+                        Element dcrDescElement = dcrElement.addElement("desc");
+                        String dcrDescription = "";                
+                        String detailDescription = "";
+                        
+                        if (dcr.selectSingleNode("newsletter-dcr-description") != null) {
+                            detailDescription = dcr.selectSingleNode("newsletter-dcr-description").getText();
+                        }
+                        dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
+                        
+                        int maxLength = (dcrDescription.length() < max_char)?dcrDescription.length():max_char;
+                        dcrDescription = dcrDescription.substring(0, maxLength);               
+                        
+                        if(maxLength==max_char) {
+                            dcrDescription = dcrDescription + "...";
+                        }
+        
+                        dcrDescElement.setText(dcrDescription);                
+                            
+                        Node image = dcr.selectSingleNode("category-dcr-image");
+                        if (image != null) {
+                            Element imgElement = dcrElement.addElement("image");
+                            String dcrImage = dcr.selectSingleNode("category-dcr-image").getText();
+                            imgElement.setText(dcrImage);
+                        }
+                        
+                        String[] path_arr= dcr.selectSingleNode("category-dcr-link").getText().split("/");
+                        int index1=path_arr[path_arr.length - 1].indexOf(".page");
+                        Element readMoreLink = dcrElement
+                                .addElement("readMore");
+                        String originalDcrName = "/" + lang + "/"+path_arr[path_arr.length - 2]+"/"
+                                + path_arr[path_arr.length - 1].substring(0,index1);
+
+                        readMoreLink.setText(originalDcrName);
+                        counter++;
+                    }
+                }
+        		
+        	}
+        }       
+       
 
         if (data != null) {
             DataSource mailDataSource = null;
@@ -754,6 +774,21 @@ public class NewsletterTask implements CSURLExternalTask {
         TSPropertiesFileReader propFileReader = new TSPropertiesFileReader(
                 client, task, propertyFileName);
         properties = propFileReader.getPropertiesFile();
+    }
+    
+    
+    public String encodeURIComponent(String url) {
+        String result;
+        try {
+            result = URLEncoder.encode(url, CHARSET);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        for(String[] entry : CHARACTERS) {
+            result = result.replaceAll(entry[0], entry[1]);
+        }
+        logger.info(" Encoded Url : "+result);
+        return result;
     }
 
 }
