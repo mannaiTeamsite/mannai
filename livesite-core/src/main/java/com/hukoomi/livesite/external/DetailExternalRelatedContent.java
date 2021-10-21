@@ -194,7 +194,7 @@ public Document getContentDetail(final RequestContext context) {
         String locationSuffix = "distance-suffix";
         String sortVal = "";
         String sort = context.getParameterString(
-                "relatedSort", "");
+                "sort", "");
         logger.info("Content Sort: " + sort);
         if (StringUtils.isNotBlank(sort)) {
             if (sort.split(":")[1].equals("distance")) {
