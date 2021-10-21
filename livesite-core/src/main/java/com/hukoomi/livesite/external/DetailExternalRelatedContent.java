@@ -197,7 +197,8 @@ public Document getContentDetail(final RequestContext context) {
                 "sort", "");
         logger.info("Content Sort: " + sort);
         if (StringUtils.isNotBlank(sort)) {
-            if (sort.split(":")[1].equals("distance")) {
+            if (sort.contains(":")) {
+                if (sort.split(":")[1].equals("distance")) {
                 logger.info("Sort Type: Distance");
                 if (detailDocument.selectSingleNode(sort.split(":")[0]) != null) {
                     String location = commonUtils
@@ -224,6 +225,10 @@ public Document getContentDetail(final RequestContext context) {
                 sortVal = sort.split(":")[0];
             }
         }
+            else{
+                sortVal = sort;
+            }
+    }
         return sortVal;
     }
 }
