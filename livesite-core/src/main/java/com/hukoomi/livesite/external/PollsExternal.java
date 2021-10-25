@@ -468,7 +468,7 @@ public class PollsExternal {
 
                 Map<Long, Long> votedOptions = null;
 
-                if (votedPolls.isEmpty() != true) {
+                if (!votedPolls.isEmpty()) {
                     votedOptions = getVotedOption(postgre, votedPolls,
                             pollsBO);
                     logger.info(
