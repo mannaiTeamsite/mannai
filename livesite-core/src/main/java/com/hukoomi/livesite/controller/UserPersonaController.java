@@ -5,6 +5,7 @@ import com.interwoven.livesite.common.web.ForwardAction;
 import com.interwoven.livesite.runtime.RequestContext;
 import org.apache.log4j.Logger;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 
 
@@ -22,10 +23,10 @@ public class UserPersonaController {
      * @return Redirect to the persona page or
      * open the requested page.
      */
-	 @SuppressWarnings("deprecation")
     public final ForwardAction personaRedirect(final RequestContext context) {
         try {
-            LOGGER.debug("personaRedirect Start ");
+            LOGGER.debug("[UserPersonaController].[personaRedirect] "
+                    + " :: Enter");
 
             String cookieName = context.getParameterString(
                     "cookieName", DEFAULT_COOKIE);
@@ -39,9 +40,18 @@ public class UserPersonaController {
 
                      if (personaCookieValue != null && !personaCookieValue
                              .equalsIgnoreCase("")) {
-                         
+                         LOGGER.debug("[UserPersonaController]"
+                                 + ".[personaRedirect] "
+                                 + ":: sitePath : "
+                                 + context.getSite().getPath());
                          String pagePath = context.getSite().getPath()
                                  .concat("/").concat(personaCookieValue);
+
+                         LOGGER.debug("[UserPersonaController]"
+                                 + ".[personaRedirect] "
+                                 + ":: pagePath : " + pagePath);
+
+
                          if (context.getFileDAL().isFile(pagePath + ".page")) {
                              context.getResponse()
                                      .setStatus(HttpServletResponse
@@ -49,19 +59,35 @@ public class UserPersonaController {
                              context.getResponse()
                                      .sendRedirect(personaCookieValue);
                          } else {
-                             LOGGER.debug("PagePath : " + pagePath+ " doesnot exist. ");
+                             LOGGER.debug("[UserPersonaController]"
+                                     + ".[personaRedirect]"
+                                     + ":: pagePath : " + pagePath
+                                     + " doesnot exist. ");
                          }
                      } else {
-                         LOGGER.debug("cookie does not exist or content value is Null ");
+                         LOGGER.debug("[UserPersonaController]"
+                                 + ".[personaRedirect]"
+                                 + ":: cookie does not exist "
+                                 + " or content value is Null ");
                      }
                  } else {
-                     LOGGER.debug("Cookie name is not set from controller parameters ");
+                     LOGGER.debug("[UserPersonaController]"
+                             + ".[personaRedirect]"
+                             + ":: Cookie name is not set "
+                             + "from controller parameters ");
                  }
-        } catch (Exception e) {
+        } catch (IOException e) {
             LOGGER.error("Exception occured :: " + e.getMessage());
             LOGGER.error("Exception :: " + e.toString());
-        } 
-        LOGGER.debug("personaRedirect End");
+        } catch (NullPointerException e) {
+            LOGGER.error("Exception occured :: " + e.getMessage());
+            LOGGER.error("Exception :: " + e.toString());
+        }  catch (Exception e) {
+            LOGGER.error("Exception occured :: " + e.getMessage());
+            LOGGER.error("Exception :: " + e.toString());
+        }
+        LOGGER.debug("[UserPersonaController].[personaRedirect] "
+                + " :: Exit");
         return null;
     }
 }
