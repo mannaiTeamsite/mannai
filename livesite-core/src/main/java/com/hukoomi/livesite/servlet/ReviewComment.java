@@ -37,53 +37,67 @@ import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 public class ReviewComment extends HttpServlet {
 
     /** logger.debug object to check the flow of the code. */
-    private static final Logger LOGGER =
-            Logger.getLogger(ReviewComment.class);
+    private static final Logger LOGGER = Logger.getLogger(ReviewComment.class);
     XssUtils xssUtils = new XssUtils();
-    
+
     /** mail properties key. */
     private static final String CONTACT_FROM_MAIL = "sentFrom";
-    /** mail properties key. */
-    private static final String CONTACT_TO_MAIL = "sentTo";
     /** mail properties key. */
     private static final String CONTACT_MAIL_HOST = "host";
     /** mail properties key. */
     private static final String CONTACT_MAIL_PORT = "port";
-    /** mail properties key. */    
+    /** mail properties key. */
     private static final String STARTTLS_ENABLE = "false";
     /** character set Constant */
     private static final String CHAR_SET = "UTF-8";
+    /** character set Constant */
+    private static final String BLOG_ID = "blogId";
+    /** character set Constant */
+    private static final String ERROR_MESSAGE = "errorMessage";
+    /** character set Constant */
+    private static final String SUCCESS = "success";
+    /** character set Constant */
+    private static final String USERNAME = "username";
+    /** character set Constant */
+    private static final String PASSWORD = "password";
+    /** character set Constant */
+    private static final String APPLICATION_JSON = "application/json";
+    /** character set Constant */
+    private static final String GET_COMMENT_BLOGID = "getCommentbyBlogId()";
 
-    protected void doPost(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException {
         LOGGER.info("ReviewComment : Start");
         JSONObject data = null;
         Enumeration<String> attributes = request.getSession().getAttributeNames();
         while (attributes.hasMoreElements())
             LOGGER.info("Value is: " + attributes.nextElement());
-        try {
-            BufferedReader inbr = new BufferedReader(
-                    new InputStreamReader(request.getInputStream()));
+
+        try (BufferedReader inbr =
+                new BufferedReader(new InputStreamReader(request.getInputStream()))) {
             String json = "";
             json = inbr.readLine();
             data = new JSONObject(json);
             boolean result = updateReviewData(data);
             if (result) {
-                data.put("success", "success");
+                data.put(SUCCESS, SUCCESS);
                 response.getWriter().write(data.toString());
             } else {
-                data.put("success", "false");
-                data.put("errorMessage", "Failed to update");
+                data.put(SUCCESS, STARTTLS_ENABLE);
+                data.put(ERROR_MESSAGE, "Failed to update");
                 response.getWriter().write(data.toString());
             }
 
         } catch (IOException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            response.setContentType(APPLICATION_JSON);
+            response.setCharacterEncoding(CHAR_SET);
             try {
-                data.put("success", "false");
-                data.put("errorMessage", e.getMessage());
+                if(data !=null) {
+                data.put(SUCCESS, STARTTLS_ENABLE);
+                data.put(ERROR_MESSAGE, e.getMessage());
                 response.getWriter().write(data.toString());
+                }
             } catch (IOException e1) {
                 LOGGER.error("REVIEW Failed : Exception ", e);
             }
@@ -92,48 +106,47 @@ public class ReviewComment extends HttpServlet {
         }
     }
 
-    protected void doGet(HttpServletRequest request,
-            HttpServletResponse response) throws ServletException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException {
         LOGGER.info("ReviewComment : Start");
         JSONObject data = null;
         JSONArray dataArray = null;
         String action = "";
         try {
             data = new JSONObject();
-            request.getParameter("blogId");
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            request.getParameter(BLOG_ID);
+            response.setContentType(APPLICATION_JSON);
+            response.setCharacterEncoding(CHAR_SET);
             action = xssUtils.stripXSS(request.getParameter("action"));
-            data.put("path",
-                    xssUtils.stripXSS(request.getParameter("path")));
+            data.put("path", xssUtils.stripXSS(request.getParameter("path")));
             data.put("action", action);
             if (action.equals("getBlogs")) {
                 dataArray = getBlogs(data);
             } else if (action.equals("getComments")) {
 
-                data.put("blogId", Integer.parseInt(xssUtils
-                        .stripXSS(request.getParameter("blogId"))));
+                data.put(BLOG_ID,
+                        Integer.parseInt(xssUtils.stripXSS(request.getParameter(BLOG_ID))));
                 dataArray = getCommentbyBlogId(data);
-
 
             }
 
             if (dataArray != null) {
-                data.put("success", "success");
+                data.put(SUCCESS, SUCCESS);
                 data.put("comments", dataArray);
                 response.getWriter().write(data.toString());
             } else {
-                data.put("success", "false");
-                data.put("errorMessage", "Failed to update");
+                data.put(SUCCESS, STARTTLS_ENABLE);
+                data.put(ERROR_MESSAGE, "Failed to update");
                 response.getWriter().write(data.toString());
             }
 
         } catch (IOException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            response.setContentType(APPLICATION_JSON);
+            response.setCharacterEncoding(CHAR_SET);
             try {
-                data.put("success", "false");
-                data.put("errorMessage", e.getMessage());
+                data.put(SUCCESS, STARTTLS_ENABLE);
+                data.put(ERROR_MESSAGE, e.getMessage());
                 response.getWriter().write(data.toString());
             } catch (IOException e1) {
                 LOGGER.error("REVIEW Failed : Exception ", e);
@@ -143,7 +156,7 @@ public class ReviewComment extends HttpServlet {
         }
     }
 
-    private JSONArray getBlogs(JSONObject data) {
+    private JSONArray getBlogs(JSONObject data) throws IOException {
         LOGGER.info("getBlogs");
         String Propfilepath = data.getString("path");
         PreparedStatement prepareStatement = null;
@@ -152,11 +165,11 @@ public class ReviewComment extends HttpServlet {
         Connection connection = null;
         JSONArray arrayComments = new JSONArray();
         try {
-            String userName = dbProperties.getProperty("username");            
-            String password = dbProperties.getProperty("password");
+            String userName = dbProperties.getProperty(USERNAME);
+            String password = dbProperties.getProperty(PASSWORD);
             password = IREncryptionUtil.decrypt(password);
-            connection = DriverManager.getConnection(
-                    getConnectionString(dbProperties), userName, password);
+            connection = DriverManager.getConnection(getConnectionString(dbProperties), userName,
+                    password);
 
             String getBlog = "SELECT * FROM BLOG_MASTER";
             prepareStatement = connection.prepareStatement(getBlog);
@@ -167,32 +180,32 @@ public class ReviewComment extends HttpServlet {
                 int blogId = rs.getInt("BLOG_ID");
                 String blogTitle = rs.getString("BLOG_TITLE");
                 JSONObject blogs = new JSONObject();
-                blogs.put("blogId", blogId);
+                blogs.put(BLOG_ID, blogId);
                 blogs.put("Title", (blogTitle));
                 arrayComments.put(blogs);
             }
             rs.close();
         } catch (SQLException e) {
-            LOGGER.error("getBlogs()", e);            
+            LOGGER.error("getBlogs()", e);
 
         } finally {
-            releaseConnection(connection, null, null);
+            releaseConnection(connection, prepareStatement, null);
         }
         return arrayComments;
     }
 
-    private boolean updateReviewData(JSONObject data) {
+    private boolean updateReviewData(JSONObject data) throws IOException {
         LOGGER.debug("BlogTask : insertBlogData");
         String path = data.getString("path");
         Properties dbProperties = loadProperties(path);
         Connection connection = null;
         boolean isDataUpdated = false;
         try {
-            String userName = dbProperties.getProperty("username");            
-            String password = dbProperties.getProperty("password");
+            String userName = dbProperties.getProperty(USERNAME);
+            String password = dbProperties.getProperty(PASSWORD);
             password = IREncryptionUtil.decrypt(password);
-            connection = DriverManager.getConnection(
-                    getConnectionString(dbProperties), userName, password);
+            connection = DriverManager.getConnection(getConnectionString(dbProperties), userName,
+                    password);
             LOGGER.debug("BlogTask : after getConnection");
             int result = updateCommentData(connection, data);
             LOGGER.info("insertBlogData result : " + result);
@@ -204,8 +217,7 @@ public class ReviewComment extends HttpServlet {
             }
 
         } catch (Exception e) {
-            LOGGER.error("Exception in Update comment data catch block : ",
-                    e);
+            LOGGER.error("Exception in Update comment data catch block : ", e);
         } finally {
             releaseConnection(connection, null, null);
             LOGGER.info("Released Update comment data connection");
@@ -215,11 +227,13 @@ public class ReviewComment extends HttpServlet {
 
     /**
      * This method updates the comment status for approved/rejected
+     * 
      * @param connection
      * @param data
      * @return
+     * @throws IOException
      */
-    private int updateCommentData(Connection connection, JSONObject data) {
+    private int updateCommentData(Connection connection, JSONObject data) throws IOException {
         PreparedStatement preparedStatement = null;
         int result = 0;
         try {
@@ -227,9 +241,8 @@ public class ReviewComment extends HttpServlet {
             String Blogproppath = data.getString("blogpath");
             long commentId = data.getLong("commentId");
             String status = xssUtils.stripXSS(data.getString("status"));
-            String query =
-                    "UPDATE BLOG_COMMENT SET STATUS = ?, STATUS_UPDATED_ON = LOCALTIMESTAMP "
-                            + "WHERE COMMENT_ID = ? ";
+            String query = "UPDATE BLOG_COMMENT SET STATUS = ?, STATUS_UPDATED_ON = LOCALTIMESTAMP "
+                    + "WHERE COMMENT_ID = ? ";
             LOGGER.info("Query : " + query);
             preparedStatement = connection.prepareStatement(query);
 
@@ -237,12 +250,11 @@ public class ReviewComment extends HttpServlet {
             preparedStatement.setLong(2, commentId);
             result = preparedStatement.executeUpdate();
             LOGGER.info("update comment result : " + result);
-            String blogTitle = getBlogTitle(commentId,Propfilepath);
-            String userEmailID = getUserEmail(commentId,Propfilepath);
-            if(!userEmailID.equals("") && userEmailID !=null) {
-                sentMailNotification(status,blogTitle,userEmailID,Blogproppath);
+            String blogTitle = getBlogTitle(commentId, Propfilepath);
+            String userEmailID = getUserEmail(commentId, Propfilepath);
+            if (!userEmailID.equals("") && userEmailID != null) {
+                sentMailNotification(status, blogTitle, userEmailID, Blogproppath);
             }
-            
 
         } catch (NumberFormatException | SQLException e) {
             LOGGER.error("Exception in updateBlogMasterData: ", e);
@@ -254,161 +266,165 @@ public class ReviewComment extends HttpServlet {
     }
 
     /**
-     * This method returns all the comments submitted for
-     * specific blog based on blogID
+     * This method returns all the comments submitted for specific blog based
+     * on blogID
+     * 
      * @param data
      * @return
+     * @throws IOException
      */
-    private JSONArray getCommentbyBlogId(JSONObject data) {
+    private JSONArray getCommentbyBlogId(JSONObject data) throws IOException {
         LOGGER.info("getCommentbyBlogId");
-        int blogId = data.getInt("blogId");
+        int blogId = data.getInt(BLOG_ID);
         String Propfilepath = data.getString("path");
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         Properties dbProperties = loadProperties(Propfilepath);
         Connection connection = null;
         JSONArray arrayComments = new JSONArray();
-        String getComment ="";
+        String getComment = "";
         try {
-            String userName = dbProperties.getProperty("username");            
-            String password = dbProperties.getProperty("password");
+            String userName = dbProperties.getProperty(USERNAME);
+            String password = dbProperties.getProperty(PASSWORD);
             password = IREncryptionUtil.decrypt(password);
-            connection = DriverManager.getConnection(
-                    getConnectionString(dbProperties), userName, password);
+            connection = DriverManager.getConnection(getConnectionString(dbProperties), userName,
+                    password);
             if (blogId > 0) {
                 getComment =
-                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID ";
+                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  "
+                        + "FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID ";
                 prepareStatement = connection.prepareStatement(getComment);
                 prepareStatement.setLong(1, blogId);
                 prepareStatement.setString(2, "Pending");
-            } else  {
+            } else {
                 getComment =
-                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  FROM BLOG_COMMENT WHERE STATUS = ? ORDER BY COMMENT_ID ";
+                        "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  "
+                        + "FROM BLOG_COMMENT WHERE STATUS = ? ORDER BY COMMENT_ID ";
                 prepareStatement = connection.prepareStatement(getComment);
                 prepareStatement.setString(1, "Pending");
             }
 
-                LOGGER.debug("getComment :" + getComment);
-                rs = prepareStatement.executeQuery();
+            LOGGER.debug("getComment :" + getComment);
+            rs = prepareStatement.executeQuery();
 
-                while (rs.next()) {
-                    LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
-                    int commentId = rs.getInt("COMMENT_ID");
-                    String commentStr = rs.getString("COMMENT");
-                    String username = rs.getString("USER_NAME");
-                    String commentOn = rs.getString("COMMENTED_ON");
-                    String blogUrl = rs.getString("BLOG_URL");
-                    String ip = rs.getString("USER_IP_ADDRESS");
-                    JSONObject Comments = new JSONObject();
-                    Comments.put("CommentId", commentId);
-                    Comments.put("Comment", commentStr);
-                    Comments.put("UserName", username);
-                    Comments.put("CommentOn", commentOn);
-                    Comments.put("BlogURL", blogUrl);
-                    Comments.put("IP", ip);
-                    arrayComments.put(Comments);
-                }
-                rs.close();
-
+            while (rs.next()) {
+                LOGGER.debug("COMMENT_ID: " + rs.getInt("COMMENT_ID"));
+                int commentId = rs.getInt("COMMENT_ID");
+                String commentStr = rs.getString("COMMENT");
+                String username = rs.getString("USER_NAME");
+                String commentOn = rs.getString("COMMENTED_ON");
+                String blogUrl = rs.getString("BLOG_URL");
+                String ip = rs.getString("USER_IP_ADDRESS");
+                JSONObject Comments = new JSONObject();
+                Comments.put("CommentId", commentId);
+                Comments.put("Comment", commentStr);
+                Comments.put("UserName", username);
+                Comments.put("CommentOn", commentOn);
+                Comments.put("BlogURL", blogUrl);
+                Comments.put("IP", ip);
+                arrayComments.put(Comments);
+            }
+            rs.close();
 
         } catch (SQLException e) {
-            LOGGER.error("getCommentbyBlogId()", e);            
+            LOGGER.error(GET_COMMENT_BLOGID, e);
 
         } finally {
-            releaseConnection(connection, null, null);
+            releaseConnection(connection, prepareStatement, null);
         }
         return arrayComments;
     }
-    
+
     /**
      * This method returns the blog title for comment approved/rejected
+     * 
      * @param commentid
      * @param path
      * @return
+     * @throws IOException
      */
-    private String getBlogTitle(long commentid,String path) {
+    private String getBlogTitle(long commentid, String path) throws IOException {
         LOGGER.info("getBlogId");
-        
+
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         Properties dbProperties = loadProperties(path);
         Connection connection = null;
-        String titleQuery ="";
-        String blogTitle="";
+        String titleQuery = "";
+        String blogTitle = "";
         try {
-            String userName = dbProperties.getProperty("username");            
-            String password = dbProperties.getProperty("password");
+            String userName = dbProperties.getProperty(USERNAME);
+            String password = dbProperties.getProperty(PASSWORD);
             password = IREncryptionUtil.decrypt(password);
-            connection = DriverManager.getConnection(
-                    getConnectionString(dbProperties), userName, password);
-           
-            titleQuery =                        
-                        "SELECT BLOG_TITLE FROM BLOG_MASTER WHERE BLOG_ID IN (SELECT BLOG_ID FROM BLOG_COMMENT WHERE COMMENT_ID = ? )";
-                prepareStatement = connection.prepareStatement(titleQuery);
-                prepareStatement.setLong(1, commentid);          
-                LOGGER.debug("titleQuery :" + titleQuery);
-                rs = prepareStatement.executeQuery();
+            connection = DriverManager.getConnection(getConnectionString(dbProperties), userName,
+                    password);
 
-                while (rs.next()) {
-                   
-                    blogTitle   =   rs.getString("BLOG_TITLE");              
-                }
-                LOGGER.info("Blog Title " +blogTitle);
-                rs.close();
+            titleQuery = "SELECT BLOG_TITLE FROM BLOG_MASTER WHERE BLOG_ID IN "
+                    + "(SELECT BLOG_ID FROM BLOG_COMMENT WHERE COMMENT_ID = ? )";
+            prepareStatement = connection.prepareStatement(titleQuery);
+            prepareStatement.setLong(1, commentid);
+            LOGGER.debug("titleQuery :" + titleQuery);
+            rs = prepareStatement.executeQuery();
 
+            while (rs.next()) {
+
+                blogTitle = rs.getString("BLOG_TITLE");
+            }
+            LOGGER.info("Blog Title " + blogTitle);
+            rs.close();
 
         } catch (SQLException e) {
-            LOGGER.error("getCommentbyBlogId()", e);            
+            LOGGER.error(GET_COMMENT_BLOGID, e);
 
         } finally {
-            releaseConnection(connection, null, null);
+            releaseConnection(connection, prepareStatement, null);
         }
         return blogTitle;
     }
-    
+
     /**
-     * This method returns the user emailid for mail notification
-     * for the specific comment approved/rejected
+     * This method returns the user emailid for mail notification for the
+     * specific comment approved/rejected
+     * 
      * @param commentid
      * @param path
      * @return
+     * @throws IOException
      */
-    private String getUserEmail(long commentid,String path) {
+    private String getUserEmail(long commentid, String path) throws IOException {
         LOGGER.info("getUserEmail");
-        
+
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         Properties dbProperties = loadProperties(path);
         Connection connection = null;
-        String emailQuery ="";
-        String useremailID="";
+        String emailQuery = "";
+        String useremailID = "";
         try {
-            String userName = dbProperties.getProperty("username");            
-            String password = dbProperties.getProperty("password");
+            String userName = dbProperties.getProperty(USERNAME);
+            String password = dbProperties.getProperty(PASSWORD);
             password = IREncryptionUtil.decrypt(password);
-            connection = DriverManager.getConnection(
-                    getConnectionString(dbProperties), userName, password);
-           
-            emailQuery =                        
-                        "SELECT USER_EMAILID FROM BLOG_COMMENT WHERE COMMENT_ID = ? ";
-                prepareStatement = connection.prepareStatement(emailQuery);
-                prepareStatement.setLong(1, commentid);          
-                LOGGER.debug("titleQuery :" + emailQuery);
-                rs = prepareStatement.executeQuery();
+            connection = DriverManager.getConnection(getConnectionString(dbProperties), userName,
+                    password);
 
-                while (rs.next()) {
-                   
-                    useremailID   =   rs.getString("USER_EMAILID");              
-                }
-                LOGGER.info("User EmailID " +useremailID);
-                rs.close();
+            emailQuery = "SELECT USER_EMAILID FROM BLOG_COMMENT WHERE COMMENT_ID = ? ";
+            prepareStatement = connection.prepareStatement(emailQuery);
+            prepareStatement.setLong(1, commentid);
+            LOGGER.debug("titleQuery :" + emailQuery);
+            rs = prepareStatement.executeQuery();
 
+            while (rs.next()) {
+
+                useremailID = rs.getString("USER_EMAILID");
+            }
+            LOGGER.info("User EmailID " + useremailID);
+            rs.close();
 
         } catch (SQLException e) {
-            LOGGER.error("getCommentbyBlogId()", e);            
+            LOGGER.error(GET_COMMENT_BLOGID, e);
 
         } finally {
-            releaseConnection(connection, null, null);
+            releaseConnection(connection, prepareStatement, null);
         }
         return useremailID;
     }
@@ -421,8 +437,7 @@ public class ReviewComment extends HttpServlet {
         String database = properties.getProperty("database");
         String schema = properties.getProperty("schema");
 
-        connectionStr = "jdbc:" + database + "://" + host + ":" + port
-                + "/" + schema;
+        connectionStr = "jdbc:" + database + "://" + host + ":" + port + "/" + schema;
 
         LOGGER.debug("Connection String : " + connectionStr);
         return connectionStr;
@@ -437,81 +452,79 @@ public class ReviewComment extends HttpServlet {
      * @param rs   ResultSet to be closed
      *
      */
-    public void releaseConnection(Connection con, Statement stmt,
-            ResultSet rs) {
+    public void releaseConnection(Connection con, Statement stmt, ResultSet rs) {
         LOGGER.info("Postgre : releaseConnection()");
         if (con != null) {
             try {
                 con.close();
             } catch (Exception e) {
-                LOGGER.error(
-                        "Postgre : releaseConnection() : connection : ",
-                        e);
+                LOGGER.error("Postgre : releaseConnection() : connection : ", e);
             }
         }
         if (stmt != null) {
             try {
                 stmt.close();
             } catch (Exception e) {
-                LOGGER.error(
-                        "Postgre : releaseConnection() : statement : ", e);
+                LOGGER.error("Postgre : releaseConnection() : statement : ", e);
             }
         }
         if (rs != null) {
             try {
                 rs.close();
             } catch (Exception e) {
-                LOGGER.error(
-                        "Postgre : releaseConnection() : resultset : ", e);
+                LOGGER.error("Postgre : releaseConnection() : resultset : ", e);
             }
         }
     }
 
-      
     /**
-     * This method is used to send notification to user about 
-     * status of his comment submitted for blog
+     * This method is used to send notification to user about status of his
+     * comment submitted for blog
+     * 
      * @param status
      * @param blogtitle
      * @param userEmail
      * @param path
+     * @throws IOException
      */
-    private void sentMailNotification(String status, String blogtitle, 
-            String userEmail, String path) {
-       
-            MimeMessage mailMessage;
-            LOGGER.debug(" status::" + status);
-            LOGGER.debug(" blogtitle::" + blogtitle);            
-            try {
-                mailMessage = createMailMessage(status, blogtitle, userEmail, path);
-                Transport.send(mailMessage);
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
-     
+    private void
+            sentMailNotification(String status, String blogtitle, String userEmail, String path)
+                    throws IOException {
+
+        MimeMessage mailMessage;
+        LOGGER.debug(" status::" + status);
+        LOGGER.debug(" blogtitle::" + blogtitle);
+        try {
+            mailMessage = createMailMessage(status, blogtitle, userEmail, path);
+            Transport.send(mailMessage);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 
     }
 
     /**
      * This method is used to create message to update user comment status
+     * 
      * @param status
      * @param blogtitle
      * @param toEmail
      * @param path
      * @return
      * @throws MessagingException
+     * @throws IOException
      */
-    private MimeMessage createMailMessage(String status, String blogtitle, 
-            String toEmail, String path) throws MessagingException {
+    private MimeMessage
+            createMailMessage(String status, String blogtitle, String toEmail, String path)
+                    throws MessagingException, IOException {
         LOGGER.info("createMailMessage: Enter");
 
         String strBlogName = "<blogname>";
-        String strStatus = "<status>";        
-        Properties propertiesFile =
-                loadProperties(path);
-        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);        
-        LOGGER.debug("sent To :" + toEmail);    
-        
+        String strStatus = "<status>";
+        Properties propertiesFile = loadProperties(path);
+        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
+        LOGGER.debug("sent To :" + toEmail);
+
         String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
         LOGGER.debug("relay IP :" + host);
         String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
@@ -523,27 +536,25 @@ public class ReviewComment extends HttpServlet {
         Session session = Session.getDefaultInstance(props, null);
         session.setDebug(true);
         MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(from));        
-        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));       
-        
+        msg.setFrom(new InternetAddress(from));
+        msg.setRecipient(Message.RecipientType.TO, new InternetAddress(toEmail));
+
         subject = propertiesFile.getProperty("statusmessageSubject");
         LOGGER.debug("subject :" + subject);
         StringBuilder sb = new StringBuilder();
-        sb.append(
-                propertiesFile.getProperty("statusMessageBody").replace(strStatus, status));
-        
-            LOGGER.debug("SuccessMessageBody :" +sb.toString());
-        
-            LOGGER.debug("before subject :" );
-            msg.setSubject(subject.replace(strBlogName, blogtitle));
-            LOGGER.debug("after subject :" );
-            msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
-      
+        sb.append(propertiesFile.getProperty("statusMessageBody").replace(strStatus, status));
+
+        LOGGER.debug("SuccessMessageBody :" + sb.toString());
+
+        LOGGER.debug("before subject :");
+        msg.setSubject(subject.replace(strBlogName, blogtitle));
+        LOGGER.debug("after subject :");
+        msg.setContent(sb.toString(), "text/html;Charset=UTF-8");
 
         LOGGER.debug("msg:" + sb.toString());
         return msg;
-    } 
-    
+    }
+
     /**
      * This method will be used to load the configuration properties.
      *
@@ -552,26 +563,18 @@ public class ReviewComment extends HttpServlet {
      * @throws MalformedURLException
      *
      */
-    private Properties loadProperties(final String Propfilepath) {
+    private Properties loadProperties(final String Propfilepath) throws IOException {
         LOGGER.info("Loading Properties File from Request Context.");
         Properties propFile = new Properties();
         if (Propfilepath != null && !Propfilepath.equals("")) {
             String root = Propfilepath;
-            InputStream inputStream;
-            try {
-                inputStream = new FileInputStream(root);
+            try (InputStream inputStream = new FileInputStream(root)) {
                 if (inputStream != null) {
                     propFile.load(inputStream);
                     LOGGER.info("Properties File Loaded");
                 }
             } catch (MalformedURLException e) {
-                LOGGER.error(
-                        "Malformed URL Exception while loading Properties file : ",
-                        e);
-            } catch (IOException e) {
-                LOGGER.error(
-                        "IO Exception while loading Properties file : ",
-                        e);
+                LOGGER.error("Malformed URL Exception while loading Properties file : ", e);
             }
 
         } else {

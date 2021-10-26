@@ -51,6 +51,9 @@ public class ContactUsExternal {
     private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
     /** initialization of success variable. */
     private static final String STATUS_SUCCESS = "success";
+    /** initialization of senderEmail variable. */
+    private static final String SENDER_EMAIL = "senderEmail";
+    
     /** object creation of ContactEmail. */
     private ContactEmail email = new ContactEmail();
 
@@ -77,9 +80,10 @@ public class ContactUsExternal {
         ValidationErrorList errorList = new ValidationErrorList();
         LOGGER.debug("action:" + action);
 
-        validData  = ESAPI.validator().getValidInput(CONTACT_ACTION, action, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        validData = ESAPI.validator().getValidInput(CONTACT_ACTION, action, ESAPIValidator.ALPHABET,
+                20, false, true, errorList);
         if(errorList.isEmpty()) {
-
+            LOGGER.debug("ERROR LIST IS EMPTY");
         }else {
             LOGGER.debug(errorList.getError(CONTACT_ACTION));
             status = STATUS_FIELD_VALIDATION;
@@ -90,7 +94,7 @@ public class ContactUsExternal {
             LOGGER.debug("page:" + context.getParameterString("page"));
 
             senderName = context.getParameterString("senderName");
-            senderEmail = context.getParameterString("senderEmail");
+            senderEmail = context.getParameterString(SENDER_EMAIL);
             emailSubject = context.getParameterString("emailSubject");
             emailText = context.getParameterString("emailText");
             gRecaptchaResponse = context.getParameterString("captcha");
@@ -129,8 +133,6 @@ public class ContactUsExternal {
             final String senderEmail, final String emailText,
             final String emailSubject) {
         String validData="";
-        String CONTACT_ACTION = "action";
-        ValidationUtils util = new ValidationUtils();
         ValidationErrorList errorList = new ValidationErrorList();
         XssUtils xssUtils = new XssUtils();
         LOGGER.info("setValueToContactModel: Enter");
@@ -142,18 +144,15 @@ public class ContactUsExternal {
                 return false;
             }
 
-            validData  = ESAPI.validator().getValidInput("senderEmail", senderEmail, ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SENDER_EMAIL, senderEmail,
+                    ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 email.setSenderEmail(senderEmail);
             }else {
-                LOGGER.debug(errorList.getError("senderEmail"));
+                LOGGER.debug(errorList.getError(SENDER_EMAIL));
                return false;
             }
-            /*
-             * if (senderEmail.length() <= 50 && util
-             * .validateEmailId(xssUtils.stripXSS(senderEmail))) {
-             * email.setSenderEmail(senderEmail); } else { return false; }
-             */
+            
             if (emailText.length() <= 2500) {
                 email.setEmailText(xssUtils.stripXSS(emailText));
             } else {
@@ -252,7 +251,8 @@ public class ContactUsExternal {
         PreparedStatement prepareStatement = null;
         String query = "";
         LOGGER.info("ContactUs : insert");
-        query = "INSERT INTO CONTACT_US_SERVICE (NAME,EMAIL_ADDRESS,QUESTIONS_AND_FEEDBACK,INQUIRY_TYPE,SEND_DATE) VALUES(?,?,?,?,LOCALTIMESTAMP)";
+        query = "INSERT INTO CONTACT_US_SERVICE (NAME,EMAIL_ADDRESS,QUESTIONS_AND_FEEDBACK,"
+                + "INQUIRY_TYPE,SEND_DATE) VALUES(?,?,?,?,LOCALTIMESTAMP)";
         try {
             connection = objPostgre.getConnection();
             prepareStatement = connection.prepareStatement(query);

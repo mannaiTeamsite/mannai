@@ -2,6 +2,7 @@ package com.hukoomi.livesite.servlet;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -107,16 +108,16 @@ public class QueryTicket extends HttpServlet {
      *
      */
     private static Properties
-            loadProperties(final String propertiesFileName) {
+            loadProperties(final String propertiesFileName) throws IOException {
         LOGGER.info("Loading Properties File from Request Context.");
         Properties propFile = new Properties();
         if (propertiesFileName != null && !propertiesFileName.equals("")) {
             String root =
                     "/usr/opentext/LiveSiteDisplayServices/runtime/web/iw/config/properties";
-            InputStream inputStream;
-            try {
-                inputStream = new FileInputStream(
-                        root + "/" + propertiesFileName);
+            
+                try(InputStream inputStream = new FileInputStream(
+            root + "/" + propertiesFileName)) {
+                
                 propFile.load(inputStream);
                 LOGGER.info("Properties File Loaded");
             } catch (MalformedURLException e) {

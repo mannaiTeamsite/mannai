@@ -107,8 +107,7 @@ public class MySql {
     public Connection getConnection() {
         logger.debug("MySql : getConnection()");
         // Creating Connection
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
+        try {            
             con = DriverManager.getConnection(connectionString, userName,
                     password);
         } catch (Exception e) {

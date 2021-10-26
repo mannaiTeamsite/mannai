@@ -76,10 +76,9 @@ public class PostgreForServlet {
         Properties propFile = new Properties();
         if (propertiesFileName != null && !propertiesFileName.equals("")) {
             String root = "/usr/opentext/LiveSiteDisplayServices/runtime/web/iw/config/properties";
-            InputStream inputStream;
-            try {
-                inputStream = new FileInputStream(
-                        root + "/" + propertiesFileName);
+            
+            try(InputStream inputStream = new FileInputStream(
+                    root + "/" + propertiesFileName)) {                
                 propFile.load(inputStream);
                 logger.info("Properties File Loaded");
             } catch (MalformedURLException e) {

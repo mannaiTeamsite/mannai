@@ -71,6 +71,7 @@ public class NewsletterUnsubscription extends HttpServlet{
     /** confirmed status constant. */
     private static final String STATUS_CONFIRMED = "Confirmed";
 
+    @Override
     public void doGet(HttpServletRequest request,
             HttpServletResponse response)
             throws IOException, ServletException {
@@ -84,7 +85,7 @@ public class NewsletterUnsubscription extends HttpServlet{
         String token = request.getParameter("token");
         String pageLang = request.getParameter("lang");
         String unsubReason = request
-                .getParameter("unsubreason");
+                .getParameter(UNSUBSCRIBE_REASON);
         String status="";
         logger.debug("token "+token+" lang "+pageLang+" unsubReason "+unsubReason);  
         RequestDispatcher rd = request
@@ -189,7 +190,7 @@ public class NewsletterUnsubscription extends HttpServlet{
             
         }
         if(syncStatus.equals(STATUS_SUCCESS)) {
-            tokenStatusUpdate = updateTokenStatus(token,
+            updateTokenStatus(token,
                     STATUS_CONFIRMED);
         }
 

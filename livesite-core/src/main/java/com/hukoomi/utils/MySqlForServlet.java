@@ -73,10 +73,9 @@ public class MySqlForServlet {
         Properties propFile = new Properties();
         if (propertiesFileName != null && !propertiesFileName.equals("")) {
             String root = "/usr/opentext/LiveSiteDisplayServices/runtime/web/iw/config/properties";
-            InputStream inputStream;
-            try {
-                inputStream = new FileInputStream(
-                        root + "/" + propertiesFileName);
+            
+            try(InputStream inputStream = new FileInputStream(
+                    root + "/" + propertiesFileName) ) {              
                 propFile.load(inputStream);
                 logger.info("Properties File Loaded");
             } catch (MalformedURLException e) {
@@ -130,8 +129,7 @@ public class MySqlForServlet {
     public Connection getConnection() {
         logger.info("MySqlForServlet : getConnection()");
         // Creating Connection
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
+        try {            
             con = DriverManager.getConnection(connectionString, userName,
                     password);
         } catch (Exception e) {

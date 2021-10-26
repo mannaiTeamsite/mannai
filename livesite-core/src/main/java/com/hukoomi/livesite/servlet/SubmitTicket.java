@@ -661,10 +661,10 @@ public class SubmitTicket extends HttpServlet {
         if (propertiesFileName != null && !propertiesFileName.equals("")) {
             String root =
                     "/usr/opentext/LiveSiteDisplayServices/runtime/web/iw/config/properties";
-            InputStream inputStream;
-            try {
-                inputStream = new FileInputStream(
-                        root + "/" + propertiesFileName);
+            
+            try(InputStream inputStream= new FileInputStream(
+                    root + "/" + propertiesFileName)) {
+                
                 propFile.load(inputStream);
                 LOGGER.info("Properties File Loaded");
             } catch (MalformedURLException e) {
