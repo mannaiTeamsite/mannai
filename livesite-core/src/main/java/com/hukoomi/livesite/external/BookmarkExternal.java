@@ -243,7 +243,7 @@ UserInfoSession ui = new UserInfoSession();
                 resultSet = prepareStatement.executeQuery();
                 String pageTitle = "";
                 String pageURL="";
-           int i=0;
+
                 while(resultSet.next()){
                     Element ele = bookmarkResultEle.addElement("bookmarkDetails");
                     pageTitle = resultSet.getString(1);
@@ -267,7 +267,7 @@ UserInfoSession ui = new UserInfoSession();
                         ele6.setText(categoryType);
                         logger.info("Result:" + pageTitle+":"+pageURL);
                     }
-                    i++;
+
                 }
             }
         } catch (SQLException ex) {

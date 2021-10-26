@@ -22,6 +22,9 @@ public class HukoomiExternal {
 	public static final String DEFAULT_QUERY = "*:*";
 	/** Constant for cookie name. */
 	private static final String DEFAULT_COOKIE = "persona";
+	private static final String FIELDQUERY_CONSTANT = "fieldQuery";
+	private static final String BASEQUERY_CONSTANT = "baseQuery";
+	private static final String CORRECTWORD_CONSTANT = "CorrectedWord";
 
 	/**
 	 * This method will be called from Component External for solr Content fetching.
@@ -35,8 +38,8 @@ public class HukoomiExternal {
 		SolrQueryBuilder sqb = new SolrQueryBuilder(context);
 		CommonUtils commonUtils = new CommonUtils();
 		String fieldQuery = "";
-		String fq = commonUtils.sanitizeSolrQuery(context.getParameterString("fieldQuery", ""));
-		context.setParameterString("fieldQuery", fq);
+		String fq = commonUtils.sanitizeSolrQuery(context.getParameterString(FIELDQUERY_CONSTANT, ""));
+		context.setParameterString(FIELDQUERY_CONSTANT, fq);
 		try {
 			fieldQuery = URLDecoder.decode(fq, "UTF-8");
 			logger.debug("fieldQuery Query : " + fieldQuery);
@@ -52,7 +55,7 @@ public class HukoomiExternal {
 			} else {
 				fieldQuery = "category:" + category;
 			}
-			logger.debug("fieldQuery : " + fieldQuery);
+			logger.debug(FIELDQUERY_CONSTANT+": " + fieldQuery);
 			sqb.addFieldQuery(fieldQuery);
 		}
 
@@ -108,16 +111,16 @@ public class HukoomiExternal {
 		Document doc;
 		doc = squ.doJsonQuery(query, "SolrResponse", true);
 		Element root = doc.getRootElement();
-		logger.info("Context FieldQuery: " + context.getParameterString("fieldQuery"));
-		logger.info("Context BaseQuery: " + context.getParameterString("baseQuery"));
+		logger.info("Context FieldQuery: " + context.getParameterString(FIELDQUERY_CONSTANT));
+		logger.info("Context BaseQuery: " + context.getParameterString(BASEQUERY_CONSTANT));
 		logger.info("Current FieldQuery: " + fq);
 		logger.info("Current Category: " + category);
-		String correctedWord = context.getParameterString("baseQuery");
-		if(root.element("CorrectedWord") != null && StringUtils.isNotBlank(root.element("CorrectedWord").getText())){
+		String correctedWord = context.getParameterString(BASEQUERY_CONSTANT);
+		if(root.element(CORRECTWORD_CONSTANT) != null && StringUtils.isNotBlank(root.element(CORRECTWORD_CONSTANT).getText())){
 			logger.info("Word has been corrected in Portal Core");
-			correctedWord = root.element("CorrectedWord").getText();
+			correctedWord = root.element(CORRECTWORD_CONSTANT).getText();
 			logger.debug("Corrected word: " + correctedWord);
-			context.setParameterString("baseQuery", correctedWord);
+			context.setParameterString(BASEQUERY_CONSTANT, correctedWord);
 		}
 		Document nutchDoc = null;
 
@@ -132,7 +135,7 @@ public class HukoomiExternal {
 
 		if (root != null && root.isRootElement()) {
 			root.addElement("category").addText(category);
-			String baseQuery = commonUtils.sanitizeSolrQuery(context.getParameterString("baseQuery"));
+			String baseQuery = commonUtils.sanitizeSolrQuery(context.getParameterString(BASEQUERY_CONSTANT));
 			String arabicRegEx = "^[a-zA-Z-_0-9.@\\/\\u0621-\\u064A\\u0660-\\u0669 ]+$";
 			if(!baseQuery.matches(arabicRegEx)){
 				baseQuery = ESAPI.encoder().encodeForHTML(baseQuery);
@@ -143,8 +146,8 @@ public class HukoomiExternal {
 			}
 			logger.info("Sanitized BaseQuery: " + baseQuery);
 			logger.info("Sanitized FieldQuery: " + sanitizedFieldQuery);
-			root.addElement("baseQuery").addText(baseQuery);
-			root.addElement("fieldQuery").addText(sanitizedFieldQuery);
+			root.addElement(BASEQUERY_CONSTANT).addText(baseQuery);
+			root.addElement(FIELDQUERY_CONSTANT).addText(sanitizedFieldQuery);
 			if (nutchDoc != null && nutchDoc.getRootElement() != null) {
 					root.add(nutchDoc.getRootElement());
 			}
@@ -154,8 +157,6 @@ public class HukoomiExternal {
 		
 		UserInfoSession inf = new UserInfoSession();		
 		doc = inf.getUserData(context, doc);
-//		logger.info("Document" + doc.asXML());
-
 		return doc;
 
 	}
