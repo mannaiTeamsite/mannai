@@ -1,8 +1,5 @@
 package com.hukoomi.livesite.external;
 
-
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
@@ -17,45 +14,39 @@ import com.interwoven.livesite.runtime.RequestContext;
 
 
 public class ErrorExternal {
-	private Properties properties = null;
-	 private final static Logger logger = Logger.getLogger(ErrorExternal.class);
 	
+	private static final Logger logger = Logger.getLogger(ErrorExternal.class);	
+	private String errStatus = "error_code";
+	
+	 @SuppressWarnings("deprecation")
 	public Document errorData(final RequestContext context) {
 		logger.info("ErrorExternal : errorData ---- Started");
+		Properties properties = null;
 		try {
 		final String COMPONENT_TYPE = "componentType";
 		final String LOCALE = "locale";
-		final String STATUS = "error_code";
+		
 		RequestHeaderUtils req = new RequestHeaderUtils(context);
 		
 		 String compType = context.getParameterString(COMPONENT_TYPE); 
-		 
-		 String contentPage = req.getReferer(); 
+		 CommonUtils cu = new CommonUtils();
+		 String contentPage = cu.getUrlPath(req.getReferer()); 
 		 PropertiesFileReader prop = null;
 			prop = new PropertiesFileReader(context, "error.properties");
 			properties = prop.getPropertiesFile();
-			String errorPageEn=properties.getProperty("errorPageEn");
-	        String errorPageAr=properties.getProperty("errorPageAr");
+			String errorPageEn=properties.getProperty("errorPageEn","/en/error.page");
+	        String errorPageAr=properties.getProperty("errorPageAr","/ar/error.page");
 	        
-	        String brokenLink = req.getRequestURL();
-	        try {
-				 brokenLink = (new URL(brokenLink)).getPath();
-		        } catch (MalformedURLException e) {
-		          logger.error("Exception occured while getting url path",e);
-		        } 
+	        String brokenLink = cu.getUrlPath(req.getRequestURL());
+	        
  
 		if(compType.equalsIgnoreCase("Banner") && context.isRuntime() && !contentPage.isBlank() && !brokenLink.equalsIgnoreCase(errorPageEn) && !brokenLink.equalsIgnoreCase(errorPageAr))
 		{			
 		 String language = context.getParameterString(LOCALE);
-			 String statusCode = context.getParameterString(STATUS);
+			 String statusCode = context.getParameterString(errStatus);
 	        String errorURLStr =properties.getProperty("urls");
 	        logger.info("urls  "+errorURLStr);
-	        	try {
-					 contentPage = (new URL(contentPage)).getPath();
-			        } catch (MalformedURLException e) {
-			         logger.error("Exception occured while getting url path",e);
-			        } 
-				
+	        	
 				 int count = 0;
 				if(!errorURLStr.isBlank()) {
 				   String[] urlsArray = errorURLStr.split(",");
@@ -67,47 +58,44 @@ public class ErrorExternal {
 					   }					    
 					 }
 				}
-				 				 
-				
+				 							
 				if(count == 0) { 
-				 CommonUtils cu = new CommonUtils(context);
+				
 				 String urlPrefix = cu.getURLPrefix(context);
 				 contentPage = urlPrefix + contentPage;
 				 brokenLink = urlPrefix + brokenLink;
-				 
-			
+				 		
 					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
 				}			 
 		}}catch(Exception e) {
 			logger.error("Exception occured did not log in db" , e);
-		}
-		
-		Document doc = getErrorDCRContent(context);  
-	
-		
+		}		
+		Document doc = getErrorDCRContent(context);  			
         logger.info("ErrorExternal : errorData ---- Ended");
 		return doc;		
 	}
-
+	 
+	
+	 @SuppressWarnings("deprecation")
 	public Document getStatus(final RequestContext context) {
 		logger.info("ErrorExternal : getStatus ---- Started");              
         Document doc = DocumentHelper.createDocument();    
         Element statusElement = doc.addElement("status");
 		CommonUtils cu = new CommonUtils(context);
-		statusElement.setText(cu.sanitizeSolrQuery(context.getParameterString("error_code")));
+		statusElement.setText(cu.sanitizeSolrQuery(context.getParameterString(errStatus)));
         logger.info("ErrorExternal : getStatus ---- Ended");
 		return doc;		
 	}
 	
-	
+	 @SuppressWarnings("deprecation")
 	public Document getErrorDCRContent(RequestContext reqcontext) {
         logger.info("Fetching Error DCR Content");
-        final String STATUS = "error_code";
+        
         final String GENERAL_ERROR = "general_error";
         Document doc = DocumentHelper.createDocument();
         Element root = doc.addElement("content");
 		CommonUtils cu = new CommonUtils(reqcontext);
-        String status = cu.sanitizeSolrQuery(reqcontext.getParameterString(STATUS));
+        String status = cu.sanitizeSolrQuery(reqcontext.getParameterString(errStatus));
         String generalError = cu.sanitizeSolrQuery(reqcontext.getParameterString(GENERAL_ERROR));
         Element statusElement = root.addElement("status");
       		statusElement.setText(status);
