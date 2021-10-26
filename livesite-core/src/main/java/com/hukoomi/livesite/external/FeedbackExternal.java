@@ -1,20 +1,14 @@
 package com.hukoomi.livesite.external;
 
-import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.Postgre;
-import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
-import org.apache.commons.lang.WordUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.hukoomi.utils.GoogleRecaptchaUtil;
@@ -25,9 +19,6 @@ import javax.servlet.http.HttpSession;
 public class FeedbackExternal {
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
-    private static final String STATUS_SUCCESS = "success";
-    private boolean verify = false;
-
     private String locale = "";
     private String userID = "";
     private String pagePath = "";
@@ -35,81 +26,37 @@ public class FeedbackExternal {
     private String persona = "";
     private String optSelected = "";
     private String feedback = "";
-    private String feedbackDate = "";
     private String topic = "";
     private String entity = "";
-    private String gRecaptchaResponse = null;
     private String table = "";
-    private int topSearchLimit;
     private static final Logger logger = Logger.getLogger(FeedbackExternal.class);
 
     Postgre postgre = null;
 
     public Document insertFeedback(final RequestContext context) {
+        boolean verify = false;
+        String gRecaptchaResponse = null;
         logger.info("insertFeedback()====> Starts");
-        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
-        CommonUtils commonUtils = new CommonUtils();
         Document feedbackDoc = DocumentHelper.createDocument();
-        String status="valid";
         postgre = new Postgre(context);
         gRecaptchaResponse = context.getParameterString("captcha");
         HttpSession session = context.getRequest().getSession(true);
-        status=(String) session.getAttribute("status");
+        String status=(String) session.getAttribute("status");
         logger.info("status="+status);
         if(status!=null && status.equals("valid")) {
             userID = (String) session.getAttribute("uid");
         }
-        if(userID=="")
-        {
-            userID=null;
-        }
         logger.info("userID:" + userID);
         locale = context.getParameterString("locale").trim().toLowerCase();
-        if(locale=="")
-        {
-            locale=null;
-        }
         pagePath = context.getParameterString("pagePath");
-        if(pagePath=="")
-        {
-            pagePath=null;
-        }
         moduleName = context.getParameterString("moduleName");
-        if(moduleName=="")
-        {
-            moduleName=null;
-        }
         persona = context.getParameterString("persona");
-        if(persona=="")
-        {
-            persona=null;
-        }
         optSelected = context.getParameterString("optSelected");
-        if(optSelected=="")
-        {
-            optSelected=null;
-        }
         feedback = context.getParameterString("feedback");
-        if(feedback=="")
-        {
-            feedback=null;
-        }
-        feedbackDate = context.getParameterString("feedbackDate");
-
         topic = context.getParameterString("topic");
-        if(topic=="")
-        {
-            topic=null;
-        }
         entity = context.getParameterString("entity");
-        if(entity=="")
-        {
-            entity=null;
-        }
         table = context.getParameterString("feedback_content").trim();
-
         logger.info("locale:" + locale);
-
         logger.info("table:" + table);
         GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
         verify = captchUtil.validateCaptcha(context,
