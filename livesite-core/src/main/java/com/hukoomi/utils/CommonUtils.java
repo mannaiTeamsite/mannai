@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -627,7 +629,14 @@ public class CommonUtils {
           return insertResponse;
     }
       
-      
+      public String getUrlPath(String url) {
+    	  try {
+    		  url = (new URL(url)).getPath();
+ 	        } catch (MalformedURLException e) {
+ 	        	 this.logger.debug(e);
+ 	        } 
+    	  return url;
+      }
      
      
 }

@@ -29,7 +29,8 @@ public class LastViewedExternal {
     private String contenttype = "";
     private String table = "";
     private String category = "";
-
+    private static final String LOCALE_CONSTANT = "locale";
+    private static final String CATEGORY_CONSTANT = "category";
     private static final Logger logger = Logger.getLogger(LastViewedExternal.class);
     Postgre postgre = null;
 
@@ -45,15 +46,15 @@ UserInfoSession ui = new UserInfoSession();
 		HttpSession session = context.getRequest().getSession();
 		String valid = ui.getStatus(context);
 		if(valid.equalsIgnoreCase("valid")) {
-            userID = (String) session.getAttribute("uid");;
+            userID = (String) session.getAttribute("uid");
             logger.info("userID:" + userID);
 
-            locale = context.getParameterString("locale").trim().toLowerCase();
+            locale = context.getParameterString(LOCALE_CONSTANT).trim().toLowerCase();
             pagetitle = context.getParameterString("page_title");
             pagedescription = context.getParameterString("page_description");
             pageurl = context.getParameterString("page_url");
             contenttype = context.getParameterString("content_type");
-            category = context.getParameterString("category");
+            category = context.getParameterString(CATEGORY_CONSTANT);
             String queryType = context.getParameterString("queryType").trim();
             table = context.getParameterString("last_viewed").trim();
             boolean isExist = false;
@@ -129,9 +130,9 @@ UserInfoSession ui = new UserInfoSession();
         }
 
         if (!ESAPIValidator.checkNull(locale)) {
-            locale  = ESAPI.validator().getValidInput("locale", locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+            locale  = ESAPI.validator().getValidInput(LOCALE_CONSTANT, locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("locale"));
+                logger.info(errorList.getError(LOCALE_CONSTANT));
                 logger.error("Not a valid parameter locale. The incident will not be logged.");
                 return 0;
             }
@@ -155,9 +156,9 @@ UserInfoSession ui = new UserInfoSession();
             }
         }
         if (!ESAPIValidator.checkNull(category)) {
-            category  = ESAPI.validator().getValidInput("category", category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            category  = ESAPI.validator().getValidInput(CATEGORY_CONSTANT, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("category"));
+                logger.info(errorList.getError(CATEGORY_CONSTANT));
                 logger.error("Not a valid parameter category. The incident will not be logged.");
                 return 0;
             }
@@ -238,7 +239,7 @@ UserInfoSession ui = new UserInfoSession();
                         ele3.setText(pagedesc);
                         Element ele5 = ele.addElement("contentType");
                         ele5.setText(ctype);
-                        Element ele6 = ele.addElement("category");
+                        Element ele6 = ele.addElement(CATEGORY_CONSTANT);
                         ele6.setText(categoryType);
                         logger.info("Result:" + pageTitle+":"+pageURL);
                     }

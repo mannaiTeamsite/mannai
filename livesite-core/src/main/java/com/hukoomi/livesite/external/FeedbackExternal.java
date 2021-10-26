@@ -1,23 +1,20 @@
 package com.hukoomi.livesite.external;
 
-import com.hukoomi.utils.CommonUtils;
+import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.Postgre;
-import com.hukoomi.utils.RequestHeaderUtils;
 import com.interwoven.livesite.runtime.RequestContext;
-import org.apache.commons.lang.WordUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.hukoomi.utils.GoogleRecaptchaUtil;
+import org.owasp.esapi.ESAPI;
+import org.owasp.esapi.ValidationErrorList;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,9 +22,6 @@ import javax.servlet.http.HttpSession;
 public class FeedbackExternal {
     private static final String STATUS_ERROR_RECAPTHCHA =
             "errorInRecaptcha";
-    private static final String STATUS_SUCCESS = "success";
-    private boolean verify = false;
-
     private String locale = "";
     private String userID = "";
     private String pagePath = "";
@@ -35,81 +29,44 @@ public class FeedbackExternal {
     private String persona = "";
     private String optSelected = "";
     private String feedback = "";
-    private String feedbackDate = "";
     private String topic = "";
     private String entity = "";
-    private String gRecaptchaResponse = null;
     private String table = "";
-    private int topSearchLimit;
+    private static final String LOCALE_CONSTANT = "locale";
+    private static final String PAGEPATH_CONSTANT = "pagePath";
+    private static final String MODULE_CONSTANT = "moduleName";
+    private static final String PERSONA_CONSTANT = "persona";
+    private static final String OPT_CONSTANT = "optSelected";
+    private static final String TOPIC_CONSTANT = "topic";
+    private static final String ENTITY_CONSTANT = "entity";
     private static final Logger logger = Logger.getLogger(FeedbackExternal.class);
 
     Postgre postgre = null;
 
     public Document insertFeedback(final RequestContext context) {
+        boolean verify = false;
+        String gRecaptchaResponse = null;
         logger.info("insertFeedback()====> Starts");
-        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
-        CommonUtils commonUtils = new CommonUtils();
         Document feedbackDoc = DocumentHelper.createDocument();
-        String status="valid";
         postgre = new Postgre(context);
         gRecaptchaResponse = context.getParameterString("captcha");
         HttpSession session = context.getRequest().getSession(true);
-        status=(String) session.getAttribute("status");
+        String status=(String) session.getAttribute("status");
         logger.info("status="+status);
         if(status!=null && status.equals("valid")) {
             userID = (String) session.getAttribute("uid");
         }
-        if(userID=="")
-        {
-            userID=null;
-        }
         logger.info("userID:" + userID);
-        locale = context.getParameterString("locale").trim().toLowerCase();
-        if(locale=="")
-        {
-            locale=null;
-        }
-        pagePath = context.getParameterString("pagePath");
-        if(pagePath=="")
-        {
-            pagePath=null;
-        }
-        moduleName = context.getParameterString("moduleName");
-        if(moduleName=="")
-        {
-            moduleName=null;
-        }
-        persona = context.getParameterString("persona");
-        if(persona=="")
-        {
-            persona=null;
-        }
-        optSelected = context.getParameterString("optSelected");
-        if(optSelected=="")
-        {
-            optSelected=null;
-        }
+        locale = context.getParameterString(LOCALE_CONSTANT).trim().toLowerCase();
+        pagePath = context.getParameterString(PAGEPATH_CONSTANT);
+        moduleName = context.getParameterString(MODULE_CONSTANT);
+        persona = context.getParameterString(PERSONA_CONSTANT);
+        optSelected = context.getParameterString(OPT_CONSTANT);
         feedback = context.getParameterString("feedback");
-        if(feedback=="")
-        {
-            feedback=null;
-        }
-        feedbackDate = context.getParameterString("feedbackDate");
-
-        topic = context.getParameterString("topic");
-        if(topic=="")
-        {
-            topic=null;
-        }
-        entity = context.getParameterString("entity");
-        if(entity=="")
-        {
-            entity=null;
-        }
+        topic = context.getParameterString(TOPIC_CONSTANT);
+        entity = context.getParameterString(ENTITY_CONSTANT);
         table = context.getParameterString("feedback_content").trim();
-
         logger.info("locale:" + locale);
-
         logger.info("table:" + table);
         GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
         verify = captchUtil.validateCaptcha(context,
@@ -142,6 +99,71 @@ public class FeedbackExternal {
 
     private int insertFeedback() {
         logger.info("insertFeedback()====> Starts");
+        ValidationErrorList errorList = new ValidationErrorList();
+        if (!ESAPIValidator.checkNull(locale)) {
+            locale  = ESAPI.validator().getValidInput(LOCALE_CONSTANT, locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError(LOCALE_CONSTANT));
+                logger.error("Not a valid parameter locale. The incident will not be logged.");
+                return 0;
+            }
+        }
+        if (!ESAPIValidator.checkNull(pagePath)) {
+            pagePath  = ESAPI.validator().getValidInput(PAGEPATH_CONSTANT, pagePath, ESAPIValidator.URL, 255, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError(PAGEPATH_CONSTANT));
+                logger.error("Not a valid parameter page-path. The incident will not be logged.");
+                return 0;
+            }
+        }
+        if (!ESAPIValidator.checkNull(moduleName)) {
+            moduleName  = ESAPI.validator().getValidInput(MODULE_CONSTANT, moduleName, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError(MODULE_CONSTANT));
+                logger.error("Not a valid parameter Module-name. The incident will not be logged.");
+                return 0;
+            }
+        }
+        if (!ESAPIValidator.checkNull(persona)) {
+            persona  = ESAPI.validator().getValidInput(PERSONA_CONSTANT, persona, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError(PERSONA_CONSTANT));
+                logger.error("Not a valid parameter persona. The incident will not be logged.");
+                return 0;
+            }
+        }
+        if (!ESAPIValidator.checkNull(optSelected)) {
+            optSelected  = ESAPI.validator().getValidInput(OPT_CONSTANT, optSelected, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError(OPT_CONSTANT));
+                logger.error("Not a valid parameter option selected. The incident will not be logged.");
+                return 0;
+            }
+        }
+        if (!ESAPIValidator.checkNull(topic)) {
+            topic  = ESAPI.validator().getValidInput(TOPIC_CONSTANT, topic, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError(TOPIC_CONSTANT));
+                logger.error("Not a valid parameter topic. The incident will not be logged.");
+                return 0;
+            }
+        }
+        if (!ESAPIValidator.checkNull(entity)) {
+            entity  = ESAPI.validator().getValidInput(ENTITY_CONSTANT, entity, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError(ENTITY_CONSTANT));
+                logger.error("Not a valid parameter entity. The incident will not be logged.");
+                return 0;
+            }
+        }
+        if (!ESAPIValidator.checkNull(userID)) {
+            userID  = ESAPI.validator().getValidInput("userID", userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
+            if(!errorList.isEmpty()) {
+                logger.info(errorList.getError("userID"));
+                logger.error("Not a valid parameter userID. The incident will not be logged.");
+                return 0;
+            }
+        }
         int result = 0;
         Connection connection = null;
         PreparedStatement prepareStatement = null;
