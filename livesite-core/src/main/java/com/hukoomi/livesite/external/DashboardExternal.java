@@ -1,13 +1,15 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
-
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -34,29 +36,12 @@ public class DashboardExternal {
 	private String locale = "";
 	private String userID = "";
 	private String table = "";
+
 	private String pagetitle = "";
+
 	private String pageurl = "";
+	private String isBookmarked = "";
 	private String contenttype = "";
-	
-	private String strValid = "valid";
-	private String strStatus = "status";
-	private String strUnm = "unm";
-	private String strFnEn = "fnEn";
-	private String strUid = "uid";
-	private String strFnAr = "fnAr";
-	private String strLnEn = "lnEn";
-	private String strLnAr = "lnAr";
-	private String strQID = "QID";
-	private String strEID = "EID";
-	private String strMobile = "mobile";
-	private String strEmail = "email";
-	private String strLstMdfy = "lstMdfy";
-	private String strRole = "role";
-	private String strExp = "exp";
-	private String strType = "type";
-	private String strUserId = "userId";
-	private String strUsertypeNo = "usertypeNo";
-	private String strUserType = "userType";
 
 	private static final Logger LOGGER = Logger.getLogger(DashboardExternal.class);
 	Postgre postgre = null;
@@ -70,7 +55,7 @@ public class DashboardExternal {
 			try {
 				jwtParsedToken = jwt.parseJwt(accessToken);
 
-				setSessionAttributes(jwtParsedToken, request, strValid);
+				setSessionAttributes(jwtParsedToken, request, "valid");
 				
 				
 			} catch (ExpiredJwtException e) {
@@ -80,8 +65,8 @@ public class DashboardExternal {
 				LOGGER.error("Signature Exception");
 				setSessionAttributes(jwtParsedToken, request, "Signature Exception");
 			} catch (Exception e) {
-				LOGGER.error("Some other exception in JWT parsing" , e);
-				setSessionAttributes(jwtParsedToken, request, "Exception in JWT parsing");
+				LOGGER.error("Some other exception in JWT parsing" + e);
+				setSessionAttributes(jwtParsedToken, request, "Some other exception in JWT parsing");
 			}
 
 		}
@@ -93,32 +78,32 @@ public class DashboardExternal {
 	
 		HttpSession session = request.getSession(true);
 
-		session.setAttribute(strStatus, status);
-		if (status.equals(strValid)) {
-			session.setAttribute(strUnm, getValue(jwtParsedToken, strUnm));
-			session.setAttribute(strUid, getValue(jwtParsedToken, strUid));
-			session.setAttribute(strFnEn, getValue(jwtParsedToken, strFnEn));
-			session.setAttribute(strFnAr, getValue(jwtParsedToken, strFnAr));
-			session.setAttribute(strLnEn, getValue(jwtParsedToken, strLnEn));
-			session.setAttribute(strLnAr, getValue(jwtParsedToken, strLnAr));
-			session.setAttribute(strQID, getValue(jwtParsedToken, strQID));
-			session.setAttribute(strEID, getValue(jwtParsedToken, strEID));
-			session.setAttribute(strMobile, getValue(jwtParsedToken, strMobile));
-			session.setAttribute(strEmail, getValue(jwtParsedToken, strEmail));
-			session.setAttribute(strLstMdfy, getValue(jwtParsedToken, strLstMdfy));
-			session.setAttribute(strRole, getValue(jwtParsedToken, strRole));
-			session.setAttribute(strExp, getValue(jwtParsedToken, strExp));
-			session.setAttribute(strUsertypeNo, getValue(jwtParsedToken, strType));
-			session.setAttribute(strUserId, getValue(jwtParsedToken, strUid));
-			String userTypeStr = getValue(jwtParsedToken, strType);
+		session.setAttribute("status", status);
+		if (status.equals("valid")) {
+			session.setAttribute("unm", getValue(jwtParsedToken, "unm"));
+			session.setAttribute("uid", getValue(jwtParsedToken, "uid"));
+			session.setAttribute("fnEn", getValue(jwtParsedToken, "fnEn"));
+			session.setAttribute("fnAr", getValue(jwtParsedToken, "fnAr"));
+			session.setAttribute("lnEn", getValue(jwtParsedToken, "lnEn"));
+			session.setAttribute("lnAr", getValue(jwtParsedToken, "lnAr"));
+			session.setAttribute("QID", getValue(jwtParsedToken, "QID"));
+			session.setAttribute("EID", getValue(jwtParsedToken, "EID"));
+			session.setAttribute("mobile", getValue(jwtParsedToken, "mobile"));
+			session.setAttribute("email", getValue(jwtParsedToken, "email"));
+			session.setAttribute("lstMdfy", getValue(jwtParsedToken, "lstMdfy"));
+			session.setAttribute("role", getValue(jwtParsedToken, "role"));
+			session.setAttribute("exp", getValue(jwtParsedToken, "exp"));
+			session.setAttribute("usertypeNo", getValue(jwtParsedToken, "type"));
+			session.setAttribute("userId", getValue(jwtParsedToken, "uid"));
+			String userTypeStr = getValue(jwtParsedToken, "type");
 
 			if (userTypeStr != null && !"".equals(userTypeStr)) {
 				int userType = Integer.parseInt(userTypeStr);
 
 				if (userType == 1 || userType == 4) {
-					session.setAttribute(strUserType, "personal");
+					session.setAttribute("userType", "personal");
 				} else if (userType == 2) {
-					session.setAttribute(strUserType, "business");
+					session.setAttribute("userType", "business");
 				}
 			}
 		}
@@ -131,44 +116,38 @@ public class DashboardExternal {
 		String status = "";
 		if (!response.equals("")) {
 			JSONObject jsonObj = new JSONObject(response);
-			if (!jsonObj.isNull(key))
+			if (!jsonObj.isNull(key) && !jsonObj.get(key).equals(null))
 				status = (String) jsonObj.get(key);
 		}
 		return status;
 	}
 
 	/** Removing the session values on logout. */
-	public void removeSessionAttr(RequestContext context)  {
+	public void removeSessionAttr(RequestContext context) {
 		LOGGER.info("--------------removeSessionAttr is Ended------------");
+
 		HttpServletRequest request = context.getRequest();
-		HttpSession session = request.getSession(false);	
-		try {				
-			removeSession(session, strStatus);	
-			removeSession(session, strUnm);
-			removeSession(session, strUid);
-			removeSession(session, strFnEn);		
-			removeSession(session, strFnAr);		
-			removeSession(session, strLnEn);		
-			removeSession(session, strLnAr);		
-			removeSession(session, strQID);		
-			removeSession(session, strEID);		
-			removeSession(session, strMobile);		
-			removeSession(session, strEmail);		
-			removeSession(session, strLstMdfy);		
-			removeSession(session, strRole);		
-			removeSession(session, strExp);		
-			removeSession(session, strUserId);	
-			removeSession(session, strUsertypeNo);		
-			removeSession(session, strUserType);				
-		}catch(NullPointerException e) {
-			LOGGER.error("Some other exception in JWT parsing" , e);
-		}
-		LOGGER.info("--------------removeSessionAttr is Ended------------" );
-	}
-	
-	public void removeSession(HttpSession session, String rmAttr) {		
-			if(session != null)
-				session.removeAttribute(rmAttr);	
+		HttpSession session = request.getSession(false);
+		if (session != null)
+			session.removeAttribute("status");
+			session.removeAttribute("unm");
+			session.removeAttribute("uid");
+			session.removeAttribute("fnEn");
+			session.removeAttribute("fnAr");
+			session.removeAttribute("lnEn");
+			session.removeAttribute("lnAr");
+			session.removeAttribute("QID");
+			session.removeAttribute("EID");
+			session.removeAttribute("mobile");
+			session.removeAttribute("email");
+			session.removeAttribute("lstMdfy");
+			session.removeAttribute("role");
+			session.removeAttribute("exp");
+			session.removeAttribute("userId");
+			session.removeAttribute("usertypeNo");
+			session.removeAttribute("userType");
+
+		LOGGER.info("--------------removeSessionAttr is Ended------------" + session.getAttribute("status"));
 	}
 	
 	public Document doLogout(RequestContext context) throws IOException {
@@ -180,7 +159,7 @@ public class DashboardExternal {
 		 * @return doc return the solr response document generated from solr query.
 		 */
 		LOGGER.info("--------------doLogout Started------------");
-		CommonUtils cu = new CommonUtils();
+		
 		Document doc = DocumentHelper.createDocument();
 		removeSessionAttr(context);
 
@@ -193,18 +172,22 @@ public class DashboardExternal {
 		final String RELAY_URL = "relayURL";
 		String relayURL = rhu.getCookie(RELAY_URL);
 		
-		 relayURL = cu.getUrlPath(relayURL);
-
+	
+		 try {
+			 relayURL = (new URL(relayURL)).getPath();
+	        } catch (MalformedURLException e) {
+	        	LOGGER.debug(e);
+	        } 
+		
+		 CommonUtils cu = new CommonUtils();
 		 String urlPrefix = cu.getURLPrefix(context);
 		 relayURL = urlPrefix + relayURL;
 		
 		
-		String logoutrl = properties.getProperty("logout", "https://hukoomi.gov.qa/nas/auth/slo");
-		
-		logoutrl = logoutrl+ "?relayURL=" + relayURL;
-		LOGGER.info("logout url:"+logoutrl);
+		String url = properties.getProperty("logout") + "?relayURL=" + relayURL;
+		LOGGER.info("logout url:"+url);
 		HttpServletResponse response = context.getResponse();
-		response.sendRedirect(logoutrl);
+		response.sendRedirect(url);
 		LOGGER.info("--------------doLogout Ended------------");
 		return doc;
 	}
@@ -240,23 +223,23 @@ public class DashboardExternal {
 		Element userdata = rootElement.addElement("user-data");
 UserInfoSession ui = new UserInfoSession();
 		String valid = ui.getStatus(context);
-		if(valid.equalsIgnoreCase(valid)) {
+		if(valid.equalsIgnoreCase("valid")) {
 			HttpSession session = context.getRequest().getSession();
-			Element userTypeElement = userdata.addElement(strUserType);
-			userTypeElement.setText((String) session.getAttribute(strUserType));
-			Element fnEnElement = userdata.addElement(strFnEn);
-			fnEnElement.setText((String) session.getAttribute(strFnEn));
-			Element lnEnElement = userdata.addElement(strLnEn);
-			lnEnElement.setText((String) session.getAttribute(strLnEn));
+			Element userTypeElement = userdata.addElement("userType");
+			userTypeElement.setText((String) session.getAttribute("userType"));
+			Element fnEnElement = userdata.addElement("fnEn");
+			fnEnElement.setText((String) session.getAttribute("fnEn"));
+			Element lnEnElement = userdata.addElement("lnEn");
+			lnEnElement.setText((String) session.getAttribute("lnEn"));
 
-			Element fnArElement = userdata.addElement(strFnAr);
-			fnArElement.setText((String) session.getAttribute(strFnAr));
-			Element lnArElement = userdata.addElement(strLnAr);
-			lnArElement.setText((String) session.getAttribute(strLnAr));
+			Element fnArElement = userdata.addElement("fnAr");
+			fnArElement.setText((String) session.getAttribute("fnAr"));
+			Element lnArElement = userdata.addElement("lnAr");
+			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userdata.addElement("userTypeNoElement");
-			userTypeNoElement.setText((String) session.getAttribute(strUsertypeNo));
-			Element emailElement = userdata.addElement(strEmail);
-			emailElement.setText((String) session.getAttribute(strEmail));
+			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
+			Element emailElement = userdata.addElement("email");
+			emailElement.setText((String) session.getAttribute("email"));
 		}
 
 		
@@ -283,19 +266,19 @@ UserInfoSession ui = new UserInfoSession();
 UserInfoSession ui = new UserInfoSession();
 
 		String valid = ui.getStatus(context);
-		if(valid.equalsIgnoreCase(strValid)) {
+		if(valid.equalsIgnoreCase("valid")) {
 			HttpSession session = context.getRequest().getSession();
-			Element userTypeElement = userData.addElement(strUserType);
-			userTypeElement.setText((String) session.getAttribute(strUserType));
-			Element fnEnElement = userData.addElement(strFnEn);
-			fnEnElement.setText((String) session.getAttribute(strFnEn));
-			Element lnEnElement = userData.addElement(strLnEn);
-			lnEnElement.setText((String) session.getAttribute(strLnEn));
+			Element userTypeElement = userData.addElement("userType");
+			userTypeElement.setText((String) session.getAttribute("userType"));
+			Element fnEnElement = userData.addElement("fnEn");
+			fnEnElement.setText((String) session.getAttribute("fnEn"));
+			Element lnEnElement = userData.addElement("lnEn");
+			lnEnElement.setText((String) session.getAttribute("lnEn"));
 
-			Element fnArElement = userData.addElement(strFnAr);
-			fnArElement.setText((String) session.getAttribute(strFnAr));
-			Element lnArElement = userData.addElement(strLnAr);
-			lnArElement.setText((String) session.getAttribute(strLnAr));
+			Element fnArElement = userData.addElement("fnAr");
+			fnArElement.setText((String) session.getAttribute("fnAr"));
+			Element lnArElement = userData.addElement("lnAr");
+			lnArElement.setText((String) session.getAttribute("lnAr"));
 			Element userTypeNoElement = userData.addElement("userTypeNoElement");
 			userTypeNoElement.setText((String) session.getAttribute("usertypeNo"));
 
@@ -314,7 +297,7 @@ UserInfoSession ui = new UserInfoSession();
 		return doc;
 
 	}
-	@SuppressWarnings("deprecation")
+
 	public Document getDashboardbookmark(RequestContext context) {
 		/**
 		 * This method will be called from Component External for Fetching bookmark
@@ -343,9 +326,9 @@ UserInfoSession ui = new UserInfoSession();
 		
 		HttpSession session = context.getRequest().getSession();
 		String valid = ui.getStatus(context);
-		LOGGER.info("Dashboard status=" + session.getAttribute(strStatus));
-		if ( valid.equals(strValid)) {
-			userID = (String) session.getAttribute(strUserId);
+		LOGGER.info("Dashboard status=" + session.getAttribute("status"));
+		if ( valid.equals("valid")) {
+			userID = (String) session.getAttribute("userId");
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
 
@@ -464,11 +447,11 @@ UserInfoSession ui = new UserInfoSession();
 				+ "' and content_type='" + contenttype + "'";
 		LOGGER.info("updateQuery:" + updateQuery);
 
-		
+		int result = 0;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(updateQuery);
-				prepareStatement.executeUpdate();
+				result = prepareStatement.executeUpdate();
 
 				LOGGER.info("caling get bookmark");
 				Element bmm = bookmarkResultEle.addElement("bmm");
@@ -493,7 +476,6 @@ UserInfoSession ui = new UserInfoSession();
 
 	public boolean isBookmarkPresent() {
 		boolean check = false;
-		String isBookmarked = "";
 		LOGGER.info("isBookmarkPresent()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
@@ -532,9 +514,15 @@ UserInfoSession ui = new UserInfoSession();
 		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
 		final String RELAY_URL = "relayURL";
 		String relayURL = rhu.getCookie(RELAY_URL);
-
+		
+	
+		 try {
+			 relayURL = (new URL(relayURL)).getPath();
+	        } catch (MalformedURLException e) {
+	        	LOGGER.debug(e);
+	        } 
+		
 		 CommonUtils cu = new CommonUtils();
-		 relayURL = cu.getUrlPath(relayURL);	
 		 String urlPrefix = cu.getURLPrefix(context);
 		 relayURL = urlPrefix + relayURL;
 		 LOGGER.info("---relayURL url---" + relayURL);

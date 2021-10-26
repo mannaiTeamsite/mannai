@@ -1,6 +1,7 @@
 package com.hukoomi.utils;
 
 import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -10,14 +11,19 @@ import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Properties;
+
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
+
 import com.interwoven.livesite.runtime.RequestContext;
+
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 
@@ -54,44 +60,48 @@ public class JWTTokenUtil {
 
 	}
 
-	@SuppressWarnings("deprecation")
-	public String parseJwt(String jwtString) throws InvalidKeySpecException, NoSuchAlgorithmException,
-			IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException {
+	public String parseJwt(String jwtString)
+			throws InvalidKeySpecException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException,
+			BadPaddingException, NoSuchPaddingException, java.security.InvalidKeyException {
 		String data = null;
 		try {
-			String strDate = null;
-			String rsaSignPublicKey = properties.getProperty("RSASignaturePublicKey");
+		String strDate = null ;
+		String rsaSignPublicKey = properties.getProperty("RSASignaturePublicKey");
+		
+		String rsaPayloadPublicKey = properties.getProperty("RSAPayloadPublicKey");
+		PublicKey publicKey = getPublicKey(rsaSignPublicKey);
+		
+		
 
-			String rsaPayloadPublicKey = properties.getProperty("RSAPayloadPublicKey");
-			PublicKey publicKey = getPublicKey(rsaSignPublicKey);
-
-			Jws<Claims> jwt;
-			jwt = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwtString);
-
-			Date exp = jwt.getBody().getExpiration();
-			if (exp != null) {
-				SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-				strDate = formatter.format(exp);
-			}
-
+		Jws<Claims> jwt;
+		jwt = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(jwtString);
+		
+		Date exp = jwt.getBody().getExpiration();
+		if(exp != null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");  
+			strDate = formatter.format(exp); 
+		}
+		   
 			String encryptedData = jwt.getBody().getSubject();
-
+			
 			publicKey = getPublicKey(rsaPayloadPublicKey);
 			data = decrypt(encryptedData, publicKey);
 			JSONObject jsonObj = new JSONObject(data);
 			jsonObj.put("exp", strDate);
-			data = jsonObj.toString();
-
+		    data = jsonObj.toString();
+		   
 		} catch (Exception e) {
-			logger.error("Exception", e);
-		}
+			logger.error("Exception",e);	
+		} 
 		return data;
 	}
+		 
 
-	public static String decrypt(String data, PublicKey publicKey) throws IllegalBlockSizeException,
-			BadPaddingException, NoSuchPaddingException, NoSuchAlgorithmException, java.security.InvalidKeyException {
+	public static String decrypt(String data, PublicKey publicKey)
+			throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException,
+			NoSuchAlgorithmException, java.security.InvalidKeyException {
 		logger.info("decrypt method called");
-		Cipher cipher = Cipher.getInstance("RSA/None/OAEPWITHSHA-256ANDMGF1PADDING"); // Compliant
+		Cipher cipher = Cipher.getInstance("RSA");
 		cipher.init(Cipher.DECRYPT_MODE, publicKey);
 		return new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes())), StandardCharsets.UTF_8);
 	}
@@ -102,8 +112,8 @@ public class JWTTokenUtil {
 		rsaPublicKey = rsaPublicKey.replace("-----END PUBLIC KEY-----", "");
 		X509EncodedKeySpec keySpec = new X509EncodedKeySpec(Base64.getDecoder().decode(rsaPublicKey));
 		KeyFactory kf = KeyFactory.getInstance("RSA");
-		return kf.generatePublic(keySpec);
-
+		PublicKey publicKey = kf.generatePublic(keySpec);
+		return publicKey;
 	}
 
 	public static String decodeToArabicString(String encodedArabicString) {
@@ -111,4 +121,5 @@ public class JWTTokenUtil {
 		return new String(charset, StandardCharsets.UTF_8);
 	}
 
+	
 }
