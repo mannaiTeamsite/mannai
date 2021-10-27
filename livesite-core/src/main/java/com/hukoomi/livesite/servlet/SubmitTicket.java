@@ -335,7 +335,7 @@ public class SubmitTicket extends HttpServlet {
             return false;
         }
         LOGGER.info("Validate nationality : ");
-        if (nationality != null && !"".equals(nationality.trim())
+        else if (nationality != null && !"".equals(nationality.trim())
                 && nationality.trim().length() > 50) {
             return false;
         }

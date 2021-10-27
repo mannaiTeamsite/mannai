@@ -60,10 +60,10 @@ public class NewsletterConfirmation extends HttpServlet {
     private static final String STATUS_FAILED = "Failed";
 
     /** Postgre Object variable. */
-    PostgreForServlet postgre = null;
+    static PostgreForServlet postgre = null;
 
     /** httpConnection for making call to phpList services. */
-    private HttpURLConnection httpConnection = null;
+    private static HttpURLConnection httpConnection = null;
 
     /** phpList properties key. */
     private static final String BASE_URL = "baseUrl";
@@ -78,13 +78,13 @@ public class NewsletterConfirmation extends HttpServlet {
     private static final String PHP_USER_ID = "id";
 
     /** baseUrl of phpList. */
-    private String baseUrl;
+    private static String baseUrl;
 
     /** phplist response status. */
     private static final String STATUS_NOTFOUND = "NOTFOUND";
 
     /** authorizationHeader for authencicate phpList. */
-    private String authorizationHeader;
+    private static String authorizationHeader;
 
     /** phpList subscriber email */
     private static final String SUBSCRIBER_EMAIL = "subscriber_email";
@@ -140,7 +140,7 @@ public class NewsletterConfirmation extends HttpServlet {
     private static final String CONFIRMATION_STATUS = "confirmationStatus";
 
     /** Postgre Object variable. */
-    MySqlForServlet mysql = null;
+    static MySqlForServlet mysql = null;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)

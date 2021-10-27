@@ -37,8 +37,7 @@ import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 public class ReviewComment extends HttpServlet {
 
     /** logger.debug object to check the flow of the code. */
-    private static final Logger LOGGER = Logger.getLogger(ReviewComment.class);
-    XssUtils xssUtils = new XssUtils();
+    private static final Logger LOGGER = Logger.getLogger(ReviewComment.class);    
 
     /** mail properties key. */
     private static final String CONTACT_FROM_MAIL = "sentFrom";
@@ -113,6 +112,7 @@ public class ReviewComment extends HttpServlet {
         JSONObject data = null;
         JSONArray dataArray = null;
         String action = "";
+        XssUtils xssUtils = new XssUtils();
         try {
             data = new JSONObject();
             request.getParameter(BLOG_ID);
@@ -236,6 +236,7 @@ public class ReviewComment extends HttpServlet {
     private int updateCommentData(Connection connection, JSONObject data) throws IOException {
         PreparedStatement preparedStatement = null;
         int result = 0;
+        XssUtils xssUtils = new XssUtils();
         try {
             String Propfilepath = data.getString("path");
             String Blogproppath = data.getString("blogpath");
@@ -259,7 +260,7 @@ public class ReviewComment extends HttpServlet {
         } catch (NumberFormatException | SQLException e) {
             LOGGER.error("Exception in updateBlogMasterData: ", e);
         } finally {
-            releaseConnection(null, preparedStatement, null);
+            releaseConnection(connection, preparedStatement, null);
             LOGGER.info("Released updateBlogMasterData connection");
         }
         return result;
