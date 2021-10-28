@@ -34,11 +34,11 @@ public class BookmarkExternal {
     private String localLiteral="locale";
     private String activeLiteral="active";
     private String categoryLiteral="category";
-    private String pagetitleLiteral="pagetitle";
-    private String pagedescriptionLiteral="pagedescription";
-    private String pageurlLiteral="pageurl";
+    private String pagetitleLiteral="page_title";
+    private String pagedescriptionLiteral="page_description";
+    private String pageurlLiteral="page_url";
     private String userIDLiteral="userID";
-    private String contenttypeLiteral="contenttype";
+    private String contenttypeLiteral="content_type";
 
     private static final Logger logger = Logger.getLogger(BookmarkExternal.class);
     Postgre postgre = null;
@@ -110,78 +110,81 @@ UserInfoSession ui = new UserInfoSession();
 
     private int insertBookmark() {
 
-        logger.info("insertBookmark()====> Starts");
+    	logger.info("insertBookmark()====> Starts");
 
-        logger.debug("Logging Broken link in Database at insertBookmark");
+        logger.debug("Logging Broken link in Database");
         ValidationErrorList errorList = new ValidationErrorList();
         if (!ESAPIValidator.checkNull(pagetitle)) {
-            pagetitle  = ESAPI.validator().getValidInput(pagetitleLiteral, pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            pagetitle  = ESAPI.validator().getValidInput("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(pagetitleLiteral));
+                logger.info(errorList.getError("pagetitle"));
                 logger.error("Not a valid parameter pagetitle. The incident will not be logged.");
                 return 0;
             }
         }
 
         if (!ESAPIValidator.checkNull(pagedescription)) {
-            pagedescription  = ESAPI.validator().getValidInput(pagedescriptionLiteral, pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            pagedescription  = ESAPI.validator().getValidInput("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(pagedescriptionLiteral));
+                logger.info(errorList.getError("pagedescription"));
                 logger.error("Not a valid parameter pagedescription. The incident will not be logged.");
                 return 0;
             }
         }
 
         if (!ESAPIValidator.checkNull(pageurl)) {
-            pageurl  = ESAPI.validator().getValidInput(pageurlLiteral, pageurl, ESAPIValidator.URL, 255, false, true, errorList);
+            pageurl  = ESAPI.validator().getValidInput("pageurl", pageurl, ESAPIValidator.URL, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(pageurlLiteral));
+                logger.info(errorList.getError("pageurl"));
                 logger.error("Not a valid parameter pageurl. The incident will not be logged.");
                 return 0;
             }
         }
 
         if (!ESAPIValidator.checkNull(locale)) {
-            locale  = ESAPI.validator().getValidInput(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+            locale  = ESAPI.validator().getValidInput("locale", locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(localLiteral));
+                logger.info(errorList.getError("locale"));
                 logger.error("Not a valid parameter locale. The incident will not be logged.");
                 return 0;
             }
         }
 
         if (!ESAPIValidator.checkNull(userID)) {
-            userID  = ESAPI.validator().getValidInput(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
+            userID  = ESAPI.validator().getValidInput("userID", userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(userIDLiteral));
+                logger.info(errorList.getError("userID"));
                 logger.error("Not a valid parameter userID. The incident will not be logged.");
                 return 0;
             }
         }
         if (!ESAPIValidator.checkNull(active)) {
-            active  = ESAPI.validator().getValidInput(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            active  = ESAPI.validator().getValidInput("active", active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(activeLiteral));
+                logger.info(errorList.getError("active"));
                 logger.error("Not a valid parameter active. The incident will not be logged.");
                 return 0;
             }
         }
         if (!ESAPIValidator.checkNull(contenttype)) {
-            contenttype  = ESAPI.validator().getValidInput(contenttypeLiteral, contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            contenttype  = ESAPI.validator().getValidInput("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(contenttypeLiteral));
+                logger.info(errorList.getError("contenttype"));
                 logger.error("Not a valid parameter contenttype. The incident will not be logged.");
                 return 0;
             }
         }
         if (!ESAPIValidator.checkNull(category)) {
-            category  = ESAPI.validator().getValidInput(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            category  = ESAPI.validator().getValidInput("category", category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError(categoryLiteral));
+                logger.info(errorList.getError("category"));
                 logger.error("Not a valid parameter category. The incident will not be logged.");
                 return 0;
             }
         }
+
+
+       
 
         int result = 0;
         Connection connection = null;

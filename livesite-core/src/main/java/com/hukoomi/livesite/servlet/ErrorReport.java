@@ -13,12 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.Properties;
-
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.hukoomi.utils.XssUtils;
@@ -34,14 +31,25 @@ import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 
 public class ErrorReport extends HttpServlet {
 
-    /** logger.debug object to check the flow of the code. */
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/** logger.debug object to check the flow of the code. */
     private static final Logger LOGGER =
-            Logger.getLogger(ReviewComment.class);
-    XssUtils xssUtils = new XssUtils();
+            Logger.getLogger(ErrorReport.class);
+    private static XssUtils xssUtils = new XssUtils();
     
-   
-
-    
+	private static String statusPath = "statusPath";
+	private static String language = "language";
+	private static String strStatus = "status";
+	private static String strStatusCodeVal = "statusCodeVal";
+	private static String contentType = "application/json";
+	private static String strSuccess = "success";
+	private static String strFalse = "false";
+	private static String encodingType = "UTF-8";
+	private static String strErrorMessage = "errorMessage";
+    @Override 
     protected void doPost(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
         LOGGER.info("Update status : Start");
@@ -49,77 +57,69 @@ public class ErrorReport extends HttpServlet {
         Enumeration<String> attributes = request.getSession().getAttributeNames();
         while (attributes.hasMoreElements())
             LOGGER.info("Value is: " + attributes.nextElement());
-        try {
-            BufferedReader inbr = new BufferedReader(
-                    new InputStreamReader(request.getInputStream()));
+        try ( BufferedReader inbr = new BufferedReader(
+                new InputStreamReader(request.getInputStream()));){         
             String json = "";
             json = inbr.readLine();
             data = new JSONObject(json);
             boolean result = updateErrorData(data);
             if (result) {
-                data.put("success", "success");
+                data.put(strSuccess, strSuccess);
                 response.getWriter().write(data.toString());
             } else {
-                data.put("success", "false");
-                data.put("errorMessage", "Failed to update");
+                data.put(strSuccess, strFalse);
+                data.put(strErrorMessage, "Failed to update");
                 response.getWriter().write(data.toString());
             }
 
-        } catch (IOException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+        } catch (IOException |JSONException e) {
+        	data = new JSONObject();
+            response.setContentType(contentType);
+            response.setCharacterEncoding(encodingType);
             try {
-                data.put("success", "false");
-                data.put("errorMessage", e.getMessage());
+                data.put(strSuccess, strFalse);
+                data.put(strErrorMessage, e.getMessage());
                 response.getWriter().write(data.toString());
-            } catch (IOException e1) {
-                LOGGER.error("REVIEW Failed : Exception ", e);
+            } catch (IOException | NullPointerException e1) {
+            	 LOGGER.error("Status update Failed : Exception ", e);
             }
         } finally {
-            LOGGER.info("End of Review comment");
+            LOGGER.info("Error Report End");
         }
     }
     
-  
+    @Override 
     protected void doGet(HttpServletRequest request,
             HttpServletResponse response) throws ServletException {
-        LOGGER.info("ReviewComment : Start");
-        JSONObject data = null;
+        LOGGER.info("Error Report : Start");
+        JSONObject data = new JSONObject(); 
         JSONArray dataArray = null;
         
-        try {
-            data = new JSONObject();            
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");           
+        try {              
+            response.setContentType(contentType);
+            response.setCharacterEncoding(encodingType);           
             data.put("path", xssUtils.stripXSS(request.getParameter("path")));
-            data.put("statusPath", xssUtils.stripXSS(request.getParameter("statusPath")));
-            data.put("language", xssUtils.stripXSS(request.getParameter("language")));
-            data.put("status", xssUtils.stripXSS(request.getParameter("status")));
-            data.put("statusCodeVal", xssUtils.stripXSS(request.getParameter("statusCodeVal")));
-            
-           
-            	dataArray = getErrorFilterResponse(data);
-            
-            
-            	
-            
-                data.put("success", "success");
+            data.put(statusPath, xssUtils.stripXSS(request.getParameter(statusPath)));
+            data.put(language, xssUtils.stripXSS(request.getParameter(language)));
+            data.put(strStatus, xssUtils.stripXSS(request.getParameter(strStatus)));
+            data.put(strStatusCodeVal, xssUtils.stripXSS(request.getParameter(strStatusCodeVal)));                    
+            	dataArray = getFilterResponse(data);
+                data.put(strSuccess, strSuccess);
                 data.put("comments", dataArray);
                 response.getWriter().write(data.toString());
-           
 
-        } catch (IOException e) {
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+        } catch (IOException|JSONException e ) {
+            response.setContentType(contentType);
+            response.setCharacterEncoding(encodingType);
             try {
-                data.put("success", "false");
-                data.put("errorMessage", e.getMessage());
+                data.put(strSuccess, strFalse);
+                data.put(strErrorMessage, e.getMessage());
                 response.getWriter().write(data.toString());
-            } catch (IOException e1) {
-                LOGGER.error("REVIEW Failed : Exception ", e);
+            } catch (IOException|NullPointerException e1) {
+                LOGGER.error("Status update Failed : Exception ", e);
             }
         } finally {
-            LOGGER.info("End of Review comment");
+            LOGGER.info("Error Report End");
         }
     }
 
@@ -168,7 +168,7 @@ public class ErrorReport extends HttpServlet {
         try {
             
             long errorId = data.getLong("errorId");
-            String status = xssUtils.stripXSS(data.getString("status"));
+            String status = xssUtils.stripXSS(data.getString(strStatus));
             String query =
             		"UPDATE ERROR_RESPONSE SET STATUS = ? WHERE RESPONSE_ID = ?";
             LOGGER.info("Query : " + query);
@@ -197,16 +197,16 @@ public class ErrorReport extends HttpServlet {
    
     
     
-    private JSONArray getErrorFilterResponse(JSONObject data) {
+    private JSONArray getFilterResponse(JSONObject data) {
         LOGGER.info("Filter getErrorResponse");
         String propfilepath = data.getString("path");
        
-        String errorStatuspath = data.getString("statusPath");
+        String errorStatuspath = data.getString(statusPath);
         
-        String lang = data.getString("language");
-        String statusCodeVal = data.getString("statusCodeVal");
+        String lang = data.getString(language);
+        String statusCodeVal = data.getString(strStatusCodeVal);
 
-        String statusVal = data.getString("status");
+        String statusVal = data.getString(strStatus);
         
         LOGGER.info(errorStatuspath);
         PreparedStatement prepareStatement = null;
@@ -214,7 +214,7 @@ public class ErrorReport extends HttpServlet {
         Properties dbProperties = loadProperties(propfilepath);
         Properties statusProperties = loadProperties(errorStatuspath);
   
-        String statusData = statusProperties.getProperty("status");
+        String statusData = statusProperties.getProperty(strStatus);
         String statusCode = statusProperties.getProperty("statusCode");
         
         LOGGER.info(statusCode);
@@ -222,7 +222,7 @@ public class ErrorReport extends HttpServlet {
         
         Connection connection = null;
         JSONArray arrayComments = new JSONArray();
-        String getComment ="";
+        
         try {
             String userName = dbProperties.getProperty("username");            
             String password = dbProperties.getProperty("password");
@@ -230,56 +230,34 @@ public class ErrorReport extends HttpServlet {
             password = IREncryptionUtil.decrypt(password);
             connection = DriverManager.getConnection(
                     getConnectionString(dbProperties), userName, password);
+            String getError = "SELECT * FROM ERROR_RESPONSE ";
             
-            getComment = "SELECT * FROM ERROR_RESPONSE ";
             if(!lang.equalsIgnoreCase("ALL") || !statusVal.equalsIgnoreCase("ALL") || !statusCodeVal.equalsIgnoreCase("ALL")) {
-            	getComment += "WHERE "; 
-            	if(!lang.equalsIgnoreCase("ALL") ) {
-                	getComment += "LANGUAGE = '"+lang.toLowerCase()+"' ";
-                }
-            	if(!statusVal.equalsIgnoreCase("ALL") ) {
-            		if(!lang.equalsIgnoreCase("ALL") ) {
-            			getComment += "AND STATUS = '"+statusVal.toLowerCase()+"' ";
-            		}else {
-            			getComment += "STATUS = '"+statusVal.toLowerCase()+"' ";
-            		}
-                	
-                }
-            	if(!statusCodeVal.equalsIgnoreCase("ALL") ) {
-            		if(!statusVal.equalsIgnoreCase("ALL") || !lang.equalsIgnoreCase("ALL")) {
-            			getComment += "AND STATUS_CODE = '"+statusCodeVal.toLowerCase()+"' ";
-            		}else {
-            			getComment += "STATUS_CODE = '"+statusCodeVal.toLowerCase()+"' ";
-            		}
-                	
-                }
-
+            	getError += "WHERE "; 
+             getError = geterroorStatement( getError, lang, statusVal, statusCodeVal);
             }
-            getComment += " ORDER BY RESPONSE_ID";
-
-                prepareStatement = connection.prepareStatement(getComment);
-                LOGGER.info("getComment :" + getComment);
+                prepareStatement = connection.prepareStatement(getError);
+                
                 rs = prepareStatement.executeQuery();
 
                 while (rs.next()) {
                     LOGGER.debug("RESPONSE_ID: " + rs.getInt("RESPONSE_ID"));
                     int errorId = rs.getInt("RESPONSE_ID");
-                    String broken_link = rs.getString("BROKEN_LINK");
-                    String content_page = rs.getString("CONTENT_PAGE");
-                    String last_reported = rs.getString("REPORTED_ON");
-                    String language = rs.getString("LANGUAGE");
-                    String status_code = rs.getString("STATUS_CODE");
+                    String brokenLink = rs.getString("BROKEN_LINK");
+                    String contentPage = rs.getString("CONTENT_PAGE");
+                    String lastReported = rs.getString("REPORTED_ON");
+                    String errStatus = rs.getString("STATUS_CODE");
                     String count = rs.getString("COUNT");
                     String status = rs.getString("STATUS");
                     JSONObject errorData = new JSONObject();
                     errorData.put("errorId", errorId);
-                    errorData.put("broken_link", broken_link);
-                    errorData.put("content_page", content_page);
-                    errorData.put("last_reported", last_reported);
-                    errorData.put("language", language);
-                    errorData.put("status_code", status_code);
+                    errorData.put("broken_link", brokenLink);
+                    errorData.put("content_page", contentPage);
+                    errorData.put("last_reported", lastReported);
+                    errorData.put(language, lang);
+                    errorData.put("status_code", errStatus);
                     errorData.put("count", count);
-                    errorData.put("status", status);
+                    errorData.put(strStatus, status);
                     errorData.put("statusData", statusData);
                     errorData.put("statusCode", statusCode);
                     
@@ -293,9 +271,35 @@ public class ErrorReport extends HttpServlet {
             LOGGER.error("getErrorResponse()", e);            
 
         } finally {
-            releaseConnection(connection, null, null);
+            releaseConnection(connection, prepareStatement, rs);
         }
         return arrayComments;
+    }
+    public String geterroorStatement(String getError, String lang, String statusVal, String statusCodeVal ) {
+    	
+         	if(!lang.equalsIgnoreCase("ALL") ) {
+             	getError += "LANGUAGE = '"+lang.toLowerCase()+"' ";
+             }
+         	if(!statusVal.equalsIgnoreCase("ALL") ) {
+         		if(!lang.equalsIgnoreCase("ALL") ) {
+         			getError += "AND STATUS = '"+statusVal.toLowerCase()+"' ";
+         		}else {
+         			getError += "STATUS = '"+statusVal.toLowerCase()+"' ";
+         		}
+             	
+             }
+         	if(!statusCodeVal.equalsIgnoreCase("ALL") ) {
+         		if(!statusVal.equalsIgnoreCase("ALL") || !lang.equalsIgnoreCase("ALL")) {
+         			getError += "AND STATUS_CODE = '"+statusCodeVal.toLowerCase()+"' ";
+         		}else {
+         			getError += "STATUS_CODE = '"+statusCodeVal.toLowerCase()+"' ";
+         		}
+             	
+             }
+
+         
+         getError += " ORDER BY REPORTED_ON DESC ";
+         return getError;
     }
     private String getConnectionString(Properties properties) {
         LOGGER.info("Postgre : getConnectionString()");
@@ -372,10 +376,10 @@ public class ErrorReport extends HttpServlet {
             InputStream inputStream;
             try {
                 inputStream = new FileInputStream(root);
-                if (inputStream != null) {
+              
                     propFile.load(inputStream);
                     LOGGER.info("Properties File Loaded");
-                }
+                
             } catch (MalformedURLException e) {
                 LOGGER.error(
                         "Malformed URL Exception while loading Properties file : ",

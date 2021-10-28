@@ -330,13 +330,9 @@ public class SubmitTicket extends HttpServlet {
     private boolean validatePassportType(String passport,
             String nationality) {
         LOGGER.info("Validate passport : ");
-        if (passport == null || "".equals(passport.trim())
-                || passport.trim().length() > 8) {
-            return false;
-        }
-        LOGGER.info("Validate nationality : ");
-        else if (nationality != null && !"".equals(nationality.trim())
-                && nationality.trim().length() > 50) {
+        if ((passport == null || "".equals(passport.trim())
+                || passport.trim().length() > 8)||(nationality != null && !"".equals(nationality.trim())
+                && nationality.trim().length() > 50)) {
             return false;
         }
         return true;
