@@ -78,7 +78,7 @@ public class UserInfoSession {
 	}
 	
 	public String checkStatus(String status, RequestContext context) {
-		String valid = "";
+		String valid = "Invalid";
 		Date expiryDate = null ;
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");  
 		HttpServletRequest request = context.getRequest();
@@ -111,7 +111,7 @@ public class UserInfoSession {
 	}
 	
 	public String getStatus(RequestContext context) {
-		String valid = "";
+		
 	  	HttpServletRequest request = context.getRequest();
 	  	String accessToken = null;
 		Cookie cookie = null;
@@ -132,7 +132,8 @@ public class UserInfoSession {
 			DashboardExternal dashboard = new DashboardExternal();
 			 status = (String) request.getSession().getAttribute(strStatus);
 			LOGGER.info("Status:"+status);		
-			if(status != strValid) {			
+			if (status != null && status.equals(strValid)) {
+					
 					LOGGER.info("--------dashboardServices is called--------");					
 					dashboard.dashboardServices(context, accessToken);	
 					status = (String) request.getSession().getAttribute(strStatus);
@@ -146,8 +147,8 @@ public class UserInfoSession {
 		
 		}
 		
-		valid = checkStatus( status, context);
-		return valid;
+		return checkStatus( status, context);
+		
 	}
 
 	private void setPersona(RequestContext context, String userId ) {
