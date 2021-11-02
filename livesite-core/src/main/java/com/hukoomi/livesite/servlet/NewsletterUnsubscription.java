@@ -23,13 +23,7 @@ public class NewsletterUnsubscription extends HttpServlet{
     /** Logger object to check the flow of the code. */
     private static final Logger logger = Logger
             .getLogger(NewsletterUnsubscription.class);
-    
-    /** Postgre Object variable. */
-    PostgreForServlet postgre = null;
-    
-    /** Mysql Object variable. */
-    MySqlForServlet mysql = null;
-    
+        
     /**
      * Constant for status success.
      */
@@ -61,8 +55,6 @@ public class NewsletterUnsubscription extends HttpServlet{
      */
     private static final String UNSUBSCRIBE_REASON = "unsubreason";
     
-    /** active status constant. */
-    private static final String STATUS_ACTIVE = "Active";
     /** inActive status constant. */
     private static final String STATUS_INACTIVE = "InActive";
     /** Unsubscribed status constant. */
@@ -76,8 +68,8 @@ public class NewsletterUnsubscription extends HttpServlet{
             HttpServletResponse response)
             throws IOException, ServletException {
         logger.info("NewsletterUnsubscription : doGet()");  
-        postgre = new PostgreForServlet();
-        mysql = new MySqlForServlet();
+        PostgreForServlet postgre = new PostgreForServlet();
+        MySqlForServlet mysql = new MySqlForServlet();
         
         double subscriberID ;
         String subscriberemail = "";
@@ -92,14 +84,14 @@ public class NewsletterUnsubscription extends HttpServlet{
                 .getRequestDispatcher(
                         "/portal-" + pageLang + "/home.page");          
         
-        subscriberID= getSubscriberID(token);
-        subscriberemail = getSubscriberEmail(subscriberID);
+        subscriberID= getSubscriberID(token, postgre);
+        subscriberemail = getSubscriberEmail(subscriberID, postgre);
         
         logger.debug("NewsletterUnsubscription subscriberID "+subscriberID+" subscriberemail "+subscriberemail);  
         if(token != null) {
             logger.debug("token not null");  
             status = unsubscribeDashboardUser(token,
-                    unsubReason,subscriberID,subscriberemail);
+                    unsubReason,subscriberID,subscriberemail, postgre, mysql);
             logger.debug("NewsletterUnsubscription : unsubscription in DB completed"+status);  
             if(status.equals(STATUS_SUCCESS)) {
              logger.debug("NewsletterUnsubscription : unsubscription in DB completed");
@@ -134,7 +126,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      *         This method unssubscribes dashboard user and update status
      */
     private String unsubscribeDashboardUser
-    (String token, String unsubReason,double subscriberID, String email) {
+    (String token, String unsubReason,double subscriberID, String email, PostgreForServlet postgre, MySqlForServlet mysql) {
         logger.info(
                 "NewsletterUnsubscription : unsubscribeDashboardUser()");
 
@@ -143,9 +135,7 @@ public class NewsletterUnsubscription extends HttpServlet{
         String status = "";
         int blacklistID = 1;
         boolean tokenStatusUpdate = false;
-        
-        /* int phpID = getPhpID(email); */
-        
+               
         String updateMasterQuery =
                 "UPDATE NEWSLETTER_MASTER SET STATUS = ? , UNSUBSCRIBED_REASON = ? WHERE SUBSCRIBER_ID = ?";
         String updatePreferenceQuery =
@@ -153,11 +143,11 @@ public class NewsletterUnsubscription extends HttpServlet{
         String updatePhpQuery =
                 "UPDATE PHPLIST_USER_USER SET BLACKLISTED = ? WHERE EMAIL = ?";
         status = unsubscribePostgreUser(updateMasterQuery, subscriberID,
-                 unsubReason, STATUS_UNSUBSCRIBED, NEWSLETTER_MASTER);
+                 unsubReason, STATUS_UNSUBSCRIBED, NEWSLETTER_MASTER, postgre);
         logger.debug("unsubscribeDashboardUser() : update master status "+ status);
         if (status.equals(STATUS_SUCCESS)) {            
             status = unsubscribePostgreUser(updatePreferenceQuery,
-                    subscriberID,unsubReason,STATUS_INACTIVE, NEWSLETTER_PREFERENCE);
+                    subscriberID,unsubReason,STATUS_INACTIVE, NEWSLETTER_PREFERENCE, postgre);
         }
         logger.debug(
                 "unsubscribeDashboardUser() : update preference status "+ status);
@@ -165,7 +155,7 @@ public class NewsletterUnsubscription extends HttpServlet{
         if (status.equals(STATUS_SUCCESS)) {
 
             unsubStatus =
-                    unsubscribePhpUser(updatePhpQuery, email , unsubReason );
+                    unsubscribePhpUser(updatePhpQuery, email , unsubReason, mysql );
         }
         
         if(unsubStatus.equals(STATUS_SUCCESS)) {
@@ -177,21 +167,21 @@ public class NewsletterUnsubscription extends HttpServlet{
             String syncPhpBlacklistData =
                     "INSERT INTO PHPLIST_USER_BLACKLIST_DATA (EMAIL, NAME, DATA) VALUES (?,?,?)";
             
-            syncStatus = syncUnsubscribeData(syncPhpQuery, email, unsubReason,"USERDATA");
+            syncStatus = syncUnsubscribeData(syncPhpQuery, email, unsubReason,"USERDATA", postgre);
             
             if(syncStatus.equals(STATUS_SUCCESS)) {
                 
-                syncStatus = syncUnsubscribeData(syncPhpBlacklist, email, unsubReason,"USERBLACKLIST");
+                syncStatus = syncUnsubscribeData(syncPhpBlacklist, email, unsubReason,"USERBLACKLIST", postgre);
             }
             if(syncStatus.equals(STATUS_SUCCESS)) {
                 
-                syncStatus = syncUnsubscribeData(syncPhpBlacklistData, email, unsubReason,"BLACKLISTDATA");
+                syncStatus = syncUnsubscribeData(syncPhpBlacklistData, email, unsubReason,"BLACKLISTDATA", postgre);
             }
             
         }
         if(syncStatus.equals(STATUS_SUCCESS)) {
             updateTokenStatus(token,
-                    STATUS_CONFIRMED);
+                    STATUS_CONFIRMED, postgre);
         }
 
         return unsubStatus;
@@ -207,7 +197,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      *         This method is used to update unsubscribed user
      */
     private String unsubscribePostgreUser(
-            String Query, double subscriberId, String unsubReason, String status , String tabName) {
+            String Query, double subscriberId, String unsubReason, String status , String tabName,  PostgreForServlet postgre) {
         logger.info(
                 "NewsletterUnsubscription : unsubscribeMasterUser()");
 
@@ -254,7 +244,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      * @param userId
      * @return
      */
-    private String unsubscribePhpUser(String Query, String email, String unsubReason) {
+    private String unsubscribePhpUser(String Query, String email, String unsubReason, MySqlForServlet mysql) {
         logger.info("NewsletterUnsubscription : unsubscribePhpUser() "+unsubReason);
 
         String status = "";
@@ -276,17 +266,17 @@ public class NewsletterUnsubscription extends HttpServlet{
             int count = prepareStatement.executeUpdate();
 
             if(count > 0) {                
-                status = updatePhpBlacklist(updatePhpBlacklist,email,"");
+                status = updatePhpBlacklist(updatePhpBlacklist,email,"", mysql);
                 if(status.equals(STATUS_SUCCESS)) {
                     
-                    status = updatePhpBlacklist(updatePhpBlacklistData,email,unsubReason);
+                    status = updatePhpBlacklist(updatePhpBlacklistData,email,unsubReason, mysql);
                 }
             }
 
         } catch (Exception e) {
             logger.error("Exception in unsubscribePhpUser", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, rs);
+            mysql.releaseConnection(connection, prepareStatement, rs);
         }
 
         return status;
@@ -298,7 +288,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      * @param userId
      * @return
      */
-    private String updatePhpBlacklist(String Query, String email, String unsubReason) {
+    private String updatePhpBlacklist(String Query, String email, String unsubReason, MySqlForServlet mysql) {
         logger.info("NewsletterUnsubscription : updatePhpBlacklist() ");
 
         String status = "";        
@@ -328,13 +318,13 @@ public class NewsletterUnsubscription extends HttpServlet{
         } catch (Exception e) {
             logger.error("Exception in updatePhpBlacklist", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, rs);
+            mysql.releaseConnection(connection, prepareStatement, rs);
         }
 
         return status;
     }
     
-    private String syncUnsubscribeData(String Query, String email, String unsubReason, String param) {
+    private String syncUnsubscribeData(String Query, String email, String unsubReason, String param, PostgreForServlet postgre) {
         logger.info("NewsletterUnsubscription : syncUnsubscribeData() ");
 
         String status = "";
@@ -380,36 +370,7 @@ public class NewsletterUnsubscription extends HttpServlet{
         return status;
     }
     
-    /**
-     * @author Pramesh
-     * @param Query
-     * @param userId
-     * @return
-     */
-    /*
-     * private int getPhpID(String email) {
-     * logger.info("NewsletterUnsubscription : getPhpID()");
-     * 
-     * String status = ""; int phpID = 0; Connection connection = null;
-     * PreparedStatement prepareStatement = null; ResultSet rs = null;
-     * String query = "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?";
-     * 
-     * try { connection = mysql.getConnection(); prepareStatement =
-     * connection.prepareStatement(query);
-     * 
-     * prepareStatement.setString(1, email);
-     * 
-     * rs = prepareStatement.executeQuery();
-     * 
-     * while(rs.next()) { phpID = rs.getInt(1);; }
-     * 
-     * } catch (Exception e) {
-     * logger.error("Exception in unsubscribePhpUser", e); } finally {
-     * postgre.releaseConnection(connection, prepareStatement, rs); }
-     * 
-     * return phpID; }
-     */
-    
+       
     /**
      * @author pramesh
      * @param subscriberId
@@ -417,7 +378,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      * 
      *         This method get the subscriber email based on subscriber id
      */
-    private String getSubscriberEmail(double subscriberId) {
+    private String getSubscriberEmail(double subscriberId, PostgreForServlet postgre) {
         logger.info("NewsletterUnsubscription : getSubscriberEmail");
         boolean subscriberPreferenceDataInsert = false;
         String addSubscriberPreferencesQuery =
@@ -451,7 +412,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      * @param userId
      * @return This method is used to fetch subscriberID using UID
      */
-    private double getSubscriberID(String token) {
+    private double getSubscriberID(String token, PostgreForServlet postgre) {
         logger.info("NewsletterUnsubscription : getSubscriberID()");
         
         String subscriberIDQuery =
@@ -491,10 +452,11 @@ public class NewsletterUnsubscription extends HttpServlet{
      * @param statusConfirmed
      * @return
      */
-    private boolean updateTokenStatus(String token, String status) {
+    private boolean updateTokenStatus(String token, String status, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : updateTokenStatus()");
         boolean updateTokenStatus = false;
-        String updateTokenStatusQuery = "UPDATE NEWSLETTER_CONFIRMATION_TOKEN SET CONFIRMATION_STATUS = ? WHERE TOKEN = ?";
+        String updateTokenStatusQuery = "UPDATE NEWSLETTER_CONFIRMATION_TOKEN SET "
+                + "CONFIRMATION_STATUS = ? WHERE TOKEN = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
 

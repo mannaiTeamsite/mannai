@@ -29,7 +29,6 @@ import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.MySql;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
-import com.hukoomi.utils.ValidationUtils;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.file.FileDal;
 import com.interwoven.livesite.runtime.RequestContext;
@@ -357,8 +356,7 @@ public class NewsletterPhpExternal {
                 logger.info("Email Already Exist !");
                 emailsExistStatus = true;
             } else {
-                logger.info("Email Doesn't Exist !");
-                emailsExistStatus = false;
+                logger.info("Email Doesn't Exist !");              
             }
         } catch (Exception e) {
             logger.error("Exception in getSubscriptionStatusByUid", e);
@@ -754,8 +752,7 @@ public class NewsletterPhpExternal {
                 logger.info("Newsletter Preference Added !");
                 subscriberPreferenceDataInsert = true;
             } else {
-                logger.info("Newsletter Preference Not Added !");
-                subscriberPreferenceDataInsert = false;
+                logger.info("Newsletter Preference Not Added !");              
             }
         } catch (Exception e) {
             logger.error("Exception in addSubscriberPreferences", e);
@@ -826,8 +823,7 @@ public class NewsletterPhpExternal {
                 logger.info("Email Already Exist !");
                 emailsExistStatus = true;
             } else {
-                logger.info("Email Doesn't Exist !");
-                emailsExistStatus = false;
+                logger.info("Email Doesn't Exist !");               
             }
         } catch (Exception e) {
             logger.error("Exception in isEmailAlreadyExist", e);
@@ -871,8 +867,7 @@ public class NewsletterPhpExternal {
                 logger.info("Subscriber Added !");
                 subscriberMasterDataInsert = true;
             } else {
-                logger.info("Subscriber Not Added !");
-                subscriberMasterDataInsert = false;
+                logger.info("Subscriber Not Added !");               
             }
         } catch (Exception e) {
             logger.error("Exception in addSubscriberInMasterTable", e);

@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -59,12 +58,6 @@ public class NewsletterConfirmation extends HttpServlet {
     /** external parameter. */
     private static final String STATUS_FAILED = "Failed";
 
-    /** Postgre Object variable. */
-    static PostgreForServlet postgre = null;
-
-    /** httpConnection for making call to phpList services. */
-    private static HttpURLConnection httpConnection = null;
-
     /** phpList properties key. */
     private static final String BASE_URL = "baseUrl";
 
@@ -77,14 +70,8 @@ public class NewsletterConfirmation extends HttpServlet {
     /** phpList properties key. */
     private static final String PHP_USER_ID = "id";
 
-    /** baseUrl of phpList. */
-    private static String baseUrl;
-
     /** phplist response status. */
     private static final String STATUS_NOTFOUND = "NOTFOUND";
-
-    /** authorizationHeader for authencicate phpList. */
-    private static String authorizationHeader;
 
     /** phpList subscriber email */
     private static final String SUBSCRIBER_EMAIL = "subscriber_email";
@@ -139,44 +126,40 @@ public class NewsletterConfirmation extends HttpServlet {
     /** phpList response status. */
     private static final String CONFIRMATION_STATUS = "confirmationStatus";
 
-    /** Postgre Object variable. */
-    static MySqlForServlet mysql = null;
-
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         logger.info("NewsletterConfirmation : doGet()");
-        postgre = new PostgreForServlet();
-        mysql = new MySqlForServlet();
-        PhpListUserBO pluBO = null;
-        PrintWriter writer = response.getWriter();
+        PostgreForServlet postgre = new PostgreForServlet();
+        MySqlForServlet mysql = new MySqlForServlet();
+        PhpListUserBO pluBO = null;      
         String token = request.getParameter("token");
         String pageLang = request.getParameter("lang");        
         RequestDispatcher rd = request.getRequestDispatcher("/portal-" + pageLang + "/home.page");
-        String confirmationStatus = getConfirmationTokenStatus(token);
+        String confirmationStatus = getConfirmationTokenStatus(token,postgre);
 
         if (STATUS_PENDING.equals(confirmationStatus)) {
-            Map<String, String> subscriberDetails = getSubcriberDetails(token);
+            Map<String, String> subscriberDetails = getSubcriberDetails(token,postgre);
 
             double subscriberId = Double.parseDouble(subscriberDetails.get("subscriberId"));
             double preferenceId = Double.parseDouble(subscriberDetails.get("preferenceId"));
 
-            String subscriberemail = getSubscriberEmail(subscriberId);
-            String persona = getSubscriberPersona(subscriberId, preferenceId);
-            int listid = getSubscriberListID(persona);
+            String subscriberemail = getSubscriberEmail(subscriberId, postgre);
+            String persona = getSubscriberPersona(subscriberId, preferenceId, postgre);
+            int listid = getSubscriberListID(persona,mysql);
             String status = "";
             String subStatus = "";
             String uptpostgreData = "";
             String syncStatus = "";
             int userId = 0;
-            status = phpSubscriberExists(subscriberemail, listid);
+            status = phpSubscriberExists(subscriberemail, listid, mysql);
             try {
                 if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
 
-                    subStatus = createSubscriberPhplist(subscriberemail);
+                    subStatus = createSubscriberPhplist(subscriberemail,postgre);
                     if (!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) {
-                        userId = getSubscriberID(subscriberemail);
-                        updateSubscriberPersona(userId, listid);
+                        userId = getSubscriberID(subscriberemail,mysql);
+                        updateSubscriberPersona(userId, listid, mysql);
                         uptpostgreData = STATUS_SUCCESS;
                     } else {
                         uptpostgreData = STATUS_FAILED;
@@ -184,8 +167,8 @@ public class NewsletterConfirmation extends HttpServlet {
 
                 }
                 if (!status.equals("") && status.equals(STATUS_PERSONA_NOTFOUND)) {
-                    userId = getSubscriberID(subscriberemail);
-                    updateSubscriberPersona(userId, listid);
+                    userId = getSubscriberID(subscriberemail, mysql);
+                    updateSubscriberPersona(userId, listid, mysql);
                     uptpostgreData = STATUS_SUCCESS;
                 }
                 if (uptpostgreData.equals(STATUS_SUCCESS) && status.equals(STATUS_NOTFOUND)) {
@@ -209,15 +192,15 @@ public class NewsletterConfirmation extends HttpServlet {
                     String updateSyncListQuery =
                             "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
 
-                    pluBO = getsyncphpData(getPhpUser, userId, listid, USERDATA);
-                    syncStatus = updatesyncphpData(updateSyncUserQuery, pluBO, USERDATA);
+                    pluBO = getsyncphpData(getPhpUser, userId, listid, USERDATA, mysql);
+                    syncStatus = updatesyncphpData(updateSyncUserQuery, pluBO, USERDATA, postgre);
                     logger.debug("NewsletterConfirmation : syncstatus user table" + syncStatus);
 
                     logger.debug("NewsletterConfirmation : getphpUserID " + userId + " listid "
                             + listid);
                     if (syncStatus.equals(STATUS_SUCCESS)) {
-                        pluBO = getsyncphpData(getUserList, userId, listid, LISTDATA);
-                        syncStatus = updatesyncphpData(updateSyncListQuery, pluBO, LISTDATA);
+                        pluBO = getsyncphpData(getUserList, userId, listid, LISTDATA, mysql);
+                        syncStatus = updatesyncphpData(updateSyncListQuery, pluBO, LISTDATA, postgre);
                     }
 
                 }
@@ -232,8 +215,8 @@ public class NewsletterConfirmation extends HttpServlet {
                     String updateSyncListQuery =
                             "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
 
-                    pluBO = getsyncphpData(getUserList, userId, listid, LISTDATA);
-                    syncStatus = updatesyncphpData(updateSyncListQuery, pluBO, LISTDATA);
+                    pluBO = getsyncphpData(getUserList, userId, listid, LISTDATA, mysql);
+                    syncStatus = updatesyncphpData(updateSyncListQuery, pluBO, LISTDATA, postgre);
                     logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>" + syncStatus);
                 }
 
@@ -244,19 +227,19 @@ public class NewsletterConfirmation extends HttpServlet {
             }
 
             if (uptpostgreData.equals(STATUS_SUCCESS)) {
-                String tokenType = getTokenType(subscriberId);
+                String tokenType = getTokenType(subscriberId,postgre);
                 boolean tokenStatusUpdate = false;
                 boolean masterDataUpdate = false;
                 boolean preferenceDataUpdate = false;
 
                 if ("NewSubscriber".equals(tokenType)) {
-                    tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED);
-                    masterDataUpdate = updateMasterTable(subscriberId);
-                    preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId);
+                    tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED, postgre);
+                    masterDataUpdate = updateMasterTable(subscriberId,postgre);
+                    preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId, postgre);
                 } else {
-                    tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED);
+                    tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED, postgre);
                     masterDataUpdate = true;
-                    preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId);
+                    preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId, postgre);
                 }
 
                 if (tokenStatusUpdate && masterDataUpdate && preferenceDataUpdate) {
@@ -298,7 +281,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @param token
      * @return
      */
-    private String getTokenType(double subscriberId) {
+    private String getTokenType(double subscriberId, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : getTokenType");
         String confirmationTokentype = null;
         String getTokenTypeQuery =
@@ -331,7 +314,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @param token
      * @return
      */
-    private String getConfirmationTokenStatus(String token) {
+    private String getConfirmationTokenStatus(String token, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : getConfirmationTokenStatus");
         String confirmationTokenStatus = null;
         String getConfirmationTokenStatusQuery =
@@ -362,7 +345,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @param statusConfirmed
      * @return
      */
-    private boolean updateTokenStatus(String token, String status) {
+    private boolean updateTokenStatus(String token, String status, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : updateTokenStatus()");
         boolean updateTokenStatus = false;
         String updateTokenStatusQuery =
@@ -396,7 +379,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @param token
      * @return
      */
-    private Map<String, String> getSubcriberDetails(String token) {
+    private Map<String, String> getSubcriberDetails(String token,PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : getSubcriberDetails()");
         Map<String, String> subscriberDetails = new LinkedHashMap<String, String>();
 
@@ -430,7 +413,7 @@ public class NewsletterConfirmation extends HttpServlet {
     /**
      * @param subscriberId
      */
-    private boolean updateMasterTable(double subscriberId) {
+    private boolean updateMasterTable(double subscriberId, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : updateMasterTable()");
         boolean subscriberPreferenceDataInsert = false;
         String addSubscriberPreferencesQuery =
@@ -449,8 +432,7 @@ public class NewsletterConfirmation extends HttpServlet {
                 logger.info("Subscription Status Updated !");
                 subscriberPreferenceDataInsert = true;
             } else {
-                logger.info("Subscription Status Not Updated !");
-                subscriberPreferenceDataInsert = false;
+                logger.info("Subscription Status Not Updated !");                
             }
         } catch (Exception e) {
             logger.error("Exception in updateMasterTable", e);
@@ -464,7 +446,7 @@ public class NewsletterConfirmation extends HttpServlet {
     /**
      * @param subscriberId
      */
-    private boolean updatePreferencesTable(double subscriberId, double preferenceId) {
+    private boolean updatePreferencesTable(double subscriberId, double preferenceId, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : updatePreferencesTable()");
         boolean subscriberPreferenceDataInsert = false;
         String addSubscriberPreferencesQuery =
@@ -484,8 +466,7 @@ public class NewsletterConfirmation extends HttpServlet {
                 logger.info("Preference Status Updated !");
                 subscriberPreferenceDataInsert = true;
             } else {
-                logger.info("Preference Status Not Updated !");
-                subscriberPreferenceDataInsert = false;
+                logger.info("Preference Status Not Updated !");                
             }
         } catch (Exception e) {
             logger.error("Exception in updateMasterTable", e);
@@ -504,7 +485,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      *         This method get the checks if Subsscriber status and updates
      */
-    private String phpSubscriberExists(String email, int listid) {
+    private String phpSubscriberExists(String email, int listid, MySqlForServlet mysql) {
         logger.info("NewsletterConfirmation : phpSubscriberExists");
         boolean subscriberPreferenceDataInsert = false;
         String checkSubscriberEmailQuery = "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ? ";
@@ -523,7 +504,7 @@ public class NewsletterConfirmation extends HttpServlet {
             if (rs.next()) {
                 logger.info("Subscriber Already Exist !");
                 phpUserID = rs.getInt(PHP_USER_ID);
-                status = checkAlreadySubscribed(phpUserID, listid);
+                status = checkAlreadySubscribed(phpUserID, listid, mysql);
             } else {
                 logger.info("Subscriber Doesn't Exist !");
                 status = STATUS_NOTFOUND;
@@ -546,7 +527,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      *         This method check if the user is Already subscribed or not
      */
-    private String checkAlreadySubscribed(int subscriberid, int listid) {
+    private String checkAlreadySubscribed(int subscriberid, int listid, MySqlForServlet mysql) {
         logger.info("NewsletterConfirmation : checkAlreadySubscribed");
         boolean subscriberPreferenceDataInsert = false;
         String checkSubscriberEmailQuery =
@@ -585,7 +566,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      *         This method get the subscriber email based on subscriber id
      */
-    private String getSubscriberEmail(double subscriberId) {
+    private String getSubscriberEmail(double subscriberId, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : getSubscriberEmail");
         boolean subscriberPreferenceDataInsert = false;
         String addSubscriberPreferencesQuery =
@@ -621,7 +602,7 @@ public class NewsletterConfirmation extends HttpServlet {
      *         This method to fetch the subscriber persona based on subscriber
      *         id
      */
-    private String getSubscriberPersona(double subscriberId, double preferenceId) {
+    private String getSubscriberPersona(double subscriberId, double preferenceId, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : getSubscriberPersona");
         String getSubscriberPersonaQuery =
                 "SELECT PERSONA, LANGUAGE FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? AND PREFERENCE_ID = ? ";
@@ -660,7 +641,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      *         This method to fetch the subscriber listId based on listName
      */
-    private int getSubscriberListID(String listName) {
+    private int getSubscriberListID(String listName, MySqlForServlet mysql) {
         logger.info("NewsletterConfirmation : getSubscriberListID");
         String getSubscriberListQuery = "SELECT * FROM PHPLIST_LIST WHERE NAME = ?";
         Connection connection = null;
@@ -692,7 +673,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * 
      *         This method to fetch the subscriber id in phpTool
      */
-    private int getSubscriberID(String email) {
+    private int getSubscriberID(String email, MySqlForServlet mysql) {
         logger.info("NewsletterConfirmation : getSubscriberID");
         String getSubscriberListQuery = "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ?";
         Connection connection = null;
@@ -725,7 +706,7 @@ public class NewsletterConfirmation extends HttpServlet {
      *         This method to update the subscriber list based on userid &
      *         listid
      */
-    private String updateSubscriberPersona(int subscriberId, int listId) {
+    private String updateSubscriberPersona(int subscriberId, int listId, MySqlForServlet mysql) {
         logger.info("NewsletterConfirmation : updateSubscriberPersona");
         String updateSubscriberListQuery =
                 "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED) VALUES (?,?,LOCALTIMESTAMP)";
@@ -765,20 +746,19 @@ public class NewsletterConfirmation extends HttpServlet {
      *                                  This method is to add subscriber to
      *                                  phpList
      */
-    private String createSubscriberPhplist(final String email)
+    private String createSubscriberPhplist(final String email, PostgreForServlet postgre)
             throws IOException, NoSuchAlgorithmException {
-        logger.info("createSubscriberPhplist:Enter");
-        Properties properties = postgre.loadProperties(PHPLIST_PROP);
-        String base64Token = getphpListToken();
-        String status = "";
+        logger.info("createSubscriberPhplist:Enter");        
+        String base64Token = getphpListToken(postgre);
+        String status = ""; 
+        String authorizationHeader;
         if (!base64Token.equals(SESSION_FAILED)) {
 
-            authorizationHeader = "Basic " + base64Token;
-            baseUrl = properties.getProperty(BASE_URL);
+            authorizationHeader = "Basic " + base64Token;           
 
             try {
 
-                status = createSubscriber(email, authorizationHeader);
+                status = createSubscriber(email, authorizationHeader, postgre);
                 logger.debug("status: " + status);
 
             } catch (Exception e) {
@@ -804,7 +784,7 @@ public class NewsletterConfirmation extends HttpServlet {
      *                                  subscriber to phpList
      */
     private String
-            createSubscriber(final String email, String authHeader)
+            createSubscriber(final String email, String authHeader, PostgreForServlet postgre)
                     throws NoSuchAlgorithmException {
         logger.info("createsubscriber:Enter");
         InputStream is = null;
@@ -812,7 +792,8 @@ public class NewsletterConfirmation extends HttpServlet {
         StringBuilder response = new StringBuilder();
         int statusCode = 0;
         String status = "";
-
+        HttpURLConnection httpConnection = null;
+        String baseUrl;
         try {
             // Create connection
             Properties properties = postgre.loadProperties(PHPLIST_PROP);
@@ -853,14 +834,17 @@ public class NewsletterConfirmation extends HttpServlet {
             statusCode = httpConnection.getResponseCode();
         } catch (IOException ioe) {
             try {
+                if(httpConnection!=null) {
                 statusCode = httpConnection.getResponseCode();
-                logger.debug(STATUS_CODE + statusCode);
-                status = SUBSCRIBED_UNSUCCESSFULL;
+                }
+                logger.debug(STATUS_CODE + statusCode);                
 
             } catch (IOException e) {
                 logger.error("Exception in subscriber creation: ", e);
             }
+            if(httpConnection!=null) {
             httpConnection.disconnect();
+            }
             logger.error("Exception in subscriber creation: ", ioe);
 
         }
@@ -880,7 +864,7 @@ public class NewsletterConfirmation extends HttpServlet {
      * @throws IOException              This method id used to get session
      *                                  token for phpList
      */
-    private String getphpListToken()
+    private String getphpListToken(PostgreForServlet postgre)
             throws NoSuchAlgorithmException, IOException {
         logger.info("getConnection:Enter");
         String token = "";
@@ -889,13 +873,15 @@ public class NewsletterConfirmation extends HttpServlet {
         String adminID = "";
         String adminPWD = "";
         int statusCode = 0;
+        String baseUrl;
+        
         Properties properties = postgre.loadProperties(PHPLIST_PROP);
         baseUrl = properties.getProperty(BASE_URL);
         logger.info("Phplist baseUrl from properties : " + baseUrl);
         adminID = properties.getProperty(ADMIN_ID);
         adminPWD = properties.getProperty(ADMIN_PWD);
         String endpoint = baseUrl + "/api/v2/sessions";
-
+        HttpURLConnection httpConnection = null;
         StringBuilder response = new StringBuilder();
 
         try {
@@ -934,13 +920,18 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (IOException e) {
 
             try {
-                statusCode = httpConnection.getResponseCode();
+                if(httpConnection!=null) {
+                    statusCode = httpConnection.getResponseCode();
+                }
+                
                 logger.debug(STATUS_CODE + statusCode);
 
             } catch (IOException ioe) {
                 logger.error("Exception in session creation: getphpListToken ", ioe);
             }
-            httpConnection.disconnect();
+            if(httpConnection!=null) {
+                httpConnection.disconnect();
+            }
             logger.error("Exception in session creation: getphpListToken ", e);
 
             return (SESSION_FAILED);
@@ -980,7 +971,7 @@ public class NewsletterConfirmation extends HttpServlet {
 
     }
 
-    public PhpListUserBO getsyncphpData(String query, int userid, int listid, String tabName) {
+    public PhpListUserBO getsyncphpData(String query, int userid, int listid, String tabName, MySqlForServlet mysql) {
 
         logger.info("NewsletterConfirmation : getsyncphpData");
 
@@ -1045,7 +1036,7 @@ public class NewsletterConfirmation extends HttpServlet {
 
     }
 
-    private String updatesyncphpData(String query, PhpListUserBO pluBO, String tabName) {
+    private String updatesyncphpData(String query, PhpListUserBO pluBO, String tabName, PostgreForServlet postgre) {
         logger.info("NewsletterConfirmation : updatesyncphpData");
         logger.info("PhpListUserBO " + pluBO.getId() + " " + pluBO.getEmail() + " "
                 + pluBO.getEntered());
