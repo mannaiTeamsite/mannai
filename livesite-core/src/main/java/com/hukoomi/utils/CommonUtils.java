@@ -564,7 +564,6 @@ public class CommonUtils {
     	  return errorList;
       }
       
-      
       public int inserErrorResponse(int count, String brokenLink, String contentPage, String language, String statusCode) {
           this.logger.debug("Inser Error Response Broken link in Database");
           ValidationErrorList errorList = new ValidationErrorList();
