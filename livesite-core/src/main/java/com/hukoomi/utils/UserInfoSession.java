@@ -39,7 +39,7 @@ public class UserInfoSession {
 		try {
 			HttpServletRequest request = context.getRequest();
 			String valid = getStatus(context);
-			if (valid.equalsIgnoreCase(strValid)) {
+			if (valid != null && valid.equals(strValid)) {
 				Element root = doc.getRootElement();
 				if (root != null && root.isRootElement()) {
 					Element userData = root.addElement("userData");

@@ -3,13 +3,9 @@ package com.hukoomi.utils;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.log4j.Logger;
 
 public class ValidationUtils {
-    /**
-     * Logger object to check the flow of the code.
-     */
-    private final Logger logger = Logger.getLogger(ValidationUtils.class);
+   
     /** regex for emailId. */
     private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\." +
             "[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*" +
@@ -34,8 +30,7 @@ public class ValidationUtils {
     public boolean validateField(String  str) {
         Pattern p = Pattern.compile(ALPHANUMERIC_SPACE_PATTERN);
         Matcher m = p.matcher(str);
-        boolean b =     m.matches();
-        return b;
+        return m.matches();
     }
     /**
      * this method validates emailId
@@ -45,8 +40,7 @@ public class ValidationUtils {
     public boolean validateEmailId(String  str) {
         Pattern p = Pattern.compile(EMAIL_PATTERN);
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        return b;
+        return m.matches();
     }
     /**
      * this method validates numeric values
@@ -56,8 +50,7 @@ public class ValidationUtils {
     public boolean validateNumeric(String  str) {
         Pattern p = Pattern.compile(NUMERIC_PATTERN);
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        return b;
+        return m.matches();
     }
     /**
      * this method validates olny alphanumeric
@@ -67,8 +60,7 @@ public class ValidationUtils {
     public boolean validateAlphaNumeric(String  str) {
         Pattern p = Pattern.compile(ALPHANUMERIC_PATTERN);
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        return b;
+        return m.matches();
     }
     /**
      * this method validates alphabet with space
@@ -78,8 +70,7 @@ public class ValidationUtils {
     public boolean validateAlphabet(String  str) {
         Pattern p = Pattern.compile(ALPHABET_SPACE_PATTERN);
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        return b;
+        return m.matches();
     }
     /**
      * this method validates alphanumeric with space and some special character
@@ -89,8 +80,7 @@ public class ValidationUtils {
     public boolean validateAdditionalPattern(String  str) {
         Pattern p = Pattern.compile(ALPHANUMERIC_ADDITIONAL_PATTERN);
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        return b;
+        return m.matches();
     }
     /**
      * this method validates comments
@@ -100,8 +90,7 @@ public class ValidationUtils {
     public boolean validateComments(String  str) {
         Pattern p = Pattern.compile(COMMENTS_PATTERN);
         Matcher m = p.matcher(str);
-        boolean b = m.matches();
-        return b;
+        return m.matches();
     }
 
 }

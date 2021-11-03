@@ -43,7 +43,7 @@ public class XssUtils {
             logger.info("Input Value : " + value);
 
             // Avoid null characters
-            value = value.replaceAll("\0", "");
+            value = value.replace("\0", "");
 
             // Remove all sections that match a pattern
             for (Pattern scriptPattern : patterns) {

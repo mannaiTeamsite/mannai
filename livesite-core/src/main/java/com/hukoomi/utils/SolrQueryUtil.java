@@ -48,7 +48,8 @@ public class SolrQueryUtil {
             logger.debug("SOLR Query Result XML:" + returnXML);
             document = Dom4jUtils.newDocument(returnXML);
         } catch (Exception e) {
-            logger.error(SOLR_EXCEPTION + " For " + query, e);
+            logger.error(SOLR_EXCEPTION + " For: " + query, e);
+            
         }
         return document;
     }
@@ -60,7 +61,8 @@ public class SolrQueryUtil {
      * @param xmlRootName root node name for Solr Query results document.
      * @return document solr query result document.
      */
-    public Document doJsonQuery(String query, final String xmlRootName, boolean checkSpell) {
+    @SuppressWarnings("unchecked")
+	public Document doJsonQuery(String query, final String xmlRootName, boolean checkSpell) {
         Document document = DocumentHelper.createDocument();
         logger.debug("SOLR Execute Query:" + query);
         if(query.contains("category:null") || !checkSpell) {
@@ -72,12 +74,11 @@ public class SolrQueryUtil {
             ResponseEntity<String> response = restTemplate.getForEntity(query, String.class);
             JSONObject returnObject = new JSONObject();
             String returnXML = "";
-//            logger.debug("Json Response: " + response.getBody());
+
             String jsonResponse = response.getBody().replaceAll("\"(\\d+)\":", "\"doc-$1\":");
-//            logger.debug("Json After Id Tag replacement: " + jsonResponse);
+
             returnObject.put(xmlRootName, new JSONObject(jsonResponse));
             returnXML = XML.toString(returnObject);
-//            logger.debug("XML data after conversion: " + returnXML);
             document = Dom4jUtils.newDocument(returnXML);
             List<Node> resultDocs = document.selectNodes("//docs");
             Node highlightNode = document.getRootElement().selectSingleNode("highlighting");
@@ -129,7 +130,7 @@ public class SolrQueryUtil {
                 logger.info("Original wordStr: " + originalWordStr);
 
                 String correctWordStr = originalWordStr;
-                if (suggestionNodeList.size() > 0) {
+                if (!suggestionNodeList.isEmpty()) {
                     if (suggestionNodeList.size() > 1) {
                         int maxFreq = 0;
                         int freqVal;
@@ -152,7 +153,7 @@ public class SolrQueryUtil {
                 }
             }
         } catch (Exception e) {
-            logger.error(SOLR_EXCEPTION + " For " + query, e);
+            logger.error(SOLR_EXCEPTION + " For- " + query, e);
         }
         return document;
     }
@@ -172,7 +173,7 @@ public class SolrQueryUtil {
                     .getForEntity(query, String.class);
             responseBody = response.getBody();
         } catch (Exception e) {
-            logger.error(SOLR_EXCEPTION + " For " + query, e);
+            logger.error(SOLR_EXCEPTION + " For= " + query, e);
         }
         return responseBody;
     }

@@ -94,7 +94,6 @@ public class CommonUtils {
         if (isPathExists(path)) {
             logger.info("File Path exists: " + path);
             doc = this.liveSiteDal.readXmlFile(path);
-//            logger.info("DCR Retrieved: " + doc.asXML());
         } else {
             logger.error("DCR does not exist at path : " + path);
         }
@@ -412,7 +411,7 @@ public class CommonUtils {
      */
     public void generateSEOMetaTagsForDynamicContent(Document dcr, RequestContext context) {
         String urlPrefix = getURLPrefix(context);
-        String paramLocale = context.getParameterString("locale", "en");
+        String paramLocale = context.getParameterString(PARAM_LOCALE, "en");
         logger.info("paramLocale : " + paramLocale);
         String title = sanitizeMetadataField(getValueFromXML("/content/root/information/title", dcr));
         if(title.equals("")){
@@ -422,7 +421,7 @@ public class CommonUtils {
         context.getPageScopeData().put(RuntimePage.PAGESCOPE_TITLE, title);
         logger.info("Set PageScope Title : " + title);
         String locale = paramLocale.equals("ar") ? "ar_QA" :"en_US";
-        context.getPageScopeData().put("locale",locale);
+        context.getPageScopeData().put(PARAM_LOCALE,locale);
         logger.info("PageScope Locale : " + locale);
         logger.info("Current PageScopeData: "+context.getPageScopeData().toString());
         String description = sanitizeMetadataField(getValueFromXML("/content/root/page-details/description", dcr));
@@ -558,46 +557,27 @@ public class CommonUtils {
         return result;
       }
       
+      public ValidationErrorList esapiValidator(String name, String str, ValidationErrorList errorList) {
+    	  if (!ESAPIValidator.checkNull(str)) {
+    		  ESAPI.validator().getValidInput(name, str, ESAPIValidator.URL, 255, false, true, errorList);             
+          }
+    	  return errorList;
+      }
+      
       
       public int inserErrorResponse(int count, String brokenLink, String contentPage, String language, String statusCode) {
           this.logger.debug("Inser Error Response Broken link in Database");
           ValidationErrorList errorList = new ValidationErrorList();
-          
-          
-          if (!ESAPIValidator.checkNull(brokenLink)) {
-            	brokenLink  = ESAPI.validator().getValidInput("brokenLink", brokenLink, ESAPIValidator.URL, 255, false, true, errorList);
-                if(!errorList.isEmpty()) {
-                    logger.info(errorList.getError("brokenLink"));
-                    logger.error("Not a valid parameter brokenLink. The incident will not be logged");
-                    return 0;
-                }
-            }
-            if (!ESAPIValidator.checkNull(contentPage)) {
-            	contentPage  = ESAPI.validator().getValidInput("contentPage", contentPage, ESAPIValidator.URL, 255, false, true, errorList);
-                if(!errorList.isEmpty()) {
-                    logger.info(errorList.getError("contentPage"));
-                    logger.error("Not a valid parameter contentPage. The incident will not be logged.");
-                    return 0;
-                }
-            }
-          if (!ESAPIValidator.checkNull(language)) {
-          	language  = ESAPI.validator().getValidInput("language", language, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-              if(!errorList.isEmpty()) {
-                  logger.info(errorList.getError("language"));
-                  logger.error("Not a valid parameter language. The incident will not be logged.");
-                  return 0;
-              }
-          }
-          if (!ESAPIValidator.checkNull(statusCode)) {
-          	statusCode  = ESAPI.validator().getValidInput("statusCode", statusCode, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-              if(!errorList.isEmpty()) {
-                  logger.info(errorList.getError("statusCode"));
-                  logger.error("Not a valid parameter statusCode. The incident will not be logged.");
-                  return 0;
-              }
-          }
           int insertResponse = 0;
-          if (contentPage != null && brokenLink != null) {
+          esapiValidator("brokenLink", brokenLink, errorList);
+          esapiValidator("contentPage", contentPage, errorList);
+          esapiValidator("language", language, errorList);
+          esapiValidator("statusCode", statusCode, errorList);
+          if(!errorList.isEmpty()) {
+              logger.info(errorList.getError("brokenLink"));
+              logger.error("Not a valid parameter brokenLink. The incident will not be logged");
+              return 0;
+          }else {        
               this.logger.info("Logging the Broken link with status: " + statusCode + ", for URL: " + brokenLink + ", present on: " + contentPage + " for language: " + language);
               PreparedStatement statement = null;
               Connection connection = null;
@@ -625,7 +605,8 @@ public class CommonUtils {
                 database.releaseConnection(connection, statement, null);
                 this.logger.info("Released Database Connection.");
               } 
-            }
+          
+          }
           return insertResponse;
     }
       
