@@ -38,7 +38,6 @@ import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
 import com.hukoomi.utils.RequestHeaderUtils;
 import com.hukoomi.utils.UserInfoSession;
-//import com.hukoomi.utils.Validator;
 import com.interwoven.livesite.runtime.RequestContext;
 
 /**
@@ -99,10 +98,7 @@ public class PollsExternal {
      * Postgre Object variable.
      */
     Postgre postgre = null;
-    /**
-     * Validator object.
-     */
-    //Validator validate = new Validator();
+    
     /**
      * Constant for action polls and survey.
      */
@@ -139,6 +135,14 @@ public class PollsExternal {
      * NLUID key
      */
     public static final String NLUID = "NLUID";
+    /**
+     * NLUID QUERY part
+     */
+    public static final String NLUID_QUERY ="AND NLUID = ? ";
+    /**
+     * USER_ID QUERY part
+     */
+    public static final String USERID_QUERY ="AND USER_ID = ? ";
     /**
      * NLUID Cookie Expiry
      */
@@ -187,14 +191,15 @@ public class PollsExternal {
             
             if(StringUtils.equalsIgnoreCase("vote", pollsBO.getAction())) {
                 doc = processVotePoll(pollsBO, postgre, votedPolls, context);
-            } else if(StringUtils.equalsIgnoreCase("current", pollsBO.getAction())) {
+            } else if(StringUtils.equalsIgnoreCase(ACTION_CURRENT_POLLS, pollsBO.getAction())) {
                 doc = processCurrentPolls(context, he, pollsBO);
             } else if(StringUtils.equalsIgnoreCase("past", pollsBO.getAction())) { 
                 doc = processPastPolls(context, he, pollsBO);
             }
         } else {
             logger.info("Invalid input parameter");
-            if (StringUtils.equalsIgnoreCase("current", pollsBO.getAction()) || StringUtils.equalsIgnoreCase("past", pollsBO.getAction())) {
+            if (StringUtils.equalsIgnoreCase(ACTION_CURRENT_POLLS, pollsBO.getAction())
+                    || StringUtils.equalsIgnoreCase("past", pollsBO.getAction())) {
                 Element pollResponseElem = doc.addElement("SolrResponse")
                         .addElement("response").addElement("numFound");
                 pollResponseElem.setText("0");
@@ -221,8 +226,7 @@ public class PollsExternal {
         logger.info("Polls External : processVotePoll");
         Map<Long, Long> votedOptions = null;
         boolean isCaptchaValid = true;
-        //logger.info("Check User Id : "+!StringUtils.isNotBlank(pollsBO.getUserId()));
-        //logger.info("Check nluser Id : "+!StringUtils.isNotBlank(pollsBO.getNLUID()));
+        
         if(!StringUtils.isNotBlank(pollsBO.getUserId()) && !StringUtils.isNotBlank(pollsBO.getNLUID())) {
             String nlUID = UUID.randomUUID().toString();
             logger.info(NLUID+" : " + nlUID);
@@ -233,8 +237,7 @@ public class PollsExternal {
             logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
             int nlUserCookieExpiry = 0;
             if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
-                nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);
-                //logger.info("nlUserCookieExpiry : " + nlUserCookieExpiry);
+                nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);               
             }
             nlUIDCookie.setMaxAge(nlUserCookieExpiry);
             nlUIDCookie.setPath("/");
@@ -255,7 +258,7 @@ public class PollsExternal {
 
                 if (votedPolls.isEmpty() != true) {
                     votedOptions = getVotedOption(postgre, votedPolls, pollsBO);
-                    logger.info("Voted Polls : " + votedOptions.toString());
+                    logger.info("Voted Polls :: " + votedOptions.toString());
                 }
                 
             } else {
@@ -287,9 +290,9 @@ public class PollsExternal {
                 "SELECT POLL_ID FROM POLL_RESPONSE WHERE POLL_ID = ? ");
 
         if (StringUtils.isNotBlank(pollsBO.getUserId())) {
-            checkVotedQuery.append("AND USER_ID = ? ");
+            checkVotedQuery.append(USERID_QUERY);
         } else {
-            checkVotedQuery.append("AND NLUID = ? ");
+            checkVotedQuery.append(NLUID_QUERY);
         }
         logger.debug("checkVotedQuery ::" + checkVotedQuery.toString());
         Connection connection = null;
@@ -346,7 +349,7 @@ public class PollsExternal {
             pollsBO.setPollId(pollIdSFromDoc);
 
             // Fetch Result from DB for above poll_ids which were voted already by user
-            Map<String, List<Map<String, String>>> response = getPollResponse(
+            Map<String, List<Map<String, String>>> pollresponse = getPollResponse(
                     pollsBO, postgre, votedPolls);
 
             Map<Long, Long> votedOptions = null;
@@ -354,10 +357,10 @@ public class PollsExternal {
             if (!votedPolls.isEmpty()) {
                 votedOptions = getVotedOption(postgre, votedPolls,
                         pollsBO);
-                logger.info("Voted Polls : " + votedOptions.toString());
+                logger.info("Voted Polls ::: " + votedOptions.toString());
             }
 
-            doc = addResultToXml(doc, response, votedOptions);
+            doc = addResultToXml(doc, pollresponse, votedOptions);
         }
         return doc;
     }
@@ -370,7 +373,7 @@ public class PollsExternal {
             HashSet<String> votedPolls, PollsBO pollsBO) {
         logger.info("getVotedOption()");
 
-        logger.info("Voted Polls : " + votedPolls.toString());
+        logger.info("Voted Polls :::: " + votedPolls.toString());
         logger.info("Polls BO : " + pollsBO);
 
         StringJoiner pollIds = new StringJoiner(",");
@@ -386,11 +389,11 @@ public class PollsExternal {
                 "SELECT POLL_ID, OPTION_ID FROM POLL_RESPONSE WHERE POLL_ID = ANY (?) ");
 
         if (StringUtils.isNotBlank(pollsBO.getUserId())) {
-            getVotedOptions.append("AND USER_ID = ? ");
+            getVotedOptions.append(USERID_QUERY);
         } else {
-            getVotedOptions.append("AND NLUID = ? ");
+            getVotedOptions.append(NLUID_QUERY);
         }
-        logger.info("checkVotedQuery ::" + getVotedOptions.toString());
+        logger.info("checkVotedQuery :::" + getVotedOptions.toString());
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -411,7 +414,7 @@ public class PollsExternal {
                 votedOptions.put(rs.getLong(POLL_ID),
                         rs.getLong("OPTION_ID"));
             }
-            logger.info("Voted Polls : " + votedOptions.toString());
+            logger.info("Voted Polls ::::: " + votedOptions.toString());
 
         } catch (Exception e) {
             logger.error("Exception in checkResponseData", e);
@@ -463,7 +466,7 @@ public class PollsExternal {
             if(StringUtils.isNotBlank(votedPollIds)) {
                 pollsBO.setPollId(votedPollIds);
                 // Fetch Result from DB for above poll_ids which were voted already by user
-                Map<String, List<Map<String, String>>> response = getPollResponse(
+                Map<String, List<Map<String, String>>> pollresponse = getPollResponse(
                         pollsBO, postgre, votedPolls);
 
                 Map<Long, Long> votedOptions = null;
@@ -477,7 +480,7 @@ public class PollsExternal {
 
                 // Iterate the solr doc and match the poll_ids , matched: try to add reponse in
                 // particular poll_id element
-                doc = addResultToXml(doc, response, votedOptions);
+                doc = addResultToXml(doc, pollresponse, votedOptions);
             }
         }
         return doc;
@@ -605,7 +608,8 @@ public class PollsExternal {
                         totRespElem.setText(optMap.get(TOTALRESPONSE));
                         Element pollPercentElem = optionElement
                                 .addElement(POLLPCT);
-                        if (i == optionVoted) {
+                        
+                        if (i.equals(optionVoted)) {
                             pollPercentElem.addAttribute("Voted", "true");
                         }
                         pollPercentElem.setText(optMap.get(POLLPCT));
@@ -637,10 +641,7 @@ public class PollsExternal {
 
             document = DocumentHelper.createDocument();
             Element pollResultElem = document.addElement("PollResult");
-            
-            //Element nlUIDElement = pollResultElem.addElement("NLUID");
-            //nlUIDElement.setText(pollsBO.getNLUID());
-            
+                     
             Element captchaResponseElement = pollResultElem.addElement("isCaptchaValid");
             if(isCaptchaValid) {
                 captchaResponseElement.setText("Valid");
@@ -672,7 +673,8 @@ public class PollsExternal {
                     totRespElem.setText(optMap.get(TOTALRESPONSE));
                     Element pollPercentElem = optionElement
                             .addElement(POLLPCT);
-                    if (i == optionVoted) {
+                    
+                    if (i.equals(optionVoted)) {
                         pollPercentElem.addAttribute("Voted", "true");
                     }
                     pollPercentElem.setText(optMap.get(POLLPCT));
@@ -840,12 +842,12 @@ public class PollsExternal {
 
         if (pollsBO.getUserId() != null
                 && !"".equals(pollsBO.getUserId())) {
-            checkVotedQuery.append("AND USER_ID = ? ");
+            checkVotedQuery.append(USERID_QUERY);
         } else if (pollsBO.getNLUID() != null
                 && !"".equals(pollsBO.getNLUID())) {
-            checkVotedQuery.append("AND NLUID = ? ");
+            checkVotedQuery.append(NLUID_QUERY);
         }
-        logger.debug("checkVotedQuery ::" + checkVotedQuery.toString());
+        logger.debug("checkVotedQuery ::::" + checkVotedQuery.toString());
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -875,198 +877,7 @@ public class PollsExternal {
         return votedPollIds.toString();
     }
 
-    /**
-     * This method is used to set value to PollsBO object.
-     * 
-     * @param context Request Context Object.
-     * 
-     * @return Returns PollsBO Object.
-     * 
-     */
-    /*public boolean setBO(final RequestContext context, PollsBO pollsBO) {
-
-        final String POLL_ACTION = "pollAction";
-        final String LOCALE = "locale";
-        final String USER_ID = "user_id";
-        final String USER_AGENT = "User-Agent";
-        final String VOTED_FROM = "votedFrom";
-        final String POLLID = "pollId";
-        final String CURRENT_POLL_ROWS = "current_poll_rows";
-        final String PAST_POLL_ROWS = "past_poll_rows";
-        final String POLLS_GROUP = "PollsGroup";
-        final String OPTION = "option";
-        final String POLL_GROUP_CATEGORY = "pollGroupCategory";
-        final String POLL_CATEGORY = "pollCategory";
-        final String SOLR_POLL_CATEGORY = "solrPollCategory";
-
-        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(
-                context);
-        logger.debug(POLL_ACTION + " >>>"
-                + context.getParameterString(POLL_ACTION) + "<<<");
-        if (!validate.checkNull(context.getParameterString(POLL_ACTION))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(POLL_ACTION),
-                    Validator.ALPHABET)) {
-                pollsBO.setAction(context.getParameterString(POLL_ACTION));
-            } else {
-                return false;
-            }
-        }
-
-        logger.debug(LOCALE + " >>>" + context.getParameterString(LOCALE)
-                + "<<<");
-        if (!validate.checkNull(context.getParameterString(LOCALE))) {
-            if (validate.isValidPattern(context.getParameterString(LOCALE),
-                    Validator.ALPHABET)) {
-                pollsBO.setLang(context.getParameterString(LOCALE, "en"));
-            } else {
-                return false;
-            }
-        }
-
-        logger.debug(USER_ID + " >>>" + context.getParameterString(USER_ID)
-                + "<<<");
-        if (!validate.checkNull(context.getParameterString(USER_ID))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(USER_ID),
-                    Validator.USER_ID)) {
-                logger.debug("user_id 1");
-                pollsBO.setUserId(context.getParameterString(USER_ID));
-                logger.debug("user_id 2");
-            } else {
-                logger.debug("user_id else");
-                return false;
-            }
-        }
-
-        logger.debug("ipaddress >>>"
-                + requestHeaderUtils.getClientIpAddress() + "<<<");
-        if (!validate.checkNull(requestHeaderUtils.getClientIpAddress())) {
-            if (validate.isValidPattern(
-                    requestHeaderUtils.getClientIpAddress(),
-                    Validator.IP_ADDRESS)) {
-                pollsBO.setIpAddress(
-                        requestHeaderUtils.getClientIpAddress());
-            } else {
-                return false;
-            }
-        }
-
-        pollsBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
-
-        logger.debug(VOTED_FROM + " >>>"
-                + context.getParameterString(VOTED_FROM) + "<<<");
-        if (!validate.checkNull(context.getParameterString(VOTED_FROM))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(VOTED_FROM),
-                    Validator.ALPHABET)) {
-                pollsBO.setVotedFrom(
-                        context.getParameterString(VOTED_FROM));
-            } else {
-                return false;
-            }
-        }
-
-        logger.debug(POLLID + " >>>" + context.getParameterString(POLLID)
-                + "<<<");
-        if (!validate.checkNull(context.getParameterString(POLLID))) {
-            if (validate.isValidPattern(context.getParameterString(POLLID),
-                    Validator.NUMERIC)) {
-                pollsBO.setPollId(context.getParameterString(POLLID));
-            } else {
-                return false;
-            }
-        }
-        logger.debug(CURRENT_POLL_ROWS + " >>>"
-                + context.getParameterString(CURRENT_POLL_ROWS) + "<<<");
-        if (!validate.checkNull(
-                context.getParameterString(CURRENT_POLL_ROWS))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(CURRENT_POLL_ROWS),
-                    Validator.NUMERIC)) {
-                pollsBO.setCurrentPollsPerPage(
-                        context.getParameterString(CURRENT_POLL_ROWS));
-            } else {
-                return false;
-            }
-        }
-
-        logger.debug(PAST_POLL_ROWS + " >>>"
-                + context.getParameterString(PAST_POLL_ROWS) + "<<<");
-        if (!validate
-                .checkNull(context.getParameterString(PAST_POLL_ROWS))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(PAST_POLL_ROWS),
-                    Validator.NUMERIC)) {
-                pollsBO.setPastPollsPerPage(
-                        context.getParameterString(PAST_POLL_ROWS));
-            } else {
-                return false;
-            }
-        }
-
-        if (!validate
-                .checkNull(context.getParameterString(POLLS_GROUP))) {
-            pollsBO.setGroup(
-                getContentName(context.getParameterString(POLLS_GROUP)));
-        }
-
-        logger.debug(OPTION + " >>>" + context.getParameterString(OPTION)
-                + "<<<");
-        if (!validate.checkNull(context.getParameterString(OPTION))) {
-            if (validate.isValidPattern(context.getParameterString(OPTION),
-                    Validator.NUMERIC)) {
-                pollsBO.setSelectedOption(
-                        context.getParameterString(OPTION));
-            } else {
-                return false;
-            }
-        }
-
-        logger.debug(POLL_GROUP_CATEGORY + " >>>"
-                + context.getParameterString(POLL_GROUP_CATEGORY) + "<<<");
-        if (!validate.checkNull(
-                context.getParameterString(POLL_GROUP_CATEGORY))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(POLL_GROUP_CATEGORY),
-                    Validator.ALPHABET_HYPEN)) {
-                pollsBO.setGroupCategory(
-                        context.getParameterString(POLL_GROUP_CATEGORY));
-            } else {
-                return false;
-            }
-        }
-
-        logger.debug(POLL_CATEGORY + " >>>"
-                + context.getParameterString(POLL_CATEGORY) + "<<<");
-        if (!validate
-                .checkNull(context.getParameterString(POLL_CATEGORY))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(POLL_CATEGORY),
-                    Validator.ALPHABET)) {
-                pollsBO.setCategory(
-                        context.getParameterString(POLL_CATEGORY));
-            } else {
-                return false;
-            }
-        }
-
-        logger.debug(SOLR_POLL_CATEGORY + " >>>"
-                + context.getParameterString(SOLR_POLL_CATEGORY) + "<<<");
-        if (!validate.checkNull(
-                context.getParameterString(SOLR_POLL_CATEGORY))) {
-            if (validate.isValidPattern(
-                    context.getParameterString(SOLR_POLL_CATEGORY),
-                    Validator.ALPHABET)) {
-                pollsBO.setSolrCategory(
-                        context.getParameterString(SOLR_POLL_CATEGORY));
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }*/
-    
+        
     /**
      * This method is used to set value to PollsBO object.
      * 
@@ -1124,7 +935,8 @@ public class PollsExternal {
         
         String pollAction = context.getParameterString(POLL_ACTION);
         logger.debug(POLL_ACTION + " >>>"+pollAction+"<<<");
-        validData  = ESAPI.validator().getValidInput(POLL_ACTION, pollAction, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+        validData = ESAPI.validator().getValidInput(POLL_ACTION, pollAction,
+                ESAPIValidator.ALPHABET, 20, false, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setAction(validData);
         }else {
@@ -1134,7 +946,8 @@ public class PollsExternal {
         
         String locale = context.getParameterString(LOCALE, "en");
         logger.debug(LOCALE + " >>>" +locale+ "<<<");
-        validData  = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true, errorList);
+        validData = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2,
+                false, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setLang(validData);
         }else {
@@ -1155,20 +968,13 @@ UserInfoSession ui = new UserInfoSession();
             }else {
                 logger.debug("UserId from session is null.");
             }
-            /*validData = ESAPI.validator().getValidInput(USER_ID, userId,
-                    ESAPIValidator.USER_ID, 50, true, true, errorList);
-            if (errorList.isEmpty()) {
-                pollsBO.setUserId(validData);
-                userId = validData;
-            } else {
-                logger.debug(errorList.getError(USER_ID));
-                return false;
-            }*/
+            
         }
         
         String ipAddress = requestHeaderUtils.getClientIpAddress();
         logger.debug("ipaddress >>>" +ipAddress+ "<<<");
-        validData  = ESAPI.validator().getValidInput("IPAddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
+        validData = ESAPI.validator().getValidInput("IPAddress", ipAddress,
+                ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setIpAddress(validData);
         }else {
@@ -1176,10 +982,10 @@ UserInfoSession ui = new UserInfoSession();
             return false;
         }
         
-        //String nlUID = context.getParameterString(NLUID);
         String nlUID = cookiesMap.get(NLUID);
         logger.debug(NLUID + " >>>"+nlUID+"<<<");
-        validData  = ESAPI.validator().getValidInput(NLUID, nlUID, ESAPIValidator.ALPHANUMERIC_HYPHEN, 36, true, true, errorList);
+        validData = ESAPI.validator().getValidInput(NLUID, nlUID,
+                ESAPIValidator.ALPHANUMERIC_HYPHEN, 36, true, true, errorList);
         if(errorList.isEmpty()) {
             pollsBO.setNLUID(validData);
         }else {
@@ -1192,7 +998,8 @@ UserInfoSession ui = new UserInfoSession();
         if(ACTION_CURRENT_POLLS.equalsIgnoreCase(pollAction)) {
             String currentPollRows = context.getParameterString(CURRENT_POLL_ROWS);
             logger.debug(CURRENT_POLL_ROWS + " >>>" +currentPollRows+ "<<<");
-            validData  = ESAPI.validator().getValidInput(CURRENT_POLL_ROWS, currentPollRows, ESAPIValidator.NUMERIC, 2, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(CURRENT_POLL_ROWS, currentPollRows,
+                    ESAPIValidator.NUMERIC, 2, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setCurrentPollsPerPage(validData);
             }else {
@@ -1204,7 +1011,8 @@ UserInfoSession ui = new UserInfoSession();
         if(ACTION_PAST_POLLS.equalsIgnoreCase(pollAction)) {
             String pastPollRows = context.getParameterString(PAST_POLL_ROWS);
             logger.debug(PAST_POLL_ROWS + " >>>" +pastPollRows+ "<<<");
-            validData  = ESAPI.validator().getValidInput(PAST_POLL_ROWS, pastPollRows, ESAPIValidator.NUMERIC, 2, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(PAST_POLL_ROWS, pastPollRows,
+                    ESAPIValidator.NUMERIC, 2, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setPastPollsPerPage(validData);
             }else {
@@ -1217,7 +1025,8 @@ UserInfoSession ui = new UserInfoSession();
             
             String pollId = context.getParameterString(POLLID);
             logger.debug(POLLID + " >>>" +pollId+ "<<<");
-            validData  = ESAPI.validator().getValidInput(POLLID, pollId, ESAPIValidator.NUMERIC, 200, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(POLLID, pollId, ESAPIValidator.NUMERIC, 200,
+                    false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setPollId(validData);
             }else {
@@ -1232,7 +1041,8 @@ UserInfoSession ui = new UserInfoSession();
             
             String option = context.getParameterString(OPTION);
             logger.debug(OPTION + " >>>" +option+ "<<<");
-            validData  = ESAPI.validator().getValidInput(OPTION, option, ESAPIValidator.NUMERIC, 2, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(OPTION, option, ESAPIValidator.NUMERIC, 2,
+                    false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setSelectedOption(validData);
             }else {
@@ -1242,7 +1052,8 @@ UserInfoSession ui = new UserInfoSession();
             
             String votedFrom = context.getParameterString(VOTED_FROM);
             logger.debug(VOTED_FROM + " >>>" +votedFrom+ "<<<");
-            validData  = ESAPI.validator().getValidInput(VOTED_FROM, votedFrom, ESAPIValidator.ALPHABET, 150, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(VOTED_FROM, votedFrom,
+                    ESAPIValidator.ALPHABET, 150, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setVotedFrom(validData);
             }else {
@@ -1265,10 +1076,11 @@ UserInfoSession ui = new UserInfoSession();
                     Cookie cookie = cookies[i];
                     String name = cookie.getName();
                     String personaValue = null;
-                    if(name != null && "persona".equalsIgnoreCase(name)) {
+                    if(name != null && PERSONA.equalsIgnoreCase(name)) {
                         personaValue = cookie.getValue();
                         logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
-                        validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                        validData = ESAPI.validator().getValidInput(PERSONA, personaValue,
+                                ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
                         if(errorList.isEmpty()) {
                             pollsBO.setPersona(validData);
                         }else {
@@ -1297,7 +1109,9 @@ UserInfoSession ui = new UserInfoSession();
                 
                 String pollGroupConfigCategory = context.getParameterString(POLL_GROUP_CONFIG_CATEGORY);
                 logger.debug(POLL_GROUP_CONFIG_CATEGORY + " >>>" +pollGroupConfigCategory+ "<<<");
-                validData  = ESAPI.validator().getValidInput(POLL_GROUP_CONFIG_CATEGORY, pollGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+                validData = ESAPI.validator().getValidInput(POLL_GROUP_CONFIG_CATEGORY,
+                        pollGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true,
+                        errorList);
                 if(errorList.isEmpty()) {
                     pollsBO.setPollGroupConfigCategory(validData);
                 }else {
@@ -1308,7 +1122,8 @@ UserInfoSession ui = new UserInfoSession();
             
             String pollGroupCategory = context.getParameterString(POLL_GROUP_CATEGORY);
             logger.debug(POLL_GROUP_CATEGORY + " >>>" +pollGroupCategory+ "<<<");
-            validData  = ESAPI.validator().getValidInput(POLL_GROUP_CATEGORY, pollGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(POLL_GROUP_CATEGORY, pollGroupCategory,
+                    ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setGroupCategory(validData);
             }else {
@@ -1318,7 +1133,8 @@ UserInfoSession ui = new UserInfoSession();
             
             String pollCategory = context.getParameterString(POLL_CATEGORY);
             logger.debug(POLL_CATEGORY + " >>>" +pollCategory+ "<<<");
-            validData  = ESAPI.validator().getValidInput(POLL_CATEGORY, pollCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(POLL_CATEGORY, pollCategory,
+                    ESAPIValidator.ALPHABET, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setCategory(validData);
             }else {
@@ -1328,7 +1144,8 @@ UserInfoSession ui = new UserInfoSession();
             
             String solrPollCategory = context.getParameterString(SOLR_POLL_CATEGORY);
             logger.debug(SOLR_POLL_CATEGORY + " >>>" +solrPollCategory+ "<<<");
-            validData  = ESAPI.validator().getValidInput(SOLR_POLL_CATEGORY, solrPollCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SOLR_POLL_CATEGORY, solrPollCategory,
+                    ESAPIValidator.ALPHABET, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 pollsBO.setSolrCategory(validData);
             }else {
@@ -1352,10 +1169,11 @@ UserInfoSession ui = new UserInfoSession();
                         Cookie cookie = cookies[i];
                         String name = cookie.getName();
                         String personaValue = null;
-                        if(name != null && "persona".equalsIgnoreCase(name)) {
+                        if(name != null && PERSONA.equalsIgnoreCase(name)) {
                             personaValue = cookie.getValue();
                             logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
-                            validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                            validData = ESAPI.validator().getValidInput(PERSONA, personaValue,
+                                    ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
                             if(errorList.isEmpty()) {
                                 pollsBO.setPersona(validData);
                             }else {

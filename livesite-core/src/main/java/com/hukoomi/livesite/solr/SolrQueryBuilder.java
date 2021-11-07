@@ -19,6 +19,10 @@ public class SolrQueryBuilder {
     public static final String UTF = "UTF-8";
     /** Is header boolean flag. */
     public boolean isHeader = false;
+    /** Constant baseQuery . */
+    public static final String BASE_QUERY = "baseQuery";
+    /** Constant fieldQuery . */
+    public static final String FIELD_QUERY = "fieldQuery";
     /** Logger object to check the flow of the code.*/
     private final Logger logger =
             Logger.getLogger(SolrQueryBuilder.class);
@@ -176,8 +180,8 @@ public class SolrQueryBuilder {
         try {
             if(!isHeader) {
                 this.baseQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
-                        .getParameterString("baseQuery", DEFAULT_QUERY), UTF));
-                context.setParameterString("baseQuery",this.baseQuery);
+                        .getParameterString(BASE_QUERY, DEFAULT_QUERY), UTF));
+                context.setParameterString(BASE_QUERY,this.baseQuery);
             } else{
                 this.baseQuery = DEFAULT_QUERY;
             }
@@ -185,22 +189,22 @@ public class SolrQueryBuilder {
 
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode baseQuery="
-                    + context.getParameterString("baseQuery",
+                    + context.getParameterString(BASE_QUERY,
                     DEFAULT_QUERY), e);
         }
 
         try {
             if(!isHeader) {
                 this.fieldQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
-                        .getParameterString("fieldQuery", ""), UTF));
-                context.setParameterString("fieldQuery",this.fieldQuery);
+                        .getParameterString(FIELD_QUERY, ""), UTF));
+                context.setParameterString(FIELD_QUERY,this.fieldQuery);
             } else {
                 this.fieldQuery = "";
             }
             logger.debug("Solr Field Query: " + fieldQuery);
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode fieldQuery="
-                    + context.getParameterString("fieldQuery"), e);
+                    + context.getParameterString(FIELD_QUERY), e);
         }
 
         try {

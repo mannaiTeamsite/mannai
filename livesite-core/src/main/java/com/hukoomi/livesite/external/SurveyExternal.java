@@ -190,8 +190,7 @@ public class SurveyExternal {
                         logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
                         int nlUserCookieExpiry = 0;
                         if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
-                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);
-                            //logger.info("nlUserCookieExpiry : " + nlUserCookieExpiry);
+                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);                            
                         }
                         nlUIDCookie.setMaxAge(nlUserCookieExpiry);
                         nlUIDCookie.setPath("/");
@@ -237,7 +236,8 @@ public class SurveyExternal {
                     if (StringUtils.isNotBlank(surveyId)) {
                         ArrayList surveyArr = new ArrayList();
                         surveyArr.add(surveyId);
-                        if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                        if (StringUtils.isNotBlank(surveyBO.getUserId())
+                                || StringUtils.isNotBlank(surveyBO.getNLUID())) {
                             submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, 
                                 null, postgre, surveyBO);
                         }
@@ -264,8 +264,7 @@ public class SurveyExternal {
                         logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
                         int nlUserCookieExpiry = 0;
                         if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
-                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);
-                            //logger.info("nlUserCookieExpiry : " + nlUserCookieExpiry);
+                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);                            
                         }
                         nlUIDCookie.setMaxAge(nlUserCookieExpiry);
                         nlUIDCookie.setPath("/");
@@ -273,7 +272,7 @@ public class SurveyExternal {
                         logger.info("nlUIDCookie added to cookie");
                     }
                     
-                    ArrayList dynamicSurveyArr = new ArrayList();
+                    ArrayList<String> dynamicSurveyArr = new ArrayList<String>();
                     dynamicSurveyArr.add(surveyBO.getSurveyId());
                     ArrayList submittedSurveyIdArr = getSubmittedSurveyIds(null, dynamicSurveyArr, postgre, surveyBO);
 
@@ -336,8 +335,7 @@ public class SurveyExternal {
         logger.debug("Survey SurveyIds from doc : " + surveyArr);
         logger.debug("Dynamic Survey SurveyIds from doc : " + dynamicSurveyArr);
         
-        if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {
-        //if (StringUtils.isNotBlank(surveyIds)) {
+        if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {        
             // Checking for already submitted Surveys
             
             ArrayList submittedSurveyIds = new ArrayList();
@@ -394,15 +392,14 @@ public class SurveyExternal {
     public ArrayList getSubmittedSurveyIds(ArrayList surveyArr, ArrayList dynamicSurveyArr,
             Postgre postgre, SurveyBO surveyBO) {
         logger.info("SurveyExternal : getSubmittedSurveyIds");
-        ArrayList submittedSurveyIds = new ArrayList();
+        ArrayList<String> submittedSurveyIds = new ArrayList<String>();
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         
         try {
             connection = postgre.getConnection();
-            String userId = surveyBO.getUserId();
-            //String ipAddress = surveyBO.getIpAddress();
+            String userId = surveyBO.getUserId();           
             String nluid = surveyBO.getNLUID();
             
             if(surveyArr != null && !surveyArr.isEmpty()) {
@@ -566,7 +563,7 @@ public class SurveyExternal {
                         answersprepareStatement, responseId, surveyBO);
                 logger.info("isAdded : " + isAdded);
                 if (isAdded) {
-                    logger.debug("responseId : " + responseId);
+                    logger.debug("responseId :: " + responseId);
 
                     // Number of items added to the answers batch is set to the un-used qustionNo
                     // field.
@@ -629,7 +626,8 @@ public class SurveyExternal {
             String lang = surveyBO.getLang();
             
             if(StringUtils.isNotBlank(surveyId) && StringUtils.isNotBlank(lang)) {
-                String dynamicSurveyQuery = "SELECT DISTINCT SURVEY_MASTER_ID FROM DYNAMIC_SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ? ";
+                String dynamicSurveyQuery =
+                        "SELECT DISTINCT SURVEY_MASTER_ID FROM DYNAMIC_SURVEY_MASTER WHERE SURVEY_ID = ? AND LANG = ? ";
     
                 logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery);
                     
@@ -638,11 +636,7 @@ public class SurveyExternal {
                 prepareStatement.setString(2, lang);
                 rs = prepareStatement.executeQuery();
                 while (rs.next()) {
-                    surveyMasterId = rs.getLong(SURVEY_MASTER_ID);
-                    /*String surveyMasterIdStr = rs.getString(SURVEY_MASTER_ID);
-                    if(surveyMasterIdStr != null && !"".endsWith(surveyMasterIdStr)) {
-                        surveyMasterId = Long.parseLong(surveyMasterIdStr);
-                    }*/
+                    surveyMasterId = rs.getLong(SURVEY_MASTER_ID);                    
                 }
             }
             logger.debug("Dynamic Survey Master Id : "+ surveyMasterId);
@@ -679,7 +673,9 @@ public class SurveyExternal {
             Long surveyMasterId = surveyBO.getSurveyMasterId();
             
             if(questionId != null && surveyMasterId != null  ) {
-                String dynamicSurveyQuery = "SELECT SURVEY_QUESTION_ID FROM dynamic_survey_question WHERE SURVEY_MASTER_ID = ? AND QUESTION_ID = ? ";
+                String dynamicSurveyQuery =
+                        "SELECT SURVEY_QUESTION_ID FROM dynamic_survey_question "
+                        + "WHERE SURVEY_MASTER_ID = ? AND QUESTION_ID = ? ";
     
                 logger.debug("dynamicSurveyQuery : "+ dynamicSurveyQuery);
                     
@@ -688,11 +684,7 @@ public class SurveyExternal {
                 prepareStatement.setLong(2, questionId);
                 rs = prepareStatement.executeQuery();
                 while (rs.next()) {
-                    surveyQuestionId = rs.getLong(SURVEY_QUESTION_ID);
-                    /*String surveyQuestionIdStr = rs.getString(SURVEY_QUESTION_ID);
-                    if(surveyQuestionIdStr != null && !"".endsWith(surveyQuestionIdStr)) {
-                        surveyQuestionId = Long.parseLong(surveyQuestionIdStr);
-                    }*/
+                    surveyQuestionId = rs.getLong(SURVEY_QUESTION_ID);                    
                 }
             }
             logger.debug("Dynamic Survey Question Id : "+ surveyQuestionId);
@@ -732,18 +724,15 @@ public class SurveyExternal {
         try {
             
             totalCount = getIntValue(surveyBO.getTotalQuestions());
-            logger.info("totalCount : " + totalCount);
+            logger.info("totalCount :: " + totalCount);
             
             Long dynamicSurveyMasterId = getDynamicSurveyMasterId(postgre, surveyBO);
             surveyBO.setSurveyMasterId(dynamicSurveyMasterId);
 
-            //totalCount = getIntValue(surveyBO.getTotalQuestions());
-            //logger.info("totalCount : " + totalCount);
-
             Long responseId = getNextSequenceValue(
                     "dynamic_survey_response_response_id_seq",
                     postgre.getConnection());
-            logger.debug("responseId : " + responseId);
+            logger.debug("responseId ::: " + responseId);
             surveyBO.setResponseId(responseId);
             
             connection = postgre.getConnection();
@@ -774,10 +763,10 @@ public class SurveyExternal {
                         .prepareStatement(surveyAnswerQuery);
 
                 boolean isAdded = addDynamicSurveyAnswerstoBatch(totalCount, context,
-                        answersprepareStatement, responseId, surveyBO);
+                        answersprepareStatement,surveyBO);
                 logger.info("isAdded : " + isAdded);
                 if (isAdded) {
-                    logger.debug("responseId : " + responseId);
+                    logger.debug("responseId :::: " + responseId);
 
                     // Number of items added to the answers batch is set to the un-used qustionNo
                     // field.
@@ -917,13 +906,13 @@ public class SurveyExternal {
      */
     private boolean addDynamicSurveyAnswerstoBatch(int totalCount,
             final RequestContext context,
-            PreparedStatement answersprepareStatement, Long responseId,
+            PreparedStatement answersprepareStatement,
             SurveyBO surveyBO) throws SQLException {
         logger.info("SurveyExternal : addDynamicSurveyAnswerstoBatch");
         XssUtils xssUtils = new XssUtils();
         int numOfAnswersAdded = 0;
         boolean isAdded = false;
-        logger.debug("totalCount : " + totalCount);
+        logger.debug("totalCount ::: " + totalCount);
         for (int i = 1; i <= totalCount; i++) {
             
             String value = context.getParameterString(String.valueOf(i));
@@ -939,8 +928,7 @@ public class SurveyExternal {
                 surveyBO.setQuestionId(Long.parseLong(questionId));
             
                 Long dynamicSurveyQuestionId = getDynamicSurveyQuestionId(postgre, surveyBO);
-                //surveyBO.setQuestionId(dynamicSurveyQuestionId);
-                
+                                
                 logger.debug("Answer for questionId " + questionId + " : " + answer);
     
                 if (answer.contains("#$#")) {
@@ -1068,7 +1056,8 @@ public class SurveyExternal {
         String surveyAction = context.getParameterString(SURVEY_ACTION);
         logger.debug(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
         if (!ESAPIValidator.checkNull(surveyAction)) {
-            validData  = ESAPI.validator().getValidInput(SURVEY_ACTION, surveyAction, ESAPIValidator.ALPHABET, 25, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SURVEY_ACTION, surveyAction, ESAPIValidator.ALPHABET, 25,
+                    false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setAction(validData);
             }else {
@@ -1079,7 +1068,8 @@ public class SurveyExternal {
         
         String locale = context.getParameterString(LOCALE, "en");
         logger.debug(LOCALE + " >>>"+locale+"<<<");
-        validData  = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true, errorList);
+        validData = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true,
+                errorList);
         if(errorList.isEmpty()) {
             surveyBO.setLang(validData);
         }else {
@@ -1098,28 +1088,14 @@ public class SurveyExternal {
             }else {
                 logger.debug("UserId from session is null.");
             }
-            /*validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
-            if(errorList.isEmpty()) {
-                surveyBO.setUserId(validData);
-            }else {
-                logger.debug(errorList.getError(USER_ID));
-                return false;
-            }*/
+            
         }
         
-        /*String userId = context.getParameterString(USER_ID);
-        logger.debug(USER_ID + " >>>"+userId+"<<<");
-        validData  = ESAPI.validator().getValidInput(USER_ID, userId, ESAPIValidator.USER_ID, 50, true, true, errorList);
-        if(errorList.isEmpty()) {
-            surveyBO.setUserId(validData);
-        }else {
-            logger.debug(errorList.getError(USER_ID));
-            return false;
-        }*/
-        
+                
         String ipAddress = requestHeaderUtils.getClientIpAddress();
         logger.debug("ipaddress >>>" +ipAddress+"<<<");
-        validData  = ESAPI.validator().getValidInput("ipaddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false, true, errorList);
+        validData = ESAPI.validator().getValidInput("ipaddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false,
+                true, errorList);
         if(errorList.isEmpty()) {
             surveyBO.setIpAddress(validData);
         }else {
@@ -1127,10 +1103,10 @@ public class SurveyExternal {
             return false;
         }
         
-        //String nlUID = context.getParameterString(NLUID);
         String nlUID = cookiesMap.get(NLUID);
         logger.debug(NLUID + " >>>"+nlUID+"<<<");
-        validData  = ESAPI.validator().getValidInput(NLUID, nlUID, ESAPIValidator.ALPHANUMERIC_HYPHEN, 36, true, true, errorList);
+        validData = ESAPI.validator().getValidInput(NLUID, nlUID, ESAPIValidator.ALPHANUMERIC_HYPHEN, 36, true,
+                true, errorList);
         if(errorList.isEmpty()) {
             surveyBO.setNLUID(validData);
         }else {
@@ -1145,7 +1121,8 @@ public class SurveyExternal {
             
             String surveyTakenFrom = context.getParameterString(SURVEY_TAKEN_FROM);
             logger.debug(SURVEY_TAKEN_FROM + " >>>"+surveyTakenFrom+"<<<");
-            validData  = ESAPI.validator().getValidInput(SURVEY_TAKEN_FROM, surveyTakenFrom, ESAPIValidator.ALPHABET, 150, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SURVEY_TAKEN_FROM, surveyTakenFrom,
+                    ESAPIValidator.ALPHABET, 150, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setTakenFrom(validData);
             }else {
@@ -1155,7 +1132,8 @@ public class SurveyExternal {
             
             String surveyId = context.getParameterString(SURVEY_ID);
             logger.debug(SURVEY_ID + " >>>"+surveyId+"<<<");
-            validData  = ESAPI.validator().getValidInput(SURVEY_ID, surveyId, ESAPIValidator.NUMERIC, 200, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SURVEY_ID, surveyId, ESAPIValidator.NUMERIC, 200, false,
+                    true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setSurveyId(validData);
             }else {
@@ -1165,7 +1143,8 @@ public class SurveyExternal {
             
             String totalQuestions = context.getParameterString(TOTAL_QUESTIONS);
             logger.debug(TOTAL_QUESTIONS + " >>>"+totalQuestions+"<<<");
-            validData  = ESAPI.validator().getValidInput(TOTAL_QUESTIONS, totalQuestions, ESAPIValidator.NUMERIC, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(TOTAL_QUESTIONS, totalQuestions, ESAPIValidator.NUMERIC,
+                    50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setTotalQuestions(validData);
             }else {
@@ -1196,7 +1175,8 @@ public class SurveyExternal {
                         if(name != null && "persona".equalsIgnoreCase(name)) {
                             personaValue = cookie.getValue();
                             logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
-                            validData  = ESAPI.validator().getValidInput(PERSONA, personaValue, ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
+                            validData = ESAPI.validator().getValidInput(PERSONA, personaValue,
+                                    ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
                             if(errorList.isEmpty()) {
                                 surveyBO.setPersona(validData);
                             }else {
@@ -1228,7 +1208,8 @@ public class SurveyExternal {
                 
                 String surveyGroupConfigCategory = context.getParameterString(SURVEY_GROUP_CONFIG_CATEGORY);
                 logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
-                validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY, surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+                validData = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY,
+                        surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
                 if(errorList.isEmpty()) {
                     surveyBO.setSurveyGroupConfigCategory(validData);
                 }else {
@@ -1239,7 +1220,8 @@ public class SurveyExternal {
             
             String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
             logger.debug(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
-            validData  = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory,
+                    ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setGroupCategory(validData);
             }else {
@@ -1249,7 +1231,8 @@ public class SurveyExternal {
             
             String surveyCategory = context.getParameterString(SURVEY_CATEGORY);
             logger.debug(SURVEY_CATEGORY + " >>>"+surveyCategory+"<<<");
-            validData  = ESAPI.validator().getValidInput(SURVEY_CATEGORY, surveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SURVEY_CATEGORY, surveyCategory, ESAPIValidator.ALPHABET,
+                    50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setCategory(validData);
             }else {
@@ -1259,7 +1242,8 @@ public class SurveyExternal {
             
             String solrSurveyCategory = context.getParameterString(SOLR_SURVEY_CATEGORY);
             logger.debug(SOLR_SURVEY_CATEGORY + " >>>"+solrSurveyCategory+"<<<");
-            validData  = ESAPI.validator().getValidInput(SOLR_SURVEY_CATEGORY, solrSurveyCategory, ESAPIValidator.ALPHABET, 50, false, true, errorList);
+            validData = ESAPI.validator().getValidInput(SOLR_SURVEY_CATEGORY, solrSurveyCategory,
+                    ESAPIValidator.ALPHABET, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 surveyBO.setSolrCategory(validData);
             }else {

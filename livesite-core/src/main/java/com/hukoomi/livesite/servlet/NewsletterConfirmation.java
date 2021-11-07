@@ -334,7 +334,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in getConfirmationTokenStatus", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         return confirmationTokenStatus;
@@ -405,7 +405,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in getSubcriberDetails", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return subscriberDetails;
     }
@@ -513,7 +513,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in phpSubscriberExists", e);
         } finally {
-            mysql.releaseConnection(connection, prepareStatement, null);
+            mysql.releaseConnection(connection, prepareStatement, rs);
         }
 
         return status;
@@ -553,7 +553,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in checkAlreadySubscribed", e);
         } finally {
-            mysql.releaseConnection(connection, prepareStatement, null);
+            mysql.releaseConnection(connection, prepareStatement, rs);
         }
 
         return status;
@@ -588,7 +588,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in getSubscriberEmail", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         return subscriberEmail;
@@ -626,7 +626,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in getSubscriberPersona", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         persona = subscriberPersona + "-" + subscriberLanguage;
@@ -660,7 +660,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in phpList query getSubscriberListID", e);
         } finally {
-            mysql.releaseConnection(connection, prepareStatement, null);
+            mysql.releaseConnection(connection, prepareStatement, rs);
         }
         logger.debug("Subscriber persona phplist id " + listid);
         return listid;
@@ -692,7 +692,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in phpList query getSubscriberID", e);
         } finally {
-            mysql.releaseConnection(connection, prepareStatement, null);
+            mysql.releaseConnection(connection, prepareStatement, rs);
         }
         logger.debug("Subscriber ID " + userid);
         return userid;
@@ -1029,7 +1029,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in getsyncphpData", e);
         } finally {
-            mysql.releaseConnection(connection, prepareStatement, null);
+            mysql.releaseConnection(connection, prepareStatement, rs);
         }
 
         return pluBO;
@@ -1086,7 +1086,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in getSubscriberPersona", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         return syncStatus;
