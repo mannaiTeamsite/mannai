@@ -387,13 +387,14 @@ public class NewsletterConfirmation extends HttpServlet {
                 "SELECT SUBSCRIBER_ID, PREFERENCE_ID FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE TOKEN = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
+        ResultSet resultSet = null;
 
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(getSubscriberDetailsQuery);
             prepareStatement.setString(1, token);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
 
             if (resultSet.next()) {
                 logger.info("Token Exist !");
