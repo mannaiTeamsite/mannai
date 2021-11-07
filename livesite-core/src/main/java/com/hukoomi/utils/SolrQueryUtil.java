@@ -55,7 +55,7 @@ public class SolrQueryUtil {
     }
     
     @SuppressWarnings("unchecked")
-    public List getHiglightedDoc(List<Node> resultDocs, Node highlightNode) {
+    public List<Node> getHiglightedDoc(List<Node> resultDocs, Node highlightNode) {
     	 for (Node resultDoc : resultDocs) {
              Node documentIDNode = resultDoc.selectSingleNode("id");
              if (documentIDNode != null) {
@@ -160,7 +160,7 @@ public class SolrQueryUtil {
 
                 String correctWordStr = originalWordStr;                
                 
-                document = getSolrDoc(document,correctWordStr, suggestionNodeList, originalWordStr, query, xmlRootName);
+                document = getSolrDoc(document, correctWordStr, suggestionNodeList, originalWordStr, query, xmlRootName);
                                    
             }
         } catch (Exception e) {
