@@ -53,7 +53,58 @@ public class SolrQueryUtil {
         }
         return document;
     }
-
+    
+    @SuppressWarnings("unchecked")
+    public List getHiglightedDoc(List<Node> resultDocs, Node highlightNode) {
+    	 for (Node resultDoc : resultDocs) {
+             Node documentIDNode = resultDoc.selectSingleNode("id");
+             if (documentIDNode != null) {
+                 String documentID = documentIDNode.getText();
+                 logger.trace("Changing Highlighted Values for: " + documentID);
+                 Node highlightedDocumentNode = highlightNode.selectSingleNode("doc-" + documentID);
+                 if (highlightedDocumentNode != null) {
+                     Element highlightedDocumentElement = (Element) highlightedDocumentNode;
+                     List<Element> highlightedDocuments = highlightedDocumentElement.elements();
+                     for (Element highlightedDocument : highlightedDocuments) {
+                         Element correspondingProperty = (Element) resultDoc.selectSingleNode(highlightedDocument.getName());
+                         logger.trace("From: " + correspondingProperty.getText());
+                         if (StringUtils.isNotBlank(highlightedDocument.getText())) {
+                             correspondingProperty.setText(highlightedDocument.getText());
+                             logger.trace("To: " + highlightedDocument.getText());
+                         }
+                     }
+                 }
+                 logger.trace("Changed Highlighted Values for: " + documentID);
+             } 
+         }
+    	 return resultDocs;
+    }
+    
+    
+    public Document getSolrDoc(Document document, String correctWordStr, List<Node> suggestionNodeList, String originalWordStr, String query, String xmlRootName) {
+    	if (!suggestionNodeList.isEmpty()) {
+            if (suggestionNodeList.size() > 1) {
+                int maxFreq = 0;
+                int freqVal;
+                for (Node node : suggestionNodeList) {
+                    freqVal = Integer.parseInt(node.selectSingleNode("freq").getText());
+                    if (freqVal > maxFreq) {
+                        maxFreq = freqVal;
+                        correctWordStr = node.selectSingleNode("word").getText();
+                    }
+                }
+            } else {
+                correctWordStr = suggestionNodeList.get(0).selectSingleNode("word").getText();
+            }
+            logger.info("Corrected wordStr: " + correctWordStr);
+            String newQuery = query.replaceAll(originalWordStr, correctWordStr);
+            logger.info("New Query: " + newQuery);
+            document = doJsonQuery(newQuery, xmlRootName, false);
+            document.getRootElement().addElement("OriginalWord").addText(originalWordStr);
+            document.getRootElement().addElement("CorrectedWord").addText(correctWordStr);
+        }
+   	 return document;
+   }
     /**
      * Query Solr based on solution result target in specified xmlRootName.
      *
@@ -84,29 +135,7 @@ public class SolrQueryUtil {
             Node highlightNode = document.getRootElement().selectSingleNode("highlighting");
             if (highlightNode != null) {
                 logger.info("Highlighting Text Query available in the Response");
-                for (Node resultDoc : resultDocs) {
-                    Node documentIDNode = resultDoc.selectSingleNode("id");
-                    if (documentIDNode != null) {
-                        String documentID = documentIDNode.getText();
-                        logger.trace("Changing Highlighted Values for: " + documentID);
-                        Node highlightedDocumentNode = highlightNode.selectSingleNode("doc-" + documentID);
-                        if (highlightedDocumentNode != null) {
-                            Element highlightedDocumentElement = (Element) highlightedDocumentNode;
-                            List<Element> highlightedDocuments = highlightedDocumentElement.elements();
-                            for (Element highlightedDocument : highlightedDocuments) {
-                                Element correspondingProperty = (Element) resultDoc.selectSingleNode(highlightedDocument.getName());
-                                logger.trace("From: " + correspondingProperty.getText());
-                                if (StringUtils.isNotBlank(highlightedDocument.getText())) {
-                                    correspondingProperty.setText(highlightedDocument.getText());
-                                    logger.trace("To: " + highlightedDocument.getText());
-                                }
-                            }
-                        }
-                        logger.trace("Changed Highlighted Values for: " + documentID);
-                    } else {
-                        logger.error("ID need to be present in the response to show the highlight functionality.");
-                    }
-                }
+                resultDocs = getHiglightedDoc(resultDocs, highlightNode);
             }
             if(resultDocs.isEmpty() && checkSpell) {
                 logger.info("Result Docs is empty");
@@ -129,28 +158,10 @@ public class SolrQueryUtil {
                 }
                 logger.info("Original wordStr: " + originalWordStr);
 
-                String correctWordStr = originalWordStr;
-                if (!suggestionNodeList.isEmpty()) {
-                    if (suggestionNodeList.size() > 1) {
-                        int maxFreq = 0;
-                        int freqVal;
-                        for (Node node : suggestionNodeList) {
-                            freqVal = Integer.parseInt(node.selectSingleNode("freq").getText());
-                            if (freqVal > maxFreq) {
-                                maxFreq = freqVal;
-                                correctWordStr = node.selectSingleNode("word").getText();
-                            }
-                        }
-                    } else {
-                        correctWordStr = suggestionNodeList.get(0).selectSingleNode("word").getText();
-                    }
-                    logger.info("Corrected wordStr: " + correctWordStr);
-                    String newQuery = query.replaceAll(originalWordStr, correctWordStr);
-                    logger.info("New Query: " + newQuery);
-                    document = doJsonQuery(newQuery, xmlRootName, false);
-                    document.getRootElement().addElement("OriginalWord").addText(originalWordStr);
-                    document.getRootElement().addElement("CorrectedWord").addText(correctWordStr);
-                }
+                String correctWordStr = originalWordStr;                
+                
+                document = getSolrDoc(document,correctWordStr, suggestionNodeList, originalWordStr, query, xmlRootName);
+                                   
             }
         } catch (Exception e) {
             logger.error(SOLR_EXCEPTION + " For- " + query, e);
