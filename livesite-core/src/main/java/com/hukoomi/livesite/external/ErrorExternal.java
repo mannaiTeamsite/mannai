@@ -65,7 +65,7 @@ public class ErrorExternal {
 				 contentPage = urlPrefix + contentPage;
 				 brokenLink = urlPrefix + brokenLink;
 				 		
-					cu.logBrokenLink(brokenLink, contentPage, language, statusCode); 
+					cu.logBrokenLink(context, brokenLink, contentPage, language, statusCode); 
 				}			 
 		}}catch(Exception e) {
 			logger.error("Exception occured did not log in db" , e);
