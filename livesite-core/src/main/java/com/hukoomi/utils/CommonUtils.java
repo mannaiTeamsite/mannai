@@ -497,7 +497,7 @@ public class CommonUtils {
       }
       
       public int getErrorCount(RequestContext context, String brokenLink, String contentPage, String language, String statusCode) {
-        this.logger.debug("getErrorCount Broken link from the Database");
+        logger.debug("getErrorCount Broken link from the Database");
   
         int count = 0;
         PreparedStatement statement = null;
@@ -505,23 +505,23 @@ public class CommonUtils {
         Postgre database = new Postgre(context);
         ResultSet resultSet = null;
         try {
-          this.logger.info("Get count of error");
+          logger.info("Get count of error");
           connection = database.getConnection();
           String query = "SELECT DISTINCT COUNT FROM ERROR_RESPONSE where LANGUAGE='" + language + "' and STATUS_CODE = '" + statusCode + "' and BROKEN_LINK = '" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
-          this.logger.info("Query to run : " + query);
+          logger.info("Query to run : " + query);
           
           statement = connection.prepareStatement(query);
           resultSet = statement.executeQuery();
           while (resultSet.next())
            count = resultSet.getInt("count");
          
-          this.logger.info("getting count from Database completed");
+          logger.info("getting count from Database completed");
         } catch (SQLException ex) {
-          this.logger.error("Error while fetching count from database.", ex);
+          logger.error("Error while fetching count from database.", ex);
         } finally { 
-          this.logger.info("Releasing Database Connection");
+          logger.info("Releasing Database Connection");
           database.releaseConnection(connection, statement, resultSet);
-          this.logger.info("Released Database Connection");
+         logger.info("Released Database Connection");
         } 
         return count;
       }
@@ -529,30 +529,30 @@ public class CommonUtils {
       public int updateErrorCount(RequestContext context, int count, String brokenLink, String contentPage, String language, String statusCode) {
     	
     	  
-        this.logger.debug("updateErrorCount Broken link in Database");
+        logger.debug("updateErrorCount Broken link in Database");
 
         int result = 0;
         PreparedStatement prepareStatement = null;
         Connection connection = null;
-        Postgre database = new Postgre(this.context);
+        Postgre database = new Postgre(context);
         try {
-          this.logger.info("Logging of Broken Link in DB Started");
+          logger.info("Logging of Broken Link in DB Started");
           connection = database.getConnection();
           String query = "UPDATE ERROR_RESPONSE SET COUNT=" + count + ", STATUS='Open', REPORTED_ON = LOCALTIMESTAMP WHERE LANGUAGE='" + language + "' and STATUS_CODE='" + statusCode + "' and BROKEN_LINK='" + brokenLink + "' and CONTENT_PAGE='" + contentPage+"'";
-          this.logger.info("Query to run : " + query);
+          logger.info("Query to run : " + query);
           if (connection != null) {
             prepareStatement = connection.prepareStatement(query);
             result = prepareStatement.executeUpdate();
           } else {
-            this.logger.info("Connection is null !");
+            logger.info("Connection is null !");
           } 
           this.logger.info("updating count of Broken link in Database completed");
         } catch (SQLException ex) {
-          this.logger.error("Error while updating count of broken link to the database.", ex);
+          logger.error("Error while updating count of broken link to the database.", ex);
         } finally {
-          this.logger.info("Releasing Database Connection");
+          logger.info("Releasing Database Connection");
           database.releaseConnection(connection, prepareStatement, null);
-          this.logger.info("Released Database Connection");
+         logger.info("Released Database Connection");
         } 
         return result;
       }
@@ -565,7 +565,7 @@ public class CommonUtils {
       }
       
       public int inserErrorResponse(RequestContext context, int count, String brokenLink, String contentPage, String language, String statusCode) {
-          this.logger.debug("Inser Error Response Broken link in Database");
+         logger.debug("Inser Error Response Broken link in Database");
           ValidationErrorList errorList = new ValidationErrorList();
           int insertResponse = 0;
           
