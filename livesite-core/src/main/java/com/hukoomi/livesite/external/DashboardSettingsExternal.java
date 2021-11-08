@@ -1492,13 +1492,13 @@ public class DashboardSettingsExternal {
 
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(getSubscriptionStatusQuery);
             prepareStatement.setString(1, userId);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
             while (resultSet.next()) {
                 subscriptionStatus = resultSet.getString(1);
             }
@@ -1506,7 +1506,7 @@ public class DashboardSettingsExternal {
         } catch (Exception e) {
             logger.error("Exception in getSubscriptionStatus", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return subscriptionStatus;
     }

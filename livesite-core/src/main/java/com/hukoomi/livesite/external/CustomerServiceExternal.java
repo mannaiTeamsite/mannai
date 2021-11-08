@@ -118,7 +118,8 @@ public class CustomerServiceExternal {
                 CustomerServiceExternal.loadProperties(context);
         String blockService = properties.getProperty("blockService");
         builder.append(
-                "SELECT S.ESERVICEID as ESERVICEID,S.SERVICEID as SERVICEID,S.SERVICEEDESC as SERVICEEDESC,S.SERVICEADESC as SERVICEADESC ");
+                "SELECT S.ESERVICEID as ESERVICEID,S.SERVICEID as SERVICEID,S.SERVICEEDESC as SERVICEEDESC,"
+                + "S.SERVICEADESC as SERVICEADESC ");
         builder.append("FROM SERVICES S ");
         builder.append("WHERE S.ESERVICEID=");
         builder.append(eService);
@@ -180,8 +181,8 @@ public class CustomerServiceExternal {
                 "SELECT E.ESERVICEID, E.ESERVICEADESC, E.ESERVICEEDESC, E.MINISTRYID ");
         builder.append("FROM ESERVICES E, INCIDENT_ESERVICE_MAPPING IEM ");
         builder.append(
-                "WHERE E.ESERVICEID=IEM.ESERVICEID AND E.ESERVICEADESC!='' AND E.ESERVICEEDESC!='' AND E.ESERVICEADESC IS NOT NULL and E.ESERVICEEDESC IS NOT NULL ");
-        builder.append("ORDER BY E.ESERVICEID ");
+                "WHERE E.ESERVICEID=IEM.ESERVICEID AND E.ESERVICEADESC!='' AND E.ESERVICEEDESC!='' AND ");
+        builder.append("E.ESERVICEADESC IS NOT NULL and E.ESERVICEEDESC IS NOT NULL ORDER BY E.ESERVICEID ");
         try {
             LOGGER.info("getServices:After builder");
             if (null != connection) {

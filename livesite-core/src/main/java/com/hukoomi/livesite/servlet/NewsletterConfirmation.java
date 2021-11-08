@@ -304,7 +304,7 @@ public class NewsletterConfirmation extends HttpServlet {
         } catch (Exception e) {
             logger.error("Exception in getTokenType", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         return confirmationTokentype;

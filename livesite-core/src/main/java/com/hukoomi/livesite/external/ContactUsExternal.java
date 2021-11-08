@@ -80,7 +80,7 @@ public class ContactUsExternal {
         ValidationErrorList errorList = new ValidationErrorList();
         LOGGER.debug("action:" + action);
 
-        validData = ESAPI.validator().getValidInput(CONTACT_ACTION, action, ESAPIValidator.ALPHABET,
+        ESAPI.validator().getValidInput(CONTACT_ACTION, action, ESAPIValidator.ALPHABET,
                 20, false, true, errorList);
         if(errorList.isEmpty()) {
             LOGGER.debug("ERROR LIST IS EMPTY");
@@ -144,7 +144,7 @@ public class ContactUsExternal {
                 return false;
             }
 
-            validData = ESAPI.validator().getValidInput(SENDER_EMAIL, senderEmail,
+            ESAPI.validator().getValidInput(SENDER_EMAIL, senderEmail,
                     ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
             if(errorList.isEmpty()) {
                 email.setSenderEmail(senderEmail);
