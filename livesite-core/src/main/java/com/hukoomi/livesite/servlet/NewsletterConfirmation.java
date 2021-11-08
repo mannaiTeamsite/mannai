@@ -147,65 +147,22 @@ public class NewsletterConfirmation extends HttpServlet {
             String subscriberemail = getSubscriberEmail(subscriberId, postgre);
             String persona = getSubscriberPersona(subscriberId, preferenceId, postgre);
             int listid = getSubscriberListID(persona,mysql);
-            String status = "";
-            String subStatus = "";
+            String status = "";           
             String uptpostgreData = "";
             String syncStatus = "";
-            int userId = 0;
+            int userId = getSubscriberID(subscriberemail,mysql);
             status = phpSubscriberExists(subscriberemail, listid, mysql);
             try {
-                if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
-
-                    subStatus = createSubscriberPhplist(subscriberemail,postgre);
-                    if (!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) {
-                        userId = getSubscriberID(subscriberemail,mysql);
-                        updateSubscriberPersona(userId, listid, mysql);
-                        uptpostgreData = STATUS_SUCCESS;
-                    } else {
-                        uptpostgreData = STATUS_FAILED;
-                    }
-
-                }
-                if (!status.equals("") && status.equals(STATUS_PERSONA_NOTFOUND)) {
-                    userId = getSubscriberID(subscriberemail, mysql);
-                    updateSubscriberPersona(userId, listid, mysql);
-                    uptpostgreData = STATUS_SUCCESS;
-                }
-                if (uptpostgreData.equals(STATUS_SUCCESS) && status.equals(STATUS_NOTFOUND)) {
-                    String getPhpUser =
-                            "SELECT ID, EMAIL, CONFIRMED, BLACKLISTED, OPTEDIN, BOUNCECOUNT, "
-                                    + "ENTERED, MODIFIED, UNIQID, UUID, HTMLEMAIL, SUBSCRIBEPAGE,"
-                                    + " RSSFREQUENCY, PASSWORD, PASSWORDCHANGED, DISABLED, "
-                                    + "EXTRADATA, FOREIGNKEY FROM PHPLIST_USER_USER WHERE ID = ? ";
-
-                    String updateSyncUserQuery =
-                            "INSERT INTO PHPLIST_USER_USER (ID, EMAIL, CONFIRMED, BLACKLISTED,"
-                                    + " OPTEDIN, BOUNCECOUNT, ENTERED, MODIFIED, UNIQID, UUID, "
-                                    + "HTMLEMAIL, SUBSCRIBEPAGE, RSSFREQUENCY, PASSWORD, "
-                                    + "PASSWORDCHANGED, DISABLED, EXTRADATA, FOREIGNKEY) "
-                                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-                    String getUserList =
-                            "SELECT USERID, LISTID, ENTERED, MODIFIED FROM PHPLIST_LISTUSER WHERE ENTERED = "
-                                    + "(SELECT MAX(ENTERED) FROM PHPLIST_LISTUSER WHERE USERID = ? AND LISTID = ?)";
-
-                    String updateSyncListQuery =
-                            "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
-
-                    pluBO = getsyncphpData(getPhpUser, userId, listid, USERDATA, mysql);
-                    syncStatus = updatesyncphpData(updateSyncUserQuery, pluBO, USERDATA, postgre);
-                    logger.debug("NewsletterConfirmation : syncstatus user table" + syncStatus);
-
-                    logger.debug("NewsletterConfirmation : getphpUserID " + userId + " listid "
-                            + listid);
-                    if (syncStatus.equals(STATUS_SUCCESS)) {
-                        pluBO = getsyncphpData(getUserList, userId, listid, LISTDATA, mysql);
-                        syncStatus = updatesyncphpData(updateSyncListQuery, pluBO, LISTDATA, postgre);
-                    }
-
+                
+                uptpostgreData = updateListDataPostgre(status, subscriberemail, userId, listid, mysql, postgre);
+                
+                if (!uptpostgreData.equals("") && uptpostgreData.equals(STATUS_SUCCESS)
+                        && status.equals(STATUS_NOTFOUND)) {
+                    
+                    syncStatus = syncPostgrePhpTab(pluBO,userId,listid, mysql,postgre);
                 }
                 logger.debug("NewsletterConfirmation : syncstatus >>>>>" + syncStatus);
-                if (uptpostgreData.equals(STATUS_SUCCESS)
+                if (!uptpostgreData.equals("") && uptpostgreData.equals(STATUS_SUCCESS)
                         && status.equals(STATUS_PERSONA_NOTFOUND)) {
 
                     String getUserList =
@@ -220,43 +177,18 @@ public class NewsletterConfirmation extends HttpServlet {
                     logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>" + syncStatus);
                 }
 
-            } catch (NoSuchAlgorithmException e) {
-                logger.error("NewsletterConfirmation : doGet() >>>>" + e);
-            } catch (IOException e) {
+            } catch (Exception e) {
                 logger.error("NewsletterConfirmation : doGet() <<<<" + e);
             }
 
-            if (uptpostgreData.equals(STATUS_SUCCESS)) {
-                String tokenType = getTokenType(subscriberId,postgre);
-                boolean tokenStatusUpdate = false;
-                boolean masterDataUpdate = false;
-                boolean preferenceDataUpdate = false;
-
-                if ("NewSubscriber".equals(tokenType)) {
-                    tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED, postgre);
-                    masterDataUpdate = updateMasterTable(subscriberId,postgre);
-                    preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId, postgre);
-                } else {
-                    tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED, postgre);
-                    masterDataUpdate = true;
-                    preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId, postgre);
-                }
-
-                if (tokenStatusUpdate && masterDataUpdate && preferenceDataUpdate) {
-                    Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "confirmed");
-                    response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
-                    response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
-                    response.setDateHeader(EXPIRES, 0);
-                    response.addCookie(confirmationCookie);
-                    rd.forward(request, response);
-                } else {
-                    Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "notConfirmed");
-                    response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
-                    response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
-                    response.setDateHeader(EXPIRES, 0);
-                    response.addCookie(confirmationCookie);
-                    rd.forward(request, response);
-                }
+            if (uptpostgreData.equals(STATUS_SUCCESS)) {                
+                String cookieStatus = postgreDataSuccess(token, subscriberId,preferenceId, postgre);
+                Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, cookieStatus); 
+                response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1. 
+                response.setHeader(PRAGMA,NO_CACHE); // HTTP 1.0. 
+                response.setDateHeader(EXPIRES, 0);
+                response.addCookie(confirmationCookie); 
+                rd.forward(request, response);
             } else {
                 Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "technicalIssue");
                 response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
@@ -275,6 +207,121 @@ public class NewsletterConfirmation extends HttpServlet {
             rd.forward(request, response);
         }
 
+    }
+    
+    private String updateListDataPostgre(
+            String status, String subscriberemail, int userId, int listid, MySqlForServlet mysql,
+            PostgreForServlet postgre
+    ) {
+        String subStatus = ""; 
+        String updatestatus = "";
+        try {
+            if (!status.equals("") && status.equals(STATUS_NOTFOUND)) {
+
+                subStatus = createSubscriberPhplist(subscriberemail,postgre);
+                if (!subStatus.equals("") && subStatus.equals(SUBSCRIBED_SUCCESSFULLY)) {                
+                    updateSubscriberPersona(userId, listid, mysql);
+                    updatestatus = STATUS_SUCCESS;
+                } else {
+                    updatestatus = STATUS_FAILED;
+                }
+
+            }
+            if (!status.equals("") && status.equals(STATUS_PERSONA_NOTFOUND)) {
+                
+                updateSubscriberPersona(userId, listid, mysql);
+                updatestatus = STATUS_SUCCESS;
+            }
+        } catch (NoSuchAlgorithmException e) {
+            logger.error("updateListDataPostgre <<<<" + e);
+        } catch (IOException e) {
+            logger.error("updateListDataPostgre >>>>" + e);
+        }
+        return updatestatus;
+    }
+    
+    /**
+     * @param pluBO
+     * @param userId
+     * @param listid
+     * @param mysql
+     * @param postgre
+     * @return
+     */
+    private String syncPostgrePhpTab(
+            PhpListUserBO pluBO, int userId, int listid, MySqlForServlet mysql, PostgreForServlet postgre
+    )
+    {
+        String status = "";
+        
+        String getPhpUser =
+                "SELECT ID, EMAIL, CONFIRMED, BLACKLISTED, OPTEDIN, BOUNCECOUNT, "
+                        + "ENTERED, MODIFIED, UNIQID, UUID, HTMLEMAIL, SUBSCRIBEPAGE,"
+                        + " RSSFREQUENCY, PASSWORD, PASSWORDCHANGED, DISABLED, "
+                        + "EXTRADATA, FOREIGNKEY FROM PHPLIST_USER_USER WHERE ID = ? ";
+
+        String updateSyncUserQuery =
+                "INSERT INTO PHPLIST_USER_USER (ID, EMAIL, CONFIRMED, BLACKLISTED,"
+                        + " OPTEDIN, BOUNCECOUNT, ENTERED, MODIFIED, UNIQID, UUID, "
+                        + "HTMLEMAIL, SUBSCRIBEPAGE, RSSFREQUENCY, PASSWORD, "
+                        + "PASSWORDCHANGED, DISABLED, EXTRADATA, FOREIGNKEY) "
+                        + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+        String getUserList =
+                "SELECT USERID, LISTID, ENTERED, MODIFIED FROM PHPLIST_LISTUSER WHERE ENTERED = "
+                        + "(SELECT MAX(ENTERED) FROM PHPLIST_LISTUSER WHERE USERID = ? AND LISTID = ?)";
+
+        String updateSyncListQuery =
+                "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
+
+        pluBO = getsyncphpData(getPhpUser, userId, listid, USERDATA, mysql);
+        status = updatesyncphpData(updateSyncUserQuery, pluBO, USERDATA, postgre);
+        logger.debug("NewsletterConfirmation : syncstatus user table" + status);
+
+        logger.debug("NewsletterConfirmation : getphpUserID " + userId + " listid "
+                + listid);
+        if (status.equals(STATUS_SUCCESS)) {
+            pluBO = getsyncphpData(getUserList, userId, listid, LISTDATA, mysql);
+            status = updatesyncphpData(updateSyncListQuery, pluBO, LISTDATA, postgre);
+        }
+        
+        return status;
+
+    }
+    
+    /**
+     * @param token
+     * @param subscriberId
+     * @param preferenceId
+     * @param postgre
+     * @return cookieStatus
+     */
+    private String postgreDataSuccess(String token,double subscriberId,double preferenceId, PostgreForServlet postgre) {
+        String tokenType = getTokenType(subscriberId,postgre);
+        boolean tokenStatusUpdate = false;
+        boolean masterDataUpdate = false;
+        boolean preferenceDataUpdate = false;
+        String cookieStatus = "";
+
+        if ("NewSubscriber".equals(tokenType)) {
+            tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED, postgre);
+            masterDataUpdate = updateMasterTable(subscriberId,postgre);
+            preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId, postgre);
+        } else {
+            tokenStatusUpdate = updateTokenStatus(token, STATUS_CONFIRMED, postgre);
+            masterDataUpdate = true;
+            preferenceDataUpdate = updatePreferencesTable(subscriberId, preferenceId, postgre);
+        }
+
+        if (tokenStatusUpdate && masterDataUpdate && preferenceDataUpdate) {
+            
+            cookieStatus = "confirmed";
+            
+        } else {
+            
+            cookieStatus = "notConfirmed";
+        }
+        return cookieStatus;
     }
 
     /**
