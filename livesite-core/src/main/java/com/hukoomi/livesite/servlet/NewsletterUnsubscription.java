@@ -125,8 +125,10 @@ public class NewsletterUnsubscription extends HttpServlet{
      * 
      *         This method unssubscribes dashboard user and update status
      */
-    private String unsubscribeDashboardUser
-    (String token, String unsubReason,double subscriberID, String email, PostgreForServlet postgre, MySqlForServlet mysql) {
+    private String unsubscribeDashboardUser(
+            String token, String unsubReason, double subscriberID, String email, PostgreForServlet postgre,
+            MySqlForServlet mysql
+    ) {
         logger.info(
                 "NewsletterUnsubscription : unsubscribeDashboardUser()");
 
@@ -197,7 +199,9 @@ public class NewsletterUnsubscription extends HttpServlet{
      *         This method is used to update unsubscribed user
      */
     private String unsubscribePostgreUser(
-            String Query, double subscriberId, String unsubReason, String status , String tabName,  PostgreForServlet postgre) {
+            String Query, double subscriberId, String unsubReason, String status, String tabName,
+            PostgreForServlet postgre
+    ) {
         logger.info(
                 "NewsletterUnsubscription : unsubscribeMasterUser()");
 
@@ -324,7 +328,9 @@ public class NewsletterUnsubscription extends HttpServlet{
         return status;
     }
     
-    private String syncUnsubscribeData(String Query, String email, String unsubReason, String param, PostgreForServlet postgre) {
+    private String syncUnsubscribeData(
+            String Query, String email, String unsubReason, String param, PostgreForServlet postgre
+    ) {
         logger.info("NewsletterUnsubscription : syncUnsubscribeData() ");
 
         String status = "";

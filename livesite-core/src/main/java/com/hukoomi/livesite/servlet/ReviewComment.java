@@ -236,6 +236,7 @@ public class ReviewComment extends HttpServlet {
     private int updateCommentData(Connection connection, JSONObject data) throws IOException {
         PreparedStatement preparedStatement = null;
         int result = 0;
+        String userEmailID = "";
         XssUtils xssUtils = new XssUtils();
         try {
             String Propfilepath = data.getString("path");
@@ -252,7 +253,7 @@ public class ReviewComment extends HttpServlet {
             result = preparedStatement.executeUpdate();
             LOGGER.info("update comment result : " + result);
             String blogTitle = getBlogTitle(commentId, Propfilepath);
-            String userEmailID = getUserEmail(commentId, Propfilepath);
+            userEmailID = getUserEmail(commentId, Propfilepath);
             if (!userEmailID.equals("") && userEmailID != null) {
                 sentMailNotification(status, blogTitle, userEmailID, Blogproppath);
             }
@@ -496,6 +497,7 @@ public class ReviewComment extends HttpServlet {
         LOGGER.debug(" status::" + status);
         LOGGER.debug(" blogtitle::" + blogtitle);
         try {
+            
             mailMessage = createMailMessage(status, blogtitle, userEmail, path);
             Transport.send(mailMessage);
         } catch (MessagingException e) {
