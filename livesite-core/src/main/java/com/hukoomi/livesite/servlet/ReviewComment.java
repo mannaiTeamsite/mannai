@@ -189,7 +189,7 @@ public class ReviewComment extends HttpServlet {
             LOGGER.error("getBlogs()", e);
 
         } finally {
-            releaseConnection(connection, prepareStatement, null);
+            releaseConnection(connection, prepareStatement, rs);
         }
         return arrayComments;
     }
@@ -254,7 +254,7 @@ public class ReviewComment extends HttpServlet {
             LOGGER.info("update comment result : " + result);
             String blogTitle = getBlogTitle(commentId, Propfilepath);
             userEmailID = getUserEmail(commentId, Propfilepath);
-            if (!userEmailID.equals("") && userEmailID != null) {
+            if (!userEmailID.equals("")) {
                 sentMailNotification(status, blogTitle, userEmailID, Blogproppath);
             }
 
@@ -379,7 +379,7 @@ public class ReviewComment extends HttpServlet {
             LOGGER.error(GET_COMMENT_BLOGID, e);
 
         } finally {
-            releaseConnection(connection, prepareStatement, null);
+            releaseConnection(connection, prepareStatement, rs);
         }
         return blogTitle;
     }
@@ -426,7 +426,7 @@ public class ReviewComment extends HttpServlet {
             LOGGER.error(GET_COMMENT_BLOGID, e);
 
         } finally {
-            releaseConnection(connection, prepareStatement, null);
+            releaseConnection(connection, prepareStatement, rs);
         }
         return useremailID;
     }
@@ -572,10 +572,10 @@ public class ReviewComment extends HttpServlet {
         if (Propfilepath != null && !Propfilepath.equals("")) {
             String root = Propfilepath;
             try (InputStream inputStream = new FileInputStream(root)) {
-                if (inputStream != null) {
+               
                     propFile.load(inputStream);
                     LOGGER.info("Properties File Loaded");
-                }
+              
             } catch (MalformedURLException e) {
                 LOGGER.error("Malformed URL Exception while loading Properties file : ", e);
             }
