@@ -332,7 +332,7 @@ public class ReviewComment extends HttpServlet {
             LOGGER.error(GET_COMMENT_BLOGID, e);
 
         } finally {
-            releaseConnection(connection, prepareStatement, null);
+            releaseConnection(connection, prepareStatement, rs);
         }
         return arrayComments;
     }
