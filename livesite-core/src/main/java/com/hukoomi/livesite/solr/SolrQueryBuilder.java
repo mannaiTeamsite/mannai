@@ -167,7 +167,7 @@ public class SolrQueryBuilder {
         String nutchCore = context.getParameterString("nutchCore");
         logger.debug("Nutch Core: " + nutchCore);
         if(StringUtils.isBlank(nutchCore)){
-            nutchCore = solrCore.replaceAll("portal","nutch");
+            nutchCore = solrCore.replace("portal","nutch");
         }
         logger.debug("Final Nutch Core: " + nutchCore);
         this.baseUrl = solrHost + "/" + solrCore;
@@ -177,36 +177,14 @@ public class SolrQueryBuilder {
         this.requestHandler = context.getParameterString("requestHandler",
                 properties.getProperty("requestHandler"));
         logger.debug("Solr Request Handler: " + requestHandler);
-        try {
-            if(!isHeader) {
-                this.baseQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
-                        .getParameterString(BASE_QUERY, DEFAULT_QUERY), UTF));
-                context.setParameterString(BASE_QUERY,this.baseQuery);
-            } else{
-                this.baseQuery = DEFAULT_QUERY;
-            }
+        
+            this.baseQuery = getBaseFieldQuery(isHeader, BASE_QUERY, context);
             logger.info("Solr Base Query: " + baseQuery);
 
-        } catch (UnsupportedEncodingException e) {
-            logger.error("Unable to decode baseQuery="
-                    + context.getParameterString(BASE_QUERY,
-                    DEFAULT_QUERY), e);
-        }
-
-        try {
-            if(!isHeader) {
-                this.fieldQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
-                        .getParameterString(FIELD_QUERY, ""), UTF));
-                context.setParameterString(FIELD_QUERY,this.fieldQuery);
-            } else {
-                this.fieldQuery = "";
-            }
+           
+            this.fieldQuery = getBaseFieldQuery(isHeader, FIELD_QUERY, context);
             logger.debug("Solr Field Query: " + fieldQuery);
-        } catch (UnsupportedEncodingException e) {
-            logger.error("Unable to decode fieldQuery="
-                    + context.getParameterString(FIELD_QUERY), e);
-        }
-
+            
         try {
             this.groupingField = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
                     .getParameterString("groupingField", ""), UTF));
@@ -275,6 +253,40 @@ public class SolrQueryBuilder {
         this.queryBoost = commonUtils.sanitizeSolrQuery(context.getParameterString("query_boost",
                 properties.getProperty("query_boost")));
         logger.info("Boost for Query: " + this.queryBoost);
+    }
+    
+    public String getBaseFieldQuery(boolean isheader, String queryType, RequestContext context)
+    {
+        String query="";
+        CommonUtils commonUtils = new CommonUtils();
+        try {
+        if(queryType.equals(BASE_QUERY)) {
+            if(!isheader) {
+              
+                    query = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
+                            .getParameterString(BASE_QUERY, DEFAULT_QUERY), UTF));
+               
+                context.setParameterString(BASE_QUERY,this.baseQuery);
+            } else{
+                query = DEFAULT_QUERY;
+            }
+        }else if(queryType.equals(FIELD_QUERY)) {
+            
+            if(!isheader) {
+                query = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
+                        .getParameterString(FIELD_QUERY, ""), UTF));
+                context.setParameterString(FIELD_QUERY,this.fieldQuery);
+            } else {
+                query = "";
+            }
+            
+        }  
+        } catch (UnsupportedEncodingException e) {
+            logger.error("Unable to decode Query="
+                    + context.getParameterString(queryType), e);
+        }
+        
+        return query;
     }
 
     /**
