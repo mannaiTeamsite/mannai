@@ -187,6 +187,7 @@ public Document getContentDetail(final RequestContext context) {
      * @param detailDocument The final content document to be returned.
      * @return String sort content.
      */
+@SuppressWarnings("deprecation")
     public String getSortContent(
             final RequestContext context,
             final Document detailDocument,

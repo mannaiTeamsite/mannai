@@ -25,7 +25,6 @@ import com.hukoomi.utils.ESAPIValidator;
 import com.hukoomi.utils.GoogleRecaptchaUtil;
 import com.hukoomi.utils.Postgre;
 import com.hukoomi.utils.PropertiesFileReader;
-import com.hukoomi.utils.ValidationUtils;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
@@ -74,18 +73,18 @@ public class ContactUsExternal {
         String action = null;
         String gRecaptchaResponse = null;
         String status = "";
-        String validData="";
-        String CONTACT_ACTION = "action";
-        action = context.getParameterString(CONTACT_ACTION);
+        
+        String contactAction = "action";
+        action = context.getParameterString(contactAction);
         ValidationErrorList errorList = new ValidationErrorList();
         LOGGER.debug("action:" + action);
 
-        ESAPI.validator().getValidInput(CONTACT_ACTION, action, ESAPIValidator.ALPHABET,
+        ESAPI.validator().getValidInput(contactAction, action, ESAPIValidator.ALPHABET,
                 20, false, true, errorList);
         if(errorList.isEmpty()) {
             LOGGER.debug("ERROR LIST IS EMPTY");
         }else {
-            LOGGER.debug(errorList.getError(CONTACT_ACTION));
+            LOGGER.debug(errorList.getError(contactAction));
             status = STATUS_FIELD_VALIDATION;
             return getDocument(status);
         }
@@ -132,7 +131,7 @@ public class ContactUsExternal {
     private boolean setValueToContactModel(final String senderName,
             final String senderEmail, final String emailText,
             final String emailSubject) {
-        String validData="";
+       
         ValidationErrorList errorList = new ValidationErrorList();
         XssUtils xssUtils = new XssUtils();
         LOGGER.info("setValueToContactModel: Enter");
@@ -202,6 +201,7 @@ public class ContactUsExternal {
      * @return msg returns MimeMessage
      * @throws MessagingException
      */
+    @SuppressWarnings("deprecation")
     private MimeMessage createMailMessage(final RequestContext context)
             throws MessagingException {
         LOGGER.info("createMailMessage: Enter");

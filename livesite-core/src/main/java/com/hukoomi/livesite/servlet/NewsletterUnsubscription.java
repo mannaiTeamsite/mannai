@@ -135,8 +135,8 @@ public class NewsletterUnsubscription extends HttpServlet{
         String unsubStatus = "";
         String syncStatus = "";
         String status = "";
-        int blacklistID = 1;
-        boolean tokenStatusUpdate = false;
+
+      
                
         String updateMasterQuery =
                 "UPDATE NEWSLETTER_MASTER SET STATUS = ? , UNSUBSCRIBED_REASON = ? WHERE SUBSCRIBER_ID = ?";
@@ -191,7 +191,7 @@ public class NewsletterUnsubscription extends HttpServlet{
     
     /**
      * @author Pramesh
-     * @param Query
+     * @param queryVal
      * @param userId
      * @param tabName
      * @return
@@ -199,7 +199,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      *         This method is used to update unsubscribed user
      */
     private String unsubscribePostgreUser(
-            String Query, double subscriberId, String unsubReason, String status, String tabName,
+            String queryVal, double subscriberId, String unsubReason, String status, String tabName,
             PostgreForServlet postgre
     ) {
         logger.info(
@@ -213,7 +213,7 @@ public class NewsletterUnsubscription extends HttpServlet{
 
         try {
             connection = postgre.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
             
             if (tabName.equals(NEWSLETTER_PREFERENCE)) {
 
@@ -244,11 +244,11 @@ public class NewsletterUnsubscription extends HttpServlet{
     
      /**
      * @author Pramesh
-     * @param Query
+     * @param queryVal
      * @param userId
      * @return
      */
-    private String unsubscribePhpUser(String Query, String email, String unsubReason, MySqlForServlet mysql) {
+    private String unsubscribePhpUser(String queryVal, String email, String unsubReason, MySqlForServlet mysql) {
         logger.info("NewsletterUnsubscription : unsubscribePhpUser() "+unsubReason);
 
         String status = "";
@@ -262,7 +262,7 @@ public class NewsletterUnsubscription extends HttpServlet{
                 "INSERT INTO PHPLIST_USER_BLACKLIST_DATA (EMAIL, NAME, DATA) VALUES (?,?,?)";
         try {
             connection = mysql.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
 
             prepareStatement.setInt(1, blacklistID);
             prepareStatement.setString(2, email);
@@ -288,11 +288,11 @@ public class NewsletterUnsubscription extends HttpServlet{
     
     /**
      * @author Pramesh
-     * @param Query
+     * @param queryVal
      * @param userId
      * @return
      */
-    private String updatePhpBlacklist(String Query, String email, String unsubReason, MySqlForServlet mysql) {
+    private String updatePhpBlacklist(String queryVal, String email, String unsubReason, MySqlForServlet mysql) {
         logger.info("NewsletterUnsubscription : updatePhpBlacklist() ");
 
         String status = "";        
@@ -302,7 +302,7 @@ public class NewsletterUnsubscription extends HttpServlet{
 
         try {
             connection = mysql.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
             if(!"".equals(unsubReason)) {
                 prepareStatement.setString(1, email);
                 prepareStatement.setString(2, "reason");
@@ -329,7 +329,7 @@ public class NewsletterUnsubscription extends HttpServlet{
     }
     
     private String syncUnsubscribeData(
-            String Query, String email, String unsubReason, String param, PostgreForServlet postgre
+            String queryVal, String email, String unsubReason, String param, PostgreForServlet postgre
     ) {
         logger.info("NewsletterUnsubscription : syncUnsubscribeData() ");
 
@@ -341,7 +341,7 @@ public class NewsletterUnsubscription extends HttpServlet{
        
         try {
             connection = postgre.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
             
             if(param.equals("USERDATA")) {
                 
@@ -386,7 +386,7 @@ public class NewsletterUnsubscription extends HttpServlet{
      */
     private String getSubscriberEmail(double subscriberId, PostgreForServlet postgre) {
         logger.info("NewsletterUnsubscription : getSubscriberEmail");
-        boolean subscriberPreferenceDataInsert = false;
+    
         String addSubscriberPreferencesQuery =
                 "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_ID = ?";
         Connection connection = null;
