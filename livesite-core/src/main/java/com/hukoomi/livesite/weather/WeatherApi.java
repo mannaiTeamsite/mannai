@@ -51,17 +51,17 @@ public class WeatherApi {
             LOGGER.info("responseCode" + responseCode);
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 LOGGER.info("Inside current temp");
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));){
+                
                 LOGGER.info("Inside current temp 1");
                 StringBuilder response = new StringBuilder();
 
                 while ((readLine = in.readLine()) != null) {
                     response.append(readLine);
                 }
-                LOGGER.info("Inside current temp 2");
-                in.close();
                 LOGGER.info("Inside current temp 3");
                 return response.toString();
+                }
 
             }
         } catch (IOException e) {
@@ -96,7 +96,7 @@ public class WeatherApi {
         return prop.getPropertiesFile();
 
     }
-
+    @SuppressWarnings("deprecation")
     public Document getWeather(final RequestContext context) {
         getProperties(context);
         LOGGER.info("getWeather Started");
@@ -280,12 +280,15 @@ public class WeatherApi {
             connection.setRequestProperty("User-Agent", "Mozilla/5.0");
             int responseCode = connection.getResponseCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                while ((readLine = in.readLine()) != null) {
-                    response.append(readLine);
-                }
-                in.close();
+            	StringBuilder response = new StringBuilder();	
+            	try(BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            			
+            			) {
+            		
+            		 while ((readLine = in.readLine()) != null) {
+                         response.append(readLine);
+                     }                   
+            	}
 
                 return response.toString();
             } else {

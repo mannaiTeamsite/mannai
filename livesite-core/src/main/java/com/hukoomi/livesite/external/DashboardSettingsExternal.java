@@ -715,7 +715,7 @@ public class DashboardSettingsExternal {
     private List<Integer> getPhpList(String userId) {
         logger.info("DashboardSettingsExternal : getPhpList()");
 
-        String listName = "";
+       
         int phpList = 0;
         double subscriberID = getSubscriberID(userId, USING_UID);
         String subscriberemail = getSubscriberEmail(subscriberID);
@@ -769,7 +769,7 @@ public class DashboardSettingsExternal {
         String unsubStatus = "";
         String syncStatus = "";
         String status = "";
-        int blacklistID = 1;
+        
         double subscriberID = getSubscriberID(userId, USING_UID);
         String subscriberemail = getSubscriberEmail(subscriberID);
 
@@ -823,7 +823,7 @@ public class DashboardSettingsExternal {
     }
 
     private String
-            syncUnsubscribeData(String Query, String email, String unsubReason, String param) {
+            syncUnsubscribeData(String queryVal, String email, String unsubReason, String param) {
         logger.info("DashboardSettingsExternal : syncUnsubscribeData() ");
 
         String status = "";
@@ -834,7 +834,7 @@ public class DashboardSettingsExternal {
 
         try {
             connection = postgre.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
 
             if (param.equals("USERDATA")) {
 
@@ -872,7 +872,7 @@ public class DashboardSettingsExternal {
 
     /**
      * @author Pramesh
-     * @param Query
+     * @param queryVal
      * @param userId
      * @param tabName
      * @return
@@ -880,7 +880,7 @@ public class DashboardSettingsExternal {
      *         This method is used to update unsubscribed user
      */
     private String unsubscribePostgreUser(
-            String Query, String userid, double subscriberId, String unsubReason, String status,
+            String queryVal, String userid, double subscriberId, String unsubReason, String status,
             String tabName
     ) {
         logger.info("DashboardSettingsExternal : unsubscribeMasterUser()" + tabName
@@ -895,7 +895,7 @@ public class DashboardSettingsExternal {
 
         try {
             connection = postgre.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
             if (tabName.equals(NEWSLETTER_PREFERENCE)) {
 
                 prepareStatement.setString(1, status);
@@ -927,11 +927,11 @@ public class DashboardSettingsExternal {
 
     /**
      * @author Pramesh
-     * @param Query
+     * @param queryVal
      * @param userId This method is to unsubscribe user from phpTool
      * @return
      */
-    private String unsubscribePhpUser(String Query, String email, String unsubReason) {
+    private String unsubscribePhpUser(String queryVal, String email, String unsubReason) {
         logger.info("DashboardSettingsExternal : unsubscribePhpUser() ");
 
         String status = "";
@@ -945,7 +945,7 @@ public class DashboardSettingsExternal {
                 "INSERT INTO PHPLIST_USER_BLACKLIST_DATA (EMAIL, NAME, DATA) VALUES (?,?,?)";
         try {
             connection = mysql.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
 
             prepareStatement.setInt(1, blacklistID);
             prepareStatement.setString(2, email);
@@ -972,12 +972,12 @@ public class DashboardSettingsExternal {
 
     /**
      * @author Pramesh
-     * @param Query
+     * @param queryVal
      * @param userId This method is to update the data for unsubscription in
      *               phptool
      * @return
      */
-    private String updatePhpBlacklist(String Query, String email, String unsubReason) {
+    private String updatePhpBlacklist(String queryVal, String email, String unsubReason) {
         logger.info("DashboardSettingsExternal : updatePhpBlacklist() ");
 
         String status = "";
@@ -987,7 +987,7 @@ public class DashboardSettingsExternal {
 
         try {
             connection = mysql.getConnection();
-            prepareStatement = connection.prepareStatement(Query);
+            prepareStatement = connection.prepareStatement(queryVal);
             if (!"".equals(unsubReason)) {
                 prepareStatement.setString(1, email);
                 prepareStatement.setString(2, "reason");
@@ -1022,7 +1022,7 @@ public class DashboardSettingsExternal {
      */
     private String getSubscriberEmail(double subscriberId) {
         logger.info("DashboardSettingsExternal : getSubscriberEmail");
-        boolean subscriberPreferenceDataInsert = false;
+        
         String addSubscriberPreferencesQuery =
                 "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_ID = ?";
         Connection connection = null;
@@ -1042,7 +1042,7 @@ public class DashboardSettingsExternal {
         } catch (Exception e) {
             logger.error("Exception in updateMasterTable", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         return subscriberEmail;
@@ -1057,7 +1057,7 @@ public class DashboardSettingsExternal {
      */
     private String getSubscriberEmail(String uid) {
         logger.info("DashboardSettingsExternal : getSubscriberEmail Using UID");
-        boolean subscriberPreferenceDataInsert = false;
+        
         String addSubscriberPreferencesQuery =
                 "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE UID = ?";
         Connection connection = null;
@@ -1077,7 +1077,7 @@ public class DashboardSettingsExternal {
         } catch (Exception e) {
             logger.error("Exception in updateMasterTable", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, rs);
         }
 
         return subscriberEmail;
@@ -1138,7 +1138,7 @@ public class DashboardSettingsExternal {
         Connection connection = postgre.getConnection();
         PreparedStatement prepareStatement = null;
         String personaSettingsQuery = null;
-        String topicsArray[] = topics.split(",");
+        String []topicsArray = topics.split(",");
 
         Map<String, String> subscriptionDetails = getSubscriptionDetails(settingsBO.getUserId());
         logger.debug("subscriptionDetailsMap : " + subscriptionDetails.toString());
@@ -1160,7 +1160,7 @@ public class DashboardSettingsExternal {
                 prepareStatement.addBatch();
             }
 
-            int result[] = prepareStatement.executeBatch();
+            int []result = prepareStatement.executeBatch();
             String personaValue = getPersonaForUser(settingsBO.getUserId(), postgre);
             if (result.length == 0) {
                 logger.info("Newsletter interest topics insertion failed");
@@ -1259,7 +1259,7 @@ public class DashboardSettingsExternal {
 
         Element newsletterResponseElem = responseElem.addElement("langauge-switch-settings");
 
-        String language[] = languageSwitchDetails.split(",");
+        String []language = languageSwitchDetails.split(",");
 
         newsletterResponseElem.addElement("english-switch").setText(language[0]);
         newsletterResponseElem.addElement("arabic-switch").setText(language[1]);
@@ -1367,7 +1367,7 @@ public class DashboardSettingsExternal {
         String getTopicsQuery = "SELECT TOPIC_INTEREST_NAME FROM NEWSLETTER_INTEREST WHERE UID = ?";
         StringJoiner topics = new StringJoiner(",");
 
-        logger.debug("getTopicsQuery ::" + getTopicsQuery.toString());
+        logger.debug("getTopicsQuery ::" + getTopicsQuery);
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -1519,6 +1519,7 @@ public class DashboardSettingsExternal {
      * @return Returns true if the input is valid else returns false.
      * 
      */
+    @SuppressWarnings("deprecation")
     public boolean validateInput(final RequestContext context, DashboardSettingsBO settingsBO) {
         logger.info("DashboardSettingsExternal : validateInput()");
 

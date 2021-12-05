@@ -33,7 +33,7 @@ public class LastViewedExternal {
     private static final String CATEGORY_CONSTANT = "category";
     private static final Logger logger = Logger.getLogger(LastViewedExternal.class);
     Postgre postgre = null;
-
+    @SuppressWarnings("deprecation")
     public Document lastViewedsearch(final RequestContext context) {
         logger.info("lastViewedsearch()====> Starts");
         Document lastviewedDoc = DocumentHelper.createDocument();
@@ -222,7 +222,7 @@ UserInfoSession ui = new UserInfoSession();
                 resultSet = prepareStatement.executeQuery();
                 String pageTitle = "";
                 String pageURL="";
-                int i=1;
+               
                 while(resultSet.next()){
                     Element ele = lastviewedResultEle.addElement("lastviewed");
                     pageTitle = resultSet.getString(1);
@@ -243,7 +243,7 @@ UserInfoSession ui = new UserInfoSession();
                         ele6.setText(categoryType);
                         logger.info("Result:" + pageTitle+":"+pageURL);
                     }
-                    i++;
+                    
                 }
             }
         } catch (SQLException ex) {

@@ -32,7 +32,7 @@ public class FeedbackExternal {
     private static final Logger logger = Logger.getLogger(FeedbackExternal.class);
 
     Postgre postgre = null;
-
+    @SuppressWarnings("deprecation")
     public Document insertFeedback(final RequestContext context) {
         boolean verify = false;
         String gRecaptchaResponse = null;

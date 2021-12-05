@@ -141,6 +141,7 @@ public class SolrQueryBuilder {
     /** This method will be called for solr query building.
      * @param context The parameter context object passed from Component.
      */
+    @SuppressWarnings("deprecation")
     private void init(final RequestContext context) {
         logger.info("Initialising Solr Query Builder");
         PropertiesFileReader propertyFileReader = new PropertiesFileReader(
@@ -254,7 +255,7 @@ public class SolrQueryBuilder {
                 properties.getProperty("query_boost")));
         logger.info("Boost for Query: " + this.queryBoost);
     }
-    
+    @SuppressWarnings("deprecation")
     public String getBaseFieldQuery(boolean isheader, String queryType, RequestContext context)
     {
         String query="";

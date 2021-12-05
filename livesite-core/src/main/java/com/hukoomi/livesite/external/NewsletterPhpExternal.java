@@ -344,13 +344,13 @@ public class NewsletterPhpExternal {
 
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(emailCheckQuery);
             prepareStatement.setString(1, uid);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
 
             if (resultSet.next()) {
                 logger.info("Email Already Exist !");
@@ -361,7 +361,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in getSubscriptionStatusByUid", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return emailsExistStatus;
     }
@@ -377,13 +377,13 @@ public class NewsletterPhpExternal {
                 "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(getSubcriberIdQuery);
 
             prepareStatement.setString(1, email);
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
 
             if (resultSet.next()) {
                 logger.info("Subscriber Id Available  !");
@@ -394,7 +394,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in getSubcriberId", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
 
         return subscriberId;
@@ -457,7 +457,7 @@ public class NewsletterPhpExternal {
                 + "NP.SUBSCRIBER_ID WHERE NM.SUBSCRIBER_EMAIL = ? AND NP.PERSONA = ? AND NP.LANGUAGE = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(tokenCheckQuery);
@@ -465,7 +465,7 @@ public class NewsletterPhpExternal {
             prepareStatement.setString(2, persona);
             prepareStatement.setString(3, subscriptionLang);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
             while (resultSet.next()) {
                 preferenceStatus = resultSet.getString(1);
             }
@@ -473,7 +473,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in checkPrefernceStatus", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return preferenceStatus;
     }
@@ -489,13 +489,13 @@ public class NewsletterPhpExternal {
                 + "SUBSCRIBER_EMAIL = ? AND CONFIRMATION_STATUS = 'Confirmed'";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(checkConfirmationStatusQuery);
 
             prepareStatement.setString(1, email);
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
             resultSet.next();
             long count = resultSet.getLong(1);
             if (count > 0) {
@@ -505,7 +505,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in checkConfirmationStatus", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
 
         return confirmationStatus;
@@ -569,13 +569,13 @@ public class NewsletterPhpExternal {
         String tokenCheckQuery = "SELECT TOKEN FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE TOKEN = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(tokenCheckQuery);
             prepareStatement.setString(1, confirmationToken);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
 
             if (resultSet.next()) {
                 logger.info("Token already Exist !");
@@ -586,7 +586,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in isConfirmationTokenExist", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return tokenExist;
     }
@@ -602,20 +602,20 @@ public class NewsletterPhpExternal {
                 "SELECT STATUS FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(getSubscriptionStatusQuery);
             prepareStatement.setString(1, email);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
             resultSet.next();
             subscriptionStatus = resultSet.getString(1);
 
         } catch (Exception e) {
             logger.error("Exception in getSubscriptionStatus", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return subscriptionStatus;
     }
@@ -633,7 +633,7 @@ public class NewsletterPhpExternal {
                 + "SUBSCRIBER_ID = ? AND LANGUAGE = ? AND PERSONA = ?";
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(getPreferenceIdQuery);
@@ -641,7 +641,7 @@ public class NewsletterPhpExternal {
             prepareStatement.setString(2, subscriptionLang);
             prepareStatement.setString(3, persona);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
 
             if (resultSet.next()) {
                 logger.info("Preference Id Exist !");
@@ -652,7 +652,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in getPreferenceId", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return preferenceId;
     }
@@ -776,13 +776,13 @@ public class NewsletterPhpExternal {
 
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(checkSubscriberIdQuery);
             prepareStatement.setDouble(1, subscriberId);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
 
             if (resultSet.next()) {
                 logger.info("Subcriber Id Already Exist !");
@@ -793,7 +793,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in generateSubscriberId", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
 
         return subscriberId;
@@ -811,13 +811,13 @@ public class NewsletterPhpExternal {
 
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(emailCheckQuery);
             prepareStatement.setString(1, email);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
 
             if (resultSet.next()) {
                 logger.info("Email Already Exist !");
@@ -828,7 +828,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in isEmailAlreadyExist", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return emailsExistStatus;
     }
@@ -1004,13 +1004,13 @@ public class NewsletterPhpExternal {
 
         Connection connection = null;
         PreparedStatement prepareStatement = null;
-
+        ResultSet resultSet = null;
         try {
             connection = postgre.getConnection();
             prepareStatement = connection.prepareStatement(getSubscriptionStatusQuery);
             prepareStatement.setString(1, userId);
 
-            ResultSet resultSet = prepareStatement.executeQuery();
+            resultSet = prepareStatement.executeQuery();
             while (resultSet.next()) {
                 subscriptionStatus = resultSet.getString(1);
             }
@@ -1018,7 +1018,7 @@ public class NewsletterPhpExternal {
         } catch (Exception e) {
             logger.error("Exception in getSubscriptionStatus", e);
         } finally {
-            postgre.releaseConnection(connection, prepareStatement, null);
+            postgre.releaseConnection(connection, prepareStatement, resultSet);
         }
         return subscriptionStatus;
     }

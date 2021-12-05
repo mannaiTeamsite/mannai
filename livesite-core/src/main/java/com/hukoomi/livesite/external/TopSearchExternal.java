@@ -28,7 +28,7 @@ public class TopSearchExternal {
     private String searchOrder = "";
     private static final Logger logger = Logger.getLogger(TopSearchExternal.class);
     Postgre postgre = null;
-
+    @SuppressWarnings("deprecation")
     public Document topSearch(final RequestContext context) {
         logger.debug("topSearch()====> Starts");
         RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);

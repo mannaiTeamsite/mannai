@@ -42,7 +42,7 @@ public class BookmarkExternal {
 
     private static final Logger logger = Logger.getLogger(BookmarkExternal.class);
     Postgre postgre = null;
-
+    @SuppressWarnings("deprecation")
     public Document bookmarkSearch(final RequestContext context) {
         logger.info("BookmarkExternal()====> Starts");
        
@@ -57,7 +57,7 @@ UserInfoSession ui = new UserInfoSession();
 		String valid = ui.getStatus(context);
 		if(valid.equalsIgnoreCase("valid")) {
         
-            userID = (String) session.getAttribute("userId");
+            userID = (String) session.getAttribute(userIDLiteral);
             logger.info("userID:" + userID);
             locale = context.getParameterString(localLiteral).trim().toLowerCase();
             pagetitle = context.getParameterString(pagetitleLiteral);
@@ -142,7 +142,7 @@ UserInfoSession ui = new UserInfoSession();
         }
 
         if (!ESAPIValidator.checkNull(locale)) {
-            locale  = ESAPI.validator().getValidInput("locale", locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+            locale  = ESAPI.validator().getValidInput(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
             if(!errorList.isEmpty()) {
                 logger.info(errorList.getError("locale"));
                 logger.error("Not a valid parameter locale. The incident will not be logged.");
@@ -151,17 +151,17 @@ UserInfoSession ui = new UserInfoSession();
         }
 
         if (!ESAPIValidator.checkNull(userID)) {
-            userID  = ESAPI.validator().getValidInput("userID", userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
+            userID  = ESAPI.validator().getValidInput(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("userID"));
+                logger.info(errorList.getError(userIDLiteral));
                 logger.error("Not a valid parameter userID. The incident will not be logged.");
                 return 0;
             }
         }
         if (!ESAPIValidator.checkNull(active)) {
-            active  = ESAPI.validator().getValidInput("active", active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            active  = ESAPI.validator().getValidInput(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("active"));
+                logger.info(errorList.getError(activeLiteral));
                 logger.error("Not a valid parameter active. The incident will not be logged.");
                 return 0;
             }
@@ -175,9 +175,9 @@ UserInfoSession ui = new UserInfoSession();
             }
         }
         if (!ESAPIValidator.checkNull(category)) {
-            category  = ESAPI.validator().getValidInput("category", category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+            category  = ESAPI.validator().getValidInput(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
             if(!errorList.isEmpty()) {
-                logger.info(errorList.getError("category"));
+                logger.info(errorList.getError(categoryLiteral));
                 logger.error("Not a valid parameter category. The incident will not be logged.");
                 return 0;
             }

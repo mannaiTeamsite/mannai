@@ -33,6 +33,7 @@ public class HukoomiExternal {
 	 *
 	 * @return doc return the solr response document generated from solr query.
 	 */
+	 @SuppressWarnings("deprecation")
 	public Document getLandingContent(RequestContext context) {
 		SolrQueryUtil squ = new SolrQueryUtil();
 		SolrQueryBuilder sqb = new SolrQueryBuilder(context);

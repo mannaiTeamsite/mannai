@@ -215,12 +215,12 @@ public class SubmitTicket extends HttpServlet {
     public StringBuilder createTicket(String json,
             String httpServletAddress) throws IOException {
         StringBuilder resp = new StringBuilder();
-        String BASE_URL = "baseUrl";
+        String urlBase = "baseUrl";
         String baseUrl;
         String servletAddress = "<servletaddress>";
         Properties propertiesFile =
                 loadProperties("customerserviceconfig.properties");
-        baseUrl = propertiesFile.getProperty(BASE_URL);
+        baseUrl = propertiesFile.getProperty(urlBase);
         baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
         String responseLine = null;
                      

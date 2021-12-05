@@ -33,6 +33,7 @@ public class HukoomiCuratedExternal {
      * @return doc return the solr response document
      * generated from solr query.
      */
+    @SuppressWarnings("deprecation")
     public Document getLandingContent(final RequestContext context) {
         Document document = DocumentHelper.createDocument();
         String fieldQuery = "";
@@ -107,6 +108,7 @@ public class HukoomiCuratedExternal {
      * @return document return the solr response document
      * generated from solr query.
      */
+    @SuppressWarnings("deprecation")
     public Document getCuratedContent(
             final RequestContext context,
             final Document documentPar, final String curatedContent,

@@ -347,7 +347,7 @@ public class SurveyExternal {
             logger.debug("No. of Submitted Survey Ids : " + submittedSurveyIds.size());
             
             // Add Status code to document
-            if (submittedSurveyIds != null && !submittedSurveyIds.isEmpty()) {
+            if (!submittedSurveyIds.isEmpty()) {
                 document = addStatusToXml(document, submittedSurveyIds);
             }
         }
@@ -397,13 +397,13 @@ public class SurveyExternal {
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
         
-        try {
+     
             connection = postgre.getConnection();
             String userId = surveyBO.getUserId();           
             String nluid = surveyBO.getNLUID();
             
             if(surveyArr != null && !surveyArr.isEmpty()) {
-                
+                try {
                 logger.info("Fetching submitted id's for Survey");
                 StringBuilder surveyQuery = new StringBuilder(
                         "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR, SURVEY_MASTER SM "
@@ -430,6 +430,11 @@ public class SurveyExternal {
                 while (rs.next()) {
                     submittedSurveyIds.add(rs.getString(SURVEYID));
                 }
+                }catch (Exception e) {
+                    logger.error("Exception in getSubmittedSurveyIds", e);
+                } finally {
+                    postgre.releaseConnection(connection, prepareStatement, rs);
+                }
                 
             }
             
@@ -446,7 +451,7 @@ public class SurveyExternal {
                     dynamicSurveyQuery.append("AND NLUID = ? ");
                 }
                 logger.debug("Dynamic Survey Query : "+ dynamicSurveyQuery.toString());
-                    
+                 try {   
                 prepareStatement = connection.prepareStatement(
                         dynamicSurveyQuery.toString());
                 prepareStatement.setArray(1,
@@ -460,14 +465,14 @@ public class SurveyExternal {
                 while (rs.next()) {
                     submittedSurveyIds.add(rs.getString(SURVEYID));
                 }
+                 }catch (Exception e) {
+                     logger.error("Exception in getSubmittedSurveyIds", e);
+                 } finally {
+                     postgre.releaseConnection(connection, prepareStatement, rs);
+                 }
             }
             logger.debug("Survey submitted id's : "+ submittedSurveyIds);
-            
-        } catch (Exception e) {
-            logger.error("Exception in getSubmittedSurveyIds", e);
-        } finally {
-            postgre.releaseConnection(connection, prepareStatement, rs);
-        }
+             
         
         return submittedSurveyIds;
     }

@@ -88,14 +88,15 @@ public class NewsletterExternal {
      *                                  method for user subscription to
      *                                  Mailchimp.
      */
+    @SuppressWarnings("deprecation")
     public Document subscribeToNewsletter(final RequestContext context)
             throws IOException, NoSuchAlgorithmException {
         LOGGER.info("Newsletter Subscribtion");
         Document memberdetail = null;
         ValidationUtils util = new ValidationUtils();
         XssUtils xssUtils = new XssUtils();
-        String email = context.getParameterString("email");
-        String language = context.getParameterString("locale", "en");
+        String email = context.getParameterString(ELEMENT_EMAIL);
+        
         String subscriptionLang =
                 context.getParameterString("subscriptionLang");
         String flagToInvokeMailchimpService =
@@ -373,7 +374,8 @@ public class NewsletterExternal {
                 }
             } catch (SQLException e) {
                 LOGGER.error("SQLException :", e);
-                return document = null;
+                document = null;
+                return document;
 
             } finally {
                 objPostgre.releaseConnection(connection, prepareStatement,

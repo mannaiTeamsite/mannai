@@ -114,9 +114,11 @@ public class Postgre {
         logger.info("Postgre : getConnection()");
         // Creating Connection
         try {
+        	DriverManager.setLoginTimeout(10);
             con = DriverManager.getConnection(connectionString, userName, password);
         } catch (Exception e) {
-            logger.error("Postgre : getConnection()", e);
+        	logger.info("Exception in getConnection", e);
+            logger.error("Exceprion in getConnection()", e);
         }
         return con;
     }

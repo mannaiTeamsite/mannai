@@ -46,6 +46,7 @@ public class CustomerServiceExternal {
      * @param context
      * @return result
      */
+    @SuppressWarnings("deprecation")
     public Document getServices(RequestContext context) {
         String action = "";
         String eService = "";

@@ -82,12 +82,13 @@ public Document getContentDetail(final RequestContext context) {
      *
      * @return Document return type.
      */
+@SuppressWarnings("deprecation")
     public Document getRelatedContent(
             final RequestContext context,
             final Document detailDocument,
             final Properties properties) {
         CommonUtils commonUtils = new CommonUtils();
-        String fieldQuery = "";
+        
         String solrHost = "";
         if (context.isRuntime()) {
             solrHost = context.getParameterString("solrHost",
@@ -100,10 +101,10 @@ public Document getContentDetail(final RequestContext context) {
         final String baseUrl = solrHost + "/" + solrCore ;
         final String requestHandler = context.getParameterString("requestHandler",
                 properties.getProperty("requestHandler"));
-        String ID = commonUtils.getValueFromXML("/content/root/information/id", detailDocument);
+        String idVal = commonUtils.getValueFromXML("/content/root/information/id", detailDocument);
         String bq = "";
-        if (StringUtils.isNotBlank(ID)) {
-            bq = "-id:" + ID;
+        if (StringUtils.isNotBlank(idVal)) {
+            bq = "-id:" + idVal;
         } else {
             bq = DEFAULT_QUERY;
         }
@@ -140,6 +141,7 @@ public Document getContentDetail(final RequestContext context) {
      * @param properties solr properties file.
      * @return no return type.
      */
+@SuppressWarnings("deprecation")
     public void addContent(
             final RequestContext context,
             final String fielQuery,

@@ -35,13 +35,13 @@ public class CommentsEngine {
 
     private static final String ELEMENT_RESULT = "Result";
     private static final String ELEMENT_STATUS = "Status";
-    final String BLOG_ACTION = "blogAction";
-    final String LOCALE = "locale";
-    final String DCR_ID = "dcr_id";
-    final String BLOG_URL = "BlogURL";
-    final String OFFSET = "offset";
-    final String NO_OF_ROWS = "noOfRows";
-    final String IP = "ip";
+    static final String BLOG_ACTION = "blogAction";
+    static final String LOCALE = "locale";
+    static final String DCR_ID = "dcr_id";
+    static final String BLOG_URL = "BlogURL";
+    static final String OFFSET = "offset";
+    static final String NO_OF_ROWS = "noOfRows";
+    static final String IP = "ip";
     private static final String STATUS_FIELD_VALIDATION = "FieldValidationFailed";
     private static final String STATUS_ERROR_RECAPTHCHA = "errorInRecaptcha";
     String status = "";
@@ -68,6 +68,7 @@ public class CommentsEngine {
      * @return Document
      * @throws SQLException
      */
+    @SuppressWarnings("deprecation")
     public Document commentEngine(final RequestContext context) throws SQLException {
         LOGGER.info("CommentsEngine");
         Document document = null;
@@ -78,13 +79,13 @@ public class CommentsEngine {
             int blogId = 0;
             String blogName = "";
 
-            String dcrId = xssUtils.stripXSS(context.getParameterString("dcr_id"));
-            String language = xssUtils.stripXSS(context.getParameterString("locale"));
+            String dcrId = xssUtils.stripXSS(context.getParameterString(DCR_ID));
+            String language = xssUtils.stripXSS(context.getParameterString(LOCALE));
             if (validateDCR(dcrId, language)) {
                 switch (action) {
                 case "getComments":
-                    String noOfRows = xssUtils.stripXSS(context.getParameterString("noOfRows"));
-                    String offset = xssUtils.stripXSS(context.getParameterString("offset"));
+                    String noOfRows = xssUtils.stripXSS(context.getParameterString(NO_OF_ROWS));
+                    String offset = xssUtils.stripXSS(context.getParameterString(OFFSET));
                     if (validateGetCommentCount(noOfRows, offset)) {
                         document = getComments(dcrId, Integer.parseInt(offset),
                                 Integer.parseInt(noOfRows), language, context);
