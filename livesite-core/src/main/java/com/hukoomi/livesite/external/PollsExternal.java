@@ -13,6 +13,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.UUID;
@@ -166,7 +167,7 @@ public class PollsExternal {
      */
     public Document performPollAction(RequestContext context) {
 
-        votedPolls = new LinkedHashSet<String>();
+        votedPolls = new LinkedHashSet<>();
 
         logger.info("PollsExternal : performPollAction()");
         
@@ -222,7 +223,7 @@ public class PollsExternal {
      * 
      */
     public Document processVotePoll(PollsBO pollsBO, Postgre postgre,
-            HashSet<String> votedPolls, RequestContext context) {
+            Set<String> votedPolls, RequestContext context) {
         logger.info("Polls External : processVotePoll");
         Map<Long, Long> votedOptions = null;
         boolean isCaptchaValid = true;
@@ -370,7 +371,7 @@ public class PollsExternal {
      * @return
      */
     public Map<Long, Long> getVotedOption(Postgre postgre,
-            HashSet<String> votedPolls, PollsBO pollsBO) {
+            Set<String> votedPolls, PollsBO pollsBO) {
         logger.info("getVotedOption()");
 
         logger.info("Voted Polls :::: " + votedPolls.toString());
@@ -761,7 +762,7 @@ public class PollsExternal {
      * @return
      */
     public Map<String, List<Map<String, String>>> getPollResponse(
-            PollsBO pollsBO, Postgre postgre, HashSet<String> votedPolls) {
+            PollsBO pollsBO, Postgre postgre, Set<String> votedPolls) {
         logger.info("getPollResponse()");
 
         String pollQuery = null;

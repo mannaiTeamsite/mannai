@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-import java.util.StringJoiner;
 import java.util.UUID;
 
 import javax.servlet.http.Cookie;
@@ -34,8 +33,6 @@ import com.hukoomi.utils.UserInfoSession;
 import com.hukoomi.utils.Validator;
 import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
-
-import bsh.StringUtil;
 
 /**
  * SurveyExternal is the components external class.
@@ -198,9 +195,9 @@ public class SurveyExternal {
                         logger.info("nlUIDCookie added to cookie");
                     }
                     
-                    ArrayList surveyArr = new ArrayList();
+                    List<String> surveyArr = new ArrayList<>();
                     surveyArr.add(surveyBO.getSurveyId());
-                    ArrayList submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, null, postgre, surveyBO);
+                    List<String> submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, null, postgre, surveyBO);
 
                     if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
                         if (captchUtil.validateCaptcha(context,
@@ -232,9 +229,9 @@ public class SurveyExternal {
                                     "/content/root/information/id")
                             .getText();
                     logger.debug("Detail External Survey Id : " + surveyId);
-                    ArrayList submittedSurveyIdArr = null;
+                    List<String> submittedSurveyIdArr = null;
                     if (StringUtils.isNotBlank(surveyId)) {
-                        ArrayList surveyArr = new ArrayList();
+                        List<String>surveyArr = new ArrayList<>();
                         surveyArr.add(surveyId);
                         if (StringUtils.isNotBlank(surveyBO.getUserId())
                                 || StringUtils.isNotBlank(surveyBO.getNLUID())) {
@@ -272,9 +269,9 @@ public class SurveyExternal {
                         logger.info("nlUIDCookie added to cookie");
                     }
                     
-                    ArrayList<String> dynamicSurveyArr = new ArrayList<String>();
+                    List<String> dynamicSurveyArr = new ArrayList<>();
                     dynamicSurveyArr.add(surveyBO.getSurveyId());
-                    ArrayList submittedSurveyIdArr = getSubmittedSurveyIds(null, dynamicSurveyArr, postgre, surveyBO);
+                    List<String> submittedSurveyIdArr = getSubmittedSurveyIds(null, dynamicSurveyArr, postgre, surveyBO);
 
                     if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
                         if (captchUtil.validateCaptcha(context,
@@ -329,8 +326,8 @@ public class SurveyExternal {
         logger.debug("Survey Listing Doc :" + document.asXML());
 
         // Extracting Survey Ids from Survey Document
-        ArrayList surveyArr = new ArrayList();
-        ArrayList dynamicSurveyArr = new ArrayList();
+        List<String> surveyArr = new ArrayList<>();
+        List<String> dynamicSurveyArr = new ArrayList<>();
         getSurveyIdsFromDoc(document, surveyArr, dynamicSurveyArr);
         logger.debug("Survey SurveyIds from doc : " + surveyArr);
         logger.debug("Dynamic Survey SurveyIds from doc : " + dynamicSurveyArr);
@@ -338,7 +335,7 @@ public class SurveyExternal {
         if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {        
             // Checking for already submitted Surveys
             
-            ArrayList submittedSurveyIds = new ArrayList();
+            List<String> submittedSurveyIds = new ArrayList<>();
             if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
                 logger.info("Fetching Submitted Survey Ids : ");
                 submittedSurveyIds = getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
@@ -362,7 +359,7 @@ public class SurveyExternal {
      */
     @SuppressWarnings("unchecked")
     public Document addStatusToXml(Document document,
-            ArrayList submittedSurveyIds) {
+            List<String> submittedSurveyIds) {
         logger.info("addStatusToXml()");
         List<Node> nodes = document
                 .selectNodes("/SolrResponse/response/docs");
@@ -389,10 +386,10 @@ public class SurveyExternal {
      * @return Returns comma seperated string containing already submitted Survey
      *         ids.
      */
-    public ArrayList getSubmittedSurveyIds(ArrayList surveyArr, ArrayList dynamicSurveyArr,
+    public List<String> getSubmittedSurveyIds(List<String> surveyArr, List<String> dynamicSurveyArr,
             Postgre postgre, SurveyBO surveyBO) {
         logger.info("SurveyExternal : getSubmittedSurveyIds");
-        ArrayList<String> submittedSurveyIds = new ArrayList<String>();
+        List<String> submittedSurveyIds = new ArrayList<>();
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
@@ -485,7 +482,7 @@ public class SurveyExternal {
      *
      */
     @SuppressWarnings("unchecked")
-    public void getSurveyIdsFromDoc(Document doc, ArrayList surveyArray, ArrayList dynamicSurveyArray) {
+    public void getSurveyIdsFromDoc(Document doc, List<String> surveyArray, List<String> dynamicSurveyArray) {
         logger.info("getSurveyIdsFromDoc()");
 
         if(surveyArray != null && dynamicSurveyArray != null) {

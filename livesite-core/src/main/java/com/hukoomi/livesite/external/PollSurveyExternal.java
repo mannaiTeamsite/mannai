@@ -120,7 +120,7 @@ public class PollSurveyExternal {
     public Document getContent(final RequestContext context) {
         logger.info("PollSurveyExternal : getContent");
 
-        votedPolls = new LinkedHashSet<String>();
+        votedPolls = new LinkedHashSet<>();
 
         Document doc = DocumentHelper.createDocument();
         PollsExternal pollsExt = new PollsExternal();
@@ -182,7 +182,7 @@ public class PollSurveyExternal {
     public Document getGroupData(RequestContext context) {
         Document doc = null;
         Document pollDoc = null;
-        votedPolls = new LinkedHashSet<String>();
+        votedPolls = new LinkedHashSet<>();
         try {
             PollsExternal pollsExt = new PollsExternal();
             SurveyExternal surveyExt = new SurveyExternal();
@@ -277,15 +277,15 @@ public class PollSurveyExternal {
                     logger.debug("surveySolrDoc : " + surveySolrDoc.asXML());
 
                     // Extract Survey Ids from document
-                    ArrayList<String> surveyArr = new ArrayList<String>();
-                    ArrayList<String> dynamicSurveyArr = new ArrayList<String>();
+                    List<String> surveyArr = new ArrayList<>();
+                    List<String> dynamicSurveyArr = new ArrayList<>();
                     surveyExt.getSurveyIdsFromDoc(surveySolrDoc, surveyArr, dynamicSurveyArr);
                     logger.debug("Survey SurveyIds from doc : " + surveyArr);
                     logger.debug("Dynamic Survey SurveyIds from doc : " + dynamicSurveyArr);
 
                     if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {                    
                         // Get Submission status
-                        ArrayList<String> submittedSurveyIds = new ArrayList<String>();
+                        List<String> submittedSurveyIds = new ArrayList<>();
                         if (StringUtils.isNotBlank(surveyBO.getUserId())
                                 || StringUtils.isNotBlank(surveyBO.getNLUID())) {
                             submittedSurveyIds = surveyExt
@@ -327,7 +327,7 @@ public class PollSurveyExternal {
     public Document getDashboardGroupData(RequestContext context) {
         Document doc = null;
         Document pollDoc = null;
-        votedPolls = new LinkedHashSet<String>();
+        votedPolls = new LinkedHashSet<>();
         try {
             PollsExternal pollsExt = new PollsExternal();
             SurveyExternal surveyExt = new SurveyExternal();
@@ -452,15 +452,15 @@ public class PollSurveyExternal {
                         logger.debug("surveySolrDoc : " + surveySolrDoc.asXML());
     
                         // Extract Survey Ids from document
-                        ArrayList<String> surveyArr = new ArrayList<String>();
-                        ArrayList<String> dynamicSurveyArr = new ArrayList<String>();
+                        ArrayList<String> surveyArr = new ArrayList<>();
+                        ArrayList<String> dynamicSurveyArr = new ArrayList<>();
                         surveyExt.getSurveyIdsFromDoc(surveySolrDoc, surveyArr, dynamicSurveyArr);
                         logger.debug("Survey SurveyIds from doc : " + surveyArr);
                         logger.debug("Dynamic Survey SurveyIds from doc : " + dynamicSurveyArr);
     
                         if(!surveyArr.isEmpty() || !dynamicSurveyArr.isEmpty()) {                        
                             // Get Submission status
-                            ArrayList<String> submittedSurveyIds = new ArrayList<String>();
+                            List<String> submittedSurveyIds = new ArrayList<>();
                             if (StringUtils.isNotBlank(surveyBO.getUserId())
                                     || StringUtils.isNotBlank(surveyBO.getNLUID())) {
                                 submittedSurveyIds = surveyExt
