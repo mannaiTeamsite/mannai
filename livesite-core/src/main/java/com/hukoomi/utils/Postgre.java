@@ -45,10 +45,8 @@ public class Postgre {
      * properties from property file configuration. 
      */
     private Properties properties = null;
-    /**
-     * Properties object for connection. 
-     */
-    private Properties connProperties = null;
+   
+    
 
     /**
      * This constructor will be called for creating database connection.
@@ -89,7 +87,7 @@ public class Postgre {
         String database = properties.getProperty("database");
         String schema = properties.getProperty("schema");
         
-        
+        Properties connProperties = null;
         userName = properties.getProperty("username");
         password = properties.getProperty("password");
         password = IREncryptionUtil.decrypt(password);

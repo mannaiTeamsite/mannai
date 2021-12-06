@@ -50,63 +50,9 @@ public class HukoomiExternal {
 		String category = commonUtils.sanitizeSolrQuery(context.getParameterString("solrcategory", ""));
 		context.setParameterString("solrcategory", category);
 		logger.debug("category : " + category);
-		if (StringUtils.isNotBlank(category)) {
-			if (StringUtils.isNotBlank(fieldQuery)) {
-				fieldQuery += " AND category:" + category;
-			} else {
-				fieldQuery = "category:" + category;
-			}
-			logger.debug(FIELDQUERY_CONSTANT+": " + fieldQuery);
-			sqb.addFieldQuery(fieldQuery);
-		}
-
-		String fields = commonUtils.sanitizeSolrQuery(context.getParameterString("fields", ""));
-		context.setParameterString("fields", fields);
-		logger.debug("fields : " + fields);
-		if (StringUtils.isNotBlank(fields)) {
-			logger.debug("fieldQuery : " + fieldQuery);
-			sqb.addFields(fields);
-		}
-
-		String crawlFields = commonUtils.sanitizeSolrQuery(context.getParameterString("crawlFields", "title,url,description"));
-		context.setParameterString("crawlFields", crawlFields);
-		logger.debug("crawlFields : " + crawlFields);
-		if (StringUtils.isNotBlank(crawlFields)) {
-			logger.debug("fieldQuery : " + fieldQuery);
-			sqb.addCrawlFields(crawlFields);
-		}
-
-		String highlighterVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlighter",""));
-		logger.debug("highlighter: " +highlighterVal);
-		if(StringUtils.isNotBlank(highlighterVal)){
-			logger.debug("fieldQuery highlighter : " +fieldQuery);
-			sqb.addHlTag(highlighterVal);
-		}
-
-		String highlightTagVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightTag",""));
-		logger.debug("highlightTag: "+highlightTagVal);
-		if(StringUtils.isNotBlank(highlightTagVal)){
-			logger.debug("fieldQuery highlightTag"+fieldQuery);
-			sqb.addHlHtmlTag(highlightTagVal);
-		}
-
-		String highlightFieldVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightField",""));
-		logger.debug("highlightFieldVal: "+highlightFieldVal);
-		if(StringUtils.isNotBlank(highlightFieldVal)){
-			logger.debug("fieldQuery highlightFieldVal"+fieldQuery);
-			sqb.addHlField(highlightFieldVal);
-		}
-
-		String cookieName = context.getParameterString("cookieName",DEFAULT_COOKIE);
-		if(cookieName != null && !cookieName.equalsIgnoreCase("")){
-			logger.debug("Cookie Name : " + cookieName);
-			String personaCookieValue = CookieUtils.getValue(context.getRequest(), cookieName);
-			if (personaCookieValue != null && !personaCookieValue.equalsIgnoreCase("")) {
-				logger.debug("Persona Cookie Value: "+personaCookieValue);
-				sqb.addDismaxBq(personaCookieValue);
-			}
-		}
-
+				
+		sqb = landingContentQuery(context, sqb, fieldQuery, category);
+		
 		String query = sqb.build();
 		logger.debug("Landing Query : " + query);
 		Document doc;
@@ -117,7 +63,7 @@ public class HukoomiExternal {
 		logger.info("Current FieldQuery: " + fq);
 		logger.info("Current Category: " + category);
 		String correctedWord = context.getParameterString(BASEQUERY_CONSTANT);
-		if(root.element(CORRECTWORD_CONSTANT) != null && StringUtils.isNotBlank(root.element(CORRECTWORD_CONSTANT).getText())){
+		if(root != null && root.element(CORRECTWORD_CONSTANT) != null && StringUtils.isNotBlank(root.element(CORRECTWORD_CONSTANT).getText())){
 			logger.info("Word has been corrected in Portal Core");
 			correctedWord = root.element(CORRECTWORD_CONSTANT).getText();
 			logger.debug("Corrected word: " + correctedWord);
@@ -161,5 +107,67 @@ public class HukoomiExternal {
 		return doc;
 
 	}
+	 @SuppressWarnings("deprecation")
+	 private SolrQueryBuilder landingContentQuery(RequestContext context, SolrQueryBuilder sqb, String fieldQuery, String category) {
+		 
+		 CommonUtils commonUtils = new CommonUtils();
+		 if (StringUtils.isNotBlank(category)) {
+				if (StringUtils.isNotBlank(fieldQuery)) {
+					fieldQuery += " AND category:" + category;
+				} else {
+					fieldQuery = "category:" + category;
+				}
+				logger.debug(FIELDQUERY_CONSTANT+": " + fieldQuery);
+				sqb.addFieldQuery(fieldQuery);
+			}
+
+			String fields = commonUtils.sanitizeSolrQuery(context.getParameterString("fields", ""));
+			context.setParameterString("fields", fields);
+			logger.debug("fields : " + fields);
+			if (StringUtils.isNotBlank(fields)) {
+				logger.debug("fieldQuery : " + fieldQuery);
+				sqb.addFields(fields);
+			}
+
+			String crawlFields = commonUtils.sanitizeSolrQuery(context.getParameterString("crawlFields", "title,url,description"));
+			context.setParameterString("crawlFields", crawlFields);
+			logger.debug("crawlFields : " + crawlFields);
+			if (StringUtils.isNotBlank(crawlFields)) {
+				logger.debug("fieldQuery : " + fieldQuery);
+				sqb.addCrawlFields(crawlFields);
+			}
+
+			String highlighterVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlighter",""));
+			logger.debug("highlighter: " +highlighterVal);
+			if(StringUtils.isNotBlank(highlighterVal)){
+				logger.debug("fieldQuery highlighter : " +fieldQuery);
+				sqb.addHlTag(highlighterVal);
+			}
+
+			String highlightTagVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightTag",""));
+			logger.debug("highlightTag: "+highlightTagVal);
+			if(StringUtils.isNotBlank(highlightTagVal)){
+				logger.debug("fieldQuery highlightTag"+fieldQuery);
+				sqb.addHlHtmlTag(highlightTagVal);
+			}
+
+			String highlightFieldVal = commonUtils.sanitizeSolrQuery(context.getParameterString("highlightField",""));
+			logger.debug("highlightFieldVal: "+highlightFieldVal);
+			if(StringUtils.isNotBlank(highlightFieldVal)){
+				logger.debug("fieldQuery highlightFieldVal"+fieldQuery);
+				sqb.addHlField(highlightFieldVal);
+			}
+
+			String cookieName = context.getParameterString("cookieName",DEFAULT_COOKIE);
+			if(cookieName != null && !cookieName.equalsIgnoreCase("")){
+				logger.debug("Cookie Name : " + cookieName);
+				String personaCookieValue = CookieUtils.getValue(context.getRequest(), cookieName);
+				if (personaCookieValue != null && !personaCookieValue.equalsIgnoreCase("")) {
+					logger.debug("Persona Cookie Value: "+personaCookieValue);
+					sqb.addDismaxBq(personaCookieValue);
+				}
+			}
+		 return sqb;
+	 }
 
 }

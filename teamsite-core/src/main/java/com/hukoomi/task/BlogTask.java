@@ -192,7 +192,7 @@ public class BlogTask {
         return result;
     }
 
-    private int updateBlogData(Document document,PostgreTSConnection postgre) throws Exception {
+    private int updateBlogData(Document document,PostgreTSConnection postgre)  {
         PreparedStatement preparedStatement = null;
         int result = 0;
         Connection connection = null;
@@ -221,7 +221,7 @@ public class BlogTask {
 
         } catch (NumberFormatException | SQLException e) {
             logger.error("Exception in updateBlogMasterData: ", e);
-            throw e;
+            
         } finally {
             postgre.releaseConnection(null, preparedStatement, null);
             logger.info("Released updateBlogMasterData connection");

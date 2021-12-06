@@ -69,70 +69,28 @@ public class CommentsEngine {
      * @throws SQLException
      */
     @SuppressWarnings("deprecation")
-    public Document commentEngine(final RequestContext context) throws SQLException {
+    public Document commentEngine(final RequestContext context) {
         LOGGER.info("CommentsEngine");
         Document document = null;
-        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+       
         XssUtils xssUtils = new XssUtils();
         String action = xssUtils.stripXSS(context.getParameterString("action"));
         if (validateAction(action)) {
-            int blogId = 0;
-            String blogName = "";
+          
 
             String dcrId = xssUtils.stripXSS(context.getParameterString(DCR_ID));
             String language = xssUtils.stripXSS(context.getParameterString(LOCALE));
             if (validateDCR(dcrId, language)) {
-                switch (action) {
-                case "getComments":
-                    String noOfRows = xssUtils.stripXSS(context.getParameterString(NO_OF_ROWS));
-                    String offset = xssUtils.stripXSS(context.getParameterString(OFFSET));
-                    if (validateGetCommentCount(noOfRows, offset)) {
-                        document = getComments(dcrId, Integer.parseInt(offset),
-                                Integer.parseInt(noOfRows), language, context);
-                    }
-                    break;
-                case "setComment":
-                    String ip = requestHeaderUtils.getClientIpAddress();
-                    String comments = xssUtils.stripXSS(context.getParameterString("comments"));
-                    String blogUrl = xssUtils.stripXSS(context.getParameterString("blog_url"));
-                    String userName = xssUtils.stripXSS(context.getParameterString("username"));
-                    String gRecaptchaResponse =
-                            xssUtils.stripXSS(context.getParameterString("recaptcha"));
-                    if (validateCommentData(context, comments, userName, blogUrl, ip)) {
-                        GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-                        boolean verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
-                        if (verify) {
-                            LOGGER.debug("Recapcha verification status:" + verify);
-
-                            blogId = getBlogId(dcrId, language, context);
-                            blogName = getBlogTitle(dcrId, language, context);
-
-                            document = insertCommentsToDB(blogId, blogUrl, comments, userName, ip,
-                                    context, blogName, language);
-
-                        } else {
-                            status = STATUS_ERROR_RECAPTHCHA;
-                            return getDocument(status);
-                        }
-                    } else {
-                        status = STATUS_FIELD_VALIDATION;
-                        document = getDocument(status);
-                    }
-
-                    break;
-                case "getCommentCount":
-                    blogId = getBlogId(dcrId, language, context);
-                    document = getCommentCount(blogId, context);
-                    break;
-
-                case "isUserLogged":
-                    document = isUserLogged(context);
-                    break;
-
-                default:
-                    break;
-
-                }
+                
+            	
+            	try {
+					document = blogDoc(document, action, xssUtils, context, dcrId, language);
+				} catch (SQLException e) {
+					LOGGER.info(e);
+				}
+            	
+            	
+            	
             } else {
                 status = STATUS_FIELD_VALIDATION;
                 document = getDocument(status);
@@ -145,7 +103,67 @@ public class CommentsEngine {
 
         return document;
     }
+    @SuppressWarnings("deprecation")
+    private Document blogDoc(Document document, String action, XssUtils xssUtils, final RequestContext context, String dcrId, String language) throws SQLException {
+    	 int blogId = 0;
+         String blogName = "";
+    	 RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+    	 
+    	 
+    	switch (action) {
+        case "getComments":
+            String noOfRows = xssUtils.stripXSS(context.getParameterString(NO_OF_ROWS));
+            String offset = xssUtils.stripXSS(context.getParameterString(OFFSET));
+            if (validateGetCommentCount(noOfRows, offset)) {
+                document = getComments(dcrId, Integer.parseInt(offset),
+                        Integer.parseInt(noOfRows), language, context);
+            }
+            break;
+        case "setComment":
+            String ip = requestHeaderUtils.getClientIpAddress();
+            String comments = xssUtils.stripXSS(context.getParameterString("comments"));
+            String blogUrl = xssUtils.stripXSS(context.getParameterString("blog_url"));
+            String userName = xssUtils.stripXSS(context.getParameterString("username"));
+            String gRecaptchaResponse =
+                    xssUtils.stripXSS(context.getParameterString("recaptcha"));
+            if (validateCommentData(context, comments, userName, blogUrl, ip)) {
+                GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+                boolean verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
+                if (verify) {
+                    LOGGER.debug("Recapcha verification status:" + verify);
 
+                    blogId = getBlogId(dcrId, language, context);
+                    blogName = getBlogTitle(dcrId, language, context);
+
+                    document = insertCommentsToDB(blogId, blogUrl, comments, userName, 
+                            context, blogName, language);
+
+                } else {
+                    status = STATUS_ERROR_RECAPTHCHA;
+                    return getDocument(status);
+                }
+            } else {
+                status = STATUS_FIELD_VALIDATION;
+                document = getDocument(status);
+            }
+
+            break;
+        case "getCommentCount":
+            blogId = getBlogId(dcrId, language, context);
+            document = getCommentCount(blogId, context);
+            break;
+
+        case "isUserLogged":
+            document = isUserLogged(context);
+            break;
+
+        default:
+            break;
+
+        }
+    	
+    	return document;
+    }
     /**
      * This method validate the comments input data
      * 
@@ -440,9 +458,11 @@ public class CommentsEngine {
      * @return
      */
     public Document insertCommentsToDB(
-            int blogId, String blogUrl, String comments, String userName, String ip,
+            int blogId, String blogUrl, String comments, String userName,
             RequestContext context, String blogtitle, String lang
     ) {
+    	RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
+    	  String ip = requestHeaderUtils.getClientIpAddress();
         LOGGER.info("CommentEngine : insertCommentsToDB");
         Postgre objPostgre = new Postgre(context);
         Document document = DocumentHelper.createDocument();

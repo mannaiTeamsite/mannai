@@ -34,7 +34,7 @@ public class PollsBO {
     /**
      * Non logged in user unique id
      */
-    private String NLUID;
+    private String nlUId;
     /**
      * Start date of the poll
      */
@@ -217,11 +217,11 @@ public class PollsBO {
     }
 
     public String getNLUID() {
-        return NLUID;
+        return nlUId;
     }
 
     public void setNLUID(String nLUID) {
-        NLUID = nLUID;
+        nlUId = nLUID;
     }
 
     /**
@@ -505,7 +505,7 @@ public class PollsBO {
                 .append(lang).append(", userId=").append(userId)
                 .append(", userAgent=").append(userAgent)
                 .append(", ipAddress=").append(ipAddress)
-                .append(", NLUID=").append(NLUID).append(", startDate=")
+                .append(", NLUID=").append(nlUId).append(", startDate=")
                 .append(startDate).append(", endDate=").append(endDate)
                 .append(", persona=").append(persona).append(", votedOn=")
                 .append(votedOn).append(", votedFrom=").append(votedFrom)

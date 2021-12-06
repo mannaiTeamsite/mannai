@@ -1,14 +1,17 @@
 package com.hukoomi.task;
 
-import com.hukoomi.utils.PostgreTSConnection;
-import com.hukoomi.utils.TeamSiteUtils;
-import com.interwoven.cssdk.common.CSClient;
-import com.interwoven.cssdk.common.CSException;
-import com.interwoven.cssdk.filesys.*;
-import com.interwoven.cssdk.workflow.CSComment;
-import com.interwoven.cssdk.workflow.CSExternalTask;
-import com.interwoven.cssdk.workflow.CSURLExternalTask;
-import com.interwoven.cssdk.workflow.CSWorkflow;
+import java.io.File;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.lang.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.dom4j.Document;
@@ -17,15 +20,18 @@ import org.dom4j.DocumentHelper;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.hukoomi.utils.PostgreTSConnection;
+import com.interwoven.cssdk.common.CSClient;
+import com.interwoven.cssdk.common.CSException;
+import com.interwoven.cssdk.filesys.CSAreaRelativePath;
+import com.interwoven.cssdk.filesys.CSFile;
+import com.interwoven.cssdk.filesys.CSHole;
+import com.interwoven.cssdk.filesys.CSSimpleFile;
+import com.interwoven.cssdk.filesys.CSVPath;
+import com.interwoven.cssdk.workflow.CSComment;
+import com.interwoven.cssdk.workflow.CSExternalTask;
+import com.interwoven.cssdk.workflow.CSURLExternalTask;
+import com.interwoven.cssdk.workflow.CSWorkflow;
 
 /**
  * DataBaseContentIngest is the workflow task class for dcr data
@@ -618,7 +624,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         Connection connection = null;
         boolean isDataSelected = false;
         boolean isDataInserted;
-        ResultSet result;
+        ResultSet result = null;
         PreparedStatement preparedStatement = null;
         try {
             connection = postgreConnection.getConnection();
@@ -650,7 +656,7 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         } catch (Exception e) {
             logger.error("Exception in insertData: ", e);
         } finally {
-            postgre.releaseConnection(connection, preparedStatement, null);
+            postgre.releaseConnection(connection, preparedStatement, result);
             logger.info("Released taxonomyQuery connection");
             if(isDataSelected){
                 isDataInserted = taxonomyUpdateQuery(lang, type, key, label, dcr,postgreConnection );
@@ -893,16 +899,16 @@ public class DataBaseContentIngest implements CSURLExternalTask {
         logger.debug("Data Insert Task : getDate");
         Timestamp sqlDate = null;
         try {
-            if(inputDate != null) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                java.util.Date date = sdf.parse(inputDate);
-                sqlDate = new Timestamp(date.getTime());
-                logger.info(inputDate + " >>> " + sqlDate);
-            }
-        } catch(Exception e) {
-            logger.error("Exception in insertData: ", e);
-        }
+          if (inputDate != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            Date date = sdf.parse(inputDate);
+            sqlDate = new Timestamp(date.getTime());
+            logger.info(inputDate + " >>> " + inputDate);
+          } 
+        } catch (Exception e) {
+          logger.error("Exception in insertData: ", e);
+        } 
         return sqlDate;
-    }
+      }
 
 }

@@ -42,7 +42,7 @@ public class SurveyBO {
     /**
      * Non logged in user unique id
      */
-    private String NLUID;
+    private String nulUId;
     /**
      * Start date of the survey
      */
@@ -249,11 +249,11 @@ public class SurveyBO {
     }
 
     public String getNLUID() {
-        return NLUID;
+        return nulUId;
     }
 
     public void setNLUID(String nLUID) {
-        NLUID = nLUID;
+        nulUId = nLUID;
     }
 
     /**
@@ -577,7 +577,7 @@ public class SurveyBO {
                 .append(", lang=").append(lang).append(", userId=")
                 .append(userId).append(", userAgent=").append(userAgent)
                 .append(", ipAddress=").append(ipAddress)
-                .append(", NLUID=").append(NLUID).append(", startDate=")
+                .append(", NLUID=").append(nulUId).append(", startDate=")
                 .append(startDate).append(", endDate=").append(endDate)
                 .append(", persona=").append(persona).append(", takenOn=")
                 .append(takenOn).append(", takenFrom=").append(takenFrom)

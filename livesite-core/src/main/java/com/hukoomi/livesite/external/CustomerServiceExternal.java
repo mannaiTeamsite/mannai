@@ -61,21 +61,21 @@ public class CustomerServiceExternal {
                 if (validateEService(eService)) {
                     result = getServices(eService, context);
                 } else {
-                     result = getFieldValidationFailedDocument(result);
+                     result = getFieldValidationFailedDocument();
                 }
             }
             else {
-                result = getFieldValidationFailedDocument(result);
+                result = getFieldValidationFailedDocument();
            }
         }
         else {
-            result = getFieldValidationFailedDocument(result);
+            result = getFieldValidationFailedDocument();
         }
         return result;
     }
 
-    private Document getFieldValidationFailedDocument( Document result) {
-        result = DocumentHelper.createDocument();
+    private Document getFieldValidationFailedDocument( ) {
+    	Document result = DocumentHelper.createDocument();
         Element resultElement =
                 result.addElement(ELEMENT_RESULT);
         Element element =

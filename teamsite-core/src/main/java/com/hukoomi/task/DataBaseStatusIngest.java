@@ -1,5 +1,24 @@
 package com.hukoomi.task;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+import java.util.StringJoiner;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateUtils;
+import org.apache.log4j.Logger;
+
 import com.hukoomi.utils.PostgreTSConnection;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
@@ -11,17 +30,6 @@ import com.interwoven.cssdk.workflow.CSComment;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
 import com.interwoven.cssdk.workflow.CSWorkflow;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.time.DateUtils;
-import org.apache.log4j.Logger;
-
-import java.sql.*;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
-import java.util.*;
 
 public class DataBaseStatusIngest implements CSURLExternalTask {
     /**
@@ -212,7 +220,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             logger.debug("DataBaseStatusIngest : workflowQueryData");
             Connection connection = null;
             boolean isDataSelected = false;
-            ResultSet result;
+            ResultSet result = null;
             PreparedStatement preparedStatement = null;
             try {
                 connection = postgre.getConnection();
@@ -239,7 +247,7 @@ public class DataBaseStatusIngest implements CSURLExternalTask {
             } catch (Exception e) {
                 logger.error("Exception in workflowQuery: ", e);
             }finally {
-                postgre.releaseConnection(connection, preparedStatement, null);
+                postgre.releaseConnection(connection, preparedStatement, result);
                 logger.info("Released taxonomyQuery connection from workflowQuery");
             }
             return isDataSelected;

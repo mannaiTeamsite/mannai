@@ -37,6 +37,14 @@ import com.hukoomi.utils.PostgreForServlet;
  */
 public class NewsletterConfirmation extends HttpServlet {
 
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 755226934872053366L;
+	
+	
+
 	/** Logger object to check the flow of the code. */
 	private static final Logger logger = Logger.getLogger(NewsletterConfirmation.class);
 
@@ -136,7 +144,7 @@ public class NewsletterConfirmation extends HttpServlet {
 		String pageLang = request.getParameter("lang");
 		RequestDispatcher rd = request.getRequestDispatcher("/portal-" + pageLang + "/home.page");
 		String confirmationStatus = getConfirmationTokenStatus(token, postgre);
-
+		try {
 		if (STATUS_PENDING.equals(confirmationStatus)) {
 			Map<String, String> subscriberDetails = getSubcriberDetails(token, postgre);
 
@@ -151,14 +159,14 @@ public class NewsletterConfirmation extends HttpServlet {
 			String syncStatus = "";
 			int userId = getSubscriberID(subscriberemail, mysql);
 			status = phpSubscriberExists(subscriberemail, listid, mysql);
-			try {
+		
 
 				uptpostgreData = updateListDataPostgre(status, subscriberemail, userId, listid, mysql, postgre);
 
 				if (!uptpostgreData.equals("") && uptpostgreData.equals(STATUS_SUCCESS)
 						&& status.equals(STATUS_NOTFOUND)) {
 
-					syncStatus = syncPostgrePhpTab(pluBO, userId, listid, mysql, postgre);
+					syncStatus = syncPostgrePhpTab(userId, listid, mysql, postgre);
 				}
 				logger.debug("NewsletterConfirmation : syncstatus >>>>>" + syncStatus);
 				if (!uptpostgreData.equals("") && uptpostgreData.equals(STATUS_SUCCESS)
@@ -174,9 +182,7 @@ public class NewsletterConfirmation extends HttpServlet {
 					logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>" + syncStatus);
 				}
 
-			} catch (Exception e) {
-				logger.error("NewsletterConfirmation : doGet() <<<<" + e);
-			}
+		
 
 			if (uptpostgreData.equals(STATUS_SUCCESS)) {
 				String cookieStatus = postgreDataSuccess(token, subscriberId, preferenceId, postgre);
@@ -202,6 +208,9 @@ public class NewsletterConfirmation extends HttpServlet {
 			response.setDateHeader(EXPIRES, 0);
 			response.addCookie(confirmationCookie);
 			rd.forward(request, response);
+		}	
+		} catch (Exception e) {
+			logger.error("NewsletterConfirmation : doGet() <<<<" + e);
 		}
 
 	}
@@ -241,7 +250,7 @@ public class NewsletterConfirmation extends HttpServlet {
 	 * @param postgre
 	 * @return
 	 */
-	private String syncPostgrePhpTab(PhpListUserBO pluBO, int userId, int listid, MySqlForServlet mysql,
+	private String syncPostgrePhpTab( int userId, int listid, MySqlForServlet mysql,
 			PostgreForServlet postgre) {
 		String status = "";
 
@@ -260,7 +269,7 @@ public class NewsletterConfirmation extends HttpServlet {
 
 		String updateSyncListQuery = "INSERT INTO PHPLIST_LISTUSER (USERID, LISTID, ENTERED, MODIFIED) VALUES (?,?,?,?)";
 
-		pluBO = getsyncphpData(getPhpUser, userId, listid, USERDATA, mysql);
+		PhpListUserBO pluBO = getsyncphpData(getPhpUser, userId, listid, USERDATA, mysql);
 		status = updatesyncphpData(updateSyncUserQuery, pluBO, USERDATA, postgre);
 		logger.debug("NewsletterConfirmation : syncstatus user table" + status);
 
@@ -411,7 +420,7 @@ public class NewsletterConfirmation extends HttpServlet {
 	 */
 	private Map<String, String> getSubcriberDetails(String token, PostgreForServlet postgre) {
 		logger.info("NewsletterConfirmation : getSubcriberDetails()");
-		Map<String, String> subscriberDetails = new LinkedHashMap<String, String>();
+		Map<String, String> subscriberDetails = new LinkedHashMap<>();
 
 		String getSubscriberDetailsQuery = "SELECT SUBSCRIBER_ID, PREFERENCE_ID FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE TOKEN = ?";
 		Connection connection = null;
@@ -979,7 +988,12 @@ public class NewsletterConfirmation extends HttpServlet {
 
 	@Override
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-		doGet(request, response);
+		try {
+			doGet(request, response);
+		}catch(Exception e) {
+			logger.info(e);
+		}
+		
 
 	}
 

@@ -282,12 +282,12 @@ public class ErrorTask {
             prepareStatement.setString(1, status_code);
             prepareStatement.setString(2, lang);
             rs = prepareStatement.executeQuery();
-            while (rs.next()) {
+            rs.next();
                 int count = rs.getInt(1);
                 if (count > 0) {
                     isErrorDataAvailable = true;
                 }
-            }
+            
             logger.info("isErrorDataAvailable : " + isErrorDataAvailable);
 
         } catch (Exception e) {

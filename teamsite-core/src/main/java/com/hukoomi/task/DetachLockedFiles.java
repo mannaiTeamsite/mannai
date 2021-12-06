@@ -1,22 +1,19 @@
 package com.hukoomi.task;
 
-import com.interwoven.cssdk.access.CSAuthorizationException;
-import com.interwoven.cssdk.access.CSExpiredSessionException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
-import com.interwoven.cssdk.common.CSObjectNotFoundException;
-import com.interwoven.cssdk.common.CSRemoteException;
 import com.interwoven.cssdk.filesys.CSArea;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
 import com.interwoven.cssdk.filesys.CSFile;
 import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
-import org.apache.log4j.Logger;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
 
 public class DetachLockedFiles implements CSURLExternalTask {
 
