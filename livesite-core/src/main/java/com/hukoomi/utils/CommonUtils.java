@@ -557,25 +557,29 @@ public class CommonUtils {
         return result;
       }
       
-      public ValidationErrorList esapiValidator(String name, String str, String type, int length, boolean allowNull, boolean canonicalize, ValidationErrorList errorList) {
+      public int esapiValidator(String name, String str, String type, int length, boolean allowNull, boolean canonicalize) {
+    	  ValidationErrorList errorList = new ValidationErrorList();
     	  if (!ESAPIValidator.checkNull(str)) {
-    		  ESAPI.validator().getValidInput(name, str, type, length, allowNull, canonicalize, errorList);             
+    		ESAPI.validator().getValidInput(name, str, type, length, allowNull, canonicalize, errorList); 
+    		  if(errorList.isEmpty()) {
+                  return 0;
+              }
           }
-    	  return errorList;
+    	  logger.info("ESAPI error in"+str);
+    	  return 1;
       }
       
       public int inserErrorResponse(RequestContext context, int count, String brokenLink, String contentPage, String language, String statusCode) {
          logger.debug("Inser Error Response Broken link in Database");
-          ValidationErrorList errorList = new ValidationErrorList();
+        
           int insertResponse = 0;
-          
-          esapiValidator("brokenLink", brokenLink, ESAPIValidator.URL, 255, false, true, errorList);
-          esapiValidator("contentPage", contentPage, ESAPIValidator.URL, 255, false, true, errorList);
-          esapiValidator("language", language, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-          esapiValidator("statusCode", statusCode, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-          if(!errorList.isEmpty()) {
-              logger.info(errorList.getError("brokenLink"));
-              logger.error("Not a valid parameter brokenLink. The incident will not be logged");
+          int errorCount = 0;
+          errorCount += esapiValidator("brokenLink", brokenLink, ESAPIValidator.URL, 255, false, true);
+          errorCount += esapiValidator("contentPage", contentPage, ESAPIValidator.URL, 255, false, true);
+          errorCount += esapiValidator("language", language, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+          errorCount += esapiValidator("statusCode", statusCode, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+          if(errorCount > 0) {            
+              logger.error("Not a valid parameter. The incident will not be logged");
               return 0;
           }else {        
               logger.info("Logging the Broken link with status: " + statusCode + ", for URL: " + brokenLink + ", present on: " + contentPage + " for language: " + language);

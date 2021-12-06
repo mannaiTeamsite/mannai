@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.owasp.esapi.ValidationErrorList;
 
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.ESAPIValidator;
@@ -114,21 +113,20 @@ public void insertStatus(boolean isExist) {
 		logger.info("insertBookmark()====> Starts");
 
 		logger.debug("Logging Broken link in Database");
-		ValidationErrorList errorList = new ValidationErrorList();
+		
+		int errorVal = 0;
 		CommonUtils cu = new CommonUtils();
 		
-		errorList = cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true, errorList);
-		errorList = cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
-		errorList = cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
-		errorList = cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+		errorVal += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorVal += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorVal += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
+		errorVal += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
+		errorVal += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
+		errorVal += cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorVal += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorVal += cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
 	
-		if (!errorList.isEmpty()) {
-			logger.info(errorList.getError(categoryLiteral));
-			logger.error("Not a valid parameter category. The incident will not be logged.");
+		if (errorVal>0) {			
 			return 0;
 		}
 
@@ -266,19 +264,18 @@ public void insertStatus(boolean isExist) {
 		logger.info("updateBookmark()====> Starts");
 		CommonUtils cu = new CommonUtils();
 		logger.debug("Logging Broken link in Database in updateBookmark");
-		ValidationErrorList errorList = new ValidationErrorList();
-		errorList = cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true, errorList);
-		errorList = cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
-		errorList = cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
-		errorList = cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator(contenttypeLiteral, contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
-		errorList = cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true, errorList);
+		int errorCount = 0;
+		errorCount += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
+		errorCount += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
+		errorCount += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
+		errorCount += cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator(contenttypeLiteral, contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
 		
-		if (!errorList.isEmpty()) {
-			logger.info(errorList.getError(categoryLiteral));
-			logger.error("Not a valid parameter category. The incident will not be logged.");
+		if (errorCount > 0) {
+			logger.error("Not a valid parameter. The incident will not be logged.");
 			return 0;
 		}
 

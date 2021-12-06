@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
-import org.owasp.esapi.ValidationErrorList;
 
 import com.hukoomi.utils.CommonUtils;
 import com.hukoomi.utils.ESAPIValidator;
@@ -102,24 +101,20 @@ public class LastViewedExternal {
 		logger.info("insertLastViewed()====> Starts");
 
 		logger.debug("Logging Broken link in Database");
-		ValidationErrorList errorList = new ValidationErrorList();
+		
 
 		CommonUtils cu = new CommonUtils();
+		int errorCount = 0;
+		errorCount += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false,true );
+		errorCount += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
+		errorCount += cu.esapiValidator(LOCALE_CONSTANT, locale, ESAPIValidator.ALPHABET, 20, false, true);
+		errorCount += cu.esapiValidator("userID", userID, ESAPIValidator.USER_ID, 255, false, true);
+		errorCount += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator(CATEGORY_CONSTANT, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
 
-		errorList = cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true,
-				errorList);
-		errorList = cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false,
-				true, errorList);
-		errorList = cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true, errorList);
-		errorList = cu.esapiValidator(LOCALE_CONSTANT, locale, ESAPIValidator.ALPHABET, 20, false, true, errorList);
-		errorList = cu.esapiValidator("userID", userID, ESAPIValidator.USER_ID, 255, false, true, errorList);
-		errorList = cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true,
-				errorList);
-		errorList = cu.esapiValidator(CATEGORY_CONSTANT, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true,
-				errorList);
-
-		if (!errorList.isEmpty()) {
-			logger.error("Not a valid parameter category. The incident will not be logged.");
+		if (errorCount > 0) {
+			logger.error("Not a valid parameter. The incident will not be logged.");
 			return 0;
 		}
 
