@@ -137,7 +137,8 @@ public class SolrQueryBuilder {
     /** This method will be called for solr query building.
      * @param context The parameter context object passed from Component.
      */
-    private void init(final RequestContext context) {
+    @SuppressWarnings("deprecation")
+	private void init(final RequestContext context) {
         logger.info("Initialising Solr Query Builder");
         PropertiesFileReader propertyFileReader = new PropertiesFileReader(
                 context, "solrconfig.properties");
