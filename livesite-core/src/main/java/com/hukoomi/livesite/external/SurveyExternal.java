@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -157,7 +158,7 @@ public class SurveyExternal {
         logger.info("SurveyExternal : submitSurvey");
         
         postgre = new Postgre(context);
-        DetailExternal detailExt = new DetailExternal();
+        
         surveyBO = new SurveyBO();
         boolean isInputValid = setBO(context, surveyBO, postgre);
         logger.debug("SurveyBO : " + surveyBO);
@@ -174,127 +175,16 @@ public class SurveyExternal {
         Element surveyStatusElem = surveyResponseElem.addElement("Status");
         if (isInputValid) {
             if (StringUtils.isNotBlank(surveyBO.getAction())) {
-                GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+                
                 if (StringUtils.equalsIgnoreCase(ACTION_SURVEY_SUBIT, surveyBO.getAction())) {
-                    
-                    if(!StringUtils.isNotBlank(surveyBO.getUserId()) && !StringUtils.isNotBlank(surveyBO.getNLUID())) {
-                        String nlUID = UUID.randomUUID().toString();
-                        logger.info(NLUID+" : " + nlUID);
-                        surveyBO.setNLUID(nlUID);
-                        Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
-                        logger.info("nlUIDCookie : " + nlUIDCookie);
-                        String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
-                        logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
-                        int nlUserCookieExpiry = 0;
-                        if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
-                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);                            
-                        }
-                        nlUIDCookie.setMaxAge(nlUserCookieExpiry);
-                        nlUIDCookie.setPath("/");
-                        response.addCookie(nlUIDCookie);
-                        logger.info("nlUIDCookie added to cookie");
-                    }
-                    
-                    List<String> surveyArr = new ArrayList<>();
-                    surveyArr.add(surveyBO.getSurveyId());
-                    List<String> submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, null, postgre, surveyBO);
-
-                    if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
-                        if (captchUtil.validateCaptcha(context,
-                                surveyBO.getCaptchaResponse())) {
-                            logger.info("Google Recaptcha is valid");
-                            boolean insertSurveyResponse = insertSurveyResponse(
-                                    surveyBO, context);
-                            logger.info("insertSurveyResponse : "
-                                    + insertSurveyResponse);
-                            if (insertSurveyResponse) {
-                                surveyStatusElem.setText(SUCCESS);
-                            } else {
-                                surveyStatusElem.setText(FAILED);
-                            }
-                        } else {
-                            logger.info("Google Recaptcha is not valid");
-                            surveyStatusElem.setText(FAILED);
-                        }
-                    } else {
-                        surveyStatusElem.setText(SUBMITTED);
-                    }
-                } else if (ACTION_SURVEY_DETAIL.equalsIgnoreCase(surveyBO.getAction())) {                    
-                    String siteKey = captchaconfigProp.getProperty("siteKey");
-                    logger.debug("siteKey : " + siteKey);
-                    document = detailExt.getContentDetail(context);
-
-                    String surveyId = document
-                            .selectSingleNode(
-                                    "/content/root/information/id")
-                            .getText();
-                    logger.debug("Detail External Survey Id : " + surveyId);
-                    List<String> submittedSurveyIdArr = null;
-                    if (StringUtils.isNotBlank(surveyId)) {
-                        List<String>surveyArr = new ArrayList<>();
-                        surveyArr.add(surveyId);
-                        if (StringUtils.isNotBlank(surveyBO.getUserId())
-                                || StringUtils.isNotBlank(surveyBO.getNLUID())) {
-                            submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, 
-                                null, postgre, surveyBO);
-                        }
-                        logger.debug("Submitted Survey Id : "
-                                + submittedSurveyIdArr);
-                    }
-
-                    if(submittedSurveyIdArr != null && !submittedSurveyIdArr.isEmpty()) {
-                        document.getRootElement().addAttribute("Status",
-                                SUBMITTED);
-                    }
-                    document.getRootElement().addAttribute("Sitekey", siteKey);
+                    submitSurveyResponse(context, surveyStatusElem);                    
+                } else if (ACTION_SURVEY_DETAIL.equalsIgnoreCase(surveyBO.getAction())) {   
+                    getSurveyDetail(context, document);                                     
                 } else if (ACTION_SURVEY_LISTING.equalsIgnoreCase(surveyBO.getAction())) {
                     document = getSurveyList(context);
-                } else if (ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {
-                    
-                    if(!StringUtils.isNotBlank(surveyBO.getUserId()) && !StringUtils.isNotBlank(surveyBO.getNLUID())) {
-                        String nlUID = UUID.randomUUID().toString();
-                        logger.info(NLUID+" : " + nlUID);
-                        surveyBO.setNLUID(nlUID);
-                        Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
-                        logger.info("nlUIDCookie : " + nlUIDCookie);
-                        String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
-                        logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
-                        int nlUserCookieExpiry = 0;
-                        if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
-                            nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);                            
-                        }
-                        nlUIDCookie.setMaxAge(nlUserCookieExpiry);
-                        nlUIDCookie.setPath("/");
-                        response.addCookie(nlUIDCookie);
-                        logger.info("nlUIDCookie added to cookie");
-                    }
-                    
-                    List<String> dynamicSurveyArr = new ArrayList<>();
-                    dynamicSurveyArr.add(surveyBO.getSurveyId());
-                    List<String> submittedSurveyIdArr = getSubmittedSurveyIds(null, dynamicSurveyArr, postgre, surveyBO);
-
-                    if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
-                        if (captchUtil.validateCaptcha(context,
-                                surveyBO.getCaptchaResponse())) {
-                            logger.info("Google Recaptcha is valid");
-                            boolean insertDynamicSurveyResponse = insertDynamicSurveyResponse(
-                                    surveyBO, context);
-                            logger.info("insertDynamicSurveyResponse : "
-                                    + insertDynamicSurveyResponse);
-                            if (insertDynamicSurveyResponse) {
-                                surveyStatusElem.setText(SUCCESS);
-                            } else {
-                                surveyStatusElem.setText(FAILED);
-                            }
-                        } else {
-                            logger.info("Google Recaptcha is not valid");
-                            surveyStatusElem.setText(FAILED);
-                        }
-                    } else {
-                        surveyStatusElem.setText(SUBMITTED);
-                    }
+                } else if (ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {                    
+                    submitDynamicSurveyResponse(context, surveyStatusElem);
                 } 
-
                 logger.debug("Final Result :" + document.asXML());
             } else {
                 logger.info("Error : Survey Action not available");
@@ -304,6 +194,150 @@ public class SurveyExternal {
             surveyStatusElem.setText(FAILED);
         }
         return document;
+    }
+    
+    /**
+     * This method will insert Survey response data.
+     * 
+     * @param context Request context object.
+     *
+     */
+    public void submitSurveyResponse(RequestContext context, Element surveyStatusElem) {
+        GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+        
+        if(!StringUtils.isNotBlank(surveyBO.getUserId()) && !StringUtils.isNotBlank(surveyBO.getNLUID())) {
+            String nlUID = UUID.randomUUID().toString();
+            logger.info(NLUID+" : " + nlUID);
+            surveyBO.setNLUID(nlUID);
+            Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
+            logger.info("nlUIDCookie : " + nlUIDCookie);
+            String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
+            logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
+            int nlUserCookieExpiry = 0;
+            if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
+                nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);                            
+            }
+            nlUIDCookie.setMaxAge(nlUserCookieExpiry);
+            nlUIDCookie.setPath("/");
+            response.addCookie(nlUIDCookie);
+            logger.info("nlUIDCookie added to cookie");
+        }
+        
+        List<String> surveyArr = new ArrayList<>();
+        surveyArr.add(surveyBO.getSurveyId());
+        List<String> submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, null, postgre);
+
+        if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
+            if (captchUtil.validateCaptcha(context,
+                    surveyBO.getCaptchaResponse())) {
+                logger.info("Google Recaptcha is valid");
+                boolean insertSurveyResponse = insertSurveyResponse(
+                        surveyBO, context);
+                logger.info("insertSurveyResponse : "
+                        + insertSurveyResponse);
+                if (insertSurveyResponse) {
+                    surveyStatusElem.setText(SUCCESS);
+                } else {
+                    surveyStatusElem.setText(FAILED);
+                }
+            } else {
+                logger.info("Google Recaptcha is not valid");
+                surveyStatusElem.setText(FAILED);
+            }
+        } else {
+            surveyStatusElem.setText(SUBMITTED);
+        }
+    }
+    
+    /**
+     * This method will get Survey details.
+     * 
+     * @param context Request context object.
+     *
+     */
+    public void getSurveyDetail(RequestContext context, Document document) {
+        DetailExternal detailExt = new DetailExternal();
+        String siteKey = captchaconfigProp.getProperty("siteKey");
+        logger.debug("siteKey : " + siteKey);
+        document = detailExt.getContentDetail(context);
+
+        String surveyId = document
+                .selectSingleNode(
+                        "/content/root/information/id")
+                .getText();
+        logger.debug("Detail External Survey Id : " + surveyId);
+        List<String> submittedSurveyIdArr = null;
+        if (StringUtils.isNotBlank(surveyId)) {
+            List<String>surveyArr = new ArrayList<>();
+            surveyArr.add(surveyId);
+            if (StringUtils.isNotBlank(surveyBO.getUserId())
+                    || StringUtils.isNotBlank(surveyBO.getNLUID())) {
+                submittedSurveyIdArr = getSubmittedSurveyIds(surveyArr, 
+                    null, postgre);
+            }
+            logger.debug("Submitted Survey Id : "
+                    + submittedSurveyIdArr);
+        }
+
+        if(submittedSurveyIdArr != null && !submittedSurveyIdArr.isEmpty()) {
+            document.getRootElement().addAttribute("Status",
+                    SUBMITTED);
+        }
+        document.getRootElement().addAttribute("Sitekey", siteKey);
+    }
+    
+    
+    /**
+     * This method will insert Dynamic Survey response data.
+     * 
+     * @param context Request context object.
+     *
+     */
+    public void submitDynamicSurveyResponse(RequestContext context, Element surveyStatusElem) {
+        GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+        
+        if(!StringUtils.isNotBlank(surveyBO.getUserId()) && !StringUtils.isNotBlank(surveyBO.getNLUID())) {
+            String nlUID = UUID.randomUUID().toString();
+            logger.info(NLUID+" : " + nlUID);
+            surveyBO.setNLUID(nlUID);
+            Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
+            logger.info("nlUIDCookie : " + nlUIDCookie);
+            String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
+            logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
+            int nlUserCookieExpiry = 0;
+            if(StringUtils.isNotBlank(nlUserCookieExpiryStr)) {
+                nlUserCookieExpiry = Integer.parseInt(nlUserCookieExpiryStr);                            
+            }
+            nlUIDCookie.setMaxAge(nlUserCookieExpiry);
+            nlUIDCookie.setPath("/");
+            response.addCookie(nlUIDCookie);
+            logger.info("nlUIDCookie added to cookie");
+        }
+        
+        List<String> dynamicSurveyArr = new ArrayList<>();
+        dynamicSurveyArr.add(surveyBO.getSurveyId());
+        List<String> submittedSurveyIdArr = getSubmittedSurveyIds(null, dynamicSurveyArr, postgre);
+
+        if (submittedSurveyIdArr != null  && submittedSurveyIdArr.isEmpty()) {
+            if (captchUtil.validateCaptcha(context,
+                    surveyBO.getCaptchaResponse())) {
+                logger.info("Google Recaptcha is valid");
+                boolean insertDynamicSurveyResponse = insertDynamicSurveyResponse(
+                        surveyBO, context);
+                logger.info("insertDynamicSurveyResponse : "
+                        + insertDynamicSurveyResponse);
+                if (insertDynamicSurveyResponse) {
+                    surveyStatusElem.setText(SUCCESS);
+                } else {
+                    surveyStatusElem.setText(FAILED);
+                }
+            } else {
+                logger.info("Google Recaptcha is not valid");
+                surveyStatusElem.setText(FAILED);
+            }
+        } else {
+            surveyStatusElem.setText(SUBMITTED);
+        }
     }
 
     /**
@@ -339,7 +373,7 @@ public class SurveyExternal {
             if(StringUtils.isNotBlank(surveyBO.getUserId()) || StringUtils.isNotBlank(surveyBO.getNLUID())) {
                 logger.info("Fetching Submitted Survey Ids : ");
                 submittedSurveyIds = getSubmittedSurveyIds(surveyArr, dynamicSurveyArr,
-                        postgre, surveyBO);
+                        postgre);
             }
             logger.debug("No. of Submitted Survey Ids : " + submittedSurveyIds.size());
             
@@ -387,33 +421,47 @@ public class SurveyExternal {
      *         ids.
      */
     public List<String> getSubmittedSurveyIds(List<String> surveyArr, List<String> dynamicSurveyArr,
-            Postgre postgre, SurveyBO surveyBO) {
+            Postgre postgre) {
         logger.info("SurveyExternal : getSubmittedSurveyIds");
         List<String> submittedSurveyIds = new ArrayList<>();
+        getSubmittedSimpleSurveyIds(surveyArr, postgre, submittedSurveyIds);
+        getSubmittedDynamicSurveyIds(dynamicSurveyArr, postgre, submittedSurveyIds);
+        logger.debug("Survey submitted id's : "+ submittedSurveyIds);
+        return submittedSurveyIds;
+    }
+    
+    /**
+     * This method is used for checking Survey submission data in database.
+     * 
+     * @param surveyIds
+     *                  Comma seprated Survey Ids
+     * @param postgre
+     *                  Postgre Object.
+     * 
+     */
+    public void getSubmittedSimpleSurveyIds(List<String> surveyArr,
+            Postgre postgre, List<String> submittedSurveyIds) {
         Connection connection = null;
         PreparedStatement prepareStatement = null;
         ResultSet rs = null;
-        
-     
-            connection = postgre.getConnection();
-            String userId = surveyBO.getUserId();           
-            String nluid = surveyBO.getNLUID();
-            
-            if(surveyArr != null && !surveyArr.isEmpty()) {
-                try {
+        if(surveyArr != null && !surveyArr.isEmpty()) {
+            try {
+                connection = postgre.getConnection();
+                String userId = surveyBO.getUserId();           
+                String nluid = surveyBO.getNLUID();
                 logger.info("Fetching submitted id's for Survey");
                 StringBuilder surveyQuery = new StringBuilder(
-                        "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR, SURVEY_MASTER SM "
-                        + "WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) "
-                        + "AND SM.SUBMIT_TYPE = 'Single' ");
-    
+                    "SELECT DISTINCT SR.SURVEY_ID FROM SURVEY_RESPONSE SR, SURVEY_MASTER SM "
+                    + "WHERE SM.SURVEY_ID = SR.SURVEY_ID AND SR.SURVEY_ID = ANY (?) "
+                    + "AND SM.SUBMIT_TYPE = 'Single' ");
+
                 if(StringUtils.isNotBlank(userId)) {
                     surveyQuery.append("AND USER_ID = ? ");
                 }else if(StringUtils.isNotBlank(nluid)) {
                     surveyQuery.append("AND NLUID = ? ");
                 }
                 logger.debug("Survey Query : "+ surveyQuery.toString());
-                    
+                
                 prepareStatement = connection.prepareStatement(
                         surveyQuery.toString());
                 prepareStatement.setArray(1,
@@ -427,28 +475,47 @@ public class SurveyExternal {
                 while (rs.next()) {
                     submittedSurveyIds.add(rs.getString(SURVEYID));
                 }
-                }catch (Exception e) {
-                    logger.error("Exception in getSubmittedSurveyIds", e);
-                } finally {
-                    postgre.releaseConnection(connection, prepareStatement, rs);
-                }
-                
+            }catch (Exception e) {
+                logger.error("Exception in getSubmittedSimpleSurveyIds", e);
+            } finally {
+                postgre.releaseConnection(connection, prepareStatement, rs);
             }
             
-            if(dynamicSurveyArr != null && !dynamicSurveyArr.isEmpty()) {
+        }
+    }
+    
+    
+    /**
+     * This method is used for checking Survey submission data in database.
+     * 
+     * @param surveyIds
+     *                  Comma seprated Survey Ids
+     * @param postgre
+     *                  Postgre Object.
+     * 
+     */
+    public void getSubmittedDynamicSurveyIds(List<String> dynamicSurveyArr,
+            Postgre postgre, List<String> submittedSurveyIds) {
+        Connection connection = null;
+        PreparedStatement prepareStatement = null;
+        ResultSet rs = null;
+        if(dynamicSurveyArr != null && !dynamicSurveyArr.isEmpty()) {
+            try {
+                connection = postgre.getConnection();
+                String userId = surveyBO.getUserId();           
+                String nluid = surveyBO.getNLUID();
                 logger.info("Fetching submitted id's for Dynamic Survey");
                 StringBuilder dynamicSurveyQuery = new StringBuilder(
-                        "SELECT DISTINCT DSM.SURVEY_ID FROM DYNAMIC_SURVEY_RESPONSE DSR, DYNAMIC_SURVEY_MASTER DSM "
-                        + "WHERE DSM.SURVEY_MASTER_ID = DSR.SURVEY_MASTER_ID AND DSM.SURVEY_ID = ANY (?) "
-                        + "AND DSM.SUBMIT_TYPE = 'Single' ");
-    
+                    "SELECT DISTINCT DSM.SURVEY_ID FROM DYNAMIC_SURVEY_RESPONSE DSR, DYNAMIC_SURVEY_MASTER DSM "
+                    + "WHERE DSM.SURVEY_MASTER_ID = DSR.SURVEY_MASTER_ID AND DSM.SURVEY_ID = ANY (?) "
+                    + "AND DSM.SUBMIT_TYPE = 'Single' ");
+
                 if(StringUtils.isNotBlank(userId)) {
                     dynamicSurveyQuery.append("AND USER_ID = ? ");
                 }else if(StringUtils.isNotBlank(nluid)) {
                     dynamicSurveyQuery.append("AND NLUID = ? ");
                 }
                 logger.debug("Dynamic Survey Query : "+ dynamicSurveyQuery.toString());
-                 try {   
                 prepareStatement = connection.prepareStatement(
                         dynamicSurveyQuery.toString());
                 prepareStatement.setArray(1,
@@ -462,16 +529,12 @@ public class SurveyExternal {
                 while (rs.next()) {
                     submittedSurveyIds.add(rs.getString(SURVEYID));
                 }
-                 }catch (Exception e) {
-                     logger.error("Exception in getSubmittedSurveyIds", e);
-                 } finally {
-                     postgre.releaseConnection(connection, prepareStatement, rs);
-                 }
-            }
-            logger.debug("Survey submitted id's : "+ submittedSurveyIds);
-             
-        
-        return submittedSurveyIds;
+             }catch (Exception e) {
+                 logger.error("Exception in getSubmittedDynamicSurveyIds", e);
+             } finally {
+                 postgre.releaseConnection(connection, prepareStatement, rs);
+             }
+        }
     }
 
     /**
@@ -1022,21 +1085,10 @@ public class SurveyExternal {
      */
     public boolean setBO(final RequestContext context, SurveyBO surveyBO, Postgre postgreObj) {
 
+        boolean isValid = true;
         final String POLL_ACTION = "pollAction";
-        final String SURVEY_ACTION = "surveyAction";
-        final String LOCALE = "locale";
-        final String USER_ID = "user_id";
         final String USER_AGENT = "User-Agent";
-        final String SURVEY_TAKEN_FROM = "surveyTakenfrom";
-        final String SURVEY_ID = "surveyId";
-        final String TOTAL_QUESTIONS = "totalQuestions";
-        final String SURVEY_GROUP = "SurveyGroup";
-        final String SURVEY_GROUP_CONFIG = "SurveyGroupConfig";
-        final String SURVEY_CATEGORY = "surveyCategory";
-        final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
-        final String SURVEY_GROUP_CONFIG_CATEGORY = "surveyGroupConfigCategory";
-        final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
-        final String PERSONA = "persona";
+        int errorCount = 0;
         
         logger.info("SurveyExternal : Loading nluserid Properties....");
         PropertiesFileReader nluseridpropertyFileReader = new PropertiesFileReader(
@@ -1048,13 +1100,64 @@ public class SurveyExternal {
         request = context.getRequest();
         response = context.getResponse();
         
-        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
-        ValidationErrorList errorList = new ValidationErrorList();
+        HashMap<String, String> cookiesMap = (HashMap<String, String>) getCookiesMap(request);
+        
+        errorCount += validateSurveyAction(context, surveyBO);
+        errorCount += validateLocale(context, surveyBO);
+        errorCount += validateUserSession(context, surveyBO);
+        errorCount += validateClientIpAddress(context, surveyBO);
+        errorCount += validateNLUID(context, surveyBO, cookiesMap);
+        
+        surveyBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
+        
+        if(ACTION_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction()) || 
+                ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {
+            
+            errorCount += validateSurveyTakenFrom(context, surveyBO);
+            errorCount += validateSurveyId(context, surveyBO);
+            errorCount += validateTotalQuestions(context, surveyBO);
+            
+            String captchaResponse = context.getParameterString("g-recaptcha-response");
+            logger.debug("captchaResponse >>>" +captchaResponse+ "<<<");
+            surveyBO.setCaptchaResponse(captchaResponse);
+            
+            errorCount += validatePersona(context, surveyBO, postgreObj, cookiesMap);            
+        }
+        
+        String pollAction = context.getParameterString(POLL_ACTION);
+        logger.debug(POLL_ACTION + " >>>" +pollAction+ "<<<");   
+        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction) || DASHBOARD.equalsIgnoreCase(pollAction)) {
+            
+            errorCount += validateSurveyGroup(context, surveyBO);
+            
+            if(DASHBOARD.equalsIgnoreCase(pollAction)) {
+                errorCount += validateSurveyGroupConfig(context, surveyBO);
+                errorCount += validateSurveyGroupConfigCategory(context, surveyBO);
+            }
+            errorCount += validateSurveyGroupCategory(context, surveyBO);
+            errorCount += validateSurveyCategory(context, surveyBO);
+            errorCount += validateSolrSurveyCategory(context, surveyBO);
+        }
+        
+        if(errorCount > 0){
+            isValid = false;
+        }
+        return isValid;
+    }
+    
+    /**
+     * This method is to validate surveyAction and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyAction(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_ACTION = "surveyAction";
+        int errorCount = 0;
         String validData  = "";
-        String userId = null;
-        
-        HashMap<String, String> cookiesMap = getCookiesMap(request);
-        
+        ValidationErrorList errorList = new ValidationErrorList();
         String surveyAction = context.getParameterString(SURVEY_ACTION);
         logger.debug(SURVEY_ACTION + " >>>"+surveyAction+"<<<");
         if (!ESAPIValidator.checkNull(surveyAction)) {
@@ -1064,10 +1167,25 @@ public class SurveyExternal {
                 surveyBO.setAction(validData);
             }else {
                 logger.debug(errorList.getError(SURVEY_ACTION));
-                return false;
+                errorCount = 1;
             }
         }
+        return errorCount;
+    }
         
+    /**
+     * This method is to validate locale and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateLocale(final RequestContext context, SurveyBO surveyBO){
+        final String LOCALE = "locale";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
         String locale = context.getParameterString(LOCALE, "en");
         logger.debug(LOCALE + " >>>"+locale+"<<<");
         validData = ESAPI.validator().getValidInput(LOCALE, locale, ESAPIValidator.ALPHABET, 2, false, true,
@@ -1076,24 +1194,49 @@ public class SurveyExternal {
             surveyBO.setLang(validData);
         }else {
             logger.debug(errorList.getError(LOCALE));
-            return false;
+            errorCount = 1;
         }
-        
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate user session and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateUserSession(final RequestContext context, SurveyBO surveyBO){
+        final String USER_ID = "user_id";
+        int errorCount = 0;
         UserInfoSession ui = new UserInfoSession();
-		String valid = ui.getStatus(context);
-		if(valid.equalsIgnoreCase("valid")) {
+        String valid = ui.getStatus(context);
+        if(valid.equalsIgnoreCase("valid")) {
             if(request.getSession().getAttribute("userId") != null) {
-                userId = request.getSession().getAttribute("userId").toString();
-                
+                String userId = request.getSession().getAttribute("userId").toString();
                 logger.debug(USER_ID + " >>>"+userId+"<<<");
                 surveyBO.setUserId(userId);
             }else {
                 logger.debug("UserId from session is null.");
             }
-            
         }
-        
-                
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Client IP Address and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateClientIpAddress(final RequestContext context, SurveyBO surveyBO){
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        RequestHeaderUtils requestHeaderUtils = new RequestHeaderUtils(context);
         String ipAddress = requestHeaderUtils.getClientIpAddress();
         logger.debug("ipaddress >>>" +ipAddress+"<<<");
         validData = ESAPI.validator().getValidInput("ipaddress", ipAddress, ESAPIValidator.IP_ADDRESS, 20, false,
@@ -1102,9 +1245,23 @@ public class SurveyExternal {
             surveyBO.setIpAddress(validData);
         }else {
             logger.debug(errorList.getError("ipaddress"));
-            return false;
+            errorCount = 1;
         }
-        
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate NLUID and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateNLUID(final RequestContext context, SurveyBO surveyBO, Map<String, String> cookiesMap){
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
         String nlUID = cookiesMap.get(NLUID);
         logger.debug(NLUID + " >>>"+nlUID+"<<<");
         validData = ESAPI.validator().getValidInput(NLUID, nlUID, ESAPIValidator.ALPHANUMERIC_HYPHEN, 36, true,
@@ -1113,149 +1270,266 @@ public class SurveyExternal {
             surveyBO.setNLUID(validData);
         }else {
             logger.debug(errorList.getError(NLUID));
-            return false;
+            errorCount = 1;
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate survey taken from and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyTakenFrom(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_TAKEN_FROM = "surveyTakenfrom";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        String surveyTakenFrom = context.getParameterString(SURVEY_TAKEN_FROM);
+        logger.debug(SURVEY_TAKEN_FROM + " >>>"+surveyTakenFrom+"<<<");
+        validData = ESAPI.validator().getValidInput(SURVEY_TAKEN_FROM, surveyTakenFrom,
+                ESAPIValidator.ALPHABET, 150, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setTakenFrom(validData);
+        }else {
+            logger.debug(errorList.getError(SURVEY_TAKEN_FROM));
+            errorCount = 1;
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Poll Id and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyId(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_ID = "surveyId";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        String surveyId = context.getParameterString(SURVEY_ID);
+        logger.debug(SURVEY_ID + " >>>"+surveyId+"<<<");
+        validData = ESAPI.validator().getValidInput(SURVEY_ID, surveyId, ESAPIValidator.NUMERIC, 200, false,
+                true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setSurveyId(validData);
+        }else {
+            logger.debug(errorList.getError(SURVEY_ID));
+            errorCount = 1;
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Total Questions and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateTotalQuestions(final RequestContext context, SurveyBO surveyBO){
+        final String TOTAL_QUESTIONS = "totalQuestions";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        String totalQuestions = context.getParameterString(TOTAL_QUESTIONS);
+        logger.debug(TOTAL_QUESTIONS + " >>>"+totalQuestions+"<<<");
+        validData = ESAPI.validator().getValidInput(TOTAL_QUESTIONS, totalQuestions, ESAPIValidator.NUMERIC,
+                50, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setTotalQuestions(validData);
+        }else {
+            logger.debug(errorList.getError(TOTAL_QUESTIONS));
+            errorCount = 1;
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Persona and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validatePersona(final RequestContext context, SurveyBO surveyBO, Postgre postgreObj, Map<String, String> cookiesMap){
+        final String PERSONA = "persona";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        //Get Persona details from persona settings
+        String persona = null;
+        if(StringUtils.isNotBlank(surveyBO.getUserId())) {
+            DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
+            persona = dsExt.getPersonaForUser(surveyBO.getUserId(), postgreObj);
+            logger.debug("Persona from DB >>>" +persona+ "<<<");
+            surveyBO.setPersona(persona);
         }
         
-        surveyBO.setUserAgent(context.getRequest().getHeader(USER_AGENT));
-        
-        if(ACTION_SURVEY_SUBIT.equalsIgnoreCase(surveyAction) || 
-                ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyAction)) {
-            
-            String surveyTakenFrom = context.getParameterString(SURVEY_TAKEN_FROM);
-            logger.debug(SURVEY_TAKEN_FROM + " >>>"+surveyTakenFrom+"<<<");
-            validData = ESAPI.validator().getValidInput(SURVEY_TAKEN_FROM, surveyTakenFrom,
-                    ESAPIValidator.ALPHABET, 150, false, true, errorList);
+        if(!StringUtils.isNotBlank(persona)) {
+            String personaValue = cookiesMap.get(PERSONA);
+            logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
+            validData = ESAPI.validator().getValidInput(PERSONA, personaValue,
+                    ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
             if(errorList.isEmpty()) {
-                surveyBO.setTakenFrom(validData);
+                surveyBO.setPersona(validData);
             }else {
-                logger.debug(errorList.getError(USER_AGENT));
-                return false;
-            }
-            
-            String surveyId = context.getParameterString(SURVEY_ID);
-            logger.debug(SURVEY_ID + " >>>"+surveyId+"<<<");
-            validData = ESAPI.validator().getValidInput(SURVEY_ID, surveyId, ESAPIValidator.NUMERIC, 200, false,
-                    true, errorList);
-            if(errorList.isEmpty()) {
-                surveyBO.setSurveyId(validData);
-            }else {
-                logger.debug(errorList.getError(SURVEY_ID));
-                return false;
-            }
-            
-            String totalQuestions = context.getParameterString(TOTAL_QUESTIONS);
-            logger.debug(TOTAL_QUESTIONS + " >>>"+totalQuestions+"<<<");
-            validData = ESAPI.validator().getValidInput(TOTAL_QUESTIONS, totalQuestions, ESAPIValidator.NUMERIC,
-                    50, false, true, errorList);
-            if(errorList.isEmpty()) {
-                surveyBO.setTotalQuestions(validData);
-            }else {
-                logger.debug(errorList.getError(TOTAL_QUESTIONS));
-                return false;
-            }
-            
-            String captchaResponse = context.getParameterString("g-recaptcha-response");
-            logger.debug("captchaResponse >>>" +captchaResponse+ "<<<");
-            surveyBO.setCaptchaResponse(captchaResponse);
-            
-          //Get Persona details from persona settings
-            String persona = null;
-            if(StringUtils.isNotBlank(userId)) {
-                DashboardSettingsExternal dsExt = new DashboardSettingsExternal();
-                persona = dsExt.getPersonaForUser(userId, postgreObj);
-                logger.debug("Persona from DB >>>" +persona+ "<<<");
-                surveyBO.setPersona(persona);
-            }
-            
-            if(persona == null || "".equals(persona)) {
-                Cookie[] cookies = request.getCookies();
-                if(cookies != null) {
-                    for(int i = 0 ; i < cookies.length;  i++) {
-                        Cookie cookie = cookies[i];
-                        String name = cookie.getName();
-                        String personaValue = null;
-                        if(name != null && "persona".equalsIgnoreCase(name)) {
-                            personaValue = cookie.getValue();
-                            logger.debug(PERSONA + " >>>" +personaValue+ "<<<");
-                            validData = ESAPI.validator().getValidInput(PERSONA, personaValue,
-                                    ESAPIValidator.ALPHABET_HYPEN, 200, true, true, errorList);
-                            if(errorList.isEmpty()) {
-                                surveyBO.setPersona(validData);
-                            }else {
-                                logger.debug(errorList.getError(PERSONA));
-                                return false;
-                            }
-                        }
-                    }
-                }
+                logger.debug(errorList.getError(PERSONA));
+                errorCount = 1;
             }
         }
-        
-        String pollAction = context.getParameterString(POLL_ACTION);
-        logger.debug(POLL_ACTION + " >>>" +pollAction+ "<<<");   
-        if(ACTION_POLLS_AND_SURVEY.equalsIgnoreCase(pollAction) || DASHBOARD.equalsIgnoreCase(pollAction)) {
-            
-            String surveyGroup = context.getParameterString(SURVEY_GROUP);
-            logger.debug(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
-            if (!ESAPIValidator.checkNull(surveyGroup)) {
-                surveyBO.setGroup(getContentName(surveyGroup));
-            }
-            
-            if(DASHBOARD.equalsIgnoreCase(pollAction)) {
-                String surveyGroupConfig = context.getParameterString(SURVEY_GROUP_CONFIG);
-                logger.debug(SURVEY_GROUP_CONFIG + " >>>" +surveyGroupConfig+ "<<<");
-                if (!ESAPIValidator.checkNull(surveyGroupConfig)) {
-                    surveyBO.setSurveyGroupConfig(getContentName(surveyGroupConfig));
-                }
-                
-                String surveyGroupConfigCategory = context.getParameterString(SURVEY_GROUP_CONFIG_CATEGORY);
-                logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
-                validData = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY,
-                        surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
-                if(errorList.isEmpty()) {
-                    surveyBO.setSurveyGroupConfigCategory(validData);
-                }else {
-                    logger.debug(errorList.getError(SURVEY_GROUP_CONFIG_CATEGORY));
-                    return false;
-                }
-            }
-            
-            String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
-            logger.debug(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
-            validData = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory,
-                    ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
-            if(errorList.isEmpty()) {
-                surveyBO.setGroupCategory(validData);
-            }else {
-                logger.debug(errorList.getError(SURVEY_GROUP_CATEGORY));
-                return false;
-            }
-            
-            String surveyCategory = context.getParameterString(SURVEY_CATEGORY);
-            logger.debug(SURVEY_CATEGORY + " >>>"+surveyCategory+"<<<");
-            validData = ESAPI.validator().getValidInput(SURVEY_CATEGORY, surveyCategory, ESAPIValidator.ALPHABET,
-                    50, false, true, errorList);
-            if(errorList.isEmpty()) {
-                surveyBO.setCategory(validData);
-            }else {
-                logger.debug(errorList.getError(SURVEY_CATEGORY));
-                return false;
-            }
-            
-            String solrSurveyCategory = context.getParameterString(SOLR_SURVEY_CATEGORY);
-            logger.debug(SOLR_SURVEY_CATEGORY + " >>>"+solrSurveyCategory+"<<<");
-            validData = ESAPI.validator().getValidInput(SOLR_SURVEY_CATEGORY, solrSurveyCategory,
-                    ESAPIValidator.ALPHABET, 50, false, true, errorList);
-            if(errorList.isEmpty()) {
-                surveyBO.setSolrCategory(validData);
-            }else {
-                logger.debug(errorList.getError(SOLR_SURVEY_CATEGORY));
-                return false;
-            }
-            
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Survey Group and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyGroup(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_GROUP = "SurveyGroup";
+        int errorCount = 0;
+        String surveyGroup = context.getParameterString(SURVEY_GROUP);
+        logger.debug(SURVEY_GROUP + " >>>" +surveyGroup+ "<<<");
+        if (!ESAPIValidator.checkNull(surveyGroup)) {
+            surveyBO.setGroup(getContentName(surveyGroup));
         }
-        
-        return true;
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Survey Group Config and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyGroupConfig(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_GROUP_CONFIG = "SurveyGroupConfig";
+        int errorCount = 0;
+        String surveyGroupConfig = context.getParameterString(SURVEY_GROUP_CONFIG);
+        logger.debug(SURVEY_GROUP_CONFIG + " >>>" +surveyGroupConfig+ "<<<");
+        if (!ESAPIValidator.checkNull(surveyGroupConfig)) {
+            surveyBO.setSurveyGroupConfig(getContentName(surveyGroupConfig));
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Survey Group Config Category and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyGroupConfigCategory(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_GROUP_CONFIG_CATEGORY = "surveyGroupConfigCategory";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        String surveyGroupConfigCategory = context.getParameterString(SURVEY_GROUP_CONFIG_CATEGORY);
+        logger.debug(SURVEY_GROUP_CONFIG_CATEGORY + " >>>"+surveyGroupConfigCategory+"<<<");
+        validData = ESAPI.validator().getValidInput(SURVEY_GROUP_CONFIG_CATEGORY,
+                surveyGroupConfigCategory, ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setSurveyGroupConfigCategory(validData);
+        }else {
+            logger.debug(errorList.getError(SURVEY_GROUP_CONFIG_CATEGORY));
+            errorCount = 1;
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Survey Group Category and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyGroupCategory(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_GROUP_CATEGORY = "surveyGroupCategory";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        String surveyGroupCategory = context.getParameterString(SURVEY_GROUP_CATEGORY);
+        logger.debug(SURVEY_GROUP_CATEGORY + " >>>"+surveyGroupCategory+"<<<");
+        validData = ESAPI.validator().getValidInput(SURVEY_GROUP_CATEGORY, surveyGroupCategory,
+                ESAPIValidator.ALPHABET_HYPEN, 50, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setGroupCategory(validData);
+        }else {
+            logger.debug(errorList.getError(SURVEY_GROUP_CATEGORY));
+            errorCount = 1;
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Survey Category and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSurveyCategory(final RequestContext context, SurveyBO surveyBO){
+        final String SURVEY_CATEGORY = "surveyCategory";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        String surveyCategory = context.getParameterString(SURVEY_CATEGORY);
+        logger.debug(SURVEY_CATEGORY + " >>>"+surveyCategory+"<<<");
+        validData = ESAPI.validator().getValidInput(SURVEY_CATEGORY, surveyCategory, ESAPIValidator.ALPHABET,
+                50, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setCategory(validData);
+        }else {
+            logger.debug(errorList.getError(SURVEY_CATEGORY));
+            errorCount = 1;
+        }
+        return errorCount;
+    }
+    
+    /**
+     * This method is to validate Solr Survey Category and set BO.
+     * 
+     * @param context Request Context object.
+     * @param survey business object.
+     * 
+     * @return Returns error count.
+     */
+    public int validateSolrSurveyCategory(final RequestContext context, SurveyBO surveyBO){
+        final String SOLR_SURVEY_CATEGORY = "solrSurveyCategory";
+        int errorCount = 0;
+        String validData  = "";
+        ValidationErrorList errorList = new ValidationErrorList();
+        String solrSurveyCategory = context.getParameterString(SOLR_SURVEY_CATEGORY);
+        logger.debug(SOLR_SURVEY_CATEGORY + " >>>"+solrSurveyCategory+"<<<");
+        validData = ESAPI.validator().getValidInput(SOLR_SURVEY_CATEGORY, solrSurveyCategory,
+                ESAPIValidator.ALPHABET, 50, false, true, errorList);
+        if(errorList.isEmpty()) {
+            surveyBO.setSolrCategory(validData);
+        }else {
+            logger.debug(errorList.getError(SOLR_SURVEY_CATEGORY));
+            errorCount = 1;
+        }
+        return errorCount;
     }
 
     /**
@@ -1278,9 +1552,9 @@ public class SurveyExternal {
      * 
      * @return Returns cookies as string key value pair map.
      */
-    public HashMap<String, String> getCookiesMap(HttpServletRequest request) {
+    public Map<String, String> getCookiesMap(HttpServletRequest request) {
         Cookie[] cookies = null;
-        HashMap<String, String> cookieMap = new HashMap<String, String>();
+        HashMap<String, String> cookieMap = new HashMap<>();
         try {
             cookies = request.getCookies();
             if (cookies != null) {
