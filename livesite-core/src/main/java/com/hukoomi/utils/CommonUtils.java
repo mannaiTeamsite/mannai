@@ -558,14 +558,16 @@ public class CommonUtils {
       }
       
       public int esapiValidator(String name, String str, String type, int length, boolean allowNull, boolean canonicalize) {
-    	  ValidationErrorList errorList = new ValidationErrorList();
-    	  if (!ESAPIValidator.checkNull(str)) {
-    		ESAPI.validator().getValidInput(name, str, type, length, allowNull, canonicalize, errorList); 
+    	  ValidationErrorList errorList = new ValidationErrorList();   	
+    	  ESAPI.validator().getValidInput(name, str, type, length, allowNull, canonicalize, errorList); 
     		  if(errorList.isEmpty()) {
                   return 0;
               }
-          }
-    	  logger.info("ESAPI error in"+str);
+    	
+    	  logger.info("ESAPI error in "+name);
+    	  logger.info("With string "+str);
+    	  logger.info("And type "+type);
+    	  logger.info("And length "+length);
     	  return 1;
       }
       

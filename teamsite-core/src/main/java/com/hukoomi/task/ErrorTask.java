@@ -235,8 +235,8 @@ public class ErrorTask {
             errorBO.setTitle(getDCRValue(document, ERROR_TITLE_PATH)); 
             errorBO.setMessage(getDCRValue(document, ERROR_MESSAGE_PATH));
             
-            String errorMasterQuery = "UPDATE ERROR_MASTER	SET STATUS_CODE=?, ERROR_NAME_TECHNICAL=?, ERROR_TITLE=?, ERROR_MESSAGE=?, LANGUAGE=? WHERE LANGUAGE=? AND STATUS_CODE=?;";
-            logger.info("updateErrorMasterData pollMasterQuery : "
+            String errorMasterQuery = "UPDATE ERROR_MASTER SET STATUS_CODE=?,ERROR_NAME_TECHNICAL=?,ERROR_TITLE=?,ERROR_MESSAGE=?,LANGUAGE=? WHERE LANGUAGE=? AND STATUS_CODE=?;";
+            logger.info("updateErrorMasterData Erorr master query : "
                     + errorMasterQuery);
             
             preparedStatement = connection
@@ -271,7 +271,7 @@ public class ErrorTask {
 
             connection = postgre.getConnection();
 
-            String status_code = getDCRValue(document, STATUS_PATH);
+            String statusCode = getDCRValue(document, STATUS_PATH);
             String lang = getDCRValue(document, LANG_PATH);
 
             String errorMasterQuery = "SELECT COUNT(*) FROM ERROR_MASTER WHERE STATUS_CODE = ? AND LANGUAGE = ?";
@@ -279,7 +279,7 @@ public class ErrorTask {
                     + errorMasterQuery);
             prepareStatement = connection
                     .prepareStatement(errorMasterQuery);
-            prepareStatement.setString(1, status_code);
+            prepareStatement.setString(1, statusCode);
             prepareStatement.setString(2, lang);
             rs = prepareStatement.executeQuery();
             rs.next();

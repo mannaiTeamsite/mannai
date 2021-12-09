@@ -45,7 +45,7 @@ public class LastViewedExternal {
 		HttpSession session = context.getRequest().getSession();
 		String valid = ui.getStatus(context);
 		if (valid.equalsIgnoreCase("valid")) {
-			userID = (String) session.getAttribute("uid");
+			userID = (String) session.getAttribute("userId");
 			logger.info("userID:" + userID);
 
 			locale = context.getParameterString(LOCALE_CONSTANT).trim().toLowerCase();

@@ -35,7 +35,7 @@ public class BookmarkExternal {
 	private String pagetitleLiteral = "page_title";
 	private String pagedescriptionLiteral = "page_description";
 	private String pageurlLiteral = "page_url";
-	private String userIDLiteral = "userID";
+	private String userIDLiteral = "userId";
 	private String contenttypeLiteral = "content_type";
 
 	private static final Logger logger = Logger.getLogger(BookmarkExternal.class);
@@ -111,14 +111,12 @@ public void insertStatus(boolean isExist) {
 	private int insertBookmark() {
 
 		logger.info("insertBookmark()====> Starts");
-
-		logger.debug("Logging Broken link in Database");
 		
 		int errorVal = 0;
 		CommonUtils cu = new CommonUtils();
 		
 		errorVal += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorVal += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorVal += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, true, true);
 		errorVal += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
 		errorVal += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
 		errorVal += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
@@ -172,9 +170,6 @@ public void insertStatus(boolean isExist) {
 	private void getBookmark(Element bookmarkResultEle) {
 		String activeflag = "Y";
 		logger.info("getTopSearch()====> Starts");
-
-		logger.debug("Logging Broken link in Database in getBookmark");
-
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
 		String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " "
@@ -228,9 +223,6 @@ public void insertStatus(boolean isExist) {
 		boolean check = false;
 		String isBookmarked = "";
 		logger.info("isBookmarkPresent()====> Starts");
-
-		logger.debug("Logging Broken link in Database in isBookmarkPresent");
-
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
 		String searchQuery = "select active from" + " " + table + " " + "where" + " " + "locale='" + locale
@@ -257,16 +249,16 @@ public void insertStatus(boolean isExist) {
 			postgre.releaseConnection(connection, prepareStatement, resultSet);
 		}
 		logger.info("getBookmark()====> ends");
+		logger.info("Is bookmark present :"+check);
 		return check;
 	}
 
 	private int updateBookmark() {
 		logger.info("updateBookmark()====> Starts");
 		CommonUtils cu = new CommonUtils();
-		logger.debug("Logging Broken link in Database in updateBookmark");
 		int errorCount = 0;
 		errorCount += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorCount += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, true, true);
 		errorCount += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
 		errorCount += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
 		errorCount += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
@@ -277,10 +269,7 @@ public void insertStatus(boolean isExist) {
 		if (errorCount > 0) {
 			logger.error("Not a valid parameter. The incident will not be logged.");
 			return 0;
-		}
-
-
-		int result = 0;
+		}int result = 0;
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
 		String bookmarkUpdateQuery = "UPDATE" + " " + table + " set active='" + active + "' where locale='" + locale

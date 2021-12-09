@@ -18,7 +18,11 @@ public class SolrQueryBuilder {
     /** Default query to fetch all solr content. */
     public static final String UTF = "UTF-8";
     /** Is header boolean flag. */
-    public boolean isHeader = false;
+    boolean isHeader = false;
+    /** Basequery String. */
+    public static final String BASE_QUERY = "baseQuery";
+    /** FieldQuery String. */
+    public static final String FIELD_QUERY = "fieldQuery";
     /** Logger object to check the flow of the code.*/
     private final Logger logger =
             Logger.getLogger(SolrQueryBuilder.class);
@@ -27,7 +31,7 @@ public class SolrQueryBuilder {
      *  in the solr query url.
      */
     private final Map<String, String> parameterMap =
-            new HashMap<String, String>();
+            new HashMap<>();
     /** baseUrl String that
      *  will contain (host + core) value
      *  in the solr query url.
@@ -164,7 +168,7 @@ public class SolrQueryBuilder {
         String nutchCore = context.getParameterString("nutchCore");
         logger.debug("Nutch Core: " + nutchCore);
         if(StringUtils.isBlank(nutchCore)){
-            nutchCore = solrCore.replaceAll("portal","nutch");
+            nutchCore = solrCore.replace("portal","nutch");
         }
         logger.debug("Final Nutch Core: " + nutchCore);
         this.baseUrl = solrHost + "/" + solrCore;
@@ -177,8 +181,8 @@ public class SolrQueryBuilder {
         try {
             if(!isHeader) {
                 this.baseQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
-                        .getParameterString("baseQuery", DEFAULT_QUERY), UTF));
-                context.setParameterString("baseQuery",this.baseQuery);
+                        .getParameterString(BASE_QUERY, DEFAULT_QUERY), UTF));
+                context.setParameterString(BASE_QUERY,this.baseQuery);
             } else{
                 this.baseQuery = DEFAULT_QUERY;
             }
@@ -186,22 +190,22 @@ public class SolrQueryBuilder {
 
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode baseQuery="
-                    + context.getParameterString("baseQuery",
+                    + context.getParameterString(BASE_QUERY,
                     DEFAULT_QUERY), e);
         }
 
         try {
             if(!isHeader) {
                 this.fieldQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
-                        .getParameterString("fieldQuery", ""), UTF));
-                context.setParameterString("fieldQuery",this.fieldQuery);
+                        .getParameterString(FIELD_QUERY, ""), UTF));
+                context.setParameterString(FIELD_QUERY,this.fieldQuery);
             } else {
                 this.fieldQuery = "";
             }
             logger.debug("Solr Field Query: " + fieldQuery);
         } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode fieldQuery="
-                    + context.getParameterString("fieldQuery"), e);
+                    + context.getParameterString(FIELD_QUERY), e);
         }
 
         try {

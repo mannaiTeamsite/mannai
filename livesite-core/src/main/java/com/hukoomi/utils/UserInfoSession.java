@@ -39,7 +39,8 @@ public class UserInfoSession {
 		try {
 			HttpServletRequest request = context.getRequest();
 			String valid = getStatus(context);
-			if (valid != null && valid.equals(strValid)) {
+				LOGGER.info(valid);
+				if (valid != null && valid.equals(strValid)) {
 				Element root = doc.getRootElement();
 				if (root != null && root.isRootElement()) {
 					Element userData = root.addElement("userData");
@@ -89,7 +90,7 @@ public class UserInfoSession {
 	
 			if(status != null && status.equalsIgnoreCase(strValid))	{	
 				String expDt = (String) request.getSession().getAttribute("exp");
-	
+					
 					try {
 						expiryDate=formatter.parse(expDt);
 					} catch (ParseException e) {						
@@ -130,9 +131,10 @@ public class UserInfoSession {
 		
 		if (accessToken != null) {	
 			DashboardExternal dashboard = new DashboardExternal();
+			
 			 status = (String) request.getSession().getAttribute(strStatus);
 			LOGGER.info("Status:"+status);		
-			if (status != null && status.equals(strValid)) {
+			if (status == null || !status.equals(strValid)) {
 					
 					LOGGER.info("--------dashboardServices is called--------");					
 					dashboard.dashboardServices(context, accessToken);	

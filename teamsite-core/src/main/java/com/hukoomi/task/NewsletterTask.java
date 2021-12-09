@@ -3,7 +3,6 @@ package com.hukoomi.task;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -35,10 +34,8 @@ import org.dom4j.io.SAXReader;
 
 import com.hukoomi.utils.TSPropertiesFileReader;
 import com.interwoven.cssdk.access.CSAuthorizationException;
-import com.interwoven.cssdk.access.CSExpiredSessionException;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
-import com.interwoven.cssdk.common.CSRemoteException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
 import com.interwoven.cssdk.filesys.CSFile;
 import com.interwoven.cssdk.filesys.CSHole;
@@ -137,7 +134,6 @@ public class NewsletterTask implements CSURLExternalTask {
 	public static final String TEMPLATE = "newsletter_template";
 	public static final String HTML_PATH = "html_path";
 	public static final String HTML_GENERATION_LOCATION = "generate_html_location";
-	public static final String MAIL_ENCODING = "UTF-8";
 	public static final String MAIL_MIME_TYPE = "text/html";
 	Properties properties;
 
@@ -191,7 +187,7 @@ public class NewsletterTask implements CSURLExternalTask {
 
 	public Map<String, String> processNewsletterDCR(CSClient client, CSExternalTask task, CSSimpleFile taskSimpleFile,
 			String fileName)
-			throws CSAuthorizationException, CSExpiredSessionException, CSRemoteException, CSException {
+			throws CSException {
 		logger.info("NewsletterTask: processNewsletterDCR()");
 		// get xsl
 		HashMap<String, String> statusMap = new HashMap<>();
@@ -456,13 +452,11 @@ public class NewsletterTask implements CSURLExternalTask {
 						String detailName = getDetail(taxanomyDCRPath, dctType.toLowerCase());
 	                    String originalDetailName = "/" + lang + "/" + detailName + "/"
 	                            + dcrDocument
-	                                    .selectSingleNode("/root/information/original-dcr-name")
+	                                    .selectSingleNode(HTML_FILE_NAME)
 	                                    .getText();
 	                    logger.info("originalDetailName - " + originalDetailName);
 	                    
 						Element readMoreLink = dcrElement.addElement("readMore");
-						String originalDcrName = DELIMITER + lang + DELIMITER + dctType.toLowerCase() + DELIMITER
-								+ dcrDocument.selectSingleNode(HTML_FILE_NAME).getText();
 
 						readMoreLink.setText(originalDetailName);
 						counter++;
@@ -618,7 +612,6 @@ public class NewsletterTask implements CSURLExternalTask {
 	}
 
 	private Document getLabelDCRFile(String dcrPath) {
-		//String dcrPath = baseUrl + dcrName;
 		logger.info("dcrPath : " + dcrPath);
 		File inputFile = new File(dcrPath);
 		SAXReader reader = new SAXReader();
@@ -638,6 +631,7 @@ public class NewsletterTask implements CSURLExternalTask {
         String detail = "";
         String listingType = "";     
         Document contenttype = getLabelDCRFile(taxanomyDCRPath);
+        if(contenttype != null) {
         List<Node> listcontenttype = contenttype.selectNodes(NEWSLETTER_LIST_CONTENT_TYPE);
         for (int j = 0; j < listcontenttype.size(); j++) {
             Node selectcontentnode = listcontenttype.get(j);            
@@ -648,6 +642,7 @@ public class NewsletterTask implements CSURLExternalTask {
 
 
             }
+        }
 
         return detail;
     }
@@ -680,8 +675,9 @@ public class NewsletterTask implements CSURLExternalTask {
 	}
 
 	private DataSource transformToMailDataSource(String xmlMailContent, CSSimpleFile xslTemplateFile, String lang)
-			throws CSException, UnsupportedEncodingException, FileNotFoundException {
+			throws CSException, IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		
 		try {
 			logger.info("transformToMailDataSource");
 			StringBuilder baseDir = new StringBuilder(genrateHtmlLocation).append(lang);
@@ -701,20 +697,23 @@ public class NewsletterTask implements CSURLExternalTask {
 			if (Files.notExists(directory)) {
 				Files.createDirectory(directory, PosixFilePermissions.asFileAttribute(baseDirPermission));
 			}
-
 			File fout = new File(baseDir + DELIMITER + htmlName + HTML);
 			if (fout.exists()) {
 				fout.delete();
 			}
 			fout.createNewFile();
-			FileOutputStream oFile = new FileOutputStream(fout, false);
+			
+			try(FileOutputStream oFile = new FileOutputStream(fout, false);){
+				
+			
 			logger.info("xmlMailContent- " + xmlMailContent);
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlMailContent.getBytes(MAIL_ENCODING));
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlMailContent.getBytes(StandardCharsets.UTF_8));
 			logger.info("before outputStream- " + outputStream.toString());
 			XSLTransformer.transform(inputStream, xslTemplateFile, outputStream);
 			logger.info("After outputStream- " + outputStream.toString());
 			outputStream.writeTo(oFile);
 			Files.setPosixFilePermissions(Path.of(directory + DELIMITER + htmlName + HTML), baseFilePermissions);
+			}
 
 		} catch (IOException ex) {
 			logger.info("Exception in transformToMailDataSource: ", ex);

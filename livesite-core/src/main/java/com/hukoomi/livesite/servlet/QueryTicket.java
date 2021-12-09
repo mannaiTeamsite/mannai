@@ -50,14 +50,14 @@ public class QueryTicket extends HttpServlet {
             String ticketNo = xssUtils.stripXSS(data.getString("ticketNumber"));
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            String BASE_URL = "baseUrl";
+            String baseUrlStr = "baseUrl";
             String baseUrl;
             String servletAddress = "<servletaddress>";
             if (ticketNo.length() <= 20) {
                 String httpServletAddress = request.getLocalAddr();
                 Properties propertiesFile =
                         loadProperties("customerserviceconfig.properties");
-                baseUrl = propertiesFile.getProperty(BASE_URL);
+                baseUrl = propertiesFile.getProperty(baseUrlStr);
                 baseUrl = baseUrl.replace(servletAddress, httpServletAddress);
                 
                 URL url = new URL(baseUrl+"/"+ticketNo);
