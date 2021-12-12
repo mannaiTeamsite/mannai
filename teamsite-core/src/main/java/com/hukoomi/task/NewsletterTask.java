@@ -339,252 +339,18 @@ public class NewsletterTask implements CSURLExternalTask {
 
 		for (int i = 0; i < categoryList.size(); i++) {
 			Node selectnode = categoryList.get(i);
-			if (selectnode.selectSingleNode("newsletter-category-field") != null) {
-				Node node = selectnode.selectSingleNode("newsletter-category-field");
-				Element categoryElement = rootElement.addElement(CATEGORY);
-				String dctType = node.selectSingleNode(CATEGORY).getText();
-				logger.info("dctType - " + dctType);
-				// DCT Type
-				Element dctTypeElement = categoryElement.addElement("dctType");
-				dctTypeElement.setText(dctType);
-
-				// Category Title
-				String dctTitle = node.selectSingleNode("newsletter-category-title").getText();
-				if (dctTitle != null) {
-					Element dctTitleElement = categoryElement.addElement("categorytitle");
-					dctTitleElement.setText(dctTitle);
-				}
-				logger.info("dctTitle - " + dctTitle);
-
-				// Column Layout
-				Element columnLayoutElement = categoryElement.addElement(COLUMN_LAYOUT);
-				String dctColumnLayout = node.selectSingleNode(COLUMN_LAYOUT).getText();
-				int columnLayout = 0;
-				if (StringUtils.isNotBlank(dctColumnLayout)) {
-					logger.info("Column Layout - " + dctColumnLayout);
-					columnLayoutElement.setText(dctColumnLayout);
-					columnLayout = Integer.parseInt(dctColumnLayout);
-				}
-
-				List<Node> category = node.selectNodes(CATEGORY_DCR);
-				int dcrCount = category.size();
-				logger.info("dcrCount Value : " + dcrCount);
-				int dcrDivCol = 0;
-				if(columnLayout>0)
-				 dcrDivCol = dcrCount / columnLayout;
-				logger.info("dcrDivCol : " + dcrDivCol);
-				int dcrMod = 0;
-				if(columnLayout>0)
-				 dcrMod = dcrCount % columnLayout;
-				logger.info("dcrMod : " + dcrMod);
-				int rows = 0;
+			if (selectnode.selectSingleNode("newsletter-category-field") != null) {			
+				rootElement = processCategory(rootElement, selectnode, client, task, maxChar, taxanomyDCRPath, lang);		
 				
-				if (dcrMod == 0) {
-					rows = dcrDivCol;
-				} else {
-					rows = dcrDivCol + 1;
-					
-				}
-				logger.info("rows : " + rows);
-
-				Element dcrCountElement = categoryElement.addElement("dcrCount");
-				dcrCountElement.setText(String.valueOf(dcrCount));
-				int counter = 0;
-				for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
-					logger.info("rowIndex : " + rowIndex);
-
-					Element categoryDcrElement = categoryElement.addElement(CATEGORY_DCR);
-					Element categroyDcrCountElement = categoryDcrElement.addElement("dcr-count");
-					if (rowIndex + 1 == rows && dcrMod != 0) {
-						categroyDcrCountElement.setText(String.valueOf(dcrMod));
-					} else {
-						categroyDcrCountElement.setText(dctColumnLayout);
-					}
-
-					for (int columnIndex = 0; columnIndex < columnLayout && dcrCount != 0; columnIndex++, dcrCount--) {
-						logger.info("columnIndex : " + columnIndex);
-						logger.info("dcrCount " + dcrCount);
-
-						Node dcr = category.get(counter);
-						Element dcrElement = categoryDcrElement.addElement("dcr");
-						String dcrPath = dcr.getText();
-						logger.info("dcrPath - " + dcrPath);
-
-						Document dcrDocument = getDcrDocument(client, task, dcrPath);
-						Element dcrTitleElement = dcrElement.addElement(TITLE);
-						String dcrTitle = dcrDocument.selectSingleNode("/root/information/title").getText();
-						logger.info("dcrTitle - " + dcrTitle);
-						dcrTitleElement.setText(dcrTitle);
-
-						Element dcrDescElement = dcrElement.addElement("desc");
-						String dcrDescription = "";
-						String seoDescription = "";
-						String detailDescription = "";
-
-						if (dcrDocument.selectSingleNode("/root/page-details/description") != null) {
-							seoDescription = dcrDocument.selectSingleNode("/root/page-details/description").getText();
-						}
-
-						if (dcrDocument.selectSingleNode("/root/detail/description") != null) {
-							detailDescription = dcrDocument.selectSingleNode("/root/detail/description").getText();
-						}
-
-						if (!seoDescription.equals("")  || !"".equals(seoDescription)) {
-							dcrDescription = seoDescription;
-						} else {
-							dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
-						}
-						int maxLength = (dcrDescription.length() < maxChar) ? dcrDescription.length() : maxChar;
-						dcrDescription = dcrDescription.substring(0, maxLength);
-
-						if (maxLength == maxChar) {
-							dcrDescription = dcrDescription + "...";
-						}
-
-						dcrDescElement.setText(dcrDescription);
-
-						Node image = dcrDocument.selectSingleNode("/root/information/image");
-						if (image != null) {
-							Element imgElement = dcrElement.addElement("image");
-							String dcrImage = dcrDocument.selectSingleNode("/root/information/image").getText();
-							imgElement.setText(dcrImage);
-						}
-						String detailName = getDetail(taxanomyDCRPath, dctType.toLowerCase());
-	                    String originalDetailName = "/" + lang + "/" + detailName + "/"
-	                            + dcrDocument
-	                                    .selectSingleNode(HTML_FILE_NAME)
-	                                    .getText();
-	                    logger.info("originalDetailName - " + originalDetailName);
-	                    
-						Element readMoreLink = dcrElement.addElement("readMore");
-
-						readMoreLink.setText(originalDetailName);
-						counter++;
-					}
-				}
 			} // New if condition
 			else if (selectnode.selectSingleNode("newsletter-other") != null) {
-				Node node = selectnode.selectSingleNode("newsletter-other");
-				Element categoryElement = rootElement.addElement(CATEGORY);
-				String dctType = node.selectSingleNode(CATEGORY).getText();
-
-				// DCT Type
-				Element dctTypeElement = categoryElement.addElement("dctType");
-				dctTypeElement.setText(dctType);
-
-				// Category Title
-				String dctTitle = node.selectSingleNode("newsletter-category-title").getText();
-				if (dctTitle != null) {
-					Element dctTitleElement = categoryElement.addElement("categorytitle");
-					dctTitleElement.setText(dctTitle);
-				}
-				logger.info("dctTitle - " + dctTitle);
-
-				// Column Layout
-				Element columnLayoutElement = categoryElement.addElement(COLUMN_LAYOUT);
-				String dctColumnLayout = node.selectSingleNode(COLUMN_LAYOUT).getText();
-				int columnLayout = 0;
-				if (StringUtils.isNotBlank(dctColumnLayout)) {
-					logger.info("Column Layout - " + dctColumnLayout);
-					columnLayoutElement.setText(dctColumnLayout);
-					columnLayout = Integer.parseInt(dctColumnLayout);
-				}
-
-				List<Node> category = node.selectNodes("newsletter-other-field");
-				int dcrCount = category.size();
-				logger.info("dcrCount : " + dcrCount);
-				int dcrDivCol = 0;
-				if(columnLayout > 0)
-				 dcrDivCol = dcrCount / columnLayout;
-				logger.info("dcrDivCol : " + dcrDivCol);
-				int dcrMod = 0;
-				if(columnLayout > 0)
-				 dcrMod = dcrCount % columnLayout;
-				logger.info("dcrMod : " + dcrMod);
-				int rows = 0;
-				if (dcrMod == 0) {
-					rows = dcrDivCol;
-				} else {
-					rows = dcrDivCol + 1;
-					
-				}
-				logger.info("rows : " + rows);
-
-				Element dcrCountElement = categoryElement.addElement("dcrCount");
-				dcrCountElement.setText(String.valueOf(dcrCount));
-				int counter = 0;
-				for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
-					logger.info("rowIndex : " + rowIndex);
-
-					Element categoryDcrElement = categoryElement.addElement(CATEGORY_DCR);
-					Element categroyDcrCountElement = categoryDcrElement.addElement("dcr-count");
-					if (rowIndex + 1 == rows && dcrMod != 0) {
-						categroyDcrCountElement.setText(String.valueOf(dcrMod));
-					} else {
-						categroyDcrCountElement.setText(dctColumnLayout);
-					}
-
-					for (int columnIndex = 0; columnIndex < columnLayout && dcrCount != 0; columnIndex++, dcrCount--) {
-						logger.info("columnIndex : " + columnIndex);
-						logger.info("dcrCount : " + dcrCount);
-
-						Node dcr = category.get(counter);
-						Element dcrElement = categoryDcrElement.addElement("dcr");
-						String dcrPath = dcr.getText();
-						logger.info("dcrPath - " + dcrPath);
-						Element dcrTitleElement = dcrElement.addElement(TITLE);
-						String dcrTitle = dcr.selectSingleNode("newsletter-dcr-title").getText();
-						logger.info("other dcrTitle - " + dcrTitle);
-						dcrTitleElement.setText(dcrTitle);
-
-						Element dcrDescElement = dcrElement.addElement("desc");
-						String dcrDescription = "";
-						String detailDescription = "";
-
-						if (dcr.selectSingleNode("newsletter-dcr-description") != null) {
-							detailDescription = dcr.selectSingleNode("newsletter-dcr-description").getText();
-						}
-						dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
-
-						int maxLength = (dcrDescription.length() < maxChar) ? dcrDescription.length() : maxChar;
-						dcrDescription = dcrDescription.substring(0, maxLength);
-
-						if (maxLength == maxChar) {
-							dcrDescription = dcrDescription + "...";
-						}
-
-						dcrDescElement.setText(dcrDescription);
-
-						Node image = dcr.selectSingleNode("category-dcr-image");
-						if (image != null) {
-							Element imgElement = dcrElement.addElement("image");
-							String dcrImage = dcr.selectSingleNode("category-dcr-image").getText();
-							imgElement.setText(dcrImage);
-						}
-
-						String[] pathArr= dcr.selectSingleNode("category-dcr-link").getText().split(DELIMITER);  
-						Element readMoreLink = dcrElement.addElement("readMore");
-						 StringBuilder originalDcrName = new StringBuilder();
-						 if(!(pathArr[0].equals("http:") || pathArr[0].equals("https:"))) {
-	                        for(int count=3; count < pathArr.length ; count++){
-
-	                            originalDcrName = originalDcrName.append(DELIMITER+pathArr[count]);                            
-
-	                        } 
-	                        originalDcrName = originalDcrName.append(DELIMITER + lang + originalDcrName);
-	                        logger.info("originalDcrName : " + originalDcrName);
-	                        readMoreLink.setText(originalDcrName.toString());
-                    }else {
-                        readMoreLink.setText(dcr.selectSingleNode("category-dcr-link").getText());
-                    }
-						counter++;
-					}
-				}
-
+				
+				rootElement = processOtherCategory(rootElement, selectnode, maxChar, lang);		
+				
 			}
 		}
 
-		if (data != null) {
+
 			
 			try {
 				logger.info("data not null.");
@@ -607,10 +373,284 @@ public class NewsletterTask implements CSURLExternalTask {
 			} catch (Exception ex) {
 				logger.error("Exception in attach: ", ex);
 			}
-		}
+		
 		return statusMap;
 	}
 
+	public Element processOtherCategory(Element rootElement, Node selectnode, int maxChar,  String lang)  {
+
+		Node node = selectnode.selectSingleNode("newsletter-other");
+		Element categoryElement = rootElement.addElement(CATEGORY);
+		String dctType = node.selectSingleNode(CATEGORY).getText();
+
+		// DCT Type
+		Element dctTypeElement = categoryElement.addElement("dctType");
+		dctTypeElement.setText(dctType);
+
+		// Category Title
+		String dctTitle = node.selectSingleNode("newsletter-category-title").getText();
+		if (dctTitle != null) {
+			Element dctTitleElement = categoryElement.addElement("categorytitle");
+			dctTitleElement.setText(dctTitle);
+		}
+		logger.info("dctTitle - " + dctTitle);
+
+		// Column Layout
+		Element columnLayoutElement = categoryElement.addElement(COLUMN_LAYOUT);
+		String dctColumnLayout = node.selectSingleNode(COLUMN_LAYOUT).getText();
+		int columnLayout = 0;
+		if (StringUtils.isNotBlank(dctColumnLayout)) {
+			logger.info("Column Layout - " + dctColumnLayout);
+			columnLayoutElement.setText(dctColumnLayout);
+			columnLayout = Integer.parseInt(dctColumnLayout);
+		}
+
+		List<Node> category = node.selectNodes("newsletter-other-field");
+		int dcrCount = category.size();
+		logger.info("dcrCount : " + dcrCount);
+		int dcrDivCol = 0;
+		if(columnLayout > 0)
+		 dcrDivCol = dcrCount / columnLayout;
+		logger.info("dcrDivCol : " + dcrDivCol);
+		int dcrMod = 0;
+		if(columnLayout > 0)
+		 dcrMod = dcrCount % columnLayout;
+		logger.info("dcrMod : " + dcrMod);
+		int rows = 0;
+		if (dcrMod == 0) {
+			rows = dcrDivCol;
+		} else {
+			rows = dcrDivCol + 1;
+			
+		}
+		logger.info("rows : " + rows);
+
+		Element dcrCountElement = categoryElement.addElement("dcrCount");
+		dcrCountElement.setText(String.valueOf(dcrCount));
+		int counter = 0;
+		for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+			logger.info("rowIndex : " + rowIndex);
+
+			Element categoryDcrElement = categoryElement.addElement(CATEGORY_DCR);
+			Element categroyDcrCountElement = categoryDcrElement.addElement("dcr-count");
+			if (rowIndex + 1 == rows && dcrMod != 0) {
+				categroyDcrCountElement.setText(String.valueOf(dcrMod));
+			} else {
+				categroyDcrCountElement.setText(dctColumnLayout);
+			}
+
+			for (int columnIndex = 0; columnIndex < columnLayout && dcrCount != 0; columnIndex++, dcrCount--) {
+				
+				logger.info("columnIndex : " + columnIndex);
+				logger.info("dcrCount : " + dcrCount);
+				
+				categoryDcrElement = createOtherDoc(category, counter, categoryDcrElement, maxChar, lang);
+				
+				
+				counter++;
+			}
+			
+		}
+		
+		
+		return rootElement;
+	}
+	
+	
+	
+	public Element createOtherDoc(List<Node> category, int counter, Element categoryDcrElement, int maxChar, String lang) {
+			Node dcr = category.get(counter);
+			Element dcrElement = categoryDcrElement.addElement("dcr");
+			String dcrPath = dcr.getText();
+			logger.info("dcrPath - " + dcrPath);
+			Element dcrTitleElement = dcrElement.addElement(TITLE);
+			String dcrTitle = dcr.selectSingleNode("newsletter-dcr-title").getText();
+			logger.info("other dcrTitle - " + dcrTitle);
+			dcrTitleElement.setText(dcrTitle);
+
+			Element dcrDescElement = dcrElement.addElement("desc");
+			String dcrDescription = "";
+			String detailDescription = "";
+
+			if (dcr.selectSingleNode("newsletter-dcr-description") != null) {
+				detailDescription = dcr.selectSingleNode("newsletter-dcr-description").getText();
+			}
+			dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
+
+			int maxLength = (dcrDescription.length() < maxChar) ? dcrDescription.length() : maxChar;
+			dcrDescription = dcrDescription.substring(0, maxLength);
+
+			if (maxLength == maxChar) {
+				dcrDescription = dcrDescription + "...";
+			}
+
+			dcrDescElement.setText(dcrDescription);
+
+			Node image = dcr.selectSingleNode("category-dcr-image");
+			if (image != null) {
+				Element imgElement = dcrElement.addElement("image");
+				String dcrImage = dcr.selectSingleNode("category-dcr-image").getText();
+				imgElement.setText(dcrImage);
+			}
+
+			String[] pathArr= dcr.selectSingleNode("category-dcr-link").getText().split(DELIMITER);  
+			Element readMoreLink = dcrElement.addElement("readMore");
+			 StringBuilder originalDcrName = new StringBuilder();
+			 if(!(pathArr[0].equals("http:") || pathArr[0].equals("https:"))) {
+                for(int count=3; count < pathArr.length ; count++){
+
+                    originalDcrName = originalDcrName.append(DELIMITER+pathArr[count]);                            
+
+                } 
+                originalDcrName = originalDcrName.append(DELIMITER + lang + originalDcrName);
+                logger.info("originalDcrName : " + originalDcrName);
+                readMoreLink.setText(originalDcrName.toString());
+        }else {
+            readMoreLink.setText(dcr.selectSingleNode("category-dcr-link").getText());
+        }
+		
+		return categoryDcrElement;
+	}
+	public Element processCategory(Element rootElement, Node selectnode, CSClient client, CSExternalTask task, int maxChar, String taxanomyDCRPath, String lang) throws CSAuthorizationException {
+
+		Node node = selectnode.selectSingleNode("newsletter-category-field");
+		Element categoryElement = rootElement.addElement(CATEGORY);
+		String dctType = node.selectSingleNode(CATEGORY).getText();
+		logger.info("dctType - " + dctType);
+		// DCT Type
+		Element dctTypeElement = categoryElement.addElement("dctType");
+		dctTypeElement.setText(dctType);
+
+		// Category Title
+		String dctTitle = node.selectSingleNode("newsletter-category-title").getText();
+		if (dctTitle != null) {
+			Element dctTitleElement = categoryElement.addElement("categorytitle");
+			dctTitleElement.setText(dctTitle);
+		}
+		logger.info("dctTitle - " + dctTitle);
+
+		// Column Layout
+		Element columnLayoutElement = categoryElement.addElement(COLUMN_LAYOUT);
+		String dctColumnLayout = node.selectSingleNode(COLUMN_LAYOUT).getText();
+		int columnLayout = 0;
+		if (StringUtils.isNotBlank(dctColumnLayout)) {
+			logger.info("Column Layout - " + dctColumnLayout);
+			columnLayoutElement.setText(dctColumnLayout);
+			columnLayout = Integer.parseInt(dctColumnLayout);
+		}
+
+		List<Node> category = node.selectNodes(CATEGORY_DCR);
+		int dcrCount = category.size();
+		logger.info("dcrCount Value : " + dcrCount);
+		int dcrDivCol = 0;
+		if(columnLayout>0)
+		 dcrDivCol = dcrCount / columnLayout;
+		logger.info("dcrDivCol : " + dcrDivCol);
+		int dcrMod = 0;
+		if(columnLayout>0)
+		 dcrMod = dcrCount % columnLayout;
+		logger.info("dcrMod : " + dcrMod);
+		int rows = 0;
+		
+		if (dcrMod == 0) {
+			rows = dcrDivCol;
+		} else {
+			rows = dcrDivCol + 1;
+			
+		}
+		logger.info("rows : " + rows);
+
+		Element dcrCountElement = categoryElement.addElement("dcrCount");
+		dcrCountElement.setText(String.valueOf(dcrCount));
+		int counter = 0;
+		for (int rowIndex = 0; rowIndex < rows; rowIndex++) {
+			logger.info("rowIndex : " + rowIndex);
+
+			Element categoryDcrElement = categoryElement.addElement(CATEGORY_DCR);
+			Element categroyDcrCountElement = categoryDcrElement.addElement("dcr-count");
+			if (rowIndex + 1 == rows && dcrMod != 0) {
+				categroyDcrCountElement.setText(String.valueOf(dcrMod));
+			} else {
+				categroyDcrCountElement.setText(dctColumnLayout);
+			}
+
+			for (int columnIndex = 0; columnIndex < columnLayout && dcrCount != 0; columnIndex++, dcrCount--) {
+				logger.info("columnIndex : " + columnIndex);
+				logger.info("dcrCount " + dcrCount);
+
+				Node dcr = category.get(counter);
+				Element dcrElement = categoryDcrElement.addElement("dcr");
+				String dcrPath = dcr.getText();
+				logger.info("dcrPath - " + dcrPath);
+
+				Document dcrDocument = getDcrDocument(client, task, dcrPath);
+				Element dcrTitleElement = dcrElement.addElement(TITLE);
+				String dcrTitle = dcrDocument.selectSingleNode("/root/information/title").getText();
+				logger.info("dcrTitle - " + dcrTitle);
+				dcrTitleElement.setText(dcrTitle);
+
+				dcrElement = processCategoryDoc(dcrElement, maxChar, dcrDocument, taxanomyDCRPath, lang, dctType);
+				counter++;
+			}
+		}
+		
+		return rootElement;
+		
+	}
+	public Element processCategoryDoc(Element dcrElement, int maxChar, Document dcrDocument, String taxanomyDCRPath, String lang, String dctType) {
+		
+		
+		
+		Element dcrDescElement = dcrElement.addElement("desc");
+		String dcrDescription = "";
+		String seoDescription = "";
+		String detailDescription = "";
+
+		if (dcrDocument.selectSingleNode("/root/page-details/description") != null) {
+			seoDescription = dcrDocument.selectSingleNode("/root/page-details/description").getText();
+		}
+
+		if (dcrDocument.selectSingleNode("/root/detail/description") != null) {
+			detailDescription = dcrDocument.selectSingleNode("/root/detail/description").getText();
+		}
+
+		if (!seoDescription.equals("")  || !"".equals(seoDescription)) {
+			dcrDescription = seoDescription;
+		} else {
+			dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
+		}
+		int maxLength = (dcrDescription.length() < maxChar) ? dcrDescription.length() : maxChar;
+		dcrDescription = dcrDescription.substring(0, maxLength);
+
+		if (maxLength == maxChar) {
+			dcrDescription = dcrDescription + "...";
+		}
+
+		dcrDescElement.setText(dcrDescription);
+
+		Node image = dcrDocument.selectSingleNode("/root/information/image");
+		if (image != null) {
+			Element imgElement = dcrElement.addElement("image");
+			String dcrImage = dcrDocument.selectSingleNode("/root/information/image").getText();
+			imgElement.setText(dcrImage);
+		}
+		String detailName = getDetail(taxanomyDCRPath, dctType.toLowerCase());
+        String originalDetailName = "/" + lang + "/" + detailName + "/"
+                + dcrDocument
+                        .selectSingleNode(HTML_FILE_NAME)
+                        .getText();
+        logger.info("originalDetailName - " + originalDetailName);
+        
+		Element readMoreLink = dcrElement.addElement("readMore");
+
+		readMoreLink.setText(originalDetailName);
+		
+		
+		return dcrElement;
+	}
+	
+	
+	
 	private Document getLabelDCRFile(String dcrPath) {
 		logger.info("dcrPath : " + dcrPath);
 		File inputFile = new File(dcrPath);

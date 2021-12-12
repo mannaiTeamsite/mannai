@@ -460,7 +460,7 @@ public class SolrQueryBuilder {
         if(StringUtils.isNotBlank(this.recent)){
             bq.append(" category:("+this.recent+")^"+this.categoryBoost);
         }
-        if(StringUtils.isNotBlank(this.baseQuery) && !this.baseQuery.equals(DEFAULT_QUERY) && !this.baseQuery.equals('*')){
+        if(StringUtils.isNotBlank(this.baseQuery) && !this.baseQuery.equals(DEFAULT_QUERY) && !this.baseQuery.equals("*")){
             bq.append(" sort:(*"+this.baseQuery+"*)^"+this.queryBoost);
         }
 

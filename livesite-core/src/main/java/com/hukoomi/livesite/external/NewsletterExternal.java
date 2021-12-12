@@ -132,7 +132,7 @@ public class NewsletterExternal {
             final RequestContext context)
             throws NoSuchAlgorithmException, IOException {
         LOGGER.info("Newsletter Subscribtion: createSubscriber");
-        Document document = DocumentHelper.createDocument();
+        Document document = null;
         if (flag.equals("true")) {
             document = insertSubscriber(email, subscriptionLang,
                     STATUS_SUBSCRIBED, context);
