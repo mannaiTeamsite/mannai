@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.StringJoiner;
 
 import org.apache.commons.lang.StringUtils;
@@ -23,6 +24,7 @@ import org.dom4j.Node;
 import com.hukoomi.bo.TSPollsBO;
 import com.hukoomi.bo.TSSurveyBO;
 import com.hukoomi.utils.PostgreTSConnection;
+import com.hukoomi.utils.TSPropertiesFileReader;
 import com.interwoven.cssdk.common.CSClient;
 import com.interwoven.cssdk.common.CSException;
 import com.interwoven.cssdk.filesys.CSAreaRelativePath;
@@ -271,7 +273,11 @@ public class PollSurveyTask implements CSURLExternalTask {
 	 * Last modifier Map holds last modifier information for each file
 	 */
 	HashMap<String, String> lastModifierMap = null;
-
+	 /**
+     * Properties object variable to load the 
+     * properties from property file configuration. 
+     */
+    private Properties properties = null;
 	/**
 	 * Overridden method from CSSDK
 	 *
@@ -1692,24 +1698,24 @@ public class PollSurveyTask implements CSURLExternalTask {
 				logger.info("Survey Master Data Updated");
 				isSurveyDataUpdated = updateSurveyQuestionData(surveyBO, document, connection);
 			} else {
-				if (connection != null) {
+				
 					connection.rollback();
-				}
+				
 				logger.info("Survey master update failed");
 			}
 
 			if (isSurveyDataUpdated) {
-				if (connection != null) {
+				
 					connection.commit();
-				}
+				
 				logger.info("Survey update transaction committed");
 			}
 
 		} catch (Exception e) {
 			try {
-				if (connection != null) {
+				
 					connection.rollback();
-				}
+				
 				logger.error("Exception in updateSurveyMasterData : ", e);
 			} catch (SQLException ex) {
 				logger.error("Exception in updateSurveyMasterData rollback catch block : ", ex);
@@ -1764,24 +1770,24 @@ public class PollSurveyTask implements CSURLExternalTask {
 				logger.info("Survey Master Data Updated");
 				isSurveyDataUpdated = updateDynamicSurveyQuestionData(surveyBO, document, connection);
 			} else {
-				if (connection != null) {
+				
 					connection.rollback();
-				}
+				
 				logger.info("Survey master update failed");
 			}
 
 			if (isSurveyDataUpdated) {
-				if (connection != null) {
+				
 					connection.commit();
-				}
+				
 				logger.info("Survey update transaction committed");
 			}
 
 		} catch (Exception e) {
 			try {
-				if (connection != null) {
+				
 					connection.rollback();
-				}
+				
 				logger.error("Exception in updateDynamicSurveyData : ", e);
 			} catch (SQLException ex) {
 				logger.error("Exception in updateDynamicSurveyData rollback catch block : ", ex);
@@ -2444,5 +2450,9 @@ public class PollSurveyTask implements CSURLExternalTask {
 			logger.error("Exception in getLastModifierAsString: ", e);
 		}
 		return lastModifierSJ.toString();
+	}
+	private void loadProperties(final CSClient client, final CSExternalTask task, final String propertyFileName) {
+		TSPropertiesFileReader propFileReader = new TSPropertiesFileReader(client, task, propertyFileName);
+		properties = propFileReader.getPropertiesFile();
 	}
 }

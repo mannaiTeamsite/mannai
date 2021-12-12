@@ -46,29 +46,19 @@ import com.interwoven.cssdk.workflow.CSExternalTask;
 import com.interwoven.cssdk.workflow.CSURLExternalTask;
 
 public class NewsletterTask implements CSURLExternalTask {
+	 
 
 	/**
 	 * Logger object to check the flow of the code.
 	 */
 	private final Logger logger = Logger.getLogger(NewsletterTask.class);
-	/**
-	 * XPath to the newsletter id
-	 */
-	public static final String ID_PATH = "/root/information/id";
-	/**
-	 * XPath to the language selection
-	 */
-	public static final String LANG_PATH = "/root/information/language/value";
 
 	/**
 	 * XPath to the filename selection
 	 */
 	public static final String HTML_FILE_NAME = "/root/information/original-dcr-name";
 
-	/**
-	 * XPath to the Title path
-	 */
-	public static final String TITLE_PATH = "/root/detail/newsletter-title";
+	
 	/**
 	 * Transition hashmap key
 	 */
@@ -89,7 +79,7 @@ public class NewsletterTask implements CSURLExternalTask {
 	 * column count string
 	 */
 	public static final String COLUMN_LAYOUT = "column-layout";
-	
+
 	/**
 	 * column count string
 	 */
@@ -127,10 +117,6 @@ public class NewsletterTask implements CSURLExternalTask {
 	private static final String[][] CHARACTERS = { { "\\+", "%20" }, { "%21", "!" }, { "%27", "'" }, { "%28", "(" },
 			{ "%29", ")" }, { "%7E", "~" } };
 
-	public static final String NEWSLETTER_DESCRIPTION_PATH = "/root/detail/newsletter-description";
-	public static final String NEWSLETTER_ROOT_CATEGOTY_PATH = "/root/detail/newsletter-category";
-	public static final String NEWSLETTER_CATEGOTY_PATH = "/root/detail/newsletter-category/newsletter-category-field";
-	public static final String OTHER_NEWSLETTER_CATEGOTY_PATH = "/root/detail/newsletter-category/newsletter-other";
 	public static final String TEMPLATE = "newsletter_template";
 	public static final String HTML_PATH = "html_path";
 	public static final String HTML_GENERATION_LOCATION = "generate_html_location";
@@ -144,9 +130,10 @@ public class NewsletterTask implements CSURLExternalTask {
 	String baseUrl = "";
 	String dcrName = "";
 	String taxanomyName = ""; // Added to get Taxanomy Labels
-    String taxanomybaseUrl = ""; // Added to get Taxanomy Labels
-    public static final String NEWSLETTER_LIST_CONTENT_TYPE = "/master/master-data/Key-Label";// Added to get Taxanomy Labels
-    
+	String taxanomybaseUrl = ""; // Added to get Taxanomy Labels
+	public static final String NEWSLETTER_LIST_CONTENT_TYPE = "/master/master-data/Key-Label";// Added to get Taxanomy
+																								// Labels
+
 	@Override
 	public void execute(CSClient client, CSExternalTask task, Hashtable params) throws CSException {
 		logger.info("NewsletterTask: execute()");
@@ -186,8 +173,7 @@ public class NewsletterTask implements CSURLExternalTask {
 	}
 
 	public Map<String, String> processNewsletterDCR(CSClient client, CSExternalTask task, CSSimpleFile taskSimpleFile,
-			String fileName)
-			throws CSException {
+			String fileName) throws CSException {
 		logger.info("NewsletterTask: processNewsletterDCR()");
 		// get xsl
 		HashMap<String, String> statusMap = new HashMap<>();
@@ -207,14 +193,14 @@ public class NewsletterTask implements CSURLExternalTask {
 		dcrName = properties.getProperty("labels_dcr_name");
 		logger.info("dcrName : " + dcrName);
 		taxanomybaseUrl = properties.getProperty("taxanomy_dcr_base_url");
-        logger.info("taxanomybaseUrl : " + taxanomybaseUrl);
+		logger.info("taxanomybaseUrl : " + taxanomybaseUrl);
 
-        taxanomyName = properties.getProperty("labels_taxanomy_name");
-        logger.info("taxanomyName : " + taxanomyName);
+		taxanomyName = properties.getProperty("labels_taxanomy_name");
+		logger.info("taxanomyName : " + taxanomyName);
 
-        String labelDCRPath = baseUrl + dcrName;
+		String labelDCRPath = baseUrl + dcrName;
 
-        String taxanomyDCRPath = taxanomybaseUrl + taxanomyName;
+		String taxanomyDCRPath = taxanomybaseUrl + taxanomyName;
 		// Social Media Links
 		String facebook = properties.getProperty("facebook_link");
 		String twitter = properties.getProperty("twitter_link");
@@ -261,10 +247,9 @@ public class NewsletterTask implements CSURLExternalTask {
 		baseUrlElement.setText(baseUrlLink);
 
 		Document labels = getLabelDCRFile(labelDCRPath);
-		if(labels != null) {
+		if (labels != null) {
 			rootElement.add(labels.getRootElement());
 		}
-		
 
 		// Add Social Media Links To Document
 		Element socialMediaElement = rootElement.addElement("social-media");
@@ -289,18 +274,20 @@ public class NewsletterTask implements CSURLExternalTask {
 		// HTML filename
 		htmlName = document.selectSingleNode(HTML_FILE_NAME).getText();
 		logger.info("HTML File Name : " + htmlName);
-
-		titleStr = document.selectSingleNode(TITLE_PATH).getText();
+		String titlePath = properties.getProperty("titlePath");
+		titleStr = document.selectSingleNode(titlePath).getText();
 		logger.info("title - " + titleStr);
 		Element titleElement = rootElement.addElement(TITLE);
 		titleElement.setText(titleStr);
 		// desc
-		String desc = document.selectSingleNode(NEWSLETTER_DESCRIPTION_PATH).getText();
+		String newsletterDiscPath = properties.getProperty("newsletterDiscPath");
+		String desc = document.selectSingleNode(newsletterDiscPath).getText();
 		logger.info("desc - " + desc);
 		Element descElement = rootElement.addElement("description");
 		descElement.setText(desc);
 		// lang
-		String lang = document.selectSingleNode(LANG_PATH).getText();
+		String langPath = properties.getProperty("langPath");
+		String lang = document.selectSingleNode(langPath).getText();
 		Element langElement = rootElement.addElement("lang");
 		logger.info("lang - " + lang);
 		langElement.setText(lang);
@@ -335,49 +322,48 @@ public class NewsletterTask implements CSURLExternalTask {
 		// Add Share Links To document ends
 
 		// Add Categories
-		List<Node> categoryList = document.selectNodes(NEWSLETTER_ROOT_CATEGOTY_PATH);
+		String newsletterRootCategory = properties.getProperty("newsletterRootCategory");
+		List<Node> categoryList = document.selectNodes(newsletterRootCategory);
 
 		for (int i = 0; i < categoryList.size(); i++) {
 			Node selectnode = categoryList.get(i);
-			if (selectnode.selectSingleNode("newsletter-category-field") != null) {			
-				rootElement = processCategory(rootElement, selectnode, client, task, maxChar, taxanomyDCRPath, lang);		
-				
+			if (selectnode.selectSingleNode("newsletter-category-field") != null) {
+				rootElement = processCategory(rootElement, selectnode, client, task, maxChar, taxanomyDCRPath, lang);
+
 			} // New if condition
 			else if (selectnode.selectSingleNode("newsletter-other") != null) {
-				
-				rootElement = processOtherCategory(rootElement, selectnode, maxChar, lang);		
-				
+
+				rootElement = processOtherCategory(rootElement, selectnode, maxChar, lang);
+
 			}
 		}
 
+		try {
+			logger.info("data not null.");
 
-			
-			try {
-				logger.info("data not null.");
+			logger.debug("Data : " + data.asXML());
+			transformToMailDataSource(data.asXML(), xslTemplateFile, lang);
 
-				logger.debug("Data : " + data.asXML());
-				transformToMailDataSource(data.asXML(), xslTemplateFile, lang);
+			String htmlfilePath = htmlTemplatePath + lang + DELIMITER + htmlName + HTML;
 
-				String htmlfilePath = htmlTemplatePath + lang + DELIMITER + htmlName + HTML;
+			logger.debug("filePath1 : " + htmlfilePath);
 
-				logger.debug("filePath1 : " + htmlfilePath);
+			CSAreaRelativePath reportFile2 = new CSAreaRelativePath(htmlfilePath);
+			CSAreaRelativePath[] files2 = new CSAreaRelativePath[1];
+			files2[0] = reportFile2;
+			task.attachFiles(files2);
 
-				CSAreaRelativePath reportFile2 = new CSAreaRelativePath(htmlfilePath);
-				CSAreaRelativePath[] files2 = new CSAreaRelativePath[1];
-				files2[0] = reportFile2;
-				task.attachFiles(files2);
+			statusMap.put(TRANSITION, SUCCESS_TRANSITION);
+			statusMap.put(TRANSITION_COMMENT, SUCCESS_TRANSITION_COMMENT);
 
-				statusMap.put(TRANSITION, SUCCESS_TRANSITION);
-				statusMap.put(TRANSITION_COMMENT, SUCCESS_TRANSITION_COMMENT);
+		} catch (Exception ex) {
+			logger.error("Exception in attach: ", ex);
+		}
 
-			} catch (Exception ex) {
-				logger.error("Exception in attach: ", ex);
-			}
-		
 		return statusMap;
 	}
 
-	public Element processOtherCategory(Element rootElement, Node selectnode, int maxChar,  String lang)  {
+	public Element processOtherCategory(Element rootElement, Node selectnode, int maxChar, String lang) {
 
 		Node node = selectnode.selectSingleNode("newsletter-other");
 		Element categoryElement = rootElement.addElement(CATEGORY);
@@ -409,19 +395,19 @@ public class NewsletterTask implements CSURLExternalTask {
 		int dcrCount = category.size();
 		logger.info("dcrCount : " + dcrCount);
 		int dcrDivCol = 0;
-		if(columnLayout > 0)
-		 dcrDivCol = dcrCount / columnLayout;
+		if (columnLayout > 0)
+			dcrDivCol = dcrCount / columnLayout;
 		logger.info("dcrDivCol : " + dcrDivCol);
 		int dcrMod = 0;
-		if(columnLayout > 0)
-		 dcrMod = dcrCount % columnLayout;
+		if (columnLayout > 0)
+			dcrMod = dcrCount % columnLayout;
 		logger.info("dcrMod : " + dcrMod);
 		int rows = 0;
 		if (dcrMod == 0) {
 			rows = dcrDivCol;
 		} else {
 			rows = dcrDivCol + 1;
-			
+
 		}
 		logger.info("rows : " + rows);
 
@@ -440,78 +426,77 @@ public class NewsletterTask implements CSURLExternalTask {
 			}
 
 			for (int columnIndex = 0; columnIndex < columnLayout && dcrCount != 0; columnIndex++, dcrCount--) {
-				
+
 				logger.info("columnIndex : " + columnIndex);
 				logger.info("dcrCount : " + dcrCount);
-				
+
 				categoryDcrElement = createOtherDoc(category, counter, categoryDcrElement, maxChar, lang);
-				
-				
+
 				counter++;
 			}
-			
+
 		}
-		
-		
+
 		return rootElement;
 	}
-	
-	
-	
-	public Element createOtherDoc(List<Node> category, int counter, Element categoryDcrElement, int maxChar, String lang) {
-			Node dcr = category.get(counter);
-			Element dcrElement = categoryDcrElement.addElement("dcr");
-			String dcrPath = dcr.getText();
-			logger.info("dcrPath - " + dcrPath);
-			Element dcrTitleElement = dcrElement.addElement(TITLE);
-			String dcrTitle = dcr.selectSingleNode("newsletter-dcr-title").getText();
-			logger.info("other dcrTitle - " + dcrTitle);
-			dcrTitleElement.setText(dcrTitle);
 
-			Element dcrDescElement = dcrElement.addElement("desc");
-			String dcrDescription = "";
-			String detailDescription = "";
+	public Element createOtherDoc(List<Node> category, int counter, Element categoryDcrElement, int maxChar,
+			String lang) {
+		Node dcr = category.get(counter);
+		Element dcrElement = categoryDcrElement.addElement("dcr");
+		String dcrPath = dcr.getText();
+		logger.info("dcrPath - " + dcrPath);
+		Element dcrTitleElement = dcrElement.addElement(TITLE);
+		String dcrTitle = dcr.selectSingleNode("newsletter-dcr-title").getText();
+		logger.info("other dcrTitle - " + dcrTitle);
+		dcrTitleElement.setText(dcrTitle);
 
-			if (dcr.selectSingleNode("newsletter-dcr-description") != null) {
-				detailDescription = dcr.selectSingleNode("newsletter-dcr-description").getText();
+		Element dcrDescElement = dcrElement.addElement("desc");
+		String dcrDescription = "";
+		String detailDescription = "";
+
+		if (dcr.selectSingleNode("newsletter-dcr-description") != null) {
+			detailDescription = dcr.selectSingleNode("newsletter-dcr-description").getText();
+		}
+		dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
+
+		int maxLength = (dcrDescription.length() < maxChar) ? dcrDescription.length() : maxChar;
+		dcrDescription = dcrDescription.substring(0, maxLength);
+
+		if (maxLength == maxChar) {
+			dcrDescription = dcrDescription + "...";
+		}
+
+		dcrDescElement.setText(dcrDescription);
+
+		Node image = dcr.selectSingleNode("category-dcr-image");
+		if (image != null) {
+			Element imgElement = dcrElement.addElement("image");
+			String dcrImage = dcr.selectSingleNode("category-dcr-image").getText();
+			imgElement.setText(dcrImage);
+		}
+
+		String[] pathArr = dcr.selectSingleNode("category-dcr-link").getText().split(DELIMITER);
+		Element readMoreLink = dcrElement.addElement("readMore");
+		StringBuilder originalDcrName = new StringBuilder();
+		if (!(pathArr[0].equals("http:") || pathArr[0].equals("https:"))) {
+			for (int count = 3; count < pathArr.length; count++) {
+
+				originalDcrName = originalDcrName.append(DELIMITER + pathArr[count]);
+
 			}
-			dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
+			originalDcrName = originalDcrName.append(DELIMITER + lang + originalDcrName);
+			logger.info("originalDcrName : " + originalDcrName);
+			readMoreLink.setText(originalDcrName.toString());
+		} else {
+			readMoreLink.setText(dcr.selectSingleNode("category-dcr-link").getText());
+		}
 
-			int maxLength = (dcrDescription.length() < maxChar) ? dcrDescription.length() : maxChar;
-			dcrDescription = dcrDescription.substring(0, maxLength);
-
-			if (maxLength == maxChar) {
-				dcrDescription = dcrDescription + "...";
-			}
-
-			dcrDescElement.setText(dcrDescription);
-
-			Node image = dcr.selectSingleNode("category-dcr-image");
-			if (image != null) {
-				Element imgElement = dcrElement.addElement("image");
-				String dcrImage = dcr.selectSingleNode("category-dcr-image").getText();
-				imgElement.setText(dcrImage);
-			}
-
-			String[] pathArr= dcr.selectSingleNode("category-dcr-link").getText().split(DELIMITER);  
-			Element readMoreLink = dcrElement.addElement("readMore");
-			 StringBuilder originalDcrName = new StringBuilder();
-			 if(!(pathArr[0].equals("http:") || pathArr[0].equals("https:"))) {
-                for(int count=3; count < pathArr.length ; count++){
-
-                    originalDcrName = originalDcrName.append(DELIMITER+pathArr[count]);                            
-
-                } 
-                originalDcrName = originalDcrName.append(DELIMITER + lang + originalDcrName);
-                logger.info("originalDcrName : " + originalDcrName);
-                readMoreLink.setText(originalDcrName.toString());
-        }else {
-            readMoreLink.setText(dcr.selectSingleNode("category-dcr-link").getText());
-        }
-		
 		return categoryDcrElement;
 	}
-	public Element processCategory(Element rootElement, Node selectnode, CSClient client, CSExternalTask task, int maxChar, String taxanomyDCRPath, String lang) throws CSAuthorizationException {
+
+	public Element processCategory(Element rootElement, Node selectnode, CSClient client, CSExternalTask task,
+			int maxChar, String taxanomyDCRPath, String lang) throws CSAuthorizationException {
 
 		Node node = selectnode.selectSingleNode("newsletter-category-field");
 		Element categoryElement = rootElement.addElement(CATEGORY);
@@ -543,20 +528,20 @@ public class NewsletterTask implements CSURLExternalTask {
 		int dcrCount = category.size();
 		logger.info("dcrCount Value : " + dcrCount);
 		int dcrDivCol = 0;
-		if(columnLayout>0)
-		 dcrDivCol = dcrCount / columnLayout;
+		if (columnLayout > 0)
+			dcrDivCol = dcrCount / columnLayout;
 		logger.info("dcrDivCol : " + dcrDivCol);
 		int dcrMod = 0;
-		if(columnLayout>0)
-		 dcrMod = dcrCount % columnLayout;
+		if (columnLayout > 0)
+			dcrMod = dcrCount % columnLayout;
 		logger.info("dcrMod : " + dcrMod);
 		int rows = 0;
-		
+
 		if (dcrMod == 0) {
 			rows = dcrDivCol;
 		} else {
 			rows = dcrDivCol + 1;
-			
+
 		}
 		logger.info("rows : " + rows);
 
@@ -579,28 +564,27 @@ public class NewsletterTask implements CSURLExternalTask {
 				logger.info("dcrCount " + dcrCount);
 
 				Node dcr = category.get(counter);
-				Element dcrElement = categoryDcrElement.addElement("dcr");
+				
 				String dcrPath = dcr.getText();
 				logger.info("dcrPath - " + dcrPath);
 
 				Document dcrDocument = getDcrDocument(client, task, dcrPath);
-				Element dcrTitleElement = dcrElement.addElement(TITLE);
-				String dcrTitle = dcrDocument.selectSingleNode("/root/information/title").getText();
-				logger.info("dcrTitle - " + dcrTitle);
-				dcrTitleElement.setText(dcrTitle);
-
-				dcrElement = processCategoryDoc(dcrElement, maxChar, dcrDocument, taxanomyDCRPath, lang, dctType);
+				categoryDcrElement = processCategoryDoc(categoryDcrElement, maxChar, dcrDocument, taxanomyDCRPath, lang, dctType);
 				counter++;
 			}
 		}
-		
+
 		return rootElement;
-		
+
 	}
-	public Element processCategoryDoc(Element dcrElement, int maxChar, Document dcrDocument, String taxanomyDCRPath, String lang, String dctType) {
-		
-		
-		
+
+	public Element processCategoryDoc(Element categoryDcrElement, int maxChar, Document dcrDocument, String taxanomyDCRPath,
+			String lang, String dctType) {
+		Element dcrElement = categoryDcrElement.addElement("dcr");
+		Element dcrTitleElement = dcrElement.addElement(TITLE);
+		String dcrTitle = dcrDocument.selectSingleNode("/root/information/title").getText();
+		logger.info("dcrTitle - " + dcrTitle);
+		dcrTitleElement.setText(dcrTitle);
 		Element dcrDescElement = dcrElement.addElement("desc");
 		String dcrDescription = "";
 		String seoDescription = "";
@@ -614,7 +598,7 @@ public class NewsletterTask implements CSURLExternalTask {
 			detailDescription = dcrDocument.selectSingleNode("/root/detail/description").getText();
 		}
 
-		if (!seoDescription.equals("")  || !"".equals(seoDescription)) {
+		if (!seoDescription.equals("") || !"".equals(seoDescription)) {
 			dcrDescription = seoDescription;
 		} else {
 			dcrDescription = detailDescription.replaceAll("<[^>]*>", "");
@@ -635,22 +619,17 @@ public class NewsletterTask implements CSURLExternalTask {
 			imgElement.setText(dcrImage);
 		}
 		String detailName = getDetail(taxanomyDCRPath, dctType.toLowerCase());
-        String originalDetailName = "/" + lang + "/" + detailName + "/"
-                + dcrDocument
-                        .selectSingleNode(HTML_FILE_NAME)
-                        .getText();
-        logger.info("originalDetailName - " + originalDetailName);
-        
+		String originalDetailName = "/" + lang + "/" + detailName + "/"
+				+ dcrDocument.selectSingleNode(HTML_FILE_NAME).getText();
+		logger.info("originalDetailName - " + originalDetailName);
+
 		Element readMoreLink = dcrElement.addElement("readMore");
 
 		readMoreLink.setText(originalDetailName);
-		
-		
+
 		return dcrElement;
 	}
-	
-	
-	
+
 	private Document getLabelDCRFile(String dcrPath) {
 		logger.info("dcrPath : " + dcrPath);
 		File inputFile = new File(dcrPath);
@@ -665,28 +644,28 @@ public class NewsletterTask implements CSURLExternalTask {
 		}
 		return document;
 	}
-	// Added to get Taxanomy //    
+	// Added to get Taxanomy //
 
-    private String getDetail(String taxanomyDCRPath, String dctType) {
-        String detail = "";
-        String listingType = "";     
-        Document contenttype = getLabelDCRFile(taxanomyDCRPath);
-        if(contenttype != null) {
-        List<Node> listcontenttype = contenttype.selectNodes(NEWSLETTER_LIST_CONTENT_TYPE);
-        for (int j = 0; j < listcontenttype.size(); j++) {
-            Node selectcontentnode = listcontenttype.get(j);            
-                listingType = selectcontentnode.selectSingleNode("Listing").getText();
-                if(listingType.equals(dctType)) {
-                     detail = selectcontentnode.selectSingleNode("Detail").getText(); 
-                }
+	private String getDetail(String taxanomyDCRPath, String dctType) {
+		String detail = "";
+		String listingType = "";
+		Document contenttype = getLabelDCRFile(taxanomyDCRPath);
+		if (contenttype != null) {
+			List<Node> listcontenttype = contenttype.selectNodes(NEWSLETTER_LIST_CONTENT_TYPE);
+			for (int j = 0; j < listcontenttype.size(); j++) {
+				Node selectcontentnode = listcontenttype.get(j);
+				listingType = selectcontentnode.selectSingleNode("Listing").getText();
+				if (listingType.equals(dctType)) {
+					detail = selectcontentnode.selectSingleNode("Detail").getText();
+				}
 
+			}
+		}
 
-            }
-        }
+		return detail;
+	}
 
-        return detail;
-    }
-    // Added to get Taxanomy //
+	// Added to get Taxanomy //
 	private String changeDateFormat(CSClient client, CSExternalTask task, String dcrDate, String lang) {
 		String convertedDate = "";
 
@@ -717,7 +696,7 @@ public class NewsletterTask implements CSURLExternalTask {
 	private DataSource transformToMailDataSource(String xmlMailContent, CSSimpleFile xslTemplateFile, String lang)
 			throws CSException, IOException {
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		
+
 		try {
 			logger.info("transformToMailDataSource");
 			StringBuilder baseDir = new StringBuilder(genrateHtmlLocation).append(lang);
@@ -742,17 +721,17 @@ public class NewsletterTask implements CSURLExternalTask {
 				fout.delete();
 			}
 			fout.createNewFile();
-			
-			try(FileOutputStream oFile = new FileOutputStream(fout, false);){
-				
-			
-			logger.info("xmlMailContent- " + xmlMailContent);
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(xmlMailContent.getBytes(StandardCharsets.UTF_8));
-			logger.info("before outputStream- " + outputStream.toString());
-			XSLTransformer.transform(inputStream, xslTemplateFile, outputStream);
-			logger.info("After outputStream- " + outputStream.toString());
-			outputStream.writeTo(oFile);
-			Files.setPosixFilePermissions(Path.of(directory + DELIMITER + htmlName + HTML), baseFilePermissions);
+
+			try (FileOutputStream oFile = new FileOutputStream(fout, false);) {
+
+				logger.info("xmlMailContent- " + xmlMailContent);
+				ByteArrayInputStream inputStream = new ByteArrayInputStream(
+						xmlMailContent.getBytes(StandardCharsets.UTF_8));
+				logger.info("before outputStream- " + outputStream.toString());
+				XSLTransformer.transform(inputStream, xslTemplateFile, outputStream);
+				logger.info("After outputStream- " + outputStream.toString());
+				outputStream.writeTo(oFile);
+				Files.setPosixFilePermissions(Path.of(directory + DELIMITER + htmlName + HTML), baseFilePermissions);
 			}
 
 		} catch (IOException ex) {
@@ -815,13 +794,13 @@ public class NewsletterTask implements CSURLExternalTask {
 		try {
 			result = URLEncoder.encode(url, CHARSET);
 		} catch (UnsupportedEncodingException e) {
-			logger.info("Exception",e);
+			logger.info("Exception", e);
 		}
-		if(result != null) {
-		for (String[] entry : CHARACTERS) {
-			
-			result = result.replaceAll(entry[0], entry[1]);
-		}
+		if (result != null) {
+			for (String[] entry : CHARACTERS) {
+
+				result = result.replaceAll(entry[0], entry[1]);
+			}
 		}
 		logger.info(" Encoded Url : " + result);
 		return result;
