@@ -179,7 +179,8 @@ public class SurveyExternal {
                 if (StringUtils.equalsIgnoreCase(ACTION_SURVEY_SUBIT, surveyBO.getAction())) {
                     submitSurveyResponse(context, surveyStatusElem);                    
                 } else if (ACTION_SURVEY_DETAIL.equalsIgnoreCase(surveyBO.getAction())) {   
-                    getSurveyDetail(context, document);                                     
+                	document = getSurveyDetail(context);  
+                    logger.info("After Returning"+document.asXML());
                 } else if (ACTION_SURVEY_LISTING.equalsIgnoreCase(surveyBO.getAction())) {
                     document = getSurveyList(context);
                 } else if (ACTION_DYNAMIC_SURVEY_SUBIT.equalsIgnoreCase(surveyBO.getAction())) {                    
@@ -255,12 +256,13 @@ public class SurveyExternal {
      * @param context Request context object.
      *
      */
-    public void getSurveyDetail(RequestContext context, Document document) {
+    public Document getSurveyDetail(RequestContext context) {
         DetailExternal detailExt = new DetailExternal();
         String siteKey = captchaconfigProp.getProperty("siteKey");
         logger.debug("siteKey : " + siteKey);
-        document = detailExt.getContentDetail(context);
-
+        
+        Document document = detailExt.getContentDetail(context);
+        logger.info("Document:"+document.asXML());
         String surveyId = document
                 .selectSingleNode(
                         "/content/root/information/id")
@@ -284,6 +286,8 @@ public class SurveyExternal {
                     SUBMITTED);
         }
         document.getRootElement().addAttribute("Sitekey", siteKey);
+        logger.info("While returning:"+document.asXML());
+        return document;
     }
     
     
@@ -405,7 +409,7 @@ public class SurveyExternal {
                 status.addAttribute("status", "submitted");
             }
         }
-
+        logger.info(document.asXML());
         return document;
     }
 
