@@ -14,8 +14,7 @@ public class PropertiesFileReader {
     /** Logger object to check the flow of the code.*/
     private static final Logger LOGGER = Logger.getLogger(
             PropertiesFileReader.class.getSimpleName());
-    /** Initialising the filepath for Properties file inside WorkArea.*/
-    private static final String PROPERTY_PATH = "/iw/config/properties/";
+
     /**
      * Set the property file.
      * @param propertiesFileName properties file name.
@@ -113,7 +112,7 @@ public class PropertiesFileReader {
             String root = fileDal.getRoot();
             LOGGER.info("File Dal Root: " + root);
             InputStream inputStream = fileDal.getStream(
-                    root + PROPERTY_PATH + propertiesFileName);
+                    root + "/iw/config/properties/" + propertiesFileName);
             if (inputStream != null) {
                 try {
                     propFile.load(inputStream);

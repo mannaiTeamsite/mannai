@@ -111,9 +111,6 @@ public class NewsletterPhpExternal {
 	/** character set Constant */
 	private static final String CHAR_SET = "UTF-8";
 
-	/** Initialising the filepath for Properties file inside WorkArea. */
-	private static final String NEWSLETTER_TEMPLATE_PATH = "/iw/config/newsletter-templates/";
-
 	/** MySql Object variable. */
 	MySql mysql = null;
 
@@ -991,7 +988,7 @@ public class NewsletterPhpExternal {
 		FileDal fileDal = context.getFileDal();
 		String root = fileDal.getRoot();
 		
-		return fileDal.read(root + NEWSLETTER_TEMPLATE_PATH + htmlFileName);
+		return fileDal.read(root + "/iw/config/newsletter-templates/" + htmlFileName);
 	}
 
 	private boolean validateMailID(String emailId) {

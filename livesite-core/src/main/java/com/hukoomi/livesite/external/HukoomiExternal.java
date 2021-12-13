@@ -102,11 +102,10 @@ public class HukoomiExternal {
 		}
 		
 		
-		logger.debug("Before calling : " + doc);
+		logger.debug("Document : " + doc.asXML());
 		
 		UserInfoSession inf = new UserInfoSession();		
 		doc = inf.getUserData(context, doc);
-		logger.info(doc);
 		return doc;
 
 	}
