@@ -990,6 +990,7 @@ public class NewsletterPhpExternal {
 		logger.info("NewsletterPhp External : getHtmlFile");
 		FileDal fileDal = context.getFileDal();
 		String root = fileDal.getRoot();
+		
 		return fileDal.read(root + NEWSLETTER_TEMPLATE_PATH + htmlFileName);
 	}
 

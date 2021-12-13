@@ -272,6 +272,7 @@ public class WeatherApi {
 		return dataObject;
 	}
 	
+	
 public JSONObject returnData(JSONObject dataObject, String elem, JSONArray weatherData) {
 	final String SUNSET = "sunset";
 	final String SUNRISE = "sunrise";

@@ -399,7 +399,7 @@ public class CommonUtils {
      */
     public String removeHTMLTags(String content){
         if(StringUtils.isNotBlank(content)) {
-            content = content.replaceAll("\\<.*?>", "");
+            content = content.replaceAll("<[^>]*>", "");
         }
         return content;
     }

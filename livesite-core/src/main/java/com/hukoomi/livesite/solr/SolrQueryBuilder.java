@@ -183,8 +183,12 @@ public class SolrQueryBuilder {
                 this.baseQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
                         .getParameterString(BASE_QUERY, DEFAULT_QUERY), UTF));
                 context.setParameterString(BASE_QUERY,this.baseQuery);
+                this.fieldQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
+                        .getParameterString(FIELD_QUERY, ""), UTF));
+                context.setParameterString(FIELD_QUERY,this.fieldQuery);
             } else{
                 this.baseQuery = DEFAULT_QUERY;
+                this.fieldQuery = "";
             }
             logger.info("Solr Base Query: " + baseQuery);
 
@@ -192,18 +196,6 @@ public class SolrQueryBuilder {
             logger.error("Unable to decode baseQuery="
                     + context.getParameterString(BASE_QUERY,
                     DEFAULT_QUERY), e);
-        }
-
-        try {
-            if(!isHeader) {
-                this.fieldQuery = commonUtils.sanitizeSolrQuery(URLDecoder.decode(context
-                        .getParameterString(FIELD_QUERY, ""), UTF));
-                context.setParameterString(FIELD_QUERY,this.fieldQuery);
-            } else {
-                this.fieldQuery = "";
-            }
-            logger.debug("Solr Field Query: " + fieldQuery);
-        } catch (UnsupportedEncodingException e) {
             logger.error("Unable to decode fieldQuery="
                     + context.getParameterString(FIELD_QUERY), e);
         }
@@ -427,31 +419,9 @@ public class SolrQueryBuilder {
 
         sb.append("?q=" + (StringUtils.isNotBlank(this.baseQuery)
                 ? this.baseQuery : DEFAULT_QUERY));
-
-        if (StringUtils.isNotBlank(fields)) {
-            sb.append("&fl=" + this.fields);
-        }
-
-        if (enableMLT) {
-            sb.append("&mlt.fl=" + this.mltFl);
-        }
-
-        if (StringUtils.isNotBlank(this.fieldQuery) && !this.fieldQuery.equals("category:All")) {
-            sb.append("&fq=" + this.fieldQuery);
-        }
-
-        if(StringUtils.isNotBlank(this.highlightField)){
-            sb.append("&hl.fl="+this.highlightField);
-        }
-
-        if(StringUtils.isNotBlank(this.hlHtmlTag)){
-            sb.append("&hl.simple.post=</"+this.hlHtmlTag+">&hl.simple.pre=<"+this.hlHtmlTag+">");
-        }
-
-        if(StringUtils.isNotBlank(this.highlighter)){
-            sb.append("&hl="+this.highlighter);
-        }
-
+        //sornaQube
+        sb.append(solrQuery(sb));
+        //sornarQube
         if(StringUtils.isNotBlank(personaCookieValue)){
 
             bq.append(" audience:*"+personaCookieValue+"*^"+this.personaBoost);
@@ -497,6 +467,33 @@ public class SolrQueryBuilder {
         }
         logger.debug("Generated Solr Query: " + sb.toString());
         return sb.toString();
+    }
+    
+    private StringBuilder solrQuery(StringBuilder sb) {
+    	if (StringUtils.isNotBlank(fields)) {
+            sb.append("&fl=" + this.fields);
+        }
+
+        if (enableMLT) {
+            sb.append("&mlt.fl=" + this.mltFl);
+        }
+
+        if (StringUtils.isNotBlank(this.fieldQuery) && !this.fieldQuery.equals("category:All")) {
+            sb.append("&fq=" + this.fieldQuery);
+        }
+
+        if(StringUtils.isNotBlank(this.highlightField)){
+            sb.append("&hl.fl="+this.highlightField);
+        }
+
+        if(StringUtils.isNotBlank(this.hlHtmlTag)){
+            sb.append("&hl.simple.post=</"+this.hlHtmlTag+">&hl.simple.pre=<"+this.hlHtmlTag+">");
+        }
+
+        if(StringUtils.isNotBlank(this.highlighter)){
+            sb.append("&hl="+this.highlighter);
+        }
+    	return sb;
     }
 
     public String crawlBuild(String updatedBaseQuery){
