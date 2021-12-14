@@ -420,7 +420,7 @@ public class SolrQueryBuilder {
         sb.append("?q=" + (StringUtils.isNotBlank(this.baseQuery)
                 ? this.baseQuery : DEFAULT_QUERY));
         //sornaQube
-        sb.append(solrQuery(sb));
+        sb = solrQuery(sb);
         //sornarQube
         if(StringUtils.isNotBlank(personaCookieValue)){
 

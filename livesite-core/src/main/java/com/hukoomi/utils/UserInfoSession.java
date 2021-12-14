@@ -17,7 +17,7 @@ import com.hukoomi.livesite.external.DashboardSettingsExternal;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class UserInfoSession {
-	
+
 	private String strValid = "valid";
 	private String strStatus = "status";
 	private String strFnEn = "fnEn";
@@ -31,7 +31,6 @@ public class UserInfoSession {
 	private String strEmail = "email";
 	private String strLstMdfy = "lstMdfy";
 	private String strRole = "role";
-	
 
 	private static final Logger LOGGER = Logger.getLogger(UserInfoSession.class);
 
@@ -39,8 +38,8 @@ public class UserInfoSession {
 		try {
 			HttpServletRequest request = context.getRequest();
 			String valid = getStatus(context);
-				LOGGER.info(valid);
-				if (valid != null && valid.equals(strValid)) {
+			LOGGER.info(valid);
+			if (valid != null && valid.equals(strValid)) {
 				Element root = doc.getRootElement();
 				if (root != null && root.isRootElement()) {
 					Element userData = root.addElement("userData");
@@ -77,44 +76,12 @@ public class UserInfoSession {
 		}
 		return doc;
 	}
-	
-	public String checkStatus(String status, RequestContext context) {
-		String valid = "Invalid";
-		Date expiryDate = null ;
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");  
-		HttpServletRequest request = context.getRequest();
-		DashboardExternal dashboard = new DashboardExternal();	
-		
-			Date cureentDate = new Date(System.currentTimeMillis());
-			
-	
-			if(status != null && status.equalsIgnoreCase(strValid))	{	
-				String expDt = (String) request.getSession().getAttribute("exp");
-					
-					try {
-						expiryDate=formatter.parse(expDt);
-					} catch (ParseException e) {						
-						e.printStackTrace();
-					}
-				
-				if (expDt != null && cureentDate.compareTo(expiryDate) < 0 ) {
-					valid = strValid;										
-				}
-			
-			else {
 
-				dashboard.removeSessionAttr(context);
-	}
-		
-	}				
-	
-		return valid;
-	}
-	
+
 	public String getStatus(RequestContext context) {
-		
-	  	HttpServletRequest request = context.getRequest();
-	  	String accessToken = null;
+		DashboardExternal dashboard = new DashboardExternal();	
+		HttpServletRequest request = context.getRequest();
+		String accessToken = null;
 		Cookie cookie = null;
 		Cookie[] cookies = null;
 		String status = "";
@@ -127,72 +94,100 @@ public class UserInfoSession {
 				}
 			}
 		}
-		
-		
-		if (accessToken != null) {	
-			DashboardExternal dashboard = new DashboardExternal();
-			
-			 status = (String) request.getSession().getAttribute(strStatus);
-			LOGGER.info("Status:"+status);		
-			if (status == null || !status.equals(strValid)) {
-					
-					LOGGER.info("--------dashboardServices is called--------");					
-					dashboard.dashboardServices(context, accessToken);	
-					status = (String) request.getSession().getAttribute(strStatus);
 
-					LOGGER.info("Status:"+status);	
-					if(status != null && status.equalsIgnoreCase(strValid))	{	
-						
-						setPersona(context, (String) request.getSession().getAttribute("userId"));
-					}
+		if (accessToken != null) {
+			
+			status = (String) request.getSession().getAttribute(strStatus);
+			LOGGER.info("Status:" + status);
+			 if(status == null || !(status.equalsIgnoreCase("Token Expired") || status.equalsIgnoreCase("Signature Exception") || status.equalsIgnoreCase("Exception in JWT parsing"))) {
+				LOGGER.info("--------dashboardServices is called--------");					
+				dashboard.dashboardServices(context, accessToken);	
+				status = (String) request.getSession().getAttribute(strStatus);
+
+				LOGGER.info("Status:"+status);	
+									
+					setPersona(context, (String) request.getSession().getAttribute("userId"),status);
+				
 			}
-		
+
 		}
-		
-		return checkStatus( status, context);
-		
+		if(status != null && (status.equalsIgnoreCase("Token Expired") || status.equalsIgnoreCase("Signature Exception") || status.equalsIgnoreCase("Exception in JWT parsing"))) {
+			
+			dashboard.removeSessionAttr(context); 
+			status = "";
+		}
+		status = checkStatusVal(request, context, status);
+		return status;
+
+	}
+private String checkStatusVal(HttpServletRequest request, RequestContext context, String status) {
+	DashboardExternal dashboard = new DashboardExternal();	
+	if(status!= null && status.equals(strValid)) {
+	Date expiryDate = null;
+	SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+	
+	Date cureentDate = new Date(System.currentTimeMillis());
+	String expDt = (String) request.getSession().getAttribute("exp");
+	if(expDt != null) {
+	try {
+		expiryDate = formatter.parse(expDt);
+	} catch (ParseException e) {
+		e.printStackTrace();
 	}
 
-	private void setPersona(RequestContext context, String userId ) {
+	if (cureentDate.compareTo(expiryDate) < 0) {
+		status =strValid;
+
+	}else {
+		dashboard.removeSessionAttr(context); 
+		status = "";
+	}
+	}
+	}else {
+		status = "";
+	}
+	return status;
+}
+	private void setPersona(RequestContext context, String userId, String status) {
+		if(status != null && status.equalsIgnoreCase(strValid))	{	
 		LOGGER.info("Set persona called");
 		HttpServletResponse response = context.getResponse();
 		HttpServletRequest request = context.getRequest();
 		Postgre postgre = new Postgre(context);
-		
-		DashboardSettingsExternal dse = new DashboardSettingsExternal();
-		LOGGER.info("userId value:"+userId);
-		String persona = dse.getPersonaForUser( userId, postgre);
-		LOGGER.info("Persona value:"+persona);
-		if(persona != null) {
-			
-			Cookie cookie = getCookie(request, "persona");
-		
-		if (cookie != null) {				
-		    cookie.setMaxAge (0);			    			    
-		    response.addCookie(cookie);			    
-		}
-		}
-		Cookie personaCookie = new Cookie("persona",persona);
-		personaCookie.setMaxAge (5 * 24 * 60 * 60 * 1000);
-		personaCookie.setValue(persona);	
-		personaCookie.setPath("/");
-	    response.addCookie(personaCookie);
-	   
-		
-		LOGGER.info("Set persona ended");
-	}
-	public static Cookie getCookie(HttpServletRequest request, String name) {
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (cookie.getName().equals(name)) {
-                    return cookie;
-                }
-            }
-        }
 
-        return null;
-    }
-			
-	
+		DashboardSettingsExternal dse = new DashboardSettingsExternal();
+		LOGGER.info("userId value:" + userId);
+		String persona = dse.getPersonaForUser(userId, postgre);
+		LOGGER.info("Persona value:" + persona);
+		if (persona != null) {
+
+			Cookie cookie = getCookie(request, "persona");
+
+			if (cookie != null) {
+				cookie.setMaxAge(0);
+				response.addCookie(cookie);
+			}
+		}
+		Cookie personaCookie = new Cookie("persona", persona);
+		personaCookie.setMaxAge(5 * 24 * 60 * 60 * 1000);
+		personaCookie.setValue(persona);
+		personaCookie.setPath("/");
+		response.addCookie(personaCookie);
+
+		LOGGER.info("Set persona ended");
+		}
+	}
+
+	public static Cookie getCookie(HttpServletRequest request, String name) {
+		if (request.getCookies() != null) {
+			for (Cookie cookie : request.getCookies()) {
+				if (cookie.getName().equals(name)) {
+					return cookie;
+				}
+			}
+		}
+
+		return null;
+	}
 
 }

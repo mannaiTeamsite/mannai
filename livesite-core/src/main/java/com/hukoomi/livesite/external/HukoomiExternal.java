@@ -37,6 +37,7 @@ public class HukoomiExternal {
 	public Document getLandingContent(RequestContext context) {
 		SolrQueryUtil squ = new SolrQueryUtil();
 		SolrQueryBuilder sqb = new SolrQueryBuilder(context);
+		logger.info("While creating"+sqb.build());
 		CommonUtils commonUtils = new CommonUtils();
 		String fieldQuery = "";
 		String fq = commonUtils.sanitizeSolrQuery(context.getParameterString(FIELDQUERY_CONSTANT, ""));
@@ -50,7 +51,7 @@ public class HukoomiExternal {
 		String category = commonUtils.sanitizeSolrQuery(context.getParameterString("solrcategory", ""));
 		context.setParameterString("solrcategory", category);
 		logger.debug("category : " + category);
-				
+		logger.info("Before Calling : "+sqb);		
 		sqb = landingContentQuery(context, sqb, fieldQuery, category);
 		
 		String query = sqb.build();
@@ -111,7 +112,7 @@ public class HukoomiExternal {
 	}
 	 @SuppressWarnings("deprecation")
 	 private SolrQueryBuilder landingContentQuery(RequestContext context, SolrQueryBuilder sqb, String fieldQuery, String category) {
-		 
+		 logger.info(sqb.build());
 		 CommonUtils commonUtils = new CommonUtils();
 		 if (StringUtils.isNotBlank(category)) {
 				if (StringUtils.isNotBlank(fieldQuery)) {
@@ -169,6 +170,7 @@ public class HukoomiExternal {
 					sqb.addDismaxBq(personaCookieValue);
 				}
 			}
+			logger.info("after landing content : "+sqb.build());
 		 return sqb;
 	 }
 
