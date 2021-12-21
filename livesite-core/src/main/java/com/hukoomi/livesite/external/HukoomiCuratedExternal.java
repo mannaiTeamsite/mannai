@@ -151,8 +151,8 @@ public class HukoomiCuratedExternal {
                 curDoc = squ.doJsonQuery(
                         query, "CuratedContent", true);
                 root = curDoc.getRootElement();
-                logger.debug("curDoc : " + curDoc);
-                logger.debug("Content Type : "
+                logger.info("curDoc : " + curDoc);
+                logger.info("Content Type : "
             + eleNode.selectSingleNode(xnode).getText());
                 addElementDetails(root, eleNode);
                 docRoot.add(root);
@@ -172,10 +172,13 @@ public class HukoomiCuratedExternal {
         String image = "image";
         String title = "title";
         String detail = "detailSearch";
+        if(eleNode.selectSingleNode(xnode)
+                                .getText() != null) {
         root.addElement("content-type")
                 .addText(
                         eleNode.selectSingleNode(xnode)
                                 .getText());
+        }
         if (eleNode.selectSingleNode(title) != null) {
             root.addElement(title)
     .addText(eleNode.selectSingleNode(title).getText());

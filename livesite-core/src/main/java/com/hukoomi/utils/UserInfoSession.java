@@ -40,9 +40,12 @@ public class UserInfoSession {
 			String valid = getStatus(context);
 			LOGGER.info(valid);
 			if (valid != null && valid.equals(strValid)) {
+				LOGGER.info("Inside printing user data");
 				Element root = doc.getRootElement();
 				if (root != null && root.isRootElement()) {
+
 					Element userData = root.addElement("userData");
+					
 
 					Element statusElement = userData.addElement(strStatus);
 					statusElement.setText(request.getSession().getAttribute(strStatus).toString());
@@ -68,18 +71,17 @@ public class UserInfoSession {
 					lstMdfyElement.setText(request.getSession().getAttribute(strLstMdfy).toString());
 					Element roleElement = userData.addElement(strRole);
 					roleElement.setText(request.getSession().getAttribute(strRole).toString());
-
 				}
 			}
 		} catch (Exception e) {
 			LOGGER.error("Exception", e);
 		}
+		LOGGER.info(doc.asXML());
 		return doc;
 	}
 
-
 	public String getStatus(RequestContext context) {
-		DashboardExternal dashboard = new DashboardExternal();	
+		Boolean logged = false;
 		HttpServletRequest request = context.getRequest();
 		String accessToken = null;
 		Cookie cookie = null;
@@ -96,85 +98,86 @@ public class UserInfoSession {
 		}
 
 		if (accessToken != null) {
-			
+
 			status = (String) request.getSession().getAttribute(strStatus);
 			LOGGER.info("Status:" + status);
-			 if(status == null || !(status.equalsIgnoreCase("Token Expired") || status.equalsIgnoreCase("Signature Exception") || status.equalsIgnoreCase("Exception in JWT parsing"))) {
-				LOGGER.info("--------dashboardServices is called--------");					
-				dashboard.dashboardServices(context, accessToken);	
-				status = (String) request.getSession().getAttribute(strStatus);
-
-				LOGGER.info("Status:"+status);	
-									
-					setPersona(context, (String) request.getSession().getAttribute("userId"),status);
-				
+			if (status == null || status.equalsIgnoreCase("") && !status.equalsIgnoreCase(strValid)) {
+				LOGGER.info("--------dashboardServices is called--------");
+				DashboardExternal dashboard = new DashboardExternal();
+				logged = dashboard.dashboardServices(context, accessToken);
+				if (Boolean.TRUE.equals(logged)) {
+					status = (String) request.getSession().getAttribute(strStatus);
+					setPersona(context, (String) request.getSession().getAttribute("userId"), status);
+				}
 			}
 
+			status = checkStatusVal(request, context, status);
 		}
-		if(status != null && (status.equalsIgnoreCase("Token Expired") || status.equalsIgnoreCase("Signature Exception") || status.equalsIgnoreCase("Exception in JWT parsing"))) {
-			
-			dashboard.removeSessionAttr(context); 
-			status = "";
-		}
-		status = checkStatusVal(request, context, status);
 		return status;
 
 	}
-private String checkStatusVal(HttpServletRequest request, RequestContext context, String status) {
-	DashboardExternal dashboard = new DashboardExternal();	
-	if(status!= null && status.equals(strValid)) {
-	Date expiryDate = null;
-	SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
-	
-	Date cureentDate = new Date(System.currentTimeMillis());
-	String expDt = (String) request.getSession().getAttribute("exp");
-	if(expDt != null) {
-	try {
-		expiryDate = formatter.parse(expDt);
-	} catch (ParseException e) {
-		e.printStackTrace();
-	}
 
-	if (cureentDate.compareTo(expiryDate) < 0) {
-		status =strValid;
+	private String checkStatusVal(HttpServletRequest request, RequestContext context, String status) {
+		DashboardExternal dashboard = new DashboardExternal();
+		if (status != null && status.equals(strValid)) {
+			Date expiryDate = null;
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
 
-	}else {
-		dashboard.removeSessionAttr(context); 
-		status = "";
-	}
-	}
-	}else {
-		status = "";
-	}
-	return status;
-}
-	private void setPersona(RequestContext context, String userId, String status) {
-		if(status != null && status.equalsIgnoreCase(strValid))	{	
-		LOGGER.info("Set persona called");
-		HttpServletResponse response = context.getResponse();
-		HttpServletRequest request = context.getRequest();
-		Postgre postgre = new Postgre(context);
+			Date cureentDate = new Date(System.currentTimeMillis());
+			String expDt = (String) request.getSession().getAttribute("exp");
+			
+			LOGGER.info("cureentDate"+cureentDate);
+			if (expDt != null) {
+				try {
+					expiryDate = formatter.parse(expDt);
+					LOGGER.info("expDt"+expDt);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 
-		DashboardSettingsExternal dse = new DashboardSettingsExternal();
-		LOGGER.info("userId value:" + userId);
-		String persona = dse.getPersonaForUser(userId, postgre);
-		LOGGER.info("Persona value:" + persona);
-		if (persona != null) {
+				if (cureentDate.compareTo(expiryDate) < 0) {
+					status = strValid;
 
-			Cookie cookie = getCookie(request, "persona");
-
-			if (cookie != null) {
-				cookie.setMaxAge(0);
-				response.addCookie(cookie);
+				} else {
+					dashboard.removeSessionAttr(context);
+					status = "";
+				}
+			}else {
+				status = "";
 			}
+		} else {
+			status = "";
 		}
-		Cookie personaCookie = new Cookie("persona", persona);
-		personaCookie.setMaxAge(5 * 24 * 60 * 60 * 1000);
-		personaCookie.setValue(persona);
-		personaCookie.setPath("/");
-		response.addCookie(personaCookie);
+		return status;
+	}
 
-		LOGGER.info("Set persona ended");
+	private void setPersona(RequestContext context, String userId, String status) {
+		if (status != null && status.equalsIgnoreCase(strValid)) {
+			LOGGER.info("Set persona called");
+			HttpServletResponse response = context.getResponse();
+			HttpServletRequest request = context.getRequest();
+			Postgre postgre = new Postgre(context);
+
+			DashboardSettingsExternal dse = new DashboardSettingsExternal();
+			LOGGER.info("userId value:" + userId);
+			String persona = dse.getPersonaForUser(userId, postgre);
+			LOGGER.info("Persona value:" + persona);
+			if (persona != null) {
+
+				Cookie cookie = getCookie(request, "persona");
+
+				if (cookie != null) {
+					cookie.setMaxAge(0);
+					response.addCookie(cookie);
+				}
+			}
+			Cookie personaCookie = new Cookie("persona", persona);
+			personaCookie.setMaxAge(5 * 24 * 60 * 60 * 1000);
+			personaCookie.setValue(persona);
+			personaCookie.setPath("/");
+			response.addCookie(personaCookie);
+
+			LOGGER.info("Set persona ended");
 		}
 	}
 

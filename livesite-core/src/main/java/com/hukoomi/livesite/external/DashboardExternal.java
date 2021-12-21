@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,7 +38,7 @@ public class DashboardExternal {
 	private String pagetitle = "";
 	private String pageurl = "";
 	private String contenttype = "";
-	
+
 	private String strValid = "valid";
 	private String strStatus = "status";
 	private String strUnm = "unm";
@@ -66,36 +67,57 @@ public class DashboardExternal {
 		boolean logged = false;
 		String jwtParsedToken = null;
 		HttpServletRequest request = context.getRequest();
-		JWTTokenUtil jwt = new JWTTokenUtil(context);
 		
-			try {
-				jwtParsedToken = jwt.parseJwt(accessToken);
+		JWTTokenUtil jwt = new JWTTokenUtil(context);
 
-				setSessionAttributes(jwtParsedToken, request, strValid);
-				return true;
-				
-			} catch (ExpiredJwtException e) {
-				LOGGER.error("Token Expired");
-				setSessionAttributes(jwtParsedToken, request, "Token Expired");
-			} catch (SignatureException e) {
-				LOGGER.error("Signature Exception");
-				setSessionAttributes(jwtParsedToken, request, "Signature Exception");
-			} catch (Exception e) {
-				LOGGER.error("Some other exception in JWT parsing" , e);
-				setSessionAttributes(jwtParsedToken, request, "Exception in JWT parsing");
-			}
-return logged;
+		try {
+			jwtParsedToken = jwt.parseJwt(accessToken);
+			setSessionAttributes(jwtParsedToken, request, strValid);
+			return true;
+
+		} catch (ExpiredJwtException e) {
+			LOGGER.error("Token Expired");
+			removeAccessToken(context);
+		} catch (SignatureException e) {
+			LOGGER.error("Signature Exception");
+			removeAccessToken(context);
+		} catch (Exception e) {
+			LOGGER.error("Some other exception in JWT parsing", e);
+			removeAccessToken(context);
 		}
-	
+		return logged;
+	}
 
+	public void removeAccessToken(RequestContext context) {
+		LOGGER.info("-------Remove token started------");
+		HttpServletRequest request = context.getRequest();
+		Cookie cookie = null;
+		Cookie[] cookies = null;
+		cookies = request.getCookies();
+		if (cookies != null) {
+			for (int i = 0; i < cookies.length; i++) {
+				cookie = cookies[i];
+				if (cookie.getName().equals("accessToken")) {
+					cookie.setValue("");
+		            cookie.setMaxAge(0);
+		            HttpServletResponse response = context.getResponse();
+		            response.addCookie(cookie);						
+				}
+			}
+		}
+		LOGGER.info("-------Remove token Ended------");
+	}
+	
+	
 	/** Setting the user info in session. */
 	private void setSessionAttributes(String jwtParsedToken, HttpServletRequest request, String status) {
 		LOGGER.info("--------------setSessionAttributes is called------------");
-	
+
 		HttpSession session = request.getSession(true);
 
-		session.setAttribute(strStatus, status);
+		
 		if (status.equals(strValid)) {
+			session.setAttribute(strStatus, status);
 			session.setAttribute(strUnm, getValue(jwtParsedToken, strUnm));
 			session.setAttribute(strUid, getValue(jwtParsedToken, strUid));
 			session.setAttribute(strFnEn, getValue(jwtParsedToken, strFnEn));
@@ -127,7 +149,6 @@ return logged;
 		LOGGER.info("--------------setSessionAttributes is Ended------------");
 	}
 
-
 	private static String getValue(String response, String key) {
 		String status = "";
 		if (!response.equals("")) {
@@ -139,39 +160,40 @@ return logged;
 	}
 
 	/** Removing the session values on logout. */
-	public void removeSessionAttr(RequestContext context)  {
+	public void removeSessionAttr(RequestContext context) {
 		LOGGER.info("--------------removeSessionAttr is Ended------------");
 		HttpServletRequest request = context.getRequest();
-		HttpSession session = request.getSession(false);	
-		try {				
-			removeSession(session, strStatus);	
+		HttpSession session = request.getSession(false);
+		try {
+			removeSession(session, strStatus);
 			removeSession(session, strUnm);
 			removeSession(session, strUid);
-			removeSession(session, strFnEn);		
-			removeSession(session, strFnAr);		
-			removeSession(session, strLnEn);		
-			removeSession(session, strLnAr);		
-			removeSession(session, strQID);		
-			removeSession(session, strEID);		
-			removeSession(session, strMobile);		
-			removeSession(session, strEmail);		
-			removeSession(session, strLstMdfy);		
-			removeSession(session, strRole);		
-			removeSession(session, strExp);		
-			removeSession(session, strUserId);	
-			removeSession(session, strUsertypeNo);		
-			removeSession(session, strUserType);				
-		}catch(NullPointerException e) {
-			LOGGER.error("Some other exception in JWT parsing" , e);
+			removeSession(session, strFnEn);
+			removeSession(session, strFnAr);
+			removeSession(session, strLnEn);
+			removeSession(session, strLnAr);
+			removeSession(session, strQID);
+			removeSession(session, strEID);
+			removeSession(session, strMobile);
+			removeSession(session, strEmail);
+			removeSession(session, strLstMdfy);
+			removeSession(session, strRole);
+			removeSession(session, strExp);
+			removeSession(session, strUserId);
+			removeSession(session, strUsertypeNo);
+			removeSession(session, strUserType);
+		} catch (NullPointerException e) {
+			LOGGER.error("Some other exception in JWT parsing", e);
 		}
-		LOGGER.info("--------------removeSessionAttr is Ended------------" );
+		removeAccessToken(context);
+		LOGGER.info("--------------removeSessionAttr is Ended------------");
 	}
-	
-	public void removeSession(HttpSession session, String rmAttr) {		
-			if(session != null)
-				session.removeAttribute(rmAttr);	
+
+	public void removeSession(HttpSession session, String rmAttr) {
+		if (session != null)
+			session.removeAttribute(rmAttr);
 	}
-	
+
 	public Document doLogout(RequestContext context) throws IOException {
 		/**
 		 * This method will be called from Component External for logout.
@@ -188,22 +210,20 @@ return logged;
 		PropertiesFileReader prop = null;
 		prop = new PropertiesFileReader(context, "dashboard.properties");
 		properties = prop.getPropertiesFile();
-		
 
 		RequestHeaderUtils rhu = new RequestHeaderUtils(context);
 		final String RELAY_URL = "relayURL";
 		String relayURL = rhu.getCookie(RELAY_URL);
-		
-		 relayURL = cu.getUrlPath(relayURL);
 
-		 String urlPrefix = cu.getURLPrefix(context);
-		 relayURL = urlPrefix + relayURL;
-		
-		
+		relayURL = cu.getUrlPath(relayURL);
+
+		String urlPrefix = cu.getURLPrefix(context);
+		relayURL = urlPrefix + relayURL;
+
 		String logoutrl = properties.getProperty("logout", "https://hukoomi.gov.qa/nas/auth/slo");
-		
-		logoutrl = logoutrl+ "?relayURL=" + relayURL;
-		LOGGER.info("logout url:"+logoutrl);
+
+		logoutrl = logoutrl + "?relayURL=" + relayURL;
+		LOGGER.info("logout url:" + logoutrl);
 		HttpServletResponse response = context.getResponse();
 		response.sendRedirect(logoutrl);
 		LOGGER.info("--------------doLogout Ended------------");
@@ -212,14 +232,14 @@ return logged;
 
 	public Document getDashboardContent(RequestContext context) {
 		/**
-		 * This method will be called from Component External for Fetching user data after login
+		 * This method will be called from Component External for Fetching user data
+		 * after login
 		 * 
 		 * @param context The parameter context object passed from Component.
 		 *
 		 * @return doc return the solr response document generated from solr query.
 		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
-		
 
 		Document doc = DocumentHelper.createDocument();
 		Element rootElement = doc.addElement("result");
@@ -234,14 +254,14 @@ return logged;
 
 		Element pollsSurvey = rootElement.addElement("polls-survey");
 		pollsSurvey.add(pollsrootElement);
-		
+
 		Element bookmarkEle = rootElement.addElement("bookmarks");
 		bookmarkEle.add(bookmarkRoot);
-		
+
 		Element userdata = rootElement.addElement("user-data");
-UserInfoSession ui = new UserInfoSession();
+		UserInfoSession ui = new UserInfoSession();
 		String valid = ui.getStatus(context);
-		if(valid.equalsIgnoreCase(valid)) {
+		if (valid.equalsIgnoreCase(valid)) {
 			HttpSession session = context.getRequest().getSession();
 			Element userTypeElement = userdata.addElement(strUserType);
 			userTypeElement.setText((String) session.getAttribute(strUserType));
@@ -260,7 +280,6 @@ UserInfoSession ui = new UserInfoSession();
 			emailElement.setText((String) session.getAttribute(strEmail));
 		}
 
-		
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 
@@ -268,23 +287,23 @@ UserInfoSession ui = new UserInfoSession();
 
 	public Document getMyDataContent(RequestContext context) {
 		/**
-		 * This method will be called from Component External for Fetching user data after login
+		 * This method will be called from Component External for Fetching user data
+		 * after login
 		 * 
 		 * @param context The parameter context object passed from Component.
 		 *
 		 * @return doc return the solr response document generated from solr query.
 		 */
 		LOGGER.info("--------------getDashboardConetent Started------------");
-		
 
 		Document doc = DocumentHelper.createDocument();
 		Element resultTelement = doc.addElement("result");
 		Element userData = resultTelement.addElement("userData");
-		
-UserInfoSession ui = new UserInfoSession();
+
+		UserInfoSession ui = new UserInfoSession();
 
 		String valid = ui.getStatus(context);
-		if(valid.equalsIgnoreCase(strValid)) {
+		if (valid.equalsIgnoreCase(strValid)) {
 			HttpSession session = context.getRequest().getSession();
 			Element userTypeElement = userData.addElement(strUserType);
 			userTypeElement.setText((String) session.getAttribute(strUserType));
@@ -310,11 +329,12 @@ UserInfoSession ui = new UserInfoSession();
 
 			LOGGER.info("session invalid");
 		}
-		
+
 		LOGGER.info("--------------getDashboardConetent Ended------------");
 		return doc;
 
 	}
+
 	@SuppressWarnings("deprecation")
 	public Document getDashboardbookmark(RequestContext context) {
 		/**
@@ -338,14 +358,13 @@ UserInfoSession ui = new UserInfoSession();
 		Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
 
 		postgre = new Postgre(context);
-		
-		
+
 		UserInfoSession ui = new UserInfoSession();
-		
+
 		HttpSession session = context.getRequest().getSession();
 		String valid = ui.getStatus(context);
 		LOGGER.info("Dashboard status=" + session.getAttribute(strStatus));
-		if ( valid.equals(strValid)) {
+		if (valid.equals(strValid)) {
 			userID = (String) session.getAttribute(strUserId);
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
@@ -465,7 +484,6 @@ UserInfoSession ui = new UserInfoSession();
 				+ "' and content_type='" + contenttype + "'";
 		LOGGER.info("updateQuery:" + updateQuery);
 
-		
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(updateQuery);
@@ -534,16 +552,15 @@ UserInfoSession ui = new UserInfoSession();
 		final String RELAY_URL = "relayURL";
 		String relayURL = rhu.getCookie(RELAY_URL);
 
-		 CommonUtils cu = new CommonUtils();
-		 relayURL = cu.getUrlPath(relayURL);	
-		 String urlPrefix = cu.getURLPrefix(context);
-		 relayURL = urlPrefix + relayURL;
-		 LOGGER.info("---relayURL url---" + relayURL);
-		 String url = properties.getProperty("login") + "?relayURL=" + relayURL;
-		 
-			HttpServletResponse response = context.getResponse();
-			response.sendRedirect(url);
-		
+		CommonUtils cu = new CommonUtils();
+		relayURL = cu.getUrlPath(relayURL);
+		String urlPrefix = cu.getURLPrefix(context);
+		relayURL = urlPrefix + relayURL;
+		LOGGER.info("---relayURL url---" + relayURL);
+		String url = properties.getProperty("login") + "?relayURL=" + relayURL;
+
+		HttpServletResponse response = context.getResponse();
+		response.sendRedirect(url);
 
 		LOGGER.info("--------------nonLoggedIn Ended------------");
 

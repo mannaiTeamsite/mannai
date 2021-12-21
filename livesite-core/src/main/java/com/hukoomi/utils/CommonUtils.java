@@ -568,6 +568,7 @@ public class CommonUtils {
     	  logger.info("With string "+str);
     	  logger.info("And type "+type);
     	  logger.info("And length "+length);
+    	  logger.info("Error List "+errorList.toString());
     	  return 1;
       }
       
@@ -581,7 +582,7 @@ public class CommonUtils {
           errorCount += esapiValidator("language", language, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
           errorCount += esapiValidator("statusCode", statusCode, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
           if(errorCount > 0) {            
-              logger.error("Not a valid parameter. The incident will not be logged");
+              
               return 0;
           }else {        
               logger.info("Logging the Broken link with status: " + statusCode + ", for URL: " + brokenLink + ", present on: " + contentPage + " for language: " + language);
