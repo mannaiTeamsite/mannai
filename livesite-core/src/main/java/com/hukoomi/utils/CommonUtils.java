@@ -278,7 +278,7 @@ public class CommonUtils {
             BufferedImage image = null;
             try {
                 image = ImageIO.read(new File(imageSourcePath));
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 logger.error("Error while Retrieving Image File.",ex);
             }
             if(image != null) {
@@ -382,6 +382,7 @@ public class CommonUtils {
      */
     public String sanitizeMetadataField(String metadata) {
         if(!metadata.isBlank()){
+        	metadata = metadata.replaceAll("&amp;nbsp;","");
             metadata = StringUtil.toHTMLEntity(metadata);
         }
         return metadata;
