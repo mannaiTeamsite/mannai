@@ -382,7 +382,7 @@ public class CommonUtils {
      */
     public String sanitizeMetadataField(String metadata) {
         if(!metadata.isBlank()){
-        	metadata = metadata.replaceAll("&amp;nbsp;","");
+        	 metadata = metadata.replaceAll("&nbsp;","");
             metadata = StringUtil.toHTMLEntity(metadata);
         }
         return metadata;

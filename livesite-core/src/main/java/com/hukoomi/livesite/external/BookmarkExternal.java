@@ -36,7 +36,6 @@ public class BookmarkExternal {
 	private String pagedescriptionLiteral = "page_description";
 	private String pageurlLiteral = "page_url";
 	private String userIDLiteral = "userId";
-	private String contenttypeLiteral = "content_type";
 
 	private static final Logger logger = Logger.getLogger(BookmarkExternal.class);
 	Postgre postgre = null;
@@ -67,6 +66,27 @@ public class BookmarkExternal {
 			category = context.getParameterString(categoryLiteral);
 			String queryType = context.getParameterString("queryType").trim();
 			table = context.getParameterString("bookmark").trim();
+			int errorVal = 0;
+			CommonUtils cu = new CommonUtils();
+
+			errorVal += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+			errorVal += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, true,
+					true);
+			errorVal += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
+			errorVal += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
+			errorVal += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
+			errorVal += cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+			errorVal += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+			errorVal += cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false, true);
+			errorVal += cu.esapiValidator("queryType", queryType, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false, true);
+			errorVal += cu.esapiValidator("table", table, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false, true);
+
+			
+			logger.info("Error Count :" + errorVal);
+			if (errorVal > 0) {
+				return bookmarkSearchDoc;
+			}
+			
 			boolean isExist = false;
 			logger.info("locale:" + locale);
 
@@ -113,23 +133,6 @@ public class BookmarkExternal {
 	private int insertBookmark() {
 
 		logger.info("insertBookmark()====> Starts");
-
-		int errorVal = 0;
-		CommonUtils cu = new CommonUtils();
-
-		errorVal += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorVal += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, true,
-				true);
-		errorVal += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
-		errorVal += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
-		errorVal += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
-		errorVal += cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorVal += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorVal += cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false, true);
-		logger.info("Error Count :" + errorVal);
-		if (errorVal > 0) {
-			return 0;
-		}
 
 		int result = 0;
 		Connection connection = null;
@@ -258,23 +261,6 @@ public class BookmarkExternal {
 
 	private int updateBookmark() {
 		logger.info("updateBookmark()====> Starts");
-		CommonUtils cu = new CommonUtils();
-		int errorCount = 0;
-		errorCount += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorCount += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255,
-				true, true);
-		errorCount += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
-		errorCount += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
-		errorCount += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
-		errorCount += cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorCount += cu.esapiValidator(contenttypeLiteral, contenttype, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false,
-				true);
-		errorCount += cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		logger.info("Error count while update : " + errorCount);
-		if (errorCount > 0) {
-			logger.error("Not a valid parameter. The incident will not be logged.");
-			return 0;
-		}
 		int result = 0;
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;

@@ -216,34 +216,19 @@ public class NewsletterPhpExternal {
 		/// Added code for unsubscription start
 		final String SETTINGS_ACTION = "settingsAction";
 		String settingsAction = context.getParameterString(SETTINGS_ACTION);
-		double subscriberId = 0;
-		double preferenceId = 0;
-		String unsubreason = context.getParameterString("unsubscribe_reason");
+		
 		
 
 		if (ACTION_UNSUBSCRIBE_NONLOGGED.equalsIgnoreCase(settingsAction)) {
 			logger.info("Unsubscribe Non Logged" + pageLang);
 
-			subscriberId = getSubscriberID(email, USING_EMAIL);
+			
 			boolean bool = isEmailAlreadyExist(email);
 			if (bool) {
 
 				String subStatus = getSubscriptionStatus(email, ACTION_UNSUBSCRIBE);
 				if(subStatus != null && subStatus.length() != 0) {
-				if (subStatus.equals(STATUS_SUBSCRIBED) ) {
-
-					String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-					sendConfirmationMail(email, pageLang, confirmationToken, UNSUBSCRIPTION_CONFIRMATION_EMAIL,
-							unsubreason, context);
-					createTopicsResponseDoc(responseElem, null, null, "", STATUS_SUCCESS, "");
-
-				} else if (subStatus.equals(STATUS_PENDING)) {
-
-					createTopicsResponseDoc(responseElem, null, null, "", STATUS_PENDING, "");
-				} else if (subStatus.equals(STATUS_UNSUBSCRIBED)) {
-					createTopicsResponseDoc(responseElem, null, null, "", STATUS_UNSUBSCRIBED, "");
-
-				} 
+					createDOcForStatus(context, email, responseElem, subStatus, pageLang );
 
 			} }else {
 
@@ -251,11 +236,32 @@ public class NewsletterPhpExternal {
 			}
 			return doc;
 		}
-
-		/// Added code for unsubscription end
 		doc = unsubscriptionFromNewsLetter(context, persona, pageLang);
 		logger.info("Newsletter final document : " + doc.asXML());
 		return doc;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private Element createDOcForStatus(final RequestContext context, String email, Element responseElem, String subStatus, String pageLang ) {
+		double subscriberId = 0;
+		double preferenceId = 0;
+		String unsubreason = context.getParameterString("unsubscribe_reason");
+		subscriberId = getSubscriberID(email, USING_EMAIL);
+		if (subStatus.equals(STATUS_SUBSCRIBED) ) {
+
+			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
+			sendConfirmationMail(email, pageLang, confirmationToken, UNSUBSCRIPTION_CONFIRMATION_EMAIL,
+					unsubreason, context);
+			createTopicsResponseDoc(responseElem, null, null, "", STATUS_SUCCESS, "");
+
+		} else if (subStatus.equals(STATUS_PENDING)) {
+
+			createTopicsResponseDoc(responseElem, null, null, "", STATUS_PENDING, "");
+		} else if (subStatus.equals(STATUS_UNSUBSCRIBED)) {
+			createTopicsResponseDoc(responseElem, null, null, "", STATUS_UNSUBSCRIBED, "");
+
+		} 
+		return responseElem;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -264,11 +270,8 @@ public class NewsletterPhpExternal {
 		XssUtils xssUtils = new XssUtils();
 		String gRecaptchaResponse = context.getParameterString("captcha");
 		boolean verify = false;
-		double subscriberId = 0;
-		double preferenceId = 0;
-		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));
+		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));		
 		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(LANG_SUBSTRING));
-
 		if (validateLanguage(subscriptionLang) && validateMailID(xssUtils.stripXSS(email))) {
 			if (gRecaptchaResponse != null && !gRecaptchaResponse.equals("")) {
 				GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
@@ -278,30 +281,9 @@ public class NewsletterPhpExternal {
 				verify = true;
 			}
 
-			if (verify) {
-				if (uid != null && !uid.equals("") && getSubscriptionStatusByUid(uid)) {
-					doc = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
-				} else if (!isEmailAlreadyExist(email)) {
-					subscriberId = generateSubscriberId();
-					boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email,
-							STATUS_PENDING);
-					boolean subscriberPreferenceDataInsert = addSubscriberPreferences(subscriberId, subscriptionLang,
-							persona);
-					preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
-					String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-					if (subscriberMasterDataInsert && subscriberPreferenceDataInsert) {
-						sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
-						doc = getDocument(email, CONFIRMATION_SENT);
-					}
-
-				} else if (isEmailAlreadyExist(email)) {
-					// Check Confirmation Status
-					String confirmationStatus = checkConfirmationStatus(email);
-					logger.info("Confirmation Status received from Db : " + confirmationStatus);
-
-					doc = confirmationStatus(confirmationStatus, context, persona, pageLang);
-
-				}
+			if (verify) {			
+				verifiedDoc(doc, email, subscriptionLang, persona, context, pageLang);
+					
 			} else {
 				doc = getDocument(email, STATUS_ERROR_RECAPTHCHA);
 			}
@@ -312,6 +294,34 @@ public class NewsletterPhpExternal {
 
 	}
 
+	private Document verifiedDoc(Document doc, String email, String subscriptionLang, String persona, final RequestContext context, String pageLang) {
+		double preferenceId = 0;
+		double subscriberId = 0;
+		if (uid != null && !uid.equals("") && getSubscriptionStatusByUid(uid)) {
+			doc = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
+		} else if (!isEmailAlreadyExist(email)) {
+			subscriberId = generateSubscriberId();
+			boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email,
+					STATUS_PENDING);
+			boolean subscriberPreferenceDataInsert = addSubscriberPreferences(subscriberId, subscriptionLang,
+					persona);
+			preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
+			if (subscriberMasterDataInsert && subscriberPreferenceDataInsert) {
+				sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
+				doc = getDocument(email, CONFIRMATION_SENT);
+			}
+
+		} else if (isEmailAlreadyExist(email)) {
+			// Check Confirmation Status
+			String confirmationStatus = checkConfirmationStatus(email);
+			logger.info("Confirmation Status received from Db : " + confirmationStatus);
+
+			doc = confirmationStatus(confirmationStatus, context, persona, pageLang);
+
+		}
+		return doc;
+	}
 	@SuppressWarnings("deprecation")
 	private Document confirmationStatus(String confirmationStatus, RequestContext context, String persona,
 			String pageLang) {

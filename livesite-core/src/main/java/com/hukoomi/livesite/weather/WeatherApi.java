@@ -117,7 +117,7 @@ public class WeatherApi {
         String defaultCity = context.getParameterString("defaultCity", "DOHA AIRPORT");
         String todayEn = context.getParameterString("todayEn", "Today");
         String todayAr = context.getParameterString("todayAr", "Today");
-        return callWeatherApi(weatherUrl, "WeatherResponse", currentCity, temperatureScale, currentTempURL, defaultCity, todayEn, todayAr);
+        return callWeatherApi(weatherUrl, currentCity, temperatureScale, currentTempURL, defaultCity, todayEn, todayAr);
     }
 
     /**
@@ -132,23 +132,14 @@ public class WeatherApi {
      * @param defaultCity      Default City.
      * @return Document
      */
-    public Document callWeatherApi(String weatherUrl, String xmlRootName, String currentCity,
+    public Document callWeatherApi(String weatherUrl,  String currentCity,
                                    String temperatureScale, String currentTempURL, String defaultCity, String todayEn, String todayAr) {
+    	String xmlRootName = "WeatherResponse";
         LOGGER.error("callWeatherApi Started");
         final String FORCAST_EN = "ForecastEn";
         final String WEATHER_RESPONSE = "WeatherResponse";
-        final String SUNSET = "sunset";
-        final String SUNRISE = "sunrise";
-        final String VALUES = "Vals";
+       
         final String CITIES = "Cities";
-        final String CITY = "City";
-        final String ELEMENT = "Elem";
-        final String WEATHER = "weather";
-        final String WEATHER_CODE = "weatherCode";
-        final String WEATHER_AR = "weatherAr";
-        final String dayEn = "dayEn";
-        final String dayAr = "dayAr";
-
         String tempMin = null;
         String tempMax = null;
         Document doc = null;
@@ -177,75 +168,13 @@ public class WeatherApi {
         JSONObject weatherObject = new JSONObject(forecastObject.get(FORCAST_EN).toString());
 
         JSONArray jsonArrayWeather = weatherObject.getJSONArray(CITIES);
-        JSONObject dataObject = new JSONObject();
         JSONObject returnObject = new JSONObject();
-
-        JSONObject day1 = new JSONObject();
-        JSONObject day2 = new JSONObject();
-        JSONObject day3 = new JSONObject();
-        JSONObject day4 = new JSONObject();
-        day1.put(dayEn, todayEn);
-        day1.put(dayAr, todayAr);
-        String[] enDays = getDays("en");
-        String[] arDays = getDays("ar");
-        day2.put(dayEn, enDays[0]);
-        day2.put(dayAr, arDays[0]);
-        day3.put(dayEn, enDays[1]);
-        day3.put(dayAr, arDays[1]);
-        day4.put(dayEn, enDays[2]);
-        day4.put(dayAr, arDays[2]);
-        for (int i = 0; i < jsonArrayWeather.length(); i++) {
-
-            JSONObject jsonobject = jsonArrayWeather.getJSONObject(i);
-            String city = jsonobject.getString(CITY);
-            String elem = jsonobject.getString(ELEMENT);
-            LOGGER.info("city : " + city);
-            if (city.equalsIgnoreCase(currentCity)) {
-                JSONArray weatherData = jsonobject.getJSONArray(VALUES);
-                if (elem.equalsIgnoreCase(SUNRISE)) {
-                    dataObject.append(SUNRISE, weatherData.get(0));
-                }
-                if (elem.equalsIgnoreCase(SUNSET)) {
-                    dataObject.append(SUNSET, weatherData.get(0));
-                }
-                if (elem.equalsIgnoreCase(tempMax)) {
-
-                    day1.put("tmax", weatherData.get(0));
-                    day2.put("tmax", weatherData.get(1));
-                    day3.put("tmax", weatherData.get(2));
-                    day4.put("tmax", weatherData.get(3));
-                }
-                if (elem.equalsIgnoreCase(tempMin)) {
-                    day1.put("tmin", weatherData.get(0));
-                    day2.put("tmin", weatherData.get(1));
-                    day3.put("tmin", weatherData.get(2));
-                    day4.put("tmin", weatherData.get(3));
-                }
-
-                if (elem.equalsIgnoreCase(WEATHER)) {
-                    day1.put(elem, weatherData.get(0));
-                    day2.put(elem, weatherData.get(1));
-                    day3.put(elem, weatherData.get(2));
-                    day4.put(elem, weatherData.get(3));
-                }
-                if (elem.equalsIgnoreCase(WEATHER_AR)) {
-                    day1.put(elem, weatherData.get(0));
-                    day2.put(elem, weatherData.get(1));
-                    day3.put(elem, weatherData.get(2));
-                    day4.put(elem, weatherData.get(3));
-                }
-                if (elem.equalsIgnoreCase(WEATHER_CODE)) {
-                    day1.put(elem, weatherData.get(0));
-                    day2.put(elem, weatherData.get(1));
-                    day3.put(elem, weatherData.get(2));
-                    day4.put(elem, weatherData.get(3));
-                }
-            }
-        }
-        dataObject.append("Day1", day1);
-        dataObject.append("Day2", day2);
-        dataObject.append("Day3", day3);
-        dataObject.append("Day4", day4);
+        
+        
+        JSONObject dataObject = returnTempData(jsonArrayWeather, todayEn, todayAr, tempMin, tempMax, currentCity);
+        
+        
+        
 
         returnObject.put(xmlRootName, dataObject);
         String returnXML = XML.toString(returnObject);
@@ -275,7 +204,91 @@ public class WeatherApi {
         LOGGER.debug("After adding " + doc.asXML());
         return doc;
     }
+private JSONObject returnTempData(JSONArray jsonArrayWeather, String todayEn, String todayAr, String tempMin, String tempMax, String currentCity) {
+	
+	 final String SUNSET = "sunset";
+     final String SUNRISE = "sunrise";
+     final String VALUES = "Vals";
 
+     final String CITY = "City";
+     final String ELEMENT = "Elem";
+     final String WEATHER = "weather";
+     final String WEATHER_CODE = "weatherCode";
+     final String WEATHER_AR = "weatherAr";
+     final String dayEn = "dayEn";
+     final String dayAr = "dayAr";
+     
+	JSONObject dataObject = new JSONObject();
+    
+
+    JSONObject day1 = new JSONObject();
+    JSONObject day2 = new JSONObject();
+    JSONObject day3 = new JSONObject();
+    JSONObject day4 = new JSONObject();
+    day1.put(dayEn, todayEn);
+    day1.put(dayAr, todayAr);
+    String[] enDays = getDays("en");
+    String[] arDays = getDays("ar");
+    day2.put(dayEn, enDays[0]);
+    day2.put(dayAr, arDays[0]);
+    day3.put(dayEn, enDays[1]);
+    day3.put(dayAr, arDays[1]);
+    day4.put(dayEn, enDays[2]);
+    day4.put(dayAr, arDays[2]);
+    for (int i = 0; i < jsonArrayWeather.length(); i++) {
+
+        JSONObject jsonobject = jsonArrayWeather.getJSONObject(i);
+        String city = jsonobject.getString(CITY);
+        String elem = jsonobject.getString(ELEMENT);
+        LOGGER.info("city : " + city);
+        if (city.equalsIgnoreCase(currentCity)) {
+            JSONArray weatherData = jsonobject.getJSONArray(VALUES);
+            if (elem.equalsIgnoreCase(SUNRISE)) {
+                dataObject.append(SUNRISE, weatherData.get(0));
+            }
+            if (elem.equalsIgnoreCase(SUNSET)) {
+                dataObject.append(SUNSET, weatherData.get(0));
+            }
+            if (elem.equalsIgnoreCase(tempMax)) {
+
+                day1.put("tmax", weatherData.get(0));
+                day2.put("tmax", weatherData.get(1));
+                day3.put("tmax", weatherData.get(2));
+                day4.put("tmax", weatherData.get(3));
+            }
+            if (elem.equalsIgnoreCase(tempMin)) {
+                day1.put("tmin", weatherData.get(0));
+                day2.put("tmin", weatherData.get(1));
+                day3.put("tmin", weatherData.get(2));
+                day4.put("tmin", weatherData.get(3));
+            }
+
+            if (elem.equalsIgnoreCase(WEATHER)) {
+                day1.put(elem, weatherData.get(0));
+                day2.put(elem, weatherData.get(1));
+                day3.put(elem, weatherData.get(2));
+                day4.put(elem, weatherData.get(3));
+            }
+            if (elem.equalsIgnoreCase(WEATHER_AR)) {
+                day1.put(elem, weatherData.get(0));
+                day2.put(elem, weatherData.get(1));
+                day3.put(elem, weatherData.get(2));
+                day4.put(elem, weatherData.get(3));
+            }
+            if (elem.equalsIgnoreCase(WEATHER_CODE)) {
+                day1.put(elem, weatherData.get(0));
+                day2.put(elem, weatherData.get(1));
+                day3.put(elem, weatherData.get(2));
+                day4.put(elem, weatherData.get(3));
+            }
+        }
+    }
+    dataObject.append("Day1", day1);
+    dataObject.append("Day2", day2);
+    dataObject.append("Day3", day3);
+    dataObject.append("Day4", day4);
+    return dataObject;
+}
     /**
      * This method will be called from Component External for Weather Content
      * fetching.

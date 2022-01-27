@@ -896,7 +896,7 @@ public class NewsletterConfirmation extends HttpServlet {
 		String requestJSON = "";
 		InputStream is = null;
 		String adminID = "";
-		String adminPWD = "";
+		
 		int statusCode = 0;
 		String baseUrl;
 
@@ -904,7 +904,7 @@ public class NewsletterConfirmation extends HttpServlet {
 		baseUrl = properties.getProperty(BASE_URL);
 		logger.info("Phplist baseUrl from properties : " + baseUrl);
 		adminID = properties.getProperty(ADMIN_ID);
-		adminPWD = properties.getProperty(ADMIN_PWD);
+		String adminPWD = properties.getProperty(ADMIN_PWD);
 		String endpoint = baseUrl + "/api/v2/sessions";
 		HttpURLConnection httpConnection = null;
 		StringBuilder response = new StringBuilder();

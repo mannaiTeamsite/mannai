@@ -373,11 +373,9 @@ public class ErrorReport extends HttpServlet {
         Properties propFile = new Properties();
         if (Propfilepath != null && !Propfilepath.equals("")) {
             String root = Propfilepath;
-            InputStream inputStream;
-            try {
-                inputStream = new FileInputStream(root);
-              
-                    propFile.load(inputStream);
+           
+            try( InputStream inputStream = new FileInputStream(root);) {
+            		propFile.load(inputStream);
                     LOGGER.info("Properties File Loaded");
                 
             } catch (MalformedURLException e) {
@@ -387,6 +385,10 @@ public class ErrorReport extends HttpServlet {
             } catch (IOException e) {
                 LOGGER.error(
                         "IO Exception while loading Properties file : ",
+                        e);
+            }catch(Exception e) {
+            	LOGGER.error(
+                        "Exception while loading Properties file : ",
                         e);
             }
 
