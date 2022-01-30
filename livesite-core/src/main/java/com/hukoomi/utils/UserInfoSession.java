@@ -45,7 +45,6 @@ public class UserInfoSession {
 				if (root != null && root.isRootElement()) {
 
 					Element userData = root.addElement("userData");
-					
 
 					Element statusElement = userData.addElement(strStatus);
 					statusElement.setText(request.getSession().getAttribute(strStatus).toString());
@@ -125,12 +124,12 @@ public class UserInfoSession {
 
 			Date cureentDate = new Date(System.currentTimeMillis());
 			String expDt = (String) request.getSession().getAttribute("exp");
-			
-			LOGGER.info("cureentDate"+cureentDate);
+
+			LOGGER.info("cureentDate" + cureentDate);
 			if (expDt != null) {
 				try {
 					expiryDate = formatter.parse(expDt);
-					LOGGER.info("expDt"+expDt);
+					LOGGER.info("expDt" + expDt);
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
@@ -142,7 +141,7 @@ public class UserInfoSession {
 					dashboard.removeSessionAttr(context);
 					status = "";
 				}
-			}else {
+			} else {
 				status = "";
 			}
 		} else {

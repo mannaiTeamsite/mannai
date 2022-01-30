@@ -19,13 +19,10 @@ import com.hukoomi.utils.PostgreForServlet;
 
 public class NewsletterUnsubscription extends HttpServlet {
 
-
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -8104292216889008294L;
-	
-	
 
 	/** Logger object to check the flow of the code. */
 	private static final Logger logger = Logger.getLogger(NewsletterUnsubscription.class);

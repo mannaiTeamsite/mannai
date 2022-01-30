@@ -39,8 +39,6 @@ public class ReviewComment extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = -4858292897536522240L;
-	
-	
 
 	/** logger.debug object to check the flow of the code. */
 	private static final Logger LOGGER = Logger.getLogger(ReviewComment.class);
@@ -103,7 +101,7 @@ public class ReviewComment extends HttpServlet {
 				}
 			} catch (IOException e1) {
 				LOGGER.error("REVIEW Failed : Exception ", e);
-			}catch(Exception e1) {
+			} catch (Exception e1) {
 				LOGGER.info(e1);
 			}
 		} catch (Exception e) {
@@ -111,7 +109,7 @@ public class ReviewComment extends HttpServlet {
 		} finally {
 			LOGGER.info("End of Review comment");
 		}
-		
+
 	}
 
 	@Override
@@ -157,10 +155,10 @@ public class ReviewComment extends HttpServlet {
 				response.getWriter().write(data.toString());
 			} catch (IOException e1) {
 				LOGGER.error("REVIEW Failed : Exception ", e);
-			}catch(Exception e2){
+			} catch (Exception e2) {
 				LOGGER.info(e);
 			}
-		}catch(Exception e){
+		} catch (Exception e) {
 			LOGGER.info(e);
 		} finally {
 			LOGGER.info("End of Review comment");

@@ -33,7 +33,7 @@ public class StatisticsExternal {
 	private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
 	/** Logger object to check the flow of the code. */
 	private final Logger logger = Logger.getLogger(StatisticsExternal.class);
-	
+
 	@SuppressWarnings("deprecation")
 	public Document getStatistics(final RequestContext context) {
 		Document document = DocumentHelper.createDocument();
@@ -68,13 +68,13 @@ public class StatisticsExternal {
 		String realtimeObjects = context.getParameterString("realtime-objects", "activeUsers");
 		String locale = context.getParameterString("locale", "en");
 		String startYear = context.getParameterString("start-year", "2020");
-		StringBuilder realtimeObjectId = getDimensionId(realtimeObjects,"rt");
+		StringBuilder realtimeObjectId = getDimensionId(realtimeObjects, "rt");
 		String analyticsObjects = context.getParameterString("analytics-objects", "pageviews,sessions");
-		StringBuilder analyticsObjectId = getDimensionId(analyticsObjects,"ga");
+		StringBuilder analyticsObjectId = getDimensionId(analyticsObjects, "ga");
 		String currentYearDimensions = context.getParameterString("current-year-dimension", "deviceCategory");
-		StringBuilder currentYearDimensionId = getDimensionId(currentYearDimensions,"ga");
+		StringBuilder currentYearDimensionId = getDimensionId(currentYearDimensions, "ga");
 		String analyticsDimensions = context.getParameterString("analytics-dimension", "month,deviceCategory");
-		StringBuilder analyticsDimensionId = getDimensionId(analyticsDimensions,"ga");
+		StringBuilder analyticsDimensionId = getDimensionId(analyticsDimensions, "ga");
 		document = getRealtimeData(getRealtimeObj(analytics, profile, realtimeObjectId.toString()), document);
 		document = getAnalyticsData(getAnalyticsObj(analytics, profile, dateFrom, dateTo, analyticsObjectId.toString()),
 				document, currentYear, locale);
@@ -90,16 +90,14 @@ public class StatisticsExternal {
 		}
 		return document;
 	}
-	
-	
-	
+
 	public StringBuilder getDimensionId(String object, String appendStr) {
 		StringBuilder dimensionId = new StringBuilder();
 		for (String dimension : object.split(",")) {
 			if (!dimensionId.toString().equals("")) {
 				dimensionId.append(",");
 			}
-			dimensionId.append(appendStr+":" + dimension);
+			dimensionId.append(appendStr + ":" + dimension);
 		}
 		return dimensionId;
 	}
@@ -111,24 +109,25 @@ public class StatisticsExternal {
 	 * @throws IOException
 	 * @throws GeneralSecurityException
 	 */
-	 @SuppressWarnings("deprecation")
+	@SuppressWarnings("deprecation")
 	private Analytics initializeAnalytics(RequestContext context, GoogleCredential credential) {
 		try {
 			HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 			String application = context.getParameterString("application", "GA-ServiceAccount");
-			return new Analytics.Builder(httpTransport, JSON_FACTORY, credential)
-					.setApplicationName(application).build();
-		} catch (GeneralSecurityException |IOException e) {
-			logger.error("Error in initializeAnalytics",e);
-		} 
+			return new Analytics.Builder(httpTransport, JSON_FACTORY, credential).setApplicationName(application)
+					.build();
+		} catch (GeneralSecurityException | IOException e) {
+			logger.error("Error in initializeAnalytics", e);
+		}
 		return null;
 	}
-	 @SuppressWarnings("deprecation")
+
+	@SuppressWarnings("deprecation")
 	public GoogleCredential getCredentials(InputStream keyfile) {
 		try {
 			return GoogleCredential.fromStream(keyfile).createScoped(AnalyticsScopes.all());
 		} catch (IOException e) {
-			logger.error("Error in getCredentials" , e);
+			logger.error("Error in getCredentials", e);
 		}
 		return null;
 	}
@@ -141,11 +140,11 @@ public class StatisticsExternal {
 		}
 		try {
 			logger.info("Getting data for: " + fields);
-			return analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields)
-					.setSort(fields.split(",")[0]).execute();
-		
+			return analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields).setSort(fields.split(",")[0])
+					.execute();
+
 		} catch (IOException ex) {
-			logger.error("error in getAnalyticsObj " , ex);
+			logger.error("error in getAnalyticsObj ", ex);
 		}
 		return null;
 	}
@@ -158,11 +157,11 @@ public class StatisticsExternal {
 		}
 		try {
 			logger.info("Getting data for: " + dimension);
-			return analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields)
-					.setDimensions(dimension).setSort(dimension.split(",")[0]).execute();
-			
+			return analytics.data().ga().get("ga:" + profileId, dateFrom, dateTo, fields).setDimensions(dimension)
+					.setSort(dimension.split(",")[0]).execute();
+
 		} catch (IOException ex) {
-			logger.error("error in getAnalyticsObjWithDimensions" , ex);
+			logger.error("error in getAnalyticsObjWithDimensions", ex);
 		}
 		return null;
 	}
@@ -182,9 +181,9 @@ public class StatisticsExternal {
 					String metricName = columnHeaders.get(traverseColumn).getName();
 					if (metricName.equals("ga:month")) {
 						yearElement.addElement("month")
-								.addAttribute(value, rowSets.get(traverseRow).get(traverseColumn)).addAttribute(
-										"name", formatMonth(rowSets.get(traverseRow).get(traverseColumn), locale));
-						
+								.addAttribute(value, rowSets.get(traverseRow).get(traverseColumn)).addAttribute("name",
+										formatMonth(rowSets.get(traverseRow).get(traverseColumn), locale));
+
 					} else if (metricName.equals("ga:deviceCategory")) {
 						deviceElement.addAttribute("name", formatNumbers(rowSets.get(traverseRow).get(traverseColumn)));
 					} else {

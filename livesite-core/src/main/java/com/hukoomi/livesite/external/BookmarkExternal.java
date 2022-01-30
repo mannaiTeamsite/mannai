@@ -70,23 +70,24 @@ public class BookmarkExternal {
 			CommonUtils cu = new CommonUtils();
 
 			errorVal += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-			errorVal += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, true,
-					true);
+			errorVal += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255,
+					true, true);
 			errorVal += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
 			errorVal += cu.esapiValidator(localLiteral, locale, ESAPIValidator.ALPHABET, 20, false, true);
 			errorVal += cu.esapiValidator(userIDLiteral, userID, ESAPIValidator.USER_ID, 255, false, true);
 			errorVal += cu.esapiValidator(activeLiteral, active, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-			errorVal += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-			errorVal += cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false, true);
+			errorVal += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false,
+					true);
+			errorVal += cu.esapiValidator(categoryLiteral, category, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false,
+					true);
 			errorVal += cu.esapiValidator("queryType", queryType, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false, true);
 			errorVal += cu.esapiValidator("table", table, ESAPIValidator.ALPHANUMERIC_HYPHEN, 255, false, true);
 
-			
 			logger.info("Error Count :" + errorVal);
 			if (errorVal > 0) {
 				return bookmarkSearchDoc;
 			}
-			
+
 			boolean isExist = false;
 			logger.info("locale:" + locale);
 

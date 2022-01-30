@@ -19,7 +19,6 @@ import javax.crypto.NoSuchPaddingException;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
-
 import com.interwoven.livesite.runtime.RequestContext;
 
 import io.jsonwebtoken.Claims;

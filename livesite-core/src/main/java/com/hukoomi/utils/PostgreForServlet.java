@@ -12,174 +12,151 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
-import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
 
 import org.apache.log4j.Logger;
 
-/**
- * @author Arbaj
- *
- */
+import com.interwoven.wcm.service.iwovregistry.utils.IREncryptionUtil;
+
 public class PostgreForServlet {
-    /**
-     * Logger object to log information
-     */
-    private final Logger logger = Logger
-            .getLogger(PostgreForServlet.class);
-    /**
-     * Connection object variable.
-     */
-    private Connection con = null;
-    /**
-     * Connection string to connect to the database.
-     */
-    private String connectionString = null;
-    /**
-     * Username for connecting to the database
-     */
-    private String userName = null;
-    /**
-     * Password for connecting to the database
-     */
-    private String password = null;
-    /**
-     * Properties object variable to load the properties from property file
-     * configuration.
-     */
-    private Properties properties = null;
+	/**
+	 * Logger object to log information
+	 */
+	private final Logger logger = Logger.getLogger(PostgreForServlet.class);
+	/**
+	 * Connection object variable.
+	 */
+	private Connection con = null;
+	/**
+	 * Connection string to connect to the database.
+	 */
+	private String connectionString = null;
+	/**
+	 * Username for connecting to the database
+	 */
+	private String userName = null;
+	/**
+	 * Password for connecting to the database
+	 */
+	private String password = null;
+	/**
+	 * Properties object variable to load the properties from property file
+	 * configuration.
+	 */
+	private Properties properties = null;
 
-    /**
-     * This constructor will be called for creating database connection.
-     * 
-     * @param context Request context object.
-     *
-     */
-    public PostgreForServlet() {
-        logger.info("PostgreForServlet : Loading Properties....");
-        properties = loadProperties("dbconfig.properties");
-        logger.info("PostgreForServlet : Properties Loaded");
-        connectionString = getConnectionString();
-    }
+	/**
+	 * This constructor will be called for creating database connection.
+	 * 
+	 * @param context Request context object.
+	 *
+	 */
+	public PostgreForServlet() {
+		logger.info("PostgreForServlet : Loading Properties....");
+		properties = loadProperties("dbconfig.properties");
+		logger.info("PostgreForServlet : Properties Loaded");
+		connectionString = getConnectionString();
+	}
 
-    /**
-     * This method will be used to load the configuration properties.
-     *
-     * @param context
-     *                The parameter context object passed from Component.
-     * @throws IOException
-     * @throws MalformedURLException
-     *
-     */
-    public Properties loadProperties(
-            final String propertiesFileName) {
-        logger.info("Loading Properties File from Request Context.");
-        Properties propFile = new Properties();
-        if (propertiesFileName != null && !propertiesFileName.equals("")) {
-            String root = "/usr/opentext/LiveSiteDisplayServices/runtime/web/iw/config/properties";
-            
-            try(InputStream inputStream = new FileInputStream(
-                    root + "/" + propertiesFileName)) {                
-                propFile.load(inputStream);
-                logger.info("Properties File Loaded");
-            } catch (MalformedURLException e) {
-                logger.error(
-                        "Malformed URL Exception while loading Properties file : ",
-                        e);
-            } catch (IOException e) {
-                logger.error(
-                        "IO Exception while loading Properties file : ",
-                        e);
-            }
+	/**
+	 * This method will be used to load the configuration properties.
+	 *
+	 * @param context The parameter context object passed from Component.
+	 * @throws IOException
+	 * @throws MalformedURLException
+	 *
+	 */
+	public Properties loadProperties(final String propertiesFileName) {
+		logger.info("Loading Properties File from Request Context.");
+		Properties propFile = new Properties();
+		if (propertiesFileName != null && !propertiesFileName.equals("")) {
+			String root = "/usr/opentext/LiveSiteDisplayServices/runtime/web/iw/config/properties";
 
-        } else {
-            logger.info("Invalid / Empty properties file name.");
-        }
-        logger.info("Finish Loading Properties File.");
-        return propFile;
-    }
+			try (InputStream inputStream = new FileInputStream(root + "/" + propertiesFileName)) {
+				propFile.load(inputStream);
+				logger.info("Properties File Loaded");
+			} catch (MalformedURLException e) {
+				logger.error("Malformed URL Exception while loading Properties file : ", e);
+			} catch (IOException e) {
+				logger.error("IO Exception while loading Properties file : ", e);
+			}
 
-    /**
-     * This method will be used for creating connection string for database
-     * connection.
-     * 
-     * @return Returns the connection string for database connection.
-     *
-     */
-    private String getConnectionString() {
-        logger.info("PostgreForServlet : getConnectionString()");
-        String connectionStr = null;
-        String host = properties.getProperty("host");
-        String port = properties.getProperty("port");
-        String database = properties.getProperty("database");
-        String schema = properties.getProperty("schema");
-        userName = properties.getProperty("username");        
-        password = properties.getProperty("password");
-        password = IREncryptionUtil.decrypt(password);
+		} else {
+			logger.info("Invalid / Empty properties file name.");
+		}
+		logger.info("Finish Loading Properties File.");
+		return propFile;
+	}
 
-        connectionStr = "jdbc:" + database + "://" + host + ":" + port
-                + "/" + schema;
+	/**
+	 * This method will be used for creating connection string for database
+	 * connection.
+	 * 
+	 * @return Returns the connection string for database connection.
+	 *
+	 */
+	private String getConnectionString() {
+		logger.info("PostgreForServlet : getConnectionString()");
+		String connectionStr = null;
+		String host = properties.getProperty("host");
+		String port = properties.getProperty("port");
+		String database = properties.getProperty("database");
+		String schema = properties.getProperty("schema");
+		userName = properties.getProperty("username");
+		password = properties.getProperty("password");
+		password = IREncryptionUtil.decrypt(password);
 
-        logger.debug("Connection String : " + connectionStr);
-        return connectionStr;
-    }
+		connectionStr = "jdbc:" + database + "://" + host + ":" + port + "/" + schema;
 
-    /**
-     * This method is to get database connection.
-     * 
-     * @return Returns the database connection.
-     */
-    public Connection getConnection() {
-        logger.info("PostgreForServlet : getConnection()");
-        // Creating Connection
-        try {
-            con = DriverManager.getConnection(connectionString, userName,
-                    password);
-        } catch (Exception e) {
-            logger.error("Postgre : getConnection()", e);
-        }
-        return con;
-    }
+		logger.debug("Connection String : " + connectionStr);
+		return connectionStr;
+	}
 
-    /**
-     * This method will be used for closing connection, statement and resultset.
-     * 
-     * @param con
-     *             Database connection to be closed
-     * @param stmt
-     *             Statement to be closed
-     * @param rs
-     *             ResultSet to be closed
-     * 
-     */
-    public void releaseConnection(Connection con, Statement stmt,
-            ResultSet rs) {
-        logger.info("PostgreForServlet : releaseConnection()");
-        if (con != null) {
-            try {
-                con.close();
-            } catch (Exception e) {
-                logger.error(
-                        "PostgreForServlet : releaseConnection() : connection : ",
-                        e);
-            }
-        }
-        if (stmt != null) {
-            try {
-                stmt.close();
-            } catch (Exception e) {
-                logger.error(
-                        "PostgreForServlet : releaseConnection() : statement : ",
-                        e);
-            }
-        }
-        if (rs != null) {
-            try {
-                rs.close();
-            } catch (Exception e) {
-                logger.error(
-                        "PostgreForServlet : releaseConnection() : resultset : ",
-                        e);
-            }
-        }
-    }
+	/**
+	 * This method is to get database connection.
+	 * 
+	 * @return Returns the database connection.
+	 */
+	public Connection getConnection() {
+		logger.info("PostgreForServlet : getConnection()");
+		// Creating Connection
+		try {
+			con = DriverManager.getConnection(connectionString, userName, password);
+		} catch (Exception e) {
+			logger.error("Postgre : getConnection()", e);
+		}
+		return con;
+	}
+
+	/**
+	 * This method will be used for closing connection, statement and resultset.
+	 * 
+	 * @param con  Database connection to be closed
+	 * @param stmt Statement to be closed
+	 * @param rs   ResultSet to be closed
+	 * 
+	 */
+	public void releaseConnection(Connection con, Statement stmt, ResultSet rs) {
+		logger.info("PostgreForServlet : releaseConnection()");
+		if (con != null) {
+			try {
+				con.close();
+			} catch (Exception e) {
+				logger.error("PostgreForServlet : releaseConnection() : connection : ", e);
+			}
+		}
+		if (stmt != null) {
+			try {
+				stmt.close();
+			} catch (Exception e) {
+				logger.error("PostgreForServlet : releaseConnection() : statement : ", e);
+			}
+		}
+		if (rs != null) {
+			try {
+				rs.close();
+			} catch (Exception e) {
+				logger.error("PostgreForServlet : releaseConnection() : resultset : ", e);
+			}
+		}
+	}
 }

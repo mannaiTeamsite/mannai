@@ -79,6 +79,7 @@ public class LastViewedExternal {
 		logger.info("LastViewedSearch====> ends");
 		return lastviewedDoc;
 	}
+
 	public void insertStatus(boolean isExist) {
 		if (isExist) {
 			int updateStatus = updateLastViewed();
@@ -95,23 +96,26 @@ public class LastViewedExternal {
 				logger.info("LastViewed not inserted");
 			}
 		}
-		
+
 	}
+
 	private int insertLastViewed() {
 		logger.info("insertLastViewed()====> Starts");
 
 		logger.debug("Logging Broken link in Database");
-		
 
 		CommonUtils cu = new CommonUtils();
 		int errorCount = 0;
 		errorCount += cu.esapiValidator("pagetitle", pagetitle, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorCount += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false,true );
+		errorCount += cu.esapiValidator("pagedescription", pagedescription, ESAPIValidator.ALPHANUMERIC_SPACE, 255,
+				false, true);
 		errorCount += cu.esapiValidator("pageurl", pageurl, ESAPIValidator.URL, 255, false, true);
 		errorCount += cu.esapiValidator(LOCALE_CONSTANT, locale, ESAPIValidator.ALPHABET, 20, false, true);
 		errorCount += cu.esapiValidator("userID", userID, ESAPIValidator.USER_ID, 255, false, true);
-		errorCount += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
-		errorCount += cu.esapiValidator(CATEGORY_CONSTANT, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false, true);
+		errorCount += cu.esapiValidator("contenttype", contenttype, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false,
+				true);
+		errorCount += cu.esapiValidator(CATEGORY_CONSTANT, category, ESAPIValidator.ALPHANUMERIC_SPACE, 255, false,
+				true);
 
 		if (errorCount > 0) {
 			logger.error("Not a valid parameter. The incident will not be logged.");

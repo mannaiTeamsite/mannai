@@ -29,285 +29,271 @@ import com.hukoomi.utils.XssUtils;
 import com.interwoven.livesite.runtime.RequestContext;
 
 public class ContactUsExternal {
-    /** Logger object to check the flow of the code. */
-    private static final Logger LOGGER =
-            Logger.getLogger(ContactUsExternal.class);
-    /** Contact us properties key. */
-    private static final String CONTACT_TO_MAIL = "sentTo";
-    /** Contact us properties key. */
-    private static final String CONTACT_FROM_MAIL = "sentFrom";
-    /** Contact us properties key. */
-    private static final String CONTACT_MAIL_HOST = "host";
-    /** Contact us properties key. */
-    private static final String CONTACT_MAIL_PORT = "port";
-    /** initialization of error variable. */
-    private static final String STATUS_ERROR_RECAPTHCHA =
-            "errorInRecaptcha";
-    /** field validation status. */
-    private static final String STATUS_FIELD_VALIDATION =
-            "FieldValidationFailed";
-    /** initialization of error variable. */
-    private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
-    /** initialization of success variable. */
-    private static final String STATUS_SUCCESS = "success";
-    /** initialization of senderEmail variable. */
-    private static final String SENDER_EMAIL = "senderEmail";
-    
-    /** object creation of ContactEmail. */
-    private ContactEmail email = new ContactEmail();
+	/** Logger object to check the flow of the code. */
+	private static final Logger LOGGER = Logger.getLogger(ContactUsExternal.class);
+	/** Contact us properties key. */
+	private static final String CONTACT_TO_MAIL = "sentTo";
+	/** Contact us properties key. */
+	private static final String CONTACT_FROM_MAIL = "sentFrom";
+	/** Contact us properties key. */
+	private static final String CONTACT_MAIL_HOST = "host";
+	/** Contact us properties key. */
+	private static final String CONTACT_MAIL_PORT = "port";
+	/** initialization of error variable. */
+	private static final String STATUS_ERROR_RECAPTHCHA = "errorInRecaptcha";
+	/** field validation status. */
+	private static final String STATUS_FIELD_VALIDATION = "FieldValidationFailed";
+	/** initialization of error variable. */
+	private static final String STATUS_FAIL_MAIL_SENT = "mailSentFailed";
+	/** initialization of success variable. */
+	private static final String STATUS_SUCCESS = "success";
+	/** initialization of senderEmail variable. */
+	private static final String SENDER_EMAIL = "senderEmail";
 
-    /**
-     * this method will verify recaptcha and send mail to hukoomi.
-     *
-     * @param context component context passed with params
-     * @return document
-     */
-    @SuppressWarnings("deprecation")
-    public Document sendEmail(final RequestContext context) {
-        Document document = DocumentHelper.createDocument();
-        boolean verify = false;
-        String senderName = null;
-        String senderEmail = null;
-        String emailSubject = null;
-        String emailText = null;
-        String action = null;
-        String gRecaptchaResponse = null;
-        String status = "";
-        
-        String contactAction = "action";
-        action = context.getParameterString(contactAction);
-        ValidationErrorList errorList = new ValidationErrorList();
-        LOGGER.debug("action:" + action);
+	/** object creation of ContactEmail. */
+	private ContactEmail email = new ContactEmail();
 
-        ESAPI.validator().getValidInput(contactAction, action, ESAPIValidator.ALPHABET,
-                20, false, true, errorList);
-        if(errorList.isEmpty()) {
-            LOGGER.debug("ERROR LIST IS EMPTY");
-        }else {
-            LOGGER.debug(errorList.getError(contactAction));
-            status = STATUS_FIELD_VALIDATION;
-            return getDocument(status);
-        }
-        if (action.equals("sendmail")) {
-            LOGGER.info("Sendingemail.");
-            LOGGER.debug("page:" + context.getParameterString("page"));
+	/**
+	 * this method will verify recaptcha and send mail to hukoomi.
+	 *
+	 * @param context component context passed with params
+	 * @return document
+	 */
+	@SuppressWarnings("deprecation")
+	public Document sendEmail(final RequestContext context) {
+		Document document = DocumentHelper.createDocument();
+		boolean verify = false;
+		String senderName = null;
+		String senderEmail = null;
+		String emailSubject = null;
+		String emailText = null;
+		String action = null;
+		String gRecaptchaResponse = null;
+		String status = "";
 
-            senderName = context.getParameterString("senderName");
-            senderEmail = context.getParameterString(SENDER_EMAIL);
-            emailSubject = context.getParameterString("emailSubject");
-            emailText = context.getParameterString("emailText");
-            gRecaptchaResponse = context.getParameterString("captcha");
-            boolean validation = setValueToContactModel(senderName,
-                    senderEmail, emailText, emailSubject);
-            if (validation) {
-                GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
-                verify = captchUtil.validateCaptcha(context,
-                        gRecaptchaResponse);
-                LOGGER.debug("Recapcha verification status:" + verify);
-                if (verify) {
-                    document = sendEmailToHukoomi(context);
-                } else {
-                    status = STATUS_ERROR_RECAPTHCHA;
-                    return getDocument(status);
-                }
-                return document;
-            } else {
-                status = STATUS_FIELD_VALIDATION;
-                return getDocument(status);
-            }
-        }
-        return document;
-    }
+		String contactAction = "action";
+		action = context.getParameterString(contactAction);
+		ValidationErrorList errorList = new ValidationErrorList();
+		LOGGER.debug("action:" + action);
 
-    /**
-     * this method will assign value to ContactEmail properties.
-     *
-     * @param senderName
-     * @param senderEmail
-     * @param emailText
-     * @param emailSubject
-     * @param lang
-     */
-    private boolean setValueToContactModel(final String senderName,
-            final String senderEmail, final String emailText,
-            final String emailSubject) {
-       
-        ValidationErrorList errorList = new ValidationErrorList();
-        XssUtils xssUtils = new XssUtils();
-        LOGGER.info("setValueToContactModel: Enter");
-        if (senderName != null && senderEmail != null && emailText != null
-                && emailSubject != null) {
-            if (senderName.length() <= 100) {
-                email.setSenderName(xssUtils.stripXSS(senderName));
-            } else {
-                return false;
-            }
+		ESAPI.validator().getValidInput(contactAction, action, ESAPIValidator.ALPHABET, 20, false, true, errorList);
+		if (errorList.isEmpty()) {
+			LOGGER.debug("ERROR LIST IS EMPTY");
+		} else {
+			LOGGER.debug(errorList.getError(contactAction));
+			status = STATUS_FIELD_VALIDATION;
+			return getDocument(status);
+		}
+		if (action.equals("sendmail")) {
+			LOGGER.info("Sendingemail.");
+			LOGGER.debug("page:" + context.getParameterString("page"));
 
-            ESAPI.validator().getValidInput(SENDER_EMAIL, senderEmail,
-                    ESAPIValidator.EMAIL_ID, 50, false, true, errorList);
-            if(errorList.isEmpty()) {
-                email.setSenderEmail(senderEmail);
-            }else {
-                LOGGER.debug(errorList.getError(SENDER_EMAIL));
-               return false;
-            }
-            
-            if (emailText.length() <= 2500) {
-                email.setEmailText(xssUtils.stripXSS(emailText));
-            } else {
-                return false;
-            }
-            email.setEmailSubject(xssUtils.stripXSS(emailSubject));
+			senderName = context.getParameterString("senderName");
+			senderEmail = context.getParameterString(SENDER_EMAIL);
+			emailSubject = context.getParameterString("emailSubject");
+			emailText = context.getParameterString("emailText");
+			gRecaptchaResponse = context.getParameterString("captcha");
+			boolean validation = setValueToContactModel(senderName, senderEmail, emailText, emailSubject);
+			if (validation) {
+				GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
+				verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
+				LOGGER.debug("Recapcha verification status:" + verify);
+				if (verify) {
+					document = sendEmailToHukoomi(context);
+				} else {
+					status = STATUS_ERROR_RECAPTHCHA;
+					return getDocument(status);
+				}
+				return document;
+			} else {
+				status = STATUS_FIELD_VALIDATION;
+				return getDocument(status);
+			}
+		}
+		return document;
+	}
 
-            return true;
-        }
+	/**
+	 * this method will assign value to ContactEmail properties.
+	 *
+	 * @param senderName
+	 * @param senderEmail
+	 * @param emailText
+	 * @param emailSubject
+	 * @param lang
+	 */
+	private boolean setValueToContactModel(final String senderName, final String senderEmail, final String emailText,
+			final String emailSubject) {
 
-        return false;
-    }
+		ValidationErrorList errorList = new ValidationErrorList();
+		XssUtils xssUtils = new XssUtils();
+		LOGGER.info("setValueToContactModel: Enter");
+		if (senderName != null && senderEmail != null && emailText != null && emailSubject != null) {
+			if (senderName.length() <= 100) {
+				email.setSenderName(xssUtils.stripXSS(senderName));
+			} else {
+				return false;
+			}
 
-    /**
-     * this method will create and send mail. returns document with status.
-     *
-     * @param context context component context passed with param
-     * @return returns document with status
-     */
-    public Document sendEmailToHukoomi(final RequestContext context) {
-        LOGGER.info("sendEmailToHukoomi: Enter");
-        String status = "";
-        MimeMessage mailMessage;
-        try {
-            int result = insertContactUsMailData(context);
-            if (result > 0) {
-                mailMessage = createMailMessage(context);
-                Transport.send(mailMessage);
-            } else {
-                status = STATUS_FAIL_MAIL_SENT;
-                LOGGER.info("Exception in insert to table ");
-                return getDocument(status);
-            }
-        } catch (MessagingException | MailException e) {
-            status = STATUS_FAIL_MAIL_SENT;
-            LOGGER.error("Exception in sendEmailToHukoomi: ", e);
-            return getDocument(status);
-        }
-        status = STATUS_SUCCESS;
-        return getDocument(status);
-    }
+			ESAPI.validator().getValidInput(SENDER_EMAIL, senderEmail, ESAPIValidator.EMAIL_ID, 50, false, true,
+					errorList);
+			if (errorList.isEmpty()) {
+				email.setSenderEmail(senderEmail);
+			} else {
+				LOGGER.debug(errorList.getError(SENDER_EMAIL));
+				return false;
+			}
 
-    /**
-     * this method will create mail. returns MimeMessage.
-     *
-     * @param context
-     * @return msg returns MimeMessage
-     * @throws MessagingException
-     */
-    @SuppressWarnings("deprecation")
-    private MimeMessage createMailMessage(final RequestContext context)
-            throws MessagingException {
-        LOGGER.info("createMailMessage: Enter");
-        Properties propertiesFile =
-                ContactUsExternal.loadProperties(context);
-        String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
-        String to = propertiesFile.getProperty(CONTACT_TO_MAIL);
-        LOGGER.debug("sent To :" + to);
-        String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
-        LOGGER.debug("relay IP :" + host);
-        String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
-        Properties props = new Properties();
-        String subject = "";
-        props.put("mail.smtp.host", host);
-        props.put("mail.smtp.starttls.enable", "false");
-        props.put("mail.smtp.port", port);
-        Session session = Session.getDefaultInstance(props, null);
-        session.setDebug(true);
-        MimeMessage msg = new MimeMessage(session);
-        msg.setFrom(new InternetAddress(from));
-        msg.setRecipient(Message.RecipientType.TO,
-                new InternetAddress(to));
-        subject = email.getEmailSubject();
-        msg.setSubject(subject);
-        StringBuilder sb = new StringBuilder();
-        sb.append(context.getParameterString("emailStartText"));
-        sb.append(email.getSenderName());
-        sb.append(" ");
-        sb.append(email.getSenderEmail());
-        sb.append(" ");
-        sb.append(email.getEmailText());
-        msg.setText(sb.toString());
-        LOGGER.debug("msg:" + msg);
-        return msg;
+			if (emailText.length() <= 2500) {
+				email.setEmailText(xssUtils.stripXSS(emailText));
+			} else {
+				return false;
+			}
+			email.setEmailSubject(xssUtils.stripXSS(emailSubject));
 
-    }
+			return true;
+		}
 
-    /**
-     * This mail will insert the contact us mail data into table
-     * @param context
-     * @return result
-     */
-    public int insertContactUsMailData(RequestContext context) {
-        LOGGER.info("insertContactUsMailData : Enter");
-        Postgre objPostgre = new Postgre(context);
-        Connection connection = null;
-        PreparedStatement prepareStatement = null;
-        String query = "";
-        LOGGER.info("ContactUs : insert");
-        query = "INSERT INTO CONTACT_US_SERVICE (NAME,EMAIL_ADDRESS,QUESTIONS_AND_FEEDBACK,"
-                + "INQUIRY_TYPE,SEND_DATE) VALUES(?,?,?,?,LOCALTIMESTAMP)";
-        try {
-            connection = objPostgre.getConnection();
-            prepareStatement = connection.prepareStatement(query);
-            prepareStatement.setString(1, email.getSenderName());
-            prepareStatement.setString(2, email.getSenderEmail());
-            prepareStatement.setString(3, email.getEmailText());
-            prepareStatement.setString(4, email.getEmailSubject());
-            final int result = prepareStatement.executeUpdate();
-            if (result == 0) {
-                LOGGER.info("failed to insert/update mail data!");
-            } else {
-                LOGGER.info(
-                        " mail data insert/update successfully!");
-            }
-            return result;
-        } catch (SQLException e) {
-            LOGGER.error("SQLException :", e);
-            return 0;
+		return false;
+	}
 
-        } finally {
-            objPostgre.releaseConnection(connection, prepareStatement,
-                    null);
-        }
+	/**
+	 * this method will create and send mail. returns document with status.
+	 *
+	 * @param context context component context passed with param
+	 * @return returns document with status
+	 */
+	public Document sendEmailToHukoomi(final RequestContext context) {
+		LOGGER.info("sendEmailToHukoomi: Enter");
+		String status = "";
+		MimeMessage mailMessage;
+		try {
+			int result = insertContactUsMailData(context);
+			if (result > 0) {
+				mailMessage = createMailMessage(context);
+				Transport.send(mailMessage);
+			} else {
+				status = STATUS_FAIL_MAIL_SENT;
+				LOGGER.info("Exception in insert to table ");
+				return getDocument(status);
+			}
+		} catch (MessagingException | MailException e) {
+			status = STATUS_FAIL_MAIL_SENT;
+			LOGGER.error("Exception in sendEmailToHukoomi: ", e);
+			return getDocument(status);
+		}
+		status = STATUS_SUCCESS;
+		return getDocument(status);
+	}
 
-    }
+	/**
+	 * this method will create mail. returns MimeMessage.
+	 *
+	 * @param context
+	 * @return msg returns MimeMessage
+	 * @throws MessagingException
+	 */
+	@SuppressWarnings("deprecation")
+	private MimeMessage createMailMessage(final RequestContext context) throws MessagingException {
+		LOGGER.info("createMailMessage: Enter");
+		Properties propertiesFile = ContactUsExternal.loadProperties(context);
+		String from = propertiesFile.getProperty(CONTACT_FROM_MAIL);
+		String to = propertiesFile.getProperty(CONTACT_TO_MAIL);
+		LOGGER.debug("sent To :" + to);
+		String host = propertiesFile.getProperty(CONTACT_MAIL_HOST);
+		LOGGER.debug("relay IP :" + host);
+		String port = propertiesFile.getProperty(CONTACT_MAIL_PORT);
+		Properties props = new Properties();
+		String subject = "";
+		props.put("mail.smtp.host", host);
+		props.put("mail.smtp.starttls.enable", "false");
+		props.put("mail.smtp.port", port);
+		Session session = Session.getDefaultInstance(props, null);
+		session.setDebug(true);
+		MimeMessage msg = new MimeMessage(session);
+		msg.setFrom(new InternetAddress(from));
+		msg.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+		subject = email.getEmailSubject();
+		msg.setSubject(subject);
+		StringBuilder sb = new StringBuilder();
+		sb.append(context.getParameterString("emailStartText"));
+		sb.append(email.getSenderName());
+		sb.append(" ");
+		sb.append(email.getSenderEmail());
+		sb.append(" ");
+		sb.append(email.getEmailText());
+		msg.setText(sb.toString());
+		LOGGER.debug("msg:" + msg);
+		return msg;
 
-    /**
-     * this method get the strings and generate document.
-     *
-     * @param status
-     * @param msg
-     * @return document document with elements
-     */
-    private Document getDocument(final String status) {
-        LOGGER.info("getDocument: Enter");
-        Document document = DocumentHelper.createDocument();
-        Element resultElement = document.addElement("Result");
-        Element statusElement = resultElement.addElement("status");
-        statusElement.setText(status);
-        return document;
-    }
+	}
 
-    /**
-     * This method will be used to load the configuration properties.
-     *
-     * @param context The parameter context object passed from Component.
-     * @return properties
-     *
-     */
-    private static Properties
-            loadProperties(final RequestContext context) {
-        LOGGER.info("loadProperties:Begin");
-        PropertiesFileReader propertyFileReader =
-                new PropertiesFileReader(context, "contactus.properties");
-        return propertyFileReader.getPropertiesFile();
-    }
+	/**
+	 * This mail will insert the contact us mail data into table
+	 * 
+	 * @param context
+	 * @return result
+	 */
+	public int insertContactUsMailData(RequestContext context) {
+		LOGGER.info("insertContactUsMailData : Enter");
+		Postgre objPostgre = new Postgre(context);
+		Connection connection = null;
+		PreparedStatement prepareStatement = null;
+		String query = "";
+		LOGGER.info("ContactUs : insert");
+		query = "INSERT INTO CONTACT_US_SERVICE (NAME,EMAIL_ADDRESS,QUESTIONS_AND_FEEDBACK,"
+				+ "INQUIRY_TYPE,SEND_DATE) VALUES(?,?,?,?,LOCALTIMESTAMP)";
+		try {
+			connection = objPostgre.getConnection();
+			prepareStatement = connection.prepareStatement(query);
+			prepareStatement.setString(1, email.getSenderName());
+			prepareStatement.setString(2, email.getSenderEmail());
+			prepareStatement.setString(3, email.getEmailText());
+			prepareStatement.setString(4, email.getEmailSubject());
+			final int result = prepareStatement.executeUpdate();
+			if (result == 0) {
+				LOGGER.info("failed to insert/update mail data!");
+			} else {
+				LOGGER.info(" mail data insert/update successfully!");
+			}
+			return result;
+		} catch (SQLException e) {
+			LOGGER.error("SQLException :", e);
+			return 0;
+
+		} finally {
+			objPostgre.releaseConnection(connection, prepareStatement, null);
+		}
+
+	}
+
+	/**
+	 * this method get the strings and generate document.
+	 *
+	 * @param status
+	 * @param msg
+	 * @return document document with elements
+	 */
+	private Document getDocument(final String status) {
+		LOGGER.info("getDocument: Enter");
+		Document document = DocumentHelper.createDocument();
+		Element resultElement = document.addElement("Result");
+		Element statusElement = resultElement.addElement("status");
+		statusElement.setText(status);
+		return document;
+	}
+
+	/**
+	 * This method will be used to load the configuration properties.
+	 *
+	 * @param context The parameter context object passed from Component.
+	 * @return properties
+	 *
+	 */
+	private static Properties loadProperties(final RequestContext context) {
+		LOGGER.info("loadProperties:Begin");
+		PropertiesFileReader propertyFileReader = new PropertiesFileReader(context, "contactus.properties");
+		return propertyFileReader.getPropertiesFile();
+	}
 
 }

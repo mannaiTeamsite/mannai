@@ -7,116 +7,125 @@ package com.hukoomi.bo;
  *
  */
 public class DashboardSettingsBO {
-    
-    /**
-     * Dashboard settings action performed by the user
-     */
-    private String action;
-    /**
-     * Logged-in UserId
-     */
-    private String userId;
-    /**
-     * User role
-     */
-    private String userRole;
-    /**
-     * Persona for the logged-in user
-     */
-    private String persona;
-    /**
-     * User Type
-     */
-    private String userType;
-    
-    /**
-     * Getter method to get action
-     * 
-     * @return Returns action
-     */
-    public String getAction() {
-        return action;
-    }
-    /**
-     * Setter method to set action
-     * 
-     * @param action action for the dashboard settings
-     */
-    public void setAction(String action) {
-        this.action = action;
-    }
-    /**
-     * Getter method to get user id
-     * 
-     * @return Returns user id
-     */
-    public String getUserId() {
-        return userId;
-    }
-    /**
-     * Setter method to set user id
-     * 
-     * @param userId user id of the logged-in user
-     */
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-    /**
-     * Getter method to get user role
-     * 
-     * @return Returns user role
-     */
-    public String getUserRole() {
-        return userRole;
-    }
-    /**
-     * Setter method to set user role
-     * 
-     * @param userRole role of the logged-in user
-     */
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
-    }
-    /**
-     * Getter method to get persona
-     * 
-     * @return Returns persona
-     */
-    public String getPersona() {
-        return persona;
-    }
-    /**
-     * Setter method to set persona
-     * 
-     * @param persona persona of the user
-     */
-    public void setPersona(String persona) {
-        this.persona = persona;
-    }
-    /**
-     * Getter method to get user type
-     * 
-     * @return Returns user type
-     */
-    public String getUserType() {
-        return userType;
-    }
-    /**
-     * Setter method to set user type
-     * 
-     * @param userType user type of the logged-in user
-     */
-    public void setUserType(String userType) {
-        this.userType = userType;
-    }
-    @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("DashboardSettingsBO [action=").append(action)
-                .append(", userId=").append(userId).append(", userRole=")
-                .append(userRole).append(", persona=").append(persona)
-                .append(", userType=").append(userType).append("]");
-        return builder.toString();
-    }
+
+	/**
+	 * Dashboard settings action performed by the user
+	 */
+	private String action;
+	/**
+	 * Logged-in UserId
+	 */
+	private String userId;
+	/**
+	 * User role
+	 */
+	private String userRole;
+	/**
+	 * Persona for the logged-in user
+	 */
+	private String persona;
+	/**
+	 * User Type
+	 */
+	private String userType;
+
+	/**
+	 * Getter method to get action
+	 * 
+	 * @return Returns action
+	 */
+	public String getAction() {
+		return action;
+	}
+
+	/**
+	 * Setter method to set action
+	 * 
+	 * @param action action for the dashboard settings
+	 */
+	public void setAction(String action) {
+		this.action = action;
+	}
+
+	/**
+	 * Getter method to get user id
+	 * 
+	 * @return Returns user id
+	 */
+	public String getUserId() {
+		return userId;
+	}
+
+	/**
+	 * Setter method to set user id
+	 * 
+	 * @param userId user id of the logged-in user
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	/**
+	 * Getter method to get user role
+	 * 
+	 * @return Returns user role
+	 */
+	public String getUserRole() {
+		return userRole;
+	}
+
+	/**
+	 * Setter method to set user role
+	 * 
+	 * @param userRole role of the logged-in user
+	 */
+	public void setUserRole(String userRole) {
+		this.userRole = userRole;
+	}
+
+	/**
+	 * Getter method to get persona
+	 * 
+	 * @return Returns persona
+	 */
+	public String getPersona() {
+		return persona;
+	}
+
+	/**
+	 * Setter method to set persona
+	 * 
+	 * @param persona persona of the user
+	 */
+	public void setPersona(String persona) {
+		this.persona = persona;
+	}
+
+	/**
+	 * Getter method to get user type
+	 * 
+	 * @return Returns user type
+	 */
+	public String getUserType() {
+		return userType;
+	}
+
+	/**
+	 * Setter method to set user type
+	 * 
+	 * @param userType user type of the logged-in user
+	 */
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("DashboardSettingsBO [action=").append(action).append(", userId=").append(userId)
+				.append(", userRole=").append(userRole).append(", persona=").append(persona).append(", userType=")
+				.append(userType).append("]");
+		return builder.toString();
+	}
 
 }

@@ -31,19 +31,13 @@ import com.hukoomi.bo.PhpListUserBO;
 import com.hukoomi.utils.MySqlForServlet;
 import com.hukoomi.utils.PostgreForServlet;
 
-/**
- * @author Arbaj
- *
- */
-public class NewsletterConfirmation extends HttpServlet {
 
+public class NewsletterConfirmation extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 755226934872053366L;
-	
-	
 
 	/** Logger object to check the flow of the code. */
 	private static final Logger logger = Logger.getLogger(NewsletterConfirmation.class);
@@ -145,21 +139,20 @@ public class NewsletterConfirmation extends HttpServlet {
 		RequestDispatcher rd = request.getRequestDispatcher("/portal-" + pageLang + "/home.page");
 		String confirmationStatus = getConfirmationTokenStatus(token, postgre);
 		try {
-		if (STATUS_PENDING.equals(confirmationStatus)) {
-			Map<String, String> subscriberDetails = getSubcriberDetails(token, postgre);
+			if (STATUS_PENDING.equals(confirmationStatus)) {
+				Map<String, String> subscriberDetails = getSubcriberDetails(token, postgre);
 
-			double subscriberId = Double.parseDouble(subscriberDetails.get("subscriberId"));
-			double preferenceId = Double.parseDouble(subscriberDetails.get("preferenceId"));
+				double subscriberId = Double.parseDouble(subscriberDetails.get("subscriberId"));
+				double preferenceId = Double.parseDouble(subscriberDetails.get("preferenceId"));
 
-			String subscriberemail = getSubscriberEmail(subscriberId, postgre);
-			String persona = getSubscriberPersona(subscriberId, preferenceId, postgre);
-			int listid = getSubscriberListID(persona, mysql);
-			String status = "";
-			String uptpostgreData = "";
-			String syncStatus = "";
-			int userId = getSubscriberID(subscriberemail, mysql);
-			status = phpSubscriberExists(subscriberemail, listid, mysql);
-		
+				String subscriberemail = getSubscriberEmail(subscriberId, postgre);
+				String persona = getSubscriberPersona(subscriberId, preferenceId, postgre);
+				int listid = getSubscriberListID(persona, mysql);
+				String status = "";
+				String uptpostgreData = "";
+				String syncStatus = "";
+				int userId = getSubscriberID(subscriberemail, mysql);
+				status = phpSubscriberExists(subscriberemail, listid, mysql);
 
 				uptpostgreData = updateListDataPostgre(status, subscriberemail, userId, listid, mysql, postgre);
 
@@ -182,20 +175,28 @@ public class NewsletterConfirmation extends HttpServlet {
 					logger.debug("NewsletterConfirmation : syncstatus <<<<>>>>>" + syncStatus);
 				}
 
-		
+				if (uptpostgreData.equals(STATUS_SUCCESS)) {
+					String cookieStatus = postgreDataSuccess(token, subscriberId, preferenceId, postgre);
+					Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, cookieStatus);
+					confirmationCookie.setHttpOnly(true);
+					response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
+					response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
+					response.setDateHeader(EXPIRES, 0);
+					response.addCookie(confirmationCookie);
 
-			if (uptpostgreData.equals(STATUS_SUCCESS)) {
-				String cookieStatus = postgreDataSuccess(token, subscriberId, preferenceId, postgre);
-				Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, cookieStatus);
-				confirmationCookie.setHttpOnly(true);
-				response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
-				response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
-				response.setDateHeader(EXPIRES, 0);
-				response.addCookie(confirmationCookie);
-				
-				rd.forward(request, response);
+					rd.forward(request, response);
+				} else {
+					Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "technicalIssue");
+					confirmationCookie.setHttpOnly(true);
+					response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
+					response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
+					response.setDateHeader(EXPIRES, 0);
+					response.addCookie(confirmationCookie);
+					rd.forward(request, response);
+				}
+
 			} else {
-				Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "technicalIssue");
+				Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "alreadyConfirmed");
 				confirmationCookie.setHttpOnly(true);
 				response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
 				response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
@@ -203,16 +204,6 @@ public class NewsletterConfirmation extends HttpServlet {
 				response.addCookie(confirmationCookie);
 				rd.forward(request, response);
 			}
-
-		} else {
-			Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "alreadyConfirmed");
-			confirmationCookie.setHttpOnly(true);
-			response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
-			response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
-			response.setDateHeader(EXPIRES, 0);
-			response.addCookie(confirmationCookie);
-			rd.forward(request, response);
-		}	
 		} catch (Exception e) {
 			logger.error("NewsletterConfirmation : doGet() <<<<" + e);
 		}
@@ -254,8 +245,7 @@ public class NewsletterConfirmation extends HttpServlet {
 	 * @param postgre
 	 * @return
 	 */
-	private String syncPostgrePhpTab( int userId, int listid, MySqlForServlet mysql,
-			PostgreForServlet postgre) {
+	private String syncPostgrePhpTab(int userId, int listid, MySqlForServlet mysql, PostgreForServlet postgre) {
 		String status = "";
 
 		String getPhpUser = "SELECT ID, EMAIL, CONFIRMED, BLACKLISTED, OPTEDIN, BOUNCECOUNT, "
@@ -528,7 +518,7 @@ public class NewsletterConfirmation extends HttpServlet {
 	 */
 	private String phpSubscriberExists(String email, int listid, MySqlForServlet mysql) {
 		logger.info("NewsletterConfirmation : phpSubscriberExists");
-		
+
 		String checkSubscriberEmailQuery = "SELECT ID FROM PHPLIST_USER_USER WHERE EMAIL = ? ";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
@@ -570,7 +560,7 @@ public class NewsletterConfirmation extends HttpServlet {
 	 */
 	private String checkAlreadySubscribed(int subscriberid, int listid, MySqlForServlet mysql) {
 		logger.info("NewsletterConfirmation : checkAlreadySubscribed");
-		
+
 		String checkSubscriberEmailQuery = "SELECT USERID,LISTID FROM PHPLIST_LISTUSER WHERE USERID = ? AND LISTID = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
@@ -608,7 +598,7 @@ public class NewsletterConfirmation extends HttpServlet {
 	 */
 	private String getSubscriberEmail(double subscriberId, PostgreForServlet postgre) {
 		logger.info("NewsletterConfirmation : getSubscriberEmail");
-		
+
 		String addSubscriberPreferencesQuery = "SELECT SUBSCRIBER_EMAIL FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_ID = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
@@ -900,7 +890,7 @@ public class NewsletterConfirmation extends HttpServlet {
 		String requestJSON = "";
 		InputStream is = null;
 		String adminID = "";
-		
+
 		int statusCode = 0;
 		String baseUrl;
 
@@ -994,10 +984,9 @@ public class NewsletterConfirmation extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		try {
 			doGet(request, response);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			logger.info(e);
 		}
-		
 
 	}
 

@@ -1572,6 +1572,6 @@ public class SurveyExternal {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return cookieMap;
-    }
+		return cookieMap;
+	}
 }

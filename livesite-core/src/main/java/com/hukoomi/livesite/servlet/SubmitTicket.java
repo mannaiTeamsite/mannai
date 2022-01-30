@@ -42,8 +42,7 @@ public class SubmitTicket extends HttpServlet {
 	 * 
 	 */
 	private static final long serialVersionUID = -2087934851143794541L;
-	
-	
+
 	/** logger.debug object to check the flow of the code. */
 	private static final Logger LOGGER = Logger.getLogger(SubmitTicket.class);
 	/** attachment key. */

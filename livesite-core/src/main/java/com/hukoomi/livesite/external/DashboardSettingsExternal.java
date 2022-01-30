@@ -231,19 +231,18 @@ public class DashboardSettingsExternal {
 	@Deprecated(since = "", forRemoval = false)
 	public Document performDashboardSettingsAction(final RequestContext context) {
 		logger.info("DashboardSettingsExternal : performPersonaSettingsAction()");
-		
+
 		XssUtils xssUtils = new XssUtils();
 		Document doc = DocumentHelper.createDocument();
 		Element responseElem = doc.addElement("dashboard-settings");
-		
+
 		final String SETTINGS_ACTION = "settingsAction";
 		String langSwitch = context.getParameterString(LANG_SWITCH);
 		String language = context.getParameterString(SWITCH_LANGUAGE);
 		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));
 		String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
-		 String unsubreason = xssUtils
-	                .stripXSS(context.getParameterString(UNSUBSCRIBE_REASON));
-		 
+		String unsubreason = xssUtils.stripXSS(context.getParameterString(UNSUBSCRIBE_REASON));
+
 		phpExternal = new NewsletterPhpExternal();
 		logger.info("DashboardSettingsExternal : langSwitch " + langSwitch + " language " + language + " pageLang "
 				+ pageLang);
@@ -257,8 +256,8 @@ public class DashboardSettingsExternal {
 			subscriberId = getSubscriberID(email, USING_EMAIL);
 			boolean bool = isEmailAlreadyExist(email);
 			if (bool) {
-			
-			topicsResponseDoc( context, responseElem,subscriberId, email, unsubreason, pageLang);
+
+				topicsResponseDoc(context, responseElem, subscriberId, email, unsubreason, pageLang);
 
 			} else {
 
@@ -271,9 +270,9 @@ public class DashboardSettingsExternal {
 		String valid = ui.getStatus(context);
 
 		if (valid.equalsIgnoreCase("valid")) {
-			
+
 			loginSettings(context, responseElem, langSwitch, language);
-			
+
 		} else {
 			logger.info("Invalid session - Redirecting to Login Page");
 			try {
@@ -286,14 +285,13 @@ public class DashboardSettingsExternal {
 		logger.debug("Final Result :" + doc.asXML());
 		return doc;
 	}
-		
+
 	@SuppressWarnings("deprecation")
 	public void loginSettings(final RequestContext context, Element responseElem, String langSwitch, String language) {
 
 		DashboardSettingsBO settingsBO = new DashboardSettingsBO();
 		String status = "";
-		
-		
+
 		if (validateInput(context, settingsBO)) {
 			logger.info("Input data validation is successfull");
 			logger.debug("settingsBO : " + settingsBO);
@@ -317,9 +315,8 @@ public class DashboardSettingsExternal {
 				String subemail = getSubscriberEmail(settingsBO.getUserId());
 				String unsubReason = context.getParameterString(UNSUBSCRIBE_REASON);
 				status = unsubscribeDashboardUser(settingsBO.getUserId(), unsubReason);
-				
+
 				unsubscribeDoc(status, responseElem, subemail);
-				
 
 			} else if (ACTION_LANG_ONOFF.equalsIgnoreCase(settingsBO.getAction())) {
 				logger.info("Switch Language Action");
@@ -333,7 +330,7 @@ public class DashboardSettingsExternal {
 					STATUS_FAILED, "Invalid input parameter");
 		}
 	}
-	
+
 	public void unsubscribeDoc(String status, Element responseElem, String subemail) {
 		if (status.equals(STATUS_SUCCESS)) {
 
@@ -342,19 +339,21 @@ public class DashboardSettingsExternal {
 			createUnsubscribeResponseDoc(responseElem, null, null, "", STATUS_FAILURE, "", subemail);
 		}
 	}
-	public void topicsResponseDoc( final RequestContext context, Element responseElem,double subscriberId, String email, String unsubreason, String pageLang) {
-		
+
+	public void topicsResponseDoc(final RequestContext context, Element responseElem, double subscriberId, String email,
+			String unsubreason, String pageLang) {
+
 		String subStatus = "";
 		double preferenceId = 0;
 
 		subStatus = getSubscriptionStatus(email, ACTION_UNSUBSCRIBE);
-		
+
 		if (subStatus != null && !subStatus.equals("")) {
 			if (subStatus.equals("Subscribed")) {
 
 				String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-				phpExternal.sendConfirmationMail(email, pageLang, confirmationToken,
-						UNSUBSCRIPTION_CONFIRMATION_EMAIL, unsubreason, context);
+				phpExternal.sendConfirmationMail(email, pageLang, confirmationToken, UNSUBSCRIPTION_CONFIRMATION_EMAIL,
+						unsubreason, context);
 				createTopicsResponseDoc(responseElem, null, null, "", STATUS_SUCCESS, "");
 
 			} else if (subStatus.equals(STATUS_PENDING)) {
@@ -366,6 +365,7 @@ public class DashboardSettingsExternal {
 			}
 		}
 	}
+
 	/**
 	 * @author Arbaj
 	 * 

@@ -1,7 +1,6 @@
 package com.hukoomi.livesite.external;
 
 import java.io.IOException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,7 +66,7 @@ public class DashboardExternal {
 		boolean logged = false;
 		String jwtParsedToken = null;
 		HttpServletRequest request = context.getRequest();
-		
+
 		JWTTokenUtil jwt = new JWTTokenUtil(context);
 
 		try {
@@ -99,23 +98,21 @@ public class DashboardExternal {
 				cookie = cookies[i];
 				if (cookie.getName().equals("accessToken")) {
 					cookie.setValue("");
-		            cookie.setMaxAge(0);
-		            HttpServletResponse response = context.getResponse();
-		            response.addCookie(cookie);						
+					cookie.setMaxAge(0);
+					HttpServletResponse response = context.getResponse();
+					response.addCookie(cookie);
 				}
 			}
 		}
 		LOGGER.info("-------Remove token Ended------");
 	}
-	
-	
+
 	/** Setting the user info in session. */
 	private void setSessionAttributes(String jwtParsedToken, HttpServletRequest request, String status) {
 		LOGGER.info("--------------setSessionAttributes is called------------");
 
 		HttpSession session = request.getSession(true);
 
-		
 		if (status.equals(strValid)) {
 			session.setAttribute(strStatus, status);
 			session.setAttribute(strUnm, getValue(jwtParsedToken, strUnm));

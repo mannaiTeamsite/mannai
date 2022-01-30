@@ -160,7 +160,7 @@ public class DetailExternalRelatedContent {
 				fq.append(" AND " + values[i].split(":")[0] + ":" + dcrValue);
 			}
 		}
-		Document relatedDoc = squ.doJsonQuery(fq.append( "&rows=" + rows + "&sort=" + sortVal).toString(), root, false);
+		Document relatedDoc = squ.doJsonQuery(fq.append("&rows=" + rows + "&sort=" + sortVal).toString(), root, false);
 		detailDocument.getRootElement().add(relatedDoc.getRootElement());
 	}
 
@@ -174,7 +174,7 @@ public class DetailExternalRelatedContent {
 	@SuppressWarnings("deprecation")
 	public String getSortContent(final RequestContext context, final Document detailDocument,
 			final Properties properties) {
-		
+
 		String sortVal = "";
 		String sort = context.getParameterString("sort", "");
 		logger.info("Content Sort: " + sort);
@@ -182,8 +182,8 @@ public class DetailExternalRelatedContent {
 			if (sort.contains(":")) {
 				if (sort.split(":")[1].equals("distance")) {
 					logger.info("Sort Type: Distance");
-					if (detailDocument.selectSingleNode(sort.split(":")[0]) != null) {		
-						sortVal = getsortVal(detailDocument,properties, sort);	
+					if (detailDocument.selectSingleNode(sort.split(":")[0]) != null) {
+						sortVal = getsortVal(detailDocument, properties, sort);
 					}
 				} else {
 					logger.info("Sort Type: Value");
@@ -195,12 +195,13 @@ public class DetailExternalRelatedContent {
 		}
 		return sortVal;
 	}
-	private String getsortVal(final Document detailDocument,final Properties properties, String sort) {
+
+	private String getsortVal(final Document detailDocument, final Properties properties, String sort) {
 		String sortVal = "";
 		CommonUtils commonUtils = new CommonUtils();
 		String locationPrefix = "distance-prefix";
 		String locationSuffix = "distance-suffix";
-		
+
 		String location = commonUtils.getValueFromXML(sort.split(":")[0], detailDocument);
 		if (StringUtils.isNotBlank(location)) {
 			sortVal = properties.getProperty(locationPrefix);
@@ -208,8 +209,7 @@ public class DetailExternalRelatedContent {
 			logger.info("Sort Query: " + sortVal + location + properties.getProperty(locationSuffix));
 		} else {
 			sortVal = properties.getProperty(locationPrefix);
-			sortVal = sortVal + properties.getProperty("distance-default")
-					+ properties.getProperty(locationSuffix);
+			sortVal = sortVal + properties.getProperty("distance-default") + properties.getProperty(locationSuffix);
 			logger.info("Sort Query: " + sortVal + properties.getProperty("distance-default")
 					+ properties.getProperty(locationSuffix));
 		}

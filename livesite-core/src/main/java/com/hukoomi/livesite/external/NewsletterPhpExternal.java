@@ -62,6 +62,8 @@ public class NewsletterPhpExternal {
 
 	/** subscribed status constant. */
 	private static final String STATUS_SUBSCRIBED = "Subscribed";
+	/** subscribed status constant. */
+	private static final String SUBSCRIPTION_LANG = "subscriptionLang";
 
 	/** confirmation sent status constant. */
 	private static final String CONFIRMATION_SENT = "ConfirmationSent";
@@ -179,7 +181,8 @@ public class NewsletterPhpExternal {
 	@SuppressWarnings("deprecation")
 	public Document subscribeToNewsletter(final RequestContext context) {
 		logger.info("NewsletterPhpExternal : subscribeToNewsletter()");
-
+		String subStatus = "";
+		double subscriberId = 0;
 		HttpSession session = context.getRequest().getSession();
 
 		postgre = new Postgre(context);
@@ -188,13 +191,12 @@ public class NewsletterPhpExternal {
 		Document doc = DocumentHelper.createDocument();
 		Element responseElem = doc.addElement("dashboard-settings");
 		XssUtils xssUtils = new XssUtils();
-		String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
 
 		if (session.getAttribute(ELEMENT_STATUS) == "valid") {
 			uid = (String) session.getAttribute("uid");
 		}
 		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));
-		String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
+		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(SUBSCRIPTION_LANG));
 		String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
 		if (uid != null && !uid.equals("")) {
 
@@ -210,50 +212,56 @@ public class NewsletterPhpExternal {
 				+ " persona : " + persona);
 		final String SETTINGS_ACTION = "settingsAction";
 		String settingsAction = context.getParameterString(SETTINGS_ACTION);
-		double subscriberId = 0;
-		double preferenceId = 0;
-		String unsubreason = context.getParameterString("unsubscribe_reason");
-		String subStatus = "";
 
 		if (ACTION_UNSUBSCRIBE_NONLOGGED.equalsIgnoreCase(settingsAction)) {
-			logger.info("Unsubscribe Non Logged" + pageLang);
 
 			subscriberId = getSubscriberID(email, USING_EMAIL);
 			boolean bool = isEmailAlreadyExist(email);
 			if (bool) {
 
 				subStatus = getSubscriptionStatus(email, ACTION_UNSUBSCRIBE);
-				if (subStatus != null && subStatus.equals(STATUS_SUBSCRIBED)) {
 
-					String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-					sendConfirmationMail(email, pageLang, confirmationToken, UNSUBSCRIPTION_CONFIRMATION_EMAIL,
-							unsubreason, context);
-					createTopicsResponseDoc(responseElem, null, null, "", STATUS_SUCCESS, "");
-
-				} else if (subStatus != null && subStatus.equals(STATUS_PENDING)) {
-
-					createTopicsResponseDoc(responseElem, null, null, "", STATUS_PENDING, "");
-				} else if (subStatus != null && subStatus.equals(STATUS_UNSUBSCRIBED)) {
-					createTopicsResponseDoc(responseElem, null, null, "", STATUS_UNSUBSCRIBED, "");
-
-				}
-
+				createSubscribeStatusDoc(subscriberId, responseElem, context, subStatus, email);
 			} else {
 
 				createTopicsResponseDoc(responseElem, null, null, "", STATUS_NOT_SUBSCRIBED, "");
 			}
 			return doc;
 		}
-		
-		
-		memberdetail = unsubscription(context, memberdetail);
-		
+
+		memberdetail = unsubscription(context);
+
 		return memberdetail;
 	}
-	@SuppressWarnings("deprecation")
-	private Document unsubscription(RequestContext context, Document memberdetail) {
-		HttpSession session = context.getRequest().getSession();
 
+	@SuppressWarnings("deprecation")
+	public void createSubscribeStatusDoc(double subscriberId, Element responseElem, RequestContext context,
+			String subStatus, String email) {
+		XssUtils xssUtils = new XssUtils();
+		String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
+		double preferenceId = 0;
+		String unsubreason = context.getParameterString("unsubscribe_reason");
+
+		if (subStatus != null && subStatus.equals(STATUS_SUBSCRIBED)) {
+
+			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
+			sendConfirmationMail(email, pageLang, confirmationToken, UNSUBSCRIPTION_CONFIRMATION_EMAIL, unsubreason,
+					context);
+			createTopicsResponseDoc(responseElem, null, null, "", STATUS_SUCCESS, "");
+
+		} else if (subStatus != null && subStatus.equals(STATUS_PENDING)) {
+
+			createTopicsResponseDoc(responseElem, null, null, "", STATUS_PENDING, "");
+		} else if (subStatus != null && subStatus.equals(STATUS_UNSUBSCRIBED)) {
+			createTopicsResponseDoc(responseElem, null, null, "", STATUS_UNSUBSCRIBED, "");
+
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	private Document unsubscription(RequestContext context) {
+		HttpSession session = context.getRequest().getSession();
+		Document memberdetail = null;
 		XssUtils xssUtils = new XssUtils();
 		boolean verify = false;
 
@@ -261,21 +269,19 @@ public class NewsletterPhpExternal {
 			uid = (String) session.getAttribute("uid");
 		}
 		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));
-		String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
+		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(SUBSCRIPTION_LANG));
 		String gRecaptchaResponse = context.getParameterString("captcha");
-		
-		
+
 		if (validateLanguage(subscriptionLang) && validateMailID(xssUtils.stripXSS(email))) {
 			if (gRecaptchaResponse != null && !gRecaptchaResponse.equals("")) {
 				GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
 				verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
 				logger.debug("Recapcha verification status:" + verify);
-			} 
+			}
 			if (verify) {
-				
-				memberdetail = updateSubscription(memberdetail, email, context );
-				
-				
+
+				memberdetail = updateSubscription(email, context);
+
 			} else {
 				memberdetail = getDocument(email, STATUS_ERROR_RECAPTHCHA);
 			}
@@ -284,88 +290,98 @@ public class NewsletterPhpExternal {
 		}
 		return memberdetail;
 	}
+
 	@SuppressWarnings("deprecation")
-private Document updateSubscription(Document memberdetail, String email, RequestContext context ){
-	double subscriberId = 0;
-	double preferenceId = 0;
-	XssUtils xssUtils = new XssUtils();
-	String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
-	String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
-	String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
+	private Document updateSubscription(String email, RequestContext context) {
+		double subscriberId = 0;
+		double preferenceId = 0;
+		Document memberdetail = null;
+		XssUtils xssUtils = new XssUtils();
+		String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
+		String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
+		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(SUBSCRIPTION_LANG));
 
-	if (uid != null && !uid.equals("") && getSubscriptionStatusByUid(uid)) {
-		memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
-	} else if (!isEmailAlreadyExist(email)) {
+		if (uid != null && !uid.equals("") && getSubscriptionStatusByUid(uid)) {
+			memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
+		} else if (!isEmailAlreadyExist(email)) {
 
-		subscriberId = generateSubscriberId();
-		boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email,
-				STATUS_PENDING);
-		boolean subscriberPreferenceDataInsert = addSubscriberPreferences(subscriberId, subscriptionLang,
-				persona);
+			subscriberId = generateSubscriberId();
+			boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email, STATUS_PENDING);
+			boolean subscriberPreferenceDataInsert = addSubscriberPreferences(subscriberId, subscriptionLang, persona);
 
-		preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
-		String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-		if (subscriberMasterDataInsert && subscriberPreferenceDataInsert) {
-			sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
-			memberdetail = getDocument(email, CONFIRMATION_SENT);
+			preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
+			if (subscriberMasterDataInsert && subscriberPreferenceDataInsert) {
+				sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
+				memberdetail = getDocument(email, CONFIRMATION_SENT);
+			}
+
+		} else if (isEmailAlreadyExist(email)) {
+			// Check Confirmation Status
+			memberdetail = unsubscribeAlreadyExistEmail(email, context);
+
 		}
-
-	} else if (isEmailAlreadyExist(email)) {
-		// Check Confirmation Status
-		memberdetail = unsubscribeAlreadyExistEmail(email, memberdetail, context);
-		
-		
+		return memberdetail;
 	}
-	return memberdetail;
-}
-	
-@SuppressWarnings("deprecation")
-private Document unsubscribeAlreadyExistEmail(String email, Document memberdetail, RequestContext context) {
-	XssUtils xssUtils = new XssUtils();
-	String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
-	double subscriberId = 0;
-	double preferenceId = 0;
-	String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
-	String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
-	String confirmationStatus = checkConfirmationStatus(email);
-	logger.info("Confirmation Status received from Db : " + confirmationStatus);
-	if (STATUS_CONFIRMED.equals(confirmationStatus)) {
-		String subscriptionStatus = getSubscriptionStatus(email);
-		if (STATUS_PENDING.equals(subscriptionStatus)) {
-			memberdetail = getDocument(email, STATUS_ALREADY_PENDING);
-		} else if (STATUS_UNSUBSCRIBED.equals(subscriptionStatus)) {
-			memberdetail = getDocument(email, STATUS_ALREADY_UNSUBSCRIBED);
-		} else {
-			String preferenceStatus = checkPrefernceStatus(email, persona, subscriptionLang);
-			logger.info(preferenceStatus);
-			if (STATUS_ACTIVE.equals(preferenceStatus)) {
-				memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
-			} else if (STATUS_PENDING.equals(preferenceStatus)) {
-				memberdetail = getDocument(email, CONFIRMATION_PENDING);
-			} else {
 
-				subscriberId = getSubcriberId(email);
-				boolean preferenceUpdateStatus = updateSubscriberPreference(subscriberId,
-						subscriptionLang, persona, STATUS_PENDING);
-				preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
-				if (preferenceUpdateStatus) {
-					String confirmationToken = generateConfirmationToken(subscriberId, preferenceId,
-							email);
-					sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "",
-							context);
-					logger.info("Confirmation Mail Sent For Preference Update !");
-					memberdetail = getDocument(email, CONFIRMATION_SENT);
-				} else {
-					logger.info("Newsletter Preference Not Updated !");
+	@SuppressWarnings("deprecation")
+	private Document unsubscribeAlreadyExistEmail(String email, RequestContext context) {
+		XssUtils xssUtils = new XssUtils();
+		Document memberdetail = null;
+		String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
+		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(SUBSCRIPTION_LANG));
+		String confirmationStatus = checkConfirmationStatus(email);
+		logger.info("Confirmation Status received from Db : " + confirmationStatus);
+		if (STATUS_CONFIRMED.equals(confirmationStatus)) {
+			String subscriptionStatus = getSubscriptionStatus(email);
+			if (STATUS_PENDING.equals(subscriptionStatus)) {
+				memberdetail = getDocument(email, STATUS_ALREADY_PENDING);
+			} else if (STATUS_UNSUBSCRIBED.equals(subscriptionStatus)) {
+				memberdetail = getDocument(email, STATUS_ALREADY_UNSUBSCRIBED);
+			} else {
+				String preferenceStatus = checkPrefernceStatus(email, persona, subscriptionLang);
+				logger.info(preferenceStatus);
+				if (STATUS_ACTIVE.equals(preferenceStatus)) {
 					memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
+				} else if (STATUS_PENDING.equals(preferenceStatus)) {
+					memberdetail = getDocument(email, CONFIRMATION_PENDING);
+				} else {
+
+					memberdetail = updatePreference(email, context);
+
 				}
 			}
+		} else if (STATUS_PENDING.equals(confirmationStatus)) {
+			memberdetail = getDocument(email, CONFIRMATION_PENDING);
 		}
-	} else if (STATUS_PENDING.equals(confirmationStatus)) {
-		memberdetail = getDocument(email, CONFIRMATION_PENDING);
+		return memberdetail;
 	}
-	return memberdetail;
-}
+
+	@SuppressWarnings("deprecation")
+	private Document updatePreference(String email, RequestContext context) {
+		Document memberdetail = null;
+		XssUtils xssUtils = new XssUtils();
+		String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
+		double subscriberId = 0;
+		double preferenceId = 0;
+		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(SUBSCRIPTION_LANG));
+		String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
+		subscriberId = getSubcriberId(email);
+		boolean preferenceUpdateStatus = updateSubscriberPreference(subscriberId, subscriptionLang, persona,
+				STATUS_PENDING);
+		preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+		if (preferenceUpdateStatus) {
+			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
+			sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
+			logger.info("Confirmation Mail Sent For Preference Update !");
+			memberdetail = getDocument(email, CONFIRMATION_SENT);
+		} else {
+			logger.info("Newsletter Preference Not Updated !");
+			memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
+		}
+		return memberdetail;
+	}
+
 	/**
 	 * @param uid2
 	 * @return
