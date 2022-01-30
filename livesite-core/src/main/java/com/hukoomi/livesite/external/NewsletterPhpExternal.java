@@ -170,10 +170,7 @@ public class NewsletterPhpExternal {
 	 * Constant for error.
 	 */
 	public static final String ERROR = "error";
-	/**
-	 * Constant for subscriptionLang.
-	 */
-	public static final String LANG_SUBSTRING = "subscriptionLang";
+
 	/**
 	 * UID variable.
 	 */
@@ -187,19 +184,17 @@ public class NewsletterPhpExternal {
 
 		postgre = new Postgre(context);
 
+		Document memberdetail = null;
 		Document doc = DocumentHelper.createDocument();
 		Element responseElem = doc.addElement("dashboard-settings");
-
 		XssUtils xssUtils = new XssUtils();
-
 		String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
 
 		if (session.getAttribute(ELEMENT_STATUS) == "valid") {
 			uid = (String) session.getAttribute("uid");
 		}
 		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));
-		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(LANG_SUBSTRING));
-
+		String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
 		String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
 		if (uid != null && !uid.equals("")) {
 
@@ -213,167 +208,164 @@ public class NewsletterPhpExternal {
 
 		logger.info("User Details From Front End :-> email : " + email + " subcription language : " + subscriptionLang
 				+ " persona : " + persona);
-		/// Added code for unsubscription start
 		final String SETTINGS_ACTION = "settingsAction";
 		String settingsAction = context.getParameterString(SETTINGS_ACTION);
-		
-		
+		double subscriberId = 0;
+		double preferenceId = 0;
+		String unsubreason = context.getParameterString("unsubscribe_reason");
+		String subStatus = "";
 
 		if (ACTION_UNSUBSCRIBE_NONLOGGED.equalsIgnoreCase(settingsAction)) {
 			logger.info("Unsubscribe Non Logged" + pageLang);
 
-			
+			subscriberId = getSubscriberID(email, USING_EMAIL);
 			boolean bool = isEmailAlreadyExist(email);
 			if (bool) {
 
-				String subStatus = getSubscriptionStatus(email, ACTION_UNSUBSCRIBE);
-				if(subStatus != null && subStatus.length() != 0) {
-					createDOcForStatus(context, email, responseElem, subStatus, pageLang );
+				subStatus = getSubscriptionStatus(email, ACTION_UNSUBSCRIBE);
+				if (subStatus != null && subStatus.equals(STATUS_SUBSCRIBED)) {
 
-			} }else {
+					String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
+					sendConfirmationMail(email, pageLang, confirmationToken, UNSUBSCRIPTION_CONFIRMATION_EMAIL,
+							unsubreason, context);
+					createTopicsResponseDoc(responseElem, null, null, "", STATUS_SUCCESS, "");
+
+				} else if (subStatus != null && subStatus.equals(STATUS_PENDING)) {
+
+					createTopicsResponseDoc(responseElem, null, null, "", STATUS_PENDING, "");
+				} else if (subStatus != null && subStatus.equals(STATUS_UNSUBSCRIBED)) {
+					createTopicsResponseDoc(responseElem, null, null, "", STATUS_UNSUBSCRIBED, "");
+
+				}
+
+			} else {
 
 				createTopicsResponseDoc(responseElem, null, null, "", STATUS_NOT_SUBSCRIBED, "");
 			}
 			return doc;
 		}
-		doc = unsubscriptionFromNewsLetter(context, persona, pageLang);
-		logger.info("Newsletter final document : " + doc.asXML());
-		return doc;
+		
+		
+		memberdetail = unsubscription(context, memberdetail);
+		
+		return memberdetail;
 	}
-	
 	@SuppressWarnings("deprecation")
-	private Element createDOcForStatus(final RequestContext context, String email, Element responseElem, String subStatus, String pageLang ) {
-		double subscriberId = 0;
-		double preferenceId = 0;
-		String unsubreason = context.getParameterString("unsubscribe_reason");
-		subscriberId = getSubscriberID(email, USING_EMAIL);
-		if (subStatus.equals(STATUS_SUBSCRIBED) ) {
+	private Document unsubscription(RequestContext context, Document memberdetail) {
+		HttpSession session = context.getRequest().getSession();
 
-			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-			sendConfirmationMail(email, pageLang, confirmationToken, UNSUBSCRIPTION_CONFIRMATION_EMAIL,
-					unsubreason, context);
-			createTopicsResponseDoc(responseElem, null, null, "", STATUS_SUCCESS, "");
-
-		} else if (subStatus.equals(STATUS_PENDING)) {
-
-			createTopicsResponseDoc(responseElem, null, null, "", STATUS_PENDING, "");
-		} else if (subStatus.equals(STATUS_UNSUBSCRIBED)) {
-			createTopicsResponseDoc(responseElem, null, null, "", STATUS_UNSUBSCRIBED, "");
-
-		} 
-		return responseElem;
-	}
-
-	@SuppressWarnings("deprecation")
-	private Document unsubscriptionFromNewsLetter(RequestContext context, String persona, String pageLang) {
-		Document doc = DocumentHelper.createDocument();
 		XssUtils xssUtils = new XssUtils();
-		String gRecaptchaResponse = context.getParameterString("captcha");
 		boolean verify = false;
-		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));		
-		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(LANG_SUBSTRING));
+
+		if (session.getAttribute(ELEMENT_STATUS) == "valid") {
+			uid = (String) session.getAttribute("uid");
+		}
+		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));
+		String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
+		String gRecaptchaResponse = context.getParameterString("captcha");
+		
+		
 		if (validateLanguage(subscriptionLang) && validateMailID(xssUtils.stripXSS(email))) {
 			if (gRecaptchaResponse != null && !gRecaptchaResponse.equals("")) {
 				GoogleRecaptchaUtil captchUtil = new GoogleRecaptchaUtil();
 				verify = captchUtil.validateCaptcha(context, gRecaptchaResponse);
 				logger.debug("Recapcha verification status:" + verify);
+			} 
+			if (verify) {
+				
+				memberdetail = updateSubscription(memberdetail, email, context );
+				
+				
 			} else {
-				verify = true;
-			}
-
-			if (verify) {			
-				verifiedDoc(doc, email, subscriptionLang, persona, context, pageLang);
-					
-			} else {
-				doc = getDocument(email, STATUS_ERROR_RECAPTHCHA);
+				memberdetail = getDocument(email, STATUS_ERROR_RECAPTHCHA);
 			}
 		} else {
-			doc = getDocument(email, STATUS_FIELD_VALIDATION);
+			memberdetail = getDocument(email, STATUS_FIELD_VALIDATION);
 		}
-		return doc;
-
-	}
-
-	private Document verifiedDoc(Document doc, String email, String subscriptionLang, String persona, final RequestContext context, String pageLang) {
-		double preferenceId = 0;
-		double subscriberId = 0;
-		if (uid != null && !uid.equals("") && getSubscriptionStatusByUid(uid)) {
-			doc = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
-		} else if (!isEmailAlreadyExist(email)) {
-			subscriberId = generateSubscriberId();
-			boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email,
-					STATUS_PENDING);
-			boolean subscriberPreferenceDataInsert = addSubscriberPreferences(subscriberId, subscriptionLang,
-					persona);
-			preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
-			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-			if (subscriberMasterDataInsert && subscriberPreferenceDataInsert) {
-				sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
-				doc = getDocument(email, CONFIRMATION_SENT);
-			}
-
-		} else if (isEmailAlreadyExist(email)) {
-			// Check Confirmation Status
-			String confirmationStatus = checkConfirmationStatus(email);
-			logger.info("Confirmation Status received from Db : " + confirmationStatus);
-
-			doc = confirmationStatus(confirmationStatus, context, persona, pageLang);
-
-		}
-		return doc;
+		return memberdetail;
 	}
 	@SuppressWarnings("deprecation")
-	private Document confirmationStatus(String confirmationStatus, RequestContext context, String persona,
-			String pageLang) {
-		XssUtils xssUtils = new XssUtils();
-		Document doc = DocumentHelper.createDocument();
-		String email = xssUtils.stripXSS(context.getParameterString(ELEMENT_EMAIL));
-		String subscriptionLang = xssUtils.stripXSS(context.getParameterString(LANG_SUBSTRING));
+private Document updateSubscription(Document memberdetail, String email, RequestContext context ){
+	double subscriberId = 0;
+	double preferenceId = 0;
+	XssUtils xssUtils = new XssUtils();
+	String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
+	String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
+	String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
 
-		if (STATUS_CONFIRMED.equals(confirmationStatus)) {
-			String subscriptionStatus = getSubscriptionStatus(email);
-			if (STATUS_PENDING.equals(subscriptionStatus)) {
-				doc = getDocument(email, STATUS_ALREADY_PENDING);
-			} else if (STATUS_UNSUBSCRIBED.equals(subscriptionStatus)) {
-				doc = getDocument(email, STATUS_ALREADY_UNSUBSCRIBED);
+	if (uid != null && !uid.equals("") && getSubscriptionStatusByUid(uid)) {
+		memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
+	} else if (!isEmailAlreadyExist(email)) {
+
+		subscriberId = generateSubscriberId();
+		boolean subscriberMasterDataInsert = addSubscriberInMasterTable(uid, subscriberId, email,
+				STATUS_PENDING);
+		boolean subscriberPreferenceDataInsert = addSubscriberPreferences(subscriberId, subscriptionLang,
+				persona);
+
+		preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+		String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
+		if (subscriberMasterDataInsert && subscriberPreferenceDataInsert) {
+			sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
+			memberdetail = getDocument(email, CONFIRMATION_SENT);
+		}
+
+	} else if (isEmailAlreadyExist(email)) {
+		// Check Confirmation Status
+		memberdetail = unsubscribeAlreadyExistEmail(email, memberdetail, context);
+		
+		
+	}
+	return memberdetail;
+}
+	
+@SuppressWarnings("deprecation")
+private Document unsubscribeAlreadyExistEmail(String email, Document memberdetail, RequestContext context) {
+	XssUtils xssUtils = new XssUtils();
+	String pageLang = xssUtils.stripXSS(context.getParameterString("lang"));
+	double subscriberId = 0;
+	double preferenceId = 0;
+	String persona = xssUtils.stripXSS(context.getParameterString(PERSONA));
+	String subscriptionLang = xssUtils.stripXSS(context.getParameterString("subscriptionLang"));
+	String confirmationStatus = checkConfirmationStatus(email);
+	logger.info("Confirmation Status received from Db : " + confirmationStatus);
+	if (STATUS_CONFIRMED.equals(confirmationStatus)) {
+		String subscriptionStatus = getSubscriptionStatus(email);
+		if (STATUS_PENDING.equals(subscriptionStatus)) {
+			memberdetail = getDocument(email, STATUS_ALREADY_PENDING);
+		} else if (STATUS_UNSUBSCRIBED.equals(subscriptionStatus)) {
+			memberdetail = getDocument(email, STATUS_ALREADY_UNSUBSCRIBED);
+		} else {
+			String preferenceStatus = checkPrefernceStatus(email, persona, subscriptionLang);
+			logger.info(preferenceStatus);
+			if (STATUS_ACTIVE.equals(preferenceStatus)) {
+				memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
+			} else if (STATUS_PENDING.equals(preferenceStatus)) {
+				memberdetail = getDocument(email, CONFIRMATION_PENDING);
 			} else {
-				String preferenceStatus = checkPrefernceStatus(email, persona, subscriptionLang);
-				if (STATUS_ACTIVE.equals(preferenceStatus)) {
-					doc = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
-				} else if (STATUS_PENDING.equals(preferenceStatus)) {
-					doc = getDocument(email, CONFIRMATION_PENDING);
+
+				subscriberId = getSubcriberId(email);
+				boolean preferenceUpdateStatus = updateSubscriberPreference(subscriberId,
+						subscriptionLang, persona, STATUS_PENDING);
+				preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
+				if (preferenceUpdateStatus) {
+					String confirmationToken = generateConfirmationToken(subscriberId, preferenceId,
+							email);
+					sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "",
+							context);
+					logger.info("Confirmation Mail Sent For Preference Update !");
+					memberdetail = getDocument(email, CONFIRMATION_SENT);
 				} else {
-					doc = sendConfirmationEmail(email, pageLang, subscriptionLang, persona, context);
+					logger.info("Newsletter Preference Not Updated !");
+					memberdetail = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
 				}
 			}
-		} else if (STATUS_PENDING.equals(confirmationStatus)) {
-			doc = getDocument(email, CONFIRMATION_PENDING);
 		}
-		return doc;
+	} else if (STATUS_PENDING.equals(confirmationStatus)) {
+		memberdetail = getDocument(email, CONFIRMATION_PENDING);
 	}
-
-	private Document sendConfirmationEmail(String email, String pageLang, String subscriptionLang, String persona,
-			RequestContext context) {
-		double subscriberId = 0;
-		Document doc = null;
-		double preferenceId = 0;
-		subscriberId = getSubcriberId(email);
-		boolean preferenceUpdateStatus = updateSubscriberPreference(subscriberId, subscriptionLang, persona,
-				STATUS_PENDING);
-		preferenceId = getPreferenceId(subscriberId, subscriptionLang, persona);
-
-		if (preferenceUpdateStatus) {
-			String confirmationToken = generateConfirmationToken(subscriberId, preferenceId, email);
-			sendConfirmationMail(email, pageLang, confirmationToken, CONFIRMATION_EMAIL, "", context);
-			logger.info("Confirmation Mail Sent For Preference Update !");
-			doc = getDocument(email, CONFIRMATION_SENT);
-		} else {
-			logger.info("Newsletter Preference Not Updated !");
-			doc = getDocument(email, STATUS_ALREADY_SUBSCRIBED);
-		}
-		return doc;
-	}
-
+	return memberdetail;
+}
 	/**
 	 * @param uid2
 	 * @return
@@ -386,22 +378,22 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(emailCheckQuery);
 			prepareStatement.setString(1, uid);
 
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Email Already Exist !");
 				emailsExistStatus = true;
-			} 
+			}
 		} catch (Exception e) {
 			logger.error("Exception in getSubscriptionStatusByUid", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 		return emailsExistStatus;
 	}
@@ -416,13 +408,13 @@ public class NewsletterPhpExternal {
 		String getSubcriberIdQuery = "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(getSubcriberIdQuery);
 
 			prepareStatement.setString(1, email);
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Subscriber Id Available  !");
@@ -433,7 +425,7 @@ public class NewsletterPhpExternal {
 		} catch (Exception e) {
 			logger.error("Exception in getSubcriberId", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 
 		return subscriberId;
@@ -492,7 +484,7 @@ public class NewsletterPhpExternal {
 		String tokenCheckQuery = "SELECT NP.STATUS FROM NEWSLETTER_MASTER NM INNER JOIN NEWSLETTER_PREFERENCE NP ON NM.SUBSCRIBER_ID = NP.SUBSCRIBER_ID WHERE NM.SUBSCRIBER_EMAIL = ? AND NP.PERSONA = ? AND NP.LANGUAGE = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(tokenCheckQuery);
@@ -500,7 +492,7 @@ public class NewsletterPhpExternal {
 			prepareStatement.setString(2, persona);
 			prepareStatement.setString(3, subscriptionLang);
 
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) {
 				preferenceStatus = resultSet.getString(1);
 			}
@@ -508,7 +500,7 @@ public class NewsletterPhpExternal {
 		} catch (Exception e) {
 			logger.error("Exception in checkPrefernceStatus", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 		return preferenceStatus;
 	}
@@ -519,17 +511,16 @@ public class NewsletterPhpExternal {
 	private String checkConfirmationStatus(String email) {
 		String confirmationStatus = STATUS_PENDING;
 
-		String checkConfirmationStatusQuery = "SELECT COUNT(*) FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE "
-				+ "SUBSCRIBER_EMAIL = ? AND CONFIRMATION_STATUS = 'Confirmed'";
+		String checkConfirmationStatusQuery = "SELECT COUNT(*) FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE SUBSCRIBER_EMAIL = ? AND CONFIRMATION_STATUS = 'Confirmed'";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(checkConfirmationStatusQuery);
 
 			prepareStatement.setString(1, email);
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 			resultSet.next();
 			long count = resultSet.getLong(1);
 			if (count > 0) {
@@ -539,7 +530,7 @@ public class NewsletterPhpExternal {
 		} catch (Exception e) {
 			logger.error("Exception in checkConfirmationStatus", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 
 		return confirmationStatus;
@@ -600,13 +591,13 @@ public class NewsletterPhpExternal {
 		String tokenCheckQuery = "SELECT TOKEN FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE TOKEN = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(tokenCheckQuery);
 			prepareStatement.setString(1, confirmationToken);
 
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Token already Exist !");
@@ -617,7 +608,7 @@ public class NewsletterPhpExternal {
 		} catch (Exception e) {
 			logger.error("Exception in isConfirmationTokenExist", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 		return tokenExist;
 	}
@@ -632,20 +623,20 @@ public class NewsletterPhpExternal {
 		String getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(getSubscriptionStatusQuery);
 			prepareStatement.setString(1, email);
 
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 			resultSet.next();
 			subscriptionStatus = resultSet.getString(1);
 
 		} catch (Exception e) {
 			logger.error("Exception in getSubscriptionStatus", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 		return subscriptionStatus;
 	}
@@ -661,7 +652,7 @@ public class NewsletterPhpExternal {
 		String getPreferenceIdQuery = "SELECT PREFERENCE_ID FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ? AND PERSONA = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(getPreferenceIdQuery);
@@ -669,7 +660,7 @@ public class NewsletterPhpExternal {
 			prepareStatement.setString(2, subscriptionLang);
 			prepareStatement.setString(3, persona);
 
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Preference Id Exist !");
@@ -680,7 +671,7 @@ public class NewsletterPhpExternal {
 		} catch (Exception e) {
 			logger.error("Exception in getPreferenceId", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 		return preferenceId;
 	}
@@ -773,7 +764,7 @@ public class NewsletterPhpExternal {
 			if (result != 0) {
 				logger.info("Newsletter Preference Added !");
 				subscriberPreferenceDataInsert = true;
-			} 
+			}
 		} catch (Exception e) {
 			logger.error("Exception in addSubscriberPreferences", e);
 		} finally {
@@ -795,13 +786,13 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(checkSubscriberIdQuery);
 			prepareStatement.setDouble(1, subscriberId);
 
-			 resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Subcriber Id Already Exist !");
@@ -812,7 +803,7 @@ public class NewsletterPhpExternal {
 		} catch (Exception e) {
 			logger.error("Exception in generateSubscriberId", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet );
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 
 		return subscriberId;
@@ -829,22 +820,22 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(emailCheckQuery);
 			prepareStatement.setString(1, email);
 
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Email Already Exist !");
 				emailsExistStatus = true;
-			} 
+			}
 		} catch (Exception e) {
 			logger.error("Exception in isEmailAlreadyExist", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 		return emailsExistStatus;
 	}
@@ -878,7 +869,7 @@ public class NewsletterPhpExternal {
 			if (result != 0) {
 				logger.info("Subscriber Added !");
 				subscriberMasterDataInsert = true;
-			} 
+			}
 		} catch (Exception e) {
 			logger.error("Exception in addSubscriberInMasterTable", e);
 		} finally {
@@ -1010,13 +1001,13 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		ResultSet resultSet = null;
+
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(getSubscriptionStatusQuery);
 			prepareStatement.setString(1, userId);
 
-			resultSet = prepareStatement.executeQuery();
+			ResultSet resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) {
 				subscriptionStatus = resultSet.getString(1);
 			}
@@ -1024,7 +1015,7 @@ public class NewsletterPhpExternal {
 		} catch (Exception e) {
 			logger.error("Exception in getSubscriptionStatus", e);
 		} finally {
-			postgre.releaseConnection(connection, prepareStatement, resultSet);
+			postgre.releaseConnection(connection, prepareStatement, null);
 		}
 		return subscriptionStatus;
 	}

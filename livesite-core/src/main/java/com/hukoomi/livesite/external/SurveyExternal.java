@@ -220,6 +220,7 @@ public class SurveyExternal {
             }
             nlUIDCookie.setMaxAge(nlUserCookieExpiry);
             nlUIDCookie.setPath("/");
+            nlUIDCookie.setHttpOnly(true); 
             response.addCookie(nlUIDCookie);
             logger.info("nlUIDCookie added to cookie");
         }
@@ -314,6 +315,7 @@ public class SurveyExternal {
             }
             nlUIDCookie.setMaxAge(nlUserCookieExpiry);
             nlUIDCookie.setPath("/");
+            nlUIDCookie.setHttpOnly(true);
             response.addCookie(nlUIDCookie);
             logger.info("nlUIDCookie added to cookie");
         }

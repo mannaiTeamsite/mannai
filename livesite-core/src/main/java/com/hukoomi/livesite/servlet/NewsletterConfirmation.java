@@ -187,13 +187,16 @@ public class NewsletterConfirmation extends HttpServlet {
 			if (uptpostgreData.equals(STATUS_SUCCESS)) {
 				String cookieStatus = postgreDataSuccess(token, subscriberId, preferenceId, postgre);
 				Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, cookieStatus);
+				confirmationCookie.setHttpOnly(true);
 				response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
 				response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
 				response.setDateHeader(EXPIRES, 0);
 				response.addCookie(confirmationCookie);
+				
 				rd.forward(request, response);
 			} else {
 				Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "technicalIssue");
+				confirmationCookie.setHttpOnly(true);
 				response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
 				response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
 				response.setDateHeader(EXPIRES, 0);
@@ -203,6 +206,7 @@ public class NewsletterConfirmation extends HttpServlet {
 
 		} else {
 			Cookie confirmationCookie = new Cookie(CONFIRMATION_STATUS, "alreadyConfirmed");
+			confirmationCookie.setHttpOnly(true);
 			response.setHeader(CACHE_CONTROL, CACHE_STORE_REVALIDATE); // HTTP 1.1.
 			response.setHeader(PRAGMA, NO_CACHE); // HTTP 1.0.
 			response.setDateHeader(EXPIRES, 0);
