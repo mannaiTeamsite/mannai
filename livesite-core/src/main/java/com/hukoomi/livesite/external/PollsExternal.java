@@ -237,6 +237,7 @@ public class PollsExternal {
             logger.info(NLUID+" : " + nlUID);
             pollsBO.setNLUID(nlUID);
             Cookie nlUIDCookie = new Cookie(NLUID, nlUID);
+            
             logger.info("nlUIDCookie : " + nlUIDCookie);
             String nlUserCookieExpiryStr = nluseridProp.getProperty(NLUSERCOOKIEEXPIRY);
             logger.info("nlUserCookieExpiryStr : " + nlUserCookieExpiryStr);
@@ -246,6 +247,7 @@ public class PollsExternal {
             }
             nlUIDCookie.setMaxAge(nlUserCookieExpiry);
             nlUIDCookie.setPath("/");
+            nlUIDCookie.setHttpOnly(true);
             response.addCookie(nlUIDCookie);
             logger.info("nlUIDCookie added to cookie");
         }
