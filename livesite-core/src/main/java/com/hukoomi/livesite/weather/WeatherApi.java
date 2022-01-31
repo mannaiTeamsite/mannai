@@ -51,7 +51,7 @@ public class WeatherApi {
 			LOGGER.info("responseCode" + responseCode);
 			if (responseCode == HttpURLConnection.HTTP_OK) {
 				LOGGER.info("Inside current temp");
-				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				LOGGER.info("Inside current temp 1");
 				StringBuilder response = new StringBuilder();
 
@@ -62,7 +62,6 @@ public class WeatherApi {
 				in.close();
 				LOGGER.info("Inside current temp 3");
 				return response.toString();
-
 			}
 		} catch (IOException e) {
 

@@ -31,6 +31,7 @@ public class ContentAsAPIExternal {
 	 * @return json object as string return the solr response document generated
 	 *         from solr query.
 	 */
+	@SuppressWarnings("deprecation")
 	public Document getSolrContent(RequestContext context) {
 		SolrQueryUtil squ = new SolrQueryUtil();
 		SolrQueryBuilder sqb = new SolrQueryBuilder(context);
@@ -53,7 +54,7 @@ public class ContentAsAPIExternal {
 			} else {
 				fieldQuery = "category:" + category;
 			}
-			logger.debug("fieldQuery : " + fieldQuery);
+			logger.debug("fQuery : " + fieldQuery);
 			sqb.addFieldQuery(fieldQuery);
 		}
 
@@ -61,7 +62,7 @@ public class ContentAsAPIExternal {
 		context.setParameterString("fields", fields);
 		logger.debug("fields : " + fields);
 		if (StringUtils.isNotBlank(fields)) {
-			logger.debug("fieldQuery : " + fieldQuery);
+			logger.debug("fQ : " + fieldQuery);
 			sqb.addFields(fields);
 		}
 
@@ -70,7 +71,7 @@ public class ContentAsAPIExternal {
 		context.setParameterString("crawlFields", crawlFields);
 		logger.debug("crawlFields : " + crawlFields);
 		if (StringUtils.isNotBlank(crawlFields)) {
-			logger.debug("fieldQuery : " + fieldQuery);
+			logger.debug("fq : " + fieldQuery);
 			sqb.addCrawlFields(crawlFields);
 		}
 

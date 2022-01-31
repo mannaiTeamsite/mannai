@@ -6,6 +6,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -394,13 +395,13 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-
+		ResultSet resultSet = null;
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(emailCheckQuery);
 			prepareStatement.setString(1, uid);
 
-			ResultSet resultSet = prepareStatement.executeQuery();
+			 resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Email Already Exist !");
@@ -410,6 +411,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in getSubscriptionStatusByUid", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception in closing result", e);
+				}
+			}
 		}
 		return emailsExistStatus;
 	}
@@ -424,13 +432,14 @@ public class NewsletterPhpExternal {
 		String getSubcriberIdQuery = "SELECT SUBSCRIBER_ID FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
+		ResultSet resultSet = null;
 
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(getSubcriberIdQuery);
 
 			prepareStatement.setString(1, email);
-			ResultSet resultSet = prepareStatement.executeQuery();
+			 resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Subscriber Id Available  !");
@@ -442,6 +451,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in getSubcriberId", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception in resultset closing", e);
+				}
+			}
 		}
 
 		return subscriberId;
@@ -500,15 +516,15 @@ public class NewsletterPhpExternal {
 		String tokenCheckQuery = "SELECT NP.STATUS FROM NEWSLETTER_MASTER NM INNER JOIN NEWSLETTER_PREFERENCE NP ON NM.SUBSCRIBER_ID = NP.SUBSCRIBER_ID WHERE NM.SUBSCRIBER_EMAIL = ? AND NP.PERSONA = ? AND NP.LANGUAGE = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-
+		ResultSet resultSet = null;
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(tokenCheckQuery);
 			prepareStatement.setString(1, email);
 			prepareStatement.setString(2, persona);
 			prepareStatement.setString(3, subscriptionLang);
-
-			ResultSet resultSet = prepareStatement.executeQuery();
+			
+			resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) {
 				preferenceStatus = resultSet.getString(1);
 			}
@@ -517,6 +533,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in checkPrefernceStatus", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception in resultset", e);
+				}
+			}
 		}
 		return preferenceStatus;
 	}
@@ -530,13 +553,14 @@ public class NewsletterPhpExternal {
 		String checkConfirmationStatusQuery = "SELECT COUNT(*) FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE SUBSCRIBER_EMAIL = ? AND CONFIRMATION_STATUS = 'Confirmed'";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
+		ResultSet resultSet = null;
 
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(checkConfirmationStatusQuery);
 
 			prepareStatement.setString(1, email);
-			ResultSet resultSet = prepareStatement.executeQuery();
+			resultSet = prepareStatement.executeQuery();
 			resultSet.next();
 			long count = resultSet.getLong(1);
 			if (count > 0) {
@@ -547,6 +571,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in checkConfirmationStatus", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("resultset closing exeption", e);
+				}
+			}
 		}
 
 		return confirmationStatus;
@@ -607,13 +638,13 @@ public class NewsletterPhpExternal {
 		String tokenCheckQuery = "SELECT TOKEN FROM NEWSLETTER_CONFIRMATION_TOKEN WHERE TOKEN = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-
+		ResultSet resultSet = null;
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(tokenCheckQuery);
 			prepareStatement.setString(1, confirmationToken);
 
-			ResultSet resultSet = prepareStatement.executeQuery();
+			resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Token already Exist !");
@@ -625,6 +656,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in isConfirmationTokenExist", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception", e);
+				}
+			}
 		}
 		return tokenExist;
 	}
@@ -639,13 +677,14 @@ public class NewsletterPhpExternal {
 		String getSubscriptionStatusQuery = "SELECT STATUS FROM NEWSLETTER_MASTER WHERE SUBSCRIBER_EMAIL = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
+		ResultSet resultSet = null;
 
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(getSubscriptionStatusQuery);
 			prepareStatement.setString(1, email);
 
-			ResultSet resultSet = prepareStatement.executeQuery();
+			resultSet = prepareStatement.executeQuery();
 			resultSet.next();
 			subscriptionStatus = resultSet.getString(1);
 
@@ -653,6 +692,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in getSubscriptionStatus", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error(" resultset", e);
+				}
+			}
 		}
 		return subscriptionStatus;
 	}
@@ -668,6 +714,7 @@ public class NewsletterPhpExternal {
 		String getPreferenceIdQuery = "SELECT PREFERENCE_ID FROM NEWSLETTER_PREFERENCE WHERE SUBSCRIBER_ID = ? AND LANGUAGE = ? AND PERSONA = ?";
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
+		ResultSet resultSet = null;
 
 		try {
 			connection = postgre.getConnection();
@@ -676,7 +723,7 @@ public class NewsletterPhpExternal {
 			prepareStatement.setString(2, subscriptionLang);
 			prepareStatement.setString(3, persona);
 
-			ResultSet resultSet = prepareStatement.executeQuery();
+			resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Preference Id Exist !");
@@ -688,6 +735,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in getPreferenceId", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception in closing resultset for getPreferenceId", e);
+				}
+			}
 		}
 		return preferenceId;
 	}
@@ -802,13 +856,13 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-
+		ResultSet resultSet = null;
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(checkSubscriberIdQuery);
 			prepareStatement.setDouble(1, subscriberId);
 
-			ResultSet resultSet = prepareStatement.executeQuery();
+			resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Subcriber Id Already Exist !");
@@ -820,6 +874,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in generateSubscriberId", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception in closing resultset for generateSubscriberId", e);
+				}
+			}
 		}
 
 		return subscriberId;
@@ -836,13 +897,13 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-
+		ResultSet resultSet = null;
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(emailCheckQuery);
 			prepareStatement.setString(1, email);
 
-			ResultSet resultSet = prepareStatement.executeQuery();
+			 resultSet = prepareStatement.executeQuery();
 
 			if (resultSet.next()) {
 				logger.info("Email Already Exist !");
@@ -852,6 +913,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in isEmailAlreadyExist", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception in closing resultset", e);
+				}
+			}
 		}
 		return emailsExistStatus;
 	}
@@ -1017,13 +1085,13 @@ public class NewsletterPhpExternal {
 
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-
+		ResultSet resultSet = null;
 		try {
 			connection = postgre.getConnection();
 			prepareStatement = connection.prepareStatement(getSubscriptionStatusQuery);
 			prepareStatement.setString(1, userId);
 
-			ResultSet resultSet = prepareStatement.executeQuery();
+			resultSet = prepareStatement.executeQuery();
 			while (resultSet.next()) {
 				subscriptionStatus = resultSet.getString(1);
 			}
@@ -1032,6 +1100,13 @@ public class NewsletterPhpExternal {
 			logger.error("Exception in getSubscriptionStatus", e);
 		} finally {
 			postgre.releaseConnection(connection, prepareStatement, null);
+			if(resultSet != null) {
+				try {
+					resultSet.close();
+				} catch (SQLException e) {
+					logger.error("Exception in closing resultset", e);
+				}
+			}
 		}
 		return subscriptionStatus;
 	}
