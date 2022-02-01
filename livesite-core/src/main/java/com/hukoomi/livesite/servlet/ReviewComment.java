@@ -62,7 +62,7 @@ public class ReviewComment extends HttpServlet {
 	/** character set Constant */
 	private static final String USERNAME = "username";
 	/** character set Constant */
-	private static final String PASSWORD = "password";
+	private static final String CREDENTIALS = "cred_pd";
 	/** character set Constant */
 	private static final String APPLICATION_JSON = "application/json";
 	/** character set Constant */
@@ -175,9 +175,9 @@ public class ReviewComment extends HttpServlet {
 		JSONArray arrayComments = new JSONArray();
 		try {
 			String userName = dbProperties.getProperty(USERNAME);
-			String password = dbProperties.getProperty(PASSWORD);
-			password = IREncryptionUtil.decrypt(password);
-			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, password);
+			String cred_pd = dbProperties.getProperty(CREDENTIALS);
+			cred_pd = IREncryptionUtil.decrypt(cred_pd);
+			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, cred_pd);
 
 			String getBlog = "SELECT * FROM BLOG_MASTER";
 			prepareStatement = connection.prepareStatement(getBlog);
@@ -210,9 +210,9 @@ public class ReviewComment extends HttpServlet {
 		boolean isDataUpdated = false;
 		try {
 			String userName = dbProperties.getProperty(USERNAME);
-			String password = dbProperties.getProperty(PASSWORD);
-			password = IREncryptionUtil.decrypt(password);
-			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, password);
+			String cred_pd = dbProperties.getProperty(CREDENTIALS);
+			cred_pd = IREncryptionUtil.decrypt(cred_pd);
+			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, cred_pd);
 			LOGGER.debug("BlogTask : after getConnection");
 			int result = updateCommentData(connection, data);
 			LOGGER.info("insertBlogData result : " + result);
@@ -294,9 +294,9 @@ public class ReviewComment extends HttpServlet {
 		String getComment = "";
 		try {
 			String userName = dbProperties.getProperty(USERNAME);
-			String password = dbProperties.getProperty(PASSWORD);
-			password = IREncryptionUtil.decrypt(password);
-			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, password);
+			String cred_pd = dbProperties.getProperty(CREDENTIALS);
+			cred_pd = IREncryptionUtil.decrypt(cred_pd);
+			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, cred_pd);
 			if (blogId > 0) {
 				getComment = "SELECT COMMENT_ID, COMMENT, USER_NAME, COMMENTED_ON,BLOG_URL,USER_IP_ADDRESS  "
 						+ "FROM BLOG_COMMENT WHERE BLOG_ID = ? AND STATUS = ? ORDER BY COMMENT_ID ";
@@ -360,9 +360,9 @@ public class ReviewComment extends HttpServlet {
 		String blogTitle = "";
 		try {
 			String userName = dbProperties.getProperty(USERNAME);
-			String password = dbProperties.getProperty(PASSWORD);
-			password = IREncryptionUtil.decrypt(password);
-			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, password);
+			String cred_pd = dbProperties.getProperty(CREDENTIALS);
+			cred_pd = IREncryptionUtil.decrypt(cred_pd);
+			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, cred_pd);
 
 			titleQuery = "SELECT BLOG_TITLE FROM BLOG_MASTER WHERE BLOG_ID IN "
 					+ "(SELECT BLOG_ID FROM BLOG_COMMENT WHERE COMMENT_ID = ? )";
@@ -407,9 +407,9 @@ public class ReviewComment extends HttpServlet {
 		String useremailID = "";
 		try {
 			String userName = dbProperties.getProperty(USERNAME);
-			String password = dbProperties.getProperty(PASSWORD);
-			password = IREncryptionUtil.decrypt(password);
-			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, password);
+			String cred_pd = dbProperties.getProperty(CREDENTIALS);
+			cred_pd = IREncryptionUtil.decrypt(cred_pd);
+			connection = DriverManager.getConnection(getConnectionString(dbProperties), userName, cred_pd);
 
 			emailQuery = "SELECT USER_EMAILID FROM BLOG_COMMENT WHERE COMMENT_ID = ? ";
 			prepareStatement = connection.prepareStatement(emailQuery);

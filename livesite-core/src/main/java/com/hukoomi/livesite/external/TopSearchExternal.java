@@ -82,13 +82,14 @@ public class TopSearchExternal {
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
 		String searchQuery = "select lower(keyword), count(lower(keyword)) from" + " " + table + " " + "where" + " "
-				+ "locale='" + locale + "' " + "group by lower(keyword) having count(lower(keyword)) > 1 "
+				+ "locale=? " + "group by lower(keyword) having count(lower(keyword)) > 1 "
 				+ "order by count(lower(keyword))" + " " + searchOrder + " " + "limit" + " " + topSearchLimit;
 		logger.debug("searchQuery:" + searchQuery);
 		ResultSet resultSet = null;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(searchQuery);
+				prepareStatement.setString(1, locale);
 				resultSet = prepareStatement.executeQuery();
 				String keyWord = "";
 				while (resultSet.next()) {
@@ -147,8 +148,7 @@ public class TopSearchExternal {
 
 	private boolean isKeywordExist(Connection connection) {
 		logger.debug("isKeywordExist()====> Starts");
-		String searchQuery = "select * from " + table + " where" + " lower(keyword)='" + baseQuery.toLowerCase() + "'"
-				+ " and ip='" + ipAddress + "'" + " and locale='" + locale + "'";
+		String searchQuery = "select * from " + table + " where lower(keyword)=? and ip=? and locale=?";
 		logger.debug("searchQuery:" + searchQuery);
 		ResultSet resultSet = null;
 		boolean isKeyword = false;
@@ -156,6 +156,9 @@ public class TopSearchExternal {
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(searchQuery);
+				prepareStatement.setString(1, baseQuery.toLowerCase());
+				prepareStatement.setString(2, ipAddress);
+				prepareStatement.setString(3, locale);
 				resultSet = prepareStatement.executeQuery();
 				while (resultSet.next()) {
 					isKeyword = true;

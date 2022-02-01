@@ -6,8 +6,7 @@ import java.util.regex.Pattern;
 public class ValidationUtils {
 
 	/** regex for emailId. */
-	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\."
-			+ "[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*" + "(\\.[A-Za-z]{2,})$";
+	private static final String EMAIL_PATTERN = "(\\\\.[a-zA-Z0-9][a-zA-Z0-9\\\\-]{0,25})(\\\\.[a-zA-Z0-9][a-zA-Z0-9\\\\-]{0,25})?(\\\\.[a-zA-Z0-9][a-zA-Z0-9\\\\-]{0,25})?(\\\\.[a-zA-Z0-9][a-zA-Z0-9\\\\-]{0,25})?";
 	/** regex for alphanumeric with space. */
 	private static final String ALPHANUMERIC_SPACE_PATTERN = "^[ 0-9A-Za-z]+$";
 	/** regex for numeric space. */

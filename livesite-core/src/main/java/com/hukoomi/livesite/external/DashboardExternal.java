@@ -413,14 +413,17 @@ public class DashboardExternal {
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
 		String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " "
-				+ table + " " + "where" + " " + "locale='" + locale + "' and " + "user_id='" + userID + "' and active='"
-				+ activeflag + "' and category='" + category + "'";
+				+ table + " " + "where locale= ? and user_id= ? and active = ?  and category= ?";
 		LOGGER.info("searchQuery:" + searchQuery);
 		ResultSet resultSet = null;
 		try {
 
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(searchQuery);
+				prepareStatement.setString(1, locale);
+				prepareStatement.setString(2, userID);
+				prepareStatement.setString(3, activeflag);
+				prepareStatement.setString(4, category);
 				resultSet = prepareStatement.executeQuery();
 				String pageTitle = "";
 				String pageURL = "";
@@ -476,14 +479,19 @@ public class DashboardExternal {
 		LOGGER.info("removeBookmark()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
-		String updateQuery = "UPDATE" + " " + table + " set active='" + activeflag + "' where locale='" + locale
-				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
-				+ "' and content_type='" + contenttype + "'";
+		String updateQuery = "UPDATE" + " " + table + " set active= ? where locale= ? and user_id= ? and page_title= ? and page_url= ? and content_type= ? ";
+
 		LOGGER.info("updateQuery:" + updateQuery);
 
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(updateQuery);
+				prepareStatement.setString(1, activeflag);
+				prepareStatement.setString(2, locale);
+				prepareStatement.setString(3, userID);
+				prepareStatement.setString(4, pagetitle);
+				prepareStatement.setString(5, pageurl);
+				prepareStatement.setString(6, contenttype);
 				prepareStatement.executeUpdate();
 
 				LOGGER.info("caling get bookmark");
@@ -513,9 +521,7 @@ public class DashboardExternal {
 		LOGGER.info("isBookmarkPresent()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
-		String searchQuery = "select active from" + " " + table + " " + "where" + " " + "locale='" + locale
-				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
-				+ "' and content_type='" + contenttype + "'";
+		String searchQuery = "select active from" + " " + table + " " + "where locale= ? and user_id= ? and page_title= ? and page_url= ? and content_type= ?";
 		ResultSet resultSet = null;
 		try {
 			if (connection != null) {

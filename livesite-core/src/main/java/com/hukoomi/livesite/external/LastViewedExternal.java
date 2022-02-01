@@ -167,13 +167,15 @@ public class LastViewedExternal {
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
 		String searchQuery = "select page_title, page_url, page_description, content_type, category from" + " " + table
-				+ " " + "where" + " " + "locale='" + locale + "' and " + "user_id='" + userID + "' and category='"
-				+ category + "'";
+				+ " where locale=? and user_id=? and category=?";
 		logger.info("searchQuery:" + searchQuery);
 		ResultSet resultSet = null;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(searchQuery);
+				prepareStatement.setString(1, locale);
+				prepareStatement.setString(2, userID);
+				prepareStatement.setString(3, category);
 				resultSet = prepareStatement.executeQuery();
 				String pageTitle = "";
 				String pageURL = "";
@@ -218,13 +220,16 @@ public class LastViewedExternal {
 		logger.info("isLastViewed()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
-		String searchQuery = "select count(*) from" + " " + table + " " + "where" + " " + "locale='" + locale
-				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
-				+ "' and content_type='" + contenttype + "'";
+		String searchQuery = "select count(*) from" + " " + table + " " + "where locale=? and user_id=? and page_title=? and page_url=? and content_type=?";
 		ResultSet resultSet = null;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(searchQuery);
+				prepareStatement.setString(1, locale);
+				prepareStatement.setString(2, userID);
+				prepareStatement.setString(3, pagetitle);
+				prepareStatement.setString(4, pageurl);
+				prepareStatement.setString(5, contenttype);
 				resultSet = prepareStatement.executeQuery();
 
 				while (resultSet.next()) {
@@ -250,9 +255,7 @@ public class LastViewedExternal {
 		int result = 0;
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		String lastviewedUpdateQuery = "UPDATE" + " " + table + " set view_date=LOCALTIMESTAMP where locale='" + locale
-				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
-				+ "' and content_type='" + contenttype + "'";
+		String lastviewedUpdateQuery = "UPDATE" + " " + table + " set view_date=LOCALTIMESTAMP where locale= ? and user_id=? and page_title=? and page_url=? and content_type=?";
 		logger.debug("lastviewedUpdateQuery:" + lastviewedUpdateQuery);
 
 		try {
@@ -260,6 +263,11 @@ public class LastViewedExternal {
 			if (connection != null) {
 
 				prepareStatement = connection.prepareStatement(lastviewedUpdateQuery);
+				prepareStatement.setString(1, locale);
+				prepareStatement.setString(2, userID);
+				prepareStatement.setString(3, pagetitle);
+				prepareStatement.setString(4, pageurl);
+				prepareStatement.setString(5, contenttype);
 				result = prepareStatement.executeUpdate();
 
 			} else {

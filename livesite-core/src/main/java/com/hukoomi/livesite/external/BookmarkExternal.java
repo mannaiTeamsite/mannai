@@ -180,13 +180,16 @@ public class BookmarkExternal {
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
 		String searchQuery = "select page_title, page_url, page_description, active, content_type, category from" + " "
-				+ table + " " + "where" + " " + "locale='" + locale + "' and " + "user_id='" + userID
-				+ "' and category='" + category + "' and active='" + activeflag + "'";
+				+ table + " " + "where locale = ? and user_id= ? and category= ? and active= ?";
 		logger.info("searchQuery:" + searchQuery);
 		ResultSet resultSet = null;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(searchQuery);
+				prepareStatement.setString(1, locale);
+				prepareStatement.setString(2, userID);
+				prepareStatement.setString(3, category);
+				prepareStatement.setString(4, activeflag);
 				resultSet = prepareStatement.executeQuery();
 				String pageTitle = "";
 				String pageURL = "";
@@ -232,13 +235,17 @@ public class BookmarkExternal {
 		logger.info("isBookmarkPresent()====> Starts");
 		Connection connection = getConnection();
 		PreparedStatement prepareStatement = null;
-		String searchQuery = "select active from" + " " + table + " " + "where" + " " + "locale='" + locale
-				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
-				+ "' and content_type='" + contenttype + "'";
+		String searchQuery = "select active from" + " " + table + " " + "where" + " " + "locale= ? and user_id= ? and page_title= ? and page_url= ? and content_type= ?";
+
 		ResultSet resultSet = null;
 		try {
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(searchQuery);
+				prepareStatement.setString(1, locale);
+				prepareStatement.setString(2, userID);
+				prepareStatement.setString(3, pagetitle);
+				prepareStatement.setString(4, pageurl);
+				prepareStatement.setString(5, contenttype);
 				resultSet = prepareStatement.executeQuery();
 
 				while (resultSet.next()) {
@@ -265,9 +272,7 @@ public class BookmarkExternal {
 		int result = 0;
 		Connection connection = null;
 		PreparedStatement prepareStatement = null;
-		String bookmarkUpdateQuery = "UPDATE" + " " + table + " set active='" + active + "' where locale='" + locale
-				+ "' and user_id='" + userID + "' and page_title='" + pagetitle + "' and page_url='" + pageurl
-				+ "' and content_type='" + contenttype + "'";
+		String bookmarkUpdateQuery = "UPDATE" + " " + table + " set active= ? where locale= ? and user_id= ? and page_title= ? and page_url= ? and content_type= ? ";
 		logger.info("bookmarkInsertQuery:" + bookmarkUpdateQuery);
 
 		try {
@@ -275,6 +280,12 @@ public class BookmarkExternal {
 			if (connection != null) {
 
 				prepareStatement = connection.prepareStatement(bookmarkUpdateQuery);
+				prepareStatement.setString(1, active);
+				prepareStatement.setString(2, locale);
+				prepareStatement.setString(3, userID);
+				prepareStatement.setString(4, pagetitle);
+				prepareStatement.setString(5, pageurl);
+				prepareStatement.setString(6, contenttype);
 				result = prepareStatement.executeUpdate();
 
 			} else {

@@ -538,12 +538,14 @@ public class CommonUtils {
 		try {
 			logger.info("Get count of error");
 			connection = database.getConnection();
-			String query = "SELECT DISTINCT COUNT FROM ERROR_RESPONSE where LANGUAGE='" + language
-					+ "' and STATUS_CODE = '" + statusCode + "' and BROKEN_LINK = '" + brokenLink
-					+ "' and CONTENT_PAGE='" + contentPage + "'";
-			logger.info("Query to run : " + query);
+			String query = "SELECT DISTINCT COUNT FROM ERROR_RESPONSE where LANGUAGE=? and STATUS_CODE = ? and BROKEN_LINK = ? and CONTENT_PAGE=?";
 
 			statement = connection.prepareStatement(query);
+			statement.setString(1, language.toLowerCase() );
+			statement.setString(2, statusCode);
+			statement.setString(3, brokenLink);
+			statement.setString(4, contentPage);
+			logger.info("Query to run : " + query);
 			resultSet = statement.executeQuery();
 			while (resultSet.next())
 				count = resultSet.getInt("count");
@@ -571,13 +573,16 @@ public class CommonUtils {
 		try {
 			logger.info("Logging of Broken Link in DB Started");
 			connection = database.getConnection();
-			String query = "UPDATE ERROR_RESPONSE SET COUNT=" + count
-					+ ", STATUS='Open', REPORTED_ON = LOCALTIMESTAMP WHERE LANGUAGE='" + language
-					+ "' and STATUS_CODE='" + statusCode + "' and BROKEN_LINK='" + brokenLink + "' and CONTENT_PAGE='"
-					+ contentPage + "'";
+			String query = "UPDATE ERROR_RESPONSE SET COUNT = ? , STATUS = ?, REPORTED_ON = LOCALTIMESTAMP WHERE LANGUAGE= ? and STATUS_CODE= ? and BROKEN_LINK= ? and CONTENT_PAGE= ?";
 			logger.info("Query to run : " + query);
 			if (connection != null) {
 				prepareStatement = connection.prepareStatement(query);
+				prepareStatement.setInt(1, count);
+				prepareStatement.setString(2, "open");
+				prepareStatement.setString(3, language.toLowerCase());
+				prepareStatement.setString(4, statusCode);
+				prepareStatement.setString(5, brokenLink);
+				prepareStatement.setString(6, contentPage);
 				result = prepareStatement.executeUpdate();
 			} else {
 				logger.info("Connection is null !");
