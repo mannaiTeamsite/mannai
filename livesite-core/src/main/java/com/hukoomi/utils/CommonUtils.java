@@ -606,10 +606,6 @@ public class CommonUtils {
 			return 0;
 		}
 
-		logger.info("ESAPI error in " + name);
-		logger.info("With string " + str);
-		logger.info("And type " + type);
-		logger.info("And length " + length);
 		logger.info("Error List " + errorList.toString());
 		return 1;
 	}

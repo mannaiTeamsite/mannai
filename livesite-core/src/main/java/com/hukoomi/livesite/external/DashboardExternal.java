@@ -344,13 +344,14 @@ public class DashboardExternal {
 		LOGGER.info("getDashboardbookmark()====> Starts");
 
 		pagetitle = context.getParameterString("page_title");
+		LOGGER.info("pagetitle:  "+pagetitle);
 
 		pageurl = context.getParameterString("page_url");
-
+		LOGGER.info("pageurl:  "+pageurl);
 		contenttype = context.getParameterString("content_type");
-
+		LOGGER.info("contenttype:  "+contenttype);
 		String queryType = context.getParameterString("queryType").trim();
-
+		LOGGER.info("queryType:  "+queryType);
 		Document bookmarkSearchDoc = DocumentHelper.createDocument();
 		Element bookmarkResultEle = bookmarkSearchDoc.addElement("bookmark");
 
@@ -360,11 +361,12 @@ public class DashboardExternal {
 
 		HttpSession session = context.getRequest().getSession();
 		String valid = ui.getStatus(context);
-		LOGGER.info("Dashboard status=" + session.getAttribute(strStatus));
+		
 		if (valid.equals(strValid)) {
 			userID = (String) session.getAttribute(strUserId);
 			LOGGER.info("userID:" + userID);
 			locale = context.getParameterString("locale").trim().toLowerCase();
+			LOGGER.info("locale:" + locale);
 
 			table = context.getParameterString("bookmark").trim();
 			boolean isExist = false;
