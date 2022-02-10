@@ -35,10 +35,10 @@ public class WeatherApi {
 	 */
 	private Properties properties = null;
 
-	private static String loadCurrentTemp(String inurl) {
+	private static String loadCurrentTemp(String inurl) throws IOException {
 		HttpURLConnection connection = null;
 		LOGGER.info(inurl);
-		try {
+		
 			URL url = new URL(inurl);
 			LOGGER.info(url);
 			connection = (HttpURLConnection) url.openConnection();
@@ -49,30 +49,24 @@ public class WeatherApi {
 			String readLine;
 			int responseCode = connection.getResponseCode();
 			LOGGER.info("responseCode" + responseCode);
+			
+			
 			if (responseCode == HttpURLConnection.HTTP_OK) {
+				try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));){
 				LOGGER.info("Inside current temp");
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				LOGGER.info("Inside current temp 1");
 				StringBuilder response = new StringBuilder();
 
 				while ((readLine = in.readLine()) != null) {
 					response.append(readLine);
 				}
-				LOGGER.info("Inside current temp 2");
-				in.close();
-				LOGGER.info("Inside current temp 3");
 				return response.toString();
-			}
-		} catch (IOException e) {
+			} catch (IOException e) {
 
-			LOGGER.error("Exception while fetching Current Temperature API", e);
+				LOGGER.error("Exception while fetching Current Temperature API", e);
 
-		} finally {
-			if (connection != null) {
-				connection.disconnect();
-				LOGGER.info("Connection disconnected");
 			}
-		}
+			}
 
 		return null;
 	}
@@ -97,7 +91,7 @@ public class WeatherApi {
 	}
 
 	@SuppressWarnings("deprecation")
-	public Document getWeather(final RequestContext context) {
+	public Document getWeather(final RequestContext context) throws IOException {
 		getProperties(context);
 		LOGGER.info("getWeather Started");
 		String weatherUrl = properties.getProperty("weatherUrl",
@@ -130,9 +124,10 @@ public class WeatherApi {
 	 * @param currentTempURL   Current Temperature URL.
 	 * @param defaultCity      Default City.
 	 * @return Document
+	 * @throws IOException 
 	 */
 	public Document callWeatherApi(String weatherUrl, String currentCity, String temperatureScale,
-			String currentTempURL, String defaultCity, String todayEn, String todayAr) {
+			String currentTempURL, String defaultCity, String todayEn, String todayAr) throws IOException {
 		String xmlRootName = "WeatherResponse";
 		LOGGER.error("callWeatherApi Started");
 		final String FORCAST_EN = "ForecastEn";
@@ -293,11 +288,12 @@ public class WeatherApi {
 	 *
 	 * @param url The parameter passed from callWeatherApi.
 	 * @return String return the weather response generated from weather Api.
+	 * @throws IOException 
 	 */
-	public String getRequest(final String url) {
+	public String getRequest(final String url) throws IOException {
 		LOGGER.error("getRequest Started");
 		HttpURLConnection connection = null;
-		try {
+		
 			URL urlForGetRequest = new URL(url);
 			String readLine;
 			connection = (HttpURLConnection) urlForGetRequest.openConnection();
@@ -306,26 +302,20 @@ public class WeatherApi {
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));){
+				
 				StringBuilder response = new StringBuilder();
 				while ((readLine = in.readLine()) != null) {
 					response.append(readLine);
 				}
-				in.close();
-
 				return response.toString();
+			} catch (IOException e) {
+				LOGGER.error("Exception while Fetching Data for Weather API: ", e);
+
+			}
 			} else {
 				LOGGER.warn("GET NOT WORKED");
 			}
-		} catch (IOException e) {
-			LOGGER.error("Exception while Fetching Data for Weather API: ", e);
-
-		} finally {
-			if (connection != null) {
-				connection.disconnect();
-				LOGGER.info("Connection disconnected");
-			}
-		}
 		LOGGER.error("getRequest Ended");
 		return null;
 	}
