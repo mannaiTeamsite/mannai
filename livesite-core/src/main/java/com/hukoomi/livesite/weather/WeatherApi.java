@@ -210,9 +210,7 @@ public class WeatherApi {
 		final String WEATHER_AR = "weatherAr";
 		final String dayEn = "dayEn";
 		final String dayAr = "dayAr";
-
 		JSONObject dataObject = new JSONObject();
-
 		JSONObject day1 = new JSONObject();
 		JSONObject day2 = new JSONObject();
 		JSONObject day3 = new JSONObject();
