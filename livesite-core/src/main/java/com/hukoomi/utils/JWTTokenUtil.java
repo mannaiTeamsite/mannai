@@ -95,7 +95,7 @@ public class JWTTokenUtil {
 	public static String decrypt(String data, PublicKey publicKey) throws IllegalBlockSizeException,
 			BadPaddingException, NoSuchPaddingException, NoSuchAlgorithmException, java.security.InvalidKeyException {
 		logger.info("decrypt method called");
-		Cipher cipher = Cipher.getInstance("RSA/None/OAEPWITHSHA-256ANDMGF1PADDING"); // Compliant
+		Cipher cipher = Cipher.getInstance("RSA"); // Compliant
 		cipher.init(Cipher.DECRYPT_MODE, publicKey);
 		return new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes())), StandardCharsets.UTF_8);
 	}
