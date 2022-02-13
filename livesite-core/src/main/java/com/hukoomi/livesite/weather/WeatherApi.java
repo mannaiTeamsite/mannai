@@ -35,10 +35,11 @@ public class WeatherApi {
 	 */
 	private Properties properties = null;
 
-	private static String loadCurrentTemp(String inurl) throws IOException {
+	private static String loadCurrentTemp(String inurl) {
 		HttpURLConnection connection = null;
+		BufferedReader in = null;
 		LOGGER.info(inurl);
-		
+		try {
 			URL url = new URL(inurl);
 			LOGGER.info(url);
 			connection = (HttpURLConnection) url.openConnection();
@@ -49,11 +50,11 @@ public class WeatherApi {
 			String readLine;
 			int responseCode = connection.getResponseCode();
 			LOGGER.info("responseCode" + responseCode);
-			
-			
+
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));){
+
 				LOGGER.info("Inside current temp");
+				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				LOGGER.info("Inside current temp 1");
 				StringBuilder response = new StringBuilder();
 
@@ -61,12 +62,25 @@ public class WeatherApi {
 					response.append(readLine);
 				}
 				return response.toString();
-			} catch (IOException e) {
-
-				LOGGER.error("Exception while fetching Current Temperature API", e);
 
 			}
+		} catch (IOException e) {
+
+			LOGGER.error("Exception while fetching Current Temperature API", e);
+
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+				if (in != null) {
+					try {
+						in.close();
+					} catch (IOException e) {
+						LOGGER.info(e);
+					}
+				}
+				LOGGER.info("Connection disconnected");
 			}
+		}
 
 		return null;
 	}
@@ -91,7 +105,7 @@ public class WeatherApi {
 	}
 
 	@SuppressWarnings("deprecation")
-	public Document getWeather(final RequestContext context) throws IOException {
+	public Document getWeather(final RequestContext context) {
 		getProperties(context);
 		LOGGER.info("getWeather Started");
 		String weatherUrl = properties.getProperty("weatherUrl",
@@ -110,7 +124,9 @@ public class WeatherApi {
 		String defaultCity = context.getParameterString("defaultCity", "DOHA AIRPORT");
 		String todayEn = context.getParameterString("todayEn", "Today");
 		String todayAr = context.getParameterString("todayAr", "Today");
+
 		return callWeatherApi(weatherUrl, currentCity, temperatureScale, currentTempURL, defaultCity, todayEn, todayAr);
+
 	}
 
 	/**
@@ -124,10 +140,10 @@ public class WeatherApi {
 	 * @param currentTempURL   Current Temperature URL.
 	 * @param defaultCity      Default City.
 	 * @return Document
-	 * @throws IOException 
+	 * 
 	 */
 	public Document callWeatherApi(String weatherUrl, String currentCity, String temperatureScale,
-			String currentTempURL, String defaultCity, String todayEn, String todayAr) throws IOException {
+			String currentTempURL, String defaultCity, String todayEn, String todayAr) {
 		String xmlRootName = "WeatherResponse";
 		LOGGER.error("callWeatherApi Started");
 		final String FORCAST_EN = "ForecastEn";
@@ -155,8 +171,10 @@ public class WeatherApi {
 
 		} catch (JSONException ex) {
 			LOGGER.error("Error while getting data for weather: ", ex);
+
 			getDataObject.put(xmlRootName,
 					getRequest("https://qmet.com.qa/metservices/api/QMD/GetMeteoFactoryForecast"));
+
 			forecastObject = new JSONObject(getDataObject.get(WEATHER_RESPONSE).toString());
 
 		}
@@ -210,7 +228,9 @@ public class WeatherApi {
 		final String WEATHER_AR = "weatherAr";
 		final String dayEn = "dayEn";
 		final String dayAr = "dayAr";
+
 		JSONObject dataObject = new JSONObject();
+
 		JSONObject day1 = new JSONObject();
 		JSONObject day2 = new JSONObject();
 		JSONObject day3 = new JSONObject();
@@ -236,36 +256,24 @@ public class WeatherApi {
 				if (elem.equalsIgnoreCase(SUNRISE)) {
 					dataObject.append(SUNRISE, weatherData.get(0));
 				}
-				if (elem.equalsIgnoreCase(SUNSET)) {
+				else if (elem.equalsIgnoreCase(SUNSET)) {
 					dataObject.append(SUNSET, weatherData.get(0));
 				}
-				if (elem.equalsIgnoreCase(tempMax)) {
+				else if (elem.equalsIgnoreCase(tempMax)) {
 
 					day1.put("tmax", weatherData.get(0));
 					day2.put("tmax", weatherData.get(1));
 					day3.put("tmax", weatherData.get(2));
 					day4.put("tmax", weatherData.get(3));
 				}
-				if (elem.equalsIgnoreCase(tempMin)) {
+				else if (elem.equalsIgnoreCase(tempMin)) {
 					day1.put("tmin", weatherData.get(0));
 					day2.put("tmin", weatherData.get(1));
 					day3.put("tmin", weatherData.get(2));
 					day4.put("tmin", weatherData.get(3));
 				}
 
-				if (elem.equalsIgnoreCase(WEATHER)) {
-					day1.put(elem, weatherData.get(0));
-					day2.put(elem, weatherData.get(1));
-					day3.put(elem, weatherData.get(2));
-					day4.put(elem, weatherData.get(3));
-				}
-				if (elem.equalsIgnoreCase(WEATHER_AR)) {
-					day1.put(elem, weatherData.get(0));
-					day2.put(elem, weatherData.get(1));
-					day3.put(elem, weatherData.get(2));
-					day4.put(elem, weatherData.get(3));
-				}
-				if (elem.equalsIgnoreCase(WEATHER_CODE)) {
+				else if (elem.equalsIgnoreCase(WEATHER) ||elem.equalsIgnoreCase(WEATHER_AR)||elem.equalsIgnoreCase(WEATHER_CODE) ) {
 					day1.put(elem, weatherData.get(0));
 					day2.put(elem, weatherData.get(1));
 					day3.put(elem, weatherData.get(2));
@@ -286,12 +294,13 @@ public class WeatherApi {
 	 *
 	 * @param url The parameter passed from callWeatherApi.
 	 * @return String return the weather response generated from weather Api.
-	 * @throws IOException 
+	 * 
 	 */
-	public String getRequest(final String url) throws IOException {
+	public String getRequest(final String url) {
 		LOGGER.error("getRequest Started");
 		HttpURLConnection connection = null;
-		
+		BufferedReader in = null;
+		try {
 			URL urlForGetRequest = new URL(url);
 			String readLine;
 			connection = (HttpURLConnection) urlForGetRequest.openConnection();
@@ -300,20 +309,33 @@ public class WeatherApi {
 			connection.setRequestProperty("User-Agent", "Mozilla/5.0");
 			int responseCode = connection.getResponseCode();
 			if (responseCode == HttpURLConnection.HTTP_OK) {
-				try (BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));){
-				
+				in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 				StringBuilder response = new StringBuilder();
 				while ((readLine = in.readLine()) != null) {
 					response.append(readLine);
 				}
 				return response.toString();
-			} catch (IOException e) {
-				LOGGER.error("Exception while Fetching Data for Weather API: ", e);
-
-			}
 			} else {
 				LOGGER.warn("GET NOT WORKED");
 			}
+		} catch (IOException e) {
+			LOGGER.error("Exception while Fetching Data for Weather API: ", e);
+
+		} finally {
+			if (connection != null) {
+				connection.disconnect();
+				if (in != null) {
+
+					try {
+						in.close();
+					} catch (IOException e) {
+						LOGGER.info(e);
+					}
+
+				}
+				LOGGER.info("Connection disconnected");
+			}
+		}
 		LOGGER.error("getRequest Ended");
 		return null;
 	}
