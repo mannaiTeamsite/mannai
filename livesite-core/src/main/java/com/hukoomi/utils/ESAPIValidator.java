@@ -20,8 +20,7 @@ public class ESAPIValidator {
 	public static final String URL = "URL";
 
 	public static boolean checkNull(String inputValue) {
-		return (inputValue == null || "null".equalsIgnoreCase(inputValue) || "".equalsIgnoreCase(inputValue)) ? true
-				: false;
+		return (inputValue == null || "null".equalsIgnoreCase(inputValue) || "".equalsIgnoreCase(inputValue));
 	}
 
 }

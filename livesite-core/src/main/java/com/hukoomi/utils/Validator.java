@@ -40,8 +40,7 @@ public class Validator {
 	}
 
 	public boolean checkNull(String inputValue) {
-		return (inputValue == null || "null".equalsIgnoreCase(inputValue) || "".equalsIgnoreCase(inputValue)) ? true
-				: false;
+		return (inputValue == null || "null".equalsIgnoreCase(inputValue) || "".equalsIgnoreCase(inputValue));
 	}
 
 }
