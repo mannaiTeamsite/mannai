@@ -17,7 +17,7 @@ Please note that the deployment as of now is manual, developer needs to deploy t
 Below are the Git commands often used while making changes to Git Repo.
 
 1. Clone the repo content to local directory
-    - `git clone --recursive https://github.com/hayagreeva/Hukoomi-Revamp.git`
+    - `git clone --recursive https://github.com/mannaiTeamsite/mannai.git`
     
 2. Make Branch for individual stories/tasks 
     - `git branch <new-branch-name|story-name>`
